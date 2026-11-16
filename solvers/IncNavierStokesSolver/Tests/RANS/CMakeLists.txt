@@ -608,3 +608,9 @@ target_link_libraries(RANSH2gConstitutiveProbe RANSKernels ${NEKTAR++_LIBRARIES}
 # H2i diagnostic methods intentionally excluded from the production solver.
 target_sources(RANSWallResolutionProbe PRIVATE
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionJointInitializer.cpp)
+
+foreach(rans_equilibrium_target RANSEquilibriumEvolutionProbe RANSCurvedWallProbe
+        RANSPressureActionProbe RANSNonpressureActionProbe RANSWallResolutionProbe)
+    target_sources(${rans_equilibrium_target} PRIVATE
+        ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionEquilibrium.cpp)
+endforeach()

@@ -10,6 +10,22 @@ from run_cao_tamura_budget_h2d import case
 from run_cls_epawf_picard import THREADS,sha,state_hash,require,set_info,set_parameter,write
 from compare_cls_epawf_pimple import same_history
 
+def verify_retained_rollback(parent,bad,checkpoint,before_sha256):
+    """Shared H2k transaction contract; rejection need not create a checkpoint."""
+    cp=Path(checkpoint)
+    require(bad.get('failure')=='deliberate post-assignment explicit rejection','did not reach deliberate post-assignment rejection')
+    require(same_history(parent,bad) and sha(cp/'State.bin')==before_sha256,'rollback changed parent state/history/bytes')
+    require(parent['signature']==bad['signature'],'rollback changed physical signature')
+    for k in ('fixed_reference','fixed_defect'):require(state_hash(parent[k])==state_hash(bad[k]),'rollback changed '+k)
+    require(parent['physical_samples'].keys()==bad['physical_samples'].keys(),'rollback changed physical sample membership')
+    for k,v in parent['physical_samples'].items():require(state_hash(v)==state_hash(bad['physical_samples'][k]),'rollback changed physical sample bits '+k)
+    if parent.get('state_audits'):
+        a,b=parent['state_audits'][-1],bad['state_audits'][-1]
+        require(a.keys()==b.keys() and all(state_hash(a[k])==state_hash(b[k]) for k in a),'rollback changed accepted diagnostic bits')
+    for k in ('last_stage_time','last_stage_alpha','last_stage_history'):
+        if k in parent:require(state_hash(parent[k] if isinstance(parent[k],list) else [parent[k]])==state_hash(bad[k] if isinstance(bad[k],list) else [bad[k]]),'rollback changed active '+k)
+    return True
+
 class StartupRun:
     def __init__(self,solver,certificate,preflight,h1,output,flat=False,builder=None):
         self.solver=solver.resolve();self.certpath=certificate.resolve();self.cert=load(certificate);self.pre=load(preflight);self.h1=h1;self.root=output;self.flat=flat;self.builder=builder or case
@@ -69,12 +85,7 @@ class StartupRun:
         # A rejection before any commit correctly has no local checkpoint. Its
         # recovery object is the explicit immutable accepted restart parent.
         self.validate_result('post-assignment-reject',bad,parent['steps'],dt,True,cp);require(bad.get('failure')=='deliberate post-assignment explicit rejection','did not reach deliberate post-assignment rejection');require(same_history(parent,bad) and sha(cp/'State.bin')==h,'rollback changed parent state/history/bytes')
-        for k in ('fixed_reference','fixed_defect'):require(state_hash(parent[k])==state_hash(bad[k]),'rollback changed '+k)
-        for key,value in parent['physical_samples'].items():require(state_hash(value)==state_hash(bad['physical_samples'][key]),'rollback changed physical sample bits '+key)
-        if parent.get('state_audits'):
-            a,b=parent['state_audits'][-1],bad['state_audits'][-1];require(a.keys()==b.keys() and all(state_hash(a[k])==state_hash(b[k]) for k in a),'rollback changed accepted diagnostic bits')
-        for key in ('last_stage_time','last_stage_alpha','last_stage_history'):
-            if key in parent:require(state_hash(parent[key])==state_hash(bad[key]) if isinstance(parent[key],list) else parent[key]==bad[key],'rollback changed active '+key)
+        verify_retained_rollback(parent,bad,cp,h)
         self.out['rollback_validation']=dict(passed=True,parent_checkpoint_sha256_before=h,parent_checkpoint_sha256_after=sha(cp/'State.bin'),reported_rejected_checkpoint=bad.get('checkpoint'),accepted_parent_used=True,driver_sha256=sha(Path(__file__)));self.save()
     def pair(self):
         try:

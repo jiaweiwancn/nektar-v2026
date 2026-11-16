@@ -210,6 +210,12 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     }
     session->LoadSolverInfo("RANSWallBoundaryPolicy",m_boundaryPolicy,"CompatibilityV1");
     Require(m_boundaryPolicy=="CompatibilityV1" || OpenBoundary(),"unknown wall boundary policy");
+    if(EquilibriumOpen())
+    {
+        std::string reference;session->LoadSolverInfo("RANSWallReference",reference,"Neutral");
+        Require(!Mapped() && reference=="AnalyticalNeutralInflowV1" && AcceptedAWF(),
+            "NeutralEquilibriumOpenV1 requires the affine analytical-neutral accepted-AWF problem");
+    }
     Require(!OpenBoundary() || (AcceptedAWF() && m_dimension==2 && (!Mapped() || Composite()) && m_comm->GetSize()==1),
         "RoughFlatOpenV1 requires the serial affine accepted-budget pilot");
     session->LoadParameter("RANSWallOutletTotalPressure",m_outletTotalPressure,0.);
@@ -849,7 +855,7 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
     Require(state.size()==static_cast<size_t>(Size()) && history.size()==state.size() && alpha>=0,"invalid evolution stage state/history");
     const auto constraints=Constraints(state,time,data);auto s=MatchingEnabled()?ExternalLift(state,time,data):state;
     if(!MatchingEnabled() && !PimpleSingleSweep())for(auto [row,value]:constraints)s[row]=value;
-    Vector r(Size());int bad=0;
+    Vector r(Size());int bad=0;std::string localFailure;
     try
     {
         Refresh(s,time,&data);
@@ -910,12 +916,12 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::Residual(const Vector &st
     }
     catch(const std::exception &error)
     {
-        bad=1;
+        bad=1;localFailure=error.what();
         if(m_solveDiagnostics)m_solveResidualException=RANSWallSolveJson::Object({
             {"type",RANSWallSolveJson::Quote(RANSWallSolveJson::ExceptionType(error))},
             {"message",RANSWallSolveJson::Quote(error.what())}});
     }
-    m_comm->AllReduce(bad,LibUtilities::ReduceMax);Require(!bad,"inadmissible evolution volume/sampler state on a collective rank");
+    m_comm->AllReduce(bad,LibUtilities::ReduceMax);Require(!bad,"inadmissible evolution volume/sampler state on a collective rank: "+localFailure);
     m_comm->AllReduce(r,LibUtilities::ReduceSum);
     if(alpha)for(int b=0;b<InnerPressure();++b)
     {

@@ -298,6 +298,23 @@ int main(int argc,char **argv)
             Require(!serial->DefinesFunction(name),"R3 resolution input must retain unforced physical data");
         double us=0;serial->LoadParameter("RANSWallFrictionVelocity",us,.4);
         RANSWallEvolutionData data(2);Vector reference,formedHistory;std::string replayContext="null";
+        if(operation=="wp2_equilibrium")
+        {
+            Require(patch.EquilibriumOpen() && !patch.Mapped() &&
+                RANSWallR3::HashFile(argv[1])==packet.get<std::string>("xml_sha256"),"WP2 policy/geometry/XML binding");
+            const auto base=patch.FiniteInflowSeed();auto state=base;
+            data.fixedBoundary=patch.FixedReferenceBoundary(base);patch.SetReference(base,data,0,0);
+            if(packet.get_optional<std::string>("state_sha256"))
+            {state=Read(packet,"state");Require(state.size()==base.size() && RANSWallR3::Hash(state)==packet.get<std::string>("state_sha256"),"WP2 explicit state identity");}
+            std::ofstream out(argv[3]);out<<J::Object({{"operation",J::Quote(operation)},
+                {"state_sha256",J::Quote(RANSWallR3::Hash(state))},{"base_sha256",J::Quote(RANSWallR3::Hash(base))},
+                {"model_specification",patch.ModelMetadata()},{"patch_signature",J::Quote(patch.Signature())},
+                {"geometry_identity",J::Quote(patch.GeometrySignature())},{"inventory_identity",J::Quote(patch.PimpleKBoundSignature())},
+                {"boundary",packet.get<bool>("boundary_checks",true)?patch.EquilibriumBoundaryChecks(state,data):"null"},
+                {"spatial",patch.EquilibriumSpatialChecks(state,data,packet.get<int>("order",24))},
+                {"initialization_work",J::Numbers(patch.InitializationWork())},{"governing_solves","0"},{"physical_steps","0"}})<<std::endl;
+            Require(out.good(),"WP2 diagnostic write");world->Finalise();return 0;
+        }
         if(operation=="h2b_operators" || operation=="h2c_seed" || operation=="h2e_contract_checks" || operation=="h2h_scalar_context" || operation=="h2h_candidate" || operation=="h2i_context" || operation=="h2i_candidate" || operation=="h2i_fresh" || operation=="h2i_accessibility" || (operation=="h2i_flat" || operation=="h2j_flat" || operation=="h2j_patch" || operation=="h2j_context" || operation=="h2k_patch" || operation=="h2k_context") || operation=="h2g_frozen" || operation=="h2f_context" || operation=="h2f_native" || operation=="h2e_context" || operation=="h2e_candidate" || operation=="h2d_setup" || operation=="h2d_candidate" || operation=="h2d_flat")
         {
             Require(patch.PrescribedInflow() && !packet.get_optional<std::string>("native_checkpoint") && RANSWallR3::HashFile(argv[1])==packet.get<std::string>("xml_sha256"),"H2b operator fixture XML/initialization contract differs");

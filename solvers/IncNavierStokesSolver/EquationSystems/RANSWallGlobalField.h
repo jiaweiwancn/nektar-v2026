@@ -87,7 +87,8 @@ public:
      */
     Vector RadialProject(const std::function<double(double)> &function,
         const std::vector<std::array<double,3>> &constraints,
-        const std::vector<double> &physicalBreakpoints={}) const;
+        const std::vector<double> &physicalBreakpoints={},
+        const std::function<double(double)> &gradient={},double h1Length=0.) const;
 
     /** Independent diagnostic through full native BwdTrans/PhysDeriv and
      * standard physical interpolation, not the fast tensor evaluation rows.

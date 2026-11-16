@@ -102,6 +102,11 @@ void RANSWallEvolutionPatch::InitialiseRobust(const LibUtilities::SessionReaderS
         const auto &c=m_parameters.model.Parameters();
         m_finiteInflowIdentity+=":model-parameters="+RANSWallSolveJson::Numbers(Vector{
             c.cMu,c.cEpsilon1,c.cEpsilon2,c.sigmaK,c.sigmaEpsilon,c.yapCoefficient,c.yapLength});
+        std::string projection;session->LoadSolverInfo("RANSWallNeutralProjection",projection,"RadialL2V1");
+        Require(projection=="RadialL2V1" || projection=="RadialEnergyV1","unknown neutral radial representation");
+        m_neutralEnergyProjection=projection=="RadialEnergyV1";
+        Require(!m_neutralEnergyProjection || (EquilibriumOpen() && !Mapped()),"RadialEnergyV1 is the WP2 affine equilibrium initializer");
+        if(m_neutralEnergyProjection)m_finiteInflowIdentity+=":native-projection=RadialEnergyV1:L2+HA^2-full-gradient:all-inlet-fields:constrained-traces";
         if(Composite())
         {
             session->LoadSolverInfo("RANSWallCompositeSeed",m_compositeSeedPolicy,"TangentialNeutralV2");
@@ -194,24 +199,28 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::FlatFiniteSeed() const
     if(AnalyticalNeutralInflow())
     {conditions.push_back({H,-1,m_robustUstar*m_robustUstar/wall->Original().TotalViscosity(H)});
      conditions.push_back({H,1,endpoint.dU});conditions.push_back({upper[2],-1,InflowAtHeight(upper[2]).dU});}
-    const auto u=fields[0]->RadialProject(velocity,conditions,breaks);
+    const double h1=m_neutralEnergyProjection?H:0.;
+    const auto u=fields[0]->RadialProject(velocity,conditions,breaks,[&](double r){return r<H?wall->Original().VelocityGradient(r,{endpoint.U,0},{0,0})[0]:InflowAtHeight(r).dU;},h1);
     std::copy(u.begin(),u.end(),s.begin()+offset[0]);
     std::vector<std::array<double,3>> kConditions{{0,1,0},{H,0,endpoint.k},{upper[2],0,InflowAtHeight(upper[2]).k}};
     if(AnalyticalNeutralInflow())
     {kConditions.push_back({H,-1,0});kConditions.push_back({H,1,0});kConditions.push_back({upper[2],-1,0});}
-    const auto k=fields[K()]->RadialProject([&](double r){return r<H?wall->ReferenceK(r):InflowAtHeight(r).k;},kConditions,breaks);
+    const auto k=fields[K()]->RadialProject([&](double r){return r<H?wall->ReferenceK(r):InflowAtHeight(r).k;},kConditions,breaks,
+        [&](double r){return r<H?wall->ReferenceKGradient(r):0.;},h1);
     std::copy(k.begin(),k.end(),s.begin()+offset[K()]);
     std::vector<std::array<double,3>> eConditions{{H,0,wall->Dissipation(H)},{upper[2],0,InflowAtHeight(upper[2]).epsilon}};
     if(AnalyticalNeutralInflow())eConditions.push_back({upper[2],-1,-InflowAtHeight(upper[2]).epsilon/upper[2]});
-    const auto epsilon=fields[Epsilon()]->RadialProject([&](double r){return InflowAtHeight(r).epsilon;},eConditions,breaks);
+    const auto epsilon=fields[Epsilon()]->RadialProject([&](double r){return InflowAtHeight(r).epsilon;},eConditions,breaks,
+        [&](double r){return -InflowAtHeight(r).epsilon/r;},h1);
     std::copy(epsilon.begin(),epsilon.end(),s.begin()+offset[Epsilon()]);
     if(AnalyticalNeutralInflow())
     {
         RANSTensor G{};G[0][2]=endpoint.dU;
         const auto c=EvaluateRANSClosure(m_parameters.model.Model(),endpoint.k,endpoint.epsilon,G,H,m_parameters.model.Parameters(),0);
         const double jump=c.reynoldsStress[2][2]-2*endpoint.k/3;
+        const auto pressure=EquilibriumOpen()?EquilibriumReferencePressures():Vector{jump*(upper[2]-H)/upper[2],-jump*H/upper[2]};
         for(int b=InnerPressure();b<=OuterPressure();++b)
-            for(int i=0;i<size[b];++i)s[offset[b]+i]=(b==InnerPressure()?jump*(upper[2]-H)/upper[2]:-jump*H/upper[2])*m_constants[b][i];
+            for(int i=0;i<size[b];++i)s[offset[b]+i]=pressure[b-InnerPressure()]*m_constants[b][i];
     }
     return s;
 }

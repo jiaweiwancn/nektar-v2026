@@ -470,9 +470,11 @@ std::array<double,4> RANSWallGlobalField::NativeEvaluate(
 
 RANSWallGlobalField::Vector RANSWallGlobalField::RadialProject(
     const std::function<double(double)> &function,
-    const std::vector<std::array<double,3>> &constraints,const std::vector<double> &physicalBreakpoints) const
+    const std::vector<std::array<double,3>> &constraints,const std::vector<double> &physicalBreakpoints,
+    const std::function<double(double)> &gradient,double h1Length) const
 {
     Require(static_cast<bool>(function),"missing radial projection function");
+    Require(std::isfinite(h1Length) && h1Length>=0 && (h1Length==0 || static_cast<bool>(gradient)),"invalid radial energy projection data");
     using IntervalKey=std::pair<double,double>;
     struct Interval { double lower,upper,area=0;int degree;std::vector<int> ids;std::size_t element; };
     std::map<IntervalKey,Interval> intervals;
@@ -549,11 +551,17 @@ RANSWallGlobalField::Vector RANSWallGlobalField::RadialProject(
                 const double sampled=function(radius);Require(std::isfinite(sampled),"nonfinite radial projection data");
                 if(firstSample){value=sampled;firstSample=false;}else if(sampled!=value)constant=false;
                 const auto row=basis->Evaluate(2*(radius-interval.lower)/(interval.upper-interval.lower)-1);
+                const double inverse=2/(interval.upper-interval.lower),derivative=h1Length?gradient(radius):0.;
+                Require(std::isfinite(derivative),"nonfinite analytical radial derivative");
                 for(std::size_t i=0;i<interval.ids.size();++i)
                 {
                     const int a=interval.ids[i];load[a]+=(long double)weight*row->value[i]*sampled;
+                    if(h1Length)load[a]+=(long double)weight*h1Length*h1Length*inverse*row->derivative[i]*derivative;
                     for(std::size_t j=0;j<interval.ids.size();++j)
+                    {
                         mass[a][interval.ids[j]]+=weight*row->value[i]*row->value[j];
+                        if(h1Length)mass[a][interval.ids[j]]+=weight*h1Length*h1Length*inverse*inverse*row->derivative[i]*row->derivative[j];
+                    }
                 }
             }
     }

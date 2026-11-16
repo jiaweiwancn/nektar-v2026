@@ -190,11 +190,16 @@ public:
     SolverUtils::RANSRobustVariant RegularizedReferenceAt(const RANSWallCoordinate &point) const;
     const std::string &RegularizedReferenceIdentity() const { return m_finiteInflowIdentity; }
     std::string FiniteInflowChecks(const Vector &state) const;
-    bool OpenBoundary() const { return m_boundaryPolicy=="RoughFlatOpenV1"; }
+    bool EquilibriumOpen() const { return m_boundaryPolicy=="NeutralEquilibriumOpenV1"; }
+    bool OpenBoundary() const { return m_boundaryPolicy=="RoughFlatOpenV1" || EquilibriumOpen(); }
     bool DevelopingFlat() const { return OpenBoundary() && !Mapped(); }
     std::string BoundaryPolicyJSON() const;
+    double EquilibriumReferenceValue(int,const RANSWallCoordinate&) const;
+    Vector EquilibriumReferencePressures() const;
+    std::string EquilibriumBoundaryChecks(const Vector&,const RANSWallEvolutionData&) const;
+    std::string EquilibriumSpatialChecks(const Vector&,const RANSWallEvolutionData&,int) const;
     struct ExternalFluxTerms { Vector advection,traction,diffusion; };
-    ExternalFluxTerms DevelopingFlux(const Vector&,int region=-1) const;
+    ExternalFluxTerms DevelopingFlux(const Vector&,int region=-1,bool analytical=false) const;
     void AddDevelopingMatrix(int,const Vector&,const std::vector<int>&,WallMatrix&) const;
     std::string DevelopingChecks(const Vector&,double,const RANSWallEvolutionData&) const;
     std::string FiniteTurbulenceBudget(const Vector&,const Vector&,double,double,const RANSWallEvolutionData&) const;
@@ -632,6 +637,7 @@ private:
     SolverUtils::AWFProfileOptions m_options;
     std::string m_formulation="EPAWF";
     std::string m_boundaryPolicy="CompatibilityV1";
+    bool m_neutralEnergyProjection=false;
     double m_outletTotalPressure=0.;
     Vector m_backflowSeed;
     bool m_finiteReferenceReuse=false;

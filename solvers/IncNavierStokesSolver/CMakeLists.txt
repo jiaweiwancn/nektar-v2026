@@ -33,6 +33,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./EquationSystems/RANSWallEvolutionRobust.cpp
         ./EquationSystems/RANSWallEvolutionComposite.cpp
         ./EquationSystems/RANSWallEvolutionDeveloping.cpp
+        ./EquationSystems/RANSWallEvolutionEquilibrium.cpp
         ./EquationSystems/RANSWallEvolutionActions.cpp
         ./EquationSystems/RANSWallEvolutionNonpressure.cpp
         ./EquationSystems/RANSWallEvolutionResolution.cpp

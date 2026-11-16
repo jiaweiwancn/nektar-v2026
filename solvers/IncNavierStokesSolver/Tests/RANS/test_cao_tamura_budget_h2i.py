@@ -25,7 +25,7 @@ class FakeRun(startup.StartupRun):
   if not reject:cp.mkdir();(cp/'State.bin').write_bytes(b'unchanged fake parent');self.cps[str(cp)]=count
   attempts=[dict.fromkeys(('outer_sweeps','momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves','bound_calls'),1) for _ in range(steps)]
   for v in attempts:v.update(scheduled_complete=True,solved_epsilon_retained_bitwise=True)
-  d=dict(failure='deliberate post-assignment explicit rejection' if reject else None,state=[1.],fixed_reference=[1.],fixed_defect=[0.],physical_samples={},steps=count,checkpoint='' if reject else str(cp),initialization_lift_calls_iterations=[0,0],pimple_attempts=attempts,implicit_callback_count=steps)
+  d=dict(failure='deliberate post-assignment explicit rejection' if reject else None,signature='synthetic fixture',state=[1.],fixed_reference=[1.],fixed_defect=[0.],physical_samples={},steps=count,checkpoint='' if reject else str(cp),initialization_lift_calls_iterations=[0,0],pimple_attempts=attempts,implicit_callback_count=steps)
   report=self.root/(name+'.json');report.write_text('{}');r=dict(code=1 if reject else 0,report=str(report),report_parse_error=None)
   if name==self.fail:
    if self.kind=='rejection':d['failure']='injected numerical rejection'

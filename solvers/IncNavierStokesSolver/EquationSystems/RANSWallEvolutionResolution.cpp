@@ -130,7 +130,8 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
             u[0]=inner?exact->Original().Velocity(z,{UH,0},{0,0})[0]:UH+us/m_parameters.model.Kappa()*std::log(z/H);
             G[0][2]=inner?exact->Original().VelocityGradient(z,{UH,0},{0,0})[0]:us/(m_parameters.model.Kappa()*z);
             k=inner?exact->ReferenceK(z):K0;gk[2]=inner?exact->ReferenceKGradient(z):0.;
-            pi=inner?pressureJump*(upper[2]-H)/upper[2]:-pressureJump*H/upper[2];
+            pi=EquilibriumOpen()?EquilibriumReferencePressures()[inner?0:1]:
+                (inner?pressureJump*(upper[2]-H)/upper[2]:-pressureJump*H/upper[2]);
             if(inner)profile=exact.get();
         }
         if(inner)
@@ -218,7 +219,7 @@ RANSWallEvolutionPatch::ResidualResolutionResult RANSWallEvolutionPatch::Residua
     for(const auto &q:m_outer)evaluate(q,false,nullptr,{},nullptr);
     if(OpenBoundary())
     {
-        const auto f=DevelopingFlux(s);
+        const auto f=DevelopingFlux(s,-1,analyticalReference && EquilibriumOpen());
         for(const auto &term:std::vector<std::pair<std::string,const Vector*>>{{"external_advection",&f.advection},{"external_traction",&f.traction},{"external_diffusion",&f.diffusion}})
             for(int i=0;i<Size();++i)
             {Bucket(buckets,term.first,Size()).Add(i,(*term.second)[i],(*term.second)[i]);Bucket(buckets,"legacy_spatial",Size()).Add(i,(*term.second)[i],(*term.second)[i]);}

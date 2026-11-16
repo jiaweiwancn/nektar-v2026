@@ -19,6 +19,15 @@ bool RANSRetainAttemptPacket(const std::string&,bool,bool,long long,int);
 
 std::string RANSWallEvolutionPatch::BoundaryPolicyJSON() const
 {
+    if(EquilibriumOpen())return J::Object({{"mode",J::Quote(m_boundaryPolicy)},
+        {"inlet",J::Quote("immutable composite AWF/log reference through the entire .8m height; native convergent trace; exact E_C(H_A) corner")},
+        {"top",J::Quote("W=0 essential; U/k/epsilon free; full selected tangential traction +u_tau^2 e_x; k conormal=0; epsilon conormal=-u_tau^4/(sigma_epsilon*Z)")},
+        {"outlet",J::Quote("T*n=T_ref*n+un-*(u-u_ref); conservative un+*q+un-*q_ref, counted once; zero outgoing scalar diffusion")},
+        {"pressure",J::Quote("pi=p/rho+2k/3; Pout is outer streamwise total-normal-pressure datum; no pressure Dirichlet or roof datum; unused gauge zero")},
+        {"Pout",J::Number(m_outletTotalPressure)},
+        {"normals",J::Quote("outlet +e_x, roof +e_z; per unit density; physical outward epsilon diffusion is positive")},
+        {"boundary_quadrature",J::Quote("configured normal Gauss order on outlet; configured tangential Gauss order on roof")},
+        {"backflow",J::Quote("immutable analytical composite reference, positive k/epsilon, no profile tail or reset")}});
     return J::Object({{"mode",J::Quote(m_boundaryPolicy)},
         {"inlet",J::Quote("native finite/AWF seed Dirichlet; dependent epsilon corner takes exact E_C(Hw)")},
         {"top",J::Quote("impermeable full-selected-stress free slip; natural scalar flux; floor-only Yap distance")},
@@ -28,33 +37,77 @@ std::string RANSWallEvolutionPatch::BoundaryPolicyJSON() const
         {"backflow",J::Quote("immutable native fixed-reference velocity/k/outer-epsilon; positive scalar data required; no clipping")}});
 }
 
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::EquilibriumReferencePressures() const
+{
+    Require(EquilibriumOpen() && AnalyticalNeutralInflow() && !Mapped(),"equilibrium pressure reference scope");
+    const double z=(m_parameters.geometry.height+upper[2])/2;
+    const auto ref=InflowAtHeight(z);RANSTensor g{};g[0][2]=ref.dU;
+    // This is immutable reference data, not a candidate-field evaluation.
+    // Do not route it through the transported-k coverage assertion.
+    const auto c=CalibratedStandard()?EvaluateRANSClosure(m_parameters.model.Model(),ref.k,ref.epsilon,g,z,m_parameters.model.Parameters(),0):
+        EvaluateRANSRobustClosure(m_parameters.model.Model(),ref.k,ref.epsilon,g,z,m_parameters.model.Parameters(),0,RegularizedReferenceAt({lower[0],0,z}));
+    return {m_outletTotalPressure+c.reynoldsStress[2][2]-c.reynoldsStress[0][0],
+        m_outletTotalPressure+2*ref.k/3-c.reynoldsStress[0][0]};
+}
+
+double RANSWallEvolutionPatch::EquilibriumReferenceValue(int block,const RANSWallCoordinate &p) const
+{
+    Require(EquilibriumOpen() && AnalyticalNeutralInflow() && !Mapped(),"equilibrium boundary source scope");
+    const double H=m_parameters.geometry.height,z=Physical(p)[2];
+    const auto ref=InflowAtHeight(std::max(H,z));
+    if(block==1)return 0.;
+    if(z>=H){if(block==0)return ref.U;if(block==K())return ref.k;if(block==Epsilon())return ref.epsilon;}
+    const auto wall=Profile(InflowAtHeight(H).k,{lower[0],0,0},1.);
+    if(block==0)return wall->Original().Velocity(z,{InflowAtHeight(H).U,0},{0,0})[0];
+    if(block==K())return wall->ReferenceK(z);
+    Require(block==Epsilon(),"invalid composite reference block");return wall->Dissipation(z);
+}
+
 RANSWallEvolutionPatch::ExternalFluxTerms RANSWallEvolutionPatch::DevelopingFlux(
-    const Vector &s,int selectedRegion) const
+    const Vector &s,int selectedRegion,bool analytical) const
 {
     Require(OpenBoundary() && (!Mapped() || Composite()) && m_dimension==2 && s.size()==Size() && m_backflowSeed.size()==Size(),
         "developing flux needs affine state and immutable native backflow seed");
     RANSWallTiming::Scope timing("boundary.assembly");
     ExternalFluxTerms f{Vector(Size()),Vector(Size()),Vector(Size())};
-    for(const auto &face:SurfaceView(0,0,upper[0],1,8))
+    const auto referencePressure=EquilibriumOpen()?EquilibriumReferencePressures():Vector{};
+    for(const auto &face:SurfaceView(0,0,upper[0],1,EquilibriumOpen()?m_parameters.normalOrder:8))
     {
         const auto &v=face.test;const auto &el=fields[0]->Elements()[v.element];
         const int region=el.lower[2]>=m_parameters.geometry.height?1:0;
         if(selectedRegion>=0 && selectedRegion!=region)continue;
-        const double un=v.Value(s,offset[0])*face.area[0]+v.Value(s,offset[1])*face.area[2];
+        const double un=analytical?EquilibriumReferenceValue(0,v.coordinate)*face.area[0]:
+            v.Value(s,offset[0])*face.area[0]+v.Value(s,offset[1])*face.area[2];
         const double positive=std::max(0.,un),negative=std::min(0.,un);
         for(int b=0;b<InnerPressure();++b)
         {
             if(b==Epsilon() && !region)continue;
             const auto q=b==Epsilon()?GeometryPoint(b,v.geometry,v.coordinate):v;
-            const double prescribed=q.Value(m_backflowSeed,offset[b]);
+            const double prescribed=EquilibriumOpen()?EquilibriumReferenceValue(b,q.coordinate):q.Value(m_backflowSeed,offset[b]);
             Require(std::isfinite(prescribed) && (b<K() || prescribed>0),"invalid prescribed backflow turbulence data");
-            const double flux=positive*q.Value(s,offset[b])+negative*prescribed;
+            const double flux=positive*(analytical?EquilibriumReferenceValue(b,q.coordinate):q.Value(s,offset[b]))+negative*prescribed;
             for(int i=0;i<q.ids.size();++i)
             {
                 f.advection[offset[b]+q.ids[i]]+=face.weight*q.phi[i]*flux;
-                if(b<K())f.traction[offset[b]+q.ids[i]]+=face.weight*q.phi[i]*m_outletTotalPressure*face.area[PhysicalAxis(b)];
+                if(b<K())
+                {
+                    double traction=m_outletTotalPressure*face.area[PhysicalAxis(b)];
+                    if(EquilibriumOpen())
+                    {
+                        traction=b==0?(region?m_outletTotalPressure:referencePressure[0]):-m_robustUstar*m_robustUstar;
+                    }
+                    f.traction[offset[b]+q.ids[i]]+=face.weight*q.phi[i]*traction;
+                }
             }
         }
+    }
+    if(EquilibriumOpen() && selectedRegion!=0)
+    {
+        const double shear=m_robustUstar*m_robustUstar;
+        const double outwardEpsilon=shear*shear/(m_parameters.model.Parameters().sigmaEpsilon*upper[2]);
+        for(int b:{0,Epsilon()})for(const auto &face:SurfaceView(b,2,upper[2],1,m_parameters.tangentialOrder))
+            for(int i=0;i<face.test.ids.size();++i)
+                (b==0?f.traction:f.diffusion)[offset[b]+face.test.ids[i]]+=face.weight*face.test.phi[i]*(b==0?-shear:outwardEpsilon);
     }
     return f;
 }
@@ -63,7 +116,7 @@ void RANSWallEvolutionPatch::AddDevelopingMatrix(int block,const Vector &s,
     const std::vector<int> &rows,WallMatrix &a) const
 {
     std::vector<int> index(Size(),-1);for(int i=0;i<rows.size();++i)index[rows[i]]=i;
-    for(const auto &face:SurfaceView(0,0,upper[0],1,8))
+    for(const auto &face:SurfaceView(0,0,upper[0],1,EquilibriumOpen()?m_parameters.normalOrder:8))
     {
         const auto &v=face.test;const bool outer=fields[0]->Elements()[v.element].lower[2]>=m_parameters.geometry.height;
         if(block==Epsilon() && !outer)continue;
@@ -181,7 +234,8 @@ std::string RANSWallEvolutionPatch::DevelopingBoundaryFixture(const Vector &s,
         {
             double actual=0,independent=0;for(int j=0;j<size[b];++j)actual+=m_constants[b][j]*f.advection[offset[b]+j];
             for(const auto &face:SurfaceView(b,0,upper[0],1,16))
-                independent+=face.weight*(sign>0?sign*(b==0?sign:(b==1?0.:(b==K()?2.:.3))):sign*face.test.Value(m_backflowSeed,offset[b]));
+                independent+=face.weight*(sign>0?sign*(b==0?sign:(b==1?0.:(b==K()?2.:.3))):
+                    sign*(EquilibriumOpen()?EquilibriumReferenceValue(b,face.test.coordinate):face.test.Value(m_backflowSeed,offset[b])));
             error.push_back(std::abs(actual-independent));
         }
         Require(Maximum(error)<2e-12,"outflow/backflow upwind flux identity failed");
@@ -202,6 +256,88 @@ std::string RANSWallEvolutionPatch::DevelopingBoundaryFixture(const Vector &s,
         {"common_constant_pressure_action",J::Number(Maximum(pressure))},{"absolute_pressure_projection_error",J::Number(absoluteProjection)},{"fixture_setup_projections","6"},
         {"complete_G_action_error",J::Number(Maximum(error))},{"epsilon_inlet_interface_corner_error",J::Number(corner)},
         {"gauge",J::Quote("unused slot fixed zero; pressure level fixed by total traction")},{"governing_solves","0"}});
+}
+
+std::string RANSWallEvolutionPatch::EquilibriumBoundaryChecks(const Vector &s,const RANSWallEvolutionData &data) const
+{
+    Require(EquilibriumOpen() && !Mapped(),"equilibrium boundary fixture scope");
+    const double us=m_robustUstar,K0=InflowAtHeight(m_parameters.geometry.height).k;
+    const double shear=us*us,epsilonFlux=std::pow(us,4)/(m_parameters.model.Parameters().sigmaEpsilon*upper[2]);
+    const double rxx=CalibratedStandard()?2./3:.92,rzz=CalibratedStandard()?2./3:.52;
+    const Vector independentPressure{m_outletTotalPressure+(rzz-rxx)*K0,m_outletTotalPressure+(2./3-rxx)*K0};
+    const auto pressure=EquilibriumReferencePressures();
+    double pressureError=0;for(int i=0;i<2;++i)pressureError=std::max(pressureError,std::abs(pressure[i]-independentPressure[i])/K0);
+    const auto actual=DevelopingFlux(s);Vector traction(Size()),diffusion(Size()),roof(Size()),outletShear(Size());
+    // Independent GL32 face contractions visit every test coefficient,
+    // including nonconstant and corner-shared modes. Region offsets are retained.
+    for(const auto &face:SurfaceView(0,0,upper[0],1,32))
+    {
+        const bool inner=fields[0]->Elements()[face.test.element].upper[2]<=m_parameters.geometry.height;
+        for(int b:{0,1})for(int i=0;i<face.test.ids.size();++i)
+        {
+            const int row=offset[b]+face.test.ids[i];
+            const double value=face.weight*face.test.phi[i]*(b==0?(inner?independentPressure[0]:m_outletTotalPressure):-shear);
+            traction[row]+=value;if(b==1)outletShear[row]+=value;
+        }
+    }
+    for(int b:{0,Epsilon()})for(const auto &face:SurfaceView(b,2,upper[2],1,32))
+        for(int i=0;i<face.test.ids.size();++i)
+        {const int row=offset[b]+face.test.ids[i];const double v=face.weight*face.test.phi[i]*(b==0?-shear:epsilonFlux);
+         (b==0?traction:diffusion)[row]+=v;roof[row]+=v;}
+    Vector faceErrors;
+    for(int b:{0,1,Epsilon()})
+    {
+        double error=0,scale=0;for(int i=0;i<size[b];++i)
+        {const int row=offset[b]+i;const double ref=b==Epsilon()?diffusion[row]:traction[row],v=b==Epsilon()?actual.diffusion[row]:actual.traction[row];error=std::max(error,std::abs(v-ref));scale=std::max(scale,std::abs(ref));}
+        faceErrors.push_back(error/std::max(scale,shear*1e-12));
+    }
+    std::vector<std::string> advectiveModeChecks;
+    for(double sign:{1.,-1.})
+    {
+        auto test=s;for(int b=0;b<InnerPressure();++b)for(int i=0;i<size[b];++i)
+            test[offset[b]+i]=(b==0?sign:b==1?0.:b==K()?2.:.3)*m_constants[b][i];
+        const auto flux=DevelopingFlux(test);Vector expected(Size()),errors;
+        for(int b=0;b<InnerPressure();++b)for(const auto &face:SurfaceView(b,0,upper[0],1,32))
+        {
+            const double value=sign>0?sign*(b==0?sign:b==1?0.:b==K()?2.:.3):sign*EquilibriumReferenceValue(b,face.test.coordinate);
+            for(int i=0;i<face.test.ids.size();++i)expected[offset[b]+face.test.ids[i]]+=face.weight*face.test.phi[i]*value;
+        }
+        for(int b=0;b<InnerPressure();++b)
+        {double error=0,scale=0;for(int i=0;i<size[b];++i){const int row=offset[b]+i;error=std::max(error,std::abs(flux.advection[row]-expected[row]));scale=std::max(scale,std::abs(expected[row]));}errors.push_back(error/std::max(scale,us*1e-12));}
+        Require(Maximum(errors)<=1e-10,"nonconstant outflow/backflow mode quadrature mismatch");
+        advectiveModeChecks.push_back(J::Object({{"sign",J::Number(sign)},{"all_mode_relative_errors",J::Numbers(errors)}}));
+    }
+    const auto analytical=ResidualResolutionComponents(s,s,0,0,data,false,false,true);
+    auto a=analytical.terms.at("spatial_sum"),wrongTop=a,wrongOutlet=a;
+    for(int i=0;i<Size();++i){wrongTop[i]-=roof[i];wrongOutlet[i]-=outletShear[i];}
+    for(auto [i,value]:analytical.constraints){(void)value;a[i]=wrongTop[i]=wrongOutlet[i]=0.;}
+    const auto norms=Norms(a,analytical.constraints,us),wrongTopNorms=Norms(wrongTop,analytical.constraints,us),wrongOutletNorms=Norms(wrongOutlet,analytical.constraints,us);
+    const auto physical=DevelopingChecks(s,0,data);
+    const auto nativeFixture=DevelopingBoundaryFixture(s,data);
+    const auto fixed=ExternalConstraints(0,data);Vector freeTop;
+    for(int b:{0,K(),Epsilon()})
+    {int count=0;for(const auto &f:SurfaceView(b,2,upper[2],1,8))for(int id:f.test.ids)if(!fixed.count(offset[b]+id))++count;freeTop.push_back(count);Require(count>0,"equilibrium natural top was accidentally prescribed");}
+    const bool balanced=*std::max_element(norms.begin(),norms.begin()+4)<=1e-9;
+    double inletFlux=0;for(const auto &f:SurfaceView(0,0,lower[0],-1,64))inletFlux+=f.weight*EquilibriumReferenceValue(0,f.test.coordinate);
+    const double bulk=inletFlux/upper[2],length=upper[0]-lower[0];
+    Require(Maximum(faceErrors)<=1e-10 && pressureError<1e-12,"independent equilibrium face/pressure identity failed");
+    Require(wrongTopNorms[0]>1e-7 && wrongOutletNorms[1]>1e-7,"wrong-boundary controls did not expose expected defects");
+    return J::Object({{"version",J::Quote("NeutralEquilibriumBoundaryChecksV1")},{"passed",J::Boolean(balanced)},
+        {"policy",BoundaryPolicyJSON()},{"face_load_relative_errors_U_W_epsilon",J::Numbers(faceErrors)},
+        {"all_native_modes_including_nonconstant","true"},{"reference_pi_inner_outer",J::Numbers(pressure)},
+        {"advective_all_mode_checks",J::List(advectiveModeChecks)},
+        {"independent_pressure_error_over_K0",J::Number(pressureError)},
+        {"reference_mechanical_pressure_jump_inner_minus_outer",J::Number(pressure[0]-pressure[1])},
+        {"top_shear_per_density",J::Number(shear)},{"top_epsilon_conormal",J::Number(-epsilonFlux)},
+        {"top_outward_epsilon_diffusive_flux",J::Number(epsilonFlux)},
+        {"composite_inlet_volume_flux",J::Number(inletFlux)},{"Ubulk",J::Number(bulk)},
+        {"minimum_preservation_horizon_seconds",J::Number(std::max(length/bulk,length/InflowAtHeight(m_parameters.geometry.height).U))},
+        {"analytical_free_block_norms",J::Numbers(norms)},{"wrong_top_free_block_norms",J::Numbers(wrongTopNorms)},
+        {"omitted_outlet_shear_free_block_norms",J::Numbers(wrongOutletNorms)},
+        {"free_top_U_k_epsilon_memberships",J::Numbers(freeTop)},
+        {"full_pressure_flux_corner_fixture",nativeFixture},{"boundary_status",physical},
+        {"initialization_vs_evolution",J::Quote("radial setup may fit top values/derivatives; evolution constrains only W there; U,k,epsilon have natural data")},
+        {"governing_solves","0"},{"physical_steps","0"}});
 }
 
 std::string RANSWallEvolutionPatch::FiniteTurbulenceBudget(const Vector &s,const Vector &history,

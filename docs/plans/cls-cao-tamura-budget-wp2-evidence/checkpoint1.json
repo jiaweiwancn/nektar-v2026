@@ -1,0 +1,1403 @@
+{
+  "version": "WP2Checkpoint1V3",
+  "capture_Asia_Shanghai": "2026-11-16T15:29:33.126304+08:00",
+  "boundary_consistency_both_models": true,
+  "models": {
+    "CLS": {
+      "boundary": {
+        "version": "NeutralEquilibriumBoundaryChecksV1",
+        "passed": true,
+        "policy": {
+          "mode": "NeutralEquilibriumOpenV1",
+          "inlet": "immutable composite AWF/log reference through the entire .8m height; native convergent trace; exact E_C(H_A) corner",
+          "top": "W=0 essential; U/k/epsilon free; full selected tangential traction +u_tau^2 e_x; k conormal=0; epsilon conormal=-u_tau^4/(sigma_epsilon*Z)",
+          "outlet": "T*n=T_ref*n+un-*(u-u_ref); conservative un+*q+un-*q_ref, counted once; zero outgoing scalar diffusion",
+          "pressure": "pi=p/rho+2k/3; Pout is outer streamwise total-normal-pressure datum; no pressure Dirichlet or roof datum; unused gauge zero",
+          "Pout": 0.003,
+          "normals": "outlet +e_x, roof +e_z; per unit density; physical outward epsilon diffusion is positive",
+          "boundary_quadrature": "configured normal Gauss order on outlet; configured tangential Gauss order on roof",
+          "backflow": "immutable analytical composite reference, positive k/epsilon, no profile tail or reset"
+        },
+        "face_load_relative_errors_U_W_epsilon": [
+          2.8591361667433744e-16,
+          5.241749639029519e-16,
+          4.2116810757075377e-16
+        ],
+        "all_native_modes_including_nonconstant": true,
+        "reference_pi_inner_outer": [
+          -0.004039556572351707,
+          -0.0014583858291560801
+        ],
+        "advective_all_mode_checks": [
+          {
+            "sign": 1,
+            "all_mode_relative_errors": [
+              5.551115123125783e-16,
+              0,
+              5.551115123125783e-16,
+              3.0839528461809903e-16
+            ]
+          },
+          {
+            "sign": -1,
+            "all_mode_relative_errors": [
+              4.0104835461124504e-16,
+              0,
+              8.214170206828276e-16,
+              1.1515668368855792e-15
+            ]
+          }
+        ],
+        "independent_pressure_error_over_K0": 1.9714008496387857e-16,
+        "reference_mechanical_pressure_jump_inner_minus_outer": -0.0025811707431956273,
+        "top_shear_per_density": 0.005515726603512429,
+        "top_epsilon_conormal": -2.9253115350668032e-05,
+        "top_outward_epsilon_diffusive_flux": 2.9253115350668032e-05,
+        "composite_inlet_volume_flux": 1.050195996901104,
+        "Ubulk": 1.31274499612638,
+        "minimum_preservation_horizon_seconds": 1.1942387693600194,
+        "analytical_free_block_norms": [
+          1.5461703471645556e-13,
+          2.5295102896706272e-15,
+          1.2570643371487621e-14,
+          1.0273594882364443e-15,
+          0,
+          0,
+          0,
+          0
+        ],
+        "wrong_top_free_block_norms": [
+          0.04529187841412349,
+          2.5295102896706272e-15,
+          1.2570643371487621e-14,
+          0.0001252192024608711,
+          0,
+          0,
+          0,
+          0
+        ],
+        "omitted_outlet_shear_free_block_norms": [
+          1.5461703471645556e-13,
+          0.0403295579638959,
+          1.2570643371487621e-14,
+          1.0273594882364443e-15,
+          0,
+          0,
+          0,
+          0
+        ],
+        "free_top_U_k_epsilon_memberships": [
+          736,
+          736,
+          736
+        ],
+        "full_pressure_flux_corner_fixture": {
+          "status": "passed",
+          "projection_only_fixture_bound_calls": 1,
+          "projection_only_fixture_governing_solves": 0,
+          "projection_only_fixture": {
+            "physical_bands": null,
+            "mode": "MassProjection",
+            "algorithm": "MassQR-AcceptedBudgetV2",
+            "inventory_policy": "AcceptedBudgetV2",
+            "projection_only": false,
+            "work_controls": {
+              "schema": 1,
+              "per_add_completed_work": 2000,
+              "total_completed_work": 20000,
+              "separation_passes": 2000,
+              "wall_seconds": 900,
+              "trace": "Summary",
+              "finite_qp_solver": "RetainedPool",
+              "finite_qp_version": "retained-pool-v1",
+              "trace_file": "None",
+              "dump_file": "None",
+              "mathematics": "same raw-centered physical mass QP and constraints; finite-QP solver implementation and work controls are recorded separately from physical checkpoint identity"
+            },
+            "telemetry_schema": 1,
+            "separation_passes": 2,
+            "inventory_rebuilds": 1,
+            "inventory_counts": {
+              "budget_awf_reporting_volume": 50688,
+              "constitutive_budget_awf_ray": 189120,
+              "constitutive_budget_reporting_source_ray": 251904,
+              "constitutive_matching_K": 563,
+              "interface_inner": 48,
+              "interface_outer": 96,
+              "mass_volume": 7680,
+              "matching_trace_nodes": 96,
+              "open_boundary_native": 464,
+              "physical_matching_transfer": 914,
+              "physical_sampled_K": 1020,
+              "prescribed_source_inner": 58752,
+              "reconstruction_dense": 12888,
+              "reconstruction_native": 69120,
+              "source_volume_outer": 48384,
+              "trace_budget_awf_ray": 14424,
+              "volume_normalization_ray": 48360
+            },
+            "discovered_constraint_families": {
+              "reconstruction_native": 1
+            },
+            "calls": 1,
+            "activations": 1,
+            "success": true,
+            "failure": "",
+            "floor_relative": 1e-08,
+            "K0": 0.017598891430879275,
+            "floor": 1.7598891430879276e-10,
+            "arithmetic_reserve": 1.600609851346169e-14,
+            "raw_minimum_scope": "static and available pre-k ray locations; no inadmissible raw normalization evaluation",
+            "raw_minimum": {
+              "value": -9.99999999999994e-05,
+              "physical_coordinate": [
+                0.6,
+                0,
+                0
+              ],
+              "functional_kind": "Point",
+              "coordinate": [
+                0.6,
+                0,
+                0
+              ],
+              "geometry": 5,
+              "inventory": "reconstruction_native"
+            },
+            "corrected_minimum": {
+              "value": 1.7600491897251658e-10,
+              "physical_coordinate": [
+                0.6,
+                0,
+                0
+              ],
+              "functional_kind": "Point",
+              "coordinate": [
+                0.6,
+                0,
+                0
+              ],
+              "geometry": 5,
+              "inventory": "reconstruction_native"
+            },
+            "raw_ground": {
+              "admissible": false,
+              "minimum": -9.99999999999994e-05,
+              "arithmetic_scale": 0,
+              "point": [
+                0.6,
+                0,
+                0
+              ],
+              "physical_point": [
+                0.6,
+                0,
+                0
+              ],
+              "geometry": 5,
+              "extrema_checked": 12
+            },
+            "corrected_ground": {
+              "admissible": true,
+              "minimum": 1.7600492040908446e-10,
+              "arithmetic_scale": 0,
+              "point": [
+                0.6,
+                0,
+                0
+              ],
+              "physical_point": [
+                0.6,
+                0,
+                0
+              ],
+              "geometry": 5,
+              "extrema_checked": 22
+            },
+            "raw_sha256": "48a935e0996c1c3cc63d0ba27286a26775a3e0f0114ec0af4f51d9acf7abbd5c",
+            "corrected_sha256": "a347c0f5c1c0a9863ee19ecdae0b667a790cdd98e143f7609823e44b8c344de9",
+            "mass_norm_correction": 1.788561413709338e-08,
+            "mass_norm_raw_step": 2.8069896430189216e-05,
+            "mass_norm_accepted_step": 2.806646245758121e-05,
+            "mass_inner_product_raw_bound": -9.65453069635199e-14,
+            "mass_norm_increment_identity_defect": 2.49381020245708e-25,
+            "correction_to_step_ratio_defined": true,
+            "correction_to_step_ratio": 0.0006371813370090448,
+            "integral_total": 3.1989399536646614e-12,
+            "integrals_inner_outer_near_positive_negative": [
+              3.198827994592728e-12,
+              1.1195907194571464e-16,
+              3.7585713381407424e-12,
+              1.3587460339103638e-11,
+              -1.0388520385438984e-11
+            ],
+            "near_ground_height": 1.5570612247636407e-05,
+            "active_constraints": [
+              {
+                "physical_coordinate": [
+                  0.6,
+                  0,
+                  0
+                ],
+                "functional_kind": "Point",
+                "coordinate": [
+                  0.6,
+                  0,
+                  0
+                ],
+                "geometry": 5,
+                "inventory": "reconstruction_native",
+                "raw": -9.99999999999994e-05,
+                "corrected": 1.7600491897251658e-10,
+                "floor": 1.7598891430879276e-10,
+                "normalized_dual_multiplier": 1.7885614137093396e-08
+              }
+            ],
+            "active_set_iterations": 1,
+            "mass_factorizations": 1,
+            "mass_factor_applications": 2,
+            "mass_matrix_applications": 3,
+            "kkt_solves": 1,
+            "governing_equation_solves": 0,
+            "primal_floor_defect": 0,
+            "active_row_floor_defect": 0,
+            "current_inventory_passed": true,
+            "current_inventory": {
+              "admissible": true,
+              "scope": "declared finite scalar evaluation sets only",
+              "phase": "k_inventory_complete",
+              "failure": "",
+              "minimum_dimensionless_margin": 1.00009094131745e-08,
+              "limiting_functional_kind": "Point",
+              "limiting_inventory": "reconstruction_native",
+              "limiting_point": [
+                0.6,
+                0,
+                0
+              ],
+              "minimum_inner_k": 1.7600491897251658e-10,
+              "minimum_outer_k": 0.01759889142862703,
+              "minimum_outer_epsilon": 0.001162291481739741,
+              "minimum_sampled_K": 0.01759889142862703,
+              "minimum_projected_trace_epsilon": 1e+300,
+              "minimum_b": null,
+              "minimum_lambda": null,
+              "normalization_applicable": false,
+              "minimum_budget_ratio": 3.0565837734691006,
+              "maximum_budget_relative_defect": 0,
+              "cutoff_range": [
+                0.0008312858194363195,
+                0.0008312858197037816
+              ],
+              "inventory_counts": {
+                "budget_awf_reporting_volume": 50688,
+                "constitutive_budget_awf_ray": 189120,
+                "constitutive_budget_reporting_source_ray": 251904,
+                "constitutive_matching_K": 563,
+                "interface_inner": 48,
+                "interface_outer": 96,
+                "mass_volume": 7680,
+                "matching_trace_nodes": 96,
+                "open_boundary_native": 464,
+                "physical_matching_transfer": 914,
+                "physical_sampled_K": 1020,
+                "prescribed_source_inner": 58752,
+                "reconstruction_dense": 12888,
+                "reconstruction_native": 69120,
+                "source_volume_outer": 48384,
+                "trace_budget_awf_ray": 14424,
+                "volume_normalization_ray": 48360
+              },
+              "profile_branch_pattern": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "current_inventory_exception": "",
+            "ground_passed": true,
+            "ground_floor_defect": 0,
+            "finite_pool_normalized_violation": 0,
+            "completed_primal_dual_coherent": true,
+            "unfinished_working_set": false,
+            "finite_pool_scans": 1,
+            "finite_pool_reentries": 0,
+            "exact_cut_reuses": 0,
+            "finite_pool_complete": true,
+            "last_completed_add": 1,
+            "adds": 1,
+            "maximum_work_one_add": 1,
+            "work_guard_checks": 1,
+            "rejected_total_limit_checks": 0,
+            "rejected_add_limit_checks": 0,
+            "rejected_time_limit_checks": 0,
+            "legacy_guard_counter": 1,
+            "unique_evaluation_rows": 1,
+            "repeated_rows": 0,
+            "repeated_identical_constraints": 0,
+            "rediscovered_identical_constraints": 0,
+            "repeated_working_sets": 0,
+            "dependent_entries": 0,
+            "maximum_active_size": 1,
+            "minimum_observed_qr_residual": 1,
+            "last_completed_qr_diagonal_range": [
+              1,
+              1
+            ],
+            "primal_objective": 1.5994759653049757e-16,
+            "dual_objective": 1.5994759653049757e-16,
+            "primal_dual_gap_working_set": 0,
+            "dual_feasibility_defect": 0,
+            "seconds_total": 9.197095794,
+            "seconds_algebra": 0.000938451,
+            "seconds_factorization": 0.107379391,
+            "seconds_separation": 0.083352449,
+            "seconds_inventory": 8.086687932,
+            "trace_events": 5,
+            "bounded_trace": [
+              {
+                "kind": "correction_start",
+                "time": 0,
+                "raw_sha256": "48a935e0996c1c3cc63d0ba27286a26775a3e0f0114ec0af4f51d9acf7abbd5c",
+                "controls": {
+                  "schema": 1,
+                  "per_add_completed_work": 2000,
+                  "total_completed_work": 20000,
+                  "separation_passes": 2000,
+                  "wall_seconds": 900,
+                  "trace": "Summary",
+                  "finite_qp_solver": "RetainedPool",
+                  "finite_qp_version": "retained-pool-v1",
+                  "trace_file": "None",
+                  "dump_file": "None",
+                  "mathematics": "same raw-centered physical mass QP and constraints; finite-QP solver implementation and work controls are recorded separately from physical checkpoint identity"
+                }
+              },
+              {
+                "kind": "separation",
+                "sequence": 2,
+                "pass": 1,
+                "inventory_rebuilds": 0,
+                "floor_violation_known_inventory": 0.0001000001759889137,
+                "ground_minimum": -9.99999999999994e-05,
+                "entering_family": "reconstruction_native",
+                "entering_coordinate": [
+                  0.6,
+                  0,
+                  0
+                ],
+                "last_completed_primal_objective": 0,
+                "seconds": 2.532498657
+              },
+              {
+                "kind": "add",
+                "sequence": 3,
+                "add": 1,
+                "per_add_work": 0,
+                "total_work": 0,
+                "entering": {
+                  "cut": 0,
+                  "witness": 0,
+                  "row_identity": "10a5655b7f2db77a",
+                  "constraint_identity": "6e6b9f788ad9e922",
+                  "family": "reconstruction_native",
+                  "coordinate": [
+                    0.6,
+                    0,
+                    0
+                  ]
+                },
+                "leaving": null,
+                "multiplier_step": 0,
+                "active_size": 1,
+                "active_fingerprint": "a56bc30f362c4aec",
+                "qr_min_diagonal": 0,
+                "qr_max_diagonal": 0,
+                "last_completed_primal_objective": 0,
+                "working_dual_violation": 0,
+                "seconds": 2.5334788
+              },
+              {
+                "kind": "solved",
+                "sequence": 4,
+                "add": 1,
+                "per_add_work": 1,
+                "total_work": 1,
+                "entering": {
+                  "cut": 0,
+                  "witness": 0,
+                  "row_identity": "10a5655b7f2db77a",
+                  "constraint_identity": "6e6b9f788ad9e922",
+                  "family": "reconstruction_native",
+                  "coordinate": [
+                    0.6,
+                    0,
+                    0
+                  ]
+                },
+                "leaving": null,
+                "multiplier_step": 1,
+                "active_size": 1,
+                "active_fingerprint": "a56bc30f362c4aec",
+                "qr_min_diagonal": 1,
+                "qr_max_diagonal": 1,
+                "last_completed_primal_objective": 1.5994759653049757e-16,
+                "working_dual_violation": 0,
+                "seconds": 2.534409271
+              },
+              {
+                "kind": "correction_end",
+                "success": true,
+                "failure": "",
+                "seconds": 9.196588016
+              }
+            ],
+            "full_diagnostic_dump": "None",
+            "stationarity_mass_dual": 0,
+            "complementarity": 0,
+            "scope": "declared k inventories and continuous cubic ground; no volume-wide polynomial certificate"
+          },
+          "active_packet_policy_passed": true,
+          "all_native_mode_flux_identity_errors": [
+            7.74803398523316e-15,
+            3.783526768795509e-16,
+            4.213914373690786e-15,
+            4.213914373690786e-15
+          ],
+          "outflow_backflow": [
+            {
+              "un": 1,
+              "independent_integral_errors": [
+                4.440892098500626e-16,
+                0,
+                8.881784197001252e-16,
+                2.7755575615628914e-17
+              ]
+            },
+            {
+              "un": -1,
+              "independent_integral_errors": [
+                2.220446049250313e-16,
+                0,
+                6.938893903907228e-18,
+                8.673617379884035e-19
+              ]
+            }
+          ],
+          "selected_stress_and_scalar_diffusion_flux_errors": [
+            1.7367428025230613e-15,
+            1.6282277175844184e-15,
+            1.22514845490862e-17,
+            9.208942202548753e-18
+          ],
+          "common_constant_pressure_action": 0.3000000000000002,
+          "absolute_pressure_projection_error": 0,
+          "fixture_setup_projections": 6,
+          "complete_G_action_error": 2.9445976265977046e-16,
+          "epsilon_inlet_interface_corner_error": 2.7755575615628914e-17,
+          "gauge": "unused slot fixed zero; pressure level fixed by total traction",
+          "governing_solves": 0
+        },
+        "boundary_status": {
+          "definition": {
+            "mode": "NeutralEquilibriumOpenV1",
+            "inlet": "immutable composite AWF/log reference through the entire .8m height; native convergent trace; exact E_C(H_A) corner",
+            "top": "W=0 essential; U/k/epsilon free; full selected tangential traction +u_tau^2 e_x; k conormal=0; epsilon conormal=-u_tau^4/(sigma_epsilon*Z)",
+            "outlet": "T*n=T_ref*n+un-*(u-u_ref); conservative un+*q+un-*q_ref, counted once; zero outgoing scalar diffusion",
+            "pressure": "pi=p/rho+2k/3; Pout is outer streamwise total-normal-pressure datum; no pressure Dirichlet or roof datum; unused gauge zero",
+            "Pout": 0.003,
+            "normals": "outlet +e_x, roof +e_z; per unit density; physical outward epsilon diffusion is positive",
+            "boundary_quadrature": "configured normal Gauss order on outlet; configured tangential Gauss order on roof",
+            "backflow": "immutable analytical composite reference, positive k/epsilon, no profile tail or reset"
+          },
+          "face_columns": "axis,side,physical_area,outward_volume_flux",
+          "faces": [
+            [
+              0,
+              -1,
+              0.7999999999999999,
+              -1.0502075284966599
+            ],
+            [
+              0,
+              1,
+              0.7999999999999999,
+              1.0502075284966599
+            ],
+            [
+              2,
+              -1,
+              0.8000000000000002,
+              0
+            ],
+            [
+              2,
+              1,
+              0.8000000000000002,
+              0
+            ]
+          ],
+          "net_volume_flux": 0,
+          "minimum_outlet_un": 0.00041835724583578945,
+          "strong_divergence_inner_outer_L2": [
+            8.774304626528788e-15,
+            6.559960746490834e-14
+          ],
+          "weak_regional_continuity_unused_gauge": [
+            8.276036413140692e-20,
+            5.3099884844069444e-18,
+            0
+          ],
+          "top_net_flux_adjustment": 0
+        },
+        "initialization_vs_evolution": "radial setup may fit top values/derivatives; evolution constrains only W there; U,k,epsilon have natural data",
+        "governing_solves": 0,
+        "physical_steps": 0
+      },
+      "native_receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/RANSWallResolutionProbe",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/boundary-v3/CLS-case/case.xml",
+          "input.json",
+          "result.json"
+        ],
+        "exit_code": 0,
+        "seconds": 60.11676018196158,
+        "input_sha256": "9b641f9a1df79d4e11bbf5eb8cf8252a8cea7aaa5cca7c348c83942aa1bc8115",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/boundary-v3/CLS-native/result.json",
+        "output_sha256": "55aae228e2b3ba0e88750be748504ba46e764dac738880fb4b922b61ff75fcd2"
+      },
+      "source_result_sha256": "55aae228e2b3ba0e88750be748504ba46e764dac738880fb4b922b61ff75fcd2",
+      "production_fixture": {
+        "version": "WP2NativeProtocolV1",
+        "status": "passed_fixture",
+        "model": "CLS",
+        "solver": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/IncNavierStokesSolver",
+        "solver_sha256": "2da3815c795d3d2894f1935b6e8c3606655543b3d52d2910a04a69d9defdb89d",
+        "results": {
+          "h0": {
+            "code": 0,
+            "seconds": 14.974025011993945,
+            "xml_sha256": "e09a2f7302b310baa99a269bc5e97e4b49de8faca8c5f38448d30633aa34038d",
+            "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/fixture-v3-CLS/h0/case.evolution.json",
+            "report_sha256": "187cb41fc078c5c0682732983013e2c53c1df3914b715488724e75ec502d01be",
+            "failure": "",
+            "usage": "14.90 13.54 0.82 992164\n"
+          },
+          "direct2": {
+            "code": 0,
+            "seconds": 29.457554369000718,
+            "xml_sha256": "62c17fa68fb6181f5ce957a5dc22cf21025f6b8df1c8363ab5560f0d4198fa4b",
+            "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/fixture-v3-CLS/direct2/case.evolution.json",
+            "report_sha256": "56c85831ae8df69fdf18679643513499337b5f7c624f580d98fd54efe225ac67",
+            "failure": "",
+            "usage": "29.35 27.07 1.50 1467648\n"
+          },
+          "split1": {
+            "code": 0,
+            "seconds": 22.63660039502429,
+            "xml_sha256": "239a1b1a4598ed5f554078e4caa559daa37cb7b4ab0d16893ba49f362c42e435",
+            "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/fixture-v3-CLS/split1/case.evolution.json",
+            "report_sha256": "17477152c31f5bd40ddd1b5aed78c6d06508912b66bde93a4c7b5aa0217d0478",
+            "failure": "",
+            "usage": "22.54 20.47 1.30 1450552\n"
+          },
+          "split1-restart": {
+            "code": 0,
+            "seconds": 23.39019076200202,
+            "xml_sha256": "2526d5b6508de9757eed5c0459605513faf8f3e08f701fcbdae486903159ed13",
+            "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/fixture-v3-CLS/split1-restart/case.evolution.json",
+            "report_sha256": "1e80161a253d58c97b45a73f986eb1bf59ca12555de1ed7f528d3ec2dc3e70a9",
+            "failure": "",
+            "usage": "23.29 21.37 1.27 1445620\n"
+          },
+          "post-assignment-reject": {
+            "code": 1,
+            "seconds": 21.94536298600724,
+            "xml_sha256": "2fba834fe9c9ba01994e41b06c059676ff248716c7fb2b95f078191e1ff12462",
+            "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/fixture-v3-CLS/post-assignment-reject/case.evolution.json",
+            "report_sha256": "1f9317bf584401baf06cf496abbaad571f1f87ea9b953735fcd6a0994518c0f8",
+            "failure": "deliberate post-assignment explicit rejection",
+            "usage": "Command exited with non-zero status 1\n21.89 19.96 1.24 1449528\n"
+          },
+          "changed-boundary-restart": {
+            "code": 1,
+            "seconds": 7.335347711050417,
+            "xml_sha256": "24b1b979b3bc0894dd0d074b1d7957b298432a529da984dc147e11a870422451",
+            "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/fixture-v3-CLS/changed-boundary-restart/case.evolution.json",
+            "report_sha256": "3ceee85bc813f4e42acdd01c549b3efe0a393adf4e3a5597abd9c8ac078067fb",
+            "failure": "Wall IMEX: checkpoint signature mismatch",
+            "usage": "Command exited with non-zero status 1\n7.29 6.16 0.59 728528\n"
+          }
+        },
+        "case_definition": {
+          "level": 0,
+          "order": 16,
+          "projection": "RadialL2V1"
+        },
+        "split_bitwise": true,
+        "post_assignment_rollback": true,
+        "incompatible_boundary_restart_rejected": true,
+        "accepted_step_executions": 4,
+        "deliberate_rejections": 1,
+        "parent_checkpoint_sha256": "0e1e72ac0d2b202d4a616e58bdb573873aa0a397320ee85e1db4a7a68d0a2495"
+      }
+    },
+    "standard": {
+      "boundary": {
+        "version": "NeutralEquilibriumBoundaryChecksV1",
+        "passed": true,
+        "policy": {
+          "mode": "NeutralEquilibriumOpenV1",
+          "inlet": "immutable composite AWF/log reference through the entire .8m height; native convergent trace; exact E_C(H_A) corner",
+          "top": "W=0 essential; U/k/epsilon free; full selected tangential traction +u_tau^2 e_x; k conormal=0; epsilon conormal=-u_tau^4/(sigma_epsilon*Z)",
+          "outlet": "T*n=T_ref*n+un-*(u-u_ref); conservative un+*q+un-*q_ref, counted once; zero outgoing scalar diffusion",
+          "pressure": "pi=p/rho+2k/3; Pout is outer streamwise total-normal-pressure datum; no pressure Dirichlet or roof datum; unused gauge zero",
+          "Pout": 0.003,
+          "normals": "outlet +e_x, roof +e_z; per unit density; physical outward epsilon diffusion is positive",
+          "boundary_quadrature": "configured normal Gauss order on outlet; configured tangential Gauss order on roof",
+          "backflow": "immutable analytical composite reference, positive k/epsilon, no profile tail or reset"
+        },
+        "face_load_relative_errors_U_W_epsilon": [
+          2.8591361667433744e-16,
+          5.241749639029519e-16,
+          6.549965350962952e-16
+        ],
+        "all_native_modes_including_nonconstant": true,
+        "reference_pi_inner_outer": [
+          0.002999999999999999,
+          0.002999999999999999
+        ],
+        "advective_all_mode_checks": [
+          {
+            "sign": 1,
+            "all_mode_relative_errors": [
+              5.551115123125783e-16,
+              0,
+              5.551115123125783e-16,
+              3.0839528461809903e-16
+            ]
+          },
+          {
+            "sign": -1,
+            "all_mode_relative_errors": [
+              4.0104835461124504e-16,
+              0,
+              2.3587873375632837e-16,
+              1.1515668368855792e-15
+            ]
+          }
+        ],
+        "independent_pressure_error_over_K0": 4.717574675126566e-17,
+        "reference_mechanical_pressure_jump_inner_minus_outer": 0,
+        "top_shear_per_density": 0.005515726603512429,
+        "top_epsilon_conormal": -2.821498719297465e-05,
+        "top_outward_epsilon_diffusive_flux": 2.821498719297465e-05,
+        "composite_inlet_volume_flux": 1.050195996901104,
+        "Ubulk": 1.31274499612638,
+        "minimum_preservation_horizon_seconds": 1.1942387693600194,
+        "analytical_free_block_norms": [
+          1.579445159947115e-13,
+          1.8491734739634034e-15,
+          1.6117727766218282e-14,
+          1.2315014777880117e-15,
+          0,
+          0,
+          0,
+          0
+        ],
+        "wrong_top_free_block_norms": [
+          0.045291878414116436,
+          1.8491734739634034e-15,
+          1.6117727766218282e-14,
+          0.00012077545079886241,
+          0,
+          0,
+          0,
+          0
+        ],
+        "omitted_outlet_shear_free_block_norms": [
+          1.579445159947115e-13,
+          0.040329557963895875,
+          1.6117727766218282e-14,
+          1.2315014777880117e-15,
+          0,
+          0,
+          0,
+          0
+        ],
+        "free_top_U_k_epsilon_memberships": [
+          736,
+          736,
+          736
+        ],
+        "full_pressure_flux_corner_fixture": {
+          "status": "passed",
+          "projection_only_fixture_bound_calls": 1,
+          "projection_only_fixture_governing_solves": 0,
+          "projection_only_fixture": {
+            "physical_bands": null,
+            "mode": "MassProjection",
+            "algorithm": "MassQR-AcceptedBudgetV2",
+            "inventory_policy": "AcceptedBudgetV2",
+            "projection_only": false,
+            "work_controls": {
+              "schema": 1,
+              "per_add_completed_work": 2000,
+              "total_completed_work": 20000,
+              "separation_passes": 2000,
+              "wall_seconds": 900,
+              "trace": "Summary",
+              "finite_qp_solver": "RetainedPool",
+              "finite_qp_version": "retained-pool-v1",
+              "trace_file": "None",
+              "dump_file": "None",
+              "mathematics": "same raw-centered physical mass QP and constraints; finite-QP solver implementation and work controls are recorded separately from physical checkpoint identity"
+            },
+            "telemetry_schema": 1,
+            "separation_passes": 2,
+            "inventory_rebuilds": 1,
+            "inventory_counts": {
+              "budget_awf_reporting_volume": 50688,
+              "constitutive_budget_awf_ray": 202680,
+              "constitutive_budget_reporting_source_ray": 270000,
+              "constitutive_matching_K": 563,
+              "interface_inner": 48,
+              "interface_outer": 96,
+              "mass_volume": 7680,
+              "matching_trace_nodes": 96,
+              "open_boundary_native": 464,
+              "physical_matching_transfer": 914,
+              "physical_sampled_K": 1020,
+              "prescribed_source_inner": 62208,
+              "reconstruction_dense": 12888,
+              "reconstruction_native": 69120,
+              "source_volume_outer": 48384,
+              "trace_budget_awf_ray": 15480,
+              "volume_normalization_ray": 51840
+            },
+            "discovered_constraint_families": {
+              "reconstruction_native": 1
+            },
+            "calls": 1,
+            "activations": 1,
+            "success": true,
+            "failure": "",
+            "floor_relative": 1e-08,
+            "K0": 0.01838575534504143,
+            "floor": 1.838575534504143e-10,
+            "arithmetic_reserve": 1.6721747074408476e-14,
+            "raw_minimum_scope": "static and available pre-k ray locations; no inadmissible raw normalization evaluation",
+            "raw_minimum": {
+              "value": -9.99999999999994e-05,
+              "physical_coordinate": [
+                0.6,
+                0,
+                0
+              ],
+              "functional_kind": "Point",
+              "coordinate": [
+                0.6,
+                0,
+                0
+              ],
+              "geometry": 5,
+              "inventory": "reconstruction_native"
+            },
+            "corrected_minimum": {
+              "value": 1.8387427691557434e-10,
+              "physical_coordinate": [
+                0.6,
+                0,
+                0
+              ],
+              "functional_kind": "Point",
+              "coordinate": [
+                0.6,
+                0,
+                0
+              ],
+              "geometry": 5,
+              "inventory": "reconstruction_native"
+            },
+            "raw_ground": {
+              "admissible": false,
+              "minimum": -9.99999999999994e-05,
+              "arithmetic_scale": 0,
+              "point": [
+                0.6,
+                0,
+                0
+              ],
+              "physical_point": [
+                0.6,
+                0,
+                0
+              ],
+              "geometry": 5,
+              "extrema_checked": 12
+            },
+            "corrected_ground": {
+              "admissible": true,
+              "minimum": 1.838742751944034e-10,
+              "arithmetic_scale": 0,
+              "point": [
+                0.6,
+                0,
+                0
+              ],
+              "physical_point": [
+                0.6,
+                0,
+                0
+              ],
+              "geometry": 5,
+              "extrema_checked": 22
+            },
+            "raw_sha256": "64af36cdb659e34769fb852db50691b9290a4896324224493f46094d582cbeed",
+            "corrected_sha256": "0f7b172943348be31055f4b13569f01ed0297092ae3cdcfb20c84d97f26c9f50",
+            "mass_norm_correction": 1.7885615544573336e-08,
+            "mass_norm_raw_step": 2.880173656202952e-05,
+            "mass_norm_accepted_step": 2.8798302449683714e-05,
+            "mass_inner_product_raw_bound": -9.906245016616525e-14,
+            "mass_norm_increment_identity_defect": -1.0241307815941264e-25,
+            "correction_to_step_ratio_defined": true,
+            "correction_to_step_ratio": 0.0006209908734514522,
+            "integral_total": 3.1989402069391045e-12,
+            "integrals_inner_outer_near_positive_negative": [
+              3.198828248174907e-12,
+              1.1195876418364034e-16,
+              3.758571633920237e-12,
+              1.3587461409099387e-11,
+              -1.0388521202160373e-11
+            ],
+            "near_ground_height": 1.5570612247636407e-05,
+            "active_constraints": [
+              {
+                "physical_coordinate": [
+                  0.6,
+                  0,
+                  0
+                ],
+                "functional_kind": "Point",
+                "coordinate": [
+                  0.6,
+                  0,
+                  0
+                ],
+                "geometry": 5,
+                "inventory": "reconstruction_native",
+                "raw": -9.99999999999994e-05,
+                "corrected": 1.8387427691557434e-10,
+                "floor": 1.838575534504143e-10,
+                "normalized_dual_multiplier": 1.7885615544573352e-08
+              }
+            ],
+            "active_set_iterations": 1,
+            "mass_factorizations": 1,
+            "mass_factor_applications": 2,
+            "mass_matrix_applications": 3,
+            "kkt_solves": 1,
+            "governing_equation_solves": 0,
+            "primal_floor_defect": 0,
+            "active_row_floor_defect": 0,
+            "current_inventory_passed": true,
+            "current_inventory": {
+              "admissible": true,
+              "scope": "declared finite scalar evaluation sets only",
+              "phase": "k_inventory_complete",
+              "failure": "",
+              "minimum_dimensionless_margin": 1.0000909588148336e-08,
+              "limiting_functional_kind": "Point",
+              "limiting_inventory": "reconstruction_native",
+              "limiting_point": [
+                0.6,
+                0,
+                0
+              ],
+              "minimum_inner_k": 1.8387427691557434e-10,
+              "minimum_outer_k": 0.01838575534278919,
+              "minimum_outer_epsilon": 0.001162291481739741,
+              "minimum_sampled_K": 0.01838575534278919,
+              "minimum_projected_trace_epsilon": 1e+300,
+              "minimum_b": null,
+              "minimum_lambda": null,
+              "normalization_applicable": false,
+              "minimum_budget_ratio": 3.0565837734716252,
+              "maximum_budget_relative_defect": 0,
+              "cutoff_range": [
+                0.0008312858194455216,
+                0.000831285819701683
+              ],
+              "inventory_counts": {
+                "budget_awf_reporting_volume": 50688,
+                "constitutive_budget_awf_ray": 202680,
+                "constitutive_budget_reporting_source_ray": 270000,
+                "constitutive_matching_K": 563,
+                "interface_inner": 48,
+                "interface_outer": 96,
+                "mass_volume": 7680,
+                "matching_trace_nodes": 96,
+                "open_boundary_native": 464,
+                "physical_matching_transfer": 914,
+                "physical_sampled_K": 1020,
+                "prescribed_source_inner": 62208,
+                "reconstruction_dense": 12888,
+                "reconstruction_native": 69120,
+                "source_volume_outer": 48384,
+                "trace_budget_awf_ray": 15480,
+                "volume_normalization_ray": 51840
+              },
+              "profile_branch_pattern": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            },
+            "current_inventory_exception": "",
+            "ground_passed": true,
+            "ground_floor_defect": 0,
+            "finite_pool_normalized_violation": 0,
+            "completed_primal_dual_coherent": true,
+            "unfinished_working_set": false,
+            "finite_pool_scans": 1,
+            "finite_pool_reentries": 0,
+            "exact_cut_reuses": 0,
+            "finite_pool_complete": true,
+            "last_completed_add": 1,
+            "adds": 1,
+            "maximum_work_one_add": 1,
+            "work_guard_checks": 1,
+            "rejected_total_limit_checks": 0,
+            "rejected_add_limit_checks": 0,
+            "rejected_time_limit_checks": 0,
+            "legacy_guard_counter": 1,
+            "unique_evaluation_rows": 1,
+            "repeated_rows": 0,
+            "repeated_identical_constraints": 0,
+            "rediscovered_identical_constraints": 0,
+            "repeated_working_sets": 0,
+            "dependent_entries": 0,
+            "maximum_active_size": 1,
+            "minimum_observed_qr_residual": 1,
+            "last_completed_qr_diagonal_range": [
+              1,
+              1
+            ],
+            "primal_objective": 1.5994762170414197e-16,
+            "dual_objective": 1.5994762170414197e-16,
+            "primal_dual_gap_working_set": 0,
+            "dual_feasibility_defect": 0,
+            "seconds_total": 10.266287431,
+            "seconds_algebra": 0.000937141,
+            "seconds_factorization": 0.108034669,
+            "seconds_separation": 0.08415378200000001,
+            "seconds_inventory": 9.090606730000001,
+            "trace_events": 5,
+            "bounded_trace": [
+              {
+                "kind": "correction_start",
+                "time": 0,
+                "raw_sha256": "64af36cdb659e34769fb852db50691b9290a4896324224493f46094d582cbeed",
+                "controls": {
+                  "schema": 1,
+                  "per_add_completed_work": 2000,
+                  "total_completed_work": 20000,
+                  "separation_passes": 2000,
+                  "wall_seconds": 900,
+                  "trace": "Summary",
+                  "finite_qp_solver": "RetainedPool",
+                  "finite_qp_version": "retained-pool-v1",
+                  "trace_file": "None",
+                  "dump_file": "None",
+                  "mathematics": "same raw-centered physical mass QP and constraints; finite-QP solver implementation and work controls are recorded separately from physical checkpoint identity"
+                }
+              },
+              {
+                "kind": "separation",
+                "sequence": 2,
+                "pass": 1,
+                "inventory_rebuilds": 0,
+                "floor_violation_known_inventory": 0.00010000018385755284,
+                "ground_minimum": -9.99999999999994e-05,
+                "entering_family": "reconstruction_native",
+                "entering_coordinate": [
+                  0.6,
+                  0,
+                  0
+                ],
+                "last_completed_primal_objective": 0,
+                "seconds": 2.670415375
+              },
+              {
+                "kind": "add",
+                "sequence": 3,
+                "add": 1,
+                "per_add_work": 0,
+                "total_work": 0,
+                "entering": {
+                  "cut": 0,
+                  "witness": 0,
+                  "row_identity": "10a5655b7f2db77a",
+                  "constraint_identity": "0409884f23d7470b",
+                  "family": "reconstruction_native",
+                  "coordinate": [
+                    0.6,
+                    0,
+                    0
+                  ]
+                },
+                "leaving": null,
+                "multiplier_step": 0,
+                "active_size": 1,
+                "active_fingerprint": "ffd1bc815407f1e5",
+                "qr_min_diagonal": 0,
+                "qr_max_diagonal": 0,
+                "last_completed_primal_objective": 0,
+                "working_dual_violation": 0,
+                "seconds": 2.671405299
+              },
+              {
+                "kind": "solved",
+                "sequence": 4,
+                "add": 1,
+                "per_add_work": 1,
+                "total_work": 1,
+                "entering": {
+                  "cut": 0,
+                  "witness": 0,
+                  "row_identity": "10a5655b7f2db77a",
+                  "constraint_identity": "0409884f23d7470b",
+                  "family": "reconstruction_native",
+                  "coordinate": [
+                    0.6,
+                    0,
+                    0
+                  ]
+                },
+                "leaving": null,
+                "multiplier_step": 1,
+                "active_size": 1,
+                "active_fingerprint": "ffd1bc815407f1e5",
+                "qr_min_diagonal": 1,
+                "qr_max_diagonal": 1,
+                "last_completed_primal_objective": 1.5994762170414197e-16,
+                "working_dual_violation": 0,
+                "seconds": 2.672335369
+              },
+              {
+                "kind": "correction_end",
+                "success": true,
+                "failure": "",
+                "seconds": 10.265836027
+              }
+            ],
+            "full_diagnostic_dump": "None",
+            "stationarity_mass_dual": 0,
+            "complementarity": 0,
+            "scope": "declared k inventories and continuous cubic ground; no volume-wide polynomial certificate"
+          },
+          "active_packet_policy_passed": true,
+          "all_native_mode_flux_identity_errors": [
+            7.74803398523316e-15,
+            3.783526768795509e-16,
+            4.213914373690786e-15,
+            4.213914373690786e-15
+          ],
+          "outflow_backflow": [
+            {
+              "un": 1,
+              "independent_integral_errors": [
+                4.440892098500626e-16,
+                0,
+                8.881784197001252e-16,
+                2.7755575615628914e-17
+              ]
+            },
+            {
+              "un": -1,
+              "independent_integral_errors": [
+                2.220446049250313e-16,
+                0,
+                0,
+                8.673617379884035e-19
+              ]
+            }
+          ],
+          "selected_stress_and_scalar_diffusion_flux_errors": [
+            1.7954930077446196e-15,
+            1.604321059681113e-15,
+            1.1648397090641138e-17,
+            8.660064852727967e-18
+          ],
+          "common_constant_pressure_action": 0.3000000000000002,
+          "absolute_pressure_projection_error": 0,
+          "fixture_setup_projections": 6,
+          "complete_G_action_error": 2.5360960120591497e-16,
+          "epsilon_inlet_interface_corner_error": 2.7755575615628914e-17,
+          "gauge": "unused slot fixed zero; pressure level fixed by total traction",
+          "governing_solves": 0
+        },
+        "boundary_status": {
+          "definition": {
+            "mode": "NeutralEquilibriumOpenV1",
+            "inlet": "immutable composite AWF/log reference through the entire .8m height; native convergent trace; exact E_C(H_A) corner",
+            "top": "W=0 essential; U/k/epsilon free; full selected tangential traction +u_tau^2 e_x; k conormal=0; epsilon conormal=-u_tau^4/(sigma_epsilon*Z)",
+            "outlet": "T*n=T_ref*n+un-*(u-u_ref); conservative un+*q+un-*q_ref, counted once; zero outgoing scalar diffusion",
+            "pressure": "pi=p/rho+2k/3; Pout is outer streamwise total-normal-pressure datum; no pressure Dirichlet or roof datum; unused gauge zero",
+            "Pout": 0.003,
+            "normals": "outlet +e_x, roof +e_z; per unit density; physical outward epsilon diffusion is positive",
+            "boundary_quadrature": "configured normal Gauss order on outlet; configured tangential Gauss order on roof",
+            "backflow": "immutable analytical composite reference, positive k/epsilon, no profile tail or reset"
+          },
+          "face_columns": "axis,side,physical_area,outward_volume_flux",
+          "faces": [
+            [
+              0,
+              -1,
+              0.7999999999999999,
+              -1.0502075284966599
+            ],
+            [
+              0,
+              1,
+              0.7999999999999999,
+              1.0502075284966599
+            ],
+            [
+              2,
+              -1,
+              0.8000000000000002,
+              0
+            ],
+            [
+              2,
+              1,
+              0.8000000000000002,
+              0
+            ]
+          ],
+          "net_volume_flux": 0,
+          "minimum_outlet_un": 0.00041835724583563533,
+          "strong_divergence_inner_outer_L2": [
+            8.774304258322953e-15,
+            6.559960746490834e-14
+          ],
+          "weak_regional_continuity_unused_gauge": [
+            8.300565161982494e-20,
+            5.3099884844069444e-18,
+            0
+          ],
+          "top_net_flux_adjustment": 0
+        },
+        "initialization_vs_evolution": "radial setup may fit top values/derivatives; evolution constrains only W there; U,k,epsilon have natural data",
+        "governing_solves": 0,
+        "physical_steps": 0
+      },
+      "native_receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/RANSWallResolutionProbe",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/boundary-v3/standard-case/case.xml",
+          "input.json",
+          "result.json"
+        ],
+        "exit_code": 0,
+        "seconds": 68.63485407596454,
+        "input_sha256": "da15bcff2c85c058d83598914eb367e9ba3d43dacb6fbc917399a08be231fd61",
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/boundary-v3/standard-native/result.json",
+        "output_sha256": "91d2cc9059382f5617cb047edffb38b58f966bee9e4b48cc09277551a6e39ec1"
+      },
+      "source_result_sha256": "91d2cc9059382f5617cb047edffb38b58f966bee9e4b48cc09277551a6e39ec1",
+      "production_fixture": {
+        "version": "WP2NativeProtocolV1",
+        "status": "passed_fixture",
+        "model": "standard",
+        "solver": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/IncNavierStokesSolver",
+        "solver_sha256": "2da3815c795d3d2894f1935b6e8c3606655543b3d52d2910a04a69d9defdb89d",
+        "results": {
+          "h0": {
+            "code": 0,
+            "seconds": 15.323989799013361,
+            "xml_sha256": "c8da542f8347862ef5c841fa995b293fdec121006090a29521f212d7ee6a9b48",
+            "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/fixture-v3-standard/h0/case.evolution.json",
+            "report_sha256": "47df7bc7435e85d52a502403ff6f95527ad6af982ef6227e63677f4edec5db85",
+            "failure": "",
+            "usage": "15.25 13.76 0.88 1020180\n"
+          },
+          "direct2": {
+            "code": 0,
+            "seconds": 30.2553502410301,
+            "xml_sha256": "f33fc9e976f797d0423c36c0d2147b4b3106a6640fb866fcec5f767bfda81085",
+            "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/fixture-v3-standard/direct2/case.evolution.json",
+            "report_sha256": "b7811b986646b8ded7717a85809bddcdd903d72dc56abb856cbfa75753e70ff0",
+            "failure": "",
+            "usage": "30.13 27.73 1.62 1532688\n"
+          },
+          "split1": {
+            "code": 0,
+            "seconds": 23.277812334999908,
+            "xml_sha256": "d05dc0699780e45914d2df5e2e5f472e9b7598f74b8429e4940ad36dc1d37dd7",
+            "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/fixture-v3-standard/split1/case.evolution.json",
+            "report_sha256": "48ffcca21edeb3c8975e51bcb17231f90eb4b6750b5e89e336f22c25628ca7e4",
+            "failure": "",
+            "usage": "23.16 21.00 1.38 1507636\n"
+          },
+          "split1-restart": {
+            "code": 0,
+            "seconds": 23.9413014499587,
+            "xml_sha256": "5658e6a21d2afdaca60fd251daa6e8fc82d589c4c7de38c380b53324e4b81fa2",
+            "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/fixture-v3-standard/split1-restart/case.evolution.json",
+            "report_sha256": "5f07f190b085a2e2986fe1323f0ece93cd79f59c20dc2ec062befccd0a465723",
+            "failure": "",
+            "usage": "23.86 21.91 1.30 1490196\n"
+          },
+          "post-assignment-reject": {
+            "code": 1,
+            "seconds": 22.9473963950295,
+            "xml_sha256": "689109a0dec6faa5db146ed8cc58287360aa5eb241584f62178dad2b687d7b03",
+            "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/fixture-v3-standard/post-assignment-reject/case.evolution.json",
+            "report_sha256": "fead3b5c0e5d2c018195ccfcca01f1c5d70b76825f66a80701df6491df44a435",
+            "failure": "deliberate post-assignment explicit rejection",
+            "usage": "Command exited with non-zero status 1\n22.89 20.91 1.30 1487832\n"
+          },
+          "changed-boundary-restart": {
+            "code": 1,
+            "seconds": 7.284881665022112,
+            "xml_sha256": "6744eca4b4847786ab1afe721830a1461a109488ae7072912ca4305a36109b97",
+            "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/fixture-v3-standard/changed-boundary-restart/case.evolution.json",
+            "report_sha256": "4651a264bfdf2a0414d3cc64635304e61bfc61ac5a3ddde8ba1bb5d4ae898454",
+            "failure": "Wall IMEX: checkpoint signature mismatch",
+            "usage": "Command exited with non-zero status 1\n7.24 6.12 0.58 749940\n"
+          }
+        },
+        "case_definition": {
+          "level": 0,
+          "order": 16,
+          "projection": "RadialL2V1"
+        },
+        "split_bitwise": true,
+        "post_assignment_rollback": true,
+        "incompatible_boundary_restart_rejected": true,
+        "accepted_step_executions": 4,
+        "deliberate_rejections": 1,
+        "parent_checkpoint_sha256": "a4fdb308e8e3479854deab1c16ec1a25c2883ff2ad449fc5d64aa2b1b201419d"
+      }
+    }
+  },
+  "physical_duration_gate": "OPEN: tiny fixtures only",
+  "spatial_gate": "OPEN: U norms still above 1e-3",
+  "hill_steps": 0,
+  "runtime": {
+    "probe": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/RANSWallResolutionProbe",
+      "sha256": "c48710cbdee1e92014f41cd17e56fbdc751a2c6ea03a8bd25502b44f65a24b85",
+      "ldd": "\tlinux-vdso.so.1 (0x00007ffc15c2a000)\n\tlibmpi_cxx.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libmpi_cxx.so.40 (0x000078407fcf4000)\n\tlibmpi.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libmpi.so.40 (0x000078407f6c9000)\n\tlibMultiRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libMultiRegions.so.5.9.0 (0x000078407f200000)\n\tlibLocalRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libLocalRegions.so.5.9.0 (0x000078407ee00000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libSpatialDomains.so.5.9.0 (0x000078407ea00000)\n\tlibStdRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libStdRegions.so.5.9.0 (0x000078407e600000)\n\tlibLibUtilities.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libLibUtilities.so.5.9.0 (0x000078407e000000)\n\tliblapack.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/liblapack.so.3 (0x000078407d800000)\n\tlibstdc++.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libstdc++.so.6 (0x000078407d400000)\n\tlibm.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libm.so.6 (0x000078407f5e2000)\n\tlibgcc_s.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libgcc_s.so.1 (0x000078407fcd0000)\n\tlibc.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libc.so.6 (0x000078407d000000)\n\tlibopen-pal.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libopen-pal.so.40 (0x000078407f14d000)\n\tlibopen-rte.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libopen-rte.so.40 (0x000078407f090000)\n\tlibhwloc.so.15 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libhwloc.so.15 (0x000078407fc72000)\n\tlibCollections.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libCollections.so.5.9.0 (0x000078407ec8d000)\n\tlibptscotch-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libptscotch-6.1.so (0x000078407e92d000)\n\tlibblas.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libblas.so.3 (0x000078407f02e000)\n\tlibz.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libz.so.1 (0x000078407fc56000)\n\tlibfftw3.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libfftw3.so.3 (0x000078407cc00000)\n\tlibboost_iostreams.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libboost_iostreams.so.1.74.0 (0x000078407f016000)\n\tlibboost_program_options.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libboost_program_options.so.1.74.0 (0x000078407ec48000)\n\tlibopenblas.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libopenblas.so.0 (0x000078407a7b0000)\n\tlibgfortran.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libgfortran.so.5 (0x000078407a400000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000078407fd10000)\n\tlibevent_core-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libevent_core-2.1.so.7 (0x000078407ec13000)\n\tlibevent_pthreads-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libevent_pthreads-2.1.so.7 (0x000078407fc4d000)\n\tlibudev.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libudev.so.1 (0x000078407e903000)\n\tlibMatrixFreeOps.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libMatrixFreeOps.so.5.9.0 (0x0000784077600000)\n\tlibptscotcherr-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libptscotcherr-6.1.so (0x000078407f5dd000)\n\tlibbz2.so.1.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libbz2.so.1.0 (0x000078407e8f0000)\n\tliblzma.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/liblzma.so.5 (0x000078407e8c5000)\n\tlibzstd.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libzstd.so.1 (0x000078407e531000)\n\tlibquadmath.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libquadmath.so.0 (0x000078407e4e9000)\n",
+      "libraries": {
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libc.so.6": "4ebb1967c395ca547dcfeaeeab7a2819724604a331aede44e8a749a7e1a4628e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libm.so.6": "045fdb0436a8fb0d651f039e3444a9cbffc011d379c82b979cebf43571053eca",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v3/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a"
+      }
+    },
+    "solver": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/IncNavierStokesSolver",
+      "sha256": "2da3815c795d3d2894f1935b6e8c3606655543b3d52d2910a04a69d9defdb89d",
+      "ldd": "\tlinux-vdso.so.1 (0x00007ffdf6375000)\n\tlibSpatialDomains.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libSpatialDomains.so.5.9.0 (0x000073231aa00000)\n\tlibSolverUtils.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libSolverUtils.so.5.9.0 (0x000073231a400000)\n\tlibFieldUtils.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libFieldUtils.so.5.9.0 (0x000073231a000000)\n\tlibmpi_cxx.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libmpi_cxx.so.40 (0x000073231b698000)\n\tlibmpi.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libmpi.so.40 (0x000073231b55f000)\n\tlibGlobalMapping.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libGlobalMapping.so.5.9.0 (0x000073231ad6b000)\n\tlibMultiRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libMultiRegions.so.5.9.0 (0x0000732319c00000)\n\tlibLocalRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libLocalRegions.so.5.9.0 (0x0000732319800000)\n\tlibStdRegions.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libStdRegions.so.5.9.0 (0x0000732319400000)\n\tlibLibUtilities.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libLibUtilities.so.5.9.0 (0x0000732318e00000)\n\tliblapack.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/liblapack.so.3 (0x0000732318600000)\n\tlibblas.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libblas.so.3 (0x000073231b4fb000)\n\tlibstdc++.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libstdc++.so.6 (0x0000732318200000)\n\tlibm.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libm.so.6 (0x000073231ac84000)\n\tlibgcc_s.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libgcc_s.so.1 (0x000073231ac64000)\n\tlibc.so.6 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libc.so.6 (0x0000732317e00000)\n\tlibptscotch-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libptscotch-6.1.so (0x000073231a92d000)\n\tlibz.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libz.so.1 (0x000073231ac48000)\n\tlibboost_program_options.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libboost_program_options.so.1.74.0 (0x000073231a8e8000)\n\tlibopen-pal.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libopen-pal.so.40 (0x0000732319b4d000)\n\tlibopen-rte.so.40 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libopen-rte.so.40 (0x0000732319a90000)\n\tlibhwloc.so.15 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libhwloc.so.15 (0x000073231a88c000)\n\tlibCollections.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libCollections.so.5.9.0 (0x000073231928d000)\n\tlibfftw3.so.3 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libfftw3.so.3 (0x0000732317a00000)\n\tlibboost_iostreams.so.1.74.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libboost_iostreams.so.1.74.0 (0x000073231ac30000)\n\tlibopenblas.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libopenblas.so.0 (0x00007323155b0000)\n\tlibgfortran.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libgfortran.so.5 (0x0000732315200000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000073231b6b4000)\n\tlibptscotcherr-6.1.so => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libptscotcherr-6.1.so (0x000073231b4f0000)\n\tlibbz2.so.1.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libbz2.so.1.0 (0x000073231ac1d000)\n\tliblzma.so.5 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/liblzma.so.5 (0x000073231a861000)\n\tlibevent_core-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libevent_core-2.1.so.7 (0x000073231a3cb000)\n\tlibevent_pthreads-2.1.so.7 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libevent_pthreads-2.1.so.7 (0x000073231b4e9000)\n\tlibudev.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libudev.so.1 (0x0000732319a66000)\n\tlibMatrixFreeOps.so.5.9.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libMatrixFreeOps.so.5.9.0 (0x0000732312400000)\n\tlibzstd.so.1 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libzstd.so.1 (0x0000732319731000)\n\tlibquadmath.so.0 => /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libquadmath.so.0 (0x0000732319a1e000)\n",
+      "libraries": {
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libc.so.6": "4ebb1967c395ca547dcfeaeeab7a2819724604a331aede44e8a749a7e1a4628e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libm.so.6": "045fdb0436a8fb0d651f039e3444a9cbffc011d379c82b979cebf43571053eca",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a"
+      }
+    }
+  },
+  "source_sha256": {
+    "library/UnitTests/SolverUtils/RANSWallResolutionProbe.cpp": "c03a7655ccacc71006243dbda401ce1c4a058332742c79a5c2c312f29fcbc1bf",
+    "solvers/IncNavierStokesSolver/CMakeLists.txt": "d6887ceff2b065657ee2234884d35f8dc7733328131d045c54932162c0c0c7e6",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDeveloping.cpp": "78bacdc277d262fd44eecf87e37a8fbca9b8b6060186c5d0252b0c6681635551",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp": "c92aaf595d6583ec994231527114d09b1764ba8ce4ae0a2a13352eff8f074135",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h": "ffc9b3e16280432aac6855ac57b2428ef5b4deffb5a7d48c46b565e319e111fa",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.cpp": "a944d11b4f92f80d327c9ab48d476f8b2b80a48f149edab5cbd0cfdb5d86c7d3",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionRobust.cpp": "9217da51373ce92616f36f94250ee07b2c426b8422cf592e300e4bdafa3eedc8",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp": "c94fe21fa2328cf6e2693ff41b700124c30f6ecc0e120ddc76b52c00e6047d7e",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h": "00086a2db6fd29153b97d92c1c78e795a26df95645076f16897c4b535237a0a1",
+    "solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt": "6fd5d0b5ffee0877f1416e8866bf76edfc53dbf0ab180b82f69234cfdaeb608a",
+    "solvers/IncNavierStokesSolver/Tests/RANS/run_cao_tamura_budget_h2f_startup.py": "2ef71b812d85d0335c50ab1da11692ba5f257bd309b64d9abfcda5627af2f0ad",
+    "solvers/IncNavierStokesSolver/Tests/RANS/test_cao_tamura_budget_h2i.py": "d2205c4c51bbfb649851db4d5f64422a4bf64656bc91f472460813dde4e8a355",
+    "docs/plans/cls-cao-tamura-budget-wp2-evidence/source-crosswalk.json": "79b4079f455825e35d2adc3a1dda9109d105bb37c9f20ad91635cb3c20039976",
+    "solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionEquilibrium.cpp": "cf0a7770923f0465af46e447523769dbc4ee78d2034786fe49573b5e0f26a028",
+    "solvers/IncNavierStokesSolver/Tests/RANS/run_cao_tamura_budget_wp2.py": "fc1637854b784f29fa025d250aae4d233bb16bb44f385781cfede2f8be70a79a",
+    "solvers/IncNavierStokesSolver/Tests/RANS/wp2_native.py": "fcebe591a1b61c0be1daa4ce9ffccf35eaf77e3e13e240e7ee33044125d74ea2",
+    "solvers/IncNavierStokesSolver/Tests/RANS/wp2_neutral_cases.py": "bde6e6dfbb74fe3578d3636c427bd5e3f8719598e11ad7cd56f86d434075a905"
+  },
+  "aggregate_at_checkpoint": {
+    "spatial_cases": 15,
+    "boundary_calls": 7,
+    "physical_attempts": 20
+  },
+  "earlier_receipts": [
+    "checkpoint1.json",
+    "baseline/CLS-native/receipt.json",
+    "baseline-v2/progress.json",
+    "boundary-q24/progress.json",
+    "fixture-CLS/progress.json",
+    "fixture-standard/progress.json"
+  ]
+}
