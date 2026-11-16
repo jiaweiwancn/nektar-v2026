@@ -1,0 +1,72 @@
+{
+  "schema": "CT16ClockOffScalarTrainingV1",
+  "status": "PARTIAL_QUALIFICATION_RESOURCE_UNADMITTED",
+  "tested_native_source": "e1e5f94b8bebba61d3ff08055192f468a37ec802",
+  "source_revision_prefix_verified": "e1e5f94b",
+  "execution_policy": "ImmutableTensorV5",
+  "component": "CT16-StreamScalarV1",
+  "external_root": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+  "runtime": "build-capacity-identity-v1/runtime",
+  "governing_SHA256": "21baae762c2c077a3e715afdb1e85ebf3c9aea0af926921d2a1d9350bdbcfd72",
+  "probe_SHA256": "d59b4f2b87b2ec2c030fa671d8419850f04791fdde8359613e4c17ccacbfca3d",
+  "small_control_directory": "small-stream-v3",
+  "small_controls": {
+    "four_native_operators": "PASS",
+    "ordered_dependency_queries_exact_equal": 36,
+    "full_continuation": "binary64 state/time/all native history equal",
+    "rejected_step_rollback": "binary64 state/time/all native history equal",
+    "row_and_point_capacity1024_continuation": "binary64 state/time/all native history equal",
+    "oracle_maximum_state_difference": 0.0,
+    "foreign_histories": "rejected"
+  },
+  "training_directory": "training-stream-v3",
+  "same_dt": 0.00025,
+  "CPU": [
+    49.903597999999995,
+    157.136224,
+    273.4668979999999
+  ],
+  "wall": [
+    51.13329899299424,
+    160.4149784100009,
+    278.2817231089575
+  ],
+  "steps": [
+    0,
+    1,
+    2
+  ],
+  "peak_AS_KiB": [
+    9835560,
+    10603900,
+    10626636
+  ],
+  "output_bytes": [
+    10249019,
+    161216091,
+    254445964
+  ],
+  "all_selected_accepted_states_binary64_equal_to_CT14": true,
+  "maximum_coefficient_difference": 0.0,
+  "whole_training_family_CPU": 599.801379,
+  "whole_training_family_wall": 503.56404605298303,
+  "worker_resource": {
+    "aggregate_maximum": 30,
+    "project_maximum": 11,
+    "aggregate_status": "pass",
+    "project_status": "pass"
+  },
+  "detailed_timing": false,
+  "broad_diagnostic_timing": false,
+  "nonnegative_fit": {
+    "startup_CPU": 49.903598,
+    "repeated_step_CPU": 116.330674,
+    "method": "max(0,C1-C0,(C2-C0)/2,C2-C1); three clock-off same-dt native commands,not steady-state or heldout validation"
+  },
+  "conditional_fresh_entry_native_only_CPU_with_headroom": 719867.5868825,
+  "conditional_own_short_start_native_only_CPU_with_headroom": 716252.9076675,
+  "fresh_native_only_over_ceiling_ratio": 29.99448278677083,
+  "model_scope": "32step segments,153restarts/segments plus2separate zero initializations for fresh start,25% headroom once. All independent audits,retention/replay,controllers,milestones,collection/transfer/publication remain additional unmeasured future work. This is an unvalidated conditional extrapolation,not a mathematical lower bound on all future states or implementations.",
+  "native_step_allowance_with_observed_fresh_startups_and_all_other_costs_zero": 2.347449285421785,
+  "gates": "G1 small/current first2 states partial; selected quadrature/alpha controls incomplete. G2 fresh own .002 pair UNATTEMPTED. G3 complete heldout/model UNATTEMPTED. G4 cycles UNATTEMPTED. G5 UNADMITTED. No T>.002 preservation launched."
+}

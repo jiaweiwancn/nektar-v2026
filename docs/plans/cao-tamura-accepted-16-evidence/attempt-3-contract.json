@@ -1,0 +1,15 @@
+{
+  "schema": "CT16MeasuredRemedyV1",
+  "execution_policy": "ImmutableTensorV7",
+  "component": "CT16-ScopedAuditPointsV1",
+  "basis": "V4 partition shows21.473353 exclusive CPU seconds in two complete audits. Source independently recomputes current gradients/scalars/constitutive spectra for every inventory observation,including duplicate exact native points. V5 changes current scalar-domain evaluation but leaves that complete-audit loop unchanged. Its matched one-step157.136224CPU is useful but far from resource admission.",
+  "changes": [
+    "Within ONE CompleteRestrictedAudit invocation,add an independent bounded map of exactly computed current-point primitives. The complete effective state,time,data,field/mesh/model and native masks are fixed for that invocation. Destroy the map before returning. Never borrow scalar-domain validity or a prior state/stage/audit result.",
+    "Key exact coordinate bits,native owner,raw side,observed field,dependent-trace flag and actual dependent-trace value bits. Revalidate owner/side on first computation. Cache only the physical primitives used by this audit:actual U gradients,k/epsilon,current-K-derived inner viscosity and stress parameters,full signed stress tensor,covariance and radicand. Revisit EVERY logical inventory in its original order,with all minima,witnesses,ranges,weights and decisions unchanged.",
+    "Use the same fixed per-call point bound2097152,with1024 tiny-working-set control. Bound exhaustion clears only this local table. No cache content enters native history. Inherit V6 local matrix-scatter and V5 streamed values,with explicit V7 execution/history identity. Off and V1-6 paths remain.",
+    "Use streamed scalar-only evaluation within this new audit path; its materialized-row binary64 oracle remains enabled in the small verification controls. Current velocity gradients,dependent epsilon and full physical checks remain fresh at each required call."
+  ],
+  "qualification": "Require all36 ordered dependency/current-state/alpha/history queries exact to Off-side output,all four small native operators,complete updates,full rejected-step rollback,changed row+point-capacity continuation and negative histories. Then matched clock-off0/1/2 against CT14 actual vectors. A local speedup is partial; all selected-space actions/quadrature/alpha,current uncertainty,fresh physical pair,retention and heldout complete forecast remain G1-G6 requirements.",
+  "allocation": "Same CT16 start1794835825,24000CPU/28800wall/16GiB new-live pool,16GiB per-processAS,one numerical family/rank,librarythreads1,compilerjobs2,project16/aggregate72. Retain all failed/insufficient attempts. No T>.002.",
+  "interpretation": "Audit arithmetic and logical inventory are unchanged. This is per-call common-subexpression evaluation with complete actual dependencies implicit in a read-only call,not reduced physical/audit coverage or cross-state validity reuse. Exact results and cold/tiny-cache history controls must substantiate it."
+}

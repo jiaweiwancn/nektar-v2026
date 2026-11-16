@@ -145,8 +145,8 @@ RANSWallGlobalField::RANSWallGlobalField(
     RANSWallTiming::Scope timing("geometry.field_catalog",true,true);
     session->MatchSolverInfo("RANSWallLinearBackend","AcceptedSerialSparseV1",m_serialSparse,false);
     std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
-    m_immutableTensor=immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6";
-    m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6";
+    m_immutableTensor=immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7";
+    m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7";
     Require(!m_sharedTensor || dimension==2,"shared immutable rows require flat2D tensor fields");
     Require((dimension==2 || dimension==3) && session->GetComm()->GetSize()==1 &&
                 !elements.empty(),"requires nonempty serial 2D/3D native field");

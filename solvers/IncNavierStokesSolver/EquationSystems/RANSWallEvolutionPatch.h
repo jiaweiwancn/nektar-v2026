@@ -581,6 +581,7 @@ private:
     bool m_scopedConstitutivePoints=false;
     bool m_streamScalarValues=false;
     bool m_scopedScatter=false;
+    bool m_scopedAuditPoints=false;
     int m_constitutiveMaximumPoints=262144;
     int m_immutableMaximumRows=65536;
     struct ImmutableRows;
@@ -597,7 +598,8 @@ private:
             residualCalls=0,residualHits=0,constraintCalls=0,constraintHits=0,
             stateEvictions=0,inputInvalidations=0,profileReuses=0,scalarFieldReuses=0,peakStates=0,peakRows=0,peakProfiles=0,
             constitutivePointScopes=0,constitutivePointComputes=0,constitutivePointHits=0,
-            constitutivePointEvictions=0,peakConstitutivePoints=0,streamScalarValues=0;
+            constitutivePointEvictions=0,peakConstitutivePoints=0,streamScalarValues=0,
+            auditPointScopes=0,auditPointComputes=0,auditPointHits=0,auditPointEvictions=0,peakAuditPoints=0;
     };
     mutable EvaluationWork m_evaluationWork;
     void PrepareEvaluation(const RANSWallEvolutionData &,double) const;

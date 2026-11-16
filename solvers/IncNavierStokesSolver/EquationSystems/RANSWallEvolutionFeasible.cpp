@@ -2325,51 +2325,101 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     double minimumDivergence=1e300,maximumDivergence=-1e300,maximumIsotropicWork=0.;
     Vector divergencePoint,isotropicWorkPoint;
     auto flatten=[](const RANSTensor &a){Vector v;for(const auto &row:a)for(double x:row)v.push_back(x);return v;};
+    // This independent audit table never borrows domain validity. Complete
+    // actual state/time/data/space identities are fixed by this call's lifetime.
+    // Every logical observation below still updates all original ranges and
+    // witnesses in its original order, including duplicate inventory entries.
+    struct AuditPoint
+    {
+        RANSTensor gradient{},tensor{};
+        double k=0,epsilon=0,profileK=0,nt=0,a=0,c=0,covariance=0,radicand=0;
+        int geometry=-1,element=-1,side=0;bool inner=false,radicandDefined=false;
+    };
+    using AuditKey=std::array<std::uint64_t,8>;
+    struct AuditHash {std::size_t operator()(const AuditKey &key) const noexcept
+        {std::size_t h=1469598103934665603ULL;for(auto b:key){h^=b;h*=1099511628211ULL;}return h;}};
+    std::unordered_map<AuditKey,AuditPoint,AuditHash> auditPoints;
+    const auto auditBit=[](double value){std::uint64_t b;std::memcpy(&b,&value,sizeof b);return b;};
+    if(m_scopedAuditPoints)++m_evaluationWork.auditPointScopes;
+    const auto computeAuditPoint=[&](const ScalarObservation &p)
+    {
+        AuditPoint v;const auto provenance=ResolveObservation(p);const auto &row=*provenance.velocity;
+        v.geometry=row.geometry;v.element=row.element;v.side=provenance.radialSide;v.inner=provenance.inner;
+        for(int a=0;a<m_dimension;++a)v.gradient[PhysicalAxis(a)]=row.Gradient(domain.effectiveState,offset[a]);
+        v.k=m_scopedAuditPoints?PointValue(K(),GeometryElement(K(),row.geometry),p.coordinate,domain.effectiveState):
+            EvaluationRow(K(),GeometryElement(K(),row.geometry),p.coordinate)->Value(domain.effectiveState,offset[K()]);
+        if(v.inner)
+        {
+            const auto profile=StateProfile(domain.effectiveState,p.coordinate,time,data);
+            v.nt=profile->Original().EddyViscosity(Distance(p.coordinate));v.profileK=profile->K();
+            const auto law=InnerStress(v.k,v.nt,v.gradient);v.tensor=law.reynoldsStress;v.a=law.a;v.c=law.c;
+        }
+        else
+        {
+            v.epsilon=p.dependentTrace?p.value:m_scopedAuditPoints?
+                PointValue(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate,domain.effectiveState):
+                EvaluationRow(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate)->Value(domain.effectiveState,offset[Epsilon()]);
+            const auto law=OuterClosure(v.k,v.epsilon,v.gradient,p.coordinate);v.tensor=law.reynoldsStress;
+            v.radicand=law.a95Radicand;v.radicandDefined=law.a95RadicandDefined;
+        }
+        v.covariance=J::Eigenvalues(v.tensor)[0];return v;
+    };
+    RANSWallTiming::Scope repeatedInventory("audit.repeated_point_inventory");
     for(const auto &p:domain.observations)
     {
         if(p.block!=K() && !p.dependentTrace)continue;
-        const double r=Distance(p.coordinate);const auto provenance=ResolveObservation(p);
-        const bool inner=provenance.inner;const auto &row=*provenance.velocity;
-        RANSTensor G{};
-        for(int a=0;a<m_dimension;++a)G[PhysicalAxis(a)]=row.Gradient(domain.effectiveState,offset[a]);
-        const double k=EvaluationRow(K(),GeometryElement(K(),row.geometry),p.coordinate)->Value(domain.effectiveState,offset[K()]);
+        const double r=Distance(p.coordinate);AuditPoint fresh;const AuditPoint *current=nullptr;
+        const bool memo=m_scopedAuditPoints && p.geometry>=0 && !p.functional;
+        const AuditKey key{std::uint64_t(p.geometry),std::uint64_t(p.block),std::uint64_t(p.side+1),
+            std::uint64_t(p.dependentTrace),auditBit(p.coordinate[0]),auditBit(p.coordinate[1]),auditBit(p.coordinate[2]),
+            p.dependentTrace?auditBit(p.value):0};
+        if(memo){const auto it=auditPoints.find(key);if(it!=auditPoints.end()){current=&it->second;++m_evaluationWork.auditPointHits;}}
+        if(!current)
+        {
+            fresh=computeAuditPoint(p);++m_evaluationWork.auditPointComputes;
+            if(memo)
+            {
+                if(auditPoints.size()>=std::size_t(m_constitutiveMaximumPoints)){auditPoints.clear();++m_evaluationWork.auditPointEvictions;}
+                current=&auditPoints.emplace(key,std::move(fresh)).first->second;
+                m_evaluationWork.peakAuditPoints=std::max<std::uint64_t>(m_evaluationWork.peakAuditPoints,auditPoints.size());
+            }
+            else current=&fresh;
+        }
+        const auto &value=*current;const bool inner=value.inner;const auto &G=value.gradient;const double k=value.k;
         if(NewModels())
         {
             const double divergence=G[0][0]+G[1][1]+G[2][2];
             if(std::abs(divergence)>std::max(std::abs(minimumDivergence==1e300?0.:minimumDivergence),
                 std::abs(maximumDivergence==-1e300?0.:maximumDivergence)))
-                divergencePoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],divergence,double(row.geometry),double(provenance.radialSide),inner?0.:1.};
+                divergencePoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],divergence,double(value.geometry),double(value.side),inner?0.:1.};
             minimumDivergence=std::min(minimumDivergence,divergence);maximumDivergence=std::max(maximumDivergence,divergence);
             if(!inner && std::abs(-2*k*divergence/3)>maximumIsotropicWork)
             {
                 maximumIsotropicWork=std::abs(-2*k*divergence/3);
-                isotropicWorkPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],-2*k*divergence/3,double(row.geometry),double(provenance.radialSide)};
+                isotropicWorkPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],-2*k*divergence/3,double(value.geometry),double(value.side)};
             }
         }
         if(inner)
         {
-            const auto profile=StateProfile(domain.effectiveState,p.coordinate,time,data);
-            const double nt=profile->Original().EddyViscosity(r);const auto law=InnerStress(k,nt,G);
-            const double cov=J::Eigenvalues(law.reynoldsStress)[0];
-            if(cov<innerCov){innerCov=cov;innerPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,profile->K(),nt,law.a,law.c,cov};
-                innerProvenance={double(row.geometry),double(row.element),double(provenance.radialSide),double(p.block)};
-                if(NewModels()){innerTensor=flatten(law.reynoldsStress);innerGradient=flatten(G);}}
+            const double nt=value.nt,cov=value.covariance;
+            if(cov<innerCov){innerCov=cov;innerPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,value.profileK,nt,value.a,value.c,cov};
+                innerProvenance={double(value.geometry),double(value.element),double(value.side),double(p.block)};
+                if(NewModels()){innerTensor=flatten(value.tensor);innerGradient=flatten(G);}}
             continue;
         }
-        const double epsilon=p.dependentTrace?p.value:EvaluationRow(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate)->Value(domain.effectiveState,offset[Epsilon()]);
-        const auto law=OuterClosure(k,epsilon,G,p.coordinate);const double cov=J::Eigenvalues(law.reynoldsStress)[0];
-        if(law.a95RadicandDefined)
+        const double epsilon=value.epsilon,cov=value.covariance;
+        if(value.radicandDefined)
         {
-            maximumRadicand=std::max(maximumRadicand,law.a95Radicand);
-            if(law.a95Radicand<minimumRadicand)
+            maximumRadicand=std::max(maximumRadicand,value.radicand);
+            if(value.radicand<minimumRadicand)
             {
-                minimumRadicand=law.a95Radicand;radicandPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,epsilon,law.a95Radicand};
-                radicandProvenance={double(row.geometry),double(row.element),double(provenance.radialSide),double(p.block)};
+                minimumRadicand=value.radicand;radicandPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,epsilon,value.radicand};
+                radicandProvenance={double(value.geometry),double(value.element),double(value.side),double(p.block)};
             }
         }
         if(cov<outerCov){outerCov=cov;outerPoint={p.coordinate[0],p.coordinate[1],p.coordinate[2],k,epsilon,cov};
-            outerProvenance={double(row.geometry),double(row.element),double(provenance.radialSide),double(p.block)};
-            if(NewModels()){outerTensor=flatten(law.reynoldsStress);outerGradient=flatten(G);}}
+            outerProvenance={double(value.geometry),double(value.element),double(value.side),double(p.block)};
+            if(NewModels()){outerTensor=flatten(value.tensor);outerGradient=flatten(G);}}
         const double g0=m_robustUstar/(m_parameters.model.Kappa()*r);
         const double e0=m_robustUstar*m_robustUstar*m_robustUstar/(m_parameters.model.Kappa()*r);
         for(int a=0;a<3;++a)for(int b=0;b<3;++b)
@@ -2385,6 +2435,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
         outer[1]=std::min(outer[1],k/K0);outer[2]=std::max(outer[2],k/K0);
         outer[3]=std::min(outer[3],epsilon/e0);outer[4]=std::max(outer[4],epsilon/e0);
     }
+    repeatedInventory.Stop();
     for(const auto &p:domain.observations)if(p.inventory=="physical_sampled_K")outer[6]=std::max(outer[6],p.value/K0);
     const bool box=outer[0]<=.001 && outer[1]>=.99 && outer[2]<=1.01 && outer[3]>=.98 && outer[4]<=1.02 &&
         outer[5]>=.99 && outer[6]<=1.01;

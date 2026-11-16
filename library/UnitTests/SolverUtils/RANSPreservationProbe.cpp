@@ -897,7 +897,8 @@ int main(int argc,char **argv)
             const auto signature=patch.Signature();
             const bool immutable=signature.find(":execution=CT15-ImmutableTensorV")!=std::string::npos ||
                 signature.find(":execution=CT16-StreamScalarV1")!=std::string::npos ||
-                signature.find(":execution=CT16-ScopedScatterV1")!=std::string::npos;
+                signature.find(":execution=CT16-ScopedScatterV1")!=std::string::npos ||
+                signature.find(":execution=CT16-ScopedAuditPointsV1")!=std::string::npos;
             Require(operation=="replay" && immutable,
                 "immutable checks require a bound recognized immutable replay");
             std::ofstream out(argv[3]);
