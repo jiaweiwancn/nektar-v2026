@@ -233,6 +233,8 @@ foreach(rans_r3_probe RANSNonpressureActionProbe RANSWallResolutionProbe RANSPre
         target_compile_options(${rans_r3_probe} PRIVATE -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror)
     endif()
 endforeach()
+add_executable(CT15SharedRowChecks CT15SharedRowChecks.cpp)
+target_include_directories(CT15SharedRowChecks PRIVATE ${RANS_SOURCE_ROOT}/solvers)
 target_sources(RANSWallResolutionProbe PRIVATE
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.cpp
     ${RANS_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/RANSHistory.cpp)

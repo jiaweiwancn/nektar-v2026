@@ -20,8 +20,8 @@ from run_cls_epawf_picard import set_info,set_parameter,write
 from rans_request_manifest import RequestManifest,runtime_identity,sha
 from ct_accepted_feasibility import write_json
 
-POLICY='ImmutableTensorV1'
-COMPONENT='CT15-ImmutableTensorV1'
+POLICY='ImmutableTensorV2'
+COMPONENT='CT15-ImmutableTensorV2'
 def ordering(folder):
     baseline_ordering(folder);policy(folder)
 

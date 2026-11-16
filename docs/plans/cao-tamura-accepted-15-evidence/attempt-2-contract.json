@@ -1,0 +1,11 @@
+{
+  "schema": "CT15MeasuredRemedyV1",
+  "policy": "ImmutableTensorV2",
+  "component": "CT15-ImmutableTensorV2",
+  "reason": "V1 selected one-step complete native CPU234.460816 versus zero-step62.759786; exact CT14 selected update. 25418868 row constructions,23481618 hits,387 full bounded-cache clears. This is inadequate even before independent audits. Two-step training and matched baseline/diagnostic receipts will close before synchronization/build of V2.",
+  "change": "Share only completed immutable FE row vectors using copy-on-write; share per-native-element IDs,constant representation,and exactly zero 2D span derivative. Preserve ordinary deep-copy storage for Off/V1; all writes detach. Arithmetic,coordinates,ordering,mandatory observation sets and current-state validity remain unchanged. No state/closure/profile/normalization reuse.",
+  "working_set": "Same65536 row bound; measure actual q64 address space before final pair. No unbounded memoization.",
+  "qualification": "Fresh V2 small operator/dependency/update/restart/rollback controls and new selected zero/one/two training; old V1 histories remain V1. Full affected selected native/q48/q64 alpha4000/8000 and four scalar controls before final qualification. COW ownership/mutation checks accompany the Linux build.",
+  "heldout": "Unchanged prospective steps6-to8 restart/retention/later-state workload; no fitting on it.",
+  "allocation": "Original CT15 allocation and all previous attempts retained; no reset, no raised ceiling, no longer campaign. Resource admission remains unestablished."
+}

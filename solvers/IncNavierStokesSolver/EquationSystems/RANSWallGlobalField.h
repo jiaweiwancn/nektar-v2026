@@ -8,6 +8,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallNumericalOperator.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSerialSparse.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallSharedVector.h>
 #include <algorithm>
 #include <array>
 #include <functional>
@@ -31,10 +32,10 @@ struct RANSWallGlobalPoint
     using Vector = RANSWallAlgebra::Vector;
     RANSWallCoordinate coordinate{};
     int geometry = -1, element = -1;
-    std::vector<int> ids;
-    Vector phi;
-    std::array<Vector,3> derivative;
-    Vector constant;
+    RANSWallSharedVector<int> ids;
+    RANSWallSharedVector<double> phi;
+    std::array<RANSWallSharedVector<double>,3> derivative;
+    RANSWallSharedVector<double> constant;
     double weight = 0;
     bool columnAverage = false; // normalized physical functional, not a point
     // Only local-coordinate arithmetic may round to an endpoint. Physical
@@ -125,10 +126,12 @@ private:
     int m_dimension;
     bool m_serialSparse=false;
     bool m_immutableTensor=false;
+    bool m_sharedTensor=false;
     struct NativeRow
     {
-        std::vector<int> ids;
-        Vector signs,constant;
+        RANSWallSharedVector<int> ids;
+        Vector signs;
+        RANSWallSharedVector<double> constant,zero;
         std::array<double,3> inverse{};
     };
     std::vector<NativeRow> m_nativeRows;

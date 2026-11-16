@@ -510,7 +510,7 @@ std::string RANSWallEvolutionPatch::PreservationIdentity(bool legacyOperator) co
     if(!legacyOperator)out<<":numerical_operator="<<RANSWallNumericalOperatorIdentity();
     if(SerialSparse())out<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")out<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
-    if(m_immutableTensor)out<<":execution=CT15-ImmutableTensorV1";
+    if(m_immutableTensor)out<<":execution=CT15-ImmutableTensorV"<<(m_sharedTensor?2:1);
     if(CurvedVerification())out<<":curved="<<CurvedCapabilityName()<<":"<<m_mapping.Signature()<<":CT6-conservative-v1";
     if(OpenBoundary())
     {

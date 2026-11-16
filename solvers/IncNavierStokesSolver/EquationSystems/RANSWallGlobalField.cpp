@@ -140,7 +140,10 @@ RANSWallGlobalField::RANSWallGlobalField(
 {
     RANSWallTiming::Scope timing("geometry.field_catalog",true,true);
     session->MatchSolverInfo("RANSWallLinearBackend","AcceptedSerialSparseV1",m_serialSparse,false);
-    session->MatchSolverInfo("RANSWallImmutableEvaluation","ImmutableTensorV1",m_immutableTensor,false);
+    std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
+    m_immutableTensor=immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2";
+    m_sharedTensor=immutable=="ImmutableTensorV2";
+    Require(!m_sharedTensor || dimension==2,"shared immutable rows require flat2D tensor fields");
     Require((dimension==2 || dimension==3) && session->GetComm()->GetSize()==1 &&
                 !elements.empty(),"requires nonempty serial 2D/3D native field");
     auto subset=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(*full,elements,true);
@@ -224,6 +227,7 @@ RANSWallGlobalField::RANSWallGlobalField(
                 double constant=sign;for(int d=0;d<m_dimension;++d)if(index[d]>=2)constant=0;
                 row.ids.push_back(map->GetLocalToGlobalMap(start+j));row.signs.push_back(sign);row.constant.push_back(constant);
             }
+            if(m_sharedTensor){row.ids.Share();row.constant.Share();row.zero.assign(count,0.);row.zero.Share();}
             m_nativeRows.push_back(std::move(row));
         }
         BuildOwnerIndex(std::move(owners));
@@ -284,20 +288,22 @@ RANSWallGlobalPoint RANSWallGlobalField::ElementPoint(int e,const Coordinate &co
     const auto map=m_field->GetLocalToGlobalMap();const int start=m_field->GetCoeff_Offset(e);
     RANSWallGlobalPoint result;result.coordinate=coordinate;result.geometry=element.geometry;result.element=e;
     result.rawLocalCoordinate=rawLocal;result.endpointRoundoffAxes=endpointRoundoffAxes;
-    result.ids.reserve(count);result.phi.reserve(count);result.constant.reserve(count);
-    for(auto &derivative:result.derivative) derivative.reserve(count);
+    if(m_sharedTensor){result.ids=m_nativeRows[e].ids;result.constant=m_nativeRows[e].constant;result.derivative[1]=m_nativeRows[e].zero;}
+    else{result.ids.reserve(count);result.constant.reserve(count);}
+    result.phi.reserve(count);
+    for(int d=0;d<3;++d)if(!m_sharedTensor || d!=1)result.derivative[d].reserve(count);
     for(int j=0;j<count;++j)
     {
         const auto index=Indices(j,modes);
         const double sign=m_immutableTensor?m_nativeRows[e].signs[j]:map->GetLocalToGlobalSign(start+j);
-        result.ids.push_back(m_immutableTensor?m_nativeRows[e].ids[j]:map->GetLocalToGlobalMap(start+j));
+        if(!m_sharedTensor)result.ids.push_back(m_immutableTensor?m_nativeRows[e].ids[j]:map->GetLocalToGlobalMap(start+j));
         double value=sign,constant=sign;
         for(int d=0;d<m_dimension;++d)
         {
             value*=basis[d]->value[index[d]];
             if(index[d]>=2) constant=0;
         }
-        result.phi.push_back(value);result.constant.push_back(constant);
+        result.phi.push_back(value);if(!m_sharedTensor)result.constant.push_back(constant);
         std::array<double,3> derivative{};
         for(int d=0;d<m_dimension;++d)
         {
@@ -306,8 +312,9 @@ RANSWallGlobalPoint RANSWallGlobalField::ElementPoint(int e,const Coordinate &co
                 entry*=q==d?basis[q]->derivative[index[q]]:basis[q]->value[index[q]];
             derivative[m_axes[d]]=entry;
         }
-        for(int d=0;d<3;++d) result.derivative[d].push_back(derivative[d]);
+        for(int d=0;d<3;++d)if(!m_sharedTensor || d!=1)result.derivative[d].push_back(derivative[d]);
     }
+    if(m_sharedTensor){result.phi.Share();result.derivative[0].Share();result.derivative[2].Share();}
     return result;
 }
 std::array<RANSWallGlobalField::Vector,3> RANSWallGlobalField::RadialGradientDerivative(

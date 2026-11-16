@@ -576,6 +576,7 @@ private:
     mutable std::map<RANSWallCoordinate,RANSWallGlobalPoint> m_kSamplingRows;
     bool m_evaluationReuse=false;
     bool m_immutableTensor=false;
+    bool m_sharedTensor=false;
     struct ImmutableRows;
     mutable std::shared_ptr<ImmutableRows> m_immutableRows;
     mutable std::shared_ptr<EvaluationCache> m_evaluation;

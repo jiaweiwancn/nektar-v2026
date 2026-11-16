@@ -333,6 +333,8 @@ std::string RANSWallEvolutionPatch::EvaluationReuseJSON() const
         {"fixed_reconstruction_rows",J::Number(fixedRows)},{"fixed_surface_rows",J::Number(surfaceRows)},
         {"row_counter_scope",J::Quote("scoped point/derivative requests; fixed reconstruction and surface catalogs counted separately")},
         {"peak_states",J::Number(w.peakStates)},{"peak_rows",J::Number(w.peakRows)},{"peak_profiles",J::Number(w.peakProfiles)},
+        {"immutable_policy",J::Quote(m_immutableTensor?(m_sharedTensor?"ImmutableTensorV2":"ImmutableTensorV1"):"Off")},
+        {"maximum_immutable_rows",J::Number(ImmutableRows::maximumRows)},
         {"maximum_states",J::Number(EvaluationCache::maximumStates)},{"maximum_rows",J::Number(EvaluationCache::maximumRows)},
         {"maximum_profiles",J::Number(EvaluationCache::maximumProfiles)},
         {"lifetime",J::Quote("immutable fixed catalogs per patch; exact-state, moving-row and owned-profile caches per evaluation scope")}});

@@ -894,7 +894,7 @@ int main(int argc,char **argv)
         ProbePhase("after_set_reference");
         if(request.get<bool>("export_immutable_checks",false))
         {
-            Require(operation=="replay" && patch.Signature().find("CT15-ImmutableTensorV1")!=std::string::npos,
+            Require(operation=="replay" && patch.Signature().find("CT15-ImmutableTensorV")!=std::string::npos,
                 "immutable checks require a bound CT15 replay");
             std::ofstream out(argv[3]);
             out<<patch.EvaluationReuseChecks(state,Values(request,"history"),time,data)<<'\n';
