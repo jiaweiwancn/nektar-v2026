@@ -34,6 +34,7 @@ def publish(root,tag):
             if(d/n).exists():copy(d/n)
     for n in ('accounting.json','tools-manifest-v4.json','tools-manifest-v5.json','source-manifest-v1.json','source-manifest-v2.json','source-manifest-v3.json'):
         if(base/n).exists():copy(base/n)
+    for p in sorted(base.glob('tools-manifest-v*.json')):copy(p)
     compact={'qualification.json','execution.json','execution-intent.json','intent.json','request.json','launch-result.json','outcome.json','design.json','initial-source.json','rotation.json','decision.json','case.xml','temporal-qualification.json','native.log.retention.json'}
     large={'comparison.json','temporal-10.json','temporal-12.json'}
     scientific={};heavy=[]

@@ -22,7 +22,8 @@ def validate(root):
     selected=load(base/'science/implementation-selected-v1.json')
     sources=[base/f'source-manifest-v{i}.json'for i in (1,2,3)]
     sources += [base/f'science/runtime-build-{n}-v1.json'for n in ('seed','scatter','memo')]
-    sources += [root/'inputs/baseline.json',base/'tools-manifest-v4.json',base/'tools-manifest-v5.json',base/'science/implementation-selected-v1.json']
+    sources += [root/'inputs/baseline.json',base/'science/implementation-selected-v1.json']
+    sources += sorted(base.glob('tools-manifest-v*.json'))
     for d in ('fresh-C-v1','C-wide-v1','C-sparse-restart-v1','C-dense-restart-v1'):
         sources.append(base/'science'/d/'qualification.json')
     sources += [base/'science/C-sparse-restart-v1/strict/qualification.json']

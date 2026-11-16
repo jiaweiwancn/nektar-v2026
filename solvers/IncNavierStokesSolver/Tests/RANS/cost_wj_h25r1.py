@@ -93,7 +93,7 @@ def run(root,provisional=False):
                 records[n]=sum(p.stat().st_size for p in(d/'monitor').glob(f'step-{n}.*')if p.is_file())
                 scientific_sizes.append(records[n])
         storage[folder]=dict(scientific_record_bytes=records,retained_bytes=sum(p.stat().st_size for p in d.rglob('*')if p.is_file()),
-            logs_bytes=sum(p.stat().st_size for p in d.rglob('*.log')if p.is_file()))
+            logs_bytes=sum(p.stat().st_size for p in d.rglob('*')if p.is_file()and '.log'in p.name and not p.name.endswith('.json')))
     per_record=max(scientific_sizes)
     for value in forecasts.values():
         count=value['scenarios']['fresh_two_stage']['scientific_steps']
