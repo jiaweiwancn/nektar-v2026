@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Diagnose and qualify exact immutable trace addresses in independent audits."""
-import argparse,cProfile,hashlib,json,os,pstats,resource,time
+import argparse,cProfile,hashlib,json,os,pstats,resource,sys,time
 from pathlib import Path
 from functools import lru_cache
 from rans_qualification import THREADS
@@ -64,6 +64,13 @@ def main():
     for q,region in zip(ini['observation']['grid'][:count],ini['observation']['grid_regions'][:count],strict=True):n.reference(n.col(c),q[2],bool(region))
     out=dict(schema='CT16ExactTraceIndexQualificationV1',status='incomplete',phase=a.phase,policy=TraceIndex.policy,
         common_immutable_reference_startup=dict(CPU=time.process_time()-cpu,wall=time.monotonic()-wall),physical_advance=False)
+    mapped={}
+    for line in Path('/proc/self/maps').read_text().splitlines():
+        parts=line.split(maxsplit=5)
+        if len(parts)==6 and parts[5].startswith('/') and ('/lib' in parts[5] or '.so' in parts[5] or parts[5]==sys.executable):
+            file=Path(parts[5]);require(file.is_file(),'unverifiable mapped Python library:'+str(file));mapped[str(file)]=sha(file)
+    out['Python_runtime']=dict(executable=str(Path(sys.executable).resolve()),executable_sha256=sha(Path(sys.executable).resolve()),
+        version=sys.version,numpy_version=np.__version__,actual_mapped_library_sha256=mapped)
     def evaluate(state):return bundle(ini,state,c,weights,count)
     if a.phase=='diagnostic':
         profile=cProfile.Profile();cpu=time.process_time();wall=time.monotonic()
