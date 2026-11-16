@@ -1,0 +1,16 @@
+{
+  "schema": "CT16ReadOnlyPrimitiveExperimentV1",
+  "candidate": "Packed current-row Value+Gradient contractions,not a governing execution policy",
+  "basis": "Measured V4 residual19.837CPU seconds/21calls and complete audit21.473CPU seconds/2calls; source repeatedly evaluates the same state-centred coefficient expression in Value and each of three Gradient axes. Test the primitive before deciding whether a full implementation is useful.",
+  "method": "Use a bounded deterministic sample of actual sealed CT14 selected native volume,fixed-basis and natural-face rows,including all three spaces and field offsets,with actual initial/coarse/fine final states. Reproduce the existing shared-vector long-double chronological loops. The prototype computes the identical rounded-double centred coefficients once in128-double stack scratch and uses raw immutable pointers,without changing each long-double accumulation order. Require all output binary64 bits exactly equal. No state or primitive is cached across queries.",
+  "limits": {
+    "rows": 65536,
+    "coefficients_per_row": 128,
+    "repeats": 16,
+    "states": 3,
+    "CPU_prelaunch": 100,
+    "wall_prelaunch": 180,
+    "new_bytes_prelaunch": 400000000
+  },
+  "interpretation": "Read-only microbenchmark,not an acceptance/native-workflow speedup. It samples actual rows and does not replace full native/operator/current-dependency/history controls. No governing runtime change or simulation; same fixed CT16 allocation and all scientific/resource limits."
+}
