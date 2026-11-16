@@ -49,6 +49,20 @@ class PhysicalComparison(unittest.TestCase):
 
 
 class ContinuationOwnership(unittest.TestCase):
+    def test_cumulative_resource_extension_preserves_origin_and_acceptance(self):
+        import hashlib
+        from wp2_budget import wall_limit
+        from run_cls_epawf_picard import sha
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);(root/'origin.json').write_text('{}')
+            self.assertEqual(wall_limit(root),43200)
+            p=root/'source/docs/plans/cls-cao-tamura-budget-wp2-evidence/policy.json';p.parent.mkdir(parents=True)
+            policy=dict(acceptance=dict(covariance=1e-4));p.write_text(json.dumps(policy))
+            amendment=dict(version='WP2CumulativeResourceAmendmentV1',original_wall_seconds=43200,cumulative_wall_seconds=46800,
+                origin_sha256=sha(root/'origin.json'),unchanged_acceptance_sha256=hashlib.sha256(json.dumps(policy['acceptance'],sort_keys=True,separators=(',',':')).encode()).hexdigest())
+            (root/'resource-extension-13h.json').write_text(json.dumps(amendment));self.assertEqual(wall_limit(root),46800)
+            (root/'origin.json').write_text('{"reset":true}')
+            with self.assertRaisesRegex(ValueError,'clock origin changed'):wall_limit(root)
     def test_execution_index_includes_nested_legacy_and_deduplicates(self):
         from wp2_execution_index import executions
         from run_cls_epawf_picard import sha

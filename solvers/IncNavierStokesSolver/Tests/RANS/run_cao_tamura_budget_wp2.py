@@ -10,6 +10,7 @@ from continue_cls_epawf_pimple import atomic
 from diagnose_cls_accepted_covariance import run_probe
 from run_cls_epawf_picard import require,THREADS,sha
 from wp2_neutral_cases import case
+from wp2_budget import wall_limit
 
 
 def charge(root,event,**work):
@@ -25,7 +26,7 @@ def _charge_locked(root,event,**work):
     d['events'].append(dict(event=event,time=datetime.now(ZoneInfo('Asia/Shanghai')).isoformat(),work=work))
     atomic(p,d)
     for k,v in dict(spatial_cases=32,boundary_calls=24,physical_attempts=6000,stationary_iterations=120,timestep_trials=16).items():require(d['totals'].get(k,0)<=v,'WP2 aggregate '+k)
-    require(time.time()-origin['started_epoch']<43200,'WP2 wall envelope')
+    require(time.time()-origin['started_epoch']<wall_limit(root),'WP2 cumulative wall envelope')
     return d
 
 

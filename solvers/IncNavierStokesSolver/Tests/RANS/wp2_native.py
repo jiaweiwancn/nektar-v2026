@@ -11,6 +11,7 @@ from run_cls_epawf_picard import require,sha,state_hash,set_parameter,write,THRE
 from run_cao_tamura_budget_wp2 import charge
 from wp2_neutral_cases import case
 from run_cao_tamura_budget_h2f_startup import verify_retained_rollback
+from wp2_budget import wall_limit
 
 
 class Run:
@@ -27,9 +28,16 @@ class Run:
             solver=str(solver),solver_sha256=sha(solver),results={},case_definition=dict(level=level,order=order,projection=projection))
         self.save()
     def save(self):atomic(self.output/'progress.json',self.result)
-    def native(self,label,steps=0,dt=2e-6,parent=None,reject=False,pout=0.,mismatch=False,perturb=False):
+    def native(self,label,steps=0,dt=2e-6,parent=None,reject=False,pout=0.,mismatch=False,perturb=False,ivp_parent=None):
+        require(not (parent and ivp_parent),'diagnostic import is distinct from ordinary restart')
         charge(self.root,label,physical_attempts=steps)
         xml=case(self.output/label,self.h1,self.pre,self.model,self.level,self.order,steps,dt,parent,pout,self.projection)
+        if ivp_parent:
+            from run_cls_epawf_picard import set_info
+            t=ET.parse(xml).getroot();source=checkpoint(ivp_parent)
+            for key,value in dict(RANSWallDiagnosticIVP='AnalyticalNeutralOpenIMEX1V1',RANSWallIVPParent=str(ivp_parent),
+                                  RANSWallIVPParentSHA256=sha(ivp_parent/'State.bin'),RANSWallIVPParentTimeStep=format(source['dt'],'.17g')).items():set_info(t,key,value)
+            set_parameter(t,'IO_CheckSteps',1);write(t,xml)
         if reject:
             t=ET.parse(xml).getroot();set_parameter(t,'RANSWallPimplePostAssignRejectStep',(checkpoint(parent)['steps'] if parent else 0)+1);write(t,xml)
         if perturb:
@@ -38,7 +46,7 @@ class Run:
             t=ET.parse(xml).getroot();set_info(t,'RANSWallWP2InitialPerturbation','OuterKBumpV1');write(t,xml)
         env=dict(os.environ,**THREADS,LD_LIBRARY_PATH=str(self.solver.parent/'lib'),NEKTAR_RANS_TIMING_FILE=str(xml.parent/'timing.jsonl'))
         started=time.monotonic()
-        remaining=43200-(time.time()-load(self.root/'origin.json')['started_epoch'])
+        remaining=wall_limit(self.root)-(time.time()-load(self.root/'origin.json')['started_epoch'])
         require(remaining>0,'WP2 aggregate wall envelope exhausted')
         with (xml.parent/'solver.log').open('w') as log:
             p=subprocess.run(['/usr/bin/time','-f','%e %U %S %M','-o',str(xml.parent/'usage.txt'),str(self.solver),str(xml)],cwd=xml.parent,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=min(1800,remaining))

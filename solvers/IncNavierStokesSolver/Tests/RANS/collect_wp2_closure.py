@@ -9,6 +9,7 @@ from cao_tamura_h2d_state import load
 from run_cls_epawf_picard import require,sha,state_hash
 from continue_cls_epawf_pimple import atomic
 from wp2_execution_index import executions as native_executions
+from wp2_budget import wall_limit
 
 
 def binding(path):return dict(path=str(path),sha256=sha(path),bytes=path.stat().st_size)
@@ -89,9 +90,11 @@ def main():
     libraries=runtime['libraries']
     for path,expected in libraries.items():
         require(sha(Path(path))==expected,'frozen linked library changed: '+path)
-    budget=dict(elapsed_wall_seconds=used,wall_limit_seconds=43200,storage_GiB=storage_kib/1024**2,storage_limit_GiB=96,
+    limit=wall_limit(r)
+    budget=dict(elapsed_wall_seconds=used,wall_limit_seconds=limit,original_wall_limit_seconds=43200,storage_GiB=storage_kib/1024**2,storage_limit_GiB=96,
                 maximum_native_RSS_GiB=rss/1024**2,process_limit_GiB=24,aggregate=read('aggregate.json'))
-    within_budget=used<=43200 and storage_kib<=96*1024**2 and rss<=24*1024**2
+    if limit!=43200:budget['cumulative_resource_amendment']=binding(r/'resource-extension-13h.json')
+    within_budget=used<=limit and storage_kib<=96*1024**2 and rss<=24*1024**2
     files=['unperturbed-preservation-v2.json','dense-quarter-budget-summary.json','native-boundary-comparison-bounds.json',
            'unperturbed-all-pairs-windows/summary.json','terminal-checks-after-transactions.json','recovery-initial-history-contract.json','runtime-v12/identity.json']
     result=dict(version='WP2ClosureLedgerV2',capture_Asia_Shanghai=datetime.now(ZoneInfo('Asia/Shanghai')).isoformat(),

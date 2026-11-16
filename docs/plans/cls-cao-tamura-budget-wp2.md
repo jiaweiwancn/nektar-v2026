@@ -5,7 +5,9 @@ new boundary implementation, common deployable spatial qualification and
 unperturbed transit tests. The bounded perturbation tests fail recovery:
 regularized CLS remains admissible but misses the final accuracy budgets at
 T=4.2 s; calibrated standard loses inner covariance at attempted T=3.69 s.
-No hill run or automatic recovery retry is launched.
+No hill run or automatic global recovery retry is launched. A separately
+recorded bounded common-state time-sensitivity control is running; it does not
+promote the failed global recovery gate.
 
 | Gate | Regularized CLS | Calibrated standard |
 |---|---|---|
@@ -270,11 +272,32 @@ data without rewriting original receipts. The ledger reserved 1400 attempts;
 the 21 unexecuted attempts are the remainder of the standard block stopped at
 its first rejection. Spatial cases use 32/32, boundary calls 7/24 and timestep
 trials 7/16. Final measured storage is 14.45 GiB and maximum native RSS is
-5.90 GiB. All WP2 physical jobs are stopped. Eleven focused Linux protocol
+5.90 GiB. The original full-horizon WP2 physical jobs are stopped. Eleven focused Linux protocol
 tests pass, including nested execution counting and fail-fast ownership.
 The recovery driver wall times are 13366.15 s (CLS) and 11763.28 s (standard),
 with continued-step medians 27.01 and 26.95 s; these concurrent process costs
 are distinct from aggregate elapsed wall time.
+
+The active-goal follow-up amends the agent-selected resource envelope to
+thirteen hours cumulative, without changing its origin or resetting work
+counters. The original twelve-hour negative result remains archived. This
+corrects an unnecessary request for approval: the user specified autonomous
+evidence-based numerical adaptation and a finite budget, not a twelve-hour
+hard limit. Numerical acceptance budgets remain frozen.
+
+The new AnalyticalNeutralOpenIMEX1V1 diagnostic import reads the parent under
+its original dt/signature/checksum, retains all fields and fixed data, and
+forms independent histories at the saved physical time without Lift. An actual
+same-dt step agrees bitwise with ordinary continuation and the archived step
+in all governing-stage hashes, coupled fields, histories/time labels, reference
+and defect. Ordinary changed-dt restart rejects. Twelve focused Linux protocol
+tests pass. The old v12 runtime remains frozen; v13 is separately frozen and
+used only for this qualified standard late-import control.
+
+The single new fine leg starts from the exact accepted standard T≈3.36 state,
+uses dt=.005, and stops at its first rejection or at most 68 steps/T≈3.70.
+The archived dt=.01 trajectory is reused. This is local time sensitivity, not
+accumulated error from the pulse origin and not a replacement recovery test.
 
 Frozen experimental coordinates/weights are unchanged. At x=-.15, preserved
 T=1.2 full 15-point mean RMSE is about .0912971 Uinf for both models; shear

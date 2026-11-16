@@ -1,0 +1,139 @@
+{
+  "version": "WP2AnalyticalOpenImportValidationV1",
+  "passed": true,
+  "checks": {
+    "history_sha256": true,
+    "incoming_sha256": true,
+    "post_flow_sha256": true,
+    "pre_k_sha256": true,
+    "raw_k_sha256": true,
+    "corrected_k_sha256": true,
+    "state": true,
+    "fixed_reference": true,
+    "fixed_defect": true,
+    "native_history": true,
+    "native_history_times": true,
+    "archived_first_state": true,
+    "exact_seed": true,
+    "no_initialization_Lift": true,
+    "actual_time": true,
+    "distinct_counters": true,
+    "candidate_differs_from_reference": true
+  },
+  "parent_checkpoint": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step336/checkpoint.32",
+  "parent_sha256": "a1fa1e67c67f69ee695a4cc9a0d607aa181f95e6deb673979416b8bd2c8d42b3",
+  "physical_t0": 3.3599999999999723,
+  "runtime_identity": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v13/identity.json",
+    "sha256": "ac6a4e08e96bf2e290eea9ee507f9cc38830fc9ae2bd868f3d3ced0a1d63a748"
+  },
+  "import_identity": {
+    "mode": "AnalyticalNeutralOpenIMEX1V1",
+    "parent_checkpoint": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step336/checkpoint.32",
+    "parent_checkpoint_sha256": "a1fa1e67c67f69ee695a4cc9a0d607aa181f95e6deb673979416b8bd2c8d42b3",
+    "parent_dt": 0.01,
+    "parent_steps": 336,
+    "physical_t0": 3.3599999999999723,
+    "new_ivp_steps": 0,
+    "dt": 0.01,
+    "seed_sha256": "dc5ad13b390d23c42d4a19ebf014dbfbacbbf93940247486eb7fd685ac7f0993",
+    "fixed_reference_sha256": "a1b87e794a37b36fe5c0032aaef9c553e48b4c947b2e1ec5e8a0b8b75179eeb5",
+    "fixed_defect_sha256": "b6f66eca6cd67b3e9baff42e52f226f747de523f0d6b473ad799a49eb4664354",
+    "initial_native_history_sha256": [
+      "d6e00670c4fa4eac124d5ea718b55f1a27938fb62f4227cc8279ea626c9e23bc",
+      "adf943267c2fc2759093b55acddf062a0460f89317e64f29262119dafb9f181d"
+    ],
+    "initial_native_history_times": [
+      3.3599999999999723,
+      0.01
+    ],
+    "initialization_lift_calls_iterations": [
+      0,
+      0
+    ],
+    "inner_k_seed": null
+  },
+  "model": {
+    "version": "CanonicalWallModelV1",
+    "name": "StandardKEpsilon",
+    "calibration": "StandardNeutralCalibratedV1",
+    "manifest_sha256": "cdf28866275f2fbbd872f293d2b736f4ced9b6915b2ba82f516d430c3c729887",
+    "coefficients": {
+      "Cmu": 0.09,
+      "Cepsilon1": 1.44,
+      "Cepsilon2": 1.92,
+      "sigmaK": 1,
+      "sigmaEpsilon": 1.3478315512167742,
+      "yapCoefficient": 0,
+      "yapLength": 2.5
+    },
+    "q": 3.3333333333333335,
+    "kappa": 0.4405539051866587,
+    "K0": 0.01838575534504143,
+    "quadratic_active": false,
+    "cubic_active": false,
+    "Yap_active": false,
+    "variant": "Original",
+    "beta": 1,
+    "gamma0": 0,
+    "Gamma": 0,
+    "physical_regularization_active": false
+  },
+  "initialization_lift_calls_iterations": [
+    0,
+    0
+  ],
+  "solved_epsilon_retained": true,
+  "ordinary_changed_dt_rejected": true,
+  "results": {
+    "ordinary-one": {
+      "code": 0,
+      "seconds": 91.14727516600396,
+      "xml_sha256": "715886cd188da5fd980edbc50084e4bfe27bde66e54190cb04f081c11ddc998a",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/late-standard-dt005/ordinary-one/case.evolution.json",
+      "report_sha256": "46b5844c218011420a02918ad7a7eadda6fdc0b7201cea560724503784f8b112",
+      "failure": "",
+      "usage": "90.75 86.02 3.91 4119824\n",
+      "requested_attempt_work": 1,
+      "observed_physical_attempts": 1,
+      "accepted_step_executions": 1
+    },
+    "imported-one": {
+      "code": 0,
+      "seconds": 88.44930817798013,
+      "xml_sha256": "1570cca48155e58f63bbd2b6192bfb0ae8b17cbca52a46669d3d0cc49e293ea7",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/late-standard-dt005/imported-one/case.evolution.json",
+      "report_sha256": "fbed7b1ecd1ecace1b58389bd99b99443337dcb0012aae4924a901409e1df4ce",
+      "failure": "",
+      "usage": "88.02 82.66 3.94 4114440\n",
+      "requested_attempt_work": 1,
+      "observed_physical_attempts": 1,
+      "accepted_step_executions": 1
+    },
+    "ordinary-changed-dt": {
+      "code": 1,
+      "seconds": 12.403592843038496,
+      "xml_sha256": "1304e1fb6357b4aa9f66c72855653f32d527cb9f7d97e742bdc39c23413b0eba",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/late-standard-dt005/ordinary-changed-dt/case.evolution.json",
+      "report_sha256": "9e8a96758c4d955716cc05b6abc13a3126cfb11c13bcebd7b0ce9138629ca959",
+      "failure": "Wall IMEX: checkpoint signature mismatch",
+      "usage": "Command exited with non-zero status 1\n12.38 10.45 1.38 1862704\n",
+      "requested_attempt_work": 0,
+      "observed_physical_attempts": 0,
+      "accepted_step_executions": 0
+    },
+    "fine-initial": {
+      "code": 0,
+      "seconds": 56.502229492005426,
+      "xml_sha256": "1565ead841c60718c2c7704c6cc6acb816e980249957cc036468cddd2b2a3af3",
+      "report": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/late-standard-dt005/fine-initial/case.evolution.json",
+      "report_sha256": "8c5ef10b0ebdcfbf4f23480540c7c78a82ba7fc8ab29e505778515e619969ca5",
+      "failure": "",
+      "usage": "56.15 53.19 2.17 2326124\n",
+      "requested_attempt_work": 0,
+      "observed_physical_attempts": 0,
+      "accepted_step_executions": 0
+    }
+  },
+  "cpp_source_sha256": "bd63508980a2578c3282aa5c6de5d753e6b621e50df4c2725e0b059ae5aa9c20"
+}

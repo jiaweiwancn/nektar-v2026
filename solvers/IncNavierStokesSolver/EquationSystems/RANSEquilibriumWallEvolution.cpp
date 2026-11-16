@@ -191,7 +191,7 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
         }
         m_session->LoadSolverInfo("RANSWallRestart",m_restart,"None");m_session->LoadSolverInfo("RANSWallCheckpoint",m_checkpointBase,"None");
         m_session->LoadSolverInfo("RANSWallDiagnosticIVP",m_diagnosticIVP,"Off");
-        Require(m_diagnosticIVP=="Off" || m_diagnosticIVP=="LateStateIMEX1V1" || m_diagnosticIVP=="LateStateInnerKIMEX1V1" || m_diagnosticIVP=="FiniteDevelopingIMEX1V1","unknown diagnostic IVP contract");
+        Require(m_diagnosticIVP=="Off" || m_diagnosticIVP=="LateStateIMEX1V1" || m_diagnosticIVP=="LateStateInnerKIMEX1V1" || m_diagnosticIVP=="FiniteDevelopingIMEX1V1" || m_diagnosticIVP=="AnalyticalNeutralOpenIMEX1V1","unknown diagnostic IVP contract");
         if(m_diagnosticIVP!="Off")
         {
             std::string parentDt;
@@ -207,11 +207,12 @@ void RANSEquilibriumWallEvolution::v_InitObject(bool declareFields)
             Require(used==parentDt.size() && std::isfinite(m_ivpParentDt) && m_ivpParentDt>0 &&
                 m_ivpParent!="None" && m_ivpParentHash.size()==64 && m_restart=="None" &&
                 m_patch->AcceptedAWF() && m_patch->PimpleSingleSweep() && m_order==1 &&
-                (m_diagnosticIVP=="FiniteDevelopingIMEX1V1"?(!m_neutral && m_patch->FiniteInflowReference() && m_patch->DevelopingFlat()):m_neutral) &&
+                (m_diagnosticIVP=="FiniteDevelopingIMEX1V1"?(!m_neutral && m_patch->FiniteInflowReference() && m_patch->DevelopingFlat()):
+                 m_diagnosticIVP=="AnalyticalNeutralOpenIMEX1V1"?(!m_neutral && m_patch->AnalyticalNeutralInflow() && m_patch->EquilibriumOpen()):m_neutral) &&
                 m_eta==0 && m_session->GetComm()->GetSize()==1 && !m_patch->Mapped(),
                 "diagnostic IMEX1 IVP requires its explicit validated neutral or finite/developing affine parent, no ordinary restart");
             for(const std::string name:{"BodyForceInner","BodyForceOuter","ScalarSourceInner","ScalarSourceOuter"})
-                if(m_diagnosticIVP!="FiniteDevelopingIMEX1V1")Require(!m_serialSession->DefinesFunction(name),"late IVP supports only the archived unforced problem");
+                if(m_diagnosticIVP!="FiniteDevelopingIMEX1V1" && m_diagnosticIVP!="AnalyticalNeutralOpenIMEX1V1")Require(!m_serialSession->DefinesFunction(name),"late IVP supports only the archived unforced problem");
         }
         Require(m_timestep>0,"evolution requires positive fixed TimeStep");m_data=RANSWallEvolutionData(dim);
         for(int a=0;a<dim;++a)

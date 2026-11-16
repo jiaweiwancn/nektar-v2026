@@ -87,3 +87,13 @@ remains OPEN. No hill continuation or automatic recovery extension follows.
 The report and identity-bound final ledger distinguish these gates. The next
 focused decision is transient timestep sensitivity around the retained growing
 standard mode, before another recovery campaign or model interpretation.
+
+The subsequent active-goal review corrects a planning interpretation: twelve
+hours was the agent-selected envelope, not a user-specified hard duration.
+An explicit resource amendment permits thirteen hours **cumulative from the
+same original clock origin**, with all previous work and failed results retained.
+Every numerical acceptance threshold and physical/case/thread limit is unchanged.
+The extension covers at most 70 additional physical attempts: a same-dt exact
+late-import check and one 68-step dt=.005 standard local-window control from
+the saved T≈3.36 state. Original coarse data are reused. It does not authorize
+a full recovery rerun, hill continuation or an automatic later extension.
