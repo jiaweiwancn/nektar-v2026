@@ -73,10 +73,11 @@ def snapshots(report):
 def main():
     p=argparse.ArgumentParser()
     for k in ('root','runtime','pair','training','static','output'):p.add_argument('--'+k,type=Path,required=True)
+    p.add_argument('--retention-only',action='store_true',help='Qualify G4 with all required per-state audits; explicitly leave the complete G3 heldout unattempted')
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');os.environ['NEKTAR_RANS_PROBE_OBSERVER']='NativeAuditReceiptV1';os.environ.pop('NEKTAR_RANS_TIMING_FILE',None);n.reference=lru_cache(None)(n.reference)
     pair=n.read(a.pair/'results.json');require(pair['qualification']['status']=='pass','fresh pair prerequisite')
     require(pair['workflow_contract_sha256']==sha(a.root/'source/docs/plans/cao-tamura-accepted-15-evidence/workflow-contract-v2.json'),'foreign workflow contract')
-    m=RequestManifest(a.output,dict(schema='CT15ActualSegmentRecoveryV1',runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),probe=runtime_identity(a.runtime/'RANSPreservationProbe'),pair_sha256=sha(a.pair/'results.json'),training_sha256=sha(a.training/'results.json'),contract_sha256=sha(a.root/'source/docs/plans/cao-tamura-accepted-15-evidence/contract.json'),held_out='steps6-to8 fixed before training fit',source_sha256=sha(Path(__file__))))
+    m=RequestManifest(a.output,dict(schema='CT15ActualSegmentRecoveryV1',runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),probe=runtime_identity(a.runtime/'RANSPreservationProbe'),pair_sha256=sha(a.pair/'results.json'),training_sha256=sha(a.training/'results.json'),contract_sha256=sha(a.root/'source/docs/plans/cao-tamura-accepted-15-evidence/contract.json'),held_out='steps6-to8 fixed before training fit',retention_only=a.retention_only,retention_scope_contract_sha256=sha(a.root/'source/docs/plans/cao-tamura-accepted-15-evidence/retention-scope-contract.json'),source_sha256=sha(Path(__file__))))
     c=pair['case'];ini=n.read(a.static/'target/frozen.json');weights=n.inventory(c)[2];count=len(weights)
     full=n.read(a.pair/'0.00025/case.evolution.json');full_snaps=snapshots(full)
     zero=n.read(a.training/'steps-0/case.evolution.json');two=n.read(a.training/'steps-2/case.evolution.json')
@@ -97,6 +98,11 @@ def main():
         return dest,r,e
     binding=dict(runtime=m.payload['request']['runtime'],probe=m.payload['request']['probe'],dt=.00025,signature=full['signature'],workflow_contract_sha256=pair['workflow_contract_sha256'])
     result=dict(schema='CT15ActualSegmentRecoveryV1',status='incomplete',policy='SelectiveReplayV1',cycles=[],model=model,workflow_contract_sha256=sha(a.root/'source/docs/plans/cao-tamura-accepted-15-evidence/workflow-contract-v2.json'))
+    def seal_retention(rollback,rr,re,sv,sve,se):
+        require(sve['exit_code']==0 and re['exit_code']!=0 and 'deliberate' in rr['failure'] and same_history(sv,rr),'selected full rejected-step rollback')
+        retention=dict(schema='CT15ActualRetentionControlsV1',status='pass',policy='SelectiveReplayV1',binding=binding,cycles=result['cycles'],segment4_execution=result['segment4_execution'],segment6_execution=se,rollback_execution=re,rollback_predecessor_execution=sve,rollback_report_sha256=sha(rollback/'case.evolution.json'),rollback_state_and_all_native_history_binary64_equal=True,scope='two actual cycles2/4,all current-state independent audit replay,owned retirement,fresh restore,genuine continuation,interruption recovery,negative payload controls,and full native rejected-step rollback; additional heldout cost-model workload separately gated')
+        write_json(a.output/'retention-controls.json',retention)
+        atomic(a.output/'retention-controls-seal.json',dict(request_sha256=m.payload['sha256'],files={'retention-controls.json':sha(a.output/'retention-controls.json')}))
     previous=zero;current=two;current_folder=a.training/'steps-2'
     for end in (2,4):
         cycle_started=time.monotonic();cycle_cpu=time.process_time();cycle_before=resource.getrusage(resource.RUSAGE_CHILDREN);cycle_external=external_cpu()
@@ -108,7 +114,7 @@ def main():
         require(recovered==full_snaps[end-2:end],'segmented versus continuous stage trajectory')
         metrics=n.physical_metrics(ini,replayed['state'],c,weights,count);expected=pair['members']['0.00025']['accepted_metrics'][end]
         require(metrics=={k:v for k,v in expected.items() if k!='time'},'full versus replayed scientific classification')
-        audits,audit_usage=scope(complete,a.runtime,replay_folder,ini,replayed,c,weights,count,full=end==4)
+        audits,audit_usage=scope(complete,a.runtime,replay_folder,ini,replayed,c,weights,count,full=end==4 and not a.retention_only)
         require(audits['per_state'][-1]['metrics']==metrics,'independent replay diagnostics disagree')
         audits_path=a.output/('audit-replay-'+str(end)+'.json');write_json(audits_path,audits)
         nr=numerical_receipts(replay_folder/'sparse-receipts.jsonl');pr=pressure_receipts(replayed)
@@ -154,6 +160,15 @@ def main():
         if end==2:
             current_folder,current,e=run('segment-4',Path(previous['checkpoint']));require(e['exit_code']==0 and not current['failure'],'genuine continuation after first cycle');result['segment4_execution']=e
     six,sr,se=run('segment-6',Path(current['checkpoint']));require(se['exit_code']==0 and not sr['failure'],'segment6 continuation')
+    if a.retention_only:
+        rollback,rr,re=run('rejected-step',Path(sr['checkpoint']),2,reject=8)
+        seven,sv,sve=run('rollback-predecessor7',Path(sr['checkpoint']),1)
+        seal_retention(rollback,rr,re,sv,sve,se)
+        model['external_monitor_CPU_per_wall_second']=envelope([x['cycle_usage']['external_monitor_CPU']/x['cycle_usage']['wall'] for x in result['cycles']])
+        admission=dict(status='declined_before_launch',reason='explicit retention-only admission; the complete G3 calibration and fixed heldout do not fit the reserved engineering pool',heldout_unchanged='coarse6-to8',G3='UNATTEMPTED',allocation_unchanged=True)
+        write_json(a.output/'heldout-admission.json',admission)
+        result.update(status='partial',retention_controls_status='pass',cost_model_validation=dict(status='unattempted_resource_admission',admission=admission),held_out=dict(status='UNATTEMPTED'),segment6_execution=se,rollback_execution=re,rollback_predecessor_execution=sve)
+        write_json(a.output/'results.json',result);m.seal(a.output,['results.json','retention-controls.json','retention-controls-seal.json','heldout-admission.json']);return 0
     # Freeze the complete held-out scope before executing it. Training contains
     # the original 0/1/2 commands and the two earlier real recovery/audit cycles.
     # Bounds use the observed range, never a negative intercept or heldout fit.
@@ -183,9 +198,7 @@ def main():
     rollback,rr,re=run('rejected-step',Path(sr['checkpoint']),2,reject=8)
     seven,sv,sve=run('rollback-predecessor7',Path(sr['checkpoint']),1)
     require(sve['exit_code']==0 and re['exit_code']!=0 and 'deliberate' in rr['failure'] and same_history(sv,rr),'selected full rejected-step rollback')
-    retention=dict(schema='CT15ActualRetentionControlsV1',status='pass',policy='SelectiveReplayV1',binding=binding,cycles=result['cycles'],segment4_execution=result['segment4_execution'],segment6_execution=se,rollback_execution=re,rollback_predecessor_execution=sve,rollback_report_sha256=sha(rollback/'case.evolution.json'),rollback_state_and_all_native_history_binary64_equal=True,scope='two actual cycles2/4,all current-state independent audit replay,owned retirement,fresh restore,genuine continuation,interruption recovery,negative payload controls,and full native rejected-step rollback; additional heldout cost-model workload separately gated')
-    write_json(a.output/'retention-controls.json',retention)
-    atomic(a.output/'retention-controls-seal.json',dict(request_sha256=m.payload['sha256'],files={'retention-controls.json':sha(a.output/'retention-controls.json')}))
+    seal_retention(rollback,rr,re,sv,sve,se)
     spent=max((n.read(f).get('maximum_sampled_total_CPU',0.) for f in a.root.glob('resources-*/live-budget.json')),default=0.)
     bounds=model['complete_heldout_bounds'];remaining=dict(CPU=23760-spent,wall=28560-(time.time()-1794805033),new_output_bytes=16*1024**3-256*1024**2-size(a.root))
     admitted=remaining['CPU']>=bounds['CPU'] and remaining['wall']>=bounds['wall'] and remaining['new_output_bytes']>=bounds['peak_new_output_bytes']

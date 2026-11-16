@@ -59,7 +59,8 @@ def forecast(root,q):
     observer_rate=max(x['execution'].get('observer_self_CPU_seconds',0.)/x['execution']['wall_seconds'] for x in cases.values())
     parse=[max(0.,cases[str(i)]['execution'].get('controller_evolve_self_CPU',0.)-cases[str(i)]['execution'].get('observer_self_CPU_seconds',0.)) for i in (0,1,2)]
     parse_startup=parse[0];parse_step=max(0.,parse[1]-parse[0],(parse[2]-parse[0])/2,parse[2]-parse[1])
-    segments=q['segments'];complete=segments is not None and segments.get('status')=='pass'
+    segments=q['segments'];complete=segments is not None and (q.get('retention') or {}).get('status')=='pass' and q['pair'] is not None and q['pair'].get('qualification',{}).get('status')=='pass'
+    validated=complete and segments.get('cost_model_validation',{}).get('status')=='pass'
     phase_CPU=phase_wall=retention_CPU=retention_wall=milestone_CPU=milestone_wall=0.
     durable_per_segment=0;transient_per_step=0;measured_AS=0;milestone_bytes=0
     if complete:
@@ -69,17 +70,31 @@ def forecast(root,q):
         full_audits=[a for a in audits if a.get('scheduled_full_audit',True)]
         milestone_CPU=envelope([a['phase_usage']['scalar_budgets']['CPU']+a['phase_usage']['constitutive']['CPU'] for a in full_audits])
         milestone_wall=envelope([a['phase_usage']['scalar_budgets']['wall']+a['phase_usage']['constitutive']['wall'] for a in full_audits])
-        held=read(root/'segments-v1/heldout-audits.json');milestone_CPU+=held['phase_usage']['actions']['CPU'];milestone_wall+=held['phase_usage']['actions']['wall']
+        held=read(root/'segments-v1/heldout-audits.json')
+        if held:
+            milestone_CPU+=held['phase_usage']['actions']['CPU'];milestone_wall+=held['phase_usage']['actions']['wall']
+        else:
+            phases=q['pair']['workflow_phases'];names=('complete_endpoint_scalar_controls','endpoint_constitutive_probe')
+            # An explicitly conservative per-member upper bound uses the whole
+            # measured TWO-member endpoint wrappers and whole changed-alpha
+            # family. Their nested native costs are not added again.
+            milestone_CPU=sum(phases[k]['self_CPU']+phases[k]['children_CPU'] for k in names)+read(root/'resources-timestep-v1/execution.json')['process_cpu_seconds']
+            milestone_wall=sum(phases[k]['wall'] for k in names)+read(root/'resources-timestep-v1/execution.json')['wall_seconds']
         retention_CPU=envelope([max(0.,x['cycle_usage']['CPU']-x['execution']['whole_segment_CPU']-x['audit_usage']['CPU']) for x in segments['cycles']])
         retention_wall=envelope([max(0.,x['cycle_usage']['wall']-x['execution']['whole_segment_wall']-x['audit_usage']['wall']) for x in segments['cycles']])
         durable_per_segment=envelope([x['durable_owned_bytes'] for x in segments['cycles']])
         transient_per_step=envelope([x['retired_bytes']/4 for x in segments['cycles']])
-        measured_AS=max([x['peak_address_space_bytes'] for x in segments['cycles']]+[segments.get('held_out',{}).get('peak_address_space_bytes',0)])
-        milestone_bytes=sum(logical_size(root/'segments-v1/held-out-6-to8'/('actions-'+label)) for label in ('native','q48','q64'))
+        def memory(value):
+            if isinstance(value,dict):return max([v*1024 for k,v in value.items() if k in ('peak_address_space_KiB','peak_virtual_KiB')]+[memory(v) for v in value.values() if isinstance(v,(dict,list))]+[0])
+            if isinstance(value,list):return max([memory(v) for v in value]+[0])
+            return 0
+        measured_AS=max([x['peak_address_space_bytes'] for x in segments['cycles']]+[segments.get('held_out',{}).get('peak_address_space_bytes',0),memory(q['pair'])])
+        milestone_bytes=sum(logical_size(root/'segments-v1/held-out-6-to8'/('actions-'+label)) for label in ('native','q48','q64')) if held else sum(logical_size(root/'timestep-v1'/k) for k in ('4000-native','4000-q48','4000-q64','8000-native','8000-q48','8000-q64'))
     # Selected short commands may become faster or slower later. These are
     # conditional extrapolations, never mathematical lower bounds on later PDEs.
     monitor_rate=segments.get('model',{}).get('external_monitor_CPU_per_wall_second',0.) if complete else 0.
     measured=dict(native=cost,observer_CPU_per_native_wall_second=observer_rate,controller_parse_startup_CPU=parse_startup,controller_parse_CPU_per_step=parse_step,external_monitor_CPU_per_wall_second=monitor_rate,independent_CPU_per_accepted_state=phase_CPU,independent_wall_per_accepted_state=phase_wall,retention_CPU_per_two_steps=retention_CPU,retention_wall_per_two_steps=retention_wall,full_milestone_CPU=milestone_CPU,full_milestone_wall=milestone_wall,short_two_step_durable_segment_bytes=durable_per_segment,transient_snapshot_bytes_per_actual_step=transient_per_step)
+    measured['milestone_bound_scope']=('actual heldout endpoint phases' if held else 'whole measured two-member endpoint wrappers plus whole changed-alpha family per future milestone; conservative scope bound, not exclusive timing or a validated heldout') if complete else 'unmeasured'
     paired=q['pair'].get('workflow_phases',{}) if q['pair'] else {};common_count=len(q['pair'].get('common_times',[])) if q['pair'] else 0
     paired_CPU=sum(paired.get(k,{}).get('self_CPU',0.)+paired.get(k,{}).get('children_CPU',0.) for k in ('paired_common_state_and_endpoint_comparison','paired_regional_time_series'))/max(1,common_count)
     paired_wall=sum(paired.get(k,{}).get('wall',0.) for k in ('paired_common_state_and_endpoint_comparison','paired_regional_time_series'))/max(1,common_count)
@@ -126,7 +141,7 @@ def forecast(root,q):
             row['other_fitted_checks_and_startups_CPU']=fixed
             row['optimistic_remaining_native_CPU_per_step_with_other_fitted_checks_fixed']=(24000/1.25-fixed)/(2*N)
             row['necessary_throughput_scope']='holding measured independent/retention/parse/startup costs fixed, and optimistically giving remaining native observers/monitors zero cost; replay doubles actual native step work. Negative allowance requires improvements beyond native evolution.'
-    return dict(status='complete_conditional_forecast' if complete else 'incomplete_native_replay_extrapolation',headroom=1.25,headroom_applied='once to complete future CPU/wall/output/AS totals; not sunk research',measurements=measured,horizons=rows,unmeasured_additional_costs=[] if complete else ['complete heldout external-monitor validation','per-state independent audits','all full milestones/actions','retention and finite durable growth'],validity='short-history bounds are conditional extrapolations; all proposed campaigns require live spent-plus-remaining guards and segment fill/iteration reforecasting. No long-time physical qualification.',necessary_zero_overhead_CPU_per_step=24000/(1.25*4884),strict_necessary_bound_scope='arithmetic budget bound only; observed short native timing is not a proven lower bound on all future states')
+    return dict(status=('complete_conditional_forecast' if validated else 'complete_unvalidated_conditional_forecast') if complete else 'incomplete_native_replay_extrapolation',whole_workflow_component_coverage=complete,heldout_model_validated=bool(validated),headroom=1.25,headroom_applied='once to complete future CPU/wall/output/AS totals; not sunk research',measurements=measured,horizons=rows,unmeasured_additional_costs=[] if complete else ['complete heldout external-monitor validation','per-state independent audits','all full milestones/actions','retention and finite durable growth'],validity='short-history bounds are conditional extrapolations; all proposed campaigns require live spent-plus-remaining guards and segment fill/iteration reforecasting. No long-time physical qualification.',necessary_zero_overhead_CPU_per_step=24000/(1.25*4884),strict_necessary_bound_scope='arithmetic budget bound only; observed short native timing is not a proven lower bound on all future states')
 
 def main():
     p=argparse.ArgumentParser()
