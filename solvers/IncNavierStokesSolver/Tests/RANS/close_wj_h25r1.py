@@ -20,6 +20,7 @@ def validate(root):
     base=root/'resumption-r1';records={};rot=load(base/'science/C-sparse-restart-v1/rotation.json')
     assert load(base/'science/cadence-comparison-v1.json')['status']=='PASS_UNPERTURBED_CADENCE_AND_RESTART_ONLY'
     assert load(base/'science/native-independent-replays-v1.json')['status']=='PASS'
+    assert load(base/'science/C-sparse-restart-v1/strict-after-rotation/qualification.json')['status']=='PASS_POST_ROTATION_TERMINAL_READ'
     removed={p['path']for r in rot['records']if r['id']in rot['removed']for p in r['payloads']}
     selected=load(base/'science/implementation-selected-v1.json')
     sources=[base/f'source-manifest-v{i}.json'for i in (1,2,3)]
@@ -29,6 +30,7 @@ def validate(root):
     for d in ('fresh-C-v1','C-wide-v1','C-sparse-restart-v1','C-dense-restart-v1'):
         sources.append(base/'science'/d/'qualification.json')
     sources += [base/'science/C-sparse-restart-v1/strict/qualification.json']
+    sources += [base/'science/C-sparse-restart-v1/strict-after-rotation/qualification.json']
     for source in sources:
         for pin in [identity(source),*pins(load(source))]:
             p=pin['path']
