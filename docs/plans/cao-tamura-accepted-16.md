@@ -141,6 +141,14 @@ to residuals, 15.402599 to constitutive inventories, 8.416919 to physical audits
 21,870,516 scalar and 7,538,384 paired-gradient evaluations. These scopes guide
 remedies; they are not whole-workflow acceptance timings. No factor reuse,
 changed timestep, mesh reduction or altered physical equation is admitted.
+The later V15 diagnostic has 13.542350 exclusive CPU seconds in 15 residuals,
+12.247390 in constitutive inventory, 8.421522 in physical audits and 6.630562 in
+flow assembly over startup plus one accepted step. Its accepted-step context
+alone assigns 10.151360 to constitutive inventory, 6.630562 to flow assembly,
+5.233350 to residuals, 4.133922 to physical audits and 2.473560 to factorization.
+Thus the measured remaining work spans several native routines; this diagnostic
+partition does not establish a performance lower bound or replace the timing-off
+whole-command envelope.
 
 Independent Python audit work uses only the sealed actual CT14 initial/coarse/
 fine .002 states and makes **no physical advance**. It preserves independent
@@ -198,8 +206,9 @@ The native and Python runtime identities are separate. V15 uses native source
 and probe `8c14585f96e048c19732f748fdfa6bcfab378a653c369124819a4c6887a1fabc`.
 V16 uses source `239a5426d8f620427b29dc211671557cc1ab7eb4` and
 `build-sampler-v1/runtime`; V17 is built from
-`3186446ccbc9a1f6a3ac69ef7306dcf30d54f6e0`; V18 is prospective at
-`895f5417ee22e3f93ed82daf7e9dabfaa97cff12`. Publication/controller commits do not
+`3186446ccbc9a1f6a3ac69ef7306dcf30d54f6e0`; V18 is being tested at
+`77bb66047e522a5e86d01cf3657d36fb365f0baf` (scratch implementation introduced at
+`895f5417ee22e3f93ed82daf7e9dabfaa97cff12`). Publication/controller commits do not
 imply a rebuilt native runtime. Full governing/probe/library hashes are in build
 receipts. V10 source `5b4e3cf40520cfb361eb0f8eb13b5bd6a561b88b` and its prior
 published runtime bindings remain valid only for that experiment.
@@ -229,7 +238,13 @@ negative is the other incomplete worker audit; neither is reported as PASS.
 The first full exact-BLAS audit failed a tuple/dictionary attribute collision
 in its tiny control before the three actual states; its request, library,
 failure and costs remain. The fix renames the observation-row member.
-Ineffective packed contractions, V12, V13 and V16 are not silently discarded.
+Ineffective packed contractions, V12, V13, V16 and V17 are not silently discarded.
+A V18 pre-launch clean-source assertion also stopped before creating a family
+because Python had generated untracked bytecode. Those generated files were
+preserved in `source-python-bytecode-v1` outside the private checkout, and
+`PYTHONDONTWRITEBYTECODE=1` prevents new source-tree bytecode. The administrative
+check/transport costs use the existing publication reserve; no solver ran in
+that stopped launch.
 
 The prior [progress-v2 snapshot](cao-tamura-accepted-16-evidence/progress-v2/results.json)
 is historical progress through V10, before later costs; it is not final CT16

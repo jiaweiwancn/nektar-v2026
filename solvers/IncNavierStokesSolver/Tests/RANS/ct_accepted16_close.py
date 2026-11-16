@@ -7,6 +7,7 @@ transfers and final publication consume the single existing publication reserve.
 It cannot resume the allocation, launch a solver or change a resource ceiling.
 """
 import argparse
+import collections
 import hashlib
 import json
 import subprocess
@@ -31,6 +32,49 @@ def sha(path):
         for block in iter(lambda: f.read(1024**2), b''):
             h.update(block)
     return h.hexdigest()
+
+
+def runtime_bindings(root):
+    bindings = {}
+    for folder in sorted(root.glob('build-*')):
+        request_path, result_path = (folder/name for name in (
+            'request-manifest.json', 'results.json'))
+        if not request_path.is_file():
+            continue
+        request = read(request_path)
+        inputs = request.get('request', request)
+        result = read(result_path) if result_path.is_file() else {}
+        bindings[folder.name] = dict(
+            source_revision=inputs.get('source_revision'),
+            request_manifest_sha256=sha(request_path),
+            results_sha256=sha(result_path) if result_path.is_file() else None,
+            status=result.get('status', 'INCOMPLETE_OR_FAILED_RETAINED'),
+            runtime={name: dict(path=value['path'], sha256=value['sha256'])
+                     for name, value in result.get('runtime', {}).items()
+                     if name in ('IncNavierStokesSolver', 'RANSPreservationProbe')})
+    return dict(schema='CT16ActualPrivateRuntimeBindingsV1', builds=bindings,
+                scope='Exact recorded native source revisions and executable bytes. Full loaded-library and configuration bindings are hash-bound in the corresponding scientific evidence; later publication source does not imply rebuilt native bytes.')
+
+
+def diagnostic_summary(root):
+    summaries = {}
+    for path in sorted(root.glob('diagnostic-*/steps-*/timing.jsonl')):
+        scopes, counts = collections.Counter(), collections.Counter()
+        by_step = collections.defaultdict(collections.Counter)
+        for line in path.open():
+            value = json.loads(line)
+            name, CPU = value['name'], value['exclusive_process_cpu_seconds']
+            scopes[name] += CPU
+            counts[name] += value.get('calls', 1)
+            by_step[str(value['step'])][name] += CPU
+        summaries[str(path.relative_to(root))] = dict(
+            timing_sha256=sha(path), sum_exclusive_CPU=sum(scopes.values()),
+            scopes=[dict(name=name, exclusive_CPU=CPU, calls=counts[name])
+                    for name, CPU in scopes.most_common()],
+            by_step={step: dict(value.most_common()) for step, value in by_step.items()})
+    return dict(schema='CT16DiagnosticOnlyScopeSummaryV1', diagnostics=summaries,
+                acceptance_training=False,
+                scope='Sum exclusive scopes only; never add inclusive scopes. Detailed/broad clocks identify remaining work and do not establish timing-off speedups, whole-workflow models or performance lower bounds.')
 
 
 def main():
@@ -119,8 +163,12 @@ def main():
         physical_T0_407='UNATTEMPTED', full_transit='UNQUALIFIED')
     path = output/'closed-publication-accounting.json'
     path.write_text(json.dumps(accounting, indent=2, allow_nan=False)+'\n')
+    (output/'runtime-bindings.json').write_text(json.dumps(
+        runtime_bindings(root), indent=2, allow_nan=False)+'\n')
+    (output/'native-diagnostics.json').write_text(json.dumps(
+        diagnostic_summary(root), indent=2, allow_nan=False)+'\n')
     (output/'seal.json').write_text(json.dumps(
-        dict(files={path.name: sha(path)}), indent=2)+'\n')
+        dict(files={f.name: sha(f) for f in output.iterdir() if f.is_file()}), indent=2)+'\n')
     print(json.dumps({k: accounting[k] for k in (
         'outcome', 'closed_family_count', 'closed_family_CPU', 'CPU_upper_with_reserve',
         'wall_upper_with_reserve', 'new_live_upper_with_publication_reserve',
