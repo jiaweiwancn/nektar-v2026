@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """H25 fair physical-mesh comparison and narrow production candidates."""
-import argparse,hashlib,json,os,re,subprocess,sys,time,uuid
+import argparse,hashlib,json,math,os,re,subprocess,sys,time,uuid
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from run_wj_h4 import THREADS,load
@@ -12,6 +12,15 @@ from cls_epawf_m3_cases import set_info,set_parameter,write
 
 HERE=Path(__file__).resolve().parent
 OLD=Path('/home/jay/build/wj-h24-flat-continuation-20261115')
+
+def measure_matches(actual,expected):
+    # Derived coordinate products are not serialized payload comparisons.
+    # Same 128-epsilon arithmetic bound used for reconstructed identities.
+    return math.isfinite(actual)and math.isfinite(expected)and abs(actual-expected)<=128*sys.float_info.epsilon*(1+abs(actual)+abs(expected))
+
+def put_same_or_new(path,value):
+    if path.exists():assert load(path)==value,'immutable prior setup differs: '+str(path)
+    else:atomic(path,value)
 
 def stock_case(original,folder,steps=8,dt=.0025):
     """Materialize physical coordinates, never feed composite chart to VCS."""
@@ -26,7 +35,7 @@ def stock_case(original,folder,steps=8,dt=.0025):
     assert len(xs)==15 and len(zs)==51 and len(x.findall('./GEOMETRY/ELEMENT/Q'))==700
     assert min(zs)==d0 and max(zs)==Z and any(z==d0+H for z in zs)
     measures=dict(full=(xs[-1]-xs[0])*(Z-d0),inner=(xs[-1]-xs[0])*H,outer=(xs[-1]-xs[0])*(Z-d0-H))
-    assert measures==dict(full=497.8125,inner=3.75,outer=494.0625)
+    assert all(measure_matches(measures[k],v)for k,v in dict(full=497.8125,inner=3.75,outer=494.0625).items())
     geometry=x.find('GEOMETRY');composite=geometry.find('COMPOSITE')
     for e in list(composite):
         if e.get('ID')!='0':composite.remove(e)
@@ -72,7 +81,7 @@ def stock_case(original,folder,steps=8,dt=.0025):
 def setup(root):
     from wj_h16_observer import compatibility
     for name in ('runtime-build-v1.json','runtime-dependencies-v1.json','compiled-source-objects.json'):
-        old=OLD/'science'/name;atomic(root/'science'/name,load(old))
+        old=OLD/'science'/name;put_same_or_new(root/'science'/name,load(old))
     runtime=load(root/'science/runtime-build-v1.json')
     for e in runtime['executables']:verify(e['ELF']);verify(e['wrapper'])
     for v in load(root/'science/runtime-dependencies-v1.json')['libraries']:verify(v['actual'])
@@ -82,24 +91,24 @@ def setup(root):
     for v in anchor.values():verify(v)
     selected=load(OLD/'inputs/selected.json')
     inputs=dict(anchor=anchor,own_cp0=selected['cp0']['M'],original=selected['original'],support=selected['common_support'])
-    atomic(root/'inputs/baseline.json',inputs)
+    put_same_or_new(root/'inputs/baseline.json',inputs)
     oldcompat=load(OLD/'science/target-cache-compatibility.json')
-    compatibility(root,verify(oldcompat['historical_manifest']),root/'science/cache-compatible-v1.json')
-    original=verify(selected['cp0']['M']['xml']);stock_case(original,root/'science/S0',8)
+    compatibility(root,verify(oldcompat['historical_manifest']),root/'science/cache-compatible-v2.json')
+    original=verify(selected['cp0']['M']['xml']);stock_case(original,root/'science/S0-v2',8)
     folder=root/'science/W0';folder.mkdir();x=ET.parse(original).getroot()
     for k,v in dict(NumSteps=8,IO_CheckSteps=1,IO_InfoSteps=1).items():set_parameter(x,k,v)
     for k,v in dict(RANSWallRestart=str(verify(anchor['checkpoint']).parent),RANSWallCheckpoint=str(folder/'CP'),RANSWallRetention='BoundedV1',
         RANSWallMonitoringPolicy='CheckpointAuditV1',RANSWallMonitorIntent=str(folder/'intent.json'),RANSWallMonitorFault='Off',
         RANSWallReport=str(folder/'native.json'),RANSWallPimpleSnapshots='Off',RANSWallPimpleFlowVectors='Off',RANSWallPimpleArithmetic='Off',RANSWallPimpleVerify='Off',RANSWallImmutableRowReuse='Off').items():set_info(x,k,v)
     write(x,folder/'case.xml')
-    atomic(root/'science/setup-v1.json',dict(status='PASS',inputs=identity(root/'inputs/baseline.json'),case_S0=identity(root/'science/S0/case.xml'),
-        case_W0=identity(folder/'case.xml'),native=runtime,compatibility=identity(root/'science/cache-compatible-v1.json'),
+    atomic(root/'science/setup-v2.json',dict(status='PASS',inputs=identity(root/'inputs/baseline.json'),case_S0=identity(root/'science/S0-v2/case.xml'),
+        case_W0=identity(folder/'case.xml'),native=runtime,compatibility=identity(root/'science/cache-compatible-v2.json'),
         source_files=[identity(p)for p in sorted(HERE.glob('*h25*.py'))],native_changes=0))
 
 def executable(root,name):return verify(next(e['wrapper']for e in load(root/'science/runtime-build-v1.json')['executables']if Path(e['wrapper']['path']).name==name))
 
 def stock(root):
-    folder=root/'science/S0';started=time.monotonic()
+    folder=root/'science/S0-v2';started=time.monotonic()
     with(folder/'native.log').open('x')as f:code=subprocess.run([str(executable(root,'IncNavierStokesSolver')),str(folder/'case.xml')],stdout=f,stderr=subprocess.STDOUT).returncode
     text=(folder/'native.log').read_text();samples=[dict(step=int(s),time=float(t),seconds=float(w))for s,t,w in re.findall(r'Steps:\s*(\d+)\s+Time:\s*([\d.eE+-]+)\s+CPU Time:\s*([\d.eE+-]+)s',text)]
     atomic(folder/'result.json',dict(status='PASS'if code==0 and len(samples)==8 else'FAIL',exit=code,seconds=time.monotonic()-started,samples=samples,producer=identity(folder/'native.log'),
@@ -109,12 +118,12 @@ def stock(root):
 def baseline(root):
     folder=root/'science/W0';d=folder/'monitor';d.mkdir();ip=folder/'intent.json';inputs=load(root/'inputs/baseline.json')
     v=dict(schema='WJMonitorIntentV1',policy='CheckpointAuditV1',directory=str(d),nonce=uuid.uuid4().hex,
-        scope_sha256=identity(root/'science/setup-v1.json')['sha256'],source_sha256=identity(root/'science/runtime-build-v1.json')['sha256'],observer_sha256=identity(HERE/'wj_h25_observer.py')['sha256'],inventory_rule_sha256=hashlib.sha256(RULE.encode()).hexdigest(),
+        scope_sha256=identity(root/'science/setup-v2.json')['sha256'],source_sha256=identity(root/'science/runtime-build-v1.json')['sha256'],observer_sha256=identity(HERE/'wj_h25_observer.py')['sha256'],inventory_rule_sha256=hashlib.sha256(RULE.encode()).hexdigest(),
         original_qh0_checkpoint=inputs['own_cp0']['checkpoint'],original_qh0_state_sha256=inputs['original']['coupled_state_sha256'],
         spatial_lineage_anchor=inputs['original']['checkpoint'],restored_checkpoint=inputs['anchor']['checkpoint'],restart_completion=inputs['anchor']['completion'],
         completed_anchor=inputs['anchor'],maximum_absolute_step=24,restored_absolute_step=16,recovery_stride=1,scientific_stride=8,dt_bits=bits(.0025),
         ack_timeout_seconds=120.,substep_evidence_steps=[],flow_capture='Off',snapshot_capture='Off',preserve_qualification_artifacts=True,
-        cache_compatibility=identity(root/'science/cache-compatible-v1.json'),common_support=inputs['support'])
+        cache_compatibility=identity(root/'science/cache-compatible-v2.json'),common_support=inputs['support'])
     obs=native=None;code=None;error=None;began=time.monotonic()
     with(folder/'observer.log').open('x')as ol,(folder/'native.log').open('x')as nl:
         try:
