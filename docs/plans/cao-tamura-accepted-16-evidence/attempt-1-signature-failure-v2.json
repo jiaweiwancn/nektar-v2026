@@ -1,0 +1,22 @@
+{
+  "schema": "CT16RetainedFailedAttemptV1",
+  "attempt": "small-stream-v2",
+  "tested_native_source": "ece36881d1080df688d75b9248824cbd7207c57a",
+  "status": "FAILED_RESOURCE_PARAMETER_HISTORY_IDENTITY",
+  "family_CPU": 171.159041,
+  "family_wall": 147.19781129201874,
+  "all_four_small_operator_comparisons": "PASS",
+  "dependency_queries_exact_equal": 36,
+  "full_4step_and_2plus2_continuation": "PASS",
+  "deliberate_rejection_steps": 2,
+  "oracle_4step": "completed without failure; final comparison not reached",
+  "failure": "continued-small-cache rejected before advancement: Wall IMEX: checkpoint signature mismatch",
+  "causal_scope": "Both physical-session and open-boundary signatures serialized the new per-call point capacity. Changing262144/2097152 to1024 therefore changed the signature before any state comparison. This is not evidence that a cache value became essential native history; the capacity-invariance control is not yet passed.",
+  "remedy": "Exclude only RANSWALLCONSTITUTIVEMAXIMUMPOINTS alongside existing RANSWALLIMMUTABLEMAXIMUMROWS from essential physical/boundary identities. Keep capacity guards and full XML/receipt recording. Rebuild and rerun fresh controls; require native state/time/all-history binary64 identity for changed row AND point capacity. No prior candidate history is relabeled or admitted.",
+  "scope": "Retain all failed outputs,bindings and receipts and charge the entire attempt to the original CT16 clock. No training or selected-space gate claimed.",
+  "worker_resource": {
+    "aggregate_max": 35,
+    "project_max": 11,
+    "status": "pass"
+  }
+}
