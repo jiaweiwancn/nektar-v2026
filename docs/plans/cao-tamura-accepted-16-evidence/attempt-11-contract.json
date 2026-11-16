@@ -1,0 +1,11 @@
+{
+  "schema": "CT16MeasuredRemedyV1",
+  "execution_policy": "ImmutableTensorV15",
+  "component": "CT16-HashedBasisV1",
+  "basis": "V10 actual one-step receipt records68632198 basis cache hits and478164 constructions across5 basis caches. Construction costs only.663CPU; the source still performs ordered-map lookup for every hit. Target lookup representation at the SAME quota,not a quota increase or cache sweep.",
+  "change": "In the new explicit policy only,use exact double-key unordered lookup for immutable one-dimensional basis Values. Keep original finite/range validation,exact native local coordinate,first inserted signed-zero-equivalent key,identical construction arithmetic/order and identical whole-cache clear at8192entries. No iteration order is consumed. Old policies keep ordered maps. Strong shared Values remain alive through row use after clear.",
+  "qualification": "NEKTAR_RANS_VERIFY_HASHED_BASIS=1 maintains the original ordered cache in parallel and compares presence AND returned Values identity at every actual lookup. Small suite keeps all previous cold-row/physical/current-state/restart/rollback/foreign controls. Additionally run one selected actual native step with only this basis-index tripwire,to exercise real8192entry clears without any performance claim; record it as verification-only and prohibit using its overhead in training. Then independent timing-off0/1/2 plus diagnosis and CT14 coefficient comparison. All G1-G6 remain unchanged.",
+  "bounds": "8192entries per basis cache unchanged; no new essential history or state-dependent payload. GlobalField registration and patch constructor consistency guard cover the new policy. Distinct execution/history identity; V15-toV14history negative. Same row/point/nnz/factor/AS limits.",
+  "allocation": "Same CT16 original start1794835825,24kCPU/28.8kwall/16GiB new live,16GiB processAS,onefamily/rank,6librarythreads1,compilerjobs2,project16/aggregate72. Keep all failed and incomplete attempts charged; noT>.002 or production ceiling increase.",
+  "interpretation": "Measured-volume exact lookup hypothesis. Construction-only timing does not measure lookup cost; acceptance benefit must come from matched clock-off commands."
+}

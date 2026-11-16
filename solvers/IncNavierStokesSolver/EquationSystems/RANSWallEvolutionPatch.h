@@ -596,6 +596,7 @@ private:
     bool m_hashedCoverage=false;
     bool m_currentVelocityGradients=false;
     bool m_observedScalars=false;
+    bool m_hashedBasisCache=false;
     struct GradientMemo;
     mutable std::shared_ptr<GradientMemo> m_gradientMemo;
     class CurrentGradientScope

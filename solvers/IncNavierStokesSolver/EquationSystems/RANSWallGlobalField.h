@@ -82,6 +82,7 @@ public:
     int Dimension() const { return m_dimension; }
     bool ImmutableOwnerIndex() const { return m_immutableTensor; }
     bool SharedTensorRows() const { return m_sharedTensor; }
+    bool HashedBasisCache() const { return m_hashedBasis; }
     int Size() const;
     std::array<std::uint64_t,6> BasisWork() const;
     RANSWallGlobalPoint Point(const Coordinate &coordinate, int side=0) const;
@@ -141,6 +142,7 @@ private:
     bool m_serialSparse=false;
     bool m_immutableTensor=false;
     bool m_sharedTensor=false;
+    bool m_hashedBasis=false;
     struct NativeRow
     {
         RANSWallSharedVector<int> ids;

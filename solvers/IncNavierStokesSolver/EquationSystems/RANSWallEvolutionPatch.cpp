@@ -365,8 +365,9 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(reuse=="Off" || reuse=="ExactStepV1","unknown exact evaluation reuse policy");
     m_evaluationReuse=reuse=="ExactStepV1";
     std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
-    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10" || immutable=="ImmutableTensorV11" || immutable=="ImmutableTensorV12" || immutable=="ImmutableTensorV13" || immutable=="ImmutableTensorV14","unknown immutable evaluation policy");
-    m_observedScalars=immutable=="ImmutableTensorV14";
+    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10" || immutable=="ImmutableTensorV11" || immutable=="ImmutableTensorV12" || immutable=="ImmutableTensorV13" || immutable=="ImmutableTensorV14" || immutable=="ImmutableTensorV15","unknown immutable evaluation policy");
+    m_hashedBasisCache=immutable=="ImmutableTensorV15";
+    m_observedScalars=immutable=="ImmutableTensorV14" || m_hashedBasisCache;
     m_currentVelocityGradients=immutable=="ImmutableTensorV13" || m_observedScalars;
     m_hashedCoverage=immutable=="ImmutableTensorV12" || m_currentVelocityGradients;
     m_scopedAuditResidual=immutable=="ImmutableTensorV11" || m_hashedCoverage;
@@ -640,7 +641,8 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     fields.push_back(std::make_shared<RANSWallGlobalField>(session,pressure,inner,m_dimension));
     fields.push_back(std::make_shared<RANSWallGlobalField>(session,pressure,outer,m_dimension));
     for(const auto &field:fields)
-        Require(field->ImmutableOwnerIndex()==m_immutableTensor && field->SharedTensorRows()==m_sharedTensor,
+        Require(field->ImmutableOwnerIndex()==m_immutableTensor && field->SharedTensorRows()==m_sharedTensor &&
+            field->HashedBasisCache()==m_hashedBasisCache,
             "patch and native-field immutable execution policy registrations differ");
     bool directional=false;
     for(const auto &field:fields)for(const auto &e:field->Elements())
@@ -1933,7 +1935,8 @@ std::string RANSWallEvolutionPatch::Signature() const
     if(DisplacedAccepted())text<<":wall_sink=SamePhysicalWallDisplacedAcceptedV1:d="<<m_options.aerodynamicDisplacement;
     if(SerialSparse())text<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")text<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
-    if(m_observedScalars)text<<":execution=CT16-CurrentObservedScalarV1";
+    if(m_hashedBasisCache)text<<":execution=CT16-HashedBasisV1";
+    else if(m_observedScalars)text<<":execution=CT16-CurrentObservedScalarV1";
     else if(m_currentVelocityGradients)text<<":execution=CT16-CurrentVelocityGradientV1";
     else if(m_hashedCoverage)text<<":execution=CT16-HashedCoverageV1";
     else if(m_scopedAuditResidual)text<<":execution=CT16-ScopedAuditResidualV1";

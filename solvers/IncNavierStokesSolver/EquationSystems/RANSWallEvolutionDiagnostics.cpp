@@ -549,7 +549,8 @@ std::string RANSWallEvolutionPatch::PreservationIdentity(bool legacyOperator) co
     if(!legacyOperator)out<<":numerical_operator="<<RANSWallNumericalOperatorIdentity();
     if(SerialSparse())out<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")out<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
-    if(m_observedScalars)out<<":execution=CT16-CurrentObservedScalarV1";
+    if(m_hashedBasisCache)out<<":execution=CT16-HashedBasisV1";
+    else if(m_observedScalars)out<<":execution=CT16-CurrentObservedScalarV1";
     else if(m_currentVelocityGradients)out<<":execution=CT16-CurrentVelocityGradientV1";
     else if(m_hashedCoverage)out<<":execution=CT16-HashedCoverageV1";
     else if(m_scopedAuditResidual)out<<":execution=CT16-ScopedAuditResidualV1";
