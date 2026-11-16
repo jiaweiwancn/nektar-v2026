@@ -56,6 +56,12 @@ and 15 GiB free-space reserve. Current workers plus reservations must fit 72.
 Resource admission is checked before creating science directories and throughout
 each operation. Pre-admission refusals are explicit, not numerical failures.
 
+After observing the native runtime, later operations reserve ten additional
+native workers: one coordinator, one observer, the rank's three runtime threads
+and four MPI helper threads, plus margin. Numerical-library threads remain one.
+This strengthens the original eight-worker admission reservation; it does not
+reduce actual thread counting or change the 72-worker ceiling.
+
 ## Adaptive experiment reservations
 
 1. Correct h350 recipe (lookup On, scalar evaluation Off), initialize 350 cells

@@ -34,7 +34,7 @@ def initialize(parent, revision):
 
 def admission(parent, phase):
     allocation = scientific_workers()
-    extra = 16 if phase == 'build' else 8 if phase == 'native' else 2
+    extra = 16 if phase == 'build' else 10 if phase == 'native' else 2
     free = os.statvfs(parent).f_bavail * os.statvfs(parent).f_frsize
     return allocation, extra, free, allocation['workers'] + extra <= 72 and free >= 15*1024**3
 

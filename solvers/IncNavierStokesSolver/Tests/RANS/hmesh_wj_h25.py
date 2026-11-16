@@ -19,17 +19,26 @@ def directory(root,label):
     assert label.replace('-','').isalnum()
     return root/'resumption-r1/science'/label
 
-def initialize(root,label):
+def initialize(root,label,successor=None):
     inputs=load(root/'inputs/baseline.json');original=verify(inputs['own_cp0']['xml'])
     x=ET.parse(original).getroot();vertices=[list(map(float,v.text.split()))for v in x.findall('./GEOMETRY/VERTEX/V')]
     xs=sorted({v[0]for v in vertices});fine=sorted({v[1]for v in vertices});parent=fine[::2]
     assert len(xs)==15 and len(fine)==51 and len(parent)==26 and parent[8]==.15
+    restored=[]
+    if successor:
+        proposal=load(successor);assert proposal['status']=='SUCCESSOR_PROPOSAL_NOT_ACCEPTANCE'
+        verify(proposal['source']);restored=proposal['restore_pairs'];assert set(restored)<=set(range(25))
+        parent=sorted(set(parent+[fine[2*i+1] for i in restored]))
+        assert (len(parent)-1)*14==proposal['cells']
+    inner=parent.index(.15);outer=len(parent)-1-inner
+    states=3*43*(3*(inner+outer)+1)+43*(3*outer+1)+15*(inner+outer+2)
     d=directory(root,label);d.mkdir();tensor_mesh(x,parent,3,2,8.,1.,points=[8,8],xknots=xs)
     for e in x.findall('./EXPANSIONS/E'):e.set('FIELDS',e.get('FIELDS').replace('eps_tilde','epsilon'))
     for e in x.findall('./CONDITIONS/VARIABLES/V'):
         if e.text=='eps_tilde':e.text='epsilon'
-    design=dict(mesh='14x(8+17) stored exact parent intervals',reference_xml=identity(original),reference_knots=fine,parent_knots=parent,xknots=xs,
-        states=12445,governing_quadrature=[12,16],fresh_representation=True,not_a_H24_restart=True)
+    design=dict(mesh=f'14x({inner}+{outer}) stored parent intervals and diagnosed restored children',reference_xml=identity(original),reference_knots=fine,parent_knots=parent,xknots=xs,
+        states=states,cells=14*(inner+outer),restored_pairs=restored,successor=identity(successor) if successor else None,
+        governing_quadrature=[12,16],fresh_representation=True,not_a_H24_restart=True)
     atomic(d/'design.json',design)
     for k,v in dict(RANSWallNativeLookup='TensorExactV1',RANSWallScalarEvaluation='Off',RANSWallMappedResourceDesign=identity(d/'design.json')['sha256'],
         RANSWallRestart='None',RANSWallCheckpoint=str(d/'CP'),RANSWallReport=str(d/'native.json'),RANSWallRetention='Off',RANSWallMonitoringPolicy='Off',
@@ -39,7 +48,7 @@ def initialize(root,label):
         governing_attempts=0,initialization_role='new h representation from unchanged physical Functions; native projection/lift/FlatInletTrace and history counted, never a relabelled H24 field'))
     with(d/'native.log').open('x')as f:code=subprocess.run([str(root/'runtime-scalar-v1/IncNavierStokesSolver'),str(d/'case.xml')],stdout=f,stderr=subprocess.STDOUT).returncode
     atomic(d/'launch-result.json',dict(exit=code));assert code==0,'h350 native initial admission failed; preserve original report'
-    r=native_load(d/'case.evolution.json');assert int(r['steps'])==0 and r['time']==0 and r['failure']==''and len(r['state'])==12445
+    r=native_load(d/'case.evolution.json');assert int(r['steps'])==0 and r['time']==0 and r['failure']==''and len(r['state'])==states
     atomic(d/'initial-source.json',dict(report=identity(d/'case.evolution.json'),checkpoint=identity(d/'CP/State.bin'),history_role='genuine native initial history, alpha0'))
 
 def analyze(root,label,candidate_report=None):
@@ -98,6 +107,7 @@ if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('initialize','analyze'),required=True)
     p.add_argument('--label',default='h350-r1-v1')
     p.add_argument('--candidate-report',type=Path)
+    p.add_argument('--successor',type=Path)
     a=p.parse_args()
-    if a.mode=='initialize':initialize(a.root,a.label)
+    if a.mode=='initialize':initialize(a.root,a.label,a.successor)
     else:analyze(a.root,a.label,a.candidate_report)
