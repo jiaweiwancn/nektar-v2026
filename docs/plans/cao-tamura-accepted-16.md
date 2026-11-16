@@ -93,3 +93,22 @@ establish a native or campaign speedup. The
 [opt-in flat-metric contract](cao-tamura-accepted-16-evidence/attempt-4-contract.json)
 retains general-map fallback,unchanged whole-chart validation and explicit
 current-coordinate checks. Governing qualification is pending.
+
+
+The [sealed progress ledger](cao-tamura-accepted-16-evidence/progress-v1/results.json)
+binds all completed attempts through the V7 diagnostic and reports5582.954978
+closed-family CPU seconds before its own collector receipt. Its separate
+[future ledger](cao-tamura-accepted-16-evidence/progress-v1/forecasts.json)
+contains exact rounded member counts and conditional native-only CPU/wall
+extrapolations for T=.407 and0.1/1/3transits; all remain UNADMITTED. Complete
+campaign CPU/wall/retention costs remain unknown,not zero.
+
+V6's0/1/2 native CPU values are53.181892/154.906970/253.475760;
+V7's are46.089977/137.980507/234.472438. Their repeated-step envelopes are
+101.725078 and96.491931 CPU seconds. Both small suites and all actual selected
+training vectors pass exactly,including cross-policy history rejection for V7.
+V7's conditional fresh entry native-only extrapolation remains598013.171799
+CPU seconds with headroom. The broad diagnostic still assigns31.58 CPU seconds
+to current constitutive inventory,20.12 to residuals,13.10 to the independent
+native repeated-point audit and9.55 to flow assembly. Diagnostic partitions
+identify further work; clock-off commands above provide the native timing data.
