@@ -39,7 +39,14 @@ def initialize(root):
     atomic(d/'initial-source.json',dict(report=identity(d/'case.evolution.json'),checkpoint=identity(d/'CP/State.bin'),history_role='genuine native initial history, alpha0'))
 
 def analyze(root):
-    d=root/'science/h350';r=native_load(d/'case.evolution.json');cache,_=load_compatible(root/'science/cache-compatible-v2.json');c=cache.config
+    from wj_h16_observer import compatibility
+    d=root/'science/h350';r=native_load(d/'case.evolution.json')
+    prior=load(root/'science/cache-compatible-v2.json')
+    bound=compatibility(root,verify(prior['historical_manifest']),d/'fine-cache-compatibility-base.json')
+    bound.update(new_native_identity=identity(root/'science/runtime-build-scalar-v1.json'),
+        permitted_difference='fine immutable reference rows only; coarse rows rebuilt independently on its new field/native map; actual numerical helper paths verified')
+    atomic(d/'fine-cache-compatibility.json',bound)
+    cache,_=load_compatible(d/'fine-cache-compatibility.json');c=cache.config
     fixed=load(verify(load(root/'inputs/baseline.json')['support']))['points'];points=collections.OrderedDict((pkey(p),p)for p in fixed)
     lobatto=[-1.,-np.sqrt(3/7),0.,np.sqrt(3/7),1.]
     for e in r['fields'][0]['mesh']:
