@@ -43,10 +43,14 @@ def children(root):
 
 
 def main():
+    own_CPU=time.process_time();started=time.monotonic()
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--control',type=Path,required=True)
     for key in ('launcher','parent','guard'):p.add_argument('--'+key,type=int,required=True)
-    p.add_argument('--cancel',action='store_true');a=p.parse_args();root=a.control.resolve()
+    mode=p.add_mutually_exclusive_group()
+    mode.add_argument('--cancel',action='store_true')
+    mode.add_argument('--cancel-at-unix',type=float,help='Wait for admission; close only a still-unadmitted old launcher at this absolute deadline')
+    a=p.parse_args();root=a.control.resolve()
     require(root.name.startswith('resources-') and root.parent.name=='ct-accepted-15-20261116','foreign CT15 control root')
     require(not (root/'execution.json').exists(),'family already closed')
     launcher,parent,guard=[proc(i) for i in (a.launcher,a.parent,a.guard)]
@@ -58,6 +62,18 @@ def main():
     require(not read(root/'worker-leases.json') and not (root/'live-budget.json').exists(),'numerical family already admitted')
     status=read(root/'worker-guard-status.json')
     witness=dict(schema='CT15PreSpawnQueueCancellationV1',control=str(root),launcher=launcher,parent=parent,guard=guard,worker_status=status,action='read_only_preflight')
+    def watch_receipt(status):
+        write(root/'queue-deadline-watch.json',dict(schema='CT15QueueDeadlineWatchV1',status=status,
+            deadline_unix=a.cancel_at_unix,self_CPU=time.process_time()-own_CPU,wall=time.monotonic()-started,
+            CPU_accounting='administrative helper charged against the fixed closure/transport/publication reserve, not added again to the launcher receipt'))
+    if a.cancel_at_unix is not None:
+        require(a.cancel_at_unix<=1794805033+28200,'deadline must leave the original 600-second publication reserve')
+        require(not (root/'queue-deadline-watch.json').exists(),'deadline watcher already closed')
+        while time.time()<a.cancel_at_unix:
+            if (root/'execution.json').exists() or read(root/'worker-leases.json') or (root/'live-budget.json').exists():
+                watch_receipt('family_admitted_or_closed');print('family admitted or closed; existing package guard remains authoritative');return 0
+            time.sleep(min(10,max(0,a.cancel_at_unix-time.time())))
+        a.cancel=True
     if not a.cancel:print(json.dumps(witness,indent=2));return 0
     # A stopped launcher cannot race the admission check. The guard remains
     # running until the launcher's ordinary finally block closes it.
@@ -97,6 +113,7 @@ def main():
     finally:
         if launcher_stopped:os.kill(a.launcher,signal.SIGCONT)
         if parent_stopped:os.kill(a.parent,signal.SIGCONT)
+    if a.cancel_at_unix is not None:watch_receipt('cancelled_before_spawn')
     return 0
 
 
