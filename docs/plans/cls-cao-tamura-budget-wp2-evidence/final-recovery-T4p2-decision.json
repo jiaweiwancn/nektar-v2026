@@ -1,0 +1,15 @@
+{
+  "version": "WP2FinalRecoveryMilestoneV1",
+  "Asia_Shanghai": "2026-11-16T23:53:57.222338",
+  "target": 4.2,
+  "maximum_authorized": 4.7769550774400775,
+  "reasoning": "Both native trajectories remain scalar/covariance admissible and correction-free; accuracy return not achieved at T2.4. Continue the identical states/histories, with no numerical or physical change, to the final affordable relaxation window.",
+  "forecast": {
+    "physical_steps_each": 180,
+    "driver_seconds_each_estimate": 5700,
+    "full_audit_seconds_estimate": 1000,
+    "report_and_push_reserve_seconds": 1200,
+    "remaining_original_envelope_seconds": 8509.777652740479
+  },
+  "stop": "same original time/storage/attempt budget; first native rejection; or T4.2. No automatic later continuation. All failures retained, WP2 stays open unless every unchanged criterion passes."
+}

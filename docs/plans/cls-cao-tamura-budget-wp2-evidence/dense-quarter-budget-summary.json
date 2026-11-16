@@ -1,0 +1,71 @@
+{
+  "version": "WP2DenseQuarterBudgetV1",
+  "capture_Asia_Shanghai": "2026-11-16T22:55:35.428740",
+  "models": {
+    "CLS": {
+      "source": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/dense-comparisons-GL28/CLS.json",
+      "sha256": "5a2077c1a44cef991f81e25c9cfbe3d479d0cbd9c471e3c197ca95b587c96a07",
+      "native_common_times": 61,
+      "points_per_state": 254016,
+      "passed": true,
+      "comparisons": {
+        "timestep": {
+          "largest_quarter_budget_fraction": 0.21851876871940115,
+          "actual_time": 0.02,
+          "metric": "1_total_normal_stress_point",
+          "full_tensor_RMS_max": 0.00018133410971771016,
+          "all_passed": true
+        },
+        "mesh": {
+          "largest_quarter_budget_fraction": 0.5665265263671451,
+          "actual_time": 0,
+          "metric": "0_total_shear_point",
+          "full_tensor_RMS_max": 0.0002586187503547635,
+          "all_passed": true
+        }
+      }
+    },
+    "standard": {
+      "source": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/dense-comparisons-GL28/standard.json",
+      "sha256": "30ee30bce2fc534887a54865100a6595566cec6eac672ab3b05c249117a423c8",
+      "native_common_times": 61,
+      "points_per_state": 254016,
+      "passed": true,
+      "comparisons": {
+        "timestep": {
+          "largest_quarter_budget_fraction": 0.05874754296462651,
+          "actual_time": 1.1400000000000006,
+          "metric": "0_mechanical_pressure_point",
+          "full_tensor_RMS_max": 4.696871068225097e-05,
+          "all_passed": true
+        },
+        "mesh": {
+          "largest_quarter_budget_fraction": 0.5665265263702273,
+          "actual_time": 0,
+          "metric": "0_total_shear_point",
+          "full_tensor_RMS_max": 0.0002709380054740481,
+          "all_passed": true
+        }
+      }
+    }
+  },
+  "scope": "all actual executed common native times, GL28 on the fixed common union of panels; primitive fields and selected tensors recomputed; absolute pressure; no interpolation in physical time",
+  "cost": {
+    "models": {
+      "CLS": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/dense-comparisons-GL28/CLS.json",
+        "sha256": "5a2077c1a44cef991f81e25c9cfbe3d479d0cbd9c471e3c197ca95b587c96a07",
+        "passed": true
+      },
+      "standard": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/dense-comparisons-GL28/standard.json",
+        "sha256": "30ee30bce2fc534887a54865100a6595566cec6eac672ab3b05c249117a423c8",
+        "passed": true
+      }
+    },
+    "seconds": 686.6133753530448,
+    "peak_RSS_KiB": 1594560,
+    "source_sha256": "65c129f72b22183eed5eb10740d8b9285c2f845bdac63244c32e11cf78a9e0f4",
+    "governing_solves": 0
+  }
+}

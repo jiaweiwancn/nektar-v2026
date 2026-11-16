@@ -120,7 +120,7 @@ class Rows:
                     TKE_integral=float(np.dot(self.weight,d['values'][:,2])),
                     scope='actual native coefficient gradients and actual outer epsilon; full selected 3x3 tensors; stress errors normalized by u_tau^2; analytical reference evaluated separately; complements native sided hard inventory')
 
-    def volume_audit(self,report,tuple_data,order=28):
+    def volume_audit(self,report,tuple_data,order=28,allow_accuracy_failure=False):
         """Independent polynomial evaluation on the frozen union-panel GL28.
 
         Stresses are reevaluated, never interpolated. Native exact sided audits
@@ -150,8 +150,11 @@ class Rows:
                 gradient=v['G'][j].tolist(),tensor=R[j].tolist(),eigenvalues=eigen.tolist(),critical_eigenvector=vec[:,0].tolist()))
         divergence=v['G'][:,0,0]+v['G'][:,2,2]
         strong=float(np.sqrt(np.dot(v['weights'],divergence**2)/sum(v['weights']))/(US/H))
-        require(min(ev)>=1e-4*K0 and strong<=1e-3,'denser-grid covariance/divergence budget')
+        require(min(ev)>=1e-4*K0,'denser-grid covariance budget')
+        strong_passed=strong<=1e-3
+        if not allow_accuracy_failure:require(strong_passed,'denser-grid divergence accuracy budget')
         return dict(order=order,point_count=len(ev),minimum_covariance_inner_outer=[w['eigenvalues'][0] for w in witnesses],witnesses=witnesses,
             positive_scalars=True,minimum_k=float(min(v['values'][:,2])),minimum_epsilon=float(min(E)),physical_volume=float(sum(v['weights'])),
-            strong_divergence_RMS_over_ustar_H=strong,polynomial_fit_error=v['fit_error'],passed=True,
+            strong_divergence_RMS_over_ustar_H=strong,strong_divergence_accuracy_passed=strong_passed,
+            covariance_margin_passed=True,polynomial_fit_error=v['fit_error'],passed=strong_passed,
             scope='fixed GL28 on the common union partition; actual affine native polynomials reconstructed from validated native rows, selected tensors freshly recomputed; finite sampling, complements exact native sided inventories; no freshness/selection claim')

@@ -1,0 +1,8 @@
+{
+  "version": "WP2RecoveryNegativeReceiptV1",
+  "Asia_Shanghai": "2026-11-16T23:50:54.102494+08:00",
+  "reason": "The GL28 assessor stopped on a failed strong-divergence accuracy budget and omitted the complete negative recovery receipt.",
+  "change": "Record failed transient/final strong-divergence accuracy checks during recovery, instead of throwing before the negative report; final qualification still requires the unchanged .001 bound. Unperturbed scans remain fail-fast.",
+  "unchanged": "Every physical state/history, production gate, scalar check, covariance margin 1e-4 K0, numerical threshold, equation and correction accounting; no certificate can be issued for the failed final state.",
+  "history": "Preserve the original failed assessment log and native T2.4 states; rerun only the read-only assessor into a separate output directory."
+}

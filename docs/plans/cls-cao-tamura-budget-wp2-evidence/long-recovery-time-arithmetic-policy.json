@@ -1,0 +1,10 @@
+{
+  "version": "WP2LongRecoveryTimeArithmeticV1",
+  "declared_Asia_Shanghai": "2026-11-16T23:05:25.780480+08:00",
+  "reason": "Before any planned endpoint beyond 1.8, bound cumulative binary64 time additions across the full predeclared recovery horizon, rather than assume the 1.2-second roundoff bound scales unchanged.",
+  "unchanged": "actual native saved times, histories, dt, step count, endpoint execution, checkpoint identities and every physical gate",
+  "tolerance": "for expected time <=1.2 s keep 64*ulp(max(1,Treq)); afterward max(original,(native_global_steps+2)*ulp(max(1,native_global_steps*stored_dt)))",
+  "derivation": "at most half one ulp per floating addition of stored dt; use a conservative whole ulp per addition plus parsed-product rounding; all steps from t0=0 counted, no epoch reset",
+  "size": "below 1e-12 s for every authorized recovery endpoint and timestep here, negligible against .005/.01 s; no time interpolation or relabeling",
+  "tests": "binary64 repeated addition at .02/.01/.005, including 4.5 s; a 1e-7 s error must still reject"
+}

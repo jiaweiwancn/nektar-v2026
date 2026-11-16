@@ -4,7 +4,7 @@
 import argparse,math,time
 from pathlib import Path
 from wp2_native import Run
-from wp2_qualification import verify_report,quarter_budget_differences
+from wp2_qualification import verify_report,quarter_budget_differences,physical_time_tolerance
 from run_cls_epawf_picard import require,state_hash,sha
 from diagnose_cls_accepted_covariance import checkpoint
 from run_cao_tamura_budget_wp2 import charge
@@ -91,7 +91,7 @@ def main():
                 if reports:
                     for key in ['fixed_reference','fixed_defect']:require(state_hash(d[key])==state_hash(reports[0][key]),'restart changed '+key)
                 accepted=d['steps'];parent=Path(d['checkpoint']);reports.append(d)
-                require(abs(d['time']-accepted*a.dt)<=64*math.ulp(max(1.,TREQ)),'physical time drift exceeds declared allowance')
+                require(abs(d['time']-accepted*a.dt)<=physical_time_tolerance(accepted,a.dt,TREQ),'physical time drift exceeds declared allowance')
                 x.result.setdefault('observations',[]).append(dict(time=d['time'],accepted=accepted,checkpoint=str(parent),checkpoint_sha256=sha(parent/'State.bin'),
                     report=x.result['results'][label]['report'],physical_budgets_passed=all(v['passed'] for v in checks),
                     final_physical_checks=checks[-1],seed_sha256=d['wp2_per_state_monitoring'][0]['physical_checks']['state_sha256']))

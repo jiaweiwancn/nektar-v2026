@@ -51,8 +51,9 @@ def paths(root,model,phase,progress):
     return reports
 
 
-def assess(root,model,phase,rows,output):
-    started=time.monotonic();progress_path=root/f'preservation-{phase}-{model}/progress.json';p=load(progress_path)
+def assess(root,model,phase,rows,output,progress_path=None):
+    started=time.monotonic();progress_path=progress_path or root/f'preservation-{phase}-{model}/progress.json';progress_hash=sha(progress_path);p=load(progress_path)
+    require(p['model']==model,'analysis trajectory model differs')
     require(p['status']=='completed_bounded_trajectory','trajectory is not complete: '+str(progress_path))
     require(p['actual_time']>=TREQ,'actual physical duration too short')
     recovery=phase=='recovery';history=[];last_hash=None;last_time=-1.;sources=[];replay=[];counts={};previous_values=None
@@ -83,7 +84,7 @@ def assess(root,model,phase,rows,output):
                 require(h==last_hash,'restart boundary changed accepted coefficients');continue
             require(t>last_time,'trajectory time order differs')
             v=rows.tuple(state,d);full=rows.full_errors(state,d,v)
-            denser=rows.volume_audit(d,v)
+            denser=rows.volume_audit(d,v,allow_accuracy_failure=recovery)
             horizontal=homogeneity(dict(d['wp2_common_samples'],values=v['values']),cold_samples,US,K0[model])
             tensor_horizontal=tensor_homogeneity(rows,v,cold)
             if initial_samples is None:initial_samples=dict(d['wp2_common_samples'],values=v['values'].tolist())
@@ -110,7 +111,7 @@ def assess(root,model,phase,rows,output):
         endpoint=d
     require(abs(last_time-p['actual_time'])<2e-14,'terminal native time differs')
     require(all(o['physical_budgets_passed'] for o in p['observations']) or recovery,'per-state preservation failed')
-    final_pass=history[-1]['physical_checks']['passed'] and history[-1]['full_tensor_accuracy_passed'] and history[-1]['horizontal_homogeneity']['passed'] and history[-1]['full_tensor_horizontal_homogeneity']['passed']
+    final_pass=history[-1]['physical_checks']['passed'] and history[-1]['denser_volume_audit']['passed'] and history[-1]['full_tensor_accuracy_passed'] and history[-1]['horizontal_homogeneity']['passed'] and history[-1]['full_tensor_horizontal_homogeneity']['passed']
     # Linear trend is measured on executed states only. The transit-scaled
     # slope is an accuracy-scale diagnostic, not a prediction of future flow.
     tt=np.asarray(times);den=float(np.sum((tt-np.mean(tt))**2));require(den>0,'unresolved final observation window')
@@ -125,7 +126,8 @@ def assess(root,model,phase,rows,output):
             interpretation='least-squares slope of actual values on the final executed window; no infinite-time or future-state claim'),
         final_budgets=endpoint['wp2_final_turbulence_budget'],seconds=time.monotonic()-started,
         peak_RSS_KiB=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
-        context_sha256=sha(rows.path),progress_sha256=sha(progress_path),governing_solves_in_this_analysis=0)
+        context_sha256=sha(rows.path),progress_sha256=progress_hash,governing_solves_in_this_analysis=0)
+    require(sha(progress_path)==progress_hash,'trajectory changed during all-state assessment')
     require(result['final_window']['duration']>=TREQ/4-2e-14,'final observation window too short')
     atomic(output,result);return result,endpoint,cold_samples
 
@@ -140,8 +142,9 @@ def tensor_differences(left,right,rows_left,rows_right):
     return dict(passed=all(v<=.0025 for row in out.values() for v in row.values()),regional_full_tensor_RMS=out,limit=.0025)
 
 
-def native_states(root,model,phase):
-    progress=load(root/f'preservation-{phase}-{model}/progress.json');states={};context=None
+def native_states(root,model,phase,progress_path=None):
+    progress=load(progress_path or root/f'preservation-{phase}-{model}/progress.json');states={};context=None
+    require(progress['model']==model,'native-state trajectory model differs')
     for file in paths(root,model,phase,progress):
         d=load(file)
         if context is None:context={k:d[k] for k in ['parameters','model_specification','wp2_common_samples']}

@@ -1,6 +1,6 @@
 # WP2: neutral open approach-flow qualification
 
-2026-11-16, Asia/Shanghai. Checkpoints 1 and 2 pass for both deployed regularized
+2026-11-16–17, Asia/Shanghai. Checkpoints 1 and 2 pass for both deployed regularized
 CLS and calibrated standard k–epsilon. Checkpoint 3 qualifies the short timestep
 pair and measured cost. Both models have completed the unperturbed physical-transit,
 half-step and finer-mesh runs. WP2 remains **OPEN** pending complete perturbation
@@ -116,7 +116,7 @@ recovery legs have 120 accepted steps and zero bound supply. CLS passes its
 native final profile budgets and the independent full GL28 profile check, but
 its full homogeneity/window/trend assessment still fails. Standard retains a
 6.14% native pointwise k error and pressure/W errors. The same accepted
-trajectories are being extended to T=1.8; no seed, physical parameter, dt or
+trajectories were extended through T=2.4 and now have a final bounded T=4.2 target; no seed, physical parameter, dt or
 acceptance threshold is changed. Recovery is not yet demonstrated.
 
 Use dt=.02 and .01 to T=1.2 s, with observations at .3/.6/.9/1.2; the last .3 s
@@ -165,3 +165,67 @@ RMSE about .001822 Uinf^2, and streamwise-RMS RMSE .90110 (CLS) versus .77668
 idealization, without a finite-layer tail. Numerical preservation does not
 remove its experimental outer-profile discrepancy or calibrate the standard
 model's isotropic normal stresses. Fig.3d and hill observations remain held out.
+
+The complete unperturbed final-window check now bounds **every pair of executed
+times**, using the componentwise GL28 ranges; it does not rely only on equal
+endpoints or a linear trend. All six cases pass. Denser GL28 timestep differences
+use at most 21.85% (CLS) and 5.87% (standard) of the allowed quarter budgets;
+mesh differences use 56.65%. Native wall/interface/continuity comparison bounds
+also pass, using the physical triangle inequality rather than adding component
+norms as error percentages. Independently aggregating the two regional GL16
+strong-divergence L2 norms reproduces the reported physical RMS within 9.3e-16.
+
+At T=2.4, CLS's native physical profiles pass except the unforced block norm
+(.002268); its complete recovery window does not qualify. Standard has k point
+error 16.88%, strong-divergence ratio .0015904, wall-shear error 1.264%, and
+mechanical-pressure RMS error .13102 in u_tau^2 units. These are failed accuracy
+criteria, despite positive scalar/covariance states and zero correction supply.
+The read-only assessor now records failed transient accuracy checks and writes
+a complete negative receipt; it still requires the same final limits and never
+bypasses scalar or covariance requirements. The original aborted assessment log
+is preserved.
+
+One conditional standard dt=.005 control completes 60 accepted steps to actual
+T=.30000000000000016 from the exact same pulse as dt=.01, with independently
+formed histories. First callback history hashes equal the perturbed seed for
+both models and both tested timesteps. At T=.3, the dt difference is about 2.82
+times the quarter-budget point-pressure limit; field differences are 2.8–10.8%
+of the fine trajectory's response. This warns that the transient is time
+sensitive. It neither establishes temporal order nor proves a physical model
+instability. No extra long timestep trajectory is launched.
+
+The final recovery milestone remains within the original 12-hour envelope, with
+no automatic extension beyond T=4.2. Floating-point time comparisons after T=1.2
+use a predeclared global-step addition bound, at most (steps+2) ulps of the
+expected time; saved times and histories are never edited or interpolated.
+Ordinary incompatible-dt restarts remain rejected. Exact completed trajectory
+snapshots bind subsequent readbacks, preventing a later continuation from
+changing the assessment's input manifest.
+
+The production native source chain matches the final Mac production C++ files.
+The one C++ difference is the separately compiled, geometry-only row-export
+probe, frozen under its own identity. Python workflow changes are recorded
+separately from the unchanged production executable. The closure collector
+checks executable and every frozen linked-library hash, input receipt hashes
+and exact final state/history/reference bindings; missing or failed recovery
+evidence cannot close WP2. Source and runtime records are indexed in
+[native-source-chain.json](cls-cao-tamura-budget-wp2-evidence/native-source-chain.json).
+
+Native turbulence budgets retain actual production, cutoff sink and its separate
+counterfactual reference production, outer epsilon production/destruction/Yap,
+physical storage from saved histories, all physical faces, constrained reactions
+and signed free/interface row projections. Regional weak identities close within
+1.5e-16 at the retained unperturbed endpoints. The raw face column labelled
+`outward_diffusion` is the conormal D*grad(q) dot n; the outward physical
+diffusive transport is its negative. Sampled face-gradient balances are distinct
+from exact weak row identities. CG interface row projections are not unique
+control-volume fluxes, and constrained rows are not unconstrained evolution
+equations. The dependent inner epsilon has no invented transport equation/flux.
+
+Useful reproduction entry points, with exact argument arrays retained under the
+Linux root, are `run_cao_tamura_budget_wp2.py`, `run_wp2_preservation.py`,
+`verify_wp2_long_transaction.py`, `analyze_wp2_approach.py`,
+`audit_wp2_dense_profiles.py`, `audit_wp2_dense_comparisons.py`,
+`audit_wp2_window_envelope.py`, `audit_wp2_native_boundary_bounds.py` and
+`collect_wp2_closure.py`. Every analysis is read-only. Existing output owners
+reject duplicate launches; use their recorded unused-root setup for reproduction.

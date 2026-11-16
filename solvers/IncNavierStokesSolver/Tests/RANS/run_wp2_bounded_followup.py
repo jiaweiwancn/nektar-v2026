@@ -52,8 +52,11 @@ def main():
                 '--output',str(before.parent),'--model',a.model,'--mode','recover','--level','4','--dt','.01',
                 '--endpoint',str(a.endpoint),'--resume'])
         receipt=load(before);require(receipt['status']=='completed_bounded_trajectory','recovery did not reach the bounded endpoint')
+        snapshot=a.output/'completed-trajectory.json';snapshot.write_bytes(before.read_bytes())
+        require(load(snapshot)['status']=='completed_bounded_trajectory','recovery snapshot raced another owner')
+        record['completed_trajectory_snapshot']=dict(path=str(snapshot),sha256=sha(snapshot));save()
         execute('read_only_return_assessment',['python3',str(here/'audit_wp2_recovery_leg.py'),'--root',str(a.root),
-                '--output',str(a.output/'assessment'),'--model',a.model])
+                '--output',str(a.output/'assessment'),'--model',a.model,'--trajectory',str(snapshot)])
         result=a.output/'assessment/result.json'
         record.update(status='completed_bounded_followup',actual_time=receipt['actual_time'],
                       assessment_sha256=sha(result),recovery_passed=load(result)['passed'])

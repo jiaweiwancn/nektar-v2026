@@ -5,6 +5,16 @@ import numpy as np
 from run_cls_epawf_picard import require
 
 
+def physical_time_tolerance(steps,dt,Treq):
+    """Binary64 addition bound; never changes a saved time or timestep."""
+    original=64*math.ulp(max(1.,Treq))
+    expected=steps*dt
+    if expected<=1.2:return original
+    # At most half an ulp per addition, plus the parsed dt/product rounding.
+    # One whole ulp per addition is a conservative arithmetic certificate.
+    return max(original,(steps+2)*math.ulp(max(1.,expected)))
+
+
 def physical_gates(s, us, K0, complete=False):
     gates={}
     def limit(name,value,bound):

@@ -7,6 +7,26 @@ from wp2_qualification import common_differences,quarter_budget_differences,phys
 
 
 class PhysicalComparison(unittest.TestCase):
+    def test_window_envelope_detects_internal_excursion(self):
+        import numpy as np
+        from audit_wp2_window_envelope import range_checks
+        sample=self.samples();v=np.asarray(sample['values']);R=np.zeros((2,3,3))
+        lo=dict(values=v.copy(),R=R.copy(),T=R.copy());hi=copy.deepcopy(lo)
+        lo['values'][:,0]-=.001;hi['values'][:,0]+=.001
+        self.assertTrue(quarter_budget_differences(sample,sample,.1,.02,.0065)['passed'])
+        check=range_checks(lo,hi,dict(values=v),sample['columns'],np.asarray(sample['weights']),np.asarray(sample['regions']),.02)
+        self.assertFalse(check['passed'])
+        self.assertFalse(check['principal']['gates']['0_U']['passed'])
+    def test_long_recovery_time_bound_preserves_actual_additions(self):
+        from wp2_qualification import physical_time_tolerance
+        import math
+        for dt,n in [(.02,60),(.01,120),(.01,450),(.005,900)]:
+            actual=0.
+            for _ in range(n):actual+=dt
+            tolerance=physical_time_tolerance(n,dt,1.1942387693600194)
+            self.assertLessEqual(abs(actual-n*dt),tolerance)
+            self.assertGreater(abs(actual+1e-7-n*dt),tolerance)
+        self.assertEqual(physical_time_tolerance(120,.01,1.1942387693600194),64*math.ulp(1.1942387693600194))
     def samples(self):
         r=[1.,0.,.02,.01,0.,-.013,.002,.005,.003,.001,0.,2.,0.,0.]
         return dict(columns='U,W,k,epsilon,pi,mechanical_pressure,nut,total_shear,total_normal_stress,production,U_x,U_z,W_x,W_z',
