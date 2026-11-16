@@ -32,6 +32,7 @@ def family(rows,root):
         owned.update(more)
 
 def main():
+    monitor_start_CPU=time.process_time()
     resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3))
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--control',type=Path,required=True);p.add_argument('command',nargs=argparse.REMAINDER);a=p.parse_args();cmd=a.command[1:] if a.command[:1]==['--'] else a.command
     rows=processes();parent=rows[os.getpid()]['parent'];outer=rows[parent]['parent'];require(outer in rows,'missing owned outer launcher')
@@ -70,7 +71,7 @@ def main():
                 except ProcessLookupError:pass
             break
         write_json(a.control/'live-budget.json',dict(maximum_sampled_total_CPU=maximum,last_sample=witness));time.sleep(.5)
-    code=child.wait();write_json(a.control/'package-budget-watch.json',dict(schema='CT15PackageBudgetWatchV1',status='stopped_before_allocation' if reason else 'completed',reason=reason,command=cmd,exit_code=code,closed_families_CPU=receipts,maximum_sampled_total_CPU=maximum,last_sample=witness,reserves=dict(CPU=240,wall=240,output_bytes=256*1024**2),scope='live /proc own plus waited-child CPU over outer launcher/guard/owned family; original closed launcher receipts are the final accounting authority; no scientific acceptance supplied'))
+    code=child.wait();write_json(a.control/'package-budget-watch.json',dict(schema='CT15PackageBudgetWatchV1',status='stopped_before_allocation' if reason else 'completed',reason=reason,command=cmd,exit_code=code,closed_families_CPU=receipts,maximum_sampled_total_CPU=maximum,last_sample=witness,budget_monitor_self_CPU_seconds=time.process_time()-monitor_start_CPU,reserves=dict(CPU=240,wall=240,output_bytes=256*1024**2),scope='live /proc own plus waited-child CPU over outer launcher/guard/owned family; original closed launcher receipts are the final accounting authority; no scientific acceptance supplied'))
     return 124 if reason else code
 
 if __name__=='__main__':raise SystemExit(main())
