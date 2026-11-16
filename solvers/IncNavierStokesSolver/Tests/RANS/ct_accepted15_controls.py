@@ -31,7 +31,7 @@ def policy(folder,value=POLICY):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('ct14','runtime','output'):p.add_argument('--'+k,type=Path,required=True)
-    p.add_argument('--phase',choices=['small','training'],required=True)
+    p.add_argument('--phase',choices=['small','training','baseline','diagnostic'],required=True)
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3))
     os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');os.environ['NEKTAR_RANS_PROBE_OBSERVER']='NativeAuditReceiptV1';os.environ.pop('NEKTAR_RANS_TIMING_FILE',None)
     ct9=a.ct14.parent/'ct-accepted-9-20261114'
@@ -41,6 +41,7 @@ def main():
         folder=a.output/label;n.make(folder,a.runtime,c,dt,steps,parent,template);enable(folder);ordering(folder);policy(folder,value)
         root=ET.parse(folder/'case.xml').getroot();set_parameter(root,'RANSWallPimpleHardAuditRejectStep',reject);write(root,folder/'case.xml')
         os.environ['NEKTAR_RANS_SPARSE_RECEIPTS']=str(folder/'sparse-receipts.jsonl')
+        if a.phase=='diagnostic':os.environ['NEKTAR_RANS_TIMING_FILE']=str(folder/'timing.jsonl')
         e=native_run([a.runtime/'IncNavierStokesSolver','case.xml'],folder,'solver.log',1200,1500)
         report=folder/'case.evolution.json';q=n.read(report) if report.exists() else dict(failure=(folder/'solver.log').read_text()[-3000:])
         os.environ.pop('NEKTAR_RANS_SPARSE_RECEIPTS',None)
@@ -82,12 +83,14 @@ def main():
         out['histories']=dict(status='pass',full_continuation_equal=True,full_rollback_equal=True,oracle_maximum_state_difference=defect,negatives=negatives,executions=[fe,te,ce,re,oe],reports={str(f/'case.evolution.json'):sha(f/'case.evolution.json') for f in (full,two,cont,rollback,oracle)})
     else:
         base=sealed(a.ct14/'static-v1');c=base['case'];out['case']=c
-        for steps in (0,1,2):
-            dest,q,e=evolve('steps-'+str(steps),c,steps,dt=.00025)
+        for steps in ((0,1,2) if a.phase=='training' else (1,)):
+            dest,q,e=evolve('steps-'+str(steps),c,steps,dt=.00025,value='Off' if a.phase=='baseline' else POLICY)
             require(e['exit_code']==0 and not q['failure'] and q['steps']==steps,'selected training trajectory failure')
             require(exact_vector_hash(q['accepted_states'][0])=='dd0af02695e58934d6469580aec40249700b404b7f079c0abe8db10c99d3c77a','actual selected initialization changed')
             receipts=numerical_receipts(dest/'sparse-receipts.jsonl')
             out['cases'][str(steps)]=dict(status='pass',steps=steps,execution=e,state_sha256=exact_vector_hash(q['state']),report_sha256=sha(dest/'case.evolution.json'),receipts=receipts,output_bytes=sum(f.stat().st_size for f in dest.rglob('*') if f.is_file()))
+            out['cases'][str(steps)]['detailed_timing']=False
+            out['cases'][str(steps)]['broad_diagnostic_timing']=a.phase=='diagnostic'
             if steps:
                 old=n.read(a.ct14/'pair-v2/0.00025/case.evolution.json');truth=old['accepted_states'][steps]
                 difference=maximum(np.asarray(q['state'])-truth);require(difference<=1e-8,'selected update differs from CT14 oracle')
