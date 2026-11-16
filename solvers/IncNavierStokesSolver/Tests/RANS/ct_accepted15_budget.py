@@ -36,6 +36,8 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--control',type=Path,required=True);p.add_argument('command',nargs=argparse.REMAINDER);a=p.parse_args();cmd=a.command[1:] if a.command[:1]==['--'] else a.command
     rows=processes();parent=rows[os.getpid()]['parent'];outer=rows[parent]['parent'];require(outer in rows,'missing owned outer launcher')
     closed=0.;receipts={}
+    if (a.root/'exception-reserves.json').is_file():
+        closed+=json.loads((a.root/'exception-reserves.json').read_text())['CPU_seconds']
     for folder in sorted(a.root.glob('resources-*')):
         if folder==a.control:continue
         f=folder/'execution.json';require(f.is_file(),'unclosed previous family:'+str(folder));r=json.loads(f.read_text());closed+=r['process_cpu_seconds'];receipts[folder.name]=r['process_cpu_seconds']
@@ -47,7 +49,12 @@ def main():
                 io=dict(line.split(':',1) for line in (Path('/proc')/str(pid)/'io').read_text().splitlines());key=(pid,rows[pid]['start']);written[key]=max(written.get(key,0),int(io['wchar']))
             except (FileNotFoundError,ProcessLookupError,PermissionError,KeyError):pass
         if time.monotonic()-last_scan>30:
-            retained=sum(f.lstat().st_size for f in a.root.rglob('*') if f.is_file() or f.is_symlink());last_scan=time.monotonic();peak_disk=max(peak_disk,retained)
+            retained=0
+            for folder,dirs,files in os.walk(a.root):
+                for name in files:
+                    try:retained+=(Path(folder)/name).lstat().st_size
+                    except FileNotFoundError:pass # CMake atomically retires Progress scratch
+            last_scan=time.monotonic();peak_disk=max(peak_disk,retained)
         witness=dict(closed_CPU=closed,live_owned_family_CPU=live,total_CPU_sample=cpu,whole_elapsed_wall=whole,retained_bytes=retained,peak_sampled_live_bytes=peak_disk,sampled_cumulative_process_wchar=sum(written.values()))
         if cpu>=23760:reason='CPU allocation reserve'
         elif whole>=28560:reason='wall allocation reserve'
