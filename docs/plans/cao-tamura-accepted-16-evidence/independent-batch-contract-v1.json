@@ -1,0 +1,14 @@
+{
+  "schema": "CT16IndependentBatchExperimentV1",
+  "policy": "CT16-BoundedBatchedRowsV1",
+  "basis": "Original cProfile full bundle assigns5.957CPU cumulative to3 complete values() calls and4.556 self CPU to859972 PreparedRows contractions. The exact trace index already preserves all decisions. Test the previously qualified batched reduction with explicit bounds and shared immutable row arrays.",
+  "changes": "One strong owned-packet plan holds unchanged IDs/phi/derivatives with exact region-specific pressure offsets. The velocity/k plan is shared only because the packet explicitly provides one same velocity_k row,not by field size inference. Every call freshly contracts its actual supplied state; no state/value/gradient or physics cache. All constitutive,radicand,covariance,traction,raw divergence and witness inventory calculations remain the original scalar route. Scope exit rejects geometry/basis/offset changes and restores all hooks even after failure.",
+  "bounds": {
+    "rows": 262144,
+    "immutable_plan_bytes": 268435456,
+    "PreparedRows_bytes": 268435456,
+    "per_process_AS_bytes": 17179869184
+  },
+  "qualification": "For sealed actual selected initialization/coarse/fine states,compare complete original PreparedRows+TraceIndex bundle to new bundle. Require unchanged decisions,exact scalar inventory/profiles/outlet and every original gradient witness. Numeric field/gradient aggregate changes scale<=2e-10 by the same original CT15 batch comparison scale. All original physical tests pass independently. Measure first full scope including preparation/exit checks and one warm repeated complete bundle for each path. Unknown new physical states always recompute current physics. Reject malformed/foreign mutable plan use; original route remains fallback for foreign packet/count. No native advancement.",
+  "allocation": "All work charged to original CT16 fixed clock/24kCPU/28.8kwall/16GiB new live; onefamily,ranks1,all6librarythreads1,project16/aggregate72. Separate startup/steady costs; no local benefit closes any unchanged G gate."
+}
