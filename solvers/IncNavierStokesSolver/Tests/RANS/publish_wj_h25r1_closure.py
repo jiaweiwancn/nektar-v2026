@@ -32,7 +32,7 @@ def publish(root,tag):
         r=load(d/'receipt.json');operations[d.name]={k:r.get(k)for k in ('status','seconds','phase','reason','reserved_attempts','actual_attempts','peak_tree_rss_bytes')}
         for n in ('request.json','receipt.json','native-exec-maps.json','attempt-counts.json','timing.jsonl'):
             if(d/n).exists():copy(d/n)
-    for n in ('accounting.json','tools-manifest-v4.json','source-manifest-v1.json','source-manifest-v2.json','source-manifest-v3.json'):
+    for n in ('accounting.json','tools-manifest-v4.json','tools-manifest-v5.json','source-manifest-v1.json','source-manifest-v2.json','source-manifest-v3.json'):
         if(base/n).exists():copy(base/n)
     compact={'qualification.json','execution.json','execution-intent.json','intent.json','request.json','launch-result.json','outcome.json','design.json','initial-source.json','rotation.json','decision.json','case.xml','temporal-qualification.json'}
     large={'comparison.json','temporal-10.json','temporal-12.json'}
