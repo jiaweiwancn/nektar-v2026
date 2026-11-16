@@ -15,19 +15,23 @@ from wj_h19_analysis import compare
 from cls_epawf_m4_cases import tensor_mesh
 from cls_epawf_m3_cases import set_info,set_parameter,write
 
-def initialize(root):
+def directory(root,label):
+    assert label.replace('-','').isalnum()
+    return root/'resumption-r1/science'/label
+
+def initialize(root,label):
     inputs=load(root/'inputs/baseline.json');original=verify(inputs['own_cp0']['xml'])
     x=ET.parse(original).getroot();vertices=[list(map(float,v.text.split()))for v in x.findall('./GEOMETRY/VERTEX/V')]
     xs=sorted({v[0]for v in vertices});fine=sorted({v[1]for v in vertices});parent=fine[::2]
     assert len(xs)==15 and len(fine)==51 and len(parent)==26 and parent[8]==.15
-    d=root/'science/h350';d.mkdir();tensor_mesh(x,parent,3,2,8.,1.,points=[8,8],xknots=xs)
+    d=directory(root,label);d.mkdir();tensor_mesh(x,parent,3,2,8.,1.,points=[8,8],xknots=xs)
     for e in x.findall('./EXPANSIONS/E'):e.set('FIELDS',e.get('FIELDS').replace('eps_tilde','epsilon'))
     for e in x.findall('./CONDITIONS/VARIABLES/V'):
         if e.text=='eps_tilde':e.text='epsilon'
     design=dict(mesh='14x(8+17) stored exact parent intervals',reference_xml=identity(original),reference_knots=fine,parent_knots=parent,xknots=xs,
         states=12445,governing_quadrature=[12,16],fresh_representation=True,not_a_H24_restart=True)
     atomic(d/'design.json',design)
-    for k,v in dict(RANSWallNativeLookup='TensorExactV1',RANSWallScalarEvaluation='ValueExactV1',RANSWallMappedResourceDesign=identity(d/'design.json')['sha256'],
+    for k,v in dict(RANSWallNativeLookup='TensorExactV1',RANSWallScalarEvaluation='Off',RANSWallMappedResourceDesign=identity(d/'design.json')['sha256'],
         RANSWallRestart='None',RANSWallCheckpoint=str(d/'CP'),RANSWallReport=str(d/'native.json'),RANSWallRetention='Off',RANSWallMonitoringPolicy='Off',
         RANSWallPimpleSnapshots='Off',RANSWallPimpleFlowVectors='Off',RANSWallPimpleArithmetic='Off',RANSWallPimpleVerify='Off').items():set_info(x,k,v)
     for k,v in dict(NumSteps=0,TimeStep=.0025,Time=0,IO_CheckSteps=1,RANSWallDiagnostics=1).items():set_parameter(x,k,v)
@@ -38,9 +42,9 @@ def initialize(root):
     r=native_load(d/'case.evolution.json');assert int(r['steps'])==0 and r['time']==0 and r['failure']==''and len(r['state'])==12445
     atomic(d/'initial-source.json',dict(report=identity(d/'case.evolution.json'),checkpoint=identity(d/'CP/State.bin'),history_role='genuine native initial history, alpha0'))
 
-def analyze(root):
+def analyze(root,label):
     from wj_h16_observer import compatibility
-    d=root/'science/h350';r=native_load(d/'case.evolution.json')
+    d=directory(root,label);r=native_load(d/'case.evolution.json')
     prior=load(root/'science/cache-compatible-v2.json')
     bound=compatibility(root,verify(prior['historical_manifest']),d/'fine-cache-compatibility-base.json')
     bound.update(new_native_identity=identity(root/'science/runtime-build-scalar-v1.json'),
@@ -92,4 +96,5 @@ def analyze(root):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--mode',choices=('initialize','analyze'),required=True)
-    a=p.parse_args();globals()[a.mode](a.root)
+    p.add_argument('--label',default='h350-r1-v1')
+    a=p.parse_args();globals()[a.mode](a.root,a.label)
