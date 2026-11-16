@@ -74,6 +74,67 @@ class Band100Controller(unittest.TestCase):
         with self.assertRaises(ValueError):
             runner.case_knobs("base", "unrecorded")
 
+    def test_qualification_halves_only_dg_and_matches_fourier_bandwidth(self):
+        base = runner.case_knobs("base", "qualification")
+        half = runner.case_knobs("svv", "qualification")
+        self.assertEqual({k:v for k,v in base.items() if k != "svv"},
+                         {k:v for k,v in half.items() if k != "svv"})
+        self.assertEqual(half["svv"], base["svv"] / 2)
+        self.assertEqual(runner.homogeneous_svv(base, "qualification"),
+                         runner.homogeneous_svv(half, "qualification"))
+        self.assertEqual(runner.homogeneous_svv(base, "qualification"), .005953125)
+        z = runner.case_knobs("z", "qualification")
+        broad = runner.case_knobs("bandwidth", "qualification")
+        self.assertEqual(z["nz"], 192)
+        self.assertEqual({k:v for k,v in z.items() if k not in ("cutoff", "taper")},
+                         {k:v for k,v in broad.items() if k not in ("cutoff", "taper")})
+        self.assertEqual(runner.homogeneous_svv(z, "qualification"),
+                         runner.homogeneous_svv(broad, "qualification"))
+        # Preserve the prior helpers' semantics for archived protocols.
+        self.assertEqual(runner.homogeneous_svv(half, "economical"), .005953125 / 2)
+
+    def test_relocated_archive_preserves_prefix_boundaries(self):
+        self.assertEqual(runner.relocated("/media/jay/新加卷/a/b", "/media/jay/新加卷1"),
+                         Path("/media/jay/新加卷1/a/b"))
+        self.assertEqual(runner.relocated("/media/jay/新加卷12/a", "/media/jay/新加卷1"),
+                         Path("/media/jay/新加卷12/a"))
+        self.assertEqual(runner.relocated("/home/jay/bin/native", "/media/jay/新加卷1"),
+                         Path("/home/jay/bin/native"))
+
+    def test_preflight_rejects_a_different_case(self):
+        bindings = {"source": {"revision": "a"*40}, "executables": {}}
+        allocated = {"ranks": 32}
+        receipt = {"schema": runner.SCHEMA, "status": "COMPLETED", "bindings": bindings,
+                   "configuration": {"stage": "preflight", "allocation": allocated,
+                                     "recipe": "qualification", "preflight_case": "svv"},
+                   "budget_gate": {"passed": True}}
+        (self.root / "receipt.json").write_text(json.dumps(receipt))
+        with self.assertRaisesRegex(ValueError, "case differs"):
+            runner.check_preflight(self.root, bindings, allocated, "qualification", "bandwidth")
+
+    def test_controller_bridge_requires_identical_scientific_and_native_bytes(self):
+        controller_name = str((HERE / "run_band100.py").relative_to(runner.SOURCE))
+        revision = "f"*40
+        old = {"status": "COMPLETED", "configuration": {"recipe": "economical"},
+               "bindings": {"source": {"revision": revision,
+                   "files_sha256": {controller_name: "old-controller", "prepare.py": "same-science"}},
+                   "executables": {"solver": "same-native"}}, "commands": []}
+        (self.root / "receipt.json").write_text(json.dumps(old))
+        controller = self.controller()
+        controller.config.update(recipe="qualification", compatible_reference_revision=revision,
+                                 storage_root=str(self.root))
+        controller.bindings = {"source": {"files_sha256": {
+            controller_name: "new-controller", "prepare.py": "same-science"}},
+            "executables": {"solver": "same-native"}}
+        runner.compatible_reference(controller, self.root, old)
+        controller.bindings["source"]["files_sha256"]["prepare.py"] = "changed-science"
+        with self.assertRaisesRegex(ValueError, "scientific helper/input changed"):
+            runner.compatible_reference(controller, self.root, old)
+        controller.bindings["source"]["files_sha256"]["prepare.py"] = "same-science"
+        controller.bindings["executables"]["solver"] = "changed-native"
+        with self.assertRaisesRegex(ValueError, "native executable/library bytes differ"):
+            runner.compatible_reference(controller, self.root, old)
+
     def test_preflight_rejects_recipe_mixing(self):
         bindings = {"source": {"revision": "a"*40}, "executables": {}}
         allocated = {"ranks": 48}

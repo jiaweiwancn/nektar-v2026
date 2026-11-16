@@ -28,7 +28,7 @@ HERE = Path(__file__).resolve().parent
 SOURCE = HERE.parents[4]
 SCHEMA = "NEKTAR_HIT_BAND100_RUN_V1"
 CASE_ORDER = ("base", "dt", "x", "z", "bandwidth", "svv", "h")
-RECIPES = ("original", "economical")
+RECIPES = ("original", "economical", "qualification")
 U, WIDTH = 12.7, .6
 SAMPLE_DT, DURATION, RECORD_START = .00025, .6, .2
 COUNTS, SEED = "2548,154,154", "20261028"
@@ -103,7 +103,7 @@ def case_knobs(name, recipe="original"):
     require(recipe in RECIPES, "unknown recipe")
     knobs = {"h": .05, "hx": .05, "hy": .05, "nz": 128, "dt": 12.5e-6,
              "cutoff": 600, "taper": 480, "svv": 1.0}
-    if recipe == "economical":
+    if recipe in ("economical", "qualification"):
         knobs.update(h=.1, hx=.1, dt=25e-6)
     if name == "dt":
         knobs["dt"] /= 2
@@ -120,6 +120,23 @@ def case_knobs(name, recipe="original"):
         knobs["hy"] /= 2
     knobs["h"] = max(knobs["hx"], knobs["hy"])
     return knobs
+
+
+def homogeneous_svv(knobs, recipe):
+    # Qualification changes only the requested DG coefficient. Fourier
+    # refinement retains the registered U*dz scaling and native modal filter.
+    if recipe == "qualification":
+        return .1 * U * WIDTH / knobs["nz"]
+    return knobs["svv"] * .1 * U * WIDTH / knobs["nz"]
+
+
+def relocated(path, storage_root):
+    """Resolve an archived mount prefix for reading, without editing receipts."""
+    path, old = Path(path), Path("/media/jay/新加卷")
+    try:
+        return Path(storage_root) / path.relative_to(old)
+    except ValueError:
+        return path
 
 
 def source_binding(revision):
@@ -222,6 +239,58 @@ def resources(pid):
         descendants |= added
     selected = [row for row in table if row[0] in descendants]
     return sum(row[2] for row in selected), sum(row[3] for row in selected)
+
+
+def external_worker_budget(owned_root, pool_size):
+    """Sample other project workers plus the entire owned CPU allocation.
+
+    Native MPI service threads sharing a singleton CPU do not enlarge that
+    rank's worker allocation. Waiting outside project controllers count too.
+    This audit is not a reservation against unrelated future launches.
+    """
+    rows = {}
+    for directory in Path("/proc").iterdir():
+        if not directory.name.isdigit():
+            continue
+        try:
+            fields = (directory / "stat").read_text().rsplit(")", 1)[1].split()
+            name = (directory / "comm").read_text().strip()
+            command = (directory / "cmdline").read_bytes().replace(b"\0", b" ").decode(errors="replace")
+            rows[int(directory.name)] = (int(fields[1]), fields[0], name, command, directory)
+        except (FileNotFoundError, ProcessLookupError, PermissionError):
+            continue
+    owned = {owned_root}
+    while True:
+        children = {pid for pid, row in rows.items() if row[0] in owned}
+        if children <= owned:
+            break
+        owned.update(children)
+    external, witnesses = 0, []
+    for pid, (_, state, name, command, directory) in rows.items():
+        if pid in owned or state in ("T", "t", "Z"):
+            continue
+        relevant = (name.startswith(("IncNavier", "RANS", "Nek", "HIT", "cc1", "f951", "orted", "mpirun", "mpiexec", "cmake", "ninja"))
+                    or (name.startswith(("python", "make")) and any(
+                        token in command.lower() for token in ("nektar", "incnavier", "rans", "wj-h"))))
+        if not relevant:
+            continue
+        masks, threads = set(), 0
+        try:
+            for task in (directory / "task").iterdir():
+                try:
+                    masks.update(os.sched_getaffinity(int(task.name)))
+                    threads += 1
+                except (ProcessLookupError, FileNotFoundError):
+                    pass
+        except (ProcessLookupError, FileNotFoundError, PermissionError):
+            continue
+        count = min(threads, len(masks))
+        external += count
+        witnesses.append({"pid": pid, "name": name, "workers_upper_bound": count})
+    return {"external_workers_upper_bound": external, "owned_pool_workers": pool_size,
+            "aggregate_workers_upper_bound": external + pool_size, "limit": 64,
+            "passed": external + pool_size <= 64, "external_processes": witnesses,
+            "observed_utc": utc()}
 
 
 def process_start_ticks(pid):
@@ -450,6 +519,10 @@ class Controller:
         receipt_path, log = directory / f"{stem}.receipt.json", directory / f"{stem}.log"
         require(not receipt_path.exists() and not log.exists(), "command output already exists; no automatic retry")
         verify_files(self.bindings)
+        qualification = self.config.get("recipe") == "qualification"
+        if qualification:
+            budget = external_worker_budget(os.getpid(), len(self.config["allocation"]["cpus"]))
+            require(budget["passed"], "outside jobs leave insufficient room within64workers")
         environment = dict(os.environ, **self.config["allocation"]["thread_environment"],
                            PYTHONDONTWRITEBYTECODE="1", TMPDIR=str(directory / "tmp"))
         (directory / "tmp").mkdir(exist_ok=True)
@@ -461,6 +534,9 @@ class Controller:
                   "environment": {k: environment[k] for k in self.config["allocation"]["thread_environment"]},
                   "peak_sampled_tree_rss_kib": 0, "peak_sampled_tree_threads": 0,
                   "resource_sample_seconds": 2, "mpi": mpi}
+        if qualification:
+            result["worker_budget_initial"] = budget
+            result["maximum_sampled_aggregate_workers"] = budget["aggregate_workers_upper_bound"]
         result["input_files_sha256"] = {str(p): sha(p) for p in sorted(directory.glob("*.xml"))
                                          if p.name == "pilot.xml"}
         result["input_files_sha256"].update({str(p): sha(p) for p in
@@ -482,6 +558,13 @@ class Controller:
                     rss, threads = resources(process.pid)
                     result["peak_sampled_tree_rss_kib"] = max(result["peak_sampled_tree_rss_kib"], rss)
                     result["peak_sampled_tree_threads"] = max(result["peak_sampled_tree_threads"], threads)
+                    if qualification:
+                        budget = external_worker_budget(os.getpid(), len(cpus))
+                        result["worker_budget_latest"] = budget
+                        result["maximum_sampled_aggregate_workers"] = max(
+                            result["maximum_sampled_aggregate_workers"], budget["aggregate_workers_upper_bound"])
+                        require(budget["passed"], "hard64worker limit exceeded; stopping only this owned command")
+                        require(rss <= 180 * 1024**2, "hard180GiB sampled process-tree RSS limit exceeded")
                     if mpi:
                         affinity_audit.observe_log(tail(log))
                         validate_bindings(binding_dir, cpus, self.config["allocation"]["ranks"], live=True, audit=affinity_audit)
@@ -558,7 +641,7 @@ class Controller:
                    "--cutoff", str(knobs["cutoff"]), "--taper", str(knobs["taper"]), "--synthesis-length", "10",
                    "--synthesis-counts", COUNTS, "--seed", SEED, "--buffer", ".25", "--stations", "0,.15,.45,.75",
                    "--probe-grid", "2,2" if smoke else "32,32", "--no-stresses", "--dealias", "--svv", "dg",
-                   "--svv-coeff", str(knobs["svv"]), "--svv-z-coeff", str(knobs["svv"]*.1*U*WIDTH/knobs["nz"]),
+                   "--svv-coeff", str(knobs["svv"]), "--svv-z-coeff", str(homogeneous_svv(knobs, self.config.get("recipe", "original"))),
                    "--svv-z-cutoff", ".75", "--pressure-solver", "XxtMultiLevelStaticCond"]
         self.execute(command, directory, "prepare", 120)
         session, manifest_path = directory / "pilot.xml", directory / "manifest.json"
@@ -643,7 +726,7 @@ def finite_smoke_history(directory, manifest):
     return {"path": str(path), "sha256": sha(path), "complete_finite_frames": count}
 
 
-def check_preflight(path, bindings, allocation_, recipe="original"):
+def check_preflight(path, bindings, allocation_, recipe="original", case="base"):
     path = Path(path).resolve()
     receipt_path = path / "receipt.json"
     receipt = json.loads(receipt_path.read_text())
@@ -652,6 +735,8 @@ def check_preflight(path, bindings, allocation_, recipe="original"):
     require(receipt["bindings"] == bindings, "preflight source/executable bindings differ from this study")
     require(receipt["configuration"]["allocation"] == allocation_, "preflight allocation differs from this study")
     require(receipt["configuration"].get("recipe", "original") == recipe, "preflight recipe differs from this study")
+    require(receipt["configuration"].get("preflight_case", "base") == case,
+            "preflight case differs from this study")
     require(receipt["budget_gate"]["passed"], "preflight did not pass the declared wall/memory budget")
     for record in receipt["commands"]:
         require(sha(record["receipt"]) == record["sha256"] and record["status"] == "COMPLETED", "preflight command receipt changed or failed")
@@ -668,7 +753,8 @@ def check_preflight(path, bindings, allocation_, recipe="original"):
 
 def preflight(controller):
     directory = controller.root / "smoke"
-    manifest, steps = controller.prepare(directory, "base", smoke=True)
+    name = controller.config.get("preflight_case", "base")
+    manifest, steps = controller.prepare(directory, name, smoke=True)
     benchmark = controller.bindings["executables"]["benchmark"]["path"]
     controller.execute([benchmark, "pilot.xml", "2", "2"], directory, "benchmark", 3600)
     native = json.loads((directory / "pilot.benchmark.json").read_text())
@@ -686,12 +772,52 @@ def preflight(controller):
     solve = controller.solver(directory, steps, 3600)
     history = finite_smoke_history(directory, manifest)
     gate = timing_gate((directory / "solver.log").read_text(), solve,
-                       case_knobs("base", controller.config.get("recipe", "original")))
+                       case_knobs(name, controller.config.get("recipe", "original")))
     controller.finish("COMPLETED", budget_gate=gate, native_benchmark=native,
                       boundary_projection=projection, boundary_evaluator_reports=projection_evaluators,
                       smoke_history=history,
                       study_eligible=gate["passed"],
                       interpretation="Preflight completed; no downstream physical or precision-qualified spectral result")
+
+
+def compatible_reference(controller, previous, receipt):
+    """Explicit bridge to the frozen completed pilot, with scientific hashes.
+
+    Only controller code/revision/checkout may differ. All preparation, analysis,
+    input-data and native executable/library bytes must agree. Archived command
+    receipts and prepared inputs are revalidated under the recorded mount map.
+    """
+    expected = controller.config.get("compatible_reference_revision")
+    require(expected and receipt["bindings"]["source"]["revision"] == expected,
+            "reference revision is not the explicitly selected frozen revision")
+    require(receipt["configuration"].get("recipe") == "economical"
+            and controller.config.get("recipe") == "qualification",
+            "compatible reference bridge is limited to economical -> qualification")
+    require(receipt["bindings"]["executables"] == controller.bindings["executables"],
+            "reference native executable/library bytes differ")
+    old_files = receipt["bindings"]["source"]["files_sha256"]
+    new_files = controller.bindings["source"]["files_sha256"]
+    require(old_files.keys() == new_files.keys(), "reference scientific file set differs")
+    for filename, expected_hash in old_files.items():
+        if filename != str((HERE / "run_band100.py").relative_to(SOURCE)):
+            require(expected_hash == new_files[filename], "reference scientific helper/input changed: " + filename)
+    storage = controller.config["storage_root"]
+    checked = 0
+    for item in receipt["commands"]:
+        path = relocated(item["receipt"], storage)
+        require(item["status"] == "COMPLETED" and sha(path) == item["sha256"],
+                "reference command receipt changed or failed")
+        command = json.loads(path.read_text())
+        logfile = path.with_name(path.name.replace(".receipt.json", ".log"))
+        require(command["status"] == "COMPLETED" and sha(logfile) == command["log_sha256"],
+                "reference command log changed or failed")
+        for filename, checksum in command["input_files_sha256"].items():
+            require(sha(relocated(filename, storage)) == checksum, "reference prepared input changed")
+        checked += 1
+    return {"receipt": str(previous / "receipt.json"), "receipt_sha256": sha(previous / "receipt.json"),
+            "source_revision": expected, "verified_command_receipts": checked,
+            "archived_mount_prefix": "/media/jay/新加卷", "current_storage_root": storage,
+            "scope": "Controller-only revision bridge; original archive bytes unchanged"}
 
 
 def previous_analysis(controller, name, reference_study):
@@ -701,10 +827,13 @@ def previous_analysis(controller, name, reference_study):
     if reference_study is not None:
         previous = Path(reference_study).resolve()
         receipt = json.loads((previous / "receipt.json").read_text())
-        require(receipt["schema"] == SCHEMA and receipt["status"] == "COMPLETED" and
-                receipt["bindings"] == controller.bindings, "reference study is incomplete or has different source/executables")
-        require(receipt["configuration"].get("recipe", "original") == controller.config.get("recipe", "original"),
-                "reference study has a different recipe")
+        require(receipt["schema"] == SCHEMA and receipt["status"] == "COMPLETED", "reference study is incomplete")
+        if receipt["bindings"] != controller.bindings:
+            bridge = compatible_reference(controller, previous, receipt)
+            controller.receipt["compatible_reference"] = bridge
+        else:
+            require(receipt["configuration"].get("recipe", "original") == controller.config.get("recipe", "original"),
+                    "reference study has a different recipe")
         result = previous / "analysis" / name / "analysis.json"
         require(result.is_file() and name in receipt["cases"], "reference study lacks required matched analysis")
         require(sha(result) == receipt["cases"][name]["analysis_sha256"], "reference analysis hash mismatch")
@@ -782,12 +911,18 @@ def main(arguments=None):
     parser.add_argument("--recipe", choices=RECIPES, default="original",
                         help="original isotropic mesh or economical streamwise mesh/time pilot")
     parser.add_argument("--run-root", type=Path)
+    parser.add_argument("--storage-root", type=Path, default=Path("/media/jay/新加卷"),
+                        help="Current mounted heavy-data disk; archives remain read only")
     parser.add_argument("--source-revision")
     parser.add_argument("--ranks", type=int, default=48, help="MPI ranks, maximum48 (default48)")
     parser.add_argument("--npz", type=int, default=16)
     parser.add_argument("--cpus")
     parser.add_argument("--preflight", type=Path)
+    parser.add_argument("--preflight-case", choices=CASE_ORDER, default="base",
+                        help="Case-specific benchmark/projection/smoke; study must select this case alone")
     parser.add_argument("--reference-study", type=Path)
+    parser.add_argument("--compatible-reference-revision",
+                        help="Explicit frozen economical revision for a scientific-hash-checked qualification bridge")
     parser.add_argument("--cases", default="base,dt", help="Sequential subset of base,dt,x,z,bandwidth,svv,h")
     parser.add_argument("--solver", default="IncNavierStokesSolver")
     parser.add_argument("--benchmark", default="HITInflowBenchmark")
@@ -805,18 +940,23 @@ def main(arguments=None):
     allocated = allocation(cpus, args.ranks, args.npz, os.sched_getaffinity(0))
     root = args.run_root.expanduser().resolve()
     require(not root.exists() and not within(root, SOURCE), "run-root must be fresh and outside the source checkout")
-    require(within(root, Path("/media/jay/新加卷")), "heavy pilot outputs must be on /media/jay/新加卷")
+    storage = args.storage_root.expanduser().resolve()
+    require(storage.is_mount() and within(root, storage), "heavy pilot outputs must be on the explicitly mounted storage-root")
     bindings = {"source": source_binding(args.source_revision), "executables": {
         "solver": executable_binding(args.solver), "benchmark": executable_binding(args.benchmark),
         "probe": executable_binding(args.boundary_probe)}}
     configuration = {"stage": args.stage, "allocation": allocated, "controller_command": [sys.executable, str(Path(__file__).resolve())] + arguments,
                      "host": os.uname().nodename, "python": sys.version, "mean_only_initialization": True,
-                     "recipe": args.recipe}
+                     "recipe": args.recipe, "preflight_case": args.preflight_case,
+                     "storage_root": str(storage),
+                     "compatible_reference_revision": args.compatible_reference_revision}
     if args.stage == "study":
         require(args.preflight is not None, "study requires --preflight from a completed matching preflight")
-        configuration["preflight"] = check_preflight(args.preflight, bindings, allocated, args.recipe)
+        configuration["preflight"] = check_preflight(args.preflight, bindings, allocated, args.recipe, args.preflight_case)
         cases = args.cases.split(",")
         require(cases and len(cases) == len(set(cases)) and all(c in CASE_ORDER for c in cases), "--cases needs unique known case names")
+        if args.preflight_case != "base":
+            require(cases == [args.preflight_case], "a case-specific preflight permits only its matching single case")
         configuration["cases"] = cases
     else:
         require(args.preflight is None and args.reference_study is None, "preflight does not accept a prior study/preflight")

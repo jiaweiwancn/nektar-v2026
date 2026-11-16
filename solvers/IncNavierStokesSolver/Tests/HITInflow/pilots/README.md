@@ -280,6 +280,25 @@ expecting a new output file's complete byte stream to match.
 
 ## CBC100 gated follow-up
 
+The [qualification protocol](../../../../../docs/plans/hit-inflow-band100-qualification-protocol.md)
+adds the authorized DG-only,192-slot and matched800-band controls.
+`queue_band100_controls.py` sequences case-specific preflights/records, stops on
+failure or rejection, and ends with a review requirement. Its `qualification`
+recipe halves only DG SVV for case`svv`; the original/economical recipes retain
+their archived semantics. Fourier refinement retains the registered0.1*U*dz
+homogeneous scaling; its amplitude and physical filter change with resolution.
+The600/800 comparison holds those settings fixed at common192 slots.
+
+Use `--storage-root` for the disk's current mount and an explicit
+`--compatible-reference-revision` when invoking the single-case driver against
+the immutable economical reference. This verifies unchanged scientific inputs,
+helpers, native binaries/libraries and archive receipts; it does not rewrite
+old absolute paths. The queue requires a fresh external`--root`, exact clean
+`--source-revision`,`--reference-study`, explicit`--cpus`, ranks and npz.
+`check_band100_controls.sh QUEUE_DIRECTORY` reads progress from Mac or Linux.
+The queue cannot launch spatial/sampling follow-ups or a full-distance run;
+those require the preceding results to determine the next bounded recipe.
+
 The [100rad/m protocol](../../../../../docs/plans/hit-inflow-band100-protocol.md)
 defines a short1m CBC pilot and the gates before any full-distance calculation.
 It uses a600/480 radial input band, not a100rad/m radial cutoff. Its10m synthetic
