@@ -1,0 +1,138 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h25-production-20261116/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/build_wj_h25.py",
+    "--root",
+    "/home/jay/build/wj-h25-production-20261116",
+    "--variant",
+    "scalar"
+  ],
+  "phase": "build",
+  "reserved_seconds": 900.0,
+  "attempts": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "allocation": {
+    "workers": 32,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 342809,
+        "parent": 342103,
+        "threads": 1,
+        "args": "python3 -B solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/resources-static-v1 -- python3 -B solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116 --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/resources-static-v1 -- python3 -B solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_static.py --ct12 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115 --ct13 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115 --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime --component /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/small-v7 --capacity /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/capacity-v4 --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/source/docs/plans/cao-tamura-accepted-15-evidence/contract.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1"
+      },
+      {
+        "pid": 342810,
+        "parent": 342809,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/resources-static-v1 --project-limit 16"
+      },
+      {
+        "pid": 342813,
+        "parent": 342809,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/resources-static-v1 -- python3 -B solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116 --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/resources-static-v1 -- python3 -B solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_static.py --ct12 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115 --ct13 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115 --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime --component /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/small-v7 --capacity /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/capacity-v4 --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/source/docs/plans/cao-tamura-accepted-15-evidence/contract.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1"
+      },
+      {
+        "pid": 342814,
+        "parent": 342813,
+        "threads": 1,
+        "args": "python3 -B solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116 --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/resources-static-v1 -- python3 -B solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_static.py --ct12 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115 --ct13 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115 --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime --component /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/small-v7 --capacity /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/capacity-v4 --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/source/docs/plans/cao-tamura-accepted-15-evidence/contract.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1"
+      },
+      {
+        "pid": 342815,
+        "parent": 342814,
+        "threads": 1,
+        "args": "python3 -B solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_static.py --ct12 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115 --ct13 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115 --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime --component /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/small-v7 --capacity /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/capacity-v4 --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/source/docs/plans/cao-tamura-accepted-15-evidence/contract.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1"
+      },
+      {
+        "pid": 347334,
+        "parent": 342815,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe case.xml /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/scalar-q64f32/request.json /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1/scalar-q64f32/packet.json"
+      },
+      {
+        "pid": 347337,
+        "parent": 347334,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 347724,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/run_cao_tamura_budget_wp2.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116 --probe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v7/RANSWallResolutionProbe --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json --h1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/spatial-final-v7 --level 4 --projection RadialEnergyV1"
+      },
+      {
+        "pid": 347883,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/run_cao_tamura_budget_wp2.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116 --probe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v7/RANSWallResolutionProbe --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json --h1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/quadrature-final-v7 --level 4 --projection RadialEnergyV1 --order 24"
+      },
+      {
+        "pid": 347886,
+        "parent": 347883,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v7/RANSWallResolutionProbe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/quadrature-final-v7/CLS-case/case.xml input.json result.json"
+      },
+      {
+        "pid": 347888,
+        "parent": 347886,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 347918,
+        "parent": 347724,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v7/RANSWallResolutionProbe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/spatial-final-v7/standard-case/case.xml input.json result.json"
+      },
+      {
+        "pid": 347919,
+        "parent": 347918,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 347999,
+        "parent": 347997,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h25-production-20261116/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --label scalar-build-v3 --seconds 900 --phase build -- python3 -B /home/jay/build/wj-h25-production-20261116/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/build_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --variant scalar"
+      }
+    ]
+  },
+  "inputs": {
+    "/home/jay/build/wj-h25-production-20261116/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/build_wj_h25.py": {
+      "sha256": "19eea7bd73af606a6ceca8506f519722415bb2789411b4b775b2f9b7c548e088",
+      "bytes": 6684
+    }
+  },
+  "runner_sha256": "1dcf4a4987df58708f4373798eb7410ebad31b919f34c1d0edf3ed06b18d4312",
+  "status": "FAIL",
+  "seconds": 11.079613052017521,
+  "exit": 1,
+  "reason": null,
+  "peak_tree_rss_bytes": 192016384,
+  "reserved_attempts": 0,
+  "unknown_attempts": false,
+  "log_sha256": "c1b777e2e753aa92ea8d43a4dc6f14803a3adc94327970a975410eceb10b6a65"
+}

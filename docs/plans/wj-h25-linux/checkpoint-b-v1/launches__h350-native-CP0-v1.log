@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/jay/build/wj-h25-production-20261116/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h25.py", line 103, in <module>
+    raise SystemExit(0 if execute(a.root,a.label,cmd,a.seconds,a.phase,a.attempts)else 1)
+  File "/home/jay/build/wj-h25-production-20261116/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h25.py", line 23, in execute
+    allocation=scientific_workers();assert allocation['workers']+(8 if phase=='build'else 2)+6<=72
+AssertionError

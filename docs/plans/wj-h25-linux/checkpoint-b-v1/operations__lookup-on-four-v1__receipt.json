@@ -1,0 +1,80 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h25-production-20261116/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py",
+    "--root",
+    "/home/jay/build/wj-h25-production-20261116",
+    "--variant",
+    "lookup-on"
+  ],
+  "phase": "native",
+  "reserved_seconds": 600.0,
+  "attempts": 4,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "allocation": {
+    "workers": 12,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 338405,
+        "parent": 338255,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 338614,
+        "parent": 338613,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/IncNavierStokesSolver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/fixture-v3-standard/changed-boundary-restart/case.xml"
+      },
+      {
+        "pid": 338615,
+        "parent": 338614,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 10 --singleton-died-pipe 11 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 338624,
+        "parent": 334233,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h25-production-20261116/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --label lookup-on-four-v1 --seconds 600 --phase native --attempts 4 -- python3 -B /home/jay/build/wj-h25-production-20261116/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --variant lookup-on"
+      }
+    ]
+  },
+  "inputs": {
+    "/home/jay/build/wj-h25-production-20261116/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py": {
+      "sha256": "693b482810f71fe4cbd3cd27d248c78ab803f05fd912dfccfa986bf42d3cd680",
+      "bytes": 6174
+    }
+  },
+  "runner_sha256": "1dcf4a4987df58708f4373798eb7410ebad31b919f34c1d0edf3ed06b18d4312",
+  "status": "PASS",
+  "seconds": 325.4607635560096,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 6762688512,
+  "reserved_attempts": 4,
+  "unknown_attempts": false,
+  "log_sha256": "8839faea7aaaf31864453378b9876c7b6b6ab6ded8545f135d27b67f82b39d65",
+  "actual_attempts": 4,
+  "known": true
+}

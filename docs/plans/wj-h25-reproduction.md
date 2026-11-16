@@ -36,3 +36,14 @@ manifest distinguishes original and compressed hashes. Coefficient arrays,
 checkpoints and large reports remain at their exact Linux paths. The open
 accounting snapshot is not a CLOSED final receipt. Completion will add separately
 sealed candidate decisions, pilot/restart/storage and final accounting evidence.
+
+
+Checkpoint B uses `science/runtime-build-scalar-v1.json` (source-v8,54c4555c)
+and the write-once `tools-build-scalar-v3/build_wj_h25.py` binding, not the current
+Git HEAD as a substitute for compiled provenance. The exact commands are retained
+in each operation `receipt.json` and `request.json`. `benefit_wj_h25.py` aggregates
+all three advancing comparisons and retains the slower candidate. For selected
+execution set NativeLookup=TensorExactV1, ScalarEvaluation=Off; both keep
+ExactStepV1 and ImmutableRowReuse=Off. Verify the checkpoint-b-v1 transport
+manifest before reading copied results. The dependency-proof publication metadata
+has a separately labelled decode record; original transport bytes are preserved.

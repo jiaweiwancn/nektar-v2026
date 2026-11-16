@@ -106,3 +106,40 @@ No H17 row-result cache, closure-result cache or reduced guard inventory is used
 The >50% equation-share and24-hour complete-case targets currently fail by a
 wide margin. Checkpoint A is published so subsequent changes have a reproducible
 measured baseline. H25 continues; no production or hill evolution is admitted.
+
+
+## Checkpoint B: exact implementation qualification
+
+The execution policy `RANSWallNativeLookup=TensorExactV1` preserves the original
+containment, owner, side and roundoff-fallback rules and changes no FE contraction.
+The pure native index fixture and all four evolving replay states pass. Coupled
+state, native history/times, genuine callback, fixed reference/defect and terminal
+complete native audit map agree bitwise. All physical guards stay active.
+
+| Same 700-cell case, steps17–19 | Ordinary compute mean (s) | Equation share |
+|---|---:|---:|
+| Instrumented policy Off |43.426694|33.75%|
+| Exact interval/geometry lookup |39.010455|37.28%|
+| Lookup plus scalar value path |42.872716|39.85%|
+
+The lookup gives a measured10.17% reduction in this short matched comparison.
+Cross-run variability remains; these are three advancing samples, not a production
+confidence interval. The scalar path passed11,232 native value comparisons and16
+full inventory/failure evaluations (changed k, epsilon, negative/nonfinite states,
+return to A with fresh generations). Its four evolving states and native audit
+map also match exactly, but it is slower. The selected recipe leaves
+`RANSWallScalarEvaluation=Off`; the optional path is not presented as a speedup.
+
+The executed native capsule is54c4555c287a8759cbc69c8360c678899e842bcd;
+its build-driver correction is separately pinned to b6bf57f2. The checked ELF,
+objects/dependencies, compiler/flags, wrappers and actual native-exec library maps
+are in checkpoint-b-v1. Failed build attempts remain recorded. Peak science RSS
+for the lookup replay was6,762,688,512 bytes. The complete dependency proof stays
+on Linux with its exact size/hash; compact native comparisons and operation
+receipts are copied without rewriting their identities.
+
+The checkpoint-B account snapshot is OPEN, not closure. The h350 and coefficient
+screen uploads succeeded but their requests were not admitted when other server
+work exceeded72 threads; neither launched numerical work. Those admission failures
+and the unsuccessful larger transport are retained and charged. H25 continues;
+the production cost target and end-to-end strategy qualification remain open.

@@ -1,0 +1,1067 @@
+{
+  "status": "MEASURED",
+  "records": [
+    {
+      "operation": "W0-profile-four-v1",
+      "exact_parity": {
+        "path": "/home/jay/build/wj-h25-production-20261116/science/W0-profile-v1/qualification.json",
+        "bytes": 2734,
+        "sha256": "3a3b87e90f8da38dfeedc6afd066ed88a5fef883f8c97fdefc783104a35a27d6"
+      },
+      "disjoint": {
+        "timing": {
+          "path": "/home/jay/build/wj-h25-production-20261116/operations/W0-profile-four-v1/timing.jsonl",
+          "bytes": 1143798,
+          "sha256": "9e951c1cda5d87d2eeee6588c72f84db816579ea0e0a7fa736c959751e92aca4"
+        },
+        "steps": [
+          17,
+          18,
+          19
+        ],
+        "wall_seconds": 131.30846426,
+        "per_step": 43.76948808666666,
+        "attributed_fraction": 0.9492864682065393,
+        "equation_fraction": 0.3375375212921557,
+        "disjoint": {
+          "guards_bounds_residual_verification": 26.201728731333322,
+          "UNATTRIBUTED": 2.2197053256666694,
+          "equation_evaluation_assembly_solution_update": 14.773844517000006,
+          "attempt_evidence_and_orchestration": 0.16459036199999608,
+          "data_allocation_release": 0.022842036333333333,
+          "recovery_publication_IO": 0.3127427246666667,
+          "loop_telemetry_orchestration": 0.0740343896666668
+        },
+        "exclusive_by_name": {
+          "domain.compute": {
+            "seconds_per_step": 20.390289204000002,
+            "calls": 12
+          },
+          "flow.assembly": {
+            "seconds_per_step": 6.437794015333334,
+            "calls": 3
+          },
+          "residual": {
+            "seconds_per_step": 2.3419370150000005,
+            "calls": 15
+          },
+          "native.implicit": {
+            "seconds_per_step": 2.217301218000003,
+            "calls": 3
+          },
+          "k.bound": {
+            "seconds_per_step": 2.1094017419999993,
+            "calls": 3
+          },
+          "pressure.build": {
+            "seconds_per_step": 1.9684660440000015,
+            "calls": 3
+          },
+          "mapped.band.solve": {
+            "seconds_per_step": 1.7172908689999984,
+            "calls": 2412
+          },
+          "k.assembly": {
+            "seconds_per_step": 1.4646210716666666,
+            "calls": 3
+          },
+          "constitutive.refresh": {
+            "seconds_per_step": 1.1641045929999998,
+            "calls": 27
+          },
+          "domain.scalar": {
+            "seconds_per_step": 0.9252424333333337,
+            "calls": 24
+          },
+          "epsilon.assembly": {
+            "seconds_per_step": 0.9179710603333332,
+            "calls": 3
+          },
+          "mapped.band.factor": {
+            "seconds_per_step": 0.5473297926666667,
+            "calls": 12
+          },
+          "monitor.checkpoint_and_publish": {
+            "seconds_per_step": 0.308742432,
+            "calls": 3
+          },
+          "matching.constraints": {
+            "seconds_per_step": 0.20777025566666665,
+            "calls": 30
+          },
+          "pimple.sweep": {
+            "seconds_per_step": 0.16459036199999608,
+            "calls": 3
+          },
+          "flow.correction_validate": {
+            "seconds_per_step": 0.14800903,
+            "calls": 3
+          },
+          "flow.total": {
+            "seconds_per_step": 0.12564217899999916,
+            "calls": 3
+          },
+          "epsilon.total": {
+            "seconds_per_step": 0.12417866866666631,
+            "calls": 3
+          },
+          "native.explicit": {
+            "seconds_per_step": 0.108854126,
+            "calls": 3
+          },
+          "residual.mass_dual_norms": {
+            "seconds_per_step": 0.07778963633333334,
+            "calls": 9
+          },
+          "native.step": {
+            "seconds_per_step": 0.0740343896666668,
+            "calls": 3
+          },
+          "mapped.band.permutation": {
+            "seconds_per_step": 0.06579450666666668,
+            "calls": 12
+          },
+          "k.bound_accounting": {
+            "seconds_per_step": 0.03517054833333333,
+            "calls": 3
+          },
+          "guard.completed_bound": {
+            "seconds_per_step": 0.024891978,
+            "calls": 3
+          },
+          "data.completed_packet": {
+            "seconds_per_step": 0.022842036333333333,
+            "calls": 3
+          },
+          "k.total": {
+            "seconds_per_step": 0.015423106333332845,
+            "calls": 3
+          },
+          "verify.momentum_linear": {
+            "seconds_per_step": 0.015274122,
+            "calls": 3
+          },
+          "native.advance": {
+            "seconds_per_step": 0.011660132333337478,
+            "calls": 3
+          },
+          "dense.factorization": {
+            "seconds_per_step": 0.009524106666666666,
+            "calls": 3
+          },
+          "verify.scalar_linear": {
+            "seconds_per_step": 0.007898826333333334,
+            "calls": 6
+          },
+          "guard.completed_outlet": {
+            "seconds_per_step": 0.004458604666666667,
+            "calls": 3
+          },
+          "io.checkpoint": {
+            "seconds_per_step": 0.004000292666666666,
+            "calls": 3
+          },
+          "k.solve_validate": {
+            "seconds_per_step": 0.003164777666666655,
+            "calls": 3
+          },
+          "epsilon.solve_validate": {
+            "seconds_per_step": 0.0021942276666666663,
+            "calls": 3
+          },
+          "verify.pressure_linear": {
+            "seconds_per_step": 0.0014170290000000002,
+            "calls": 3
+          },
+          "verify.scalar_source_storage": {
+            "seconds_per_step": 0.0010321079999999546,
+            "calls": 6
+          },
+          "equation.pressure_factor": {
+            "seconds_per_step": 0.0009214753333333329,
+            "calls": 3
+          },
+          "pimple.check.input": {
+            "seconds_per_step": 0.0003466079999997855,
+            "calls": 3
+          },
+          "pressure.mass_factorize": {
+            "seconds_per_step": 0.00033149299999999754,
+            "calls": 3
+          },
+          "pimple.check.k": {
+            "seconds_per_step": 0.0003023079999999965,
+            "calls": 3
+          },
+          "pimple.check.flow": {
+            "seconds_per_step": 0.0002981776666666676,
+            "calls": 3
+          },
+          "pimple.check.epsilon": {
+            "seconds_per_step": 0.0002650820000000091,
+            "calls": 3
+          },
+          "equation.scalar_solve": {
+            "seconds_per_step": 0.00018632633333333357,
+            "calls": 6
+          },
+          "pimple.final_refresh_diagnostics": {
+            "seconds_per_step": 0.00015167300000003733,
+            "calls": 3
+          },
+          "dense.triangular_solve": {
+            "seconds_per_step": 0.00014700366666666666,
+            "calls": 3
+          },
+          "equation.scalar_factor": {
+            "seconds_per_step": 0.0001272586666666737,
+            "calls": 6
+          },
+          "momentum.factorize": {
+            "seconds_per_step": 0.00010153033333334023,
+            "calls": 3
+          },
+          "equation.momentum_solve": {
+            "seconds_per_step": 9.469266666666555e-05,
+            "calls": 3
+          },
+          "verify.completed_stage": {
+            "seconds_per_step": 4.2365666666666545e-05,
+            "calls": 3
+          },
+          "momentum.solve_validate": {
+            "seconds_per_step": 4.136666666666617e-05,
+            "calls": 3
+          },
+          "pressure.solve_validate": {
+            "seconds_per_step": 1.5501666666667413e-05,
+            "calls": 3
+          },
+          "equation.pressure_solve": {
+            "seconds_per_step": 8.683666666666675e-06,
+            "calls": 3
+          }
+        },
+        "nested_explanatory_only": {
+          "domain.parts.anchor_materialization": 0.054013896666666665,
+          "domain.parts.current_K_profiles": 0.06524026166666672,
+          "domain.parts.epsilon_rows": 2.081514046666667,
+          "domain.parts.fixed_rows": 2.122264481666667,
+          "domain.parts.moving_ray_rows": 14.743215184333332
+        },
+        "samples": [
+          43.98736641,
+          43.365406744,
+          43.955691106
+        ]
+      },
+      "ordinary_native_compute_seconds": [
+        43.64408387,
+        43.023746604,
+        43.612250128
+      ],
+      "mean_native_compute": 43.426693534,
+      "minimum": 43.023746604,
+      "maximum": 43.64408387,
+      "operation_receipt": {
+        "argv": [
+          "python3",
+          "-B",
+          "/home/jay/build/wj-h25-production-20261116/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py",
+          "--root",
+          "/home/jay/build/wj-h25-production-20261116"
+        ],
+        "phase": "native",
+        "reserved_seconds": 600.0,
+        "attempts": 4,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "allocation": {
+          "workers": 4,
+          "processes": [
+            {
+              "pid": 2109,
+              "parent": 1,
+              "threads": 1,
+              "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+            },
+            {
+              "pid": 2270,
+              "parent": 1,
+              "threads": 2,
+              "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+            },
+            {
+              "pid": 336838,
+              "parent": 334233,
+              "threads": 1,
+              "args": "python3 -B /home/jay/build/wj-h25-production-20261116/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --label W0-profile-four-v1 --seconds 600 --phase native --attempts 4 -- python3 -B /home/jay/build/wj-h25-production-20261116/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py --root /home/jay/build/wj-h25-production-20261116"
+            }
+          ]
+        },
+        "inputs": {
+          "/home/jay/build/wj-h25-production-20261116/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py": {
+            "sha256": "f38c18d6cc1cd5d25e4b362bc067fc767927a08ba70abcaa9b335619c136ece0",
+            "bytes": 5282
+          }
+        },
+        "runner_sha256": "1dcf4a4987df58708f4373798eb7410ebad31b919f34c1d0edf3ed06b18d4312",
+        "status": "PASS",
+        "seconds": 355.35643897298723,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 6703505408,
+        "reserved_attempts": 4,
+        "unknown_attempts": false,
+        "log_sha256": "cdd6be9e1d9d6107daeb40fbf059824eccdad10145ca70cae85159259d1a3a0a",
+        "actual_attempts": 4,
+        "known": true
+      }
+    },
+    {
+      "operation": "lookup-on-four-v1",
+      "exact_parity": {
+        "path": "/home/jay/build/wj-h25-production-20261116/science/W1-lookup-v1/qualification.json",
+        "bytes": 2785,
+        "sha256": "ad15c66c914d2929b49b9bc059707c2db39000061bd73b3502c1ab6c41f918cc"
+      },
+      "disjoint": {
+        "timing": {
+          "path": "/home/jay/build/wj-h25-production-20261116/operations/lookup-on-four-v1/timing.jsonl",
+          "bytes": 1146058,
+          "sha256": "cef54c21f75cd7f39ffbfd43f3f8be625b307d14c69b47410d7d6090c2652758"
+        },
+        "steps": [
+          17,
+          18,
+          19
+        ],
+        "wall_seconds": 118.094416018,
+        "per_step": 39.36480533933334,
+        "attributed_fraction": 0.9998852526693732,
+        "equation_fraction": 0.37283500509701484,
+        "disjoint": {
+          "data_allocation_release": 2.6293654926666665,
+          "guards_bounds_residual_verification": 21.445742916333344,
+          "UNATTRIBUTED": 0.0045170063333324914,
+          "equation_evaluation_assembly_solution_update": 14.67657739933334,
+          "attempt_evidence_and_orchestration": 0.20830496400000223,
+          "recovery_publication_IO": 0.3244546953333333,
+          "loop_telemetry_orchestration": 0.07584286533333302
+        },
+        "exclusive_by_name": {
+          "domain.compute": {
+            "seconds_per_step": 15.336404971333335,
+            "calls": 12
+          },
+          "flow.assembly": {
+            "seconds_per_step": 6.388641699,
+            "calls": 3
+          },
+          "data.evaluation_release": {
+            "seconds_per_step": 2.606365083333333,
+            "calls": 6
+          },
+          "residual": {
+            "seconds_per_step": 2.4523627223333335,
+            "calls": 15
+          },
+          "pressure.build": {
+            "seconds_per_step": 2.166626274,
+            "calls": 3
+          },
+          "k.bound": {
+            "seconds_per_step": 2.1635643593333334,
+            "calls": 3
+          },
+          "mapped.band.solve": {
+            "seconds_per_step": 1.616031666000002,
+            "calls": 2412
+          },
+          "k.assembly": {
+            "seconds_per_step": 1.4791829316666665,
+            "calls": 3
+          },
+          "domain.scalar": {
+            "seconds_per_step": 0.9933409843333328,
+            "calls": 24
+          },
+          "epsilon.assembly": {
+            "seconds_per_step": 0.9592587566666667,
+            "calls": 3
+          },
+          "constitutive.refresh": {
+            "seconds_per_step": 0.9506271686666667,
+            "calls": 27
+          },
+          "mapped.band.factor": {
+            "seconds_per_step": 0.548750484,
+            "calls": 12
+          },
+          "monitor.checkpoint_and_publish": {
+            "seconds_per_step": 0.3138157443333333,
+            "calls": 3
+          },
+          "pimple.sweep": {
+            "seconds_per_step": 0.20830496400000223,
+            "calls": 3
+          },
+          "flow.correction_validate": {
+            "seconds_per_step": 0.20558012933333336,
+            "calls": 3
+          },
+          "matching.constraints": {
+            "seconds_per_step": 0.19631911266666666,
+            "calls": 30
+          },
+          "flow.total": {
+            "seconds_per_step": 0.12407058899999986,
+            "calls": 3
+          },
+          "epsilon.total": {
+            "seconds_per_step": 0.12049344599999993,
+            "calls": 3
+          },
+          "native.explicit": {
+            "seconds_per_step": 0.11199211199999999,
+            "calls": 3
+          },
+          "residual.mass_dual_norms": {
+            "seconds_per_step": 0.07976965100000001,
+            "calls": 9
+          },
+          "native.step": {
+            "seconds_per_step": 0.07584286533333302,
+            "calls": 3
+          },
+          "mapped.band.permutation": {
+            "seconds_per_step": 0.07008782433333333,
+            "calls": 12
+          },
+          "k.bound_accounting": {
+            "seconds_per_step": 0.03774285266666667,
+            "calls": 3
+          },
+          "k.total": {
+            "seconds_per_step": 0.03494152633333295,
+            "calls": 3
+          },
+          "guard.completed_bound": {
+            "seconds_per_step": 0.025853286000000003,
+            "calls": 3
+          },
+          "data.completed_packet": {
+            "seconds_per_step": 0.022998029333333336,
+            "calls": 3
+          },
+          "verify.momentum_linear": {
+            "seconds_per_step": 0.013750728666666665,
+            "calls": 3
+          },
+          "native.advance": {
+            "seconds_per_step": 0.011492760666667342,
+            "calls": 3
+          },
+          "verify.scalar_linear": {
+            "seconds_per_step": 0.010693304333333334,
+            "calls": 6
+          },
+          "io.checkpoint": {
+            "seconds_per_step": 0.010638951,
+            "calls": 3
+          },
+          "dense.factorization": {
+            "seconds_per_step": 0.009573155333333333,
+            "calls": 3
+          },
+          "guard.completed_outlet": {
+            "seconds_per_step": 0.0061764106666666665,
+            "calls": 3
+          },
+          "k.solve_validate": {
+            "seconds_per_step": 0.003295009666666663,
+            "calls": 3
+          },
+          "epsilon.solve_validate": {
+            "seconds_per_step": 0.0023652650000000053,
+            "calls": 3
+          },
+          "native.implicit": {
+            "seconds_per_step": 0.0020706346666656827,
+            "calls": 3
+          },
+          "verify.pressure_linear": {
+            "seconds_per_step": 0.001226981,
+            "calls": 3
+          },
+          "verify.scalar_source_storage": {
+            "seconds_per_step": 0.0011217460000000096,
+            "calls": 6
+          },
+          "equation.pressure_factor": {
+            "seconds_per_step": 0.0009244386666666665,
+            "calls": 3
+          },
+          "pimple.check.input": {
+            "seconds_per_step": 0.00033996766666651485,
+            "calls": 3
+          },
+          "pimple.check.k": {
+            "seconds_per_step": 0.0003105496666666642,
+            "calls": 3
+          },
+          "pimple.check.flow": {
+            "seconds_per_step": 0.0003003656666666661,
+            "calls": 3
+          },
+          "pressure.mass_factorize": {
+            "seconds_per_step": 0.00029014499999999627,
+            "calls": 3
+          },
+          "pimple.check.epsilon": {
+            "seconds_per_step": 0.0002880750000002763,
+            "calls": 3
+          },
+          "equation.scalar_solve": {
+            "seconds_per_step": 0.00020485033333333329,
+            "calls": 6
+          },
+          "equation.scalar_factor": {
+            "seconds_per_step": 0.00016800200000000506,
+            "calls": 6
+          },
+          "momentum.factorize": {
+            "seconds_per_step": 0.00016667533333332893,
+            "calls": 3
+          },
+          "dense.triangular_solve": {
+            "seconds_per_step": 0.00014302099999999998,
+            "calls": 3
+          },
+          "pimple.final_refresh_diagnostics": {
+            "seconds_per_step": 0.00012860066666668205,
+            "calls": 3
+          },
+          "equation.momentum_solve": {
+            "seconds_per_step": 7.293699999999977e-05,
+            "calls": 3
+          },
+          "verify.completed_stage": {
+            "seconds_per_step": 4.456900000000009e-05,
+            "calls": 3
+          },
+          "pressure.solve_validate": {
+            "seconds_per_step": 1.9560999999999537e-05,
+            "calls": 3
+          },
+          "momentum.solve_validate": {
+            "seconds_per_step": 1.807066666666829e-05,
+            "calls": 3
+          },
+          "equation.pressure_solve": {
+            "seconds_per_step": 8.95066666666666e-06,
+            "calls": 3
+          },
+          "data.evaluation_invalidate": {
+            "seconds_per_step": 2.3799999999999997e-06,
+            "calls": 6
+          }
+        },
+        "nested_explanatory_only": {
+          "domain.parts.anchor_materialization": 0.050336215,
+          "domain.parts.current_K_profiles": 0.058604663333333314,
+          "domain.parts.epsilon_rows": 2.0665645163333335,
+          "domain.parts.fixed_rows": 2.2810870733333335,
+          "domain.parts.moving_ray_rows": 9.602572072333333
+        },
+        "samples": [
+          38.970211736,
+          39.227677939,
+          39.896526343
+        ]
+      },
+      "ordinary_native_compute_seconds": [
+        38.622348462,
+        38.865462047,
+        39.54355317
+      ],
+      "mean_native_compute": 39.01045455966667,
+      "minimum": 38.622348462,
+      "maximum": 39.54355317,
+      "operation_receipt": {
+        "argv": [
+          "python3",
+          "-B",
+          "/home/jay/build/wj-h25-production-20261116/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py",
+          "--root",
+          "/home/jay/build/wj-h25-production-20261116",
+          "--variant",
+          "lookup-on"
+        ],
+        "phase": "native",
+        "reserved_seconds": 600.0,
+        "attempts": 4,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "allocation": {
+          "workers": 12,
+          "processes": [
+            {
+              "pid": 2109,
+              "parent": 1,
+              "threads": 1,
+              "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+            },
+            {
+              "pid": 2270,
+              "parent": 1,
+              "threads": 2,
+              "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+            },
+            {
+              "pid": 338405,
+              "parent": 338255,
+              "threads": 1,
+              "args": "python3 -"
+            },
+            {
+              "pid": 338614,
+              "parent": 338613,
+              "threads": 3,
+              "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v3/IncNavierStokesSolver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/fixture-v3-standard/changed-boundary-restart/case.xml"
+            },
+            {
+              "pid": 338615,
+              "parent": 338614,
+              "threads": 4,
+              "args": "orted --hnp --set-sid --report-uri 10 --singleton-died-pipe 11 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+            },
+            {
+              "pid": 338624,
+              "parent": 334233,
+              "threads": 1,
+              "args": "python3 -B /home/jay/build/wj-h25-production-20261116/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --label lookup-on-four-v1 --seconds 600 --phase native --attempts 4 -- python3 -B /home/jay/build/wj-h25-production-20261116/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --variant lookup-on"
+            }
+          ]
+        },
+        "inputs": {
+          "/home/jay/build/wj-h25-production-20261116/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py": {
+            "sha256": "693b482810f71fe4cbd3cd27d248c78ab803f05fd912dfccfa986bf42d3cd680",
+            "bytes": 6174
+          }
+        },
+        "runner_sha256": "1dcf4a4987df58708f4373798eb7410ebad31b919f34c1d0edf3ed06b18d4312",
+        "status": "PASS",
+        "seconds": 325.4607635560096,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 6762688512,
+        "reserved_attempts": 4,
+        "unknown_attempts": false,
+        "log_sha256": "8839faea7aaaf31864453378b9876c7b6b6ab6ded8545f135d27b67f82b39d65",
+        "actual_attempts": 4,
+        "known": true
+      }
+    },
+    {
+      "operation": "scalar-on-four-v1",
+      "exact_parity": {
+        "path": "/home/jay/build/wj-h25-production-20261116/science/W1-scalar-v1/qualification.json",
+        "bytes": 2785,
+        "sha256": "7e0ac2f424076bff622ea7fc013abb0193a345de9c176452c097f7849fddc631"
+      },
+      "disjoint": {
+        "timing": {
+          "path": "/home/jay/build/wj-h25-production-20261116/operations/scalar-on-four-v1/timing.jsonl",
+          "bytes": 1163460,
+          "sha256": "19fa7dcac7e23bd289a7c80f7a5376441cdd2a242eefbb6695b7f50a7cd67f94"
+        },
+        "steps": [
+          17,
+          18,
+          19
+        ],
+        "wall_seconds": 130.011351071,
+        "per_step": 43.33711702366667,
+        "attributed_fraction": 0.9999003972584446,
+        "equation_fraction": 0.39849589147571246,
+        "disjoint": {
+          "data_allocation_release": 2.278566126333333,
+          "guards_bounds_residual_verification": 23.00049667700001,
+          "UNATTRIBUTED": 0.004316495666666018,
+          "equation_evaluation_assembly_solution_update": 17.269663082333324,
+          "attempt_evidence_and_orchestration": 0.2686668886666676,
+          "recovery_publication_IO": 0.434350333,
+          "loop_telemetry_orchestration": 0.08105742066666721
+        },
+        "exclusive_by_name": {
+          "domain.compute": {
+            "seconds_per_step": 16.561885469999996,
+            "calls": 12
+          },
+          "flow.assembly": {
+            "seconds_per_step": 6.734400530333333,
+            "calls": 3
+          },
+          "pressure.build": {
+            "seconds_per_step": 3.970236784333332,
+            "calls": 3
+          },
+          "residual": {
+            "seconds_per_step": 2.493900550333333,
+            "calls": 15
+          },
+          "k.bound": {
+            "seconds_per_step": 2.3381656429999995,
+            "calls": 3
+          },
+          "data.evaluation_release": {
+            "seconds_per_step": 2.253114081666667,
+            "calls": 6
+          },
+          "mapped.band.solve": {
+            "seconds_per_step": 1.7312972616666673,
+            "calls": 2412
+          },
+          "k.assembly": {
+            "seconds_per_step": 1.5421218566666666,
+            "calls": 3
+          },
+          "constitutive.refresh": {
+            "seconds_per_step": 0.9901158870000001,
+            "calls": 27
+          },
+          "epsilon.assembly": {
+            "seconds_per_step": 0.9275004863333334,
+            "calls": 3
+          },
+          "domain.scalar": {
+            "seconds_per_step": 0.8506813156666665,
+            "calls": 24
+          },
+          "mapped.band.factor": {
+            "seconds_per_step": 0.5849446626666666,
+            "calls": 12
+          },
+          "monitor.checkpoint_and_publish": {
+            "seconds_per_step": 0.40883523833333335,
+            "calls": 3
+          },
+          "flow.correction_validate": {
+            "seconds_per_step": 0.33108896700000007,
+            "calls": 3
+          },
+          "pimple.sweep": {
+            "seconds_per_step": 0.2686668886666676,
+            "calls": 3
+          },
+          "flow.total": {
+            "seconds_per_step": 0.23818168366666548,
+            "calls": 3
+          },
+          "matching.constraints": {
+            "seconds_per_step": 0.14539624800000003,
+            "calls": 30
+          },
+          "k.total": {
+            "seconds_per_step": 0.13704271733333387,
+            "calls": 3
+          },
+          "mapped.band.permutation": {
+            "seconds_per_step": 0.124130214,
+            "calls": 12
+          },
+          "epsilon.total": {
+            "seconds_per_step": 0.12008007199999919,
+            "calls": 3
+          },
+          "native.explicit": {
+            "seconds_per_step": 0.11719751500000002,
+            "calls": 3
+          },
+          "k.bound_accounting": {
+            "seconds_per_step": 0.11126652566666667,
+            "calls": 3
+          },
+          "native.step": {
+            "seconds_per_step": 0.08105742066666721,
+            "calls": 3
+          },
+          "residual.mass_dual_norms": {
+            "seconds_per_step": 0.070080712,
+            "calls": 9
+          },
+          "guard.completed_bound": {
+            "seconds_per_step": 0.042723749666666665,
+            "calls": 3
+          },
+          "verify.momentum_linear": {
+            "seconds_per_step": 0.041013174000000006,
+            "calls": 3
+          },
+          "io.checkpoint": {
+            "seconds_per_step": 0.025515094666666665,
+            "calls": 3
+          },
+          "data.completed_packet": {
+            "seconds_per_step": 0.02544959133333333,
+            "calls": 3
+          },
+          "guard.completed_outlet": {
+            "seconds_per_step": 0.021301747333333333,
+            "calls": 3
+          },
+          "verify.scalar_linear": {
+            "seconds_per_step": 0.016493020333333334,
+            "calls": 6
+          },
+          "native.advance": {
+            "seconds_per_step": 0.010631523999997228,
+            "calls": 3
+          },
+          "dense.factorization": {
+            "seconds_per_step": 0.009558465333333334,
+            "calls": 3
+          },
+          "k.solve_validate": {
+            "seconds_per_step": 0.0030927226666666676,
+            "calls": 3
+          },
+          "epsilon.solve_validate": {
+            "seconds_per_step": 0.002140792999999995,
+            "calls": 3
+          },
+          "native.implicit": {
+            "seconds_per_step": 0.0019140013333327488,
+            "calls": 3
+          },
+          "verify.pressure_linear": {
+            "seconds_per_step": 0.0013188973333333335,
+            "calls": 3
+          },
+          "verify.scalar_source_storage": {
+            "seconds_per_step": 0.0010071890000000188,
+            "calls": 6
+          },
+          "equation.pressure_factor": {
+            "seconds_per_step": 0.0009380336666666664,
+            "calls": 3
+          },
+          "pimple.check.input": {
+            "seconds_per_step": 0.0003920509999998008,
+            "calls": 3
+          },
+          "pimple.check.flow": {
+            "seconds_per_step": 0.00038107966666666576,
+            "calls": 3
+          },
+          "pimple.check.k": {
+            "seconds_per_step": 0.00033791733333333557,
+            "calls": 3
+          },
+          "momentum.factorize": {
+            "seconds_per_step": 0.00028253733333331404,
+            "calls": 3
+          },
+          "pimple.check.epsilon": {
+            "seconds_per_step": 0.00027955733333347627,
+            "calls": 3
+          },
+          "pressure.mass_factorize": {
+            "seconds_per_step": 0.0002508986666666657,
+            "calls": 3
+          },
+          "equation.scalar_factor": {
+            "seconds_per_step": 0.00015298000000001089,
+            "calls": 6
+          },
+          "dense.triangular_solve": {
+            "seconds_per_step": 0.00014811533333333333,
+            "calls": 3
+          },
+          "equation.scalar_solve": {
+            "seconds_per_step": 0.00012991366666666662,
+            "calls": 6
+          },
+          "pimple.final_refresh_diagnostics": {
+            "seconds_per_step": 0.00011327399999997804,
+            "calls": 3
+          },
+          "verify.completed_stage": {
+            "seconds_per_step": 6.540466666666671e-05,
+            "calls": 3
+          },
+          "equation.momentum_solve": {
+            "seconds_per_step": 5.081666666666672e-05,
+            "calls": 3
+          },
+          "momentum.solve_validate": {
+            "seconds_per_step": 1.953033333333687e-05,
+            "calls": 3
+          },
+          "pressure.solve_validate": {
+            "seconds_per_step": 1.5808000000000256e-05,
+            "calls": 3
+          },
+          "equation.pressure_solve": {
+            "seconds_per_step": 7.950666666666672e-06,
+            "calls": 3
+          },
+          "data.evaluation_invalidate": {
+            "seconds_per_step": 2.4533333333333333e-06,
+            "calls": 6
+          }
+        },
+        "nested_explanatory_only": {
+          "domain.parts.anchor_materialization": 0.052212813999999996,
+          "domain.parts.current_K_profiles": 0.07505764966666668,
+          "domain.parts.epsilon_rows": 2.0317308649999997,
+          "domain.parts.fixed_rows": 2.321905869666667,
+          "domain.parts.moving_ray_rows": 10.970120100333327
+        },
+        "samples": [
+          43.164547951,
+          43.271106421,
+          43.575696699
+        ]
+      },
+      "ordinary_native_compute_seconds": [
+        42.69222425,
+        42.80688262,
+        43.119040222
+      ],
+      "mean_native_compute": 42.872715697333334,
+      "minimum": 42.69222425,
+      "maximum": 43.119040222,
+      "operation_receipt": {
+        "argv": [
+          "python3",
+          "-B",
+          "/home/jay/build/wj-h25-production-20261116/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py",
+          "--root",
+          "/home/jay/build/wj-h25-production-20261116",
+          "--variant",
+          "scalar-on"
+        ],
+        "phase": "native",
+        "reserved_seconds": 600.0,
+        "attempts": 4,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "allocation": {
+          "workers": 17,
+          "processes": [
+            {
+              "pid": 2109,
+              "parent": 1,
+              "threads": 1,
+              "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+            },
+            {
+              "pid": 2270,
+              "parent": 1,
+              "threads": 2,
+              "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+            },
+            {
+              "pid": 348590,
+              "parent": 346491,
+              "threads": 1,
+              "args": "python3 -B solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/resources-timestep-v1 -- python3 -B solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116 --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/resources-timestep-v1 -- python3 -B solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_timestep.py --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime --static /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1 --previous-pair /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v1 --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-contract-v1.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1"
+            },
+            {
+              "pid": 348591,
+              "parent": 348590,
+              "threads": 1,
+              "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/resources-timestep-v1 --project-limit 16"
+            },
+            {
+              "pid": 348594,
+              "parent": 348590,
+              "threads": 1,
+              "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted3_command.py --owned-child --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/resources-timestep-v1 -- python3 -B solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116 --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/resources-timestep-v1 -- python3 -B solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_timestep.py --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime --static /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1 --previous-pair /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v1 --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-contract-v1.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1"
+            },
+            {
+              "pid": 348595,
+              "parent": 348594,
+              "threads": 1,
+              "args": "python3 -B solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116 --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/resources-timestep-v1 -- python3 -B solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_timestep.py --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime --static /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1 --previous-pair /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v1 --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-contract-v1.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1"
+            },
+            {
+              "pid": 348596,
+              "parent": 348595,
+              "threads": 1,
+              "args": "python3 -B solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_timestep.py --runtime /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime --static /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/static-v1 --previous-pair /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115/pair-v1 --contract /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-contract-v1.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1"
+            },
+            {
+              "pid": 349975,
+              "parent": 348596,
+              "threads": 3,
+              "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/4000-q64/case.xml /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/4000-q64/frozen-request.json /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/timestep-v1/4000-q64/frozen.json"
+            },
+            {
+              "pid": 349976,
+              "parent": 349975,
+              "threads": 4,
+              "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+            },
+            {
+              "pid": 350564,
+              "parent": 1,
+              "threads": 1,
+              "args": "/usr/bin/python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/common-comparison-resume.py"
+            },
+            {
+              "pid": 350602,
+              "parent": 350600,
+              "threads": 1,
+              "args": "python3 -B /home/jay/build/wj-h25-production-20261116/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --label scalar-on-four-v1 --seconds 600 --phase native --attempts 4 -- python3 -B /home/jay/build/wj-h25-production-20261116/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --variant scalar-on"
+            }
+          ]
+        },
+        "inputs": {
+          "/home/jay/build/wj-h25-production-20261116/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/profile_wj_h25.py": {
+            "sha256": "355cc8dcc1d87ae05e05afbcfe62b2983fc936a1f126b6f57531d797d089fb58",
+            "bytes": 6394
+          }
+        },
+        "runner_sha256": "1dcf4a4987df58708f4373798eb7410ebad31b919f34c1d0edf3ed06b18d4312",
+        "status": "PASS",
+        "seconds": 340.7213506959961,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 6666723328,
+        "reserved_attempts": 4,
+        "unknown_attempts": false,
+        "log_sha256": "683bf34c8eb78a06e9f7fd5925ccd970f6c6d6aa62a78ceaf4b70aff8225dc43",
+        "actual_attempts": 4,
+        "known": true
+      }
+    }
+  ],
+  "lowest_measured_ordinary": "lookup-on-four-v1",
+  "limitation": "same advancing states and IEEE parity; short samples and cross-run variability, no cherry-picked rerun or statistically established production speedup",
+  "scalar_component": {
+    "path": "/home/jay/build/wj-h25-production-20261116/science/scalar-value-component-v1/result.json",
+    "bytes": 4289,
+    "sha256": "3baa10f987ea0a24f6985549772c6347303e815c703ad229e61b66169fe19cf0"
+  }
+}

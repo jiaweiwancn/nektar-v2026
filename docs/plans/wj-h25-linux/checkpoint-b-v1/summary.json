@@ -1,0 +1,80 @@
+{
+  "schema": "WJH25CheckpointBV1",
+  "status": "IMPLEMENTATION_PARITY_PASS_PRODUCTION_TARGET_NOT_ESTABLISHED",
+  "selected_execution": {
+    "RANSWallNativeLookup": "TensorExactV1",
+    "RANSWallScalarEvaluation": "Off",
+    "RANSWallImmutableRowReuse": "Off",
+    "RANSWallEvaluationReuse": "ExactStepV1"
+  },
+  "native_capsule": "54c4555c287a8759cbc69c8360c678899e842bcd",
+  "native_build_driver": "b6bf57f2",
+  "source_Git_HEAD": "9f3e867e7021a07470a240b14858e36667730403",
+  "records": [
+    {
+      "operation": "W0-profile-four-v1",
+      "ordinary_native_compute_seconds": [
+        43.64408387,
+        43.023746604,
+        43.612250128
+      ],
+      "mean_native_compute": 43.426693534,
+      "minimum": 43.023746604,
+      "maximum": 43.64408387,
+      "exact_parity": {
+        "path": "/home/jay/build/wj-h25-production-20261116/science/W0-profile-v1/qualification.json",
+        "bytes": 2734,
+        "sha256": "3a3b87e90f8da38dfeedc6afd066ed88a5fef883f8c97fdefc783104a35a27d6"
+      },
+      "equation_fraction": 0.3375375212921557,
+      "attributed_fraction": 0.9492864682065393
+    },
+    {
+      "operation": "lookup-on-four-v1",
+      "ordinary_native_compute_seconds": [
+        38.622348462,
+        38.865462047,
+        39.54355317
+      ],
+      "mean_native_compute": 39.01045455966667,
+      "minimum": 38.622348462,
+      "maximum": 39.54355317,
+      "exact_parity": {
+        "path": "/home/jay/build/wj-h25-production-20261116/science/W1-lookup-v1/qualification.json",
+        "bytes": 2785,
+        "sha256": "ad15c66c914d2929b49b9bc059707c2db39000061bd73b3502c1ab6c41f918cc"
+      },
+      "equation_fraction": 0.37283500509701484,
+      "attributed_fraction": 0.9998852526693732
+    },
+    {
+      "operation": "scalar-on-four-v1",
+      "ordinary_native_compute_seconds": [
+        42.69222425,
+        42.80688262,
+        43.119040222
+      ],
+      "mean_native_compute": 42.872715697333334,
+      "minimum": 42.69222425,
+      "maximum": 43.119040222,
+      "exact_parity": {
+        "path": "/home/jay/build/wj-h25-production-20261116/science/W1-scalar-v1/qualification.json",
+        "bytes": 2785,
+        "sha256": "7e0ac2f424076bff622ea7fc013abb0193a345de9c176452c097f7849fddc631"
+      },
+      "equation_fraction": 0.39849589147571246,
+      "attributed_fraction": 0.9999003972584446
+    }
+  ],
+  "scalar_component": {
+    "native_values": 11232,
+    "scalar_inventories": 16,
+    "status": "PASS"
+  },
+  "decision": "Keep exact lookup. ValueExactV1 is correct but slower and remains Off. Continue h/dt/operational qualification; no affordability PASS.",
+  "limitations": [
+    "three ordinary samples per four-step replay, cross-run variability",
+    "source-v8 includes the default-Off scalar option and transient seed helper; executed build/object/runtime pins are separate from documentation HEAD",
+    "shared worker admission deferred subsequent h/certificate requests before numerical execution"
+  ]
+}
