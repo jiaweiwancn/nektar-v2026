@@ -12,6 +12,7 @@ from ct_accepted4_reference import Column,parameters,reference,write_json,requir
 from run_a93_a95_e94e95_matrix import case_xml
 from run_cls_epawf_picard import set_info,set_parameter,write
 from ct_accepted_open import run,probe,row_value
+from rans_trace_index import positive_h_trace_index
 from ct_accepted_pilot import replay,compare,budget_classification,artifact_hash,constitutive_comparison
 from ct_accepted2_audit import values,mass
 from ct_accepted2_storage import artifact
@@ -107,7 +108,7 @@ def traction(initial,state,c):
     for a,b in zip(c['x'][:-1],c['x'][1:]):
         xs=[a+(b-a)*j/p for j in range(p+1)];ks=[]
         for x in xs:
-            i=next(i for i,(q,side) in enumerate(zip(o['grid'],o['grid_sides'],strict=True)) if q==[x,0.,H] and side==1)
+            i=positive_h_trace_index(initial,x,H)
             ks.append(row_value(initial['test_basis'][i]['velocity_k'],s,off[2])[0])
         traces.append((a,b,np.polynomial.polynomial.polyfit((np.array(xs)-a)/(b-a),ks,p)))
     def nt(x,z):

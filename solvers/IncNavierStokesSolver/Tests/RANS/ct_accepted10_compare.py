@@ -15,6 +15,7 @@ from ct_accepted3_metrics import inventory
 from ct_accepted5_traction import profiles,difference,diffusivity
 from ct_accepted_feasibility import write_json,require
 from ct_accepted_open import row_value
+from rans_trace_index import positive_h_trace_index
 from ct_accepted3_metrics import point
 from rans_request_manifest import RequestManifest,sha
 
@@ -51,7 +52,7 @@ def outlet(p,s,c):
         if f['region']:
             law=point(f,s,off,'A95');require('total_stress' in law,'undefined outlet constitutive evaluation');T=np.array(law['total_stress'])
         else:
-            x=f['coordinate'][0];Hrow=next(p['test_basis'][i]['velocity_k'] for i,(v,side) in enumerate(zip(p['observation']['grid'],p['observation']['grid_sides'],strict=True)) if v==[x,0.,c['H']] and side==1);K=row_value(Hrow,s,off[2])[0];Pi=row_value(f['pressure'],s,off[4])[0];T=diffusivity(K,f['coordinate'][2],c)*(grad+grad.T)-np.eye(3)*Pi
+            x=f['coordinate'][0];Hrow=p['test_basis'][positive_h_trace_index(p,x,c['H'])]['velocity_k'];K=row_value(Hrow,s,off[2])[0];Pi=row_value(f['pressure'],s,off[4])[0];T=diffusivity(K,f['coordinate'][2],c)*(grad+grad.T)-np.eye(3)*Pi
         d=T[[0,2],0]-expected[f['region']];value=float(d@d);square+=f['weight']*value;den+=f['weight']
         if witness is None or value>witness['square']:witness=dict(square=value,coordinate=f['coordinate'],geometry=q['geometry'],region=f['region'],actual=T[[0,2],0].tolist(),prescribed=expected[f['region']].tolist())
     return dict(weighted_RMS=float(np.sqrt(square/den)),normalized_weighted_RMS=float(np.sqrt(square/den))/c['ustar']**2,witness=witness,scope='actual reconstructed natural-face stress versus datum, not a prescribed-row reaction or pointwise outlet admission requirement')

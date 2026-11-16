@@ -5,6 +5,7 @@ from rans_qualification import THREADS,exact_vector_hash
 os.environ.update(THREADS)
 import numpy as np
 from ct_accepted_open import row_value,require
+from rans_trace_index import positive_h_trace_index
 from ct_accepted4_reference import parameters
 from ct_accepted3_metrics import point
 
@@ -13,7 +14,7 @@ def endpoint_trace(initial,state,c):
     for lo,hi in zip(c['x'][:-1],c['x'][1:]):
         xs=[lo+(hi-lo)*j/p for j in range(p+1)];ks=[]
         for x in xs:
-            i=next(i for i,(q,side) in enumerate(zip(o['grid'],o['grid_sides'],strict=True)) if q==[x,0.,H] and side==1)
+            i=positive_h_trace_index(initial,x,H)
             ks.append(row_value(initial['test_basis'][i]['velocity_k'],state,off[2])[0])
         traces.append((lo,hi,np.polynomial.polynomial.polyfit((np.array(xs)-lo)/(hi-lo),ks,p)))
     def at(x):
