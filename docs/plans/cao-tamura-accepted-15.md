@@ -39,3 +39,41 @@ production will have separate ledgers.
 | G6 | Pushed source and hash-bound runtime/input/history/resource reproduction | IN PROGRESS |
 
 No T=.407 or meaningful-duration preservation run is authorized in CT15.
+
+The first two bounded candidates have not supplied an affordable path. The
+following are complete native commands with detailed timers off, not isolated
+steady-step times. All selected updates below equal CT14's actual coefficients
+bitwise; the full fresh T=.002 qualification remains outstanding.
+
+| Execution | Zero steps CPU s | One step CPU s | Two steps CPU s |
+|---|---:|---:|---:|
+| CT14 matched fresh control | — | 202.494408 | reused historical trajectories |
+| ImmutableTensorV1 | 62.759786 | 234.460816 | 413.393018 |
+| ImmutableTensorV2, shared immutable row storage | 59.151492 | 235.612187 | 402.588599 |
+
+V1/V2 pass four small complete operator controls (maximum independent defect
+4.313e-15 <=2e-10), 36 dependency queries, complete small updates, genuine
+restart, full rollback and incompatible-history rejection. V1's one-step
+counter records 25,418,868 row constructions, 23,481,618 hits and 387 cache
+clears. Broad diagnostic timing measures 33.46 exclusive CPU seconds in flow
+assembly and roughly16 seconds per complete domain computation. Hits alone
+do not demonstrate savings. The separately measured independent-controller
+prototype preserves every result exactly, reducing a complete endpoint
+diagnostic bundle from19.71/20.99 to16.33/16.33 CPU seconds; it prepares only
+immutable arrays and recomputes all current-state contractions and physics.
+
+The [third prospective remedy](cao-tamura-accepted-15-evidence/attempt-3-contract.json)
+targets matrix-entry lookup, successful diagnostic-string allocation and
+working-set thrashing. It retains exact chronological coefficient additions,
+canonical sorted CSR, all tests and a hard bounded row limit. Qualification is
+pending; no speedup or production admission is claimed.
+
+An unowned129-thread `gdb` caused the shared-worker monitor to observe141
+aggregate threads during V2's two-step family. The monitor paused our family,
+then resumed it after the debugger exited. Our project highwater stayed12;
+the family retains its **failed aggregate worker audit**, and is not presented
+as a clean resource-admission result. New qualification must run within both
+worker ceilings. A prior CMake scratch-directory race also failed its monitor;
+the completed build is retained with an additional120-CPU-second accounting
+reserve. Compiler/interface and verification-driver failures remain in the
+same CT15 ledger. None of these attempts resets the allocation.
