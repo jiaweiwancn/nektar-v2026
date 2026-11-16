@@ -894,8 +894,12 @@ int main(int argc,char **argv)
         ProbePhase("after_set_reference");
         if(request.get<bool>("export_immutable_checks",false))
         {
-            Require(operation=="replay" && patch.Signature().find("CT15-ImmutableTensorV")!=std::string::npos,
-                "immutable checks require a bound CT15 replay");
+            const auto signature=patch.Signature();
+            const bool immutable=signature.find(":execution=CT15-ImmutableTensorV")!=std::string::npos ||
+                signature.find(":execution=CT16-StreamScalarV1")!=std::string::npos ||
+                signature.find(":execution=CT16-ScopedScatterV1")!=std::string::npos;
+            Require(operation=="replay" && immutable,
+                "immutable checks require a bound recognized immutable replay");
             std::ofstream out(argv[3]);
             out<<patch.EvaluationReuseChecks(state,Values(request,"history"),time,data)<<'\n';
             Require(out.good(),"immutable verification write failed");world->Finalise();return 0;

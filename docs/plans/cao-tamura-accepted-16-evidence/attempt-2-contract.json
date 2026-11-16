@@ -1,0 +1,17 @@
+{
+  "schema": "CT16MeasuredRemedyV1",
+  "execution_policy": "ImmutableTensorV6",
+  "component": "CT16-ScopedScatterV1",
+  "parent_candidate": "ImmutableTensorV5 / CT16-StreamScalarV1; retain its complete measured outcome",
+  "basis": "V4 partition records15.535393 CPU seconds in flow assembly and3.032309 in k assembly for one selected step. Source calls SparseMatrix::Entry for each quadrature/local-index contribution. This motivates testing lookup elimination; the partition does not establish how much of those times is lookup.",
+  "changes": [
+    "Create a per-AssemblePicardBlock exact native-geometry scatter table of stable pointers to the current matrix entries,for flow/flow and scalar/scalar volume contributions only. Keep each numerical expression,quadrature order and chronological binary64 += unchanged. Canonical final CSR sorting/zero elimination and all factors/residuals remain.",
+    "The table is local to a newly constructed matrix/its actual index and free-mask vector. It cannot survive alpha/state/boundary changes,a restart or rollback. Only addresses/IDs are stored; no changing matrix coefficient or constitutive payload is reused.",
+    "Bound table payloads to64MiB per assembly and4096 native geometries. Use the old guarded Entry path for any unplanned geometry once the bound is reached. All other matrix writes retain the original route. On reuse require identical native IDs. Do not finalize,clear,copy or move a matrix while its scatter table is in use.",
+    "Retain the complete V5 current-scalar/value and per-call-point policy,with a distinct V6 component/history identity. Keep Off/V1-5 behavior unchanged."
+  ],
+  "qualification": "Run the same small full operator/dependency/history/rejected-step controls and compare actual complete CSR/actions to the qualified oracle. Then matched clock-off0/1/2 plus smallest diagnostic if needed. State/pressure/traction<=1e-8,actions<=2e-10,original true residual/IR bounds,all original scientific/classifier thresholds. A local speedup is partial and does not close G1-G6.",
+  "risks": "Precreating zero entries changes only transient insertion order; final canonical CSR must remain exact,including zeros and signed decisions. unordered_map rehash preserves element references; there must be no erase/finalize during table use. Preserve partial failures and all worker/resource receipts.",
+  "allocation": "Same fixed CT16 start1794835825,24000CPU/28800wall/16GiB new live pool; CPU/wall reserve and16GiB per-processAS unchanged. No full final pair until candidate can plausibly improve the resource obstruction; continue measured remedies. No T>.002.",
+  "not_admission": "Production admission,retention/recovery and complete heldout forecasts remain separate gates; physical T=.407 remains UNATTEMPTED."
+}

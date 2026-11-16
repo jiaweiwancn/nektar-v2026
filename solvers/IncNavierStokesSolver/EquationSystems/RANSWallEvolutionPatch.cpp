@@ -337,8 +337,9 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(reuse=="Off" || reuse=="ExactStepV1","unknown exact evaluation reuse policy");
     m_evaluationReuse=reuse=="ExactStepV1";
     std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
-    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5","unknown immutable evaluation policy");
-    m_streamScalarValues=immutable=="ImmutableTensorV5";
+    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6","unknown immutable evaluation policy");
+    m_scopedScatter=immutable=="ImmutableTensorV6";
+    m_streamScalarValues=immutable=="ImmutableTensorV5" || m_scopedScatter;
     m_immutableTensor=immutable!="Off";m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || m_streamScalarValues;
     m_hashAssembly=immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || m_streamScalarValues;
     m_scopedConstitutivePoints=immutable=="ImmutableTensorV4" || m_streamScalarValues;
@@ -1865,7 +1866,8 @@ std::string RANSWallEvolutionPatch::Signature() const
     if(DisplacedAccepted())text<<":wall_sink=SamePhysicalWallDisplacedAcceptedV1:d="<<m_options.aerodynamicDisplacement;
     if(SerialSparse())text<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")text<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
-    if(m_streamScalarValues)text<<":execution=CT16-StreamScalarV1";
+    if(m_scopedScatter)text<<":execution=CT16-ScopedScatterV1";
+    else if(m_streamScalarValues)text<<":execution=CT16-StreamScalarV1";
     else if(m_immutableTensor)text<<":execution=CT15-ImmutableTensorV"<<(m_scopedConstitutivePoints?4:m_hashAssembly?3:m_sharedTensor?2:1);
     if(ColumnAverageK())text<<":K-functional=ColumnAverage-v1:physical-dz/H:fixed-native-panel-Gauss8:global-CG-row";
     if(AcceptedAWF())text<<":wall_formulation="<<FormulationMetadata();

@@ -88,11 +88,53 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
     const double nu   = m_parameters.geometry.molecularNu;
     Refresh(s, time, &data);
 
+    // Addresses belong only to this still-unfinalized matrix and its actual
+    // canonical row selection. unordered_map rehash preserves references;
+    // no row is cleared or finalized until all volume assembly is complete.
+    // No coefficient, state, mask or factor is reused across assembly calls.
+    struct Scatter
+    {
+        std::vector<int> ids;
+        std::vector<double*> entries;
+    };
+    std::map<int,Scatter> scatters;std::size_t scatterBytes=0;
+    constexpr std::size_t maximumScatterBytes=64*1024*1024,maximumScatterGeometries=4096;
+    auto scatter=[&](const RANSWallGlobalPoint &point,int components,int first)->const Scatter*
+    {
+        if(!m_scopedScatter || !system.sparse)return nullptr;
+        const auto old=scatters.find(point.geometry);
+        if(old!=scatters.end())
+        {
+            Require(old->second.ids==static_cast<const std::vector<int>&>(point.ids),
+                "scoped scatter native identity differs");
+            return &old->second;
+        }
+        const std::size_t count=point.ids.size(),dofs=components*count;
+        Require(count>0 && components>0 && components<=3,
+            "scoped scatter native row outside bounded shape");
+        if(count>128)return nullptr;
+        const std::size_t bytes=count*sizeof(int)+dofs*dofs*sizeof(double*)+sizeof(Scatter)+128;
+        if(scatters.size()>=maximumScatterGeometries || bytes>maximumScatterBytes-scatterBytes)return nullptr;
+        Scatter plan;plan.ids=static_cast<const std::vector<int>&>(point.ids);
+        plan.entries.assign(dofs*dofs,nullptr);
+        for(int a=0;a<components;++a)for(int i=0;i<count;++i)
+        {
+            const int row=index[offset[first+a]+point.ids[i]];if(row<0)continue;
+            for(int b=0;b<components;++b)for(int j=0;j<count;++j)
+            {
+                const int col=index[offset[first+b]+point.ids[j]];
+                if(col>=0)plan.entries[(a*count+i)*dofs+b*count+j]=&system.Entry(row,col);
+            }
+        }
+        scatterBytes+=bytes;return &scatters.emplace(point.geometry,std::move(plan)).first->second;
+    };
+
     auto addScalar = [&](const RANSWallGlobalPoint &point,
                          const RANSVector &velocity, double weight,
                          double diffusion, double rate, double source) {
         const double value = point.Value(s, offset[block]);
         const auto grad    = point.Gradient(s, offset[block]);
+        const auto plan=scatter(point,1,block);const std::size_t count=point.ids.size();
         for (int i = 0; i < point.ids.size(); ++i)
         {
             const int row = index[offset[block] + point.ids[i]];
@@ -110,7 +152,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
             {
                 const int col = index[offset[block] + point.ids[j]];
                 if (col >= 0)
-                    system.Entry(row,col) +=
+                    (plan?*plan->entries[i*count+j]:system.Entry(row,col)) +=
                         weight * ((test * rate - adv) * point.phi[j] +
                                   diffusion * (dx * point.derivative[0][j] +
                                                dz * point.derivative[2][j]));
@@ -121,6 +163,8 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                         const RANSVector &force,
                         const RANSWallGlobalPoint *forcingPressure) {
         const bool inner = ray != nullptr;
+        const auto plan=flow?scatter(q.v,m_dimension,0):nullptr;
+        const std::size_t count=q.v.ids.size(),dofs=m_dimension*count;
         RANSVector u{};
         RANSTensor grad{};
         for (int a = 0; a < m_dimension; ++a)
@@ -224,7 +268,7 @@ RANSWallEvolutionPatch::PicardBlock RANSWallEvolutionPatch::AssemblePicardBlock(
                                     viscosity * (dx * q.v.derivative[0][j] +
                                                  dz * q.v.derivative[2][j]) -
                                     (dx * u[0] + dz * u[2]) * q.v.phi[j];
-                            system.Entry(row,col) += q.weight * value;
+                            (plan?*plan->entries[(a*count+i)*dofs+b*count+j]:system.Entry(row,col)) += q.weight * value;
                         }
                     }
                     if (forcingPressure && (aa == 0 || CurvedVerification()))

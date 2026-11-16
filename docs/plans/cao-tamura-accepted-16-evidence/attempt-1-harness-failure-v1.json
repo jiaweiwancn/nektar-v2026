@@ -1,0 +1,23 @@
+{
+  "schema": "CT16RetainedFailedAttemptV1",
+  "attempt": "small-stream-v1",
+  "external_root": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+  "tested_native_source": "1b89687a85a42e0215a4f79bd8abb13510d56261",
+  "status": "FAILED_HARNESS_IDENTITY_GUARD",
+  "family_CPU": 38.465106000000006,
+  "family_wall": 36.34036349999951,
+  "operator_cases_passed": [
+    "d0-p3",
+    "d0-p4"
+  ],
+  "failure": "immutable checks require a bound CT15 replay",
+  "causal_scope": "Hardcoded legacy probe component guard rejected the explicit CT16-StreamScalarV1 signature before dependency controls. No training or scientific-pair claim. Preserve all raw outputs/receipts and charge the entire family.",
+  "remedy": "Explicitly recognize the two new CT16 execution signatures. Disable the streamed-value and scoped-scatter flags along with other immutable flags on the independent Off side of dependency verification; compare every ordered query string exactly. Rebuild and rerun bounded controls in a fresh output directory.",
+  "worker_resource": {
+    "aggregate_max": 33,
+    "project_max": 11,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "status": "pass"
+  }
+}

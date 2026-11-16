@@ -580,6 +580,7 @@ private:
     bool m_hashAssembly=false;
     bool m_scopedConstitutivePoints=false;
     bool m_streamScalarValues=false;
+    bool m_scopedScatter=false;
     int m_constitutiveMaximumPoints=262144;
     int m_immutableMaximumRows=65536;
     struct ImmutableRows;
