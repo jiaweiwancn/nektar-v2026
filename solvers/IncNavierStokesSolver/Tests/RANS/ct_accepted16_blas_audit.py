@@ -38,27 +38,27 @@ class ExactAuditRows(PreparedRows):
     maximum_rows=262144
     def __init__(self,initial,count,library):
         super().__init__();self.initial=initial;self.count=count;self.saved_values=[];self.saved_points=[];self.active=None;self.point_calls=0;self.grid_calls=0;self.plan_bytes=0;self.handle=None
-        o=initial['observation'];self.offsets=tuple(o['offsets']);self.rows=tuple(initial['test_basis'])+tuple(o['faces']);self.grid_size=len(initial['test_basis']);self.state_size=len(o['state'])
+        o=initial['observation'];self.offsets=tuple(o['offsets']);self.observation_rows=tuple(initial['test_basis'])+tuple(o['faces']);self.grid_size=len(initial['test_basis']);self.state_size=len(o['state'])
         regions=list(o['grid_regions'])+[q['region'] for q in o['faces']]
-        require(0<count<=self.grid_size and len(self.rows)==len(regions)<=self.maximum_rows and len(self.offsets)==7 and all(isinstance(v,(int,np.integer)) for v in self.offsets),'invalid owned BLAS row packet')
+        require(0<count<=self.grid_size and len(self.observation_rows)==len(regions)<=self.maximum_rows and len(self.offsets)==7 and all(isinstance(v,(int,np.integer)) for v in self.offsets),'invalid owned BLAS row packet')
         self.row_indices={}
-        for i,(row,region) in enumerate(zip(self.rows,regions,strict=True)):
+        for i,(row,region) in enumerate(zip(self.observation_rows,regions,strict=True)):
             require(region in (0,1) and (row.get('epsilon') is not None)==bool(region),'inconsistent physical row region/epsilon')
             prior=self.row_indices.setdefault(id(row),(row,i,region));require(prior[0] is row and prior[2]==region,'ambiguous native row owner')
         self.digest=self.packet_digest();self.arrays=[];self.widths=[]
         for name in ('velocity_k','epsilon','pressure'):
-            widths={len(q[name]['ids']) for q in self.rows if q.get(name) is not None}
+            widths={len(q[name]['ids']) for q in self.observation_rows if q.get(name) is not None}
             require(len(widths)==1,'mixed native row widths require the original route');w=widths.pop();self.widths.append(w)
-            planned=len(self.rows)*w*8*5
+            planned=len(self.observation_rows)*w*8*5
             require(0<w<=128 and self.plan_bytes+planned<=self.maximum_plan_bytes,'BLAS immutable row allocation bound')
-            ids=np.zeros((len(self.rows),w),dtype=np.int64);phi=np.zeros((len(self.rows),w));d=np.zeros((len(self.rows),3,w))
-            for i,q in enumerate(self.rows):
+            ids=np.zeros((len(self.observation_rows),w),dtype=np.int64);phi=np.zeros((len(self.observation_rows),w));d=np.zeros((len(self.observation_rows),3,w))
+            for i,q in enumerate(self.observation_rows):
                 if q.get(name) is None:continue
                 require(all(isinstance(v,(int,np.integer)) for v in q[name]['ids']),'noninteger native field ID')
                 ids[i]=q[name]['ids'];phi[i]=q[name]['phi'];d[i]=q[name]['derivative']
             for a in (ids,phi,d):a.flags.writeable=False
             self.arrays.extend((ids,phi,d));self.plan_bytes+=sum(a.nbytes for a in (ids,phi,d))
-        self.present=np.asarray([q.get('epsilon') is not None for q in self.rows],dtype=np.uint8)
+        self.present=np.asarray([q.get('epsilon') is not None for q in self.observation_rows],dtype=np.uint8)
         self.pressure_offsets=np.asarray([self.offsets[4+int(r)] for r in regions],dtype=np.int64)
         self.native_offsets=np.asarray(self.offsets,dtype=np.int64)
         for a in (self.present,self.pressure_offsets,self.native_offsets):a.flags.writeable=False;self.plan_bytes+=a.nbytes
@@ -69,7 +69,7 @@ class ExactAuditRows(PreparedRows):
         self.lib.ct16_plan_free.argtypes=[ctypes.c_void_p];self.lib.ct16_plan_free.restype=None
         self.lib.ct16_plan_point.argtypes=[ctypes.c_void_p,ctypes.c_int64,f64,ctypes.c_int64,f64];self.lib.ct16_plan_point.restype=ctypes.c_int
         self.lib.ct16_plan_grid.argtypes=[ctypes.c_void_p,ctypes.c_int64,f64,ctypes.c_int64,f64,f64];self.lib.ct16_plan_grid.restype=ctypes.c_int
-        self.handle=create(len(self.rows),*self.widths,*self.arrays[:6],self.present,*self.arrays[6:],self.pressure_offsets,self.native_offsets,self.state_size)
+        self.handle=create(len(self.observation_rows),*self.widths,*self.arrays[:6],self.present,*self.arrays[6:],self.pressure_offsets,self.native_offsets,self.state_size)
         require(bool(self.handle),'malformed or foreign field row plan rejected before use')
     def packet_digest(self):
         o=self.initial['observation']
