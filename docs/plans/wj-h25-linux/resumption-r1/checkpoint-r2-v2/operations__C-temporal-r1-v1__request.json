@@ -1,0 +1,138 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h25-production-20261116/resumption-r1/tools-v4/solvers/IncNavierStokesSolver/Tests/RANS/temporal_wj_h25r1.py",
+    "--root",
+    "/home/jay/build/wj-h25-production-20261116"
+  ],
+  "phase": "passive",
+  "reserved_seconds": 300.0,
+  "attempts": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "allocation": {
+    "workers": 28,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 402673,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wp2_bounded_followup.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116 --solver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver --probe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/RANSWallResolutionProbe --h1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-CLS-followup-T1p8 --model CLS --endpoint 1.8 --after-transactions"
+      },
+      {
+        "pid": 403027,
+        "parent": 402673,
+        "threads": 1,
+        "args": "python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wp2_preservation.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116 --solver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver --h1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-CLS --model CLS --mode recover --level 4 --dt .01 --endpoint 1.8 --resume"
+      },
+      {
+        "pid": 404633,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/queue-recovery-half-step-standard.py"
+      },
+      {
+        "pid": 405521,
+        "parent": 404633,
+        "threads": 1,
+        "args": "python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wp2_preservation.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116 --solver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver --h1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-half-step-standard --model standard --mode recovery-trial --level 4 --dt .005 --endpoint .3 --expected-seed 0f2bc1f991d814e8a2b4fcfe471ee47efc07927c48f25b162d5c161ea89927f0"
+      },
+      {
+        "pid": 405526,
+        "parent": 405525,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-half-step-standard/step32/case.xml"
+      },
+      {
+        "pid": 405528,
+        "parent": 405526,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 10 --singleton-died-pipe 11 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 407206,
+        "parent": 407205,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-CLS/step180/case.xml"
+      },
+      {
+        "pid": 407207,
+        "parent": 407206,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 10 --singleton-died-pipe 11 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 408338,
+        "parent": 408242,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_command.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116 --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/resources-build-capacity-identity-v1 --expected-CPU 500 --expected-wall 600 --expected-new-bytes 1400000000 -- python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116 --ct9 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-capacity-identity-v1 --phase runtime"
+      },
+      {
+        "pid": 408339,
+        "parent": 408338,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/guard_rans_worker_budget.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/resources-build-capacity-identity-v1 --project-limit 16"
+      },
+      {
+        "pid": 408346,
+        "parent": 408338,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_command.py --owned-child --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116 --control /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/resources-build-capacity-identity-v1 -- python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116 --ct9 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-capacity-identity-v1 --phase runtime"
+      },
+      {
+        "pid": 408347,
+        "parent": 408346,
+        "threads": 1,
+        "args": "python3 -B /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116 --ct9 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-capacity-identity-v1 --phase runtime"
+      },
+      {
+        "pid": 408410,
+        "parent": 408408,
+        "threads": 1,
+        "args": "/usr/lib/gcc/x86_64-linux-gnu/11/cc1plus -quiet -I /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/library -I /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers -imultiarch x86_64-linux-gnu -MD CMakeFiles/IncNavierStokesSolver.dir/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionOpenBoundary.cpp.d -MF CMakeFiles/IncNavierStokesSolver.dir/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionOpenBoundary.cpp.o.d -MT CMakeFiles/IncNavierStokesSolver.dir/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionOpenBoundary.cpp.o -D_GNU_SOURCE -D_REENTRANT -D ENABLE_NEKTAR_EXCEPTIONS -D NEKTAR_MEMORY_POOL_ENABLED -D NEKTAR_MPI_TYPE=0 -D NEKTAR_RANS_HAVE_EIGEN_SPARSE -D NEKTAR_RANS_HAVE_SCOTCH_ORDERING -D NEKTAR_USE_MPI -D NEKTAR_USE_SCOTCH -D TIXML_USE_STL -D NDEBUG -D NEKTAR_USE_MPI -isystem /usr/include/scotch -isystem /usr/include/eigen3 -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionOpenBoundary.cpp -quiet -dumpdir CMakeFiles/IncNavierStokesSolver.dir/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/EquationSystems/ -dumpbase RANSWallEvolutionOpenBoundary.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -O3 -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror -std=gnu++17 -fasynchronous-unwind-tables -fstack-protector-strong -Wformat-security -fstack-clash-protection -fcf-protection -o /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/tmp/ccpOCEqo.s"
+      },
+      {
+        "pid": 408411,
+        "parent": 408409,
+        "threads": 1,
+        "args": "/usr/lib/gcc/x86_64-linux-gnu/11/cc1plus -quiet -I /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/library -I /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers -imultiarch x86_64-linux-gnu -MD CMakeFiles/IncNavierStokesSolver.dir/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp.d -MF CMakeFiles/IncNavierStokesSolver.dir/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp.o.d -MT CMakeFiles/IncNavierStokesSolver.dir/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp.o -D_GNU_SOURCE -D_REENTRANT -D ENABLE_NEKTAR_EXCEPTIONS -D NEKTAR_MEMORY_POOL_ENABLED -D NEKTAR_MPI_TYPE=0 -D NEKTAR_RANS_HAVE_EIGEN_SPARSE -D NEKTAR_RANS_HAVE_SCOTCH_ORDERING -D NEKTAR_USE_MPI -D NEKTAR_USE_SCOTCH -D TIXML_USE_STL -D NDEBUG -D NEKTAR_USE_MPI -isystem /usr/include/scotch -isystem /usr/include/eigen3 -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp -quiet -dumpdir CMakeFiles/IncNavierStokesSolver.dir/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/EquationSystems/ -dumpbase RANSEquilibriumWallEvolution.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -O3 -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror -std=gnu++17 -fasynchronous-unwind-tables -fstack-protector-strong -Wformat-security -fstack-clash-protection -fcf-protection -o /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/tmp/cc2XeBbW.s"
+      },
+      {
+        "pid": 408457,
+        "parent": 408455,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h25r1.py --root /home/jay/build/wj-h25-production-20261116 --label C-temporal-r1-v1 --seconds 300 --phase passive -- python3 -B /home/jay/build/wj-h25-production-20261116/resumption-r1/tools-v4/solvers/IncNavierStokesSolver/Tests/RANS/temporal_wj_h25r1.py --root /home/jay/build/wj-h25-production-20261116"
+      }
+    ]
+  },
+  "additional_workers_reserved": 2,
+  "free_bytes": 77587484672,
+  "final_operation": false,
+  "inputs": {
+    "/home/jay/build/wj-h25-production-20261116/resumption-r1/tools-v4/solvers/IncNavierStokesSolver/Tests/RANS/temporal_wj_h25r1.py": {
+      "sha256": "4013323d5599cba286c20681421b15f4d1687f4a9e0e8046d08ec9b949142cfa",
+      "bytes": 3392
+    }
+  },
+  "runner_sha256": "d5c71b039749099ec6ebeeec11b74e9f61b477eb64571567e4864e5535225af4",
+  "utc": "2026-11-16T14:51:36.501278+00:00"
+}

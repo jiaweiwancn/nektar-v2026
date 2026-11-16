@@ -116,3 +116,93 @@ Next are the frozen native prototype contracts in wj-h25r1-native-prototypes.md,
 the localized mesh decision, a separate quadrature initialization and actual
 retained-trajectory restart/terminal validation. The prescribed transient's
 failed initial gate keeps subsequent transient h/q/dt and cadence admission open.
+
+## R2: implementation, selective spatial and quadrature results
+
+R1 was pushed and verified at `39ff5e9110dc0202dd0af9072a180e979a46f2b4`.
+Native source-v2 is the overlay at that revision on source-v1; build-scatter-v1
+and runtime-scatter-v1 are its executed governing/diagnostic binaries. Source-v3
+at `a13d2dbf598b7cc137c13e9235835c99aecca36e` adds the separately tested memo
+candidate. Neither executable is identified by this document's eventual HEAD.
+
+| Native comparison | Ordinary complete mean, s | Equation share | Attribution |
+|---|---:|---:|---:|
+| New scatter executable, scatter Off (one sample) |41.210847021|39.5927%|99.9806%|
+| ElementExactV1 scatter (three samples) |35.153428171|33.7401%|99.9816%|
+| New memo executable, memo Off (one sample) |32.705812277|30.4530%|99.9803%|
+| MemoExactV1 (three samples) |33.407643352|30.0673%|99.9894%|
+
+All four comparisons genuinely restart H24 M16 and advance. On candidates pass
+four exact coefficient/history/reference/callback comparisons to W0 and the
+complete native audit map comparison; component scatter checks preserve ordered
+sum bits, cancellation, signed zero and sparse-pattern behavior. Scatter is
+retained. The memo passes 11,232 native value comparisons and 16 complete scalar
+inventory/failure evaluations, but fails its prospectively fixed requirement to
+beat BOTH Off and the scatter mean by 2%. It is retained as correct but slower
+negative evidence. Variation between the two executable Off samples is substantial;
+these short means are not confidence intervals or a pure isolated causal estimate.
+
+The positive-lower-bound prototype executes its conservative native bound and
+the original pointwise fallback on every sampled point. Moving-point cost
+coverage is 100% for A, changed k, changed epsilon and returned A; the original
+negative-k failure occurs before moving points and has no coverage claim. Bound
+work is .496--.570 s versus 1.046--1.319 s for the corresponding exact point
+contractions. These are measured moving-point costs, not a whole-step speedup.
+Certified lower values and actually evaluated minima are reported separately.
+No production guard/root/principal/current-K/cutoff/trace check is removed.
+
+The actual 602-cell successor restores the original fine children in the 18
+parent intervals selected from h350. All field budgets pass, worst utilization
+.369811, but principal-action utilization 1.013965942 exceeds one. Localization
+finds parent pair17; restoring it and neighbors17--18 along with existing pair16
+produces the separately materialized 630-cell successor. Its new full comparison
+passes initial representation only: worst field utilization .358143144,
+principal-action utilization .981628980, and zero wall-traction discrepancy.
+No evolved spatial qualification or performance saving is claimed for either.
+
+The 700-cell 8/12 governing-quadrature producer constructs a genuine target
+reference/projection/lift/FlatInletTrace/history and rejects an ordinary wrong-q
+restart. Its initial physical comparison passes: worst field utilization
+3.46555e-12, principal-action utilization 1.84722e-11, zero wall discrepancy.
+This near-identical initial state is not evidence of evolved quadrature accuracy.
+The operational control therefore retains 700 cells and governing quadrature
+12/16. The frozen finite perturbation is still inadmissible; no .01/.02/.04/.08
+transient dt escalation is justified from a rejected initial state.
+
+The selected exact implementation completed eight genuine C advances at .005,
+C4/.02→C12/.06, in653.247665 s including startup, barriers, final fields and
+driver validation. C5--8 state/history/reference/callback bits equal retained
+H24 C. Every step has one flow/k/bound/epsilon sweep, zero bound activations and
+zero extra corrections. Fresh current physical audits occur at C6/8/10/12.
+Terminal principal minimum is .0035485288018655137; maximum signed regional Q1
+moment2.54039e-16 (limit2e-15). Strong divergence is reported separately.
+
+Actual shared completed times .05 and .06 pass C/M physical comparison without
+interpolation or pressure regauging. Worst field-budget utilization is .0224451,
+worst directional-principal utilization .0369537, wall traction MAX2.39493e-6
+relative to u_tau squared (limit .001). Earlier H24 C/M/F .02--.04 evidence is
+reused only after exact new C5--8 parity. This is a short unperturbed-window
+result, not transient or full-duration production qualification.
+
+C-wide ordinary warm steps7/9/11 cost [42.362902401,45.387005606,36.034117008] s,
+mean41.261341672 s, with31.8724% equation work and99.9920% attribution. Its
+four scheduled scientific steps average94.805427824 s, including full native
+audit, independent observer enclosing wait, publication and recovery; attribution
+97.8313%. These broad current measurements, rather than the fastest isolated
+scatter sample, enter the provisional complete-case forecast. Sparse/dense
+restart controls, actual retention/strict read and genuine fresh cost remain for
+checkpoint C. Their scientific limitation remains the failed finite seed.
+
+The R2 complete provisional forecast retains T505.02466521278404, the fixed
+terminal window, 101005 fresh/.005 advances (100997 from C8/.04), recovery each
+step and scientific stride4/.02. It counts the measured fixed process envelope
+twice for initial continuation plus one planned restart, and prospective600 s
+genuine fresh construction/180 s terminal strict read until measured. Fresh
+cost5520708.054 s (1533.530 h); continuation5519670.875 s (1533.242 h). With25%
+contingency the fresh forecast is6900885.068 s, far above86400 s. Complete
+equation share23.8956%, attribution99.0551%. Retaining full sampled scientific
+records would need582560331988 bytes (about543 GiB), beyond the8GiB development
+science allocation. These are conditional short-control extrapolations; a .25
+cadence sensitivity is explicitly unexecuted and cannot supply qualification.
+Actual fresh/strict costs and repeated sparse/dense block variability will replace
+the provisional caps at C. No 505-unit run or production archive is launched.

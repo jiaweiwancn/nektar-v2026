@@ -1,0 +1,1671 @@
+{
+  "schema": "WJH25R1CompleteCostV1",
+  "status": "TARGET_NOT_MET",
+  "provisional": true,
+  "selected_implementation": {
+    "status": "PASS_EXACT_IMPLEMENTATION_ONLY",
+    "runtime": {
+      "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/science/runtime-build-scatter-v1.json",
+      "bytes": 269477,
+      "sha256": "50b21b857671787b70417df80d01ffd22e0ccecb71f51dda81fd4fe6c1fd4f96"
+    },
+    "qualification": {
+      "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/science/W1-scatter-v1/qualification.json",
+      "bytes": 2846,
+      "sha256": "1ffa2dff9c418b9b7e61dbc31c2e120a7bbc4ac5948e8eb7439a3ccc97362d56"
+    },
+    "scalar_policy": "Off",
+    "assembly_policy": "ElementExactV1",
+    "lookup_policy": "TensorExactV1",
+    "record": "scatter-on-four-r1-v1",
+    "limitation": "no transient h/q/dt, full-duration or production-cadence admission"
+  },
+  "selected_space": {
+    "cells": 700,
+    "velocity_degree": 3,
+    "pressure_degree": 1,
+    "governing_quadrature": [
+      12,
+      16
+    ],
+    "dt": 0.005
+  },
+  "accuracy_scope": "cheapest actually compared short unperturbed C/M/F flat recipe; prescribed finite perturbation never admitted, production accuracy remains open",
+  "blocks": {
+    "C-wide-r1-v1": {
+      "operation": {
+        "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/operations/C-wide-r1-v1/receipt.json",
+        "bytes": 7033,
+        "sha256": "50bc476082a43be3415a06d29cb6df7a1696a574ae993a1350e8b1521f42f5b8"
+      },
+      "qualification": {
+        "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/science/C-wide-v1/qualification.json",
+        "bytes": 6300,
+        "sha256": "7eb732bc604393f31ea017c41ea0f56269b0a469df9f7f9d3e99baf3210b9870"
+      },
+      "ordinary": {
+        "timing": {
+          "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/operations/C-wide-r1-v1/timing.jsonl",
+          "bytes": 2243463,
+          "sha256": "e12d974cc35cd5c49b51f9453b0c27414a35d1c4726c6b1f3a9397691a81b29a"
+        },
+        "steps": [
+          7,
+          9,
+          11
+        ],
+        "wall_seconds": 123.784025015,
+        "per_step": 41.26134167166666,
+        "attributed_fraction": 0.9999201865749735,
+        "equation_fraction": 0.31872394890390043,
+        "disjoint": {
+          "data_allocation_release": 3.025995519333333,
+          "guards_bounds_residual_verification": 24.394308545666675,
+          "UNATTRIBUTED": 0.0032932090000044405,
+          "equation_evaluation_assembly_solution_update": 13.150977754666664,
+          "attempt_evidence_and_orchestration": 0.2611503836666647,
+          "recovery_publication_IO": 0.33947350700000006,
+          "loop_telemetry_orchestration": 0.08614275233333284
+        },
+        "exclusive_by_name": {
+          "domain.compute": {
+            "seconds_per_step": 17.815298664666667,
+            "calls": 12
+          },
+          "flow.assembly": {
+            "seconds_per_step": 4.007232473,
+            "calls": 3
+          },
+          "pressure.build": {
+            "seconds_per_step": 3.0583821913333336,
+            "calls": 3
+          },
+          "data.evaluation_release": {
+            "seconds_per_step": 2.9999279949999997,
+            "calls": 6
+          },
+          "residual": {
+            "seconds_per_step": 2.510390919666666,
+            "calls": 15
+          },
+          "k.bound": {
+            "seconds_per_step": 2.2920546440000003,
+            "calls": 3
+          },
+          "mapped.band.solve": {
+            "seconds_per_step": 2.276984845333337,
+            "calls": 2412
+          },
+          "domain.scalar": {
+            "seconds_per_step": 1.1643382230000006,
+            "calls": 24
+          },
+          "constitutive.refresh": {
+            "seconds_per_step": 1.1222199929999996,
+            "calls": 27
+          },
+          "k.assembly": {
+            "seconds_per_step": 0.7977889583333333,
+            "calls": 3
+          },
+          "mapped.band.factor": {
+            "seconds_per_step": 0.5974268446666666,
+            "calls": 12
+          },
+          "epsilon.assembly": {
+            "seconds_per_step": 0.5781575176666666,
+            "calls": 3
+          },
+          "monitor.checkpoint_and_publish": {
+            "seconds_per_step": 0.3273817353333333,
+            "calls": 3
+          },
+          "matching.constraints": {
+            "seconds_per_step": 0.2832044416666667,
+            "calls": 30
+          },
+          "pimple.sweep": {
+            "seconds_per_step": 0.2611503836666647,
+            "calls": 3
+          },
+          "flow.correction_validate": {
+            "seconds_per_step": 0.24420315299999998,
+            "calls": 3
+          },
+          "flow.total": {
+            "seconds_per_step": 0.16127286433333352,
+            "calls": 3
+          },
+          "epsilon.total": {
+            "seconds_per_step": 0.13653215366666682,
+            "calls": 3
+          },
+          "native.explicit": {
+            "seconds_per_step": 0.11143878200000001,
+            "calls": 3
+          },
+          "residual.mass_dual_norms": {
+            "seconds_per_step": 0.10003861833333333,
+            "calls": 9
+          },
+          "native.step": {
+            "seconds_per_step": 0.08614275233333284,
+            "calls": 3
+          },
+          "mapped.band.permutation": {
+            "seconds_per_step": 0.07996499633333333,
+            "calls": 12
+          },
+          "k.total": {
+            "seconds_per_step": 0.04936298266666661,
+            "calls": 3
+          },
+          "k.bound_accounting": {
+            "seconds_per_step": 0.04618435333333334,
+            "calls": 3
+          },
+          "guard.completed_bound": {
+            "seconds_per_step": 0.037319469,
+            "calls": 3
+          },
+          "verify.momentum_linear": {
+            "seconds_per_step": 0.028349499,
+            "calls": 3
+          },
+          "data.completed_packet": {
+            "seconds_per_step": 0.026065054333333334,
+            "calls": 3
+          },
+          "io.checkpoint": {
+            "seconds_per_step": 0.012091771666666667,
+            "calls": 3
+          },
+          "verify.scalar_linear": {
+            "seconds_per_step": 0.010785459333333332,
+            "calls": 6
+          },
+          "dense.factorization": {
+            "seconds_per_step": 0.009894744333333335,
+            "calls": 3
+          },
+          "guard.completed_outlet": {
+            "seconds_per_step": 0.009076818666666667,
+            "calls": 3
+          },
+          "native.advance": {
+            "seconds_per_step": 0.00757012599999977,
+            "calls": 3
+          },
+          "k.solve_validate": {
+            "seconds_per_step": 0.0036287463333333353,
+            "calls": 3
+          },
+          "epsilon.solve_validate": {
+            "seconds_per_step": 0.0025322076666666796,
+            "calls": 3
+          },
+          "verify.pressure_linear": {
+            "seconds_per_step": 0.0013462893333333335,
+            "calls": 3
+          },
+          "verify.scalar_source_storage": {
+            "seconds_per_step": 0.0011368399999999613,
+            "calls": 6
+          },
+          "native.implicit": {
+            "seconds_per_step": 0.0006170023333377609,
+            "calls": 3
+          },
+          "equation.pressure_factor": {
+            "seconds_per_step": 0.0005693519999999992,
+            "calls": 3
+          },
+          "pimple.check.input": {
+            "seconds_per_step": 0.000466570000000092,
+            "calls": 3
+          },
+          "pimple.check.k": {
+            "seconds_per_step": 0.00043997933333333555,
+            "calls": 3
+          },
+          "pimple.check.flow": {
+            "seconds_per_step": 0.00037137666666666656,
+            "calls": 3
+          },
+          "equation.scalar_solve": {
+            "seconds_per_step": 0.0003373880000000001,
+            "calls": 6
+          },
+          "pimple.check.epsilon": {
+            "seconds_per_step": 0.000335724666666574,
+            "calls": 3
+          },
+          "pressure.mass_factorize": {
+            "seconds_per_step": 0.000307996333333338,
+            "calls": 3
+          },
+          "equation.scalar_factor": {
+            "seconds_per_step": 0.0002588413333333289,
+            "calls": 6
+          },
+          "momentum.factorize": {
+            "seconds_per_step": 0.0002366036666666682,
+            "calls": 3
+          },
+          "dense.triangular_solve": {
+            "seconds_per_step": 0.00016274366666666666,
+            "calls": 3
+          },
+          "pimple.final_refresh_diagnostics": {
+            "seconds_per_step": 0.000137668666666683,
+            "calls": 3
+          },
+          "equation.momentum_solve": {
+            "seconds_per_step": 0.00012263600000000005,
+            "calls": 3
+          },
+          "verify.completed_stage": {
+            "seconds_per_step": 4.872233333333189e-05,
+            "calls": 3
+          },
+          "momentum.solve_validate": {
+            "seconds_per_step": 2.4630666666670964e-05,
+            "calls": 3
+          },
+          "pressure.solve_validate": {
+            "seconds_per_step": 1.6407333333334426e-05,
+            "calls": 3
+          },
+          "equation.pressure_solve": {
+            "seconds_per_step": 8.046666666666674e-06,
+            "calls": 3
+          },
+          "data.evaluation_invalidate": {
+            "seconds_per_step": 2.47e-06,
+            "calls": 6
+          }
+        },
+        "nested_explanatory_only": {
+          "domain.parts.anchor_materialization": 0.06493532966666667,
+          "domain.parts.current_K_profiles": 0.06782835933333335,
+          "domain.parts.epsilon_rows": 2.492377821666667,
+          "domain.parts.fixed_rows": 3.0581451373333337,
+          "domain.parts.moving_ray_rows": 10.51196595566666
+        },
+        "samples": [
+          42.362902401,
+          45.387005606,
+          36.034117008
+        ]
+      },
+      "scientific": {
+        "timing": {
+          "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/operations/C-wide-r1-v1/timing.jsonl",
+          "bytes": 2243463,
+          "sha256": "e12d974cc35cd5c49b51f9453b0c27414a35d1c4726c6b1f3a9397691a81b29a"
+        },
+        "steps": [
+          6,
+          8,
+          10,
+          12
+        ],
+        "wall_seconds": 379.22171129599997,
+        "per_step": 94.80542782399999,
+        "attributed_fraction": 0.9783133988560566,
+        "equation_fraction": 0.1349105763094519,
+        "disjoint": {
+          "data_allocation_release": 2.794573655,
+          "guards_bounds_residual_verification": 23.514005113000007,
+          "UNATTRIBUTED": 2.056007499500002,
+          "equation_evaluation_assembly_solution_update": 12.790254904999987,
+          "attempt_evidence_and_orchestration": 0.239506368999999,
+          "full_scientific_audit": 43.00361253299998,
+          "recovery_publication_IO": 0.46818692424999997,
+          "observer_enclosing_wait": 9.86874696,
+          "loop_telemetry_orchestration": 0.07053386524999539
+        },
+        "exclusive_by_name": {
+          "audit.WJ.total": {
+            "seconds_per_step": 33.09502913975,
+            "calls": 4
+          },
+          "domain.compute": {
+            "seconds_per_step": 16.868297151,
+            "calls": 16
+          },
+          "monitor.independent_wait": {
+            "seconds_per_step": 9.86874696,
+            "calls": 4
+          },
+          "audit.physical": {
+            "seconds_per_step": 7.28396996975,
+            "calls": 4
+          },
+          "residual": {
+            "seconds_per_step": 5.022699214000002,
+            "calls": 32
+          },
+          "flow.assembly": {
+            "seconds_per_step": 3.973903278,
+            "calls": 4
+          },
+          "data.evaluation_release": {
+            "seconds_per_step": 2.7945712972499996,
+            "calls": 8
+          },
+          "pressure.build": {
+            "seconds_per_step": 2.7677150055000004,
+            "calls": 4
+          },
+          "k.bound": {
+            "seconds_per_step": 2.4906844670000003,
+            "calls": 4
+          },
+          "mapped.band.solve": {
+            "seconds_per_step": 2.1753801089999985,
+            "calls": 3240
+          },
+          "native.physical_samples": {
+            "seconds_per_step": 1.9300313105,
+            "calls": 4
+          },
+          "domain.scalar": {
+            "seconds_per_step": 1.1129277877499997,
+            "calls": 40
+          },
+          "constitutive.refresh": {
+            "seconds_per_step": 1.0256046555,
+            "calls": 56
+          },
+          "mapped.band.factor": {
+            "seconds_per_step": 0.8479229205,
+            "calls": 16
+          },
+          "k.assembly": {
+            "seconds_per_step": 0.7992344162499999,
+            "calls": 4
+          },
+          "epsilon.assembly": {
+            "seconds_per_step": 0.60379796125,
+            "calls": 4
+          },
+          "monitor.checkpoint_and_publish": {
+            "seconds_per_step": 0.37415945624999997,
+            "calls": 4
+          },
+          "matching.constraints": {
+            "seconds_per_step": 0.29921922350000013,
+            "calls": 56
+          },
+          "pimple.sweep": {
+            "seconds_per_step": 0.239506368999999,
+            "calls": 4
+          },
+          "flow.correction_validate": {
+            "seconds_per_step": 0.20501612800000002,
+            "calls": 4
+          },
+          "epsilon.total": {
+            "seconds_per_step": 0.13446326249999951,
+            "calls": 4
+          },
+          "flow.total": {
+            "seconds_per_step": 0.13187912450000017,
+            "calls": 4
+          },
+          "native.acceptance_audit": {
+            "seconds_per_step": 0.12117219699999993,
+            "calls": 4
+          },
+          "native.explicit": {
+            "seconds_per_step": 0.11224514749999996,
+            "calls": 4
+          },
+          "residual.mass_dual_norms": {
+            "seconds_per_step": 0.1057529065,
+            "calls": 16
+          },
+          "mapped.band.permutation": {
+            "seconds_per_step": 0.083595866,
+            "calls": 16
+          },
+          "native.step": {
+            "seconds_per_step": 0.07053386524999539,
+            "calls": 4
+          },
+          "monitor.qualification_commit": {
+            "seconds_per_step": 0.065760672,
+            "calls": 4
+          },
+          "k.bound_accounting": {
+            "seconds_per_step": 0.04698212175,
+            "calls": 4
+          },
+          "io.checkpoint": {
+            "seconds_per_step": 0.028266796,
+            "calls": 4
+          },
+          "guard.completed_bound": {
+            "seconds_per_step": 0.0274822475,
+            "calls": 4
+          },
+          "k.total": {
+            "seconds_per_step": 0.02685197724999977,
+            "calls": 4
+          },
+          "verify.momentum_linear": {
+            "seconds_per_step": 0.02250609675,
+            "calls": 4
+          },
+          "verify.scalar_linear": {
+            "seconds_per_step": 0.012573918250000002,
+            "calls": 8
+          },
+          "dense.factorization": {
+            "seconds_per_step": 0.009847931,
+            "calls": 4
+          },
+          "native.advance": {
+            "seconds_per_step": 0.007076397249999644,
+            "calls": 4
+          },
+          "guard.completed_outlet": {
+            "seconds_per_step": 0.005564395,
+            "calls": 4
+          },
+          "k.solve_validate": {
+            "seconds_per_step": 0.0032986550000000045,
+            "calls": 4
+          },
+          "epsilon.solve_validate": {
+            "seconds_per_step": 0.002653997499999998,
+            "calls": 4
+          },
+          "native.implicit": {
+            "seconds_per_step": 0.0023148355000017773,
+            "calls": 4
+          },
+          "verify.pressure_linear": {
+            "seconds_per_step": 0.001392909,
+            "calls": 4
+          },
+          "verify.scalar_source_storage": {
+            "seconds_per_step": 0.001126194500000038,
+            "calls": 8
+          },
+          "equation.pressure_factor": {
+            "seconds_per_step": 0.0005961539999999998,
+            "calls": 4
+          },
+          "pimple.check.k": {
+            "seconds_per_step": 0.00045223949999998944,
+            "calls": 4
+          },
+          "pimple.check.epsilon": {
+            "seconds_per_step": 0.00039133250000000785,
+            "calls": 4
+          },
+          "pimple.check.input": {
+            "seconds_per_step": 0.00036309849999982546,
+            "calls": 4
+          },
+          "pimple.check.flow": {
+            "seconds_per_step": 0.00034054025000000016,
+            "calls": 4
+          },
+          "pressure.mass_factorize": {
+            "seconds_per_step": 0.00028220450000000785,
+            "calls": 4
+          },
+          "momentum.factorize": {
+            "seconds_per_step": 0.0002812380000000031,
+            "calls": 4
+          },
+          "equation.scalar_solve": {
+            "seconds_per_step": 0.0002421800000000001,
+            "calls": 8
+          },
+          "equation.scalar_factor": {
+            "seconds_per_step": 0.00022060199999999336,
+            "calls": 8
+          },
+          "dense.triangular_solve": {
+            "seconds_per_step": 0.00015383175,
+            "calls": 4
+          },
+          "pimple.final_refresh_diagnostics": {
+            "seconds_per_step": 0.00013094824999998478,
+            "calls": 4
+          },
+          "equation.momentum_solve": {
+            "seconds_per_step": 8.264600000000046e-05,
+            "calls": 4
+          },
+          "verify.completed_stage": {
+            "seconds_per_step": 5.672224999999894e-05,
+            "calls": 4
+          },
+          "momentum.solve_validate": {
+            "seconds_per_step": 4.656700000000083e-05,
+            "calls": 4
+          },
+          "pressure.solve_validate": {
+            "seconds_per_step": 1.687275000000028e-05,
+            "calls": 4
+          },
+          "equation.pressure_solve": {
+            "seconds_per_step": 9.955749999999994e-06,
+            "calls": 4
+          },
+          "data.evaluation_invalidate": {
+            "seconds_per_step": 2.3577500000000004e-06,
+            "calls": 8
+          }
+        },
+        "nested_explanatory_only": {
+          "domain.parts.anchor_materialization": 0.05428282225,
+          "domain.parts.current_K_profiles": 0.07300430024999997,
+          "domain.parts.epsilon_rows": 2.36067793175,
+          "domain.parts.fixed_rows": 2.545898189,
+          "domain.parts.moving_ray_rows": 10.461391577749998,
+          "audit.WJ.current_state_contractions": 1.9530663720197765,
+          "audit.WJ.inner_profile_covariance": 2.480603377999366,
+          "audit.WJ.outer_closure_covariance": 1.643394748250595,
+          "audit.WJ.owned_rows_gradients": 16.53016624450975,
+          "audit.WJ.principal_full_search": 11.666515309752992,
+          "audit.WJ.scalar_row_accessor": 7.301160472461452,
+          "audit.WJ.velocity_accessor_validation": 5.504810276491046,
+          "audit.WJ.witness_implicit_tangent": 0.019819132749985976
+        },
+        "samples": [
+          93.861651678,
+          100.043859206,
+          97.097931784,
+          88.218268628
+        ]
+      },
+      "whole_advancing_profile": {
+        "timing": {
+          "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/operations/C-wide-r1-v1/timing.jsonl",
+          "bytes": 2243463,
+          "sha256": "e12d974cc35cd5c49b51f9453b0c27414a35d1c4726c6b1f3a9397691a81b29a"
+        },
+        "steps": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "wall_seconds": 537.760081207,
+        "per_step": 67.220010150875,
+        "attributed_fraction": 0.984672308503265,
+        "equation_fraction": 0.18816618406461771,
+        "disjoint": {
+          "data_allocation_release": 2.85777948975,
+          "guards_bounds_residual_verification": 23.523819632500015,
+          "UNATTRIBUTED": 1.0303275780000023,
+          "equation_evaluation_assembly_solution_update": 12.648532802875016,
+          "attempt_evidence_and_orchestration": 0.24078991487499835,
+          "recovery_publication_IO": 0.40130543637500005,
+          "loop_telemetry_orchestration": 0.08127554999999731,
+          "full_scientific_audit": 21.50180626649999,
+          "observer_enclosing_wait": 4.93437348
+        },
+        "exclusive_by_name": {
+          "domain.compute": {
+            "seconds_per_step": 17.026040876874998,
+            "calls": 32
+          },
+          "audit.WJ.total": {
+            "seconds_per_step": 16.547514569875,
+            "calls": 4
+          },
+          "monitor.independent_wait": {
+            "seconds_per_step": 4.93437348,
+            "calls": 4
+          },
+          "flow.assembly": {
+            "seconds_per_step": 3.9683985843749996,
+            "calls": 8
+          },
+          "residual": {
+            "seconds_per_step": 3.741307769500001,
+            "calls": 52
+          },
+          "audit.physical": {
+            "seconds_per_step": 3.641984984875,
+            "calls": 4
+          },
+          "data.evaluation_release": {
+            "seconds_per_step": 2.844667449625,
+            "calls": 16
+          },
+          "pressure.build": {
+            "seconds_per_step": 2.748002794,
+            "calls": 8
+          },
+          "k.bound": {
+            "seconds_per_step": 2.3509678591250003,
+            "calls": 8
+          },
+          "mapped.band.solve": {
+            "seconds_per_step": 2.153147140750002,
+            "calls": 6456
+          },
+          "domain.scalar": {
+            "seconds_per_step": 1.110275809875,
+            "calls": 72
+          },
+          "constitutive.refresh": {
+            "seconds_per_step": 1.041259972875,
+            "calls": 92
+          },
+          "native.physical_samples": {
+            "seconds_per_step": 0.96501565525,
+            "calls": 4
+          },
+          "k.assembly": {
+            "seconds_per_step": 0.790891244125,
+            "calls": 8
+          },
+          "mapped.band.factor": {
+            "seconds_per_step": 0.7192591782500001,
+            "calls": 32
+          },
+          "epsilon.assembly": {
+            "seconds_per_step": 0.593186272,
+            "calls": 8
+          },
+          "monitor.checkpoint_and_publish": {
+            "seconds_per_step": 0.349247572625,
+            "calls": 8
+          },
+          "matching.constraints": {
+            "seconds_per_step": 0.27836131787500007,
+            "calls": 96
+          },
+          "pimple.sweep": {
+            "seconds_per_step": 0.24078991487499835,
+            "calls": 8
+          },
+          "flow.correction_validate": {
+            "seconds_per_step": 0.21633621349999999,
+            "calls": 8
+          },
+          "flow.total": {
+            "seconds_per_step": 0.14286219675000034,
+            "calls": 8
+          },
+          "epsilon.total": {
+            "seconds_per_step": 0.1348207482499999,
+            "calls": 8
+          },
+          "native.explicit": {
+            "seconds_per_step": 0.11068664087499999,
+            "calls": 8
+          },
+          "residual.mass_dual_norms": {
+            "seconds_per_step": 0.099663340875,
+            "calls": 28
+          },
+          "native.step": {
+            "seconds_per_step": 0.08127554999999731,
+            "calls": 8
+          },
+          "mapped.band.permutation": {
+            "seconds_per_step": 0.07904036012499999,
+            "calls": 32
+          },
+          "native.acceptance_audit": {
+            "seconds_per_step": 0.06058609849999996,
+            "calls": 4
+          },
+          "k.bound_accounting": {
+            "seconds_per_step": 0.043820829750000005,
+            "calls": 8
+          },
+          "k.total": {
+            "seconds_per_step": 0.033716534624999905,
+            "calls": 8
+          },
+          "monitor.qualification_commit": {
+            "seconds_per_step": 0.032880336,
+            "calls": 4
+          },
+          "guard.completed_bound": {
+            "seconds_per_step": 0.0310749805,
+            "calls": 8
+          },
+          "verify.momentum_linear": {
+            "seconds_per_step": 0.023455624875,
+            "calls": 8
+          },
+          "io.checkpoint": {
+            "seconds_per_step": 0.01917752775,
+            "calls": 8
+          },
+          "data.completed_packet": {
+            "seconds_per_step": 0.0131096925,
+            "calls": 4
+          },
+          "verify.scalar_linear": {
+            "seconds_per_step": 0.011284205375000002,
+            "calls": 16
+          },
+          "native.advance": {
+            "seconds_per_step": 0.010330990124999495,
+            "calls": 8
+          },
+          "dense.factorization": {
+            "seconds_per_step": 0.010071912875,
+            "calls": 8
+          },
+          "guard.completed_outlet": {
+            "seconds_per_step": 0.006789412749999999,
+            "calls": 8
+          },
+          "k.solve_validate": {
+            "seconds_per_step": 0.003417849500000004,
+            "calls": 8
+          },
+          "epsilon.solve_validate": {
+            "seconds_per_step": 0.002525660375000004,
+            "calls": 8
+          },
+          "native.implicit": {
+            "seconds_per_step": 0.0021973750000023884,
+            "calls": 8
+          },
+          "verify.pressure_linear": {
+            "seconds_per_step": 0.001377302125,
+            "calls": 8
+          },
+          "verify.scalar_source_storage": {
+            "seconds_per_step": 0.001118031625000004,
+            "calls": 16
+          },
+          "equation.pressure_factor": {
+            "seconds_per_step": 0.0006090872499999996,
+            "calls": 8
+          },
+          "pimple.check.k": {
+            "seconds_per_step": 0.00042409462499999606,
+            "calls": 8
+          },
+          "pimple.check.input": {
+            "seconds_per_step": 0.0004026787499999962,
+            "calls": 8
+          },
+          "pimple.check.epsilon": {
+            "seconds_per_step": 0.0003563019999999195,
+            "calls": 8
+          },
+          "pimple.check.flow": {
+            "seconds_per_step": 0.00033756025000000007,
+            "calls": 8
+          },
+          "pressure.mass_factorize": {
+            "seconds_per_step": 0.0002773093750000049,
+            "calls": 8
+          },
+          "equation.scalar_solve": {
+            "seconds_per_step": 0.0002689863750000001,
+            "calls": 16
+          },
+          "momentum.factorize": {
+            "seconds_per_step": 0.0002671283750000017,
+            "calls": 8
+          },
+          "equation.scalar_factor": {
+            "seconds_per_step": 0.00022629974999999452,
+            "calls": 16
+          },
+          "dense.triangular_solve": {
+            "seconds_per_step": 0.00017506262500000002,
+            "calls": 8
+          },
+          "pimple.final_refresh_diagnostics": {
+            "seconds_per_step": 0.0001359493749999996,
+            "calls": 8
+          },
+          "equation.momentum_solve": {
+            "seconds_per_step": 9.562062499999992e-05,
+            "calls": 8
+          },
+          "verify.completed_stage": {
+            "seconds_per_step": 5.762012499999883e-05,
+            "calls": 8
+          },
+          "momentum.solve_validate": {
+            "seconds_per_step": 3.5867625000001596e-05,
+            "calls": 8
+          },
+          "pressure.solve_validate": {
+            "seconds_per_step": 1.6944250000000593e-05,
+            "calls": 8
+          },
+          "equation.pressure_solve": {
+            "seconds_per_step": 9.430500000000004e-06,
+            "calls": 8
+          },
+          "data.evaluation_invalidate": {
+            "seconds_per_step": 2.347625e-06,
+            "calls": 16
+          }
+        },
+        "nested_explanatory_only": {
+          "domain.parts.anchor_materialization": 0.05935497424999999,
+          "domain.parts.current_K_profiles": 0.06906492949999998,
+          "domain.parts.epsilon_rows": 2.3940286671250006,
+          "domain.parts.fixed_rows": 2.694238713875,
+          "domain.parts.moving_ray_rows": 10.336475464124998,
+          "audit.WJ.current_state_contractions": 0.9765331860098883,
+          "audit.WJ.inner_profile_covariance": 1.240301688999683,
+          "audit.WJ.outer_closure_covariance": 0.8216973741252975,
+          "audit.WJ.owned_rows_gradients": 8.265083122254875,
+          "audit.WJ.principal_full_search": 5.833257654876496,
+          "audit.WJ.scalar_row_accessor": 3.650580236230726,
+          "audit.WJ.velocity_accessor_validation": 2.752405138245523,
+          "audit.WJ.witness_implicit_tangent": 0.009909566374992988
+        },
+        "samples": [
+          34.754344896,
+          93.861651678,
+          42.362902401,
+          100.043859206,
+          45.387005606,
+          97.097931784,
+          36.034117008,
+          88.218268628
+        ]
+      },
+      "first_step_excluded_from_warm": 5,
+      "fixed_seconds": 115.48758352300638,
+      "fixed_disjoint": {
+        "native_startup": 95.83950877299999,
+        "terminal_fields_and_report": 4.706258195,
+        "other_native_lifecycle": 9.042067134999982,
+        "controller_observer_setup_and_validation": 5.899749420006401
+      },
+      "observer_setup_seconds": 2.0398772900225595,
+      "native_resource_summary": {
+        "resident_accepted_states": 1,
+        "resident_audits": 1,
+        "resident_wj_packets": 1,
+        "resident_stage_records": 1,
+        "resident_step_records": 1,
+        "resident_explicit_records": 2,
+        "resident_pimple_records": 1
+      }
+    }
+  },
+  "ordinary": {
+    "timing": {
+      "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/operations/C-wide-r1-v1/timing.jsonl",
+      "bytes": 2243463,
+      "sha256": "e12d974cc35cd5c49b51f9453b0c27414a35d1c4726c6b1f3a9397691a81b29a"
+    },
+    "steps": [
+      7,
+      9,
+      11
+    ],
+    "wall_seconds": 123.784025015,
+    "per_step": 41.26134167166666,
+    "attributed_fraction": 0.9999201865749735,
+    "equation_fraction": 0.31872394890390043,
+    "disjoint": {
+      "data_allocation_release": 3.025995519333333,
+      "guards_bounds_residual_verification": 24.394308545666675,
+      "UNATTRIBUTED": 0.0032932090000044405,
+      "equation_evaluation_assembly_solution_update": 13.150977754666664,
+      "attempt_evidence_and_orchestration": 0.2611503836666647,
+      "recovery_publication_IO": 0.33947350700000006,
+      "loop_telemetry_orchestration": 0.08614275233333284
+    },
+    "exclusive_by_name": {
+      "domain.compute": {
+        "seconds_per_step": 17.815298664666667,
+        "calls": 12
+      },
+      "flow.assembly": {
+        "seconds_per_step": 4.007232473,
+        "calls": 3
+      },
+      "pressure.build": {
+        "seconds_per_step": 3.0583821913333336,
+        "calls": 3
+      },
+      "data.evaluation_release": {
+        "seconds_per_step": 2.9999279949999997,
+        "calls": 6
+      },
+      "residual": {
+        "seconds_per_step": 2.510390919666666,
+        "calls": 15
+      },
+      "k.bound": {
+        "seconds_per_step": 2.2920546440000003,
+        "calls": 3
+      },
+      "mapped.band.solve": {
+        "seconds_per_step": 2.276984845333337,
+        "calls": 2412
+      },
+      "domain.scalar": {
+        "seconds_per_step": 1.1643382230000006,
+        "calls": 24
+      },
+      "constitutive.refresh": {
+        "seconds_per_step": 1.1222199929999996,
+        "calls": 27
+      },
+      "k.assembly": {
+        "seconds_per_step": 0.7977889583333333,
+        "calls": 3
+      },
+      "mapped.band.factor": {
+        "seconds_per_step": 0.5974268446666666,
+        "calls": 12
+      },
+      "epsilon.assembly": {
+        "seconds_per_step": 0.5781575176666666,
+        "calls": 3
+      },
+      "monitor.checkpoint_and_publish": {
+        "seconds_per_step": 0.3273817353333333,
+        "calls": 3
+      },
+      "matching.constraints": {
+        "seconds_per_step": 0.2832044416666667,
+        "calls": 30
+      },
+      "pimple.sweep": {
+        "seconds_per_step": 0.2611503836666647,
+        "calls": 3
+      },
+      "flow.correction_validate": {
+        "seconds_per_step": 0.24420315299999998,
+        "calls": 3
+      },
+      "flow.total": {
+        "seconds_per_step": 0.16127286433333352,
+        "calls": 3
+      },
+      "epsilon.total": {
+        "seconds_per_step": 0.13653215366666682,
+        "calls": 3
+      },
+      "native.explicit": {
+        "seconds_per_step": 0.11143878200000001,
+        "calls": 3
+      },
+      "residual.mass_dual_norms": {
+        "seconds_per_step": 0.10003861833333333,
+        "calls": 9
+      },
+      "native.step": {
+        "seconds_per_step": 0.08614275233333284,
+        "calls": 3
+      },
+      "mapped.band.permutation": {
+        "seconds_per_step": 0.07996499633333333,
+        "calls": 12
+      },
+      "k.total": {
+        "seconds_per_step": 0.04936298266666661,
+        "calls": 3
+      },
+      "k.bound_accounting": {
+        "seconds_per_step": 0.04618435333333334,
+        "calls": 3
+      },
+      "guard.completed_bound": {
+        "seconds_per_step": 0.037319469,
+        "calls": 3
+      },
+      "verify.momentum_linear": {
+        "seconds_per_step": 0.028349499,
+        "calls": 3
+      },
+      "data.completed_packet": {
+        "seconds_per_step": 0.026065054333333334,
+        "calls": 3
+      },
+      "io.checkpoint": {
+        "seconds_per_step": 0.012091771666666667,
+        "calls": 3
+      },
+      "verify.scalar_linear": {
+        "seconds_per_step": 0.010785459333333332,
+        "calls": 6
+      },
+      "dense.factorization": {
+        "seconds_per_step": 0.009894744333333335,
+        "calls": 3
+      },
+      "guard.completed_outlet": {
+        "seconds_per_step": 0.009076818666666667,
+        "calls": 3
+      },
+      "native.advance": {
+        "seconds_per_step": 0.00757012599999977,
+        "calls": 3
+      },
+      "k.solve_validate": {
+        "seconds_per_step": 0.0036287463333333353,
+        "calls": 3
+      },
+      "epsilon.solve_validate": {
+        "seconds_per_step": 0.0025322076666666796,
+        "calls": 3
+      },
+      "verify.pressure_linear": {
+        "seconds_per_step": 0.0013462893333333335,
+        "calls": 3
+      },
+      "verify.scalar_source_storage": {
+        "seconds_per_step": 0.0011368399999999613,
+        "calls": 6
+      },
+      "native.implicit": {
+        "seconds_per_step": 0.0006170023333377609,
+        "calls": 3
+      },
+      "equation.pressure_factor": {
+        "seconds_per_step": 0.0005693519999999992,
+        "calls": 3
+      },
+      "pimple.check.input": {
+        "seconds_per_step": 0.000466570000000092,
+        "calls": 3
+      },
+      "pimple.check.k": {
+        "seconds_per_step": 0.00043997933333333555,
+        "calls": 3
+      },
+      "pimple.check.flow": {
+        "seconds_per_step": 0.00037137666666666656,
+        "calls": 3
+      },
+      "equation.scalar_solve": {
+        "seconds_per_step": 0.0003373880000000001,
+        "calls": 6
+      },
+      "pimple.check.epsilon": {
+        "seconds_per_step": 0.000335724666666574,
+        "calls": 3
+      },
+      "pressure.mass_factorize": {
+        "seconds_per_step": 0.000307996333333338,
+        "calls": 3
+      },
+      "equation.scalar_factor": {
+        "seconds_per_step": 0.0002588413333333289,
+        "calls": 6
+      },
+      "momentum.factorize": {
+        "seconds_per_step": 0.0002366036666666682,
+        "calls": 3
+      },
+      "dense.triangular_solve": {
+        "seconds_per_step": 0.00016274366666666666,
+        "calls": 3
+      },
+      "pimple.final_refresh_diagnostics": {
+        "seconds_per_step": 0.000137668666666683,
+        "calls": 3
+      },
+      "equation.momentum_solve": {
+        "seconds_per_step": 0.00012263600000000005,
+        "calls": 3
+      },
+      "verify.completed_stage": {
+        "seconds_per_step": 4.872233333333189e-05,
+        "calls": 3
+      },
+      "momentum.solve_validate": {
+        "seconds_per_step": 2.4630666666670964e-05,
+        "calls": 3
+      },
+      "pressure.solve_validate": {
+        "seconds_per_step": 1.6407333333334426e-05,
+        "calls": 3
+      },
+      "equation.pressure_solve": {
+        "seconds_per_step": 8.046666666666674e-06,
+        "calls": 3
+      },
+      "data.evaluation_invalidate": {
+        "seconds_per_step": 2.47e-06,
+        "calls": 6
+      }
+    },
+    "nested_explanatory_only": {
+      "domain.parts.anchor_materialization": 0.06493532966666667,
+      "domain.parts.current_K_profiles": 0.06782835933333335,
+      "domain.parts.epsilon_rows": 2.492377821666667,
+      "domain.parts.fixed_rows": 3.0581451373333337,
+      "domain.parts.moving_ray_rows": 10.51196595566666
+    },
+    "samples": [
+      42.362902401,
+      45.387005606,
+      36.034117008
+    ]
+  },
+  "scientific": {
+    "timing": {
+      "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/operations/C-wide-r1-v1/timing.jsonl",
+      "bytes": 2243463,
+      "sha256": "e12d974cc35cd5c49b51f9453b0c27414a35d1c4726c6b1f3a9397691a81b29a"
+    },
+    "steps": [
+      6,
+      8,
+      10,
+      12
+    ],
+    "wall_seconds": 379.22171129599997,
+    "per_step": 94.80542782399999,
+    "attributed_fraction": 0.9783133988560566,
+    "equation_fraction": 0.1349105763094519,
+    "disjoint": {
+      "data_allocation_release": 2.794573655,
+      "guards_bounds_residual_verification": 23.514005113000007,
+      "UNATTRIBUTED": 2.056007499500002,
+      "equation_evaluation_assembly_solution_update": 12.790254904999987,
+      "attempt_evidence_and_orchestration": 0.239506368999999,
+      "full_scientific_audit": 43.00361253299998,
+      "recovery_publication_IO": 0.46818692424999997,
+      "observer_enclosing_wait": 9.86874696,
+      "loop_telemetry_orchestration": 0.07053386524999539
+    },
+    "exclusive_by_name": {
+      "audit.WJ.total": {
+        "seconds_per_step": 33.09502913975,
+        "calls": 4
+      },
+      "domain.compute": {
+        "seconds_per_step": 16.868297151,
+        "calls": 16
+      },
+      "monitor.independent_wait": {
+        "seconds_per_step": 9.86874696,
+        "calls": 4
+      },
+      "audit.physical": {
+        "seconds_per_step": 7.28396996975,
+        "calls": 4
+      },
+      "residual": {
+        "seconds_per_step": 5.022699214000002,
+        "calls": 32
+      },
+      "flow.assembly": {
+        "seconds_per_step": 3.973903278,
+        "calls": 4
+      },
+      "data.evaluation_release": {
+        "seconds_per_step": 2.7945712972499996,
+        "calls": 8
+      },
+      "pressure.build": {
+        "seconds_per_step": 2.7677150055000004,
+        "calls": 4
+      },
+      "k.bound": {
+        "seconds_per_step": 2.4906844670000003,
+        "calls": 4
+      },
+      "mapped.band.solve": {
+        "seconds_per_step": 2.1753801089999985,
+        "calls": 3240
+      },
+      "native.physical_samples": {
+        "seconds_per_step": 1.9300313105,
+        "calls": 4
+      },
+      "domain.scalar": {
+        "seconds_per_step": 1.1129277877499997,
+        "calls": 40
+      },
+      "constitutive.refresh": {
+        "seconds_per_step": 1.0256046555,
+        "calls": 56
+      },
+      "mapped.band.factor": {
+        "seconds_per_step": 0.8479229205,
+        "calls": 16
+      },
+      "k.assembly": {
+        "seconds_per_step": 0.7992344162499999,
+        "calls": 4
+      },
+      "epsilon.assembly": {
+        "seconds_per_step": 0.60379796125,
+        "calls": 4
+      },
+      "monitor.checkpoint_and_publish": {
+        "seconds_per_step": 0.37415945624999997,
+        "calls": 4
+      },
+      "matching.constraints": {
+        "seconds_per_step": 0.29921922350000013,
+        "calls": 56
+      },
+      "pimple.sweep": {
+        "seconds_per_step": 0.239506368999999,
+        "calls": 4
+      },
+      "flow.correction_validate": {
+        "seconds_per_step": 0.20501612800000002,
+        "calls": 4
+      },
+      "epsilon.total": {
+        "seconds_per_step": 0.13446326249999951,
+        "calls": 4
+      },
+      "flow.total": {
+        "seconds_per_step": 0.13187912450000017,
+        "calls": 4
+      },
+      "native.acceptance_audit": {
+        "seconds_per_step": 0.12117219699999993,
+        "calls": 4
+      },
+      "native.explicit": {
+        "seconds_per_step": 0.11224514749999996,
+        "calls": 4
+      },
+      "residual.mass_dual_norms": {
+        "seconds_per_step": 0.1057529065,
+        "calls": 16
+      },
+      "mapped.band.permutation": {
+        "seconds_per_step": 0.083595866,
+        "calls": 16
+      },
+      "native.step": {
+        "seconds_per_step": 0.07053386524999539,
+        "calls": 4
+      },
+      "monitor.qualification_commit": {
+        "seconds_per_step": 0.065760672,
+        "calls": 4
+      },
+      "k.bound_accounting": {
+        "seconds_per_step": 0.04698212175,
+        "calls": 4
+      },
+      "io.checkpoint": {
+        "seconds_per_step": 0.028266796,
+        "calls": 4
+      },
+      "guard.completed_bound": {
+        "seconds_per_step": 0.0274822475,
+        "calls": 4
+      },
+      "k.total": {
+        "seconds_per_step": 0.02685197724999977,
+        "calls": 4
+      },
+      "verify.momentum_linear": {
+        "seconds_per_step": 0.02250609675,
+        "calls": 4
+      },
+      "verify.scalar_linear": {
+        "seconds_per_step": 0.012573918250000002,
+        "calls": 8
+      },
+      "dense.factorization": {
+        "seconds_per_step": 0.009847931,
+        "calls": 4
+      },
+      "native.advance": {
+        "seconds_per_step": 0.007076397249999644,
+        "calls": 4
+      },
+      "guard.completed_outlet": {
+        "seconds_per_step": 0.005564395,
+        "calls": 4
+      },
+      "k.solve_validate": {
+        "seconds_per_step": 0.0032986550000000045,
+        "calls": 4
+      },
+      "epsilon.solve_validate": {
+        "seconds_per_step": 0.002653997499999998,
+        "calls": 4
+      },
+      "native.implicit": {
+        "seconds_per_step": 0.0023148355000017773,
+        "calls": 4
+      },
+      "verify.pressure_linear": {
+        "seconds_per_step": 0.001392909,
+        "calls": 4
+      },
+      "verify.scalar_source_storage": {
+        "seconds_per_step": 0.001126194500000038,
+        "calls": 8
+      },
+      "equation.pressure_factor": {
+        "seconds_per_step": 0.0005961539999999998,
+        "calls": 4
+      },
+      "pimple.check.k": {
+        "seconds_per_step": 0.00045223949999998944,
+        "calls": 4
+      },
+      "pimple.check.epsilon": {
+        "seconds_per_step": 0.00039133250000000785,
+        "calls": 4
+      },
+      "pimple.check.input": {
+        "seconds_per_step": 0.00036309849999982546,
+        "calls": 4
+      },
+      "pimple.check.flow": {
+        "seconds_per_step": 0.00034054025000000016,
+        "calls": 4
+      },
+      "pressure.mass_factorize": {
+        "seconds_per_step": 0.00028220450000000785,
+        "calls": 4
+      },
+      "momentum.factorize": {
+        "seconds_per_step": 0.0002812380000000031,
+        "calls": 4
+      },
+      "equation.scalar_solve": {
+        "seconds_per_step": 0.0002421800000000001,
+        "calls": 8
+      },
+      "equation.scalar_factor": {
+        "seconds_per_step": 0.00022060199999999336,
+        "calls": 8
+      },
+      "dense.triangular_solve": {
+        "seconds_per_step": 0.00015383175,
+        "calls": 4
+      },
+      "pimple.final_refresh_diagnostics": {
+        "seconds_per_step": 0.00013094824999998478,
+        "calls": 4
+      },
+      "equation.momentum_solve": {
+        "seconds_per_step": 8.264600000000046e-05,
+        "calls": 4
+      },
+      "verify.completed_stage": {
+        "seconds_per_step": 5.672224999999894e-05,
+        "calls": 4
+      },
+      "momentum.solve_validate": {
+        "seconds_per_step": 4.656700000000083e-05,
+        "calls": 4
+      },
+      "pressure.solve_validate": {
+        "seconds_per_step": 1.687275000000028e-05,
+        "calls": 4
+      },
+      "equation.pressure_solve": {
+        "seconds_per_step": 9.955749999999994e-06,
+        "calls": 4
+      },
+      "data.evaluation_invalidate": {
+        "seconds_per_step": 2.3577500000000004e-06,
+        "calls": 8
+      }
+    },
+    "nested_explanatory_only": {
+      "domain.parts.anchor_materialization": 0.05428282225,
+      "domain.parts.current_K_profiles": 0.07300430024999997,
+      "domain.parts.epsilon_rows": 2.36067793175,
+      "domain.parts.fixed_rows": 2.545898189,
+      "domain.parts.moving_ray_rows": 10.461391577749998,
+      "audit.WJ.current_state_contractions": 1.9530663720197765,
+      "audit.WJ.inner_profile_covariance": 2.480603377999366,
+      "audit.WJ.outer_closure_covariance": 1.643394748250595,
+      "audit.WJ.owned_rows_gradients": 16.53016624450975,
+      "audit.WJ.principal_full_search": 11.666515309752992,
+      "audit.WJ.scalar_row_accessor": 7.301160472461452,
+      "audit.WJ.velocity_accessor_validation": 5.504810276491046,
+      "audit.WJ.witness_implicit_tangent": 0.019819132749985976
+    },
+    "samples": [
+      93.861651678,
+      100.043859206,
+      97.097931784,
+      88.218268628
+    ]
+  },
+  "pooled_ordinary_variability": {
+    "count": 3,
+    "mean": 41.26134167166667,
+    "minimum": 36.034117008,
+    "maximum": 45.387005606,
+    "stdev": 4.7727568880005435,
+    "samples": [
+      42.362902401,
+      45.387005606,
+      36.034117008
+    ]
+  },
+  "chosen_cost_rule": "largest measured block mean separately for ordinary, scheduled-scientific and fixed costs; first process advance excluded from warm samples; no fastest-step forecast",
+  "forecasts": {
+    "4": {
+      "scientific_stride": 4,
+      "scientific_interval": 0.02,
+      "recovery_stride": 1,
+      "scope": "short unperturbed cadence exercised; finite-perturbation production admission open",
+      "scenarios": {
+        "fresh_two_stage": {
+          "status": "CONDITIONAL_UNPERTURBED_COST_ONLY",
+          "start_step": 0,
+          "start_time": 0.0,
+          "accepted_advances": 101005,
+          "scientific_steps": 25252,
+          "ordinary_steps": 75753,
+          "dt": 0.005,
+          "completed_end": 505.02500000000003,
+          "required_horizon": 505.02466521278404,
+          "terminal_window": [
+            447.8483832973273,
+            505.02466521278404
+          ],
+          "disjoint_seconds": {
+            "observer_enclosing_wait": 249205.59823391997,
+            "data_allocation_release": 299796.81251211796,
+            "UNATTRIBUTED": 52167.77183875138,
+            "recovery_publication_IO": 37538.792786932005,
+            "guards_bounds_residual_verification": 2441717.712373364,
+            "full_scientific_audit": 1085927.2236833156,
+            "equation_evaluation_assembly_solution_update": 1319205.5347103234,
+            "attempt_evidence_and_orchestration": 25830.939843888824,
+            "loop_telemetry_orchestration": 8306.693082799846,
+            "two_process_startup_terminal_controller": 230.97516704601276,
+            "strict_terminal_read": 180.0,
+            "genuine_fresh_construction_initial_archive": 600.0
+          },
+          "seconds": 5520708.054232459,
+          "hours": 1533.530015064572,
+          "with_25_percent_seconds": 6900885.067790573,
+          "meets_24_hour_gate": false,
+          "equation_fraction": 0.2389558588773686,
+          "equation_fraction_note": "conservative numerator: fixed-stage equation work is not added",
+          "attributed_fraction": 0.9905505287861116,
+          "fixed_costs_measured": false,
+          "warning": "fresh construction 600s and strict read 180s are prospective operation caps, not measured results"
+        },
+        "continuation_C8": {
+          "status": "CONDITIONAL_UNPERTURBED_COST_ONLY",
+          "start_step": 8,
+          "start_time": 0.04,
+          "accepted_advances": 100997,
+          "scientific_steps": 25250,
+          "ordinary_steps": 75747,
+          "dt": 0.005,
+          "completed_end": 505.02500000000003,
+          "required_horizon": 505.02466521278404,
+          "terminal_window": [
+            447.8483832973273,
+            505.02466521278404
+          ],
+          "disjoint_seconds": {
+            "observer_enclosing_wait": 249185.86073999997,
+            "data_allocation_release": 299773.06739169196,
+            "UNATTRIBUTED": 52163.64006449839,
+            "recovery_publication_IO": 37535.8195720415,
+            "guards_bounds_residual_verification": 2441524.3185118637,
+            "full_scientific_audit": 1085841.2164582496,
+            "equation_evaluation_assembly_solution_update": 1319101.0483339855,
+            "attempt_evidence_and_orchestration": 25828.893928848825,
+            "loop_telemetry_orchestration": 8306.035158555345,
+            "two_process_startup_terminal_controller": 230.97516704601276,
+            "strict_terminal_read": 180.0
+          },
+          "seconds": 5519670.8753267815,
+          "hours": 1533.241909812995,
+          "with_25_percent_seconds": 6899588.594158477,
+          "meets_24_hour_gate": false,
+          "equation_fraction": 0.23898183028093875,
+          "equation_fraction_note": "conservative numerator: fixed-stage equation work is not added",
+          "attributed_fraction": 0.9905495017288671,
+          "fixed_costs_measured": false,
+          "warning": "fresh construction 600s and strict read 180s are prospective operation caps, not measured results"
+        }
+      },
+      "retained_scientific_archive_bytes": 582560331988,
+      "fits_8GiB_science_cap": false
+    },
+    "50": {
+      "scientific_stride": 50,
+      "scientific_interval": 0.25,
+      "recovery_stride": 1,
+      "scope": "UNEXECUTED .25 cadence sensitivity only; no accuracy or operational admission",
+      "scenarios": {
+        "fresh_two_stage": {
+          "status": "CONDITIONAL_UNPERTURBED_COST_ONLY",
+          "start_step": 0,
+          "start_time": 0.0,
+          "accepted_advances": 101005,
+          "scientific_steps": 2021,
+          "ordinary_steps": 98984,
+          "dt": 0.005,
+          "completed_end": 505.02500000000003,
+          "required_horizon": 505.02466521278404,
+          "terminal_window": [
+            447.8483832973273,
+            505.02466521278404
+          ],
+          "disjoint_seconds": {
+            "observer_enclosing_wait": 19944.737606159997,
+            "data_allocation_release": 305172.9738424457,
+            "UNATTRIBUTED": 4481.166156145943,
+            "recovery_publication_IO": 34548.651390797255,
+            "guards_bounds_residual_verification": 2462168.041417643,
+            "full_scientific_audit": 86910.30092919296,
+            "equation_evaluation_assembly_solution_update": 1327585.48723093,
+            "attempt_evidence_and_orchestration": 26333.751948610137,
+            "loop_telemetry_orchestration": 8669.303138632858,
+            "two_process_startup_terminal_controller": 230.97516704601276,
+            "strict_terminal_read": 180.0,
+            "genuine_fresh_construction_initial_archive": 600.0
+          },
+          "seconds": 4276825.388827604,
+          "hours": 1188.0070524521122,
+          "with_25_percent_seconds": 5346031.736034505,
+          "meets_24_hour_gate": false,
+          "equation_fraction": 0.3104137687498291,
+          "equation_fraction_note": "conservative numerator: fixed-stage equation work is not added",
+          "attributed_fraction": 0.9989522213911627,
+          "fixed_costs_measured": false,
+          "warning": "fresh construction 600s and strict read 180s are prospective operation caps, not measured results"
+        },
+        "continuation_C8": {
+          "status": "CONDITIONAL_UNPERTURBED_COST_ONLY",
+          "start_step": 8,
+          "start_time": 0.04,
+          "accepted_advances": 100997,
+          "scientific_steps": 2021,
+          "ordinary_steps": 98976,
+          "dt": 0.005,
+          "completed_end": 505.02500000000003,
+          "required_horizon": 505.02466521278404,
+          "terminal_window": [
+            447.8483832973273,
+            505.02466521278404
+          ],
+          "disjoint_seconds": {
+            "observer_enclosing_wait": 19944.737606159997,
+            "data_allocation_release": 305148.76587829104,
+            "UNATTRIBUTED": 4481.139810473943,
+            "recovery_publication_IO": 34545.93560274126,
+            "guards_bounds_residual_verification": 2461972.886949278,
+            "full_scientific_audit": 86910.30092919296,
+            "equation_evaluation_assembly_solution_update": 1327480.2794088926,
+            "attempt_evidence_and_orchestration": 26331.662745540805,
+            "loop_telemetry_orchestration": 8668.613996614191,
+            "two_process_startup_terminal_controller": 230.97516704601276,
+            "strict_terminal_read": 180.0
+          },
+          "seconds": 4275895.298094231,
+          "hours": 1187.748693915064,
+          "with_25_percent_seconds": 5344869.122617789,
+          "meets_24_hour_gate": false,
+          "equation_fraction": 0.3104566849428122,
+          "equation_fraction_note": "conservative numerator: fixed-stage equation work is not added",
+          "attributed_fraction": 0.9989519996402926,
+          "fixed_costs_measured": false,
+          "warning": "fresh construction 600s and strict read 180s are prospective operation caps, not measured results"
+        }
+      },
+      "retained_scientific_archive_bytes": 46624205249,
+      "fits_8GiB_science_cap": false
+    }
+  },
+  "storage": {
+    "C-wide-v1": {
+      "scientific_record_bytes": {
+        "6": 23065276,
+        "8": 23065704,
+        "10": 23069273,
+        "12": 23069869
+      },
+      "retained_bytes": 245733255,
+      "logs_bytes": 2129275
+    }
+  },
+  "maximum_measured_scientific_record_bytes": 23069869,
+  "science_rss_cap": 8589934592,
+  "build_rss_cap": 17179869184,
+  "measured_peak_science_rss_bytes": 6808727552,
+  "campaign_snapshot": {
+    "original": {
+      "build": 389.50274165614974,
+      "native": 2099.6596822449355,
+      "passive": 1916.041679986054,
+      "total": 5125.204103887139
+    },
+    "continuation": {
+      "build": 373.51751053507905,
+      "native": 2710.993095862039,
+      "passive": 397.2722167929751,
+      "total": 4681.782823190093
+    },
+    "note": "snapshot may include this operation reservation; final closed-account artifact is authoritative"
+  },
+  "limitations": [
+    "Finite seed principal quality failed before evolution; cadence and h/q/dt transient qualifications remain open.",
+    "Measured variability is a short control-window observation, not a production confidence interval or long-horizon growth bound.",
+    "Scientific archives extrapolated from complete retained pilot records exceed the existing 8 GiB development science cap; no production storage allocation is established.",
+    "Fixed stages conservatively include executed source checks, validation and controller work; native.step, audits and waits are never added twice."
+  ]
+}
