@@ -1,0 +1,206 @@
+{
+  "version": "WP2RejectedRecoveryReplayV1",
+  "model": "calibrated_standard",
+  "actual_accepted_time": 3.6799999999999655,
+  "first_rejected_attempt_time": 3.6899999999999653,
+  "accepted_steps": 368,
+  "attempted_steps": 369,
+  "failure_stage": "final complete accepted-AWF audit after all one-sweep solves and logical bound, before coupled candidate assignment and history commit",
+  "failure": "accepted AWF hard audit exit; candidate/history retained: accepted_awf_covariance_or_budget_exit",
+  "parent_state_sha256": "46a2e853e4e052285fddb6eecab19e78d8ab83b9be0aabc35b29c8f79135db33",
+  "rejected_state_sha256": "d7747437582d930b24ad55407819e68cbe94bc6c2b2e081dfcceb4565f8c70a9",
+  "attempted_history_sha256": "46a2e853e4e052285fddb6eecab19e78d8ab83b9be0aabc35b29c8f79135db33",
+  "parent_checkpoint": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step368/checkpoint.32/State.bin",
+    "sha256": "af80c7c734c812400ef9576a76575ce7a4c2c3e4d59380e592624812f7aa0170"
+  },
+  "reference_sha256": "a1b87e794a37b36fe5c0032aaef9c553e48b4c947b2e1ec5e8a0b8b75179eeb5",
+  "defect_sha256": "b6f66eca6cd67b3e9baff42e52f226f747de523f0d6b473ad799a49eb4664354",
+  "native_history_sha256": [
+    "b3c7b648da0b6da3365fc75e9e5e73939261c846e1983350320b6064c3ccf703",
+    "adf943267c2fc2759093b55acddf062a0460f89317e64f29262119dafb9f181d"
+  ],
+  "native_history_times": [
+    3.6799999999999655,
+    0.01
+  ],
+  "witness": {
+    "physical": [
+      0.1,
+      0,
+      0.00037071067811865477
+    ],
+    "geometry": 71,
+    "element": 71,
+    "radial_side": 0,
+    "tangential_side": 1,
+    "native_element_lower": [
+      0.1,
+      0.0,
+      0.000282842712474619
+    ],
+    "native_element_upper": [
+      0.6,
+      0.0,
+      0.0004
+    ],
+    "block": 2,
+    "k": 0.004780870703900692,
+    "endpoint_K": 0.020124472529214812,
+    "dependent_epsilon": 1.3355404950500382,
+    "eddy_viscosity": 1.3079319333594469e-05,
+    "gradient": [
+      [
+        0.916308623218868,
+        0.0,
+        283.8206019199765
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        -0.04231993531114711,
+        0.0,
+        3.1273719450805912
+      ]
+    ],
+    "independent_gradient": [
+      [
+        0.9163086232188575,
+        0.0,
+        283.8206019199788
+      ],
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        -0.04231993531114681,
+        0.0,
+        3.127371945080605
+      ]
+    ],
+    "gradient_replay_maximum_error": 2.2737367544323206e-12,
+    "isotropic_tensor": [
+      [
+        0.0031872471359337944,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0031872471359337944,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0031872471359337944
+      ]
+    ],
+    "linear_stress_contribution": [
+      [
+        -2.396938618241174e-05,
+        -0.0,
+        -0.003711626770016257
+      ],
+      [
+        -0.0,
+        -0.0,
+        -0.0
+      ],
+      [
+        -0.003711626770016257,
+        -0.0,
+        -8.180779268926703e-05
+      ]
+    ],
+    "reynolds_tensor": [
+      [
+        0.003163277749751383,
+        0.0,
+        -0.003711626770016257
+      ],
+      [
+        0.0,
+        0.0031872471359337944,
+        0.0
+      ],
+      [
+        -0.003711626770016257,
+        0.0,
+        0.003105439343244527
+      ]
+    ],
+    "eigenvalues": [
+      -0.0005773808840410645,
+      0.0031872471359337944,
+      0.0068460979770369745
+    ],
+    "critical_eigenvector": [
+      -0.7043467609935394,
+      0.0,
+      -0.7098560701141534
+    ],
+    "native_minimum": -0.0005773808840411462,
+    "normalized_minimum_over_K0": -0.03140370755541365
+  },
+  "scalar_and_budget_domain": [
+    1,
+    0.15530020544590842,
+    0.002855311582363143,
+    0.017596547516467106,
+    0.0011621996719262744,
+    0.017596547516467106,
+    0.13391231976711712,
+    3.036002541054659,
+    0
+  ],
+  "covariance_inner_outer": [
+    -0.0005773808840411462,
+    0.005659255300884793
+  ],
+  "checks": {
+    "state_restored_bitwise": true,
+    "native_history_restored_bitwise": true,
+    "native_history_times_restored_bitwise": true,
+    "fixed_reference_restored_bitwise": true,
+    "fixed_defect_restored_bitwise": true,
+    "accepted_time_preserved": true,
+    "candidate_retained": true,
+    "scalar_domain_admissible": true,
+    "budget_admissible": true,
+    "one_each_governing_solve": true,
+    "no_bound_activation": true,
+    "solved_epsilon_retained": true
+  },
+  "rollback_receipt": {
+    "assigned_candidate_sha256": "46a2e853e4e052285fddb6eecab19e78d8ab83b9be0aabc35b29c8f79135db33",
+    "implicit_callback_entered": true,
+    "attempted_stage_history_sha256": "46a2e853e4e052285fddb6eecab19e78d8ab83b9be0aabc35b29c8f79135db33",
+    "attempted_stage_time": 3.6899999999999653,
+    "attempted_stage_alpha": 100,
+    "restored_state_sha256": "46a2e853e4e052285fddb6eecab19e78d8ab83b9be0aabc35b29c8f79135db33",
+    "restored_stage_time": 0,
+    "restored_stage_alpha": 0,
+    "accepted_stage_audits": 0,
+    "accepted_state_audits": 1,
+    "accepted_explicit_audits": 1,
+    "packet_flush_after_restore": true
+  },
+  "bindings": {
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step390/case.evolution.json": "8c5d2c9fd308e00760b448b084f81dc99f7eab2f3d10842249a04e8cf32f2326",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step368/case.evolution.json": "8bf0a8e22ad06674edda55149ffabb3f05bf7e9867f97109800a65a1e8e72035",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/geometry-rows-selected/result.json": "9445db73a22ebb19dd30a98f344827f63a3df4d4e1d754df4f60833faaaf9abb",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/audit_wp2_rejected_recovery.py": "864a018d7aea0e40de7efc17cacf342b6be0860476d46718d8e1f3ef57df98ed"
+  },
+  "cost": {
+    "seconds": 0.8880469899741001,
+    "peak_RSS_KiB": 196080
+  },
+  "zero_PDE_solves": true,
+  "interpretation": "genuine inner Linear covariance rejection in this discrete dt=.01 recovery; scalar and cutoff budgets pass. This does not establish global model infeasibility or timestep-independent instability."
+}

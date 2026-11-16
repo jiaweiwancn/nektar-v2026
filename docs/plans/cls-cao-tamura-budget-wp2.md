@@ -3,8 +3,10 @@
 2026-11-16–17, Asia/Shanghai. Checkpoints 1 and 2 pass for both deployed regularized
 CLS and calibrated standard k–epsilon. Checkpoint 3 qualifies the short timestep
 pair and measured cost. Both models have completed the unperturbed physical-transit,
-half-step and finer-mesh runs. WP2 remains **OPEN** pending complete perturbation
-recovery, including the final-window and trend criteria.
+half-step and finer-mesh runs. WP2 remains **OPEN**: the standard perturbation
+recovery suffers a genuine native covariance rejection at attempted T=3.69 s,
+after 368 accepted steps to T=3.68 s. CLS is completing its bounded T=4.2
+assessment. Boundary/spatial success does not close the failed dynamic gate.
 
 The physical calibration, full-height analytical inlet, local transported-K
 cutoff budget and one-sweep equations are unchanged. The new
@@ -229,3 +231,28 @@ Linux root, are `run_cao_tamura_budget_wp2.py`, `run_wp2_preservation.py`,
 `audit_wp2_window_envelope.py`, `audit_wp2_native_boundary_bounds.py` and
 `collect_wp2_closure.py`. Every analysis is read-only. Existing output owners
 reject duplicate launches; use their recorded unused-root setup for reproduction.
+
+At 2026-11-17 01:22 Asia/Shanghai, independent replay confirms standard's first
+rejected tensor at (x,z)=(.1,.00037071067811865477) m, geometry/element 71,
+tangential plus limit of the downstream [.1,.6] panel. The actual k is
+.004780870703900692, transported endpoint K=.020124472529214812 and
+nu_A=1.3079319333594469e-5 m²/s. The represented gradient has U_z=283.82060192,
+U_x=.9163086232, W_x=-.0423199353 and W_z=3.1273719451 per second. Independently
+differentiating its native-element polynomial agrees within 2.3e-12 per second.
+The isotropic covariance diagonal is .003187247136; the off-diagonal Linear
+contribution is -.003711626770. The complete eigenvalues are
+(-.0005773808840411,.003187247135934,.006846097977037) m²/s², reproducing the
+native negative minimum within 8.2e-17. This is an interior radial witness with
+explicit native tangential provenance, not an H-side mismatch.
+
+Scalar positivity and cutoff budgets still pass: minimum inner k=.00285531158,
+minimum outer epsilon=.00116219967, minimum budget ratio=3.03600254 and maximum
+relative budget defect zero. The attempt completes one U/p/epsilon/k solve and
+one logical bound call, with no activation and authoritative solved epsilon,
+then fails the final complete audit before candidate assignment/history commit.
+Fields, native histories/time labels, fixed reference and defect restore
+bitwise to the accepted parent; the rejected coefficients and callback history
+remain archived. There is no retry. The exact receipt and independent tensor
+replay are in [recovery-standard-native-rejection.json](cls-cao-tamura-budget-wp2-evidence/recovery-standard-native-rejection.json).
+This establishes failure of this discrete recovery trajectory; unresolved
+transient timestep/spatial error prevents a claim of model-wide instability.

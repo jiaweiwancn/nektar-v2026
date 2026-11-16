@@ -60,6 +60,19 @@ def main():
                 verified_report_frontier=progress['observations'][-1]['time'],failure=progress.get('failure'))
             owner=read(f'recovery-{model}-followup-T4p2/progress.json')
             rec.update(qualification_owner_status=owner['status'],qualification_failure=owner.get('failure'))
+        rejection=r/f'recovery-{model}-native-rejection.json'
+        if rejection.exists():
+            rejected=load(rejection)
+            require(all(rejected['checks'].values()),'rejected-state replay or rollback check failed')
+            for path,expected in rejected['bindings'].items():
+                require(sha(Path(path))==expected,'rejection replay input changed')
+            require(sha(Path(rejected['parent_checkpoint']['path']))==rejected['parent_checkpoint']['sha256'],
+                    'accepted parent checkpoint changed after rejection')
+            rec.update(status='failed_native_covariance_recovery',rejection_receipt=binding(rejection),
+                actual_time=rejected['actual_accepted_time'],first_rejected_attempt_time=rejected['first_rejected_attempt_time'],
+                accepted_steps=rejected['accepted_steps'],attempted_steps=rejected['attempted_steps'],
+                independent_witness=rejected['witness'],failure_stage=rejected['failure_stage'])
+            recovery_pass=False
         gates=dict(**static,unperturbed_physical_transit=bool(unpert_pass),time_mesh_sensitivity=bool(time_mesh),
                    restart_rollback_and_terminal_audit=bool(transaction_pass),perturbation_recovery=bool(recovery_pass))
         models[model]=dict(gates=gates,passed=all(gates.values()),recovery=rec,
@@ -85,7 +98,7 @@ def main():
     within_budget=used<=43200 and storage_kib<=96*1024**2 and rss<=24*1024**2
     files=['unperturbed-preservation-v2.json','dense-quarter-budget-summary.json','native-boundary-comparison-bounds.json',
            'unperturbed-all-pairs-windows/summary.json','terminal-checks-after-transactions.json','recovery-initial-history-contract.json','runtime-v12/identity.json']
-    result=dict(version='WP2ClosureLedgerV1',capture_Asia_Shanghai=datetime.now(ZoneInfo('Asia/Shanghai')).isoformat(),
+    result=dict(version='WP2ClosureLedgerV2',capture_Asia_Shanghai=datetime.now(ZoneInfo('Asia/Shanghai')).isoformat(),
                 closed=all(v['passed'] for v in models.values()) and within_budget,models=models,budget=budget,within_declared_budget=within_budget,
                 physical_executions=counts,runtime=dict(executable=runtime['path'],sha256=runtime['sha256'],linked_closure_verified=True),
                 evidence={n:binding(r/n) for n in files},checkpoint_evidence={str(i):binding(a.checkpoints/f'checkpoint{i}.json') for i in [1,2,3]},
