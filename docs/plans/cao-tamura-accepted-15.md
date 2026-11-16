@@ -50,6 +50,8 @@ bitwise; the full fresh T=.002 qualification remains outstanding.
 | CT14 matched fresh control | — | 202.494408 | reused historical trajectories |
 | ImmutableTensorV1 | 62.759786 | 234.460816 | 413.393018 |
 | ImmutableTensorV2, shared immutable row storage | 59.151492 | 235.612187 | 402.588599 |
+| ImmutableTensorV3, hashed assembly/literal guards/1M row bound | 56.041102 | 189.783742 | 331.519330 |
+| ImmutableTensorV4, additional per-call current-point reuse | 56.598205 | 189.308833 | 350.148692 |
 
 V1/V2 pass four small complete operator controls (maximum independent defect
 4.313e-15 <=2e-10), 36 dependency queries, complete small updates, genuine
@@ -65,8 +67,22 @@ immutable arrays and recomputes all current-state contractions and physics.
 The [third prospective remedy](cao-tamura-accepted-15-evidence/attempt-3-contract.json)
 targets matrix-entry lookup, successful diagnostic-string allocation and
 working-set thrashing. It retains exact chronological coefficient additions,
-canonical sorted CSR, all tests and a hard bounded row limit. Qualification is
-pending; no speedup or production admission is claimed.
+canonical sorted CSR, all tests and a hard bounded row limit. Both V3 and V4
+pass the small operators/dependency/history suite and preserve the selected
+first two accepted coefficient vectors bitwise. V4 also checks continuation
+with a1024-row work cache, proving that its larger cache is not essential
+history. Selected-space admission and the complete fresh pair remain pending.
+
+V4's timing-off whole zero/one/two family used775.071055 CPU seconds, compared
+with1069.190580 for V2. These families have the same scientific control scope,
+but native implementation and observer policy both changed; this is a whole
+path comparison, not a claim that one routine caused the difference. The V4
+zero-step native observer used3.837857 CPU seconds versus the previously
+measured18.950956 seconds for the complete V2 controller evolve function;
+their scopes differ. The explicit [workflow contract](cao-tamura-accepted-15-evidence/workflow-contract-v1.json)
+binds prepared-array audits, full accepted-state gradient coverage, actual
+retirement/replay and held-out validation. Its segment reports and restart
+anchors have finite durable growth and are not described as constant storage.
 
 An unowned129-thread `gdb` caused the shared-worker monitor to observe141
 aggregate threads during V2's two-step family. The monitor paused our family,

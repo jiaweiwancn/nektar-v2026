@@ -6,6 +6,11 @@ from rans_qualification import THREADS
 os.environ.update(THREADS)
 from rans_request_manifest import sha
 
+def install_probe_observer():
+    """Keep the existing probe serializer and parser; observe its native PID."""
+    import ct_accepted_open
+    ct_accepted_open.run=lambda command,folder,log:native_run(command,folder,log,1200,1500)
+
 def native_run(command,folder,log,cpu,wall):
     """Bound the native process itself, observe its actual maps, always reap it."""
     observer_cpu=time.process_time();started=time.monotonic();before=resource.getrusage(resource.RUSAGE_CHILDREN);maps={};rss=vm=0;stop=None

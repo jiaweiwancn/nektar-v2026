@@ -25,13 +25,21 @@ class PreparedRows:
     and contracted again in the identical NumPy arithmetic/order.
     """
     policy='CT15-PreparedNativeRowsV1'
-    def __init__(self):self.rows={};self.saved=[];self.calls=0;self.original=row_value
+    def __init__(self):
+        self.rows={};self.saved=[];self.calls=0;self.original=row_value
+        self.maximum_rows=262144;self.maximum_bytes=256*1024**2
+        self.live_bytes=0;self.peak_bytes=0;self.evictions=0
     def __call__(self,row,state,offset):
         key=(id(row),int(offset));cached=self.rows.get(key)
         if cached is None:
             ids=np.asarray(row['ids'],int)+offset;phi=np.asarray(row['phi']);d=np.asarray(row['derivative'])
+            size=sum(v.nbytes for v in (ids,phi,d))
+            require(size<=self.maximum_bytes,'single prepared row exceeds finite allocation')
+            if len(self.rows)>=self.maximum_rows or self.live_bytes+size>self.maximum_bytes:
+                self.rows.clear();self.live_bytes=0;self.evictions+=1
             for v in (ids,phi,d):v.flags.writeable=False
             cached=(row,ids,phi,d);self.rows[key]=cached
+            self.live_bytes+=size;self.peak_bytes=max(self.peak_bytes,self.live_bytes)
         _,ids,phi,d=cached;self.calls+=1
         return phi@state[ids],d@state[ids]
     def __enter__(self):
@@ -42,7 +50,7 @@ class PreparedRows:
     def __exit__(self,*args):
         for module in self.saved:module.row_value=self.original
     @property
-    def bytes(self):return sum(v.nbytes for _,*arrays in self.rows.values() for v in arrays)
+    def bytes(self):return self.live_bytes
 
 class PreparedGrid(PreparedRows):
     """Batch the same complete native rows; qualify changed reduction order."""

@@ -9,7 +9,8 @@ os.environ.update(THREADS)
 import numpy as np
 import ct_accepted8_native as n
 from ct_accepted15_controls import ordering,COMPONENT
-from ct_accepted15_exec import native_run
+from ct_accepted15_exec import native_run,install_probe_observer
+from ct_accepted15_python import PreparedRows
 from ct_accepted9_controls import enable
 from ct_accepted9_pressure_run import sealed
 from ct_accepted11_target import target_pair,bounded_budgets
@@ -80,7 +81,8 @@ def main():
         row=dict(dt=dt,time=r['time'],directory=str(folder),failure=r['failure'],signature=r['signature'],execution=e,zero_step_execution=ze,actual_initial_sha256=exact_vector_hash(z['state']),state_sha256=exact_vector_hash(r['state']),configuration_sha256=sha(folder/'case.xml'),native_report_sha256=sha(folder/'case.evolution.json'),history_sha256=artifact_hash(r['checkpoint']),initialization_receipt=r['initialization_receipt'])
         row['accepted_metrics']=[dict(time=t,**n.physical_metrics(ini,s,c,weights,count)) for t,s in zip(r['audit_times'],r['accepted_states'],strict=True)];row['traction_history']=[dict(time=t,profile=profiles(ini,s,c)) for t,s in zip(r['audit_times'],r['accepted_states'],strict=True)];row['actual_initial_traction_profile']=profiles(ini,z['state'],c)
         fixed=inventory(ini['test_basis'],ini['observation']['grid'],np.asarray(r['state']),ini['observation']['offsets'],'A95',ini['observation']['grid_sides']);row['domain']=dict(status='pass' if fixed['domain_failure_count']==0 and fixed['minima']['covariance']['value']>=-1e-10*c['K0'] else 'fail',fixed=fixed,native_audited_extrema=audited_extrema(r),native_evolution_failure=r['failure'])
-        row['gradient_reference_errors']=gradients(ini,r['state'],c,weights,count);row['represented_outlet_traction']=outlet(ini,r['state'],c);row['regional_pressure']=[]
+        row['accepted_gradient_reference_errors']=[dict(time=t,errors=gradients(ini,s,c,weights,count)) for t,s in zip(r['audit_times'],r['accepted_states'],strict=True)]
+        row['gradient_reference_errors']=row['accepted_gradient_reference_errors'][-1]['errors'];row['represented_outlet_traction']=outlet(ini,r['state'],c);row['regional_pressure']=[]
         for t,s in zip(r['audit_times'],r['accepted_states'],strict=True):
             pi=n.observations(ini,s,count)[:,4];row['regional_pressure'].append(dict(time=t,absolute_reference_error=regional_pressure(pi,reference_pressure,wt,regions,c['ustar']**2),drift=regional_pressure(pi,initial_pressure,wt,regions,c['ustar']**2)))
         row['budgets']=bounded_budgets(a.runtime,folder,ini,r,c) if r['steps'] else dict(gate=dict(status='missing'))
@@ -97,4 +99,6 @@ def main():
     out['workflow_phases']=PHASES
     out['workflow_phase_scope']='outer nonoverlapping wrappers; endpoint scalar wrapper contains its own native probes; do not add its children to native executions again; no detailed inner timers'
     write_json(a.output/'results.json',out);m.seal(a.output,['results.json']);print('CT15 physical qualification',out['qualification'],flush=True);return 0 if out['qualification']['status']=='pass' else 1
-if __name__=='__main__':raise SystemExit(main())
+if __name__=='__main__':
+    install_probe_observer()
+    with PreparedRows():raise SystemExit(main())

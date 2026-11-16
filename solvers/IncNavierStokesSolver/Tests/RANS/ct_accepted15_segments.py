@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Actual selected-space segment retirement, fresh restore/replay and holdout."""
-import argparse,copy,json,os,resource,shutil,time,xml.etree.ElementTree as ET
+import argparse,copy,hashlib,json,os,resource,shutil,time,xml.etree.ElementTree as ET
 from pathlib import Path
 from functools import lru_cache
 from rans_qualification import THREADS,exact_vector_hash
@@ -13,14 +13,40 @@ from ct_accepted15_retention import publish,retire,verify,atomic
 from ct_accepted14_pair import numerical_receipts
 from ct_accepted14_collect import pressure_receipts
 from ct_accepted11_target import bounded_budgets
-from ct_accepted15_exec import native_run
+from ct_accepted15_exec import native_run,install_probe_observer
+from ct_accepted15_python import PreparedRows
+from ct_accepted15_audits import complete,bundle,scope
+from ct_accepted15_equivalence import numerical
 from ct_accepted_open import require
 from ct_accepted_feasibility import write_json
 from run_cls_epawf_picard import set_parameter,write
-from rans_request_manifest import RequestManifest,runtime_identity,sha
+from rans_request_manifest import RequestManifest,runtime_identity,sha,canonical
 from compare_cls_epawf_pimple import same_history
 
 STAGES=('committed','post_flow','pre_k','raw','corrected','history','fixed_reference')
+def size(path):return sum(f.stat().st_size for f in path.rglob('*') if f.is_file()) if path.exists() else 0
+def envelope(values):return max(values)+max(values)-min(values)
+def peak_AS(execution):
+    values=[]
+    def walk(q):
+        if isinstance(q,dict):
+            for k,v in q.items():
+                if k in ('peak_address_space_KiB','peak_virtual_KiB'):values.append(v*1024)
+                elif isinstance(v,(dict,list)):walk(v)
+        elif isinstance(q,list):
+            for v in q:walk(v)
+    walk(execution)
+    for line in Path('/proc/self/status').read_text().splitlines():
+        if line.startswith('VmPeak:'):values.append(int(line.split()[1])*1024)
+    return max(values,default=0)
+def disposable(folder,report):
+    files=[]
+    for row in report['pimple_attempts']:
+        for key in ('flow_snapshot','k_snapshot'):
+            if row.get(key):
+                path=Path(row[key]);require(path.is_relative_to(folder),'payload outside newly owned segment')
+                files.append(path);files.extend(referenced_files(n.read(path)))
+    return sorted(set(files))
 def referenced_files(value):
     files=[]
     if isinstance(value,dict):
@@ -40,7 +66,8 @@ def snapshots(report):
         path=Path(row['k_snapshot']);require(sha(path)==row['k_snapshot_sha256'],'changed actual stage')
         q=n.read(path);require(sha(Path(q['matrix_file']))==q['matrix_sha256'],'changed actual scalar matrix')
         flow=Path(row['flow_snapshot']);require(sha(flow)==row['flow_snapshot_sha256'],'changed actual flow stage')
-        out.append(dict(time=q['time'],alpha=q['alpha'],stages={k:exact_vector_hash(q[k]) for k in STAGES},matrix_sha256=q['matrix_sha256'],flow={k:v for k,v in n.read(flow).items() if isinstance(v,list) and (not v or isinstance(v[0],(int,float,bool)))}))
+        f=n.read(flow)
+        out.append(dict(time=q['time'],alpha=q['alpha'],stages={k:exact_vector_hash(q[k]) for k in STAGES},matrix_sha256=q['matrix_sha256'],all_k_numerical_data_sha256=hashlib.sha256(canonical(numerical(q))).hexdigest(),all_flow_numerical_data_sha256=hashlib.sha256(canonical(numerical(f))).hexdigest()))
     return out
 
 def main():
@@ -59,14 +86,18 @@ def main():
     model=dict(CPU=fit(cpu),wall=fit(wall),fit_scope='training zero/one/two only; heldout not used for fit')
     write_json(a.output/'frozen-model-before-heldout.json',model)
     def run(label,parent,steps=2,reject=0):
+        started=time.monotonic();cpu=time.process_time();before=resource.getrusage(resource.RUSAGE_CHILDREN)
         dest=a.output/label;n.make(dest,a.runtime,c,.00025,steps,parent);enable(dest);ordering(dest)
         root=ET.parse(dest/'case.xml').getroot();set_parameter(root,'RANSWallPimpleHardAuditRejectStep',reject);write(root,dest/'case.xml');os.environ['NEKTAR_RANS_SPARSE_RECEIPTS']=str(dest/'sparse-receipts.jsonl')
         e=native_run([a.runtime/'IncNavierStokesSolver','case.xml'],dest,'solver.log',1600,2000);os.environ.pop('NEKTAR_RANS_SPARSE_RECEIPTS',None);r=n.read(dest/'case.evolution.json')
+        after=resource.getrusage(resource.RUSAGE_CHILDREN)
+        e['whole_segment_CPU']=time.process_time()-cpu+after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime;e['whole_segment_wall']=time.monotonic()-started
         return dest,r,e
     binding=dict(runtime=m.payload['request']['runtime'],probe=m.payload['request']['probe'],dt=.00025,signature=full['signature'])
     result=dict(schema='CT15ActualSegmentRecoveryV1',status='incomplete',policy='SelectiveReplayV1',cycles=[],model=model)
     previous=zero;current=two;current_folder=a.training/'steps-2'
     for end in (2,4):
+        cycle_started=time.monotonic();cycle_cpu=time.process_time();cycle_before=resource.getrusage(resource.RUSAGE_CHILDREN)
         cp=Path(previous['checkpoint']);restored=a.output/('restored-'+str(end));shutil.copytree(cp,restored)
         require(all(sha(f)==sha(restored/f.relative_to(cp)) for f in cp.rglob('*') if f.is_file()),'native restart restore bytes differ')
         replay_folder,replayed,execution=run('replayed-'+str(end),restored)
@@ -75,19 +106,16 @@ def main():
         require(recovered==full_snaps[end-2:end],'segmented versus continuous stage trajectory')
         metrics=n.physical_metrics(ini,replayed['state'],c,weights,count);expected=pair['members']['0.00025']['accepted_metrics'][end]
         require(metrics=={k:v for k,v in expected.items() if k!='time'},'full versus replayed scientific classification')
+        audits,audit_usage=scope(complete,a.runtime,replay_folder,ini,replayed,c,weights,count)
+        require(audits['per_state'][-1]['metrics']==metrics,'independent replay diagnostics disagree')
+        audits_path=a.output/('audit-replay-'+str(end)+'.json');write_json(audits_path,audits)
         nr=numerical_receipts(replay_folder/'sparse-receipts.jsonl');pr=pressure_receipts(replayed)
         proof=dict(status='pass',decisions_exact_equal=True,maximum_scaled_array_difference=0.,maximum_scaled_state_pressure_traction_difference=0.,replay_report_sha256=sha(replay_folder/'case.evolution.json'),actual_stage_witnesses=actual,independent_metrics=metrics,numerical_receipts=nr,pressure_receipts=pr)
         proof_path=a.output/('replay-proof-'+str(end)+'.json');write_json(proof_path,proof)
         # Retire only stage payloads inside the newly owned member's snapshot
         # directory. Reports, receipts and both native restart states remain.
-        eligible=[]
-        for row in current['pimple_attempts']:
-            for key in ('flow_snapshot','k_snapshot'):
-                if row.get(key):
-                    path=Path(row[key]);require(path.is_relative_to(current_folder),'snapshot outside newly owned member');eligible.append(path)
-                    eligible.extend(referenced_files(n.read(path)))
-        eligible=sorted(set(eligible))
-        required=[proof_path,current_folder/'case.evolution.json',current_folder/'case.xml',current_folder/'sparse-receipts.jsonl']
+        eligible=sorted(set(disposable(current_folder,current)+disposable(replay_folder,replayed)))
+        required=[proof_path,audits_path,current_folder/'case.evolution.json',current_folder/'case.xml',current_folder/'sparse-receipts.jsonl',replay_folder/'case.evolution.json',replay_folder/'case.xml',replay_folder/'sparse-receipts.jsonl']
         for checkpoint in (Path(previous['checkpoint']),Path(current['checkpoint'])):required.extend(f for f in checkpoint.rglob('*') if f.is_file())
         publication=a.output/('retirement-'+str(end));manifest=publish(a.root,publication,binding,required,[Path(previous['checkpoint']),Path(current['checkpoint'])],eligible,proof)
         negative={}
@@ -114,22 +142,59 @@ def main():
         # Recover an interrupted publish from the independently sealed identical
         # manifest, then verify it before allowing any deletion.
         os.replace(interrupted/'manifest.json.pending',interrupted/'manifest.json');atomic(interrupted/'seal.json',dict(manifest_sha256=sha(interrupted/'manifest.json')));verify(a.root,interrupted,binding)
+        before_retirement_bytes=size(current_folder)+size(replay_folder)+size(restored)+size(publication)+proof_path.stat().st_size+audits_path.stat().st_size+size(interrupted)
         removed=retire(a.root,publication,binding)
-        result['cycles'].append(dict(end_step=end,execution=execution,retired_bytes=removed,publication_sha256=sha(publication/'seal.json'),negative_controls=negative,proof_sha256=sha(proof_path)))
+        cycle_after=resource.getrusage(resource.RUSAGE_CHILDREN)
+        usage=dict(CPU=time.process_time()-cycle_cpu+cycle_after.ru_utime+cycle_after.ru_stime-cycle_before.ru_utime-cycle_before.ru_stime,wall=time.monotonic()-cycle_started)
+        result['cycles'].append(dict(end_step=end,execution=execution,cycle_usage=usage,audit_usage=audit_usage,peak_address_space_bytes=peak_AS([execution,audits]),before_retirement_owned_bytes=before_retirement_bytes,durable_owned_bytes=before_retirement_bytes-removed,retired_bytes=removed,publication_sha256=sha(publication/'seal.json'),negative_controls=negative,proof_sha256=sha(proof_path)))
         write_json(a.output/'progress.json',result)
         previous=current
         if end==2:
             current_folder,current,e=run('segment-4',Path(previous['checkpoint']));require(e['exit_code']==0 and not current['failure'],'genuine continuation after first cycle');result['segment4_execution']=e
     six,sr,se=run('segment-6',Path(current['checkpoint']));require(se['exit_code']==0 and not sr['failure'],'segment6 continuation')
+    # Freeze the complete held-out scope before executing it. Training contains
+    # the original 0/1/2 commands and the two earlier real recovery/audit cycles.
+    # Bounds use the observed range, never a negative intercept or heldout fit.
+    initial_two=training['2']['execution']
+    normal_cpu=max(model['CPU']['startup']+2*model['CPU']['repeated_step']+initial_two.get('controller_evolve_self_CPU',0),result['segment4_execution']['whole_segment_CPU'])
+    normal_wall=max(model['wall']['startup']+2*model['wall']['repeated_step'],result['segment4_execution']['whole_segment_wall'])
+    # The held-out endpoint additionally exercises all current sparse actions;
+    # use the already measured initial changed-alpha controls as an additive
+    # prospective bound, not a measurement of this later workload.
+    ts=n.read(a.root/'timestep-v1/results.json');action_training=[r['execution'] for k,r in ts['controls'].items() if k.startswith('4000-')]
+    action_cpu=sum(v['process_cpu_seconds']+v.get('observer_self_CPU_seconds',0) for v in action_training)
+    action_wall=sum(v['wall_seconds'] for v in action_training)
+    model['complete_heldout_bounds']=dict(CPU=normal_cpu+envelope([x['cycle_usage']['CPU'] for x in result['cycles']])+action_cpu,wall=normal_wall+envelope([x['cycle_usage']['wall'] for x in result['cycles']])+action_wall,peak_address_space_bytes=envelope([x['peak_address_space_bytes'] for x in result['cycles']]+[peak_AS(action_training)]),peak_new_output_bytes=envelope([x['before_retirement_owned_bytes'] for x in result['cycles']])+sum((a.root/'timestep-v1'/k/'frozen.json').stat().st_size for k in ts['controls'] if k.startswith('4000-')))
+    model['scope']='one normal two-step restart, fresh predecessor restoration and two-step replay, all independent state/scalar/constitutive audits, later native/q48/q64 actions, sealed publication and retirement; no heldout measurements used for fitting'
+    write_json(a.output/'frozen-complete-model-before-heldout.json',model)
     started=time.monotonic();self_cpu=time.process_time();before=resource.getrusage(resource.RUSAGE_CHILDREN)
     eight,er,ee=run('held-out-6-to8',Path(sr['checkpoint']));require(ee['exit_code']==0 and not er['failure'] and same_history(full,er),'heldout later-state continuation')
     require(snapshots(er)==full_snaps[6:8],'heldout stage trajectory')
-    budgets=bounded_budgets(a.runtime,eight,ini,er,c);require(budgets['gate']['status']=='pass','independent later-state audit replay')
-    metrics=n.physical_metrics(ini,er['state'],c,weights,count);require(metrics=={k:v for k,v in pair['members']['0.00025']['accepted_metrics'][8].items() if k!='time'},'heldout physical decisions')
-    after=resource.getrusage(resource.RUSAGE_CHILDREN);measured=dict(native=ee,whole_CPU=time.process_time()-self_cpu+after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime,whole_wall=time.monotonic()-started,output_bytes=sum(f.stat().st_size for f in eight.rglob('*') if f.is_file()),budgets=budgets)
+    audits,audit_usage=scope(complete,a.runtime,eight,ini,er,c,weights,count,actions=True)
+    metrics=audits['per_state'][-1]['metrics'];require(metrics=={k:v for k,v in pair['members']['0.00025']['accepted_metrics'][8].items() if k!='time'},'heldout physical decisions')
+    restored=a.output/'restored-heldout';shutil.copytree(Path(sr['checkpoint']),restored)
+    replay_folder,replayed,replay_e=run('replayed-heldout',restored)
+    require(replay_e['exit_code']==0 and same_history(er,replayed) and snapshots(er)==snapshots(replayed),'heldout fresh-process actual stage/history recovery')
+    replay_bundle=bundle(ini,replayed['state'],c,weights,count);require(replay_bundle=={k:v for k,v in audits['per_state'][-1].items() if k!='time'},'heldout independent audit replay decisions')
+    proof=dict(status='pass',decisions_exact_equal=True,maximum_scaled_array_difference=0.,maximum_scaled_state_pressure_traction_difference=0.,actual_stage_witnesses=snapshots(er),replay_report_sha256=sha(replay_folder/'case.evolution.json'))
+    proof_path=a.output/'heldout-replay-proof.json';write_json(proof_path,proof);audit_path=a.output/'heldout-audits.json';write_json(audit_path,audits)
+    required=[proof_path,audit_path]
+    for f in (eight,replay_folder):required.extend(f/k for k in ('case.xml','case.evolution.json','sparse-receipts.jsonl'))
+    for checkpoint in (Path(sr['checkpoint']),Path(er['checkpoint'])):required.extend(f for f in checkpoint.rglob('*') if f.is_file())
+    publication=a.output/'heldout-retirement';eligible=sorted(set(disposable(eight,er)+disposable(replay_folder,replayed)))
+    publish(a.root,publication,binding,required,[Path(sr['checkpoint']),Path(er['checkpoint'])],eligible,proof)
+    peak_new=size(eight)+size(replay_folder)+size(restored)+size(publication)+proof_path.stat().st_size+audit_path.stat().st_size
+    removed=retire(a.root,publication,binding)
+    after=resource.getrusage(resource.RUSAGE_CHILDREN);measured=dict(native=ee,replay_execution=replay_e,audit_usage=audit_usage,whole_CPU=time.process_time()-self_cpu+after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime,whole_wall=time.monotonic()-started,peak_address_space_bytes=peak_AS([ee,replay_e,audits]),peak_new_output_bytes=peak_new,durable_new_output_bytes=peak_new-removed,retired_bytes=removed,audits_sha256=sha(audit_path),publication_sha256=sha(publication/'seal.json'))
+    comparisons={k:dict(predicted=model['complete_heldout_bounds'][k],actual=measured[{'CPU':'whole_CPU','wall':'whole_wall'}.get(k,k)]) for k in model['complete_heldout_bounds']}
+    for q in comparisons.values():q['status']='pass' if q['actual']<=q['predicted'] else 'fail'
+    result['cost_model_validation']=dict(status='pass' if all(q['status']=='pass' for q in comparisons.values()) else 'fail',comparisons=comparisons,heldout_not_used_to_fit=True,frozen_model_sha256=sha(a.output/'frozen-complete-model-before-heldout.json'))
+    write_json(a.output/'heldout-result.json',dict(measured=measured,validation=result['cost_model_validation']))
     rollback,rr,re=run('rejected-step',Path(sr['checkpoint']),2,reject=8)
     seven,sv,sve=run('rollback-predecessor7',Path(sr['checkpoint']),1)
     require(sve['exit_code']==0 and re['exit_code']!=0 and 'deliberate' in rr['failure'] and same_history(sv,rr),'selected full rejected-step rollback')
     result.update(status='pass',held_out=measured,segment6_execution=se,rollback_execution=re,rollback_predecessor_execution=sve,rollback_report_sha256=sha(rollback/'case.evolution.json'),live_bytes=sum(f.stat().st_size for f in a.root.rglob('*') if f.is_file()))
     write_json(a.output/'results.json',result);m.seal(a.output,['results.json']);return 0
-if __name__=='__main__':raise SystemExit(main())
+if __name__=='__main__':
+    install_probe_observer()
+    with PreparedRows():raise SystemExit(main())
