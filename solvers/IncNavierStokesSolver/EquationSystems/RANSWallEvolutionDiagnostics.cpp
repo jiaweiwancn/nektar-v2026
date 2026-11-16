@@ -331,7 +331,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
     if(scopedResidual)
     {
         imposed=raw;for(auto [row,value]:constraints)imposed[row]=s[row]-value;
-        Maximum(imposed);
+        RANSWallAlgebra::Maximum(imposed);
         if(verifyResidual)exact(imposed,Residual(s,history,alpha,time,data));
     }
     result["coupled_norms"]=Norms(scopedResidual?imposed:
