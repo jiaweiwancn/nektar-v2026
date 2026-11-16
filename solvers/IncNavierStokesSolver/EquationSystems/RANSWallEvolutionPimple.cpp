@@ -163,11 +163,13 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         if(useMapped){put("momentum_factor_allocation",momentumFactor.AllocationJSON());put("mass_factor_allocation",mass.AllocationJSON());
             put("native_velocity_rows",J::Numbers(std::vector<int>(flow.rows.begin(),flow.rows.begin()+nv)));}
         RANSWallTiming::Scope predictorTiming("momentum.solve_validate");
-        const auto predictor=momentumFactor.Apply(rhs);
+        RANSWallTiming::Scope predictorSolve("equation.momentum_solve");
+        const auto predictor=momentumFactor.Apply(rhs);predictorSolve.Stop();
+        RANSWallTiming::Scope predictorCheck("verify.momentum_linear");
         auto predictorDefect=Multiply(a,predictor);
         for(int i=0;i<nv;++i)predictorDefect[i]-=rhs[i];
         Require(Maximum(predictorDefect)<=1e-10*std::max(1.,Maximum(rhs)),"PIMPLE predictor linear residual");
-        ++momentum;predictorTiming.Stop();
+        ++momentum;predictorCheck.Stop();predictorTiming.Stop();
         RANSWallTiming::Scope pressureBuildTiming("pressure.build");
         // B = (alpha M_free)^-1. This is never a full momentum inverse.
         WallMatrix bg,schur(np,Vector(np));
@@ -185,11 +187,16 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
         for(int i=0;i<np;++i)pressureRhs[i]+=flow.residual[nv+i];
         pressureBuildTiming.Stop();
         RANSWallTiming::Scope pressureSolveTiming("pressure.solve_validate");
-        ++pressureAttempts;const auto dz=Factor(schur).Apply(pressureRhs);
+        ++pressureAttempts;const auto dz=[&](){
+            RANSWallTiming::Scope factorTiming("equation.pressure_factor");
+            const Factor factor(schur);factorTiming.Stop();
+            RANSWallTiming::Scope solveTiming("equation.pressure_solve");return factor.Apply(pressureRhs);
+        }();
+        RANSWallTiming::Scope pressureCheck("verify.pressure_linear");
         auto pressureDefect=Multiply(schur,dz);
         for(int i=0;i<np;++i)pressureDefect[i]-=pressureRhs[i];
         Require(Maximum(pressureDefect)<=1e-10*std::max(1.,Maximum(pressureRhs)),"PIMPLE pressure linear residual");
-        ++pressure;pressureSolveTiming.Stop();
+        ++pressure;pressureCheck.Stop();pressureSolveTiming.Stop();
         Vector predictorRhs(nv);for(int i=0;i<nv;++i)predictorRhs[i]=-flow.residual[i];
         if(m_pimpleArithmetic)
         {
@@ -301,19 +308,25 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::SolvePimpleSingleSweep(
             const auto block=AssemblePicardBlock(b,s,history,alpha,time,data,external,denseReference);
             // Same-state consistency verifies actual signed source/rate and
             // physical mass/history. No transport solve occurs in this check.
+            RANSWallTiming::Scope sourceCheck("verify.scalar_source_storage");
             const auto original=Residual(s,history,alpha,time,data);
             Vector agreement(block.rows.size());
             for(int i=0;i<block.rows.size();++i)agreement[i]=block.residual[i]-original[block.rows[i]];
             Require(Maximum(agreement)<1e-9*std::max(1.,Maximum(original)),"PIMPLE scalar source/storage mismatch");
+            sourceCheck.Stop();
             auto rhs=block.residual;for(auto &x:rhs)x=-x;
             if(b==Epsilon())++epsilonAttempts;else ++kAttempts;
             RANSWallTiming::Scope scalarSolveTiming(b==Epsilon()?"epsilon.solve_validate":"k.solve_validate");
-            const Factor scalarFactor(block.matrix);const auto delta=scalarFactor.Apply(rhs);
+            RANSWallTiming::Scope factorTiming("equation.scalar_factor");
+            const Factor scalarFactor(block.matrix);factorTiming.Stop();
+            RANSWallTiming::Scope solveTiming("equation.scalar_solve");
+            const auto delta=scalarFactor.Apply(rhs);solveTiming.Stop();
             if(useMapped)put(b==Epsilon()?"epsilon_factor_allocation":"k_factor_allocation",scalarFactor.AllocationJSON());
+            RANSWallTiming::Scope linearCheck("verify.scalar_linear");
             auto linear=Multiply(block.matrix,delta);
             for(int i=0;i<linear.size();++i)linear[i]-=rhs[i];
             Require(Maximum(linear)<1e-10*std::max(1.,Maximum(rhs)),"PIMPLE scalar linear residual");
-            if(b==Epsilon())++epsilon;else ++k;scalarSolveTiming.Stop();
+            if(b==Epsilon())++epsilon;else ++k;linearCheck.Stop();scalarSolveTiming.Stop();
             double traceColumns=0,traceMass=0,traceStorage=0,imposed=0;
             for(int i=0;i<block.rows.size();++i)
             {

@@ -614,21 +614,27 @@ RANSEquilibriumWallEvolution::Vector RANSEquilibriumWallEvolution::Implicit(cons
         if(m_patch->SegregatedPicard() || m_patch->PimpleSingleSweep())m_rejectedState=m_patch->LastFeasibleState();
         throw;
     }
-    if(m_patch->OpenBoundary())m_patch->ValidateOutlet(candidate,"before_commit");
+    if(m_patch->OpenBoundary())
+    {RANSWallTiming::Scope part("guard.completed_outlet");m_patch->ValidateOutlet(candidate,"before_commit");}
+    RANSWallTiming::Scope completedResidual("verify.completed_stage");
     const auto residual=m_patch->Residual(candidate,fullHistory,1/lambda,time,m_implicitData);
     const auto norms=m_patch->Norms(residual,m_patch->Constraints(candidate,time,m_implicitData),m_ustar);
+    completedResidual.Stop();
+    completedResidual.Stop();
     if(m_patch->SegregatedPicard())
         Require(Maximum(norms)<=m_tolerance,"Picard candidate failed the native stage residual check");
     if(m_patch->PimpleSingleSweep() && m_pimpleRejectStep>0 && m_integrator->Steps()+1==m_pimpleRejectStep)
     {m_rejectedState=candidate;throw std::runtime_error("deliberate PIMPLE rejection after scheduled solves before commit");}
     RANSWallEvolutionPatch::Diagnostic samples;
     m_fullAuditCurrent=ScientificDue(m_integrator->Steps()+1);
-    if(m_checkpointAudit)CheckOnlineBound(candidate,fullHistory,1/lambda,time);
+    if(m_checkpointAudit)
+    {RANSWallTiming::Scope part("guard.completed_bound");CheckOnlineBound(candidate,fullHistory,1/lambda,time);}
     if(m_patch->PimpleSingleSweep() && m_fullAuditCurrent){samples=m_patch->PhysicalSamples(candidate,time,m_implicitData);++m_physicalSampleCalls;}
     if(m_diagnostics && m_fullAuditCurrent)RecordAudit(candidate,fullHistory,1/lambda,time);
     if(!m_checkpointAudit)CheckOnlineBound(candidate,fullHistory,1/lambda,time);
     if(m_checkpointAudit && !m_fullAuditCurrent)
     {
+        RANSWallTiming::Scope part("data.completed_packet");
         m_acceptedStates.push_back(candidate);m_auditTimes.push_back(time);
         m_wjAuditPackets.push_back(m_patch->WJAuditPacket({},candidate,fullHistory,1/lambda,time,"implicit_provisional_online_only"));
     }

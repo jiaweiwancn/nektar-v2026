@@ -39,12 +39,27 @@ def execute(root,label,argv,seconds,phase,attempts=0):
         MPLCONFIGDIR=str(root/'tmp/matplotlib'),NEKTAR_RANS_TIMING_FILE=str(folder/'timing.jsonl'),
         WJ_H25_OPERATION=str(folder),WJ_H25_DEADLINE=str(time.monotonic()+seconds),
         WJ_H14_PARENT='/home/jay/build/wj-h13-fullheight-paired-domain-20261113/publication-v1/paired-case')
-    start=time.monotonic();peak=0;groups=set();reason=None;last_disk=-100
+    start=time.monotonic();peak=0;groups=set();reason=None;last_disk=-100;maps=[];seen_maps=set()
+    def native_maps(pid):
+        nonlocal reason
+        try:
+            paths=sorted({str(Path(s.split(maxsplit=5)[5]).resolve())for s in Path(f'/proc/{pid}/maps').read_text().splitlines()
+                if len(s.split(maxsplit=5))==6 and s.split(maxsplit=5)[5].startswith('/')and not s.endswith(' (deleted)')})
+            if any(p.endswith('.elf')for p in paths)and any(p.endswith('/libc.so.6')for p in paths):
+                key=(pid,tuple(paths))
+                if key not in seen_maps:
+                    assert len(maps)<16,'bounded native runtime-map catalog'
+                    seen_maps.add(key);libc=[p for p in paths if p.endswith('/libc.so.6')]
+                    okay=libc==['/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/libc.so.6']
+                    maps.append(dict(pid=pid,status='PASS'if okay else'FAIL',files=paths,elapsed=time.monotonic()-start))
+                    if not okay:reason='MIXED_NATIVE_RUNTIME'
+            for p in Path(f'/proc/{pid}/task/{pid}/children').read_text().split():native_maps(int(p))
+        except (FileNotFoundError,ProcessLookupError):pass
     with(folder/'command.log').open('x')as log:
         child=subprocess.Popen(['/usr/bin/time','-v',*map(str,argv)],cwd=root,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
         while child.poll()is None:
             try:
-                rss,_=tree_usage(os.getpid());peak=max(peak,rss);groups|=owned_groups(child.pid)
+                rss,_=tree_usage(os.getpid());peak=max(peak,rss);groups|=owned_groups(child.pid);native_maps(child.pid)
                 if rss>(16 if phase=='build'else 8)*1024**3:reason='RSS_LIMIT'
                 if time.monotonic()-start>seconds:reason='TIME_LIMIT'
                 if time.monotonic()-start-last_disk>10:
@@ -72,7 +87,10 @@ def execute(root,label,argv,seconds,phase,attempts=0):
         peak_tree_rss_bytes=peak,reserved_attempts=attempts,unknown_attempts=bool(attempts),
         log_sha256=sha(folder/'command.log'))
     counts=folder/'attempt-counts.json'
-    if counts.exists():event.update(load(counts));event['unknown_attempts']=False
+    if counts.exists():
+        actual=load(counts);assert type(actual['actual_attempts'])is int and 0<=actual['actual_attempts']<=attempts
+        event.update(actual);event['unknown_attempts']=not actual.get('known',True)
+    save(folder/'native-exec-maps.json',maps)
     complete_operation(root/'accounting.json',label,event);save(folder/'receipt.json',dict(req,**event))
     print(label,event['status'],seconds_used,flush=True)
     return code==0 and reason is None

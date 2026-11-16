@@ -315,6 +315,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
     const std::vector<RANSWallCoordinate> &additionalAnchors) const
 {
     RANSWallTiming::Scope timing("domain.compute");
+    RANSWallTiming::Accumulator timingParts;
     ScalarDomainResult result;result.phase="coefficients";result.normalizationApplicable=CappedDestruction();
     const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us;
     const double E0=us*us*us/(m_parameters.model.Kappa()*m_parameters.geometry.height);
@@ -370,13 +371,17 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         InitialiseScalarLocations();
         if(ConstitutiveKInventory()){InvalidateCoverageToken();m_coveredKLocations.clear();m_coveredKFunctionals.clear();}
         result.effectiveState=ExternalLift(state,time,data);result.phase="fixed_fields_and_samplers";
-        for(const auto &point:m_scalarLocations)
-            if(!check(point.inventory,point.row,point.block,point.strict,result.effectiveState,point.side))return result;
+        {
+            RANSWallTiming::Accumulator::Part part(timingParts,"domain.parts.fixed_rows");
+            for(const auto &point:m_scalarLocations)
+                if(!check(point.inventory,point.row,point.block,point.strict,result.effectiveState,point.side))return result;
+        }
         auto &pending=result.pendingProfiles;
         result.phase="moving_ray_k_before_normalization";
         auto ray=[&](const RANSWallCoordinate &p,const std::shared_ptr<EquilibriumAWFProfiles> &profile,
                      const std::string &name,bool source,double horizontalWeight)
         {
+            RANSWallTiming::Accumulator::Part part(timingParts,"domain.parts.moving_ray_rows");
             result.minimumCutoff=std::min(result.minimumCutoff,profile->Reference().cutoff);
             result.maximumCutoff=std::max(result.maximumCutoff,profile->Reference().cutoff);
             result.profileBranches.push_back(AcceptedAWF()?'A':profile->Reference().weight==0?'B':profile->Reference().weight==1?'E':'M');
@@ -398,22 +403,27 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
                  if(!check("constitutive_budget_reporting_source_ray",*EvaluationRow(K(),fields[K()]->LocateElement(point),point),K(),false,result.effectiveState))return false;}
             pending.push_back({p,profile,source});return true;
         };
+        auto stateProfile=[&](const RANSWallCoordinate &p){
+            RANSWallTiming::Accumulator::Part part(timingParts,"domain.parts.current_K_profiles");
+            return StateProfile(result.effectiveState,p,time,data);
+        };
         // Check every physical k BEFORE calling WallNormalization or a
         // dependent trace. Current profiles rebuild trial-specific cutoffs.
         for(const auto &r:m_rays)
-            if(!ray(r.coordinate,StateProfile(result.effectiveState,r.coordinate,time,data),
+            if(!ray(r.coordinate,stateProfile(r.coordinate),
                     "volume_normalization_ray",true,r.weight))return result;
         for(const auto &p:m_traceScalarAnchors)
         {
             if(CappedDestruction() && !ray(p,Profile(SampleK(result.effectiveState,p),p,0),"trace_baseline_normalization_ray",false,0))return result;
-            if(!ray(p,StateProfile(result.effectiveState,p,time,data),
+            if(!ray(p,stateProfile(p),
                     AcceptedAWF()?"trace_budget_awf_ray":"trace_current_normalization_ray",false,0))return result;
         }
         if(ConstitutiveKInventory())
         {
             // Profile construction needs only fixed/sampled fields. Validate
             // all dynamic-anchor samplers before constructing ANY new profile.
-            const auto anchors=ConstitutiveAnchors(result.effectiveState,additionalAnchors);
+            const auto anchors=[&](){RANSWallTiming::Accumulator::Part part(timingParts,"domain.parts.anchor_materialization");
+                return ConstitutiveAnchors(result.effectiveState,additionalAnchors);}();
             for(auto p:anchors)
             {
                 const double scale=m_mapping.At(p).scale;
@@ -431,7 +441,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             for(const auto &p:anchors)
             {
                 if(CappedDestruction() && !ray(p,Profile(SampleK(result.effectiveState,p),p,0),"constitutive_baseline_normalization_ray",false,0))return result;
-                if(!ray(p,StateProfile(result.effectiveState,p,time,data),AcceptedAWF()?"constitutive_budget_awf_ray":"constitutive_current_normalization_ray",false,0))return result;
+                if(!ray(p,stateProfile(p),AcceptedAWF()?"constitutive_budget_awf_ray":"constitutive_current_normalization_ray",false,0))return result;
                 if(ProspectiveKInventory())
                 {
                     // Only positivity constraints: never normalize this
@@ -464,6 +474,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         result.traceState=result.effectiveState;
         for(auto [row,value]:Constraints(state,time,data))result.traceState[row]=value;
         if(!MatchingEnabled() && !PimpleSingleSweep())result.effectiveState=result.traceState;
+        RANSWallTiming::Accumulator::Part epsilonPart(timingParts,"domain.parts.epsilon_rows");
         for(const auto &point:m_scalarLocations)if(point.block==Epsilon())
         {
             if(!check("actual_lifted_outer_epsilon",point.row,Epsilon(),true,result.effectiveState,point.side))return result;
