@@ -1,0 +1,34 @@
+{
+  "schema": "CT16ProspectiveCombinationAmendmentV1",
+  "applies_to": [
+    "ImmutableTensorV14/CT16-CurrentObservedScalarV1",
+    "ImmutableTensorV15/CT16-HashedBasisV1"
+  ],
+  "before_first_execution": true,
+  "parent_contract_sha256": {
+    "attempt-10-contract.json": "d445d89233cfc24432f2b9ace7e4c1ae632e2afc38dee677cb70572e9f795656",
+    "attempt-11-contract.json": "b8100225d92f8a61352333c5b5a586d8f70a5728e2d30caf405b8c6c45891698"
+  },
+  "measured_basis": {
+    "tested_source": "def644d0c34b9668573ec840b6ddaa58309e814a",
+    "V11_CPU": [
+      33.570767,
+      90.702362,
+      145.99554
+    ],
+    "V13_CPU": [
+      33.407704,
+      96.760721,
+      158.519554
+    ],
+    "V11_step_envelope": 57.131595,
+    "V13_step_envelope": 63.353017,
+    "V13_one_step_gradient_hits": 5422654,
+    "V13_one_step_gradient_misses": 2115730,
+    "V13_one_step_invalidations": 1,
+    "V12_selected_coverage_inserts": 0,
+    "V12_selected_coverage_queries": 0
+  },
+  "selection": "Keep the equivalent V13 experiment,its source/histories/CPU and failure to improve throughput. V14/V15 combine their new current-call scalar and immutable basis-index hypotheses with V11/V10 features,WITHOUT V13 cross-call current-gradient memo and WITHOUT inherited V12 coverage hashing. The selected inventory policy stays frozen; its zero coverage calls provide no evidence for the dormant branch. No claim that either V12/V13 supplies an affordable production path.",
+  "unchanged": "V14/V15 identities had no native executions or histories before this amendment. All new physical gradients are recomputed with the exact V10 stream route. Current-call scalar cold verification and V15 old-index verification stay mandatory. Update dependency checks to require no cross-call state reuse and explicit pure-gradient-memo false. Preserve all original G1-G6,limits,quotas,source history and finite CT16 ledger. Timing-off model validation remains incomplete; observed envelope is conditional,not a lower bound."
+}

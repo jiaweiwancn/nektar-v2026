@@ -368,9 +368,11 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10" || immutable=="ImmutableTensorV11" || immutable=="ImmutableTensorV12" || immutable=="ImmutableTensorV13" || immutable=="ImmutableTensorV14" || immutable=="ImmutableTensorV15","unknown immutable evaluation policy");
     m_hashedBasisCache=immutable=="ImmutableTensorV15";
     m_observedScalars=immutable=="ImmutableTensorV14" || m_hashedBasisCache;
-    m_currentVelocityGradients=immutable=="ImmutableTensorV13" || m_observedScalars;
+    // V13 remains available as the measured complete-velocity experiment.
+    // Later candidates omit its table after its timing-off throughput loss.
+    m_currentVelocityGradients=immutable=="ImmutableTensorV13";
     m_hashedCoverage=immutable=="ImmutableTensorV12" || m_currentVelocityGradients;
-    m_scopedAuditResidual=immutable=="ImmutableTensorV11" || m_hashedCoverage;
+    m_scopedAuditResidual=immutable=="ImmutableTensorV11" || m_hashedCoverage || m_observedScalars;
     m_streamGradients=immutable=="ImmutableTensorV10" || m_scopedAuditResidual;
     m_rowLRU=immutable=="ImmutableTensorV9" || m_streamGradients;
     const bool flatMetrics=immutable=="ImmutableTensorV8" || m_rowLRU;
