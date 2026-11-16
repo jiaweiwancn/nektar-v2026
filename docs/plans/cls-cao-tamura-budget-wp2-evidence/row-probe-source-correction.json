@@ -1,0 +1,33 @@
+{
+  "version": "WP2RowProbeSourceCorrectionV1",
+  "original_manifest": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/wp2-postprocess-rows-source.json",
+    "sha256": "dfd60eadfe065af443281d5f2b7f3001e1b1de999bc07e8323804cd0ace3a1d0"
+  },
+  "failed_initial_source_sha256": "e27c01ffab3335b4d165eabb2eec778ae0fdd15e028b0a5954c2e9c8088abe23",
+  "compiled_source_sha256": "c5c3be08963717b35cefca19c32c300fccc58f1cedf88a13e90f29139c72c11e",
+  "compiled_source_archive": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/analysis-source-probe-fix/RANSWallResolutionProbe.cpp",
+  "failed_build_log": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/build-postprocess-rows.log",
+    "sha256": "773abb1cc98ad12b0f3d6b410a9c752fa0559ed152a98720f9a5266ea93c4c7f"
+  },
+  "successful_build_log": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/build-postprocess-rows-fix.log",
+    "sha256": "a0445d53edd2ffe77e8314492931ea727a562c94f8f2b116d998de5c1dcc9581"
+  },
+  "source_diff": [
+    "--- failed-first-compile\n",
+    "+++ compiled-fixed-source\n",
+    "@@ -45,7 +45,7 @@\n",
+    "     for(const auto &el:patch.fields[0]->Elements())",
+    "     {xs.insert({el.lower[0],el.upper[0]});for(double z:{el.lower[2],el.upper[2]})Require(std::find(knots.begin(),knots.end(),z)!=knots.end(),\"row partition omits native interface\");}",
+    "     const auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(8,LibUtilities::eGaussGaussLegendre)];",
+    "-    struct Catalog {int width;std::vector<std::int32_t> ids;Vector phi,constant,dx,dz;};",
+    "+    struct Catalog {explicit Catalog(int n):width(n){} int width;std::vector<std::int32_t> ids;Vector phi,constant,dx,dz;};",
+    "     Catalog v{16},e{16},p{4},h{16};Vector coordinates,weights,wallCoordinates;std::vector<std::int32_t> regions,geometry,elements;",
+    "     auto append=[](Catalog &a,const RANSWallGlobalPoint &q,int offset)",
+    "     {Require(q.ids.size()==a.width,\"row catalog requires the qualified cubic/P1 basis\");for(int j=0;j<a.width;++j)"
+  ],
+  "row_probe_runtime_sha256": "f51cad5b9581e89c4643619536b0122212556467953ab796041ad6ca4e53e473",
+  "interpretation": "Original row-export source manifest described the failed -Werror=missing-field-initializers attempt. Successful rebuild explicitly initialized the same Catalog fields; current Mac/Linux CPP and compiled-fix archive match. This corrects the analysis-probe source index, not a numerical result or production runtime."
+}

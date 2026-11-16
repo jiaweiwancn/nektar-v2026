@@ -1,0 +1,1166 @@
+{
+  "version": "WP2Checkpoint4V1",
+  "capture_Asia_Shanghai": "2026-11-17T01:52:09.753809+08:00",
+  "closed": false,
+  "status": "OPEN_bounded_negative_recovery",
+  "implementation_revision": "19959bea36d9b289f685f014dcb4518c5c152dbb",
+  "gates": {
+    "CLS": {
+      "boundary": true,
+      "spatial": true,
+      "short_timestep_cost": true,
+      "unperturbed_physical_transit": true,
+      "time_mesh_sensitivity": true,
+      "restart_rollback_and_terminal_audit": true,
+      "perturbation_recovery": false
+    },
+    "standard": {
+      "boundary": true,
+      "spatial": true,
+      "short_timestep_cost": true,
+      "unperturbed_physical_transit": true,
+      "time_mesh_sensitivity": true,
+      "restart_rollback_and_terminal_audit": true,
+      "perturbation_recovery": false
+    }
+  },
+  "models": {
+    "CLS": {
+      "accepted_steps": 420,
+      "actual_time": 4.199999999999955,
+      "state_sha256": "0d3bf2c6410185ae78eb0398196cd1fbdf3e6bfb014daf40cca2152dfa2d5a0a",
+      "checkpoint": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-CLS/step420/checkpoint.30/State.bin",
+        "sha256": "d4c34573b60120ae6f917ede480c20da6c2f2fa2dcb9d0e959624353786dc368"
+      }
+    },
+    "standard": {
+      "accepted_steps": 368,
+      "actual_time": 3.6799999999999655,
+      "state_sha256": "46a2e853e4e052285fddb6eecab19e78d8ab83b9be0aabc35b29c8f79135db33",
+      "checkpoint": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step368/checkpoint.32/State.bin",
+        "sha256": "af80c7c734c812400ef9576a76575ce7a4c2c3e4d59380e592624812f7aa0170"
+      }
+    }
+  },
+  "physical_executions": {
+    "reported_native_attempts": 1379,
+    "accepted_step_executions": 1370,
+    "deliberate_post_assignment_rejections": 8,
+    "native_invocations": 103,
+    "scope": "unique native report paths; reused prefixes counted once, independent replay invocations counted separately"
+  },
+  "aggregate": {
+    "version": "WP2AggregateWorkV1",
+    "totals": {
+      "spatial_cases": 32,
+      "boundary_calls": 7,
+      "physical_attempts": 1400,
+      "timestep_trials": 7,
+      "geometry_context_builds": 2
+    },
+    "events": [
+      {
+        "event": "native CLS level0",
+        "time": "2026-11-16T14:38:27.938383+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 1
+        }
+      },
+      {
+        "event": "native CLS level0",
+        "time": "2026-11-16T14:46:29.529282+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 1
+        }
+      },
+      {
+        "event": "native CLS level0",
+        "time": "2026-11-16T14:46:59.344494+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 0
+        }
+      },
+      {
+        "event": "native standard level0",
+        "time": "2026-11-16T14:47:03.476978+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 1
+        }
+      },
+      {
+        "event": "native standard level0",
+        "time": "2026-11-16T14:47:24.850533+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 0
+        }
+      },
+      {
+        "event": "h0",
+        "time": "2026-11-16T14:53:40.630382+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "native CLS level1",
+        "time": "2026-11-16T14:53:43.666730+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 0
+        }
+      },
+      {
+        "event": "direct2",
+        "time": "2026-11-16T14:53:58.286539+08:00",
+        "work": {
+          "physical_attempts": 2
+        }
+      },
+      {
+        "event": "native standard level1",
+        "time": "2026-11-16T14:54:25.375639+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 0
+        }
+      },
+      {
+        "event": "split1",
+        "time": "2026-11-16T14:54:34.719638+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "split1-restart",
+        "time": "2026-11-16T14:54:58.716486+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "post-assignment-reject",
+        "time": "2026-11-16T14:55:24.697201+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "changed-boundary-restart",
+        "time": "2026-11-16T14:55:47.290392+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "h0",
+        "time": "2026-11-16T14:55:55.694367+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "direct2",
+        "time": "2026-11-16T14:56:12.029530+08:00",
+        "work": {
+          "physical_attempts": 2
+        }
+      },
+      {
+        "event": "split1",
+        "time": "2026-11-16T14:56:43.427481+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "split1-restart",
+        "time": "2026-11-16T14:57:07.534201+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "post-assignment-reject",
+        "time": "2026-11-16T14:57:32.874728+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "changed-boundary-restart",
+        "time": "2026-11-16T14:57:55.920670+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "native CLS level2",
+        "time": "2026-11-16T15:01:25.610409+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 0
+        }
+      },
+      {
+        "event": "native CLS level0",
+        "time": "2026-11-16T15:01:31.755601+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 1
+        }
+      },
+      {
+        "event": "native standard level2",
+        "time": "2026-11-16T15:02:35.454887+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 0
+        }
+      },
+      {
+        "event": "native standard level0",
+        "time": "2026-11-16T15:02:35.777668+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 1
+        }
+      },
+      {
+        "event": "native CLS level3",
+        "time": "2026-11-16T15:19:39.941519+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 0
+        }
+      },
+      {
+        "event": "native CLS level0",
+        "time": "2026-11-16T15:19:41.786440+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 1
+        }
+      },
+      {
+        "event": "native standard level0",
+        "time": "2026-11-16T15:20:51.094298+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 1
+        }
+      },
+      {
+        "event": "native standard level3",
+        "time": "2026-11-16T15:20:57.222771+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 0
+        }
+      },
+      {
+        "event": "h0",
+        "time": "2026-11-16T15:22:10.644750+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "direct2",
+        "time": "2026-11-16T15:22:26.703081+08:00",
+        "work": {
+          "physical_attempts": 2
+        }
+      },
+      {
+        "event": "split1",
+        "time": "2026-11-16T15:22:57.175132+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "split1-restart",
+        "time": "2026-11-16T15:23:20.822106+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "post-assignment-reject",
+        "time": "2026-11-16T15:23:45.125357+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "changed-boundary-restart",
+        "time": "2026-11-16T15:24:07.991495+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "h0",
+        "time": "2026-11-16T15:24:16.363878+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "direct2",
+        "time": "2026-11-16T15:24:32.573998+08:00",
+        "work": {
+          "physical_attempts": 2
+        }
+      },
+      {
+        "event": "split1",
+        "time": "2026-11-16T15:25:03.810131+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "split1-restart",
+        "time": "2026-11-16T15:25:27.988292+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "post-assignment-reject",
+        "time": "2026-11-16T15:25:52.830227+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "changed-boundary-restart",
+        "time": "2026-11-16T15:26:16.690474+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "native CLS level3",
+        "time": "2026-11-16T15:39:29.977959+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 0
+        }
+      },
+      {
+        "event": "native CLS level4",
+        "time": "2026-11-16T15:43:02.150120+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 0
+        }
+      },
+      {
+        "event": "native standard level4",
+        "time": "2026-11-16T15:44:14.602072+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 0
+        }
+      },
+      {
+        "event": "native CLS level5",
+        "time": "2026-11-16T15:45:44.185332+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 0
+        }
+      },
+      {
+        "event": "native standard level5",
+        "time": "2026-11-16T15:47:22.660492+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 0
+        }
+      },
+      {
+        "event": "h0",
+        "time": "2026-11-16T15:51:24.992569+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "direct2",
+        "time": "2026-11-16T15:51:45.926606+08:00",
+        "work": {
+          "physical_attempts": 2
+        }
+      },
+      {
+        "event": "split1",
+        "time": "2026-11-16T15:52:21.995411+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "split1-restart",
+        "time": "2026-11-16T15:52:48.940550+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "post-assignment-reject",
+        "time": "2026-11-16T15:53:16.860169+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "changed-boundary-restart",
+        "time": "2026-11-16T15:53:43.486008+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "native CLS level4",
+        "time": "2026-11-16T16:12:53.334356+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 0
+        }
+      },
+      {
+        "event": "native CLS level4",
+        "time": "2026-11-16T16:13:41.170744+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 0
+        }
+      },
+      {
+        "event": "native standard level4",
+        "time": "2026-11-16T16:13:52.431355+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 0
+        }
+      },
+      {
+        "event": "native standard level4",
+        "time": "2026-11-16T16:15:46.797527+08:00",
+        "work": {
+          "spatial_cases": 1,
+          "boundary_calls": 0
+        }
+      },
+      {
+        "event": "common physical extraction CLS level4",
+        "time": "2026-11-16T16:21:27.494629+08:00",
+        "work": {
+          "spatial_cases": 1
+        }
+      },
+      {
+        "event": "common physical extraction CLS level5",
+        "time": "2026-11-16T16:21:48.678820+08:00",
+        "work": {
+          "spatial_cases": 1
+        }
+      },
+      {
+        "event": "common physical extraction standard level4",
+        "time": "2026-11-16T16:25:17.240888+08:00",
+        "work": {
+          "spatial_cases": 1
+        }
+      },
+      {
+        "event": "common physical extraction standard level5",
+        "time": "2026-11-16T16:25:34.652059+08:00",
+        "work": {
+          "spatial_cases": 1
+        }
+      },
+      {
+        "event": "fresh GL28 CLS",
+        "time": "2026-11-16T16:29:50.228927+08:00",
+        "work": {
+          "spatial_cases": 1
+        }
+      },
+      {
+        "event": "fresh GL28 standard",
+        "time": "2026-11-16T16:34:20.656273+08:00",
+        "work": {
+          "spatial_cases": 1
+        }
+      },
+      {
+        "event": "h0",
+        "time": "2026-11-16T16:36:00.623553+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "direct2",
+        "time": "2026-11-16T16:36:19.595737+08:00",
+        "work": {
+          "physical_attempts": 2
+        }
+      },
+      {
+        "event": "split1",
+        "time": "2026-11-16T16:36:55.835626+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "split1-restart",
+        "time": "2026-11-16T16:37:23.868181+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "post-assignment-reject",
+        "time": "2026-11-16T16:37:52.833682+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "changed-boundary-restart",
+        "time": "2026-11-16T16:38:19.133587+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "time trial CLS dt=0.02",
+        "time": "2026-11-16T16:43:44.326830+08:00",
+        "work": {
+          "timestep_trials": 1
+        }
+      },
+      {
+        "event": "time trial standard dt=0.02",
+        "time": "2026-11-16T16:43:44.442422+08:00",
+        "work": {
+          "timestep_trials": 1
+        }
+      },
+      {
+        "event": "step2",
+        "time": "2026-11-16T16:43:44.521852+08:00",
+        "work": {
+          "physical_attempts": 2
+        }
+      },
+      {
+        "event": "step2",
+        "time": "2026-11-16T16:43:44.596976+08:00",
+        "work": {
+          "physical_attempts": 2
+        }
+      },
+      {
+        "event": "time trial standard dt=0.01",
+        "time": "2026-11-16T16:46:47.285201+08:00",
+        "work": {
+          "timestep_trials": 1
+        }
+      },
+      {
+        "event": "time trial CLS dt=0.01",
+        "time": "2026-11-16T16:46:47.380090+08:00",
+        "work": {
+          "timestep_trials": 1
+        }
+      },
+      {
+        "event": "step4",
+        "time": "2026-11-16T16:46:47.469040+08:00",
+        "work": {
+          "physical_attempts": 4
+        }
+      },
+      {
+        "event": "step4",
+        "time": "2026-11-16T16:46:47.524510+08:00",
+        "work": {
+          "physical_attempts": 4
+        }
+      },
+      {
+        "event": "time trial CLS dt=0.02",
+        "time": "2026-11-16T16:53:29.262873+08:00",
+        "work": {
+          "timestep_trials": 1
+        }
+      },
+      {
+        "event": "step2",
+        "time": "2026-11-16T16:53:29.354268+08:00",
+        "work": {
+          "physical_attempts": 2
+        }
+      },
+      {
+        "event": "time trial standard dt=0.02",
+        "time": "2026-11-16T16:53:35.110135+08:00",
+        "work": {
+          "timestep_trials": 1
+        }
+      },
+      {
+        "event": "step2",
+        "time": "2026-11-16T16:53:35.185189+08:00",
+        "work": {
+          "physical_attempts": 2
+        }
+      },
+      {
+        "event": "one",
+        "time": "2026-11-16T17:17:11.686793+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "one",
+        "time": "2026-11-16T17:17:11.773443+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "one",
+        "time": "2026-11-16T17:18:44.644505+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "one",
+        "time": "2026-11-16T17:18:44.903359+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "h0",
+        "time": "2026-11-16T17:32:16.464436+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "h0",
+        "time": "2026-11-16T17:32:16.550074+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "changed-dt",
+        "time": "2026-11-16T17:50:46.370623+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "changed-dt",
+        "time": "2026-11-16T17:50:46.474744+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "step15",
+        "time": "2026-11-16T17:58:22.032025+08:00",
+        "work": {
+          "physical_attempts": 12
+        }
+      },
+      {
+        "event": "step15",
+        "time": "2026-11-16T17:58:22.114262+08:00",
+        "work": {
+          "physical_attempts": 12
+        }
+      },
+      {
+        "event": "step30",
+        "time": "2026-11-16T18:05:02.429343+08:00",
+        "work": {
+          "physical_attempts": 15
+        }
+      },
+      {
+        "event": "step30",
+        "time": "2026-11-16T18:05:05.936215+08:00",
+        "work": {
+          "physical_attempts": 15
+        }
+      },
+      {
+        "event": "step45",
+        "time": "2026-11-16T18:12:59.281125+08:00",
+        "work": {
+          "physical_attempts": 15
+        }
+      },
+      {
+        "event": "step45",
+        "time": "2026-11-16T18:13:12.190164+08:00",
+        "work": {
+          "physical_attempts": 15
+        }
+      },
+      {
+        "event": "step60",
+        "time": "2026-11-16T18:20:57.911883+08:00",
+        "work": {
+          "physical_attempts": 15
+        }
+      },
+      {
+        "event": "step60",
+        "time": "2026-11-16T18:21:23.629977+08:00",
+        "work": {
+          "physical_attempts": 15
+        }
+      },
+      {
+        "event": "step30",
+        "time": "2026-11-16T18:56:19.356711+08:00",
+        "work": {
+          "physical_attempts": 26
+        }
+      },
+      {
+        "event": "step30",
+        "time": "2026-11-16T18:56:19.447051+08:00",
+        "work": {
+          "physical_attempts": 26
+        }
+      },
+      {
+        "event": "step60",
+        "time": "2026-11-16T19:13:23.139408+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "step60",
+        "time": "2026-11-16T19:13:47.126415+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "step90",
+        "time": "2026-11-16T19:32:33.454687+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "step90",
+        "time": "2026-11-16T19:34:12.415189+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "step120",
+        "time": "2026-11-16T19:48:28.816031+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "step120",
+        "time": "2026-11-16T19:49:51.151338+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "immutable retrospective geometry rows selected",
+        "time": "2026-11-16T20:09:15.709913+08:00",
+        "work": {
+          "geometry_context_builds": 1
+        }
+      },
+      {
+        "event": "immutable retrospective geometry rows confirmation",
+        "time": "2026-11-16T20:09:23.749357+08:00",
+        "work": {
+          "geometry_context_builds": 1
+        }
+      },
+      {
+        "event": "step15",
+        "time": "2026-11-16T20:09:35.093211+08:00",
+        "work": {
+          "physical_attempts": 13
+        }
+      },
+      {
+        "event": "step15",
+        "time": "2026-11-16T20:09:35.311623+08:00",
+        "work": {
+          "physical_attempts": 13
+        }
+      },
+      {
+        "event": "step30",
+        "time": "2026-11-16T20:21:15.177062+08:00",
+        "work": {
+          "physical_attempts": 15
+        }
+      },
+      {
+        "event": "step30",
+        "time": "2026-11-16T20:21:25.861825+08:00",
+        "work": {
+          "physical_attempts": 15
+        }
+      },
+      {
+        "event": "step45",
+        "time": "2026-11-16T20:33:32.099152+08:00",
+        "work": {
+          "physical_attempts": 15
+        }
+      },
+      {
+        "event": "step45",
+        "time": "2026-11-16T20:33:37.036999+08:00",
+        "work": {
+          "physical_attempts": 15
+        }
+      },
+      {
+        "event": "step60",
+        "time": "2026-11-16T20:45:59.139147+08:00",
+        "work": {
+          "physical_attempts": 15
+        }
+      },
+      {
+        "event": "step60",
+        "time": "2026-11-16T20:46:02.992078+08:00",
+        "work": {
+          "physical_attempts": 15
+        }
+      },
+      {
+        "event": "step30",
+        "time": "2026-11-16T20:58:38.335241+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "step30",
+        "time": "2026-11-16T20:58:38.628467+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "step60",
+        "time": "2026-11-16T21:16:09.443575+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "step60",
+        "time": "2026-11-16T21:16:24.096500+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "step90",
+        "time": "2026-11-16T21:32:04.503657+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "step90",
+        "time": "2026-11-16T21:32:16.340828+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "step120",
+        "time": "2026-11-16T21:48:01.876572+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "step120",
+        "time": "2026-11-16T21:48:21.302785+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "split4",
+        "time": "2026-11-16T22:07:50.915710+08:00",
+        "work": {
+          "physical_attempts": 4
+        }
+      },
+      {
+        "event": "step150",
+        "time": "2026-11-16T22:07:51.226446+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "restart4",
+        "time": "2026-11-16T22:10:58.962353+08:00",
+        "work": {
+          "physical_attempts": 4
+        }
+      },
+      {
+        "event": "parent-readback",
+        "time": "2026-11-16T22:14:04.501032+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "post-assignment-reject",
+        "time": "2026-11-16T22:15:06.759287+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "split4",
+        "time": "2026-11-16T22:18:34.235911+08:00",
+        "work": {
+          "physical_attempts": 4
+        }
+      },
+      {
+        "event": "restart4",
+        "time": "2026-11-16T22:21:34.372746+08:00",
+        "work": {
+          "physical_attempts": 4
+        }
+      },
+      {
+        "event": "step180",
+        "time": "2026-11-16T22:23:28.364375+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "parent-readback",
+        "time": "2026-11-16T22:24:31.796363+08:00",
+        "work": {
+          "physical_attempts": 0
+        }
+      },
+      {
+        "event": "post-assignment-reject",
+        "time": "2026-11-16T22:25:36.159059+08:00",
+        "work": {
+          "physical_attempts": 1
+        }
+      },
+      {
+        "event": "terminal seen GL28 CLS",
+        "time": "2026-11-16T22:27:09.878326+08:00",
+        "work": {
+          "spatial_cases": 1
+        }
+      },
+      {
+        "event": "terminal seen GL28 standard",
+        "time": "2026-11-16T22:28:14.308068+08:00",
+        "work": {
+          "spatial_cases": 1
+        }
+      },
+      {
+        "event": "step150",
+        "time": "2026-11-16T22:29:20.380138+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "time trial standard dt=0.005",
+        "time": "2026-11-16T22:39:12.368200+08:00",
+        "work": {
+          "timestep_trials": 1
+        }
+      },
+      {
+        "event": "step32",
+        "time": "2026-11-16T22:39:12.489246+08:00",
+        "work": {
+          "physical_attempts": 32
+        }
+      },
+      {
+        "event": "step180",
+        "time": "2026-11-16T22:45:11.237276+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "step60",
+        "time": "2026-11-16T22:55:53.918531+08:00",
+        "work": {
+          "physical_attempts": 28
+        }
+      },
+      {
+        "event": "step210",
+        "time": "2026-11-16T23:07:07.419058+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "step210",
+        "time": "2026-11-16T23:13:09.629350+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "step240",
+        "time": "2026-11-16T23:22:10.988873+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "step240",
+        "time": "2026-11-16T23:28:29.245165+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      },
+      {
+        "event": "step272",
+        "time": "2026-11-16T23:53:58.767789+08:00",
+        "work": {
+          "physical_attempts": 32
+        }
+      },
+      {
+        "event": "step272",
+        "time": "2026-11-16T23:53:58.874122+08:00",
+        "work": {
+          "physical_attempts": 32
+        }
+      },
+      {
+        "event": "step304",
+        "time": "2026-11-17T00:10:40.146196+08:00",
+        "work": {
+          "physical_attempts": 32
+        }
+      },
+      {
+        "event": "step304",
+        "time": "2026-11-17T00:11:11.690944+08:00",
+        "work": {
+          "physical_attempts": 32
+        }
+      },
+      {
+        "event": "step336",
+        "time": "2026-11-17T00:27:13.229615+08:00",
+        "work": {
+          "physical_attempts": 32
+        }
+      },
+      {
+        "event": "step336",
+        "time": "2026-11-17T00:28:04.045297+08:00",
+        "work": {
+          "physical_attempts": 32
+        }
+      },
+      {
+        "event": "step368",
+        "time": "2026-11-17T00:44:21.681756+08:00",
+        "work": {
+          "physical_attempts": 32
+        }
+      },
+      {
+        "event": "step368",
+        "time": "2026-11-17T00:45:15.619885+08:00",
+        "work": {
+          "physical_attempts": 32
+        }
+      },
+      {
+        "event": "step390",
+        "time": "2026-11-17T01:01:09.651297+08:00",
+        "work": {
+          "physical_attempts": 22
+        }
+      },
+      {
+        "event": "step390",
+        "time": "2026-11-17T01:02:05.880011+08:00",
+        "work": {
+          "physical_attempts": 22
+        }
+      },
+      {
+        "event": "step420",
+        "time": "2026-11-17T01:13:29.068480+08:00",
+        "work": {
+          "physical_attempts": 30
+        }
+      }
+    ]
+  },
+  "wall_seconds_at_capture": 41782.75385117531,
+  "no_WP2_physical_jobs_remaining": true,
+  "hill_steps": 0,
+  "source_runtime": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/final-source-runtime-v3.json",
+    "sha256": "3599b6811fae3e316cfca57d4d82f48fcfaeab5501b34da442cc7d1904add1e4"
+  },
+  "ledger": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/final-status-complete-counts.json",
+    "sha256": "f436b00f53a6d0642c69438cc11bd02c8a284d8504c7fed39891d39bf8e32c57"
+  },
+  "interpretation": "Checkpoints 1-3 and full unperturbed transit pass both; recovery fails both. Goal remains OPEN. Eight deliberate rollback rejections are separate from one genuine standard covariance rejection. No automatic retry or long continuation."
+}

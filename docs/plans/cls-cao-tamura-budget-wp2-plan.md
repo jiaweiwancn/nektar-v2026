@@ -76,3 +76,14 @@ factor/solve, report/checkpoint and step costs separately. All adaptive attempts
 replays and failures share one durable numerical/time/storage ledger. Commit and
 push each checkpoint and verify ancestry; terminal partial evidence is truthful
 and leaves unmet goal criteria open.
+
+2026-11-17 terminal update (Asia/Shanghai): checkpoints 0–3 are committed and
+pushed. The common full six-column spatial gate and all unperturbed transit,
+half-step, confirmation-mesh and restart tests pass both models. Checkpoint 4
+retains a bounded negative result: CLS completes T=4.2 without correction but
+fails final return/window accuracy; standard accepts through T=3.68 and rejects
+its next candidate on genuine inner covariance. The original closure goal
+remains OPEN. No hill continuation or automatic recovery extension follows.
+The report and identity-bound final ledger distinguish these gates. The next
+focused decision is transient timestep sensitivity around the retained growing
+standard mode, before another recovery campaign or model interpretation.

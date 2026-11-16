@@ -1,258 +1,319 @@
-# WP2: neutral open approach-flow qualification
+# WP2: full-height neutral open approach flow
 
-2026-11-16–17, Asia/Shanghai. Checkpoints 1 and 2 pass for both deployed regularized
-CLS and calibrated standard k–epsilon. Checkpoint 3 qualifies the short timestep
-pair and measured cost. Both models have completed the unperturbed physical-transit,
-half-step and finer-mesh runs. WP2 remains **OPEN**: the standard perturbation
-recovery suffers a genuine native covariance rejection at attempted T=3.69 s,
-after 368 accepted steps to T=3.68 s. CLS is completing its bounded T=4.2
-assessment. Boundary/spatial success does not close the failed dynamic gate.
+2026-11-16–17, Asia/Shanghai. **WP2 remains OPEN.** Both models pass the
+new boundary implementation, common deployable spatial qualification and
+unperturbed transit tests. The bounded perturbation tests fail recovery:
+regularized CLS remains admissible but misses the final accuracy budgets at
+T=4.2 s; calibrated standard loses inner covariance at attempted T=3.69 s.
+No hill run or automatic recovery retry is launched.
 
-The physical calibration, full-height analytical inlet, local transported-K
-cutoff budget and one-sweep equations are unchanged. The new
-`NeutralEquilibriumOpenV1` policy supplies full roof shear and epsilon conormal
-flux, stress-consistent regional outlet traction and absolute pressure, with
-immutable analytical backflow data. Top U/k/epsilon remain free; W is essential.
-The old boundary policies retain their meanings.
-
-The stored pressure is pi=p/rho+2k/3. At Pout=.003 the independent selected-kernel
-check gives CLS pi_inner=-.004039556572351707 and
-pi_outer=-.0014583858291560801; standard gives both .003. CLS's retained
-mechanical pressure jump is -.0025811707431956273. No separate roof/outlet pressure
-Dirichlet datum or closed-box mean gauge is added.
-
-All native face modes, including nonconstant modes and both outflow/backflow
-signs, agree with independent GL32 integrations within 1.2e-15 relative error.
-With configured GL24 face/source quadrature, analytical free-block weak loads are
-at most 1.58e-13 in native normalization. Wrong-top and omitted-outlet-shear
-controls respectively give U=.04529 and W=.04033 defects. Both models pass new
-production-policy direct/split restart, post-assignment rejection/rollback and
-changed-boundary restart rejection. These tiny fixtures qualify implementation,
-not a transit interval. Full receipts, actual source hashes and immutable solver,
-probe and library identities are in [checkpoint1.json](cls-cao-tamura-budget-wp2-evidence/checkpoint1.json).
-
-Radial energy projection is an optional representation operation, including
-outer epsilon and model-correct regional pressure. It supplies no balancing
-volume load and is not a stationary PDE solve. The common full six-column
-progress is:
-
-| Cubic slots | CLS U / W / k / epsilon residual | Standard U / W / k / epsilon residual |
-|---:|---|---|
-| 2804, L2 | .13704 / .004816 / .04859 / .001826 | .13686 / .0001048 / .04651 / .002950 |
-| 2804, energy | .02261 / .002042 / .005188 / .0006376 | .02199 / .0001243 / .004970 / .0007684 |
-| 5339, energy | .003470 / .0004199 / .001045 / .0001060 | .003343 / .00001984 / .0009998 / .0001234 |
-| 8002, energy | .001272 / .0004486 / .0001386 / .00006463 | .001056 / .00001863 / .0001302 / .0001034 |
-| 9882, upper refinement | .001236 / .0004280 / .0001343 / .00006288 | .001026 / .000003697 / .0001265 / .0001025 |
-
-The upper-only refinement was ineffective. Signed panel contractions against
-the full inverse free-row mass located large cancellation around the matching
-plane, with shared CG rows and cross terms retained. Splitting the last inner
-and first two outer panels gives the selected **8650-slot** common case:
-
-| Case | CLS U / W / k / epsilon | Standard U / W / k / epsilon |
+| Gate | Regularized CLS | Calibrated standard |
 |---|---|---|
-| Selected | .000469076 / .000166622 / .000126918 / .000036735 | .000412545 / .000018553 / .000120549 / .000029991 |
-| 11014-slot confirmation | .000329744 / .000137559 / .000072366 / .000033939 | .000277433 / .000018548 / .000067656 / .000026954 |
+| Equilibrium-compatible boundary implementation | PASS | PASS |
+| Common six-column spatial accuracy | PASS | PASS |
+| Unperturbed dt / dt/2 / finer mesh through T_req | PASS | PASS |
+| Whole-interval quarter-budget comparisons | PASS | PASS |
+| Complete unperturbed final windows and trend | PASS | PASS |
+| Split restart, histories, post-assignment rollback | PASS | PASS |
+| Bounded perturbation return to all final budgets | FAIL, T=4.2 | FAIL, native rejection at attempted T=3.69 |
+| Resolved transient timestep accuracy | OPEN | OPEN; short half-step control exceeds a quarter budget |
+| Overall approach-flow closure | OPEN | OPEN |
 
-Both cases use the complete six-column topology, cubic fields and regional P1
-pressures. Increasing source/face quadrature from GL16 to GL24 changes the
-selected block norms by at most 2.2e-11. Independent GL28 plus the frozen
-physical stations and exact native side limits pass both models' full physical
-budgets. Independent covariance minima (inner, outer) are
-(.00631381050,.00609524100) for CLS and (.00683838645,.00671295638) for standard,
-far above each model's unchanged 1e-4 K0 target. Independent NumPy eigenvalue
-replays agree within 1e-12. No stationary PDE correction or artificial supply
-is used.
+The [closure ledger](cls-cao-tamura-budget-wp2-evidence/final-status.json)
+and [checkpoint-4 receipt](cls-cao-tamura-budget-wp2-evidence/checkpoint4.json)
+bind terminal results. Boundary/spatial success and an admissible trajectory
+are separate from perturbation recovery and experimental accuracy.
 
-Selected versus confirmation physical differences, integrated on the union of
-their interfaces, use at most 8.41% of the allowed quarter-budget limits.
-Absolute regional pressure offsets are retained. One-ulp ReferenceK integration
-roundoff between native panel partitions is recorded explicitly, without
-changing normalization or a physical tolerance.
+## Physical contract and boundaries
 
-The historical default evolution limit remains 3000. The explicit opt-in
-`WP2MeasuredDenseV1` permits at most 12000 only for this serial affine one-sweep
-problem, following measured 5339–9882-slot audit peaks below 3.73 GiB. Physical
-consistent masses, pressure inverse and all acceptance inventories are
-unchanged. Actual larger first/continued-step RSS and cost must still pass
-checkpoint 3 before longer evolution is adopted. The policy and exact free rows,
-case/runtime identities and physical gates are in
-[checkpoint2.json](cls-cao-tamura-budget-wp2-evidence/checkpoint2.json) and
-[numerical-adaptation.json](cls-cao-tamura-budget-wp2-evidence/numerical-adaptation.json).
+The frozen H2g calibrations, seven-point fit, u_tau=.07426793792419734 m/s,
+nu=3.8095238095238094e-6 m²/s, kappa=.4405539051866587,
+z0_eff=.00012222264395414748 m and H_A=.0065 m are unchanged. Both models use
+the full-height analytical logarithmic U and 1/z epsilon above H_A, their own
+equilibrium K0, and the nonconstant accepted inner ReferenceK. The inlet and
+backflow reference have no finite tail. Endpoint K is transported during
+evolution; every local cutoff uses its actual K and counterfactual p_A0(K).
+Actual inner production remains full stress work, with source P_actual-E_C.
+There is no forcing, residual anchor, profile reset, E_C/k reaction or retuning.
 
-The exact composite inlet flux is 1.050195996901104 m²/s per unit span, U_bulk is
-1.31274499612638 m/s and T_req is 1.1942387693600194 s. Both selected dt=.02 runs
-have now completed 60 accepted steps to actual T=1.2000000000000006 s, with zero
-rejection or correction supply and passing per-state native physical checks.
-Both half-step runs completed 120 accepted steps to actual T=1.2000000000000008 s;
-both 11014-slot confirmation runs completed 60 accepted steps to
-T=1.2000000000000006 s. All 61 executed common native times pass timestep and mesh
-comparisons. Complete dynamic closure has not yet been issued. H2k's hill startup remains preserved;
-no hill run is authorized here.
+The versioned policy is NeutralEquilibriumOpenV1. Historical policies retain
+their meanings. At the roof, W=0 is essential; U, k and solved outer epsilon
+are free. The full selected tangential traction is +u_tau² e_x, k conormal
+flux is zero, and epsilon conormal is -u_tau^4/(sigma_epsilon Z). The latter
+is positive outward physical diffusion. Per unit roof length it is
+2.9253115350668032e-5 for CLS and 2.821498719297465e-5 for standard.
+Roof traction is .005515726603512429 m²/s².
 
-The selected-space dt=.02/.01 s trials reach the same actual T=.04 s with 2/4
-accepted steps per model. Every equation and logical bound operation occurs once
-per accepted step; solved epsilon is retained, and correction activity/supply are
-zero. Differences use at most 3.29% (CLS) and 1.03% (standard) of the allowed
-quarter budgets. Continued native steps cost 26–28 s; cold two-step driver runs
-cost 120–123 s with peak RSS below 4 GiB. The confirmation mesh's two steps cost
-179–180 s total, continued steps about 39–40 s, peak 5.54 GiB. Early selected/finer
-differences remain within 8.41% of the quarter budgets.
+The outlet uses T*n=T_ref*n+min(u_n,0)(u-u_ref), with its equivalent
+conservative upwind flux counted once and immutable positive scalar backflow
+data. Pressure is pi=p/rho+2k/3. Pout fixes outer streamwise total normal
+pressure; no independent pressure Dirichlet condition or closed-box mean gauge
+is appended. Production cases use Pout=0. The nonzero-datum fixture at .003
+independently recovers:
 
-The final diagnostic runtime explicitly checks prescribed coefficients before
-free-row masking and reports the post-k dependent epsilon refresh lag separately.
-It changes no evolution arithmetic: both models reproduce old-runtime governing
-stage hashes, states, native histories, reference/defect and audit values bitwise
-from the same accepted checkpoint. All earlier trial prescribed rows independently
-replay with zero error. Frozen runtimes are retained, and successors name their
-exact parent checkpoints. The epsilon refresh lag is not removed by a second
-solve or Lift.
+| Reference | pi_inner | pi_outer | mechanical p_inner-p_outer, per density |
+|---|---:|---:|---:|
+| CLS | -.004039556572351707 | -.0014583858291560801 | -.0025811707431956273 |
+| Standard | .003 | .003 | 0 |
 
-Both predeclared recovery seeds pass the native admissibility checks at zero
-physical steps. A constrained consistent-mass projection adds only outer k on
-.012<z<.05, with an actual maximum 4.0492% departure, zero endpoint-K change and
-unchanged U, W, pressures, epsilon, reference, defect and boundary data. The TKE
-increments are 5.35438e-6 (CLS) and 5.59378e-6 (standard), per unit span/density.
-These are setup increments, not positivity-correction supply. At T=1.2 both
-recovery legs have 120 accepted steps and zero bound supply. CLS passes its
-native final profile budgets and the independent full GL28 profile check, but
-its full homogeneity/window/trend assessment still fails. Standard retains a
-6.14% native pointwise k error and pressure/W errors. The same accepted
-trajectories were extended through T=2.4 and now have a final bounded T=4.2 target; no seed, physical parameter, dt or
-acceptance threshold is changed. Recovery is not yet demonstrated.
+All affected face test modes, nonconstant modes and outflow/backflow signs agree
+with independent GL32 integration within 1.2e-15 relative error. Analytical
+free U/W/k/epsilon weak loads are at most 1.58e-13 in native normalization.
+Wrong-top and omitted-outlet-shear controls retain U=.04529 and W=.04033
+defects. Full-stress compensation, pressure/corner and production fixtures pass.
+See [checkpoint 1](cls-cao-tamura-budget-wp2-evidence/checkpoint1.json) and the
+[literature crosswalk](cls-cao-tamura-budget-wp2-evidence/source-crosswalk.json).
+Richards–Norris supplies the upper shear/epsilon-flux rationale; the regional
+outlet-pressure completion and numerical budgets are project-specific.
 
-Use dt=.02 and .01 to T=1.2 s, with observations at .3/.6/.9/1.2; the last .3 s
-exceeds T_req/4. Continue the same accepted trials instead of repeating them.
-The finer mesh has completed the same physical interval; recovery uses .01. The checkpoint-3
-remaining-program forecast was about 4–4.5 h with two serial native cases, including
-setup/reporting, restart/rollback and headroom, inside the original 12 h envelope.
-The [checkpoint-3 receipt](cls-cao-tamura-budget-wp2-evidence/checkpoint3.json)
-separates inclusive step costs, exclusive CPU categories, actual splitting
-defects from their algebraic identity, and declared versus executed duration.
+## Common spatial qualification
 
-The first implementation attempt exposed an immutable-reference dispatch using
-candidate coverage assertions. That setup failure is retained on Linux; the
-reference now calls the selected kernel directly, and complete hard audits remain
-active. No historical witness is reinterpreted by this repair.
+All levels use the complete six-column topology
+[-.2,-.1,-.05,0,.05,.1,.6] m, Z=.8 m, cubic U/W/k/epsilon and regional P1
+pressures. Reported numbers are **full free-row physical consistent-mass-dual
+block norms**, with shared rows and cross terms assembled before contraction.
 
-Reproduction: `run_cao_tamura_budget_wp2.py` builds common fresh model cases and
-charges the aggregate work ledger; `wp2_native.py` runs fail-fast production
-restart/rollback fixtures. Heavy artifacts and exact command logs are under
-`/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116`.
-See the [predeclared plan](cls-cao-tamura-budget-wp2-plan.md),
-[policy](cls-cao-tamura-budget-wp2-evidence/policy.json) and
-[literature/source crosswalk](cls-cao-tamura-budget-wp2-evidence/source-crosswalk.json).
+| Slots / representation | CLS U / W / k / epsilon | Standard U / W / k / epsilon |
+|---|---|---|
+| 2804 / L2 | .137041 / .004816 / .048587 / .001826 | .136857 / .0001048 / .046509 / .002950 |
+| 2804 / energy | .022613 / .002042 / .005188 / .0006376 | .021994 / .0001243 / .004970 / .0007684 |
+| 5339 / energy | .003470 / .0004199 / .001045 / .0001060 | .003343 / .00001984 / .0009998 / .0001234 |
+| 8002 / energy | .001272 / .0004486 / .0001386 / .00006463 | .001056 / .00001863 / .0001302 / .0001034 |
+| **8650 / selected** | **.000469076 / .000166622 / .000126918 / .000036735** | **.000412545 / .000018553 / .000120549 / .000029991** |
+| 11014 / confirmation | .000329744 / .000137559 / .000072366 / .000033939 | .000277433 / .000018548 / .000067656 / .000026954 |
 
-The full coefficient-derived, all-state readback checks full 3x3 Reynolds and
-mean stresses, complete gradients, homogeneity, absolute pressure, source work
-and covariance at 254016 GL28 points per state on the union physical partition.
-Independent AWF ReferenceK primitives reproduce native values within 1.18e-16;
-source-grid primitive fields/gradients replay native data bitwise. Inner dependent
-epsilon and viscosity are recomputed from each actual state's endpoint K, not
-a report's terminal transient sampler. Native exact sided/interface inventories
-remain complementary to this finite volume sampling. All original raw reports
-and earlier analysis receipts are retained.
+An ineffective 9882-slot upper-only refinement is preserved. Signed global
+mass-dual panel contractions localized matching-plane cancellation; splitting
+the last inner and first two outer panels produced the selected case.
+RadialEnergyV1 minimizes a representation error for U, k and complete outer
+epsilon with correct regional reference pressures. It is setup algebra,
+not a stationary PDE solve or an equilibrium-restoring load.
 
-The unperturbed dt/half-step comparison uses at most 20.15% (CLS) and 5.12%
-(standard) of the allowed quarter-budget limits. The maximum selected/finer
-fraction over the whole interval is 51.40%, at the initial inner sampled shear.
-Full-stress regional RMS errors reach at most .002211 (CLS) and .001525
-(standard), normalized by u_tau^2, below .01. The measured final .3 s window
-and transit-scaled least-squares trend pass every unperturbed leg.
+Source/face GL16-to-GL24 changes in block norms are <=2.2e-11. Independent GL28,
+physical stations, native extrema and exact sided interfaces pass initial
+physical/scalar/covariance budgets. Independent initial covariance minima
+(inner, outer) are (.00631381050,.00609524100) for CLS and
+(.00683838645,.00671295638) for standard. Independent tensor/eigenvalue replay
+agrees within 1e-12. No bound correction or artificial supply is used.
 
-The actual preserved upstream profiles, with frozen observations and weights,
-give full 15-point mean-velocity RMSE .0912971 Uinf for both models, stress
-RMSE about .001822 Uinf^2, and streamwise-RMS RMSE .90110 (CLS) versus .77668
-(standard), in sigma_u/u_tau units. This is the selected full-height surface-layer
-idealization, without a finite-layer tail. Numerical preservation does not
-remove its experimental outer-profile discrepancy or calibrate the standard
-model's isotropic normal stresses. Fig.3d and hill observations remain held out.
+The historical 3000-slot default remains. Explicit WP2MeasuredDenseV1 permits
+at most 12000 only for this serial affine one-sweep problem, after measured
+larger audits and continued steps. No physical-mass approximation or general
+mapped expansion is introduced. Exact native field dimensions, free rows,
+quadrature and identities are in
+[checkpoint 2](cls-cao-tamura-budget-wp2-evidence/checkpoint2.json) and
+[numerical adaptation](cls-cao-tamura-budget-wp2-evidence/numerical-adaptation.json).
 
-The complete unperturbed final-window check now bounds **every pair of executed
-times**, using the componentwise GL28 ranges; it does not rely only on equal
-endpoints or a linear trend. All six cases pass. Denser GL28 timestep differences
-use at most 21.85% (CLS) and 5.87% (standard) of the allowed quarter budgets;
-mesh differences use 56.65%. Native wall/interface/continuity comparison bounds
-also pass, using the physical triangle inequality rather than adding component
-norms as error percentages. Independently aggregating the two regional GL16
-strong-divergence L2 norms reproduces the reported physical RMS within 9.3e-16.
+## Executed physical time and independent checks
 
-At T=2.4, CLS's native physical profiles pass except the unforced block norm
-(.002268); its complete recovery window does not qualify. Standard has k point
-error 16.88%, strong-divergence ratio .0015904, wall-shear error 1.264%, and
-mechanical-pressure RMS error .13102 in u_tau^2 units. These are failed accuracy
-criteria, despite positive scalar/covariance states and zero correction supply.
-The read-only assessor now records failed transient accuracy checks and writes
-a complete negative receipt; it still requires the same final limits and never
-bypasses scalar or covariance requirements. The original aborted assessment log
-is preserved.
+The composite inlet gives Q=1.050195996901104 m²/s, U_bulk=1.31274499612638 m/s
+and **T_req=1.1942387693600194 s**. Each model completes:
 
-One conditional standard dt=.005 control completes 60 accepted steps to actual
-T=.30000000000000016 from the exact same pulse as dt=.01, with independently
-formed histories. First callback history hashes equal the perturbed seed for
-both models and both tested timesteps. At T=.3, the dt difference is about 2.82
-times the quarter-budget point-pressure limit; field differences are 2.8–10.8%
-of the fine trajectory's response. This warns that the transient is time
-sensitive. It neither establishes temporal order nor proves a physical model
-instability. No extra long timestep trajectory is launched.
+| Leg | dt, seconds | Accepted / attempted | Actual endpoint, seconds |
+|---|---:|---:|---:|
+| Selected coarse | .02 | 60 / 60 | 1.2000000000000006 |
+| Selected half-step | .01 | 120 / 120 | 1.2000000000000008 |
+| Confirmation mesh | .02 | 60 / 60 | 1.2000000000000006 |
 
-The final recovery milestone remains within the original 12-hour envelope, with
-no automatic extension beyond T=4.2. Floating-point time comparisons after T=1.2
-use a predeclared global-step addition bound, at most (steps+2) ulps of the
-expected time; saved times and histories are never edited or interpolated.
-Ordinary incompatible-dt restarts remain rejected. Exact completed trajectory
-snapshots bind subsequent readbacks, preventing a later continuation from
-changing the assessment's input manifest.
+These are 1.004824 transit units. Reused trial prefixes are counted once;
+restart/rollback replay executions are itemized separately in the artifact
+index. All accepted physical steps retain one U/p/outer-epsilon/k solve and
+one logical bound operation, with zero correction supply and authoritative
+solved epsilon. First histories match the actual fresh seed, not a regenerated
+reference. Ordinary changed-dt and changed-boundary restart rejection remains.
+Across the pulse's .012–.05 m reference support, k/epsilon is approximately
+.227–.946 s for CLS and .237–.989 s for standard. These reference times do not
+bound the evolved near-wall scale: at standard's rejected witness k/E_C is
+about .00358 s, below dt=.01 s. This motivates a transient time-sensitivity
+check; it is not an integrator-instability proof.
 
-The production native source chain matches the final Mac production C++ files.
-The one C++ difference is the separately compiled, geometry-only row-export
-probe, frozen under its own identity. Python workflow changes are recorded
-separately from the unchanged production executable. The closure collector
-checks executable and every frozen linked-library hash, input receipt hashes
-and exact final state/history/reference bindings; missing or failed recovery
-evidence cannot close WP2. Source and runtime records are indexed in
-[native-source-chain.json](cls-cao-tamura-budget-wp2-evidence/native-source-chain.json).
+Every unique unperturbed state passes native monitoring and independent
+coefficient-derived full 3x3 stress/gradient/profile checks at 254016 GL28
+points. Primitive fields/gradients replay native rows bitwise; reference-k
+primitives agree within 1.18e-16. Dependent inner data use each state's own
+endpoint K, rather than a report's terminal transient sampler.
 
-Native turbulence budgets retain actual production, cutoff sink and its separate
-counterfactual reference production, outer epsilon production/destruction/Yap,
-physical storage from saved histories, all physical faces, constrained reactions
-and signed free/interface row projections. Regional weak identities close within
-1.5e-16 at the retained unperturbed endpoints. The raw face column labelled
-`outward_diffusion` is the conormal D*grad(q) dot n; the outward physical
-diffusive transport is its negative. Sampled face-gradient balances are distinct
-from exact weak row identities. CG interface row projections are not unique
-control-volume fluxes, and constrained rows are not unconstrained evolution
-equations. The dependent inner epsilon has no invented transport equation/flux.
+All 61 common executed times pass dense timestep and mesh comparisons.
+Worst fractions of the **allowed quarter budgets** are .21852 (CLS timestep),
+.05875 (standard timestep) and .56653 (mesh). Native boundary/continuity
+triangle bounds also pass. Full Reynolds/mean-stress RMS errors normalized by
+u_tau² reach at most .002211 (CLS) and .001525 (standard), below .01.
+Final .3 s windows exceed T_req/4: all-pairs component-range bounds and
+transit-scaled trends pass all six unperturbed cases. Endpoint similarity alone
+is not used to claim window closure.
 
-Useful reproduction entry points, with exact argument arrays retained under the
-Linux root, are `run_cao_tamura_budget_wp2.py`, `run_wp2_preservation.py`,
-`verify_wp2_long_transaction.py`, `analyze_wp2_approach.py`,
-`audit_wp2_dense_profiles.py`, `audit_wp2_dense_comparisons.py`,
-`audit_wp2_window_envelope.py`, `audit_wp2_native_boundary_bounds.py` and
-`collect_wp2_closure.py`. Every analysis is read-only. Existing output owners
-reject duplicate launches; use their recorded unused-root setup for reproduction.
+Actual step52-to60 4+4 replay is bitwise equal in fields, governing stages,
+histories/time labels, reference, defect and boundary identity. Deliberate
+post-assignment rejection restores the restart-initialized accepted caches,
+fields and histories. The diagnostic runtime upgrade is separately shown
+bitwise equivalent to the previous production arithmetic on both models.
 
-At 2026-11-17 01:22 Asia/Shanghai, independent replay confirms standard's first
-rejected tensor at (x,z)=(.1,.00037071067811865477) m, geometry/element 71,
-tangential plus limit of the downstream [.1,.6] panel. The actual k is
-.004780870703900692, transported endpoint K=.020124472529214812 and
-nu_A=1.3079319333594469e-5 m²/s. The represented gradient has U_z=283.82060192,
-U_x=.9163086232, W_x=-.0423199353 and W_z=3.1273719451 per second. Independently
-differentiating its native-element polynomial agrees within 2.3e-12 per second.
-The isotropic covariance diagonal is .003187247136; the off-diagonal Linear
-contribution is -.003711626770. The complete eigenvalues are
-(-.0005773808840411,.003187247135934,.006846097977037) m²/s², reproducing the
-native negative minimum within 8.2e-17. This is an interior radial witness with
-explicit native tangential provenance, not an H-side mismatch.
+## Bounded perturbation outcome
 
-Scalar positivity and cutoff budgets still pass: minimum inner k=.00285531158,
-minimum outer epsilon=.00116219967, minimum budget ratio=3.03600254 and maximum
-relative budget defect zero. The attempt completes one U/p/epsilon/k solve and
-one logical bound call, with no activation and authoritative solved epsilon,
-then fails the final complete audit before candidate assignment/history commit.
-Fields, native histories/time labels, fixed reference and defect restore
-bitwise to the accepted parent; the rejected coefficients and callback history
-remain archived. There is no retry. The exact receipt and independent tensor
-replay are in [recovery-standard-native-rejection.json](cls-cao-tamura-budget-wp2-evidence/recovery-standard-native-rejection.json).
-This establishes failure of this discrete recovery trajectory; unresolved
-transient timestep/spatial error prevents a claim of model-wide instability.
+The predeclared fresh setup changes only outer k on .012<z<.05 with zero
+external/interface increment. Its actual peak departure is 4.0492203% of K0,
+above twice the 1% accuracy budget. Endpoint K, U/W, pressure, epsilon,
+reference, defect and prescribed data are unchanged. Initial TKE increments
+are 5.35438e-6 (CLS) and 5.59378e-6 (standard) per unit span/density; these
+are setup changes, not bound supply.
+
+| Recovery, dt=.01 s | CLS | Standard |
+|---|---:|---:|
+| Accepted / attempted physical steps | 420 / 420 | 368 / 369 |
+| Accepted physical frontier, seconds | 4.199999999999955 | 3.6799999999999655 |
+| Transit units | 3.516885 | 3.081461 |
+| Terminal native covariance inner / outer | .006282072 / .006084599 | first rejected: -.000577381 / .005659255 |
+| Final complete return classification | FAIL accuracy/window | FAIL hard covariance |
+| Bound activation / supply | zero / zero | zero / zero |
+
+CLS's final free U/W/k/epsilon block norms are
+(.0057668113,.0012657988,.0005281667,.0000819372). Inner pointwise k error is
+1.54713%, against 1%; strong-divergence RMS/(u_tau/H_A)=.000187065 and
+wall-shear RMS error=.00141018 pass their own budgets. Passing those quantities
+does not compensate for failed residual/profile/window criteria.
+The independently recomputed GL28 final .3 s window changes inner U by
+.00027763 (limit .00025), pointwise inner k by .01364577 (limit .0025), and
+mechanical-pressure RMS by .00650470 (limit .0025). The corresponding
+transit-scaled trends fail too. The complete all-pairs window receipt is
+retained; the final-window failure is measured, not inferred from the endpoint.
+
+Standard's first rejection is at actual attempted T=3.6899999999999653,
+after all four scheduled solves and the logical bound, at the final complete
+accepted-AWF audit **before** candidate assignment/history commit. Its exact
+negative witness is (x,z)=(.1,.00037071067811865477) m, geometry/element 71,
+tangential plus limit of the downstream [.1,.6] panel, interior radial side.
+Actual k=.004780870703900692, endpoint K=.020124472529214812,
+nu_A=1.3079319333594469e-5 m²/s. G has U_x=.9163086232, U_z=283.82060192,
+W_x=-.0423199353 and W_z=3.1273719451 per second. Independent polynomial
+differentiation differs by <=2.3e-12 per second.
+
+The complete covariance eigenvalues are
+(-.0005773808840411,.003187247135934,.006846097977037) m²/s²;
+independent replay agrees with the native minimum within 8.2e-17. This is a
+genuine inner Linear witness, not an interface-law/gradient pairing defect.
+Scalar positivity and cutoff budgets still pass: min inner k=.00285531158,
+min outer epsilon=.00116219967, min budget ratio=3.03600254, budget defect zero.
+All accepted parent fields/histories/time labels/reference/defect restore
+bitwise, with rejected candidate and callback history retained.
+
+At that point actual full stress-work production is 1.0406687 and E_C=1.3355405
+m²/s³; counterfactual p_A0=1.6713864 remains a distinct quantity.
+The preceding accepted state's domain-integrated inner P/E=1.003648:
+near-balanced global integrals do not imply local equilibrium or covariance.
+Diffusion, advection, storage and interface/constrained-row exchanges remain
+explicit in the native weak budgets, rather than being inferred from P-E.
+
+![Executed perturbation metrics](cls-cao-tamura-budget-wp2-evidence/recovery.png)
+
+One bounded standard dt=.005 control executes 60 accepted steps to
+T=.30000000000000016 from the identical pulse and its own valid histories.
+At T=.3, timestep differences use 2.82 times the quarter-budget point-pressure
+limit and 2.8–10.8% of the resolved response. Thus the transient timestep gate
+is open. These results do not establish timestep-independent model instability
+or global physical infeasibility. The original negative assessments, exact
+states and independent
+[rejection replay](cls-cao-tamura-budget-wp2-evidence/recovery-standard-native-rejection.json)
+are preserved. No retry, physical retuning or extension beyond T=4.2 follows.
+
+## Budgets, performance and scientific limits
+
+Native budgets retain actual production, prescribed cutoff dissipation,
+separate counterfactual production, epsilon production/destruction/Yap,
+physical history storage, boundary transport, roof/outlet work and constrained
+reactions. Weak row identities close within 1.5e-16 at retained unperturbed
+endpoints, and within 1.3e-16 at the reported late recovery endpoints.
+At CLS's unperturbed T=1.2 half-step endpoint, actual roof traction work is
+.00653600734, outward roof epsilon diffusion is .00002340249228 and outlet
+reference-traction work is .00002352580716, per unit span/density. These are
+separate work/flux terms, not a fabricated closed kinetic balance.
+
+Raw face column `outward_diffusion` stores D*grad(q) dot n; outward physical
+diffusive transport is its negative. Sampled-gradient face balances are distinct
+from exact weak row partitions. CG interface-row projections are not unique
+control-volume fluxes, constrained reactions are not free evolution equations,
+and dependent inner epsilon has no invented transport equation.
+
+Continued selected steps cost roughly 25–33 s; confirmation steps about 40 s.
+Measured selected recovery steps are about 27 s, including all unchanged hard
+audits. The confirmation run peaks near 5.9 GiB. Driver time includes startup,
+report/budget construction and checkpoint/output. Exclusive process-CPU
+categories distinguish domain/inventory and constitutive scans from
+factorization/triangular actions; report construction is not labelled pure I/O.
+The [artifact/cost index](cls-cao-tamura-budget-wp2-evidence/artifact-index.json)
+records actual commands, per-root costs, executable identities and heavy paths.
+The original aggregate 12-hour, 96-GiB storage, 24-GiB/process and 72-worker
+limits are not reset by continuation names. Numerical ranks/library threads
+are one; build concurrency is four. Repeated-addition time allowances are
+predeclared bounds; no saved time, history or checkpoint identity is edited.
+
+The complete native-report index counts **1379 physical attempts, 1370 accepted
+step executions, eight deliberately injected rollback rejections and one
+genuine standard rejection**, across 103 solver invocations including zero-step
+and incompatible-restart fixtures. It includes nested runtime replays and
+legacy progress records, deriving counters from native callback/accepted-step
+data without rewriting original receipts. The ledger reserved 1400 attempts;
+the 21 unexecuted attempts are the remainder of the standard block stopped at
+its first rejection. Spatial cases use 32/32, boundary calls 7/24 and timestep
+trials 7/16. Final measured storage is 14.45 GiB and maximum native RSS is
+5.90 GiB. All WP2 physical jobs are stopped. Eleven focused Linux protocol
+tests pass, including nested execution counting and fail-fast ownership.
+The recovery driver wall times are 13366.15 s (CLS) and 11763.28 s (standard),
+with continued-step medians 27.01 and 26.95 s; these concurrent process costs
+are distinct from aggregate elapsed wall time.
+
+Frozen experimental coordinates/weights are unchanged. At x=-.15, preserved
+T=1.2 full 15-point mean RMSE is about .0912971 Uinf for both models; shear
+RMSE is about .001822 Uinf², and streamwise RMS error is .90110 (CLS) versus
+.77668 (standard), in sigma_u/u_tau units. The seven fitted mean points retain
+RMSE .02549213 Uinf. This records the full-height surface-layer idealization's
+experimental discrepancy; numerical closure would not remove it. Standard's
+isotropic neutral normal stresses are not a fit to unequal measured RMS.
+Fig.3d and hill observations remain held out.
+
+## Provenance, reproduction and next action
+
+Starting head: baa4651351a588c23c72785a22e90bb3f1bd40ce. Checkpoints 0–3 were
+committed/pushed as 019190cb74783fdc8cea88d07a96deabd491b68f,
+2e08ddb40615269044b34ad40d8509171cfcfd40,
+76f94833f1170d81059b68d6599c9690686ea459 and
+8e499bc5c64fb7a22f036e649c53b93cff31b643, respectively.
+The source identity manifest records the full tested hashes; final evidence
+is committed as checkpoint 4 with an explicitly **OPEN** result.
+
+Production runtime-v12 executable SHA256:
+8f64823373d97b86880cc9b624b19886f9921a2e9a0d56a9def1f0528af485df.
+Its complete linked-library closure is frozen and rechecked by the closure
+collector. Native production source hashes match the final source chain;
+the geometry-only row-export probe is separately built and identified.
+Postprocessing changes do not overwrite a historical solver or library.
+The row-probe source index is corrected to the successfully compiled c5c3be08
+source: its earlier manifest described a failed missing-field-initializer
+compile. The exact constructor-only diff, failed/successful build-log hashes
+and unchanged f51cad5b runtime are preserved in
+[row-probe-source-correction.json](cls-cao-tamura-budget-wp2-evidence/row-probe-source-correction.json).
+The tested implementation revision is 19959bea36d9b289f685f014dcb4518c5c152dbb;
+the final documentation/evidence commit adds no native arithmetic change.
+
+Heavy root:
+`/media/jay/新加卷1/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116`;
+mount UUID 5AB8A669B8A642FD is verified. Exact native XML/argv, histories,
+checkpoints, failed packets and all readback sources remain there.
+The [plan](cls-cao-tamura-budget-wp2-plan.md),
+[policy](cls-cao-tamura-budget-wp2-evidence/policy.json),
+[source chain](cls-cao-tamura-budget-wp2-evidence/native-source-chain.json)
+and final artifact index provide reproducible commands. Principal entry points
+are run_cao_tamura_budget_wp2.py, run_wp2_preservation.py,
+verify_wp2_long_transaction.py, audit_wp2_rejected_recovery.py,
+audit_wp2_dense_comparisons.py, audit_wp2_window_envelope.py,
+collect_wp2_closure.py and collect_wp2_artifacts.py. Use unused output roots;
+existing owners reject duplicate launches. Every forensic/readback operation
+performs zero governing solves.
+
+**Next package:** qualify one short common-state timestep comparison around
+the saved standard growth/rejection interval, with independently initialized
+IMEX1 histories and the same physical scalar/stress budgets. This is the
+smallest way to test the observed transient time sensitivity before assigning
+the local mode to the model or commissioning a longer recovery run.
+Hill requalification remains deferred until both-model WP2 closure. Spatial
+accuracy of the selected equilibrium, transient accuracy/robustness, developed
+flow and held-out experimental validation remain separate gates.

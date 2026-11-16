@@ -1,6 +1,25 @@
 {
-  "code": 0,
-  "stdout": "",
-  "stderr": "..........\n----------------------------------------------------------------------\nRan 10 tests in 0.341s\n\nOK\n",
-  "Asia_Shanghai": "2026-11-16T23:13:09.270003"
+  "version": "WP2ProtocolTestsV7",
+  "passed": true,
+  "tests": 11,
+  "command": [
+    "env",
+    "OMP_NUM_THREADS=1",
+    "OPENBLAS_NUM_THREADS=1",
+    "MKL_NUM_THREADS=1",
+    "python3",
+    "-m",
+    "unittest",
+    "test_wp2_protocol"
+  ],
+  "cwd": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS",
+  "log": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/protocol-tests-final-v7.log",
+    "sha256": "31d705ec6de319c3b5a04b80dea4ed0b175d96eb7c5472763949940a95bd287c",
+    "text": "...........\n----------------------------------------------------------------------\nRan 11 tests in 0.155s\n\nOK\n"
+  },
+  "source_sha256": {
+    "test_wp2_protocol.py": "83595a935948a9c69c39824418e61a984bc4501e301ebf296b1d4ca3b555f746",
+    "wp2_execution_index.py": "11023e45c27f43ca5618914813a867e180e0c08cd5196276c5b098c64b418a13"
+  }
 }

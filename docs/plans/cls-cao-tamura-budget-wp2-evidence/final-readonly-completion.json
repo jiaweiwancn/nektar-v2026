@@ -1,0 +1,46 @@
+{
+  "version": "WP2FinalReadonlyCompletionV1",
+  "status": "completed_read_only_assessment",
+  "models": {
+    "CLS": {
+      "owner": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-CLS-followup-T4p2/progress.json",
+      "owner_sha256": "1a45259775135e6ba05701e6a14787d13264d3854fca268207a206efa89f6b25",
+      "status": "completed_bounded_followup",
+      "failure": null
+    },
+    "standard": {
+      "owner": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-standard-followup-T4p2/progress.json",
+      "owner_sha256": "c16c121148338653a8a74b13611fd40df319680392cf718faaf807a027fbe9a5",
+      "status": "terminal_stop",
+      "failure": "followup stopped after same_checkpoint_continuation; no later invocation permitted"
+    }
+  },
+  "commands": [
+    [
+      "python3",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/audit_wp2_window_envelope.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-CLS-final-all-pairs",
+      "--models",
+      "CLS",
+      "--phases",
+      "recovery",
+      "--trajectory",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-CLS-followup-T4p2/completed-trajectory.json"
+    ],
+    [
+      "python3",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/collect_wp2_closure.py",
+      "--root",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116",
+      "--checkpoints",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/checkpoint-evidence",
+      "--output",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/final-status.json"
+    ]
+  ],
+  "closed": false,
+  "final_status_sha256": "79f39abde71e653e5ceb35c103eee752843d3679ec08288df65700f5436b46c9"
+}
