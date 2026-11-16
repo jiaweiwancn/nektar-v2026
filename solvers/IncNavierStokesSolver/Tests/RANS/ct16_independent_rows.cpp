@@ -124,3 +124,13 @@ extern "C" int ct16_plan_grid(const void *handle,std::int64_t count,
     }
     return 0;
 }
+
+// Preserve the original scalar NumPy norm's nine-entry BLAS reduction. Each
+// matrix norm is fresh; this helper retains no data or physical classification.
+extern "C" int ct16_norm9(std::int64_t n,const double *matrices,double *norms)
+{
+    if(n<0 || n>262144)return 1;
+    for(std::int64_t i=0;i<n;++i)
+        norms[i]=std::sqrt(cblas_ddot(9,matrices+9*i,1,matrices+9*i,1));
+    return 0;
+}
