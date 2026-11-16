@@ -32,7 +32,7 @@ def policy(folder,value=POLICY):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for k in ('ct14','runtime','output'):p.add_argument('--'+k,type=Path,required=True)
-    p.add_argument('--phase',choices=['small','training','baseline','diagnostic'],required=True)
+    p.add_argument('--phase',choices=['small','training','selected-one','baseline','diagnostic'],required=True)
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3))
     os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');os.environ['NEKTAR_RANS_PROBE_OBSERVER']='NativeAuditReceiptV1';os.environ.pop('NEKTAR_RANS_TIMING_FILE',None)
     ct9=a.ct14.parent/'ct-accepted-9-20261114'

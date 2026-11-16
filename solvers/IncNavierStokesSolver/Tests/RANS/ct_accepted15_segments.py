@@ -15,7 +15,7 @@ from ct_accepted14_collect import pressure_receipts
 from ct_accepted11_target import bounded_budgets
 from ct_accepted15_exec import native_run,install_probe_observer
 from ct_accepted15_python import PreparedRows
-from ct_accepted15_audits import complete,bundle,scope
+from ct_accepted15_audits import complete,bundle,scope,external_cpu
 from ct_accepted15_equivalence import numerical
 from ct_accepted_open import require
 from ct_accepted_feasibility import write_json
@@ -94,10 +94,10 @@ def main():
         e['whole_segment_CPU']=time.process_time()-cpu+after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime;e['whole_segment_wall']=time.monotonic()-started
         return dest,r,e
     binding=dict(runtime=m.payload['request']['runtime'],probe=m.payload['request']['probe'],dt=.00025,signature=full['signature'])
-    result=dict(schema='CT15ActualSegmentRecoveryV1',status='incomplete',policy='SelectiveReplayV1',cycles=[],model=model)
+    result=dict(schema='CT15ActualSegmentRecoveryV1',status='incomplete',policy='SelectiveReplayV1',cycles=[],model=model,workflow_contract_sha256=sha(a.root/'source/docs/plans/cao-tamura-accepted-15-evidence/workflow-contract-v2.json'))
     previous=zero;current=two;current_folder=a.training/'steps-2'
     for end in (2,4):
-        cycle_started=time.monotonic();cycle_cpu=time.process_time();cycle_before=resource.getrusage(resource.RUSAGE_CHILDREN)
+        cycle_started=time.monotonic();cycle_cpu=time.process_time();cycle_before=resource.getrusage(resource.RUSAGE_CHILDREN);cycle_external=external_cpu()
         cp=Path(previous['checkpoint']);restored=a.output/('restored-'+str(end));shutil.copytree(cp,restored)
         require(all(sha(f)==sha(restored/f.relative_to(cp)) for f in cp.rglob('*') if f.is_file()),'native restart restore bytes differ')
         replay_folder,replayed,execution=run('replayed-'+str(end),restored)
@@ -106,7 +106,7 @@ def main():
         require(recovered==full_snaps[end-2:end],'segmented versus continuous stage trajectory')
         metrics=n.physical_metrics(ini,replayed['state'],c,weights,count);expected=pair['members']['0.00025']['accepted_metrics'][end]
         require(metrics=={k:v for k,v in expected.items() if k!='time'},'full versus replayed scientific classification')
-        audits,audit_usage=scope(complete,a.runtime,replay_folder,ini,replayed,c,weights,count)
+        audits,audit_usage=scope(complete,a.runtime,replay_folder,ini,replayed,c,weights,count,full=end==4)
         require(audits['per_state'][-1]['metrics']==metrics,'independent replay diagnostics disagree')
         audits_path=a.output/('audit-replay-'+str(end)+'.json');write_json(audits_path,audits)
         nr=numerical_receipts(replay_folder/'sparse-receipts.jsonl');pr=pressure_receipts(replayed)
@@ -145,7 +145,7 @@ def main():
         before_retirement_bytes=size(current_folder)+size(replay_folder)+size(restored)+size(publication)+proof_path.stat().st_size+audits_path.stat().st_size+size(interrupted)
         removed=retire(a.root,publication,binding)
         cycle_after=resource.getrusage(resource.RUSAGE_CHILDREN)
-        usage=dict(CPU=time.process_time()-cycle_cpu+cycle_after.ru_utime+cycle_after.ru_stime-cycle_before.ru_utime-cycle_before.ru_stime,wall=time.monotonic()-cycle_started)
+        usage=dict(CPU=time.process_time()-cycle_cpu+cycle_after.ru_utime+cycle_after.ru_stime-cycle_before.ru_utime-cycle_before.ru_stime,wall=time.monotonic()-cycle_started,external_monitor_CPU=max(0.,external_cpu()-cycle_external))
         result['cycles'].append(dict(end_step=end,execution=execution,cycle_usage=usage,audit_usage=audit_usage,peak_address_space_bytes=peak_AS([execution,audits]),before_retirement_owned_bytes=before_retirement_bytes,durable_owned_bytes=before_retirement_bytes-removed,retired_bytes=removed,publication_sha256=sha(publication/'seal.json'),negative_controls=negative,proof_sha256=sha(proof_path)))
         write_json(a.output/'progress.json',result)
         previous=current
@@ -165,9 +165,11 @@ def main():
     action_cpu=sum(v['process_cpu_seconds']+v.get('observer_self_CPU_seconds',0) for v in action_training)
     action_wall=sum(v['wall_seconds'] for v in action_training)
     model['complete_heldout_bounds']=dict(CPU=normal_cpu+envelope([x['cycle_usage']['CPU'] for x in result['cycles']])+action_cpu,wall=normal_wall+envelope([x['cycle_usage']['wall'] for x in result['cycles']])+action_wall,peak_address_space_bytes=envelope([x['peak_address_space_bytes'] for x in result['cycles']]+[peak_AS(action_training)]),peak_new_output_bytes=envelope([x['before_retirement_owned_bytes'] for x in result['cycles']])+sum((a.root/'timestep-v1'/k/'frozen.json').stat().st_size for k in ts['controls'] if k.startswith('4000-')))
+    model['external_monitor_CPU_per_wall_second']=envelope([x['cycle_usage']['external_monitor_CPU']/x['cycle_usage']['wall'] for x in result['cycles']])
+    model['complete_heldout_bounds']['CPU']+=model['external_monitor_CPU_per_wall_second']*model['complete_heldout_bounds']['wall']
     model['scope']='one normal two-step restart, fresh predecessor restoration and two-step replay, all independent state/scalar/constitutive audits, later native/q48/q64 actions, sealed publication and retirement; no heldout measurements used for fitting'
     write_json(a.output/'frozen-complete-model-before-heldout.json',model)
-    started=time.monotonic();self_cpu=time.process_time();before=resource.getrusage(resource.RUSAGE_CHILDREN)
+    started=time.monotonic();self_cpu=time.process_time();before=resource.getrusage(resource.RUSAGE_CHILDREN);held_external=external_cpu()
     eight,er,ee=run('held-out-6-to8',Path(sr['checkpoint']));require(ee['exit_code']==0 and not er['failure'] and same_history(full,er),'heldout later-state continuation')
     require(snapshots(er)==full_snaps[6:8],'heldout stage trajectory')
     audits,audit_usage=scope(complete,a.runtime,eight,ini,er,c,weights,count,actions=True)
@@ -186,6 +188,8 @@ def main():
     peak_new=size(eight)+size(replay_folder)+size(restored)+size(publication)+proof_path.stat().st_size+audit_path.stat().st_size
     removed=retire(a.root,publication,binding)
     after=resource.getrusage(resource.RUSAGE_CHILDREN);measured=dict(native=ee,replay_execution=replay_e,audit_usage=audit_usage,whole_CPU=time.process_time()-self_cpu+after.ru_utime+after.ru_stime-before.ru_utime-before.ru_stime,whole_wall=time.monotonic()-started,peak_address_space_bytes=peak_AS([ee,replay_e,audits]),peak_new_output_bytes=peak_new,durable_new_output_bytes=peak_new-removed,retired_bytes=removed,audits_sha256=sha(audit_path),publication_sha256=sha(publication/'seal.json'))
+    measured['external_monitor_CPU']=max(0.,external_cpu()-held_external);measured['whole_CPU']+=measured['external_monitor_CPU']
+    measured['CPU_scope']='controller own plus reaped native descendants plus live ancestors/package and worker monitor deltas; no nested phase totals added twice'
     comparisons={k:dict(predicted=model['complete_heldout_bounds'][k],actual=measured[{'CPU':'whole_CPU','wall':'whole_wall'}.get(k,k)]) for k in model['complete_heldout_bounds']}
     for q in comparisons.values():q['status']='pass' if q['actual']<=q['predicted'] else 'fail'
     result['cost_model_validation']=dict(status='pass' if all(q['status']=='pass' for q in comparisons.values()) else 'fail',comparisons=comparisons,heldout_not_used_to_fit=True,frozen_model_sha256=sha(a.output/'frozen-complete-model-before-heldout.json'))

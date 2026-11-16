@@ -40,7 +40,9 @@ def forecast(root,q):
     for key,field in (('CPU','process_cpu_seconds'),('wall','wall_seconds')):
         v=[cases[str(i)]['execution'][field] for i in (0,1,2)]
         cost[key]=dict(startup=max(0.,v[0]),step=max(0.,v[1]-v[0],(v[2]-v[0])/2,v[2]-v[1]))
-    observer=max(x['execution'].get('controller_evolve_self_CPU',0.) for x in cases.values())
+    observer_rate=max(x['execution'].get('observer_self_CPU_seconds',0.)/x['execution']['wall_seconds'] for x in cases.values())
+    parse=[max(0.,cases[str(i)]['execution'].get('controller_evolve_self_CPU',0.)-cases[str(i)]['execution'].get('observer_self_CPU_seconds',0.)) for i in (0,1,2)]
+    parse_startup=parse[0];parse_step=max(0.,parse[1]-parse[0],(parse[2]-parse[0])/2,parse[2]-parse[1])
     segments=q['segments'];complete=segments is not None and segments.get('status')=='pass'
     phase_CPU=phase_wall=retention_CPU=retention_wall=milestone_CPU=milestone_wall=0.
     durable_per_segment=0;transient_per_step=0;measured_AS=0;milestone_bytes=0
@@ -48,8 +50,9 @@ def forecast(root,q):
         audits=[read(root/'segments-v1'/('audit-replay-'+str(i)+'.json')) for i in (2,4)]
         phase_CPU=envelope([u['CPU'] for a in audits for u in a['phase_usage']['per_state']])
         phase_wall=envelope([u['wall'] for a in audits for u in a['phase_usage']['per_state']])
-        milestone_CPU=envelope([a['phase_usage']['scalar_budgets']['CPU']+a['phase_usage']['constitutive']['CPU'] for a in audits])
-        milestone_wall=envelope([a['phase_usage']['scalar_budgets']['wall']+a['phase_usage']['constitutive']['wall'] for a in audits])
+        full_audits=[a for a in audits if a.get('scheduled_full_audit',True)]
+        milestone_CPU=envelope([a['phase_usage']['scalar_budgets']['CPU']+a['phase_usage']['constitutive']['CPU'] for a in full_audits])
+        milestone_wall=envelope([a['phase_usage']['scalar_budgets']['wall']+a['phase_usage']['constitutive']['wall'] for a in full_audits])
         held=read(root/'segments-v1/heldout-audits.json');milestone_CPU+=held['phase_usage']['actions']['CPU'];milestone_wall+=held['phase_usage']['actions']['wall']
         retention_CPU=envelope([max(0.,x['cycle_usage']['CPU']-x['execution']['whole_segment_CPU']-x['audit_usage']['CPU']) for x in segments['cycles']])
         retention_wall=envelope([max(0.,x['cycle_usage']['wall']-x['execution']['whole_segment_wall']-x['audit_usage']['wall']) for x in segments['cycles']])
@@ -59,7 +62,8 @@ def forecast(root,q):
         milestone_bytes=sum(logical_size(root/'segments-v1/held-out-6-to8'/('actions-'+label)) for label in ('native','q48','q64'))
     # Selected short commands may become faster or slower later. These are
     # conditional extrapolations, never mathematical lower bounds on later PDEs.
-    measured=dict(native=cost,observer_and_controller_CPU_per_native_command=observer,independent_CPU_per_accepted_state=phase_CPU,independent_wall_per_accepted_state=phase_wall,retention_CPU_per_segment=retention_CPU,retention_wall_per_segment=retention_wall,full_milestone_CPU=milestone_CPU,full_milestone_wall=milestone_wall,short_two_step_durable_segment_bytes=durable_per_segment,transient_snapshot_bytes_per_actual_step=transient_per_step)
+    monitor_rate=segments.get('model',{}).get('external_monitor_CPU_per_wall_second',0.) if complete else 0.
+    measured=dict(native=cost,observer_CPU_per_native_wall_second=observer_rate,controller_parse_startup_CPU=parse_startup,controller_parse_CPU_per_step=parse_step,external_monitor_CPU_per_wall_second=monitor_rate,independent_CPU_per_accepted_state=phase_CPU,independent_wall_per_accepted_state=phase_wall,retention_CPU_per_two_steps=retention_CPU,retention_wall_per_two_steps=retention_wall,full_milestone_CPU=milestone_CPU,full_milestone_wall=milestone_wall,short_two_step_durable_segment_bytes=durable_per_segment,transient_snapshot_bytes_per_actual_step=transient_per_step)
     horizons=[('entry',Decimal('.407'))]+[(str(f)+'transit',Decimal(str(f))*Decimal('40.6216378576')) for f in (.1,1,3)]
     rows=[];qualification_passed=all(g=='PASS' for g in gates(root)[1].values())
     immutable=logical_size(root/'build-v10/runtime')
@@ -83,9 +87,10 @@ def forecast(root,q):
             # Retired payloads are verified by an actual second native replay.
             replay_cpu=N*cost['CPU']['step']+S*cost['CPU']['startup']
             replay_wall=N*cost['wall']['step']+S*cost['wall']['startup']
-            controller=(2*S+initial)*observer
-            components=dict(native_CPU=native_cpu,replay_CPU=replay_cpu,controller_CPU=controller,independent_state_CPU=N*phase_CPU,milestone_CPU=A*milestone_CPU,retention_CPU=S*retention_CPU,collection_transfer_publication_CPU=240.)
-            cpu=sum(components.values());wall=native_wall+replay_wall+controller+N*phase_wall+A*milestone_wall+S*retention_wall+600.
+            controller=(native_wall+replay_wall)*observer_rate+(2*S+initial)*parse_startup+2*N*parse_step
+            components=dict(native_CPU=native_cpu,replay_CPU=replay_cpu,controller_CPU=controller,independent_state_CPU=N*phase_CPU,milestone_CPU=A*milestone_CPU,retention_CPU=math.ceil(N/2)*retention_CPU,collection_transfer_publication_CPU=240.)
+            wall=native_wall+replay_wall+controller+N*phase_wall+A*milestone_wall+math.ceil(N/2)*retention_wall+600.
+            components['external_monitor_CPU']=wall*monitor_rate;cpu=sum(components.values())
             # A short segment's entire retained inventory per two steps is a
             # conservative finite-horizon growth bound, not a claim of constant
             # resident storage. It includes replay reports/anchors/receipts.

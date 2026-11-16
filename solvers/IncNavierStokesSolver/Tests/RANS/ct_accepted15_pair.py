@@ -56,6 +56,8 @@ def main():
     for k in ('runtime','static','component','capacity','contract','output'):p.add_argument('--'+k,type=Path,required=True)
     p.add_argument('--admission',type=Path)
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');os.environ['NEKTAR_RANS_PROBE_OBSERVER']='NativeAuditReceiptV1';os.environ.pop('NEKTAR_RANS_TIMING_FILE',None);n.reference=lru_cache(None)(n.reference)
+    workflow_contract=Path(__file__).resolve().parents[4]/'docs/plans/cao-tamura-accepted-15-evidence/workflow-contract-v2.json'
+    co_workflow_sha256=sha(workflow_contract)
     pre=sealed(a.static);component=sealed(a.component);capacity=sealed(a.capacity);require(pre['status']==component['status']==capacity['status']=='pass','pair prerequisites incomplete')
     co=n.read(a.contract);dts=co['dt'];require(tuple(dts) in COHORTS and co['T']==.002,'unadmitted short-pair contract')
     retry=dts!=[.001,.0005];require(co['schema']==('CT15AdmittedShortPairContractV2' if retry else 'CT15AdmittedShortPairContractV1'),'foreign cohort contract')
@@ -68,6 +70,7 @@ def main():
     c=pre['case'];ini=n.read(a.static/'target/frozen.json');require(sha(a.static/'target/frozen.json')==pre['native_packet_sha256'],'static observation rows changed');weights=n.inventory(c)[2];count=len(weights);first=None;initials={};reports={};zeros={}
     m=RequestManifest(a.output,dict(schema='CT15FreshSelectedPairV2' if retry else 'CT15FreshSelectedPairV1',source=sha(Path(__file__)),contract=sha(a.contract),static=sha(a.static/'results.json'),component=sha(a.component/'results.json'),capacity=sha(a.capacity/'results.json'),runtime=rt,probe=pr,case=c,dt=dts,T=.002,component_identity=COMPONENT,detailed_timing=False,physical_classifier_source=sha(Path(__file__).with_name('ct_accepted11_target.py')),request_specialization_source=sha(Path(__file__).with_name('ct_accepted14_gate.py')) if retry else None,timestep_admission=sha(a.admission/'results.json') if retry else None))
     out=dict(schema='CT11TargetPhysicalPairV1',CT15_schema='CT15FreshSelectedPairV2' if retry else 'CT15FreshSelectedPairV1',required_dt=dts,target=.002,case=c,prerequisites=dict(status='pass'),members={},initial={},detailed_timing=False)
+    out['workflow_contract_sha256']=co_workflow_sha256
     regions=np.asarray(ini['observation']['grid_regions'][:count]);wt=np.asarray(weights);col=n.col(c);reference_pressure=np.array([n.reference(col,q[2],bool(r))[3] for q,r in zip(ini['observation']['grid'][:count],regions,strict=True)]);initial_pressure=n.observations(ini,ini['observation']['state'],count)[:,4]
     for dt in dts:
         name=str(dt);dest=a.output/('zero-'+name);n.make(dest,a.runtime,c,dt,0);enable(dest);ordering(dest);os.environ['NEKTAR_RANS_SPARSE_RECEIPTS']=str(dest/'sparse-receipts.jsonl')

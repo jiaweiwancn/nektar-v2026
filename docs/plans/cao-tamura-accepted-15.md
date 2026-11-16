@@ -79,7 +79,7 @@ but native implementation and observer policy both changed; this is a whole
 path comparison, not a claim that one routine caused the difference. The V4
 zero-step native observer used3.837857 CPU seconds versus the previously
 measured18.950956 seconds for the complete V2 controller evolve function;
-their scopes differ. The explicit [workflow contract](cao-tamura-accepted-15-evidence/workflow-contract-v1.json)
+their scopes differ. The explicit [workflow contract](cao-tamura-accepted-15-evidence/workflow-contract-v2.json)
 binds prepared-array audits, full accepted-state gradient coverage, actual
 retirement/replay and held-out validation. Its segment reports and restart
 anchors have finite durable growth and are not described as constant storage.
@@ -147,3 +147,31 @@ live owned-family CPU, the original wall-clock allocation, and new live disk.
 It leaves240 CPU seconds and256MiB for closure/transport/publication. Sampled
 per-process `wchar` highwaters are reported separately as a lower bound on
 logical writes; they are not exact physical disk-byte accounting.
+
+Future CT15 families use`ct_accepted15_command.py`, which preserves the same
+worker guard/leases/polling and additionally measures launcher self and worker
+monitor CPU. Package-monitor self CPU and live ancestor/helper deltas distinguish
+external costs from the controller and native descendants. None of these nested
+measurements is added twice. Original prospective workflow v1 is preserved;
+v2 binds these measurements and the earlier-cycle audit schedule before use.
+Both recovery cycles retain all mandatory per-state observations; the extra
+four-control scalar training audit runs at cycle4. The fresh pair and heldout8
+retain their complete original scalar/constitutive controls, and the production
+initial/.002/every512/final full-audit schedule is unchanged.
+
+The smallest fresh selected-case performance reproducer is the following
+single-step control. It must use a **new** output/control directory and counts
+against the same finite allocation if run during CT15:
+
+```bash
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+export BLIS_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1
+p=/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-15-20261116
+b=/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-14-20261115
+cd "$p/source"
+t=solvers/IncNavierStokesSolver/Tests/RANS
+python3 -B "$t/ct_accepted15_command.py" --control "$p/resources-reproducer-NEW" -- \
+  python3 -B "$t/ct_accepted15_budget.py" --root "$p" --control "$p/resources-reproducer-NEW" -- \
+  python3 -B "$t/ct_accepted15_controls.py" --ct14 "$b" \
+    --runtime "$p/build-v10/runtime" --output "$p/reproducer-NEW" --phase selected-one
+```
