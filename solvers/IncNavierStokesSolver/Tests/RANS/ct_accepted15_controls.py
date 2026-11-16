@@ -14,6 +14,7 @@ from ct_accepted14_pair import numerical_receipts
 from ct_accepted13_orderings import native_run
 from ct_accepted13_memory import equal_primitives
 from ct_accepted_open import probe,require
+from ct_accepted_pilot import replay
 from compare_cls_epawf_pimple import same_history
 from run_cls_epawf_picard import set_info,set_parameter,write
 from rans_request_manifest import RequestManifest,runtime_identity,sha
@@ -53,6 +54,14 @@ def main():
             require(COMPONENT in q['observation']['identity'],'missing new execution identity')
             result=compare_packets(oracle,q,c)
             out['cases'][label]=dict(status='pass',checks=result,execution=e,oracle_sha256=sha(src/'operator.json'),packet_sha256=sha(dest/'operator.json'))
+            if label=='displaced-p3':
+                request=replay(q,q['observation']['state'],0.,[],alpha=0.,history=q['observation']['state'])
+                request['operation']='evaluation_reuse_checks'
+                os.environ['NEKTAR_RANS_VERIFY_OWNER_INDEX']='1'
+                checks,execution=probe(a.runtime,dest,request,'dependencies')
+                os.environ.pop('NEKTAR_RANS_VERIFY_OWNER_INDEX',None)
+                require(execution['exit_code']==0 and checks['passed'] and checks['immutable_only'],'immutable dependency/owner controls')
+                out['dependencies']=dict(status='pass',checks=checks,execution=execution,packet_sha256=sha(dest/'dependencies.json'))
             write_json(a.output/'progress.json',out);print('CT15 small',label,'pass',flush=True)
         c=n.read(ct9/'controls-v4/one/construction.json');template=ct9/'controls-v4/one/case.xml'
         full,fr,fe=evolve('full',c,4,template=template)
