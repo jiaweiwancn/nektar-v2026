@@ -198,7 +198,7 @@ RANSWallEvolutionPatch::EvaluationScope::EvaluationScope(const RANSWallEvolution
 }
 RANSWallEvolutionPatch::EvaluationScope::~EvaluationScope()
 {
-    if(owns){patch.m_evaluation=previous;patch.InvalidateCoverageToken();}
+    if(owns){RANSWallTiming::Scope timing("data.evaluation_release");patch.m_evaluation=previous;patch.InvalidateCoverageToken();}
 }
 void RANSWallEvolutionPatch::PrepareEvaluation(const RANSWallEvolutionData &data,double time) const
 {
@@ -208,7 +208,8 @@ void RANSWallEvolutionPatch::PrepareEvaluation(const RANSWallEvolutionData &data
     if(!c.ready || c.time!=Bit(time) || c.generation!=data.generation || c.fixed!=fixed)
     {
         if(c.ready)++m_evaluationWork.inputInvalidations;
-        c.Clear();c.time=Bit(time);c.generation=data.generation;c.fixed=fixed;c.ready=true;
+        {RANSWallTiming::Scope timing("data.evaluation_invalidate");c.Clear();}
+        c.time=Bit(time);c.generation=data.generation;c.fixed=fixed;c.ready=true;
     }
 }
 void RANSWallEvolutionPatch::InvalidateCoverageToken() const
@@ -444,6 +445,7 @@ std::string RANSWallEvolutionPatch::EvaluationReuseJSON() const
     for(const auto &[key,rows]:m_reconstructionCatalog){(void)key;fixedRows+=rows.size();}
     for(const auto &[key,rows]:m_surfaceCatalog){(void)key;surfaceRows+=rows.size();}
     return J::Object({{"mode",J::Quote(m_evaluationReuse?"ExactStepV1":"Off")},
+        {"native_lookup",J::Quote(fields[0]->TensorLookupEnabled()?"TensorExactV1":"Off")},
         {"scopes",J::Number(w.scopes)},{"domain_calls",J::Number(w.domainCalls)},
         {"domain_computes",J::Number(w.domainComputes)},{"domain_hits",J::Number(w.domainHits)},
         {"prefix_hits",J::Number(w.prefixHits)},{"row_constructs",J::Number(w.rowConstructs)},{"row_hits",J::Number(w.rowHits)},

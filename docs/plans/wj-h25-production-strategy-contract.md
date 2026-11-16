@@ -156,3 +156,25 @@ observations remain inside the9.5mm matching plane; performance does not validat
 that physical comparison. If a concrete unresolved obstruction remains after
 bounded iteration, publish TARGET_NOT_MET, the cheapest accuracy-qualified case,
 full cost, failed approaches and one precise next implementation change.
+
+## First exact candidate, frozen before its measurements
+
+`RANSWallNativeLookup=TensorExactV1` is an execution-only, default-Off candidate.
+It indexes conforming serial2D Cartesian chart intervals and geometry IDs in each
+native field. The original exact-containment pass, radial-side predicates,
+geometry-ID tie break and legacy roundoff fallback remain authoritative. Candidate
+intervals use the original floating-point comparison expressions, including the
+fallback subtraction/addition order. Nonconforming partitions keep the scan.
+Coordinates, row arithmetic, state evaluations, coverage and audit traversal do
+not change; the H17 row catalog stays Off. The composite-map region lookup uses
+the same geometry's bounds, followed by the original map and derivative order.
+
+Qualification uses the frozen W0 evolving steps17–20 and complete step20 native
+physical map, with exact coefficient/history/callback/reference/defect parity.
+An Off two-step measurement on the same new executable precedes the On four-step
+measurement. This is an implementation comparison, not another temporal level.
+Pure native index fixtures cover moving coordinates, signed zero/ULPs, faces and
+radial sides, geometry ordering, invalid coordinates and unsupported partitions.
+Dynamic ExactStepV1 state/profile invalidation remains unchanged. Additional
+cache-release/invalidation timings resolve the callback remainder; accumulated
+domain buckets are nested explanatory costs and never added to their parent.

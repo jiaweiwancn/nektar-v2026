@@ -9,8 +9,13 @@ from wj_h15_observer import identity,verify,atomic
 
 OLD=Path('/home/jay/build/wj-h22-early-phase-replay-20261115')
 
-def build(root):
-    source=root/'source-v4';output=root/'build-profile-v2';started=time.monotonic()
+def build(root,variant='profile'):
+    if variant=='profile':
+        source=root/'source-v4';output=root/'build-profile-v2';previous=OLD/'build';previous_source=OLD/'source';tag='profile';manifest='source-manifest-v4.json'
+    else:
+        assert variant=='lookup'
+        source=root/'source-v5';output=root/'build-lookup-v1';previous=root/'build-profile-v2';previous_source=root/'source-v4';tag='lookup';manifest='source-manifest-v5.json'
+    started=time.monotonic()
     cmake=(source/'solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt').read_text()
     for relative in re.findall(r'\$\{RANS_SOURCE_ROOT\}/([A-Za-z0-9_./-]+\.(?:cpp|h))',cmake):
         assert(source/relative).is_file(),'missing configured source fixture: '+relative
@@ -25,7 +30,7 @@ def build(root):
     config=['cmake','-S',str(source/'solvers/IncNavierStokesSolver/Tests/RANS'),'-B',str(output),'-DCMAKE_EXPORT_COMPILE_COMMANDS=ON']
     config+=['-D'+k+'='+cache[k]for k in keys if k in cache]
     subprocess.run(config,check=True)
-    old=load(OLD/'build/compile_commands.json');new=load(output/'compile_commands.json');records=[];digests={}
+    old=load(previous/'compile_commands.json');new=load(output/'compile_commands.json');records=[];digests={}
     def digest(p):
         p=Path(p)
         if p not in digests:digests[p]=identity(p)['sha256']
@@ -37,11 +42,11 @@ def build(root):
         o=matches[0];oa,na=shlex.split(o['command']),shlex.split(n['command'])
         flags=lambda a:[v for v in a if v.startswith(('-O','-f','-m','-std=','-D'))]
         if flags(oa)!=flags(na):continue
-        oldobj=OLD/'build'/oa[oa.index('-o')+1];newobj=output/na[na.index('-o')+1];dep=Path(str(oldobj)+'.d')
+        oldobj=previous/oa[oa.index('-o')+1];newobj=output/na[na.index('-o')+1];dep=Path(str(oldobj)+'.d')
         if not oldobj.exists()or not dep.exists():continue
         paths=shlex.split(dep.read_text().replace('\\\n',' ').split(':',1)[1]);pairs=[];okay=True
         for path in paths:
-            p=Path(path);newpath=Path(str(p).replace(str(OLD/'source'),str(source),1))if p.is_relative_to(OLD/'source')else p
+            p=Path(path);newpath=Path(str(p).replace(str(previous_source),str(source),1))if p.is_relative_to(previous_source)else p
             # Explicit old private compatibility include roots remain compiler
             # inputs if that generated header is not in the new source tree.
             if not newpath.exists()and '/Tests/RANS/include/'in str(p):newpath=p
@@ -53,11 +58,12 @@ def build(root):
         Path(str(newobj)+'.d').write_text(str(newobj)+': '+ ' '.join(shlex.quote(p['actual'])for p in pairs)+'\n')
         now=time.time()+1;os.utime(newobj,(now,now))
         records.append(dict(source=identity(n['file']),object=identity(newobj),old_object=identity(oldobj),dependencies=pairs))
-    atomic(root/'science/profile-object-reuse.json',dict(status='QUALIFIED_EXACT_DEPENDENCIES',objects=records,configure=config,cache=identity(OLD/'build/CMakeCache.txt')))
+    atomic(root/('science/'+tag+'-object-reuse.json'),dict(status='QUALIFIED_EXACT_DEPENDENCIES',objects=records,configure=config,cache=identity(OLD/'build/CMakeCache.txt')))
     names=('IncNavierStokesSolver','RANSWallResolutionProbe','WJH25CommonMassChecks','RANSWallTimingChecks','RANSWallMonitorChecks')
+    if variant=='lookup':names+=('WJH25ExactLookupChecks',)
     command=['cmake','--build',str(output),'--target',*names,'--parallel','8']
     subprocess.run(command,check=True)
-    runtime=root/'runtime-profile-v1';runtime.mkdir()
+    runtime=root/('runtime-'+tag+'-v1');runtime.mkdir()
     oldrt=OLD/'runtime';executables=[]
     for name in names:
         elf=runtime/(name+'.elf');shutil.copy2(output/name,elf)
@@ -68,11 +74,11 @@ def build(root):
     for c in new:
         a=shlex.split(c['command']);obj=output/a[a.index('-o')+1]
         if obj.exists():objects.append(dict(source=identity(c['file']),command=c['command'],object=identity(obj),dependency=identity(str(obj)+'.d')if Path(str(obj)+'.d').exists()else None))
-    atomic(root/'science/runtime-build-profile-v1.json',dict(status='PASS',source_manifest=identity(root/'source-manifest-v4.json'),
+    atomic(root/('science/runtime-build-'+tag+'-v1.json'),dict(status='PASS',source_manifest=identity(root/manifest),
         compiler=subprocess.check_output(['/usr/bin/c++','--version'],text=True),configure=config,build=command,seconds=time.monotonic()-started,
         compile_commands=identity(output/'compile_commands.json'),objects=objects,executables=executables,
         link_commands=[identity(p)for p in sorted(output.glob('CMakeFiles/*/link.txt'))if p.parent.name in ('IncNavierStokesSolver.dir','RANSWallResolutionProbe.dir','WJH25CommonMassChecks.dir')],
-        private_runtime=identity(root/'science/runtime-dependencies-v1.json'),old_object_proof=identity(root/'science/profile-object-reuse.json'),purpose='profiling-only source; no mathematical optimization selected yet'))
+        private_runtime=identity(root/'science/runtime-dependencies-v1.json'),old_object_proof=identity(root/('science/'+tag+'-object-reuse.json')),purpose='profiling-only baseline'if variant=='profile'else'opt-in exact containment/geometry lookup; same governing mathematics'))
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);a=p.parse_args();build(a.root)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--variant',choices=('profile','lookup'),default='profile');a=p.parse_args();build(a.root,a.variant)

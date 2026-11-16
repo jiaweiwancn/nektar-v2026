@@ -6,6 +6,7 @@
 #define NEKTAR_RANS_WALL_GLOBAL_FIELD_H
 
 #include <IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallTensorLookup.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallMappedAlgebra.h>
 #include <array>
 #include <functional>
@@ -62,6 +63,8 @@ public:
                         const std::vector<unsigned int> &elements, int dimension);
     const MultiRegions::ContFieldSharedPtr &Field() const { return m_field; }
     const std::vector<Element> &Elements() const { return m_elements; }
+    bool TensorLookupEnabled() const { return m_tensorLookup; }
+    const Element *GeometryElement(int geometry) const;
     int Dimension() const { return m_dimension; }
     int Size() const;
     const void *CoefficientMapIdentity() const;
@@ -125,6 +128,9 @@ private:
     struct BasisData;
     MultiRegions::ContFieldSharedPtr m_field;
     bool m_mappedBlock=false;
+    bool m_tensorLookup=false;
+    RANSWallTensorLookup m_elementLookup;
+    std::map<int,int> m_geometryElements;
     int m_dimension;
     std::array<int,3> m_axes{};
     std::vector<Element> m_elements;

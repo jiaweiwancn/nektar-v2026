@@ -122,8 +122,13 @@ RANSWallGlobalPoint RANSWallEvolutionPatch::Transform(RANSWallGlobalPoint q) con
 {
     if(!Mapped())return q;
     int side=0,region=0;
-    if(m_mapping.compositeTunnel)for(const auto &e:fields[0]->Elements())if(e.geometry==q.geometry)
-        region=e.lower[2]>=m_mapping.height?1:-1;
+    if(m_mapping.compositeTunnel)
+    {
+        if(fields[0]->TensorLookupEnabled())
+        {const auto e=fields[0]->GeometryElement(q.geometry);if(e)region=e->lower[2]>=m_mapping.height?1:-1;}
+        else for(const auto &e:fields[0]->Elements())if(e.geometry==q.geometry)
+            region=e.lower[2]>=m_mapping.height?1:-1;
+    }
     if(m_mapping.kind==RANSWallNormalMap::Kind::CosineHill)
         for(double foot:{-m_mapping.lengthX,m_mapping.lengthX})if(Same(q.coordinate[0],foot))
             for(const auto &e:fields[0]->Elements())if(e.geometry==q.geometry)side=(e.lower[0]+e.upper[0])/2<foot?-1:1;

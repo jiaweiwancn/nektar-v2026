@@ -126,6 +126,10 @@ RANSWallGlobalField::RANSWallGlobalField(
     std::string backend;session->LoadSolverInfo("RANSWallLinearBackend",backend,"Dense");
     Require(backend=="Dense" || backend=="MappedBlockV1","unknown wall linear backend");
     m_mappedBlock=backend=="MappedBlockV1";
+    std::string lookup;session->LoadSolverInfo("RANSWallNativeLookup",lookup,"Off");
+    Require(lookup=="Off" || lookup=="TensorExactV1","unknown native containment lookup policy");
+    m_tensorLookup=lookup=="TensorExactV1";
+    Require(!m_tensorLookup || (m_mappedBlock && dimension==2),"TensorExactV1 requires the mapped serial2D field");
     Require((dimension==2 || dimension==3) && session->GetComm()->GetSize()==1 &&
                 !elements.empty(),"requires nonempty serial 2D/3D native field");
     auto subset=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(*full,elements,true);
@@ -186,6 +190,16 @@ RANSWallGlobalField::RANSWallGlobalField(
         }
         m_elements.push_back(element);m_elementBasis.push_back(std::move(bases));
     }
+    if(m_tensorLookup)
+    {
+        m_elementLookup.Build(m_elements,m_dimension);
+        for(int e=0;e<int(m_elements.size());++e)m_geometryElements[m_elements[e].geometry]=e;
+    }
+}
+const RANSWallGlobalField::Element *RANSWallGlobalField::GeometryElement(int geometry) const
+{
+    const auto i=m_geometryElements.find(geometry);
+    return i==m_geometryElements.end()?nullptr:&m_elements[i->second];
 }
 int RANSWallGlobalField::Size() const
 {
@@ -286,6 +300,29 @@ int RANSWallGlobalField::LocateElement(const Coordinate &coordinate,int side) co
 {
     Require(side>=-1 && side<=1,"unknown radial sampling side");
     int selected=-1;
+    if(m_tensorLookup && m_elementLookup.Ready())
+    {
+        for(int e:m_elementLookup.Candidates(coordinate,0.))
+        {
+            const auto &element=m_elements[e];bool contains=true;
+            for(int d=0;d<m_dimension;++d)
+            {const int a=m_axes[d];contains=contains && coordinate[a]>=element.lower[a] && coordinate[a]<=element.upper[a];}
+            if(!contains || (side>0 && coordinate[2]>=element.upper[2]) ||
+                            (side<0 && coordinate[2]<=element.lower[2]))continue;
+            if(selected<0 || element.geometry<m_elements[selected].geometry)selected=e;
+        }
+        if(selected>=0)return selected;
+        for(int e:m_elementLookup.Candidates(coordinate,1e-11))
+        {
+            const auto &element=m_elements[e];bool contains=true;
+            for(int d=0;d<m_dimension;++d)
+            {const int a=m_axes[d];contains=contains && coordinate[a]>=element.lower[a]-1e-11 && coordinate[a]<=element.upper[a]+1e-11;}
+            if(!contains || (side>0 && coordinate[2]>=element.upper[2]-1e-12) ||
+                            (side<0 && coordinate[2]<=element.lower[2]+1e-12))continue;
+            if(selected<0 || element.geometry<m_elements[selected].geometry)selected=e;
+        }
+        Require(selected>=0,"physical sample not found on requested radial side");return selected;
+    }
     // A moving cutoff can create a valid quadrature interval arbitrarily
     // close to a stored face. On the new route, an exactly containing owner
     // takes priority over a neighbour admitted only by the legacy 1e-11
