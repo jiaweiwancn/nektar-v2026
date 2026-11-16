@@ -1,0 +1,11 @@
+{
+  "schema": "CT16IndependentBLASRowsExperimentV1",
+  "policy": "CT16-IndependentBLASRowsV1",
+  "basis": "The full independent bundle profile shows859972 PreparedRows calls with4.556self/7.377cumulative CPU and1m NumPy array conversions. The previous einsum batch changed an extremum witness and was rejected. Test a C-owned loop gathering exact actual coefficients and calling the SAME pinned BLAS dot/GEMV arithmetic as original NumPy row_value,without changing any physics.",
+  "scope": "Read-only primitive experiment only. Build a small private shared helper with one compiler process,-ffp-contract=off,-fno-fast-math and the actual already-loaded NumPy libblas.so.3 bytes. Never replace shared libraries. For every row/field in the actual selected weighted grid and all3 sealed states,compare all value/3gradient bits including signed zero to original per-row NumPy arithmetic. Any mismatch fails; do not relax to a tolerance or infer scientific/whole-workflow acceptance.",
+  "BLAS_path": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3",
+  "BLAS_SHA256": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+  "bounds": "Same immutable plan262144rows/256MiB,one row scratch<=128double,16GiB processAS. C ABI validates all IDs and offset/bounds BEFORE writing outputs; retain malformed-ID/offset negative controls. No state/value cache in this prototype; every actual invocation gathers its supplied current state anew. Bind compiled bytes,source,actualPython/NumPy/mappedlibraries and timings.",
+  "allocation": "Single guarded family under original CT16 start1794835825/24kCPU/28.8kwall/16GiB new live,rank1/all6threads1/compilerjobs1/project16/aggregate72; no new allocation,noT>.002.",
+  "next_if_exact": "Only after bitwise primitive PASS may a separately specified full current-state independent bundle integration be tested against every original observation/decision/witness. This primitive alone closes no G gate."
+}
