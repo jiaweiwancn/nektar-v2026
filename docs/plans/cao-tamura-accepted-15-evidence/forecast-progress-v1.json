@@ -1,0 +1,484 @@
+{
+  "status": "incomplete_native_replay_extrapolation",
+  "whole_workflow_component_coverage": false,
+  "heldout_model_validated": false,
+  "headroom": 1.25,
+  "headroom_applied": "once to complete future CPU/wall/output/AS totals; not sunk research",
+  "measurements": {
+    "native": {
+      "CPU": {
+        "startup": 56.598205,
+        "step": 160.839859
+      },
+      "wall": {
+        "startup": 57.53463072201703,
+        "step": 162.52276861295104
+      }
+    },
+    "observer_CPU_per_native_wall_second": 0.06670516565132573,
+    "controller_parse_startup_CPU": 0.3083496579999996,
+    "controller_parse_CPU_per_step": 1.2677864020000018,
+    "external_monitor_CPU_per_wall_second": null,
+    "independent_CPU_per_accepted_state": null,
+    "independent_wall_per_accepted_state": null,
+    "retention_CPU_per_two_steps": null,
+    "retention_wall_per_two_steps": null,
+    "full_milestone_CPU": null,
+    "full_milestone_wall": null,
+    "short_two_step_durable_segment_bytes": null,
+    "transient_snapshot_bytes_per_actual_step": null,
+    "milestone_bound_scope": "unmeasured",
+    "paired_CPU_per_common_state": 3.839200396777768,
+    "paired_wall_per_common_state": 3.8413527908980742
+  },
+  "horizons": [
+    {
+      "horizon": "entry",
+      "requested_T": "0.407",
+      "actual_endpoints": [
+        "0.40700",
+        "0.407000"
+      ],
+      "from_state": "fresh_zero",
+      "start_is_qualified": true,
+      "total_member_steps": [
+        1628,
+        3256
+      ],
+      "additional_member_steps": [
+        1628,
+        3256
+      ],
+      "segment_length": 32,
+      "native_hard_segment_cap": 64,
+      "segments": [
+        51,
+        102
+      ],
+      "full_audit_counts": [
+        6,
+        9
+      ],
+      "CPU_components": {
+        "native_CPU": 794314.593131,
+        "replay_CPU": 794201.396721,
+        "controller_CPU": 119556.71416930798,
+        "independent_state_CPU": null,
+        "paired_comparison_CPU": 6254.057446350984,
+        "milestone_CPU": null,
+        "retention_CPU": null,
+        "collection_transfer_publication_CPU": 240.0,
+        "external_monitor_CPU": null
+      },
+      "CPU_before_headroom": null,
+      "CPU_with_headroom": null,
+      "active_wall_with_headroom": null,
+      "finite_retained_output_with_headroom": null,
+      "peak_new_live_output_with_headroom": null,
+      "measured_short_AS_bytes": 16323031040,
+      "status": "UNADMITTED",
+      "native_only_CPU_with_headroom": 992893.24141375,
+      "required_total_cost_reduction": null,
+      "scope_complete": false,
+      "native_only_active_wall_with_headroom": 1003348.8370844569,
+      "peak_AS_with_headroom": 20403788800.0,
+      "partial_observed_scope_CPU_with_headroom": 2143208.451834574,
+      "partial_observed_scope_wall_with_headroom": 2164571.68492421,
+      "partial_observed_scope": "native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors"
+    },
+    {
+      "horizon": "entry",
+      "requested_T": "0.407",
+      "actual_endpoints": [
+        "0.40700",
+        "0.407000"
+      ],
+      "from_state": "own_qualified_T0.002",
+      "start_is_qualified": true,
+      "total_member_steps": [
+        1628,
+        3256
+      ],
+      "additional_member_steps": [
+        1620,
+        3240
+      ],
+      "segment_length": 32,
+      "native_hard_segment_cap": 64,
+      "segments": [
+        51,
+        102
+      ],
+      "full_audit_counts": [
+        4,
+        7
+      ],
+      "CPU_components": {
+        "native_CPU": 790341.240105,
+        "replay_CPU": 790341.240105,
+        "controller_CPU": 118967.19481483291,
+        "independent_state_CPU": null,
+        "paired_comparison_CPU": 6223.343843176762,
+        "milestone_CPU": null,
+        "retention_CPU": null,
+        "collection_transfer_publication_CPU": 240.0,
+        "external_monitor_CPU": null
+      },
+      "CPU_before_headroom": null,
+      "CPU_with_headroom": null,
+      "active_wall_with_headroom": null,
+      "finite_retained_output_with_headroom": null,
+      "peak_new_live_output_with_headroom": null,
+      "measured_short_AS_bytes": 16323031040,
+      "status": "UNADMITTED",
+      "native_only_CPU_with_headroom": 987926.5501312499,
+      "required_total_cost_reduction": null,
+      "scope_complete": false,
+      "native_only_active_wall_with_headroom": 998329.3174492633,
+      "peak_AS_with_headroom": 20403788800.0,
+      "partial_observed_scope_CPU_with_headroom": 2132641.273585012,
+      "partial_observed_scope_wall_with_headroom": 2153901.169509625,
+      "partial_observed_scope": "native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors"
+    },
+    {
+      "horizon": "0.1transit",
+      "requested_T": "4.06216378576",
+      "actual_endpoints": [
+        "4.06225",
+        "4.062250"
+      ],
+      "from_state": "fresh_zero",
+      "start_is_qualified": true,
+      "total_member_steps": [
+        16249,
+        32498
+      ],
+      "additional_member_steps": [
+        16249,
+        32498
+      ],
+      "segment_length": 32,
+      "native_hard_segment_cap": 64,
+      "segments": [
+        508,
+        1016
+      ],
+      "full_audit_counts": [
+        34,
+        66
+      ],
+      "CPU_components": {
+        "native_CPU": 7926829.467502999,
+        "replay_CPU": 7926716.271093,
+        "controller_CPU": 1193190.5010947238,
+        "independent_state_CPU": null,
+        "paired_comparison_CPU": 62387.00644763873,
+        "milestone_CPU": null,
+        "retention_CPU": null,
+        "collection_transfer_publication_CPU": 240.0,
+        "external_monitor_CPU": null
+      },
+      "CPU_before_headroom": null,
+      "CPU_with_headroom": null,
+      "active_wall_with_headroom": null,
+      "finite_retained_output_with_headroom": null,
+      "peak_new_live_output_with_headroom": null,
+      "measured_short_AS_bytes": 16323031040,
+      "status": "UNADMITTED",
+      "native_only_CPU_with_headroom": 9908536.83437875,
+      "required_total_cost_reduction": null,
+      "scope_complete": false,
+      "native_only_active_wall_with_headroom": 10012869.060071653,
+      "peak_AS_with_headroom": 20403788800.0,
+      "partial_observed_scope_CPU_with_headroom": 21386704.057672955,
+      "partial_observed_scope_wall_with_headroom": 21595859.88850002,
+      "partial_observed_scope": "native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors"
+    },
+    {
+      "horizon": "0.1transit",
+      "requested_T": "4.06216378576",
+      "actual_endpoints": [
+        "4.06225",
+        "4.062250"
+      ],
+      "from_state": "own_qualified_T0.002",
+      "start_is_qualified": true,
+      "total_member_steps": [
+        16249,
+        32498
+      ],
+      "additional_member_steps": [
+        16241,
+        32482
+      ],
+      "segment_length": 32,
+      "native_hard_segment_cap": 64,
+      "segments": [
+        508,
+        1016
+      ],
+      "full_audit_counts": [
+        32,
+        64
+      ],
+      "CPU_components": {
+        "native_CPU": 7922856.114477,
+        "replay_CPU": 7922856.114477,
+        "controller_CPU": 1192600.981740249,
+        "independent_state_CPU": null,
+        "paired_comparison_CPU": 62356.29284446451,
+        "milestone_CPU": null,
+        "retention_CPU": null,
+        "collection_transfer_publication_CPU": 240.0,
+        "external_monitor_CPU": null
+      },
+      "CPU_before_headroom": null,
+      "CPU_with_headroom": null,
+      "active_wall_with_headroom": null,
+      "finite_retained_output_with_headroom": null,
+      "peak_new_live_output_with_headroom": null,
+      "measured_short_AS_bytes": 16323031040,
+      "status": "UNADMITTED",
+      "native_only_CPU_with_headroom": 9903570.14309625,
+      "required_total_cost_reduction": null,
+      "scope_complete": false,
+      "native_only_active_wall_with_headroom": 10007849.540436458,
+      "peak_AS_with_headroom": 20403788800.0,
+      "partial_observed_scope_CPU_with_headroom": 21376136.87942339,
+      "partial_observed_scope_wall_with_headroom": 21585189.37308543,
+      "partial_observed_scope": "native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors"
+    },
+    {
+      "horizon": "1transit",
+      "requested_T": "40.6216378576",
+      "actual_endpoints": [
+        "40.62175",
+        "40.621750"
+      ],
+      "from_state": "fresh_zero",
+      "start_is_qualified": true,
+      "total_member_steps": [
+        162487,
+        324974
+      ],
+      "additional_member_steps": [
+        162487,
+        324974
+      ],
+      "segment_length": 32,
+      "native_hard_segment_cap": 64,
+      "segments": [
+        5078,
+        10156
+      ],
+      "full_audit_counts": [
+        320,
+        637
+      ],
+      "CPU_components": {
+        "native_CPU": 79265488.75937898,
+        "replay_CPU": 79265375.56296898,
+        "controller_CPU": 11931562.664642435,
+        "independent_state_CPU": null,
+        "paired_comparison_CPU": 623823.994071626,
+        "milestone_CPU": null,
+        "retention_CPU": null,
+        "collection_transfer_publication_CPU": 240.0,
+        "external_monitor_CPU": null
+      },
+      "CPU_before_headroom": null,
+      "CPU_with_headroom": null,
+      "active_wall_with_headroom": null,
+      "finite_retained_output_with_headroom": null,
+      "peak_new_live_output_with_headroom": null,
+      "measured_short_AS_bytes": 16323031040,
+      "status": "UNADMITTED",
+      "native_only_CPU_with_headroom": 99081860.94922373,
+      "required_total_cost_reduction": null,
+      "scope_complete": false,
+      "native_only_active_wall_with_headroom": 100125136.18064798,
+      "peak_AS_with_headroom": 20403788800.0,
+      "partial_observed_scope_CPU_with_headroom": 213858113.72632754,
+      "partial_observed_scope_wall_with_headroom": 215945549.0208815,
+      "partial_observed_scope": "native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors"
+    },
+    {
+      "horizon": "1transit",
+      "requested_T": "40.6216378576",
+      "actual_endpoints": [
+        "40.62175",
+        "40.621750"
+      ],
+      "from_state": "own_qualified_T0.002",
+      "start_is_qualified": true,
+      "total_member_steps": [
+        162487,
+        324974
+      ],
+      "additional_member_steps": [
+        162479,
+        324958
+      ],
+      "segment_length": 32,
+      "native_hard_segment_cap": 64,
+      "segments": [
+        5078,
+        10155
+      ],
+      "full_audit_counts": [
+        318,
+        635
+      ],
+      "CPU_components": {
+        "native_CPU": 79261458.808148,
+        "replay_CPU": 79261458.808148,
+        "controller_CPU": 11930964.852874495,
+        "independent_state_CPU": null,
+        "paired_comparison_CPU": 623793.2804684517,
+        "milestone_CPU": null,
+        "retention_CPU": null,
+        "collection_transfer_publication_CPU": 240.0,
+        "external_monitor_CPU": null
+      },
+      "CPU_before_headroom": null,
+      "CPU_with_headroom": null,
+      "active_wall_with_headroom": null,
+      "finite_retained_output_with_headroom": null,
+      "peak_new_live_output_with_headroom": null,
+      "measured_short_AS_bytes": 16323031040,
+      "status": "UNADMITTED",
+      "native_only_CPU_with_headroom": 99076823.510185,
+      "required_total_cost_reduction": null,
+      "scope_complete": false,
+      "native_only_active_wall_with_headroom": 100120044.74272437,
+      "peak_AS_with_headroom": 20403788800.0,
+      "partial_observed_scope_CPU_with_headroom": 213847394.68704867,
+      "partial_observed_scope_wall_with_headroom": 215934724.30337325,
+      "partial_observed_scope": "native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors"
+    },
+    {
+      "horizon": "3transit",
+      "requested_T": "121.8649135728",
+      "actual_endpoints": [
+        "121.86500",
+        "121.865000"
+      ],
+      "from_state": "fresh_zero",
+      "start_is_qualified": true,
+      "total_member_steps": [
+        487460,
+        974920
+      ],
+      "additional_member_steps": [
+        487460,
+        974920
+      ],
+      "segment_length": 32,
+      "native_hard_segment_cap": 64,
+      "segments": [
+        15234,
+        30467
+      ],
+      "full_audit_counts": [
+        955,
+        1907
+      ],
+      "CPU_components": {
+        "native_CPU": 237795700.76753497,
+        "replay_CPU": 237795587.57112497,
+        "controller_CPU": 35794590.46331928,
+        "independent_state_CPU": null,
+        "paired_comparison_CPU": 1871460.4646136875,
+        "milestone_CPU": null,
+        "retention_CPU": null,
+        "collection_transfer_publication_CPU": 240.0,
+        "external_monitor_CPU": null
+      },
+      "CPU_before_headroom": null,
+      "CPU_with_headroom": null,
+      "active_wall_with_headroom": null,
+      "finite_retained_output_with_headroom": null,
+      "peak_new_live_output_with_headroom": null,
+      "measured_short_AS_bytes": 16323031040,
+      "status": "UNADMITTED",
+      "native_only_CPU_with_headroom": 297244625.9594187,
+      "required_total_cost_reduction": null,
+      "scope_complete": false,
+      "native_only_active_wall_with_headroom": 300374439.4901196,
+      "peak_AS_with_headroom": 20403788800.0,
+      "partial_observed_scope_CPU_with_headroom": 641571974.0832411,
+      "partial_observed_scope_wall_with_headroom": 647833360.3138164,
+      "partial_observed_scope": "native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors"
+    },
+    {
+      "horizon": "3transit",
+      "requested_T": "121.8649135728",
+      "actual_endpoints": [
+        "121.86500",
+        "121.865000"
+      ],
+      "from_state": "own_qualified_T0.002",
+      "start_is_qualified": true,
+      "total_member_steps": [
+        487460,
+        974920
+      ],
+      "additional_member_steps": [
+        487452,
+        974904
+      ],
+      "segment_length": 32,
+      "native_hard_segment_cap": 64,
+      "segments": [
+        15233,
+        30466
+      ],
+      "full_audit_counts": [
+        953,
+        1905
+      ],
+      "CPU_components": {
+        "native_CPU": 237791614.21809897,
+        "replay_CPU": 237791614.21809897,
+        "controller_CPU": 35793984.359137885,
+        "independent_state_CPU": null,
+        "paired_comparison_CPU": 1871429.7510105134,
+        "milestone_CPU": null,
+        "retention_CPU": null,
+        "collection_transfer_publication_CPU": 240.0,
+        "external_monitor_CPU": null
+      },
+      "CPU_before_headroom": null,
+      "CPU_with_headroom": null,
+      "active_wall_with_headroom": null,
+      "finite_retained_output_with_headroom": null,
+      "peak_new_live_output_with_headroom": null,
+      "measured_short_AS_bytes": 16323031040,
+      "status": "UNADMITTED",
+      "native_only_CPU_with_headroom": 297239517.7726237,
+      "required_total_cost_reduction": null,
+      "scope_complete": false,
+      "native_only_active_wall_with_headroom": 300369276.1339076,
+      "peak_AS_with_headroom": 20403788800.0,
+      "partial_observed_scope_CPU_with_headroom": 641561103.182933,
+      "partial_observed_scope_wall_with_headroom": 647822381.3942146,
+      "partial_observed_scope": "native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors"
+    }
+  ],
+  "unmeasured_additional_costs": [
+    "complete heldout external-monitor validation",
+    "per-state independent audits",
+    "all full milestones/actions",
+    "retention and finite durable growth"
+  ],
+  "validity": "short-history bounds are conditional extrapolations; all proposed campaigns require live spent-plus-remaining guards and segment fill/iteration reforecasting. No long-time physical qualification.",
+  "necessary_zero_overhead_CPU_per_step": 3.9312039312039313,
+  "strict_necessary_bound_scope": "arithmetic budget bound only; observed short native timing is not a proven lower bound on all future states",
+  "publication_scope": "Arithmetic compaction on Mac from sealed authoritative Linux receipts; no fresh numerical validation or full retention/heldout forecast is claimed.",
+  "source_receipt_SHA256": {
+    "/private/tmp/ct15-current-receipts/training-v4.json": "9e0a382009aec9ae0f33627802ce5499269951f34331e69efc58cc9398d12800",
+    "/private/tmp/ct15-current-receipts/pair-v1/results.json": "27f02d571bedf9feab54901f130943929a68296221649d98589560ab31f02b7f",
+    "/private/tmp/ct15-current-receipts/static-v1/results.json": "4b1d4f4c4b712e433d88f6628c7e42e932cee9d6cf55c550b98afd778b6d9c6c",
+    "/private/tmp/ct15-current-receipts/timestep-v1/results.json": "b7f10ce840abdc055bba49ba7f87f9d332d3761a76c27ba83c811f632e8ae09c"
+  }
+}

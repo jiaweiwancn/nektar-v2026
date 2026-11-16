@@ -1,0 +1,38 @@
+{
+  "schema": "CT15RemainingAllocationAdmissionPlanV1",
+  "status": "conditional_before_any_G4_or_attempt5_launch",
+  "original_start_unix": 1794805033,
+  "hard_CPU_seconds": 24000,
+  "hard_wall_seconds": 28800,
+  "hard_live_bytes": 17179869184,
+  "guard_stop_CPU_seconds": 23760,
+  "guard_stop_elapsed_wall_seconds": 28560,
+  "publication_start_cutoff_unix": 1794833233,
+  "closed_CPU_including_existing_exception_reserve": 20389.906691353,
+  "queue_accounting": "Add live launcher own/reaped-child plus guard own/reaped-child CPU until the original execution receipt closes. Waiting is not free, and does not reset the allocation or supply numerical evidence.",
+  "priority": [
+    "Allow the existing full equivalence-v1 queue to obtain its unchanged worker lease; never duplicate it",
+    "After its receipt closes, admit G4-only only if the entire bound below fits remaining CPU, absolute wall, disk, AS and workers",
+    "Consider the fixed four-control memory remedy only if the measured prior costs plus an explicit whole-scope allowance fit the remaining pool; otherwise consider only the prospectively declared sparse-only partial scope",
+    "Decline any scope that does not fit and preserve its UNATTEMPTED status; close metadata and publication before the original deadline"
+  ],
+  "full_equivalence_allowance": {"CPU_seconds": 128, "wall_seconds": 240, "new_bytes": 536870912, "native_advances": 0},
+  "G4_only": {
+    "command_flag": "--retention-only",
+    "native_scope": "four two-step native commands including rejected-step attempt plus one genuine one-step continuation; two replay/retirement cycles2/4 and all required independent state audits",
+    "native_CPU_envelope": 1730.549756,
+    "controller_CPU_envelope": 112.963050323,
+    "six_independent_bundles_CPU_allowance": 105.57354,
+    "receipt_restore_retire_and_driver_CPU_allowance": 180,
+    "external_monitor_CPU_allowance": 526.5,
+    "total_CPU_bound_including_rounding_variance": 2700,
+    "sequential_wall_bound": 2600,
+    "new_live_byte_bound": 2147483648,
+    "basis": "native nonnegative same-dt zero/one/two envelope; separately measured controller envelope and exact PreparedRows endpoint costs; observed full-pair external-monitor rate about0.2025 CPU per wall second; explicit file/driver and wall allowances. Conditional engineering estimate, not a mathematical runtime bound. Original live package guards remain authoritative.",
+    "G3": "UNATTEMPTED; unchanged full heldout6-to8 and additional G3 calibration do not fit the remaining pool",
+    "unchanged": "all required per-state observations, stage arrays, independent replay, exact trajectory/classifications, two retire/restore/continue cycles, interrupted publication, negative payload controls and full native rejected-step rollback"
+  },
+  "shared_host": "User explicitly chose to wait for the unrelated HIT job. Never kill, pause, reconfigure or bypass it. Keep the same worker lease/guard and preserve failed aggregate audits.",
+  "deadline_safety": "An independently running supervisor closes only our legacy launcher if it is still before first spawn at12:47:13UTC, leaving the original600-second publication reserve. No scientific run is started by that supervisor.",
+  "decision_rule": "No PASS from source implementation, a partial memory subset, unknown/zero substituted workflow costs, or the mere completion of this bounded task. Resource admission remains unestablished unless all original G1-G6 gates pass."
+}

@@ -105,6 +105,9 @@ def forecast(root,q):
     # conditional extrapolations, never mathematical lower bounds on later PDEs.
     monitor_rate=segments.get('model',{}).get('external_monitor_CPU_per_wall_second',0.) if complete else 0.
     measured=dict(native=cost,observer_CPU_per_native_wall_second=observer_rate,controller_parse_startup_CPU=parse_startup,controller_parse_CPU_per_step=parse_step,external_monitor_CPU_per_wall_second=monitor_rate,independent_CPU_per_accepted_state=phase_CPU,independent_wall_per_accepted_state=phase_wall,retention_CPU_per_two_steps=retention_CPU,retention_wall_per_two_steps=retention_wall,full_milestone_CPU=milestone_CPU,full_milestone_wall=milestone_wall,short_two_step_durable_segment_bytes=durable_per_segment,transient_snapshot_bytes_per_actual_step=transient_per_step)
+    if not complete:
+        for key in ('external_monitor_CPU_per_wall_second','independent_CPU_per_accepted_state','independent_wall_per_accepted_state','retention_CPU_per_two_steps','retention_wall_per_two_steps','full_milestone_CPU','full_milestone_wall','short_two_step_durable_segment_bytes','transient_snapshot_bytes_per_actual_step'):
+            measured[key]=None
     measured['milestone_bound_scope']=('actual heldout endpoint phases' if held else 'whole measured two-member endpoint wrappers plus whole changed-alpha family per future milestone; conservative scope bound, not exclusive timing or a validated heldout') if complete else 'unmeasured'
     paired=q['pair'].get('workflow_phases',{}) if q['pair'] else {};common_count=len(q['pair'].get('common_times',[])) if q['pair'] else 0
     paired_CPU=sum(paired.get(k,{}).get('self_CPU',0.)+paired.get(k,{}).get('children_CPU',0.) for k in ('paired_common_state_and_endpoint_comparison','paired_regional_time_series'))/max(1,common_count)
@@ -144,6 +147,7 @@ def forecast(root,q):
             live=durable+2*32*transient_per_step+256*1024**2
             admitted=complete and qualification_passed and 1.25*cpu<=24000 and 1.25*wall<=28800 and 1.25*live<=24*GIB and 1.25*measured_AS<=16*GIB
             rows.append(dict(horizon=name,requested_T=str(T),actual_endpoints=[str(Decimal(n)*Decimal(str(dt))) for n,dt in zip(counts,(.00025,.000125))],from_state=start,start_is_qualified=(start=='fresh_zero' or q['pair'] is not None and q['pair'].get('qualification',{}).get('status')=='pass'),total_member_steps=counts,additional_member_steps=additional,segment_length=32,native_hard_segment_cap=64,segments=segcounts,full_audit_counts=audits,CPU_components=components,CPU_before_headroom=cpu,CPU_with_headroom=1.25*cpu,active_wall_with_headroom=1.25*wall,finite_retained_output_with_headroom=1.25*durable,peak_new_live_output_with_headroom=1.25*live,measured_short_AS_bytes=measured_AS,status='ADMITTED' if admitted else 'UNADMITTED',native_only_CPU_with_headroom=1.25*native_cpu,required_total_cost_reduction=max(1.,1.25*cpu/24000),scope_complete=complete))
+            rows[-1]['native_only_active_wall_with_headroom']=1.25*native_wall
     for row in rows:
         row['peak_AS_with_headroom']=1.25*row['measured_short_AS_bytes']
         if complete:
@@ -160,6 +164,8 @@ def forecast(root,q):
             row['partial_observed_scope_wall_with_headroom']=row['active_wall_with_headroom']
             row['partial_observed_scope']='native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors'
             row['required_total_cost_reduction']=None
+            for key in ('independent_state_CPU','milestone_CPU','retention_CPU','external_monitor_CPU'):
+                row['CPU_components'][key]=None
             for key in ('CPU_before_headroom','CPU_with_headroom','active_wall_with_headroom','finite_retained_output_with_headroom','peak_new_live_output_with_headroom'):
                 row[key]=None
     return dict(status=('complete_conditional_forecast' if validated else 'complete_unvalidated_conditional_forecast') if complete else 'incomplete_native_replay_extrapolation',whole_workflow_component_coverage=complete,heldout_model_validated=bool(validated),headroom=1.25,headroom_applied='once to complete future CPU/wall/output/AS totals; not sunk research',measurements=measured,horizons=rows,unmeasured_additional_costs=[] if complete else ['complete heldout external-monitor validation','per-state independent audits','all full milestones/actions','retention and finite durable growth'],validity='short-history bounds are conditional extrapolations; all proposed campaigns require live spent-plus-remaining guards and segment fill/iteration reforecasting. No long-time physical qualification.',necessary_zero_overhead_CPU_per_step=24000/(1.25*4884),strict_necessary_bound_scope='arithmetic budget bound only; observed short native timing is not a proven lower bound on all future states')

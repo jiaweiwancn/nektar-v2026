@@ -1,0 +1,53 @@
+{
+  "schema": "CT15CheckpointCPartialWorkflowObstructionV1",
+  "status": "UNRESOLVED",
+  "native_source": "7b722daa41d18b316f8b78dafdde39fada4d5e94",
+  "pair_controller_source": "b53c965abf53fb79d51bd5f962d6d8625676866f",
+  "source_tree_parent": "46fd17ea",
+  "source_file_SHA256": {
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_collect.py": "66963bf6ee2a4af6daed64a3c43e42e45d44dec352b694c974b2edb161c7cc92",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_command.py": "cd59e7486ad6f67cc6f0e3b256ae4ccbcef308dc1406a28970a2944db12c49e4",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_cancel_wait.py": "2c910f82cdc128bf0204732f2fef7049715dfde4664e16a3dc2a7828452bee64",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_snapshot.py": "f2e56c71305532180742a113288848e227586556b8af6769d2133d3c2aba150b",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_segments.py": "12ca3adae7fdc63dce67ade11f6e5b3e8277867cef3a6fa462c85f010f879601",
+    "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_probe_memory.py": "787153b13e7e5c5521cd35644298e6632e584d958ecee1d9c397f34521fed6df"
+  },
+  "gates": {
+    "G1": "PARTIAL; full selected trajectory comparison queued before spawn",
+    "G2": "PASS",
+    "G3": "PARTIAL measurements; frozen heldout UNATTEMPTED",
+    "G4": "UNATTEMPTED; conditional prelaunch admission only",
+    "G5": "UNRESOLVED; incomplete workflow forecast and native-only CPU41.37 times ceiling",
+    "G6": "PENDING final closed accounting and push"
+  },
+  "physical_T0_407": "UNATTEMPTED",
+  "full_transit": "UNQUALIFIED",
+  "pair_results_SHA256": "27f02d571bedf9feab54901f130943929a68296221649d98589560ab31f02b7f",
+  "pair_resource_receipt_SHA256": "170f062b8d6611e73a2cdb1a6b7f5262ee05e9db0e4dbb19eda572ce59282a0a",
+  "package_budget_watch_SHA256": "aea722084748a164945dc579261b8b3f18523ab8cbabbdd30fa1300e550c2451",
+  "pair_workflow_CPU": {
+    "native_zero_and_evolution": 3697.199425,
+    "accepted_metrics_profiles_inventory": 143.05346286499582,
+    "endpoint_scalar_wrappers": 1869.5921641379998,
+    "constitutive_wrappers": 128.59136138100058,
+    "paired_comparisons": 34.55280357099991,
+    "worker_and_budget_monitors": 1353.0076764590008,
+    "unseparated_balance": 352.57672934900256
+  },
+  "pair_whole_CPU": 7578.5736227630005,
+  "pair_whole_wall": 6682.806283378974,
+  "cost_scope": "nested native probes included only in their complete wrapper; unseparated balance has no exclusive-routine attribution; no clean matched wall-time speedup claimed",
+  "engineering_closed_CPU_before_pending_queue": 20389.906691353,
+  "failed_shared_worker_audit": {
+    "maximum_aggregate": 101,
+    "maximum_project": 12,
+    "aggregate_limit": 72,
+    "project_limit": 16,
+    "aggregate_status": "fail",
+    "project_status": "pass",
+    "control_helpers_counted": 2
+  },
+  "remaining_plan_SHA256": "59f54e8d7798b531f4d55b2925f7d94b08f1635b5c044b72f0b833c86a97632e",
+  "forecast_SHA256": "8f84cf8bdce5bc1966cf4b95860f23bf5771981ca6a3cb7eb27c40bd4f891eba",
+  "remaining_action": "Continue user-requested wait and only evidence-supported whole-scope admissions within the unchanged original allocation; if no path fits, close UNRESOLVED without marking admission goal achieved."
+}

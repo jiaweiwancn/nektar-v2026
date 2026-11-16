@@ -17,10 +17,10 @@ and probe SHA256
 Publication head and tested native source are distinct. Full external receipts,
 not compact publication substitutes, are the comparison inputs.
 
-The first implementation will isolate immutable geometry and FE rows from the
-unqualified ExactStepV1 state caches. Moving AWF coordinates remain exact keys;
-all current-state admissibility work remains active. Further remedies require
-measured bottlenecks and prospective, bounded amendments.
+The four measured implementations isolate immutable geometry and FE rows from
+the unqualified ExactStepV1 state caches. Moving AWF coordinates remain exact
+keys; all current-state admissibility work remains active. Successive prospective
+contracts preserve the failed designs and bound each remedy.
 
 The target is demanding: 4884 paired steps allow less than 3.931 CPU seconds
 per step even before startup, checks, restarts, evidence and replay costs.
@@ -31,11 +31,11 @@ production will have separate ledgers.
 
 | Gate | Requirement | Current status |
 |---|---|---|
-| G1 | Exact problem/time map; affected actions <=2e-10; state/absolute Pi/traction <=1e-8; current-state/dependency/history controls | UNATTEMPTED |
+| G1 | Exact problem/time map; affected actions <=2e-10; state/absolute Pi/traction <=1e-8; current-state/dependency/history controls | PARTIAL; full selected-trajectory comparison queued |
 | G2 | Fresh .00025/.000125 pair to T=.002; every unchanged scientific/uncertainty criterion | PASS; shared-worker resource audit failed separately |
-| G3 | Matched timing-off startup/step/workflow measurements; frozen held-out restart workload validates model | UNATTEMPTED |
+| G3 | Matched timing-off startup/step/workflow measurements; frozen held-out restart workload validates model | PARTIAL measurements; fixed heldout UNATTEMPTED |
 | G4 | Two actual retirement/recovery cycles, replay/audit, interruption, continuation and full rollback | UNATTEMPTED |
-| G5 | Complete T=.407 forecast with 25% headroom <=24000 CPU s/28800 active-wall s/24 GiB output; later horizons explicit | UNATTEMPTED |
+| G5 | Complete T=.407 forecast with 25% headroom <=24000 CPU s/28800 active-wall s/24 GiB output; later horizons explicit | UNRESOLVED; native-only conditional CPU forecast already41.37 times ceiling |
 | G6 | Pushed source and hash-bound runtime/input/history/resource reproduction | IN PROGRESS |
 
 Checkpoint B qualifies the affected candidate in
@@ -49,9 +49,9 @@ actual/tiny/cancelling solves and native/q48/q64 actions. Momentum reconstructio
 is9.7490090523e-15 against2e-10. Peak selected scalar address space is15940460KiB
 against16777216KiB. Full static admission used2467.110331 CPU seconds;
 changed-alpha admission1445.504679; exact static oracle comparison60.100567.
-All three worker audits pass. Closed engineering cost including the120-second
-exception reserve is12808.697313 CPU seconds. Full G1 stage/accepted-state
-comparison, G2 fresh physical pair, G3/G4 and production admission remain open.
+All three worker audits pass. At B, closed engineering cost including the120-second
+exception reserve was12808.697313 CPU seconds. Full G1 stage/accepted-state
+comparison, the fresh physical pair, G3/G4 and production admission remained open.
 
 The subsequent [fresh pair](cao-tamura-accepted-15-evidence/fresh-pair-v1.json)
 passes every unchanged scientific and uncertainty criterion at T=.002 in8/16
@@ -81,10 +81,20 @@ the measured native-only and partial-scope extrapolations named separately.
 
 No T=.407 or meaningful-duration preservation run is authorized in CT15.
 
+[Checkpoint C's partial-workflow obstruction](cao-tamura-accepted-15-evidence/checkpoint-c-partial.json)
+records the fresh scientific PASS, measured whole-family CPU decomposition,
+failed shared-worker audit and unadmitted campaign. It is explicitly not a G3/G4
+PASS. The [remaining-allocation plan](cao-tamura-accepted-15-evidence/remaining-admission-plan-v1.json)
+requires the entire declared scope to fit before each launch and retains the
+original deadline. A read-only Linux metadata exporter supports publication on
+the source Mac without starting another numerical family; its administrative
+cost remains within the fixed publication reserve and does not supply worker
+admission or scientific reclassification.
+
 The first two bounded candidates have not supplied an affordable path. The
 following are complete native commands with detailed timers off, not isolated
-steady-step times. All selected updates below equal CT14's actual coefficients
-bitwise; the full fresh T=.002 qualification remains outstanding.
+steady-step times. The selected first two updates below equal CT14's actual
+coefficients bitwise; the subsequent fresh T=.002 pair passes independently.
 
 | Execution | Zero steps CPU s | One step CPU s | Two steps CPU s |
 |---|---:|---:|---:|
@@ -112,7 +122,7 @@ canonical sorted CSR, all tests and a hard bounded row limit. Both V3 and V4
 pass the small operators/dependency/history suite and preserve the selected
 first two accepted coefficient vectors bitwise. V4 also checks continuation
 with a1024-row work cache, proving that its larger cache is not essential
-history. Selected-space admission and the complete fresh pair remain pending.
+history. Selected-space admission and the complete fresh pair subsequently pass.
 
 V4's timing-off whole zero/one/two family used775.071055 CPU seconds, compared
 with1069.190580 for V2. These families have the same scientific control scope,
@@ -156,6 +166,100 @@ T=.002 would subtract8/16 steps; it is unavailable until its fresh pair passes.
 All these horizons remain **UNADMITTED**. Physical T=.407 remains
 **UNATTEMPTED**.
 
+The [forecast progress receipt](cao-tamura-accepted-15-evidence/forecast-progress-v1.json)
+keeps complete CPU/wall/durable-output forecasts **null** until recovery and
+workflow costs are measured. The following conditional native-only figures
+include startup at the chosen32-step segment length and25% headroom once.
+They exclude required independent audits, replay, retention, collection and
+publication; they cannot admit any horizon. There are51 coarse plus102 fine
+segments at T=.407, not32 segments. The native hard segment cap remains64.
+
+| Horizon | Fresh coarse/fine steps | Native-only CPU s, fresh / own T=.002 continuation | Native-only wall s, fresh / continuation | Complete workflow/output | Decision |
+|---|---:|---:|---:|---|---|
+| T=.407 | 1628 / 3256 | 992893 / 987927 | 1003349 / 998329 | UNMEASURED | UNADMITTED |
+| 0.1 transit, T=4.06216378576 | 16249 / 32498 | 9908537 / 9903570 | 10012869 / 10007850 | UNMEASURED | UNADMITTED |
+| 1 transit, T=40.6216378576 | 162487 / 324974 | 99081861 / 99076824 | 100125136 / 100120045 | UNMEASURED | UNADMITTED |
+| 3 transits, T=121.8649135728 | 487460 / 974920 | 297244626 / 297239518 | 300374439 / 300369276 | UNMEASURED | UNADMITTED |
+
+Continuation subtracts8 coarse/16 fine steps only from the candidate's own
+qualified histories. It is not permission to resume old-component histories.
+Decimal ceiling determines each member's actual endpoint. The frozen full-audit
+counts are6/9 for fresh T=.407 and4/7 for continuation; all native per-stage and
+independent per-state observations remain required. Selected probe address-space
+highwater is15.2020073GiB, or19.0025091GiB with the contract's25% forecast
+headroom, above16GiB. The fixed65536-row probe remedy is prospectively specified
+but **UNATTEMPTED**. Full-retention raw snapshots alone would grow to roughly111GB
+at4884 steps; no unqualified selective-replay storage estimate replaces that
+fact. Resident working space and finite durable growth remain distinct.
+
+The new pair's measured whole-family CPU separates as follows. Native probes
+inside a wrapper are included in that wrapper and are not added again.
+
+| Measured scope | CPU s |
+|---|---:|
+| Both native zero-step initializations and8/16-step evolutions | 3697.199425 |
+| Independent accepted metrics, traction profiles and endpoint inventories | 143.053463 |
+| Complete two-member endpoint scalar-control wrappers | 1869.592164 |
+| Endpoint constitutive wrappers | 128.591361 |
+| Paired common-state and regional comparisons | 34.552804 |
+| Outer worker and package-budget monitors | 1353.007676 |
+| Unseparated controller/startup/observer/parse/binding balance | 352.576729 |
+| Complete owned family | 7578.573623 |
+
+The last balance is explicitly unseparated; it is not attributed to one routine.
+The CT14 whole-family receipt is9607.247458 CPU seconds. Its native8/16 commands
+were1269.812781/2514.342541, compared with1230.834028/2351.821703 here. These
+are observed scopes, not a claim that the entire difference is one optimization
+or a controlled wall-time speedup. The new path additionally checks accepted-state
+gradients and suffered unrelated-worker pauses. The training0/1/2 experiment
+resolves fresh startup/repeated-step costs, but the original heldout6-to8 workload
+still has to validate restart, complete workflow, AS and output bounds. It has
+not been fitted retrospectively or replaced by the physical pair.
+
+The targeted diagnostic, which is excluded from acceptance timing, measured
+100.73 exclusive CPU seconds in complete scalar-domain computation,33.46 in
+flow assembly and23.85 in residual work for the V1 startup/one-step command.
+Sparse factorization and direct solves used2.88/1.93 seconds. This evidence
+supports further batching of current-field FE/domain and audit work; a smaller
+factor or another cache-hit count alone cannot supply the missing throughput.
+The measured160.84 seconds/step envelope is not a proof that all future
+implementations or states require that time. The strict necessary bound is the
+arithmetic3.93-second zero-overhead allowance; the41.37-fold gap refers only to
+the declared short-history native extrapolation before other workflow costs.
+
+`ImmutableTensorV4` retains exact-owner/radial-side geometry lookup, immutable
+tensor FE rows and bounded copy-on-write storage. Hashed assembly preserves
+chronological additions and canonical sorted CSR. Its constitutive-point reuse
+is local to one complete current-state call, uses exact actual coordinates and
+dependencies, and dies before the next call. Current flow-gradient covariance
+and radicand checks are recomputed. Native row storage is bounded at1048576;
+the per-call current-point bound is262144. Python `PreparedRowsV1` bounds
+immutable arrays at262144 rows/256MiB and recomputes every current-state dot
+product and physical check. The batched Python prototype is not adopted.
+No consistent-mass factor or changing numerical factor reuse is implemented.
+The Off oracle, ExactStepV1 open-route guard and unchanged post-k epsilon lag
+remain active.
+
+`SelectiveReplayV1` is a proposed selective policy, not a lossless archive of
+every retired file. Its code retains readable current/previous checkpoints,
+all segment anchors/reports/receipts and first-failure witnesses; it verifies
+fresh-process deterministic stage replay and all independent observations before
+atomic retirement of newly owned snapshots. Full retirement/recovery qualification
+remains **UNATTEMPTED** until the selected native segments actually run. Small
+restart/rollback controls and source implementation do not substitute for G4.
+The explicitly cheaper G4-only scope preserves all required per-state audits,
+two cycles ending2/4 and rejected-step rollback, while declaring the unchanged
+G3 heldout **UNATTEMPTED**. It cannot produce resource admission.
+
+Task3 is **not admitted**. Before a new physical T=.407 contract, the selected
+component needs complete trajectory equivalence, actual G4 cycles, a prospective
+heldout workflow/model validation, lower-memory high-order controls if adopted,
+and an affordable complete forecast under every existing ceiling. Any later
+campaign still needs live spent-plus-remaining guards, segment-boundary
+fill/iteration reforecasting and its own physical/uncertainty contract. A short
+scientific PASS does not establish T=.407 preservation, transit-duration science,
+operational readiness or experimental replication.
+
 Reproduction uses the selected immutable runtime at
 `/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime`.
 Its tested native source is`7b722daa41d18b316f8b78dafdde39fada4d5e94`, governing
@@ -195,10 +299,11 @@ monitor CPU. Package-monitor self CPU and live ancestor/helper deltas distinguis
 external costs from the controller and native descendants. None of these nested
 measurements is added twice. Original prospective workflow v1 is preserved;
 v2 binds these measurements and the earlier-cycle audit schedule before use.
-Both recovery cycles retain all mandatory per-state observations; the extra
-four-control scalar training audit runs at cycle4. The fresh pair and heldout8
-retain their complete original scalar/constitutive controls, and the production
-initial/.002/every512/final full-audit schedule is unchanged.
+Both recovery cycles retain all mandatory per-state observations. The default
+full G3/G4 scope adds the four-control scalar training audit at cycle4; the
+explicit G4-only scope leaves that extra G3 calibration and heldout unattempted.
+The fresh pair retains its complete original scalar/constitutive controls, and
+the production initial/.002/every512/final full-audit schedule is unchanged.
 
 The smallest fresh selected-case performance reproducer is the following
 single-step control. It must use a **new** output/control directory and counts
