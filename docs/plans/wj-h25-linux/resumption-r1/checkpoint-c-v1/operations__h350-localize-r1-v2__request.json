@@ -1,0 +1,138 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/diagnose_hmesh_wj_h25r1.py",
+    "--root",
+    "/home/jay/build/wj-h25-production-20261116"
+  ],
+  "phase": "passive",
+  "reserved_seconds": 180.0,
+  "attempts": 0,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "allocation": {
+    "workers": 28,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 374960,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wp2_completion_waves.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116 --solver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver --probe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-analysis-rows/RANSWallResolutionProbe --h1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json"
+      },
+      {
+        "pid": 377176,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wp2_final_checks.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116 --solver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver --probe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-v12/RANSWallResolutionProbe --h1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json"
+      },
+      {
+        "pid": 394169,
+        "parent": 374960,
+        "threads": 1,
+        "args": "/usr/bin/python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wp2_preservation.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116 --solver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver --h1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-CLS --model CLS --mode recover --level 4 --dt 0.01 --endpoint 1.2 --parent-progress /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-seed-CLS/progress.json"
+      },
+      {
+        "pid": 394170,
+        "parent": 374960,
+        "threads": 1,
+        "args": "/usr/bin/python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/run_wp2_preservation.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116 --solver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver --h1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard --model standard --mode recover --level 4 --dt 0.01 --endpoint 1.2 --parent-progress /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-seed-standard/progress.json"
+      },
+      {
+        "pid": 394956,
+        "parent": 394955,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step60/case.xml"
+      },
+      {
+        "pid": 394957,
+        "parent": 394956,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 10 --singleton-died-pipe 11 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 394964,
+        "parent": 394963,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-CLS/step60/case.xml"
+      },
+      {
+        "pid": 394965,
+        "parent": 394964,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 10 --singleton-died-pipe 11 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 395485,
+        "parent": 395484,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h25r1.py --root /home/jay/build/wj-h25-production-20261116 --label scatter-build-r1-v1 --seconds 900 --phase build -- python3 -B /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/build_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --variant scatter"
+      },
+      {
+        "pid": 395488,
+        "parent": 395487,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/build_wj_h25.py --root /home/jay/build/wj-h25-production-20261116 --variant scatter"
+      },
+      {
+        "pid": 395613,
+        "parent": 395612,
+        "threads": 1,
+        "args": "/usr/lib/gcc/x86_64-linux-gnu/11/cc1plus -quiet -I /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/library -I /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers -imultiarch x86_64-linux-gnu -MD CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.d -MF CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o.d -MT CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o -D_GNU_SOURCE -D_REENTRANT -D ENABLE_NEKTAR_EXCEPTIONS -D NEKTAR_MEMORY_POOL_ENABLED -D NEKTAR_MPI_TYPE=0 -D NEKTAR_USE_MPI -D NEKTAR_USE_SCOTCH -D TIXML_USE_STL -D NDEBUG -D NEKTAR_USE_MPI -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /usr/include/scotch -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp -quiet -dumpdir CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/ -dumpbase RANSWallEvolutionPatch.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -O3 -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror -std=gnu++17 -ffp-contract=off -fno-fast-math -fasynchronous-unwind-tables -fstack-protector-strong -Wformat-security -fstack-clash-protection -fcf-protection -o /home/jay/build/wj-h25-production-20261116/resumption-r1/tmp/ccKBMs2m.s"
+      },
+      {
+        "pid": 395623,
+        "parent": 395622,
+        "threads": 1,
+        "args": "/usr/lib/gcc/x86_64-linux-gnu/11/cc1plus -quiet -I /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/library -I /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers -imultiarch x86_64-linux-gnu -MD CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionEvaluation.cpp.d -MF CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionEvaluation.cpp.o.d -MT CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionEvaluation.cpp.o -D_GNU_SOURCE -D_REENTRANT -D ENABLE_NEKTAR_EXCEPTIONS -D NEKTAR_MEMORY_POOL_ENABLED -D NEKTAR_MPI_TYPE=0 -D NEKTAR_USE_MPI -D NEKTAR_USE_SCOTCH -D TIXML_USE_STL -D NDEBUG -D NEKTAR_USE_MPI -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /usr/include/scotch -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionEvaluation.cpp -quiet -dumpdir CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/ -dumpbase RANSWallEvolutionEvaluation.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -O3 -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror -std=gnu++17 -ffp-contract=off -fno-fast-math -fasynchronous-unwind-tables -fstack-protector-strong -Wformat-security -fstack-clash-protection -fcf-protection -o /home/jay/build/wj-h25-production-20261116/resumption-r1/tmp/ccssQZ45.s"
+      },
+      {
+        "pid": 395630,
+        "parent": 395629,
+        "threads": 1,
+        "args": "/usr/lib/gcc/x86_64-linux-gnu/11/cc1plus -quiet -I /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/library -I /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers -imultiarch x86_64-linux-gnu -MD CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp.d -MF CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp.o.d -MT CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp.o -D_GNU_SOURCE -D_REENTRANT -D ENABLE_NEKTAR_EXCEPTIONS -D NEKTAR_MEMORY_POOL_ENABLED -D NEKTAR_MPI_TYPE=0 -D NEKTAR_USE_MPI -D NEKTAR_USE_SCOTCH -D TIXML_USE_STL -D NDEBUG -D NEKTAR_USE_MPI -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /usr/include/scotch -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp -quiet -dumpdir CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/ -dumpbase RANSWallEvolutionDiagnostics.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -O3 -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror -std=gnu++17 -ffp-contract=off -fno-fast-math -fasynchronous-unwind-tables -fstack-protector-strong -Wformat-security -fstack-clash-protection -fcf-protection -o /home/jay/build/wj-h25-production-20261116/resumption-r1/tmp/ccYmbrKv.s"
+      },
+      {
+        "pid": 395637,
+        "parent": 395636,
+        "threads": 1,
+        "args": "/usr/lib/gcc/x86_64-linux-gnu/11/cc1plus -quiet -I /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/library -I /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers -imultiarch x86_64-linux-gnu -MD CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp.d -MF CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp.o.d -MT CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp.o -D_GNU_SOURCE -D_REENTRANT -D ENABLE_NEKTAR_EXCEPTIONS -D NEKTAR_MEMORY_POOL_ENABLED -D NEKTAR_MPI_TYPE=0 -D NEKTAR_USE_MPI -D NEKTAR_USE_SCOTCH -D TIXML_USE_STL -D NDEBUG -D NEKTAR_USE_MPI -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /usr/include/scotch -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp -quiet -dumpdir CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/EquationSystems/ -dumpbase RANSWallEvolutionTransition.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -O3 -Wall -Wextra -Wpedantic -Wno-sign-compare -Werror -std=gnu++17 -ffp-contract=off -fno-fast-math -fasynchronous-unwind-tables -fstack-protector-strong -Wformat-security -fstack-clash-protection -fcf-protection -o /home/jay/build/wj-h25-production-20261116/resumption-r1/tmp/ccspxFBv.s"
+      },
+      {
+        "pid": 395675,
+        "parent": 395674,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/run_wj_h25r1.py --root /home/jay/build/wj-h25-production-20261116 --label h350-localize-r1-v2 --seconds 180 --phase passive -- python3 -B /home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/diagnose_hmesh_wj_h25r1.py --root /home/jay/build/wj-h25-production-20261116"
+      }
+    ]
+  },
+  "additional_workers_reserved": 2,
+  "free_bytes": 78615969792,
+  "final_operation": false,
+  "inputs": {
+    "/home/jay/build/wj-h25-production-20261116/resumption-r1/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/diagnose_hmesh_wj_h25r1.py": {
+      "sha256": "ee1243affdc696e37576b50039e24ccc2e0d33b60282b3c9a801280f79a53f03",
+      "bytes": 3264
+    }
+  },
+  "runner_sha256": "d352bd9e2ae3f75d196ca1b362a307d83de01231c86b95d078cbefb56ee27c49",
+  "utc": "2026-11-16T13:29:28.685333+00:00"
+}

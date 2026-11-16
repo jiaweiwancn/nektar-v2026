@@ -1,0 +1,1051 @@
+{
+  "status": "PASS_IMPLEMENTATION_COMPARISON",
+  "records": {
+    "scatter-off-two-r1-v1": {
+      "timing": {
+        "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/operations/scatter-off-two-r1-v1/timing.jsonl",
+        "bytes": 633122,
+        "sha256": "97f8a50d2a5c80fae2fd5eade985c5eccfd17852bd0bdb487cd9c205b13dd49f"
+      },
+      "steps": [
+        17
+      ],
+      "wall_seconds": 41.210847021,
+      "per_step": 41.210847021,
+      "attributed_fraction": 0.99980649182008,
+      "equation_fraction": 0.39592717081707957,
+      "disjoint": {
+        "data_allocation_release": 2.42467589,
+        "guards_bounds_residual_verification": 21.857098739999994,
+        "UNATTRIBUTED": 0.007974635999997533,
+        "equation_evaluation_assembly_solution_update": 16.316494068,
+        "attempt_evidence_and_orchestration": 0.19072747899998888,
+        "recovery_publication_IO": 0.31918483,
+        "loop_telemetry_orchestration": 0.09469137800000027
+      },
+      "exclusive_by_name": {
+        "domain.compute": {
+          "seconds_per_step": 15.878996624,
+          "calls": 4
+        },
+        "flow.assembly": {
+          "seconds_per_step": 6.492896844,
+          "calls": 1
+        },
+        "residual": {
+          "seconds_per_step": 2.6884457920000004,
+          "calls": 5
+        },
+        "mapped.band.solve": {
+          "seconds_per_step": 2.534494279999999,
+          "calls": 804
+        },
+        "pressure.build": {
+          "seconds_per_step": 2.526869780000001,
+          "calls": 1
+        },
+        "data.evaluation_release": {
+          "seconds_per_step": 2.4018871109999997,
+          "calls": 2
+        },
+        "k.bound": {
+          "seconds_per_step": 1.83277147,
+          "calls": 1
+        },
+        "k.assembly": {
+          "seconds_per_step": 1.587567953,
+          "calls": 1
+        },
+        "constitutive.refresh": {
+          "seconds_per_step": 1.11333076,
+          "calls": 9
+        },
+        "epsilon.assembly": {
+          "seconds_per_step": 0.9864264159999998,
+          "calls": 1
+        },
+        "domain.scalar": {
+          "seconds_per_step": 0.9070979020000005,
+          "calls": 8
+        },
+        "mapped.band.factor": {
+          "seconds_per_step": 0.538470302,
+          "calls": 4
+        },
+        "monitor.checkpoint_and_publish": {
+          "seconds_per_step": 0.306525081,
+          "calls": 1
+        },
+        "flow.correction_validate": {
+          "seconds_per_step": 0.2644473660000002,
+          "calls": 1
+        },
+        "matching.constraints": {
+          "seconds_per_step": 0.194046519,
+          "calls": 10
+        },
+        "pimple.sweep": {
+          "seconds_per_step": 0.19072747899998888,
+          "calls": 1
+        },
+        "epsilon.total": {
+          "seconds_per_step": 0.128046973,
+          "calls": 1
+        },
+        "native.explicit": {
+          "seconds_per_step": 0.10340474699999996,
+          "calls": 1
+        },
+        "flow.total": {
+          "seconds_per_step": 0.1032106370000001,
+          "calls": 1
+        },
+        "native.step": {
+          "seconds_per_step": 0.09469137800000027,
+          "calls": 1
+        },
+        "residual.mass_dual_norms": {
+          "seconds_per_step": 0.070419933,
+          "calls": 3
+        },
+        "mapped.band.permutation": {
+          "seconds_per_step": 0.060160022,
+          "calls": 4
+        },
+        "k.bound_accounting": {
+          "seconds_per_step": 0.038269562,
+          "calls": 1
+        },
+        "k.total": {
+          "seconds_per_step": 0.02962783400000113,
+          "calls": 1
+        },
+        "guard.completed_bound": {
+          "seconds_per_step": 0.024401416,
+          "calls": 1
+        },
+        "data.completed_packet": {
+          "seconds_per_step": 0.022786949,
+          "calls": 1
+        },
+        "native.advance": {
+          "seconds_per_step": 0.022500556000004224,
+          "calls": 1
+        },
+        "verify.momentum_linear": {
+          "seconds_per_step": 0.014311999,
+          "calls": 1
+        },
+        "io.checkpoint": {
+          "seconds_per_step": 0.012659749,
+          "calls": 1
+        },
+        "dense.factorization": {
+          "seconds_per_step": 0.011841122,
+          "calls": 1
+        },
+        "verify.scalar_linear": {
+          "seconds_per_step": 0.008720265000000001,
+          "calls": 2
+        },
+        "native.implicit": {
+          "seconds_per_step": 0.005328200999997534,
+          "calls": 1
+        },
+        "guard.completed_outlet": {
+          "seconds_per_step": 0.004065182,
+          "calls": 1
+        },
+        "k.solve_validate": {
+          "seconds_per_step": 0.0030751160000000027,
+          "calls": 1
+        },
+        "epsilon.solve_validate": {
+          "seconds_per_step": 0.0022655869999999995,
+          "calls": 1
+        },
+        "verify.pressure_linear": {
+          "seconds_per_step": 0.001237559,
+          "calls": 1
+        },
+        "verify.scalar_source_storage": {
+          "seconds_per_step": 0.001077411999999939,
+          "calls": 2
+        },
+        "equation.pressure_factor": {
+          "seconds_per_step": 0.000897742,
+          "calls": 1
+        },
+        "pimple.check.k": {
+          "seconds_per_step": 0.00042983099999999164,
+          "calls": 1
+        },
+        "pimple.check.flow": {
+          "seconds_per_step": 0.0004255290000000009,
+          "calls": 1
+        },
+        "pimple.check.epsilon": {
+          "seconds_per_step": 0.0003309360000001149,
+          "calls": 1
+        },
+        "pimple.check.input": {
+          "seconds_per_step": 0.0003037849999998343,
+          "calls": 1
+        },
+        "equation.scalar_factor": {
+          "seconds_per_step": 0.00026164199999999943,
+          "calls": 2
+        },
+        "pressure.mass_factorize": {
+          "seconds_per_step": 0.00020663899999999458,
+          "calls": 1
+        },
+        "dense.triangular_solve": {
+          "seconds_per_step": 0.000205589,
+          "calls": 1
+        },
+        "equation.scalar_solve": {
+          "seconds_per_step": 0.00020171899999999994,
+          "calls": 2
+        },
+        "momentum.factorize": {
+          "seconds_per_step": 0.0001678579999999652,
+          "calls": 1
+        },
+        "pimple.final_refresh_diagnostics": {
+          "seconds_per_step": 0.00014379500000005763,
+          "calls": 1
+        },
+        "equation.momentum_solve": {
+          "seconds_per_step": 6.906400000000062e-05,
+          "calls": 1
+        },
+        "verify.completed_stage": {
+          "seconds_per_step": 4.3972999999999235e-05,
+          "calls": 1
+        },
+        "momentum.solve_validate": {
+          "seconds_per_step": 2.788000000000096e-05,
+          "calls": 1
+        },
+        "pressure.solve_validate": {
+          "seconds_per_step": 1.7409999999998954e-05,
+          "calls": 1
+        },
+        "equation.pressure_solve": {
+          "seconds_per_step": 7.921000000000008e-06,
+          "calls": 1
+        },
+        "data.evaluation_invalidate": {
+          "seconds_per_step": 1.83e-06,
+          "calls": 2
+        }
+      },
+      "nested_explanatory_only": {
+        "domain.parts.anchor_materialization": 0.061007304,
+        "domain.parts.current_K_profiles": 0.05444512900000007,
+        "domain.parts.epsilon_rows": 2.198940457,
+        "domain.parts.fixed_rows": 2.122513987,
+        "domain.parts.moving_ray_rows": 9.780108452000007
+      },
+      "samples": [
+        41.210847021
+      ],
+      "stdev": null,
+      "minimum": 41.210847021,
+      "maximum": 41.210847021
+    },
+    "scatter-on-four-r1-v1": {
+      "timing": {
+        "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/operations/scatter-on-four-r1-v1/timing.jsonl",
+        "bytes": 1164483,
+        "sha256": "3e7cda3a6f2ba29c89e1d01caaf3a64fbb55d451cca94ee23699d13661f9b236"
+      },
+      "steps": [
+        17,
+        18,
+        19
+      ],
+      "wall_seconds": 105.460284513,
+      "per_step": 35.153428171,
+      "attributed_fraction": 0.9998159798061459,
+      "equation_fraction": 0.3374014173611845,
+      "disjoint": {
+        "data_allocation_release": 2.3190349960000005,
+        "guards_bounds_residual_verification": 20.39293730666666,
+        "UNATTRIBUTED": 0.006468940666662925,
+        "equation_evaluation_assembly_solution_update": 11.860816489999992,
+        "attempt_evidence_and_orchestration": 0.17389407399999848,
+        "recovery_publication_IO": 0.32058592833333327,
+        "loop_telemetry_orchestration": 0.0796904353333332
+      },
+      "exclusive_by_name": {
+        "domain.compute": {
+          "seconds_per_step": 14.941319178666665,
+          "calls": 12
+        },
+        "flow.assembly": {
+          "seconds_per_step": 3.844317613,
+          "calls": 3
+        },
+        "residual": {
+          "seconds_per_step": 2.3608944573333335,
+          "calls": 15
+        },
+        "data.evaluation_release": {
+          "seconds_per_step": 2.294721575,
+          "calls": 6
+        },
+        "pressure.build": {
+          "seconds_per_step": 2.267774971,
+          "calls": 3
+        },
+        "mapped.band.solve": {
+          "seconds_per_step": 2.2244233163333282,
+          "calls": 2412
+        },
+        "k.bound": {
+          "seconds_per_step": 1.8017238103333335,
+          "calls": 3
+        },
+        "constitutive.refresh": {
+          "seconds_per_step": 1.104802893666667,
+          "calls": 27
+        },
+        "domain.scalar": {
+          "seconds_per_step": 0.8633907163333333,
+          "calls": 24
+        },
+        "k.assembly": {
+          "seconds_per_step": 0.7356902276666667,
+          "calls": 3
+        },
+        "epsilon.assembly": {
+          "seconds_per_step": 0.5649876380000002,
+          "calls": 3
+        },
+        "mapped.band.factor": {
+          "seconds_per_step": 0.5232265956666667,
+          "calls": 12
+        },
+        "monitor.checkpoint_and_publish": {
+          "seconds_per_step": 0.31044413333333337,
+          "calls": 3
+        },
+        "matching.constraints": {
+          "seconds_per_step": 0.21764125733333328,
+          "calls": 30
+        },
+        "pimple.sweep": {
+          "seconds_per_step": 0.17389407399999848,
+          "calls": 3
+        },
+        "flow.correction_validate": {
+          "seconds_per_step": 0.14032683666666668,
+          "calls": 3
+        },
+        "flow.total": {
+          "seconds_per_step": 0.13878648366666665,
+          "calls": 3
+        },
+        "epsilon.total": {
+          "seconds_per_step": 0.12584965800000023,
+          "calls": 3
+        },
+        "native.explicit": {
+          "seconds_per_step": 0.10446406266666668,
+          "calls": 3
+        },
+        "native.step": {
+          "seconds_per_step": 0.0796904353333332,
+          "calls": 3
+        },
+        "residual.mass_dual_norms": {
+          "seconds_per_step": 0.07636628466666667,
+          "calls": 9
+        },
+        "mapped.band.permutation": {
+          "seconds_per_step": 0.07219282033333334,
+          "calls": 12
+        },
+        "k.bound_accounting": {
+          "seconds_per_step": 0.03464419133333333,
+          "calls": 3
+        },
+        "guard.completed_bound": {
+          "seconds_per_step": 0.026346235999999995,
+          "calls": 3
+        },
+        "data.completed_packet": {
+          "seconds_per_step": 0.02431142433333333,
+          "calls": 3
+        },
+        "k.total": {
+          "seconds_per_step": 0.01979984833333326,
+          "calls": 3
+        },
+        "native.advance": {
+          "seconds_per_step": 0.017963123333331055,
+          "calls": 3
+        },
+        "verify.momentum_linear": {
+          "seconds_per_step": 0.015159956,
+          "calls": 3
+        },
+        "io.checkpoint": {
+          "seconds_per_step": 0.010141795,
+          "calls": 3
+        },
+        "dense.factorization": {
+          "seconds_per_step": 0.009736936333333333,
+          "calls": 3
+        },
+        "verify.scalar_linear": {
+          "seconds_per_step": 0.008292355999999999,
+          "calls": 6
+        },
+        "guard.completed_outlet": {
+          "seconds_per_step": 0.004618845,
+          "calls": 3
+        },
+        "native.implicit": {
+          "seconds_per_step": 0.004385092999996232,
+          "calls": 3
+        },
+        "k.solve_validate": {
+          "seconds_per_step": 0.003259481999999999,
+          "calls": 3
+        },
+        "epsilon.solve_validate": {
+          "seconds_per_step": 0.002280642666666668,
+          "calls": 3
+        },
+        "verify.pressure_linear": {
+          "seconds_per_step": 0.00129414,
+          "calls": 3
+        },
+        "verify.scalar_source_storage": {
+          "seconds_per_step": 0.0011690043333333257,
+          "calls": 6
+        },
+        "equation.pressure_factor": {
+          "seconds_per_step": 0.0005513023333333332,
+          "calls": 3
+        },
+        "pressure.mass_factorize": {
+          "seconds_per_step": 0.00035680366666666446,
+          "calls": 3
+        },
+        "pimple.check.input": {
+          "seconds_per_step": 0.000333871666666911,
+          "calls": 3
+        },
+        "pimple.check.k": {
+          "seconds_per_step": 0.000333332000000001,
+          "calls": 3
+        },
+        "pimple.check.flow": {
+          "seconds_per_step": 0.0002760329999999999,
+          "calls": 3
+        },
+        "pimple.check.epsilon": {
+          "seconds_per_step": 0.00026323966666641496,
+          "calls": 3
+        },
+        "equation.scalar_solve": {
+          "seconds_per_step": 0.00020386933333333334,
+          "calls": 6
+        },
+        "equation.scalar_factor": {
+          "seconds_per_step": 0.00017817500000000264,
+          "calls": 6
+        },
+        "dense.triangular_solve": {
+          "seconds_per_step": 0.00017262466666666666,
+          "calls": 3
+        },
+        "pimple.final_refresh_diagnostics": {
+          "seconds_per_step": 0.00013688700000002996,
+          "calls": 3
+        },
+        "momentum.factorize": {
+          "seconds_per_step": 0.0001277856666666577,
+          "calls": 3
+        },
+        "equation.momentum_solve": {
+          "seconds_per_step": 7.57903333333335e-05,
+          "calls": 3
+        },
+        "verify.completed_stage": {
+          "seconds_per_step": 3.908133333333242e-05,
+          "calls": 3
+        },
+        "momentum.solve_validate": {
+          "seconds_per_step": 2.216099999999971e-05,
+          "calls": 3
+        },
+        "pressure.solve_validate": {
+          "seconds_per_step": 1.5724666666666262e-05,
+          "calls": 3
+        },
+        "equation.pressure_solve": {
+          "seconds_per_step": 7.38033333333333e-06,
+          "calls": 3
+        },
+        "data.evaluation_invalidate": {
+          "seconds_per_step": 1.9966666666666665e-06,
+          "calls": 6
+        }
+      },
+      "nested_explanatory_only": {
+        "domain.parts.anchor_materialization": 0.04614797166666667,
+        "domain.parts.current_K_profiles": 0.05561638399999999,
+        "domain.parts.epsilon_rows": 1.9697500399999999,
+        "domain.parts.fixed_rows": 2.2897365206666667,
+        "domain.parts.moving_ray_rows": 9.142094837333335
+      },
+      "samples": [
+        37.175310958,
+        33.539429845,
+        34.74554371
+      ],
+      "stdev": 1.8519409189041287,
+      "minimum": 33.539429845,
+      "maximum": 37.175310958
+    },
+    "memo-off-two-r1-v1": {
+      "timing": {
+        "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/operations/memo-off-two-r1-v1/timing.jsonl",
+        "bytes": 622704,
+        "sha256": "73ff73067bf41180449c7bc501d72f6e48f0b0992c38c51893c783773a0107b0"
+      },
+      "steps": [
+        17
+      ],
+      "wall_seconds": 32.705812277,
+      "per_step": 32.705812277,
+      "attributed_fraction": 0.999803183179018,
+      "equation_fraction": 0.3045299598017992,
+      "disjoint": {
+        "data_allocation_release": 2.1935855589999997,
+        "guards_bounds_residual_verification": 19.985461662000013,
+        "UNATTRIBUTED": 0.006437053999993713,
+        "equation_evaluation_assembly_solution_update": 9.959899698000001,
+        "attempt_evidence_and_orchestration": 0.14968980300000112,
+        "recovery_publication_IO": 0.3190673,
+        "loop_telemetry_orchestration": 0.09167120099999693
+      },
+      "exclusive_by_name": {
+        "domain.compute": {
+          "seconds_per_step": 14.497700668,
+          "calls": 4
+        },
+        "flow.assembly": {
+          "seconds_per_step": 3.825321277,
+          "calls": 1
+        },
+        "residual": {
+          "seconds_per_step": 2.296501496,
+          "calls": 5
+        },
+        "data.evaluation_release": {
+          "seconds_per_step": 2.1707866919999996,
+          "calls": 2
+        },
+        "k.bound": {
+          "seconds_per_step": 1.8275151589999998,
+          "calls": 1
+        },
+        "mapped.band.solve": {
+          "seconds_per_step": 1.5985921030000012,
+          "calls": 804
+        },
+        "pressure.build": {
+          "seconds_per_step": 1.428779825999999,
+          "calls": 1
+        },
+        "domain.scalar": {
+          "seconds_per_step": 0.9206036979999996,
+          "calls": 8
+        },
+        "constitutive.refresh": {
+          "seconds_per_step": 0.79741179,
+          "calls": 9
+        },
+        "k.assembly": {
+          "seconds_per_step": 0.7590725660000001,
+          "calls": 1
+        },
+        "epsilon.assembly": {
+          "seconds_per_step": 0.5364458950000001,
+          "calls": 1
+        },
+        "mapped.band.factor": {
+          "seconds_per_step": 0.49167531499999995,
+          "calls": 4
+        },
+        "monitor.checkpoint_and_publish": {
+          "seconds_per_step": 0.310443433,
+          "calls": 1
+        },
+        "flow.correction_validate": {
+          "seconds_per_step": 0.18098230300000007,
+          "calls": 1
+        },
+        "matching.constraints": {
+          "seconds_per_step": 0.178025877,
+          "calls": 10
+        },
+        "pimple.sweep": {
+          "seconds_per_step": 0.14968980300000112,
+          "calls": 1
+        },
+        "epsilon.total": {
+          "seconds_per_step": 0.12575807400000016,
+          "calls": 1
+        },
+        "flow.total": {
+          "seconds_per_step": 0.10827136500000023,
+          "calls": 1
+        },
+        "native.explicit": {
+          "seconds_per_step": 0.10333043100000003,
+          "calls": 1
+        },
+        "native.step": {
+          "seconds_per_step": 0.09167120099999693,
+          "calls": 1
+        },
+        "residual.mass_dual_norms": {
+          "seconds_per_step": 0.067545728,
+          "calls": 3
+        },
+        "mapped.band.permutation": {
+          "seconds_per_step": 0.0539547,
+          "calls": 4
+        },
+        "k.bound_accounting": {
+          "seconds_per_step": 0.036128356,
+          "calls": 1
+        },
+        "k.total": {
+          "seconds_per_step": 0.030245091999999474,
+          "calls": 1
+        },
+        "guard.completed_bound": {
+          "seconds_per_step": 0.024304398,
+          "calls": 1
+        },
+        "data.completed_packet": {
+          "seconds_per_step": 0.022796747,
+          "calls": 1
+        },
+        "native.advance": {
+          "seconds_per_step": 0.019783692000004294,
+          "calls": 1
+        },
+        "dense.factorization": {
+          "seconds_per_step": 0.010043518,
+          "calls": 1
+        },
+        "verify.momentum_linear": {
+          "seconds_per_step": 0.00951746,
+          "calls": 1
+        },
+        "io.checkpoint": {
+          "seconds_per_step": 0.008623867,
+          "calls": 1
+        },
+        "verify.scalar_linear": {
+          "seconds_per_step": 0.006011978,
+          "calls": 2
+        },
+        "native.implicit": {
+          "seconds_per_step": 0.0047089869999936695,
+          "calls": 1
+        },
+        "guard.completed_outlet": {
+          "seconds_per_step": 0.003744994,
+          "calls": 1
+        },
+        "k.solve_validate": {
+          "seconds_per_step": 0.0030154739999999902,
+          "calls": 1
+        },
+        "epsilon.solve_validate": {
+          "seconds_per_step": 0.002017078999999998,
+          "calls": 1
+        },
+        "verify.pressure_linear": {
+          "seconds_per_step": 0.001202945,
+          "calls": 1
+        },
+        "verify.scalar_source_storage": {
+          "seconds_per_step": 0.0010221760000000413,
+          "calls": 2
+        },
+        "equation.pressure_factor": {
+          "seconds_per_step": 0.0004635660000000003,
+          "calls": 1
+        },
+        "pimple.check.input": {
+          "seconds_per_step": 0.0002731149999997129,
+          "calls": 1
+        },
+        "pimple.check.k": {
+          "seconds_per_step": 0.00026411499999998145,
+          "calls": 1
+        },
+        "pimple.check.flow": {
+          "seconds_per_step": 0.00025243499999999877,
+          "calls": 1
+        },
+        "pimple.check.epsilon": {
+          "seconds_per_step": 0.00023249300000038886,
+          "calls": 1
+        },
+        "pressure.mass_factorize": {
+          "seconds_per_step": 0.00021311199999998753,
+          "calls": 1
+        },
+        "dense.triangular_solve": {
+          "seconds_per_step": 0.000164459,
+          "calls": 1
+        },
+        "equation.scalar_solve": {
+          "seconds_per_step": 0.00016409099999999967,
+          "calls": 2
+        },
+        "momentum.factorize": {
+          "seconds_per_step": 0.0001327960000000461,
+          "calls": 1
+        },
+        "pimple.final_refresh_diagnostics": {
+          "seconds_per_step": 0.00012791599999995018,
+          "calls": 1
+        },
+        "equation.scalar_factor": {
+          "seconds_per_step": 0.00010896600000000894,
+          "calls": 2
+        },
+        "equation.momentum_solve": {
+          "seconds_per_step": 4.8683000000000753e-05,
+          "calls": 1
+        },
+        "equation.pressure_solve": {
+          "seconds_per_step": 4.5122000000000006e-05,
+          "calls": 1
+        },
+        "verify.completed_stage": {
+          "seconds_per_step": 3.994199999999941e-05,
+          "calls": 1
+        },
+        "momentum.solve_validate": {
+          "seconds_per_step": 1.795099999999869e-05,
+          "calls": 1
+        },
+        "pressure.solve_validate": {
+          "seconds_per_step": 1.5231999999998705e-05,
+          "calls": 1
+        },
+        "data.evaluation_invalidate": {
+          "seconds_per_step": 2.12e-06,
+          "calls": 2
+        }
+      },
+      "nested_explanatory_only": {
+        "domain.parts.anchor_materialization": 0.051926718000000004,
+        "domain.parts.current_K_profiles": 0.05280905399999998,
+        "domain.parts.epsilon_rows": 1.853784846,
+        "domain.parts.fixed_rows": 2.055000993,
+        "domain.parts.moving_ray_rows": 9.154462065999997
+      },
+      "samples": [
+        32.705812277
+      ],
+      "stdev": null,
+      "minimum": 32.705812277,
+      "maximum": 32.705812277
+    },
+    "memo-on-four-r1-v1": {
+      "timing": {
+        "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/operations/memo-on-four-r1-v1/timing.jsonl",
+        "bytes": 1137731,
+        "sha256": "2de8c9a3c16d6cc3f2711ee940e58f8f961505a2ced7899c55be1b86f8f90b1a"
+      },
+      "steps": [
+        17,
+        18,
+        19
+      ],
+      "wall_seconds": 100.22293005700001,
+      "per_step": 33.40764335233334,
+      "attributed_fraction": 0.999894010592247,
+      "equation_fraction": 0.30067331147534404,
+      "disjoint": {
+        "data_allocation_release": 2.206642537,
+        "guards_bounds_residual_verification": 20.629265144999994,
+        "UNATTRIBUTED": 0.00354085633333553,
+        "equation_evaluation_assembly_solution_update": 10.044786755333329,
+        "attempt_evidence_and_orchestration": 0.12972472266666793,
+        "recovery_publication_IO": 0.32528749099999993,
+        "loop_telemetry_orchestration": 0.06839584500000011
+      },
+      "exclusive_by_name": {
+        "domain.compute": {
+          "seconds_per_step": 15.513534594666666,
+          "calls": 12
+        },
+        "flow.assembly": {
+          "seconds_per_step": 3.8376881153333335,
+          "calls": 3
+        },
+        "residual": {
+          "seconds_per_step": 2.261559055333333,
+          "calls": 15
+        },
+        "data.evaluation_release": {
+          "seconds_per_step": 2.1836711873333337,
+          "calls": 6
+        },
+        "k.bound": {
+          "seconds_per_step": 1.6573198486666667,
+          "calls": 3
+        },
+        "mapped.band.solve": {
+          "seconds_per_step": 1.584919811333337,
+          "calls": 2412
+        },
+        "pressure.build": {
+          "seconds_per_step": 1.4592246856666662,
+          "calls": 3
+        },
+        "constitutive.refresh": {
+          "seconds_per_step": 0.8538865426666665,
+          "calls": 27
+        },
+        "domain.scalar": {
+          "seconds_per_step": 0.792514306333333,
+          "calls": 24
+        },
+        "k.assembly": {
+          "seconds_per_step": 0.729602613,
+          "calls": 3
+        },
+        "epsilon.assembly": {
+          "seconds_per_step": 0.54071246,
+          "calls": 3
+        },
+        "mapped.band.factor": {
+          "seconds_per_step": 0.4937051816666667,
+          "calls": 12
+        },
+        "monitor.checkpoint_and_publish": {
+          "seconds_per_step": 0.31248064799999997,
+          "calls": 3
+        },
+        "matching.constraints": {
+          "seconds_per_step": 0.20141506133333334,
+          "calls": 30
+        },
+        "flow.correction_validate": {
+          "seconds_per_step": 0.1434112466666667,
+          "calls": 3
+        },
+        "pimple.sweep": {
+          "seconds_per_step": 0.12972472266666793,
+          "calls": 3
+        },
+        "epsilon.total": {
+          "seconds_per_step": 0.12579463600000018,
+          "calls": 3
+        },
+        "flow.total": {
+          "seconds_per_step": 0.11256105099999984,
+          "calls": 3
+        },
+        "native.explicit": {
+          "seconds_per_step": 0.10322351866666664,
+          "calls": 3
+        },
+        "native.step": {
+          "seconds_per_step": 0.06839584500000011,
+          "calls": 3
+        },
+        "residual.mass_dual_norms": {
+          "seconds_per_step": 0.06824718733333333,
+          "calls": 9
+        },
+        "mapped.band.permutation": {
+          "seconds_per_step": 0.056633850000000006,
+          "calls": 12
+        },
+        "k.total": {
+          "seconds_per_step": 0.0315612259999997,
+          "calls": 3
+        },
+        "k.bound_accounting": {
+          "seconds_per_step": 0.031057824,
+          "calls": 3
+        },
+        "guard.completed_bound": {
+          "seconds_per_step": 0.025453572333333337,
+          "calls": 3
+        },
+        "data.completed_packet": {
+          "seconds_per_step": 0.022968996333333335,
+          "calls": 3
+        },
+        "io.checkpoint": {
+          "seconds_per_step": 0.012806842999999998,
+          "calls": 3
+        },
+        "verify.momentum_linear": {
+          "seconds_per_step": 0.011192812666666668,
+          "calls": 3
+        },
+        "native.advance": {
+          "seconds_per_step": 0.010084183666665561,
+          "calls": 3
+        },
+        "dense.factorization": {
+          "seconds_per_step": 0.009664685333333334,
+          "calls": 3
+        },
+        "verify.scalar_linear": {
+          "seconds_per_step": 0.006213137666666667,
+          "calls": 6
+        },
+        "guard.completed_outlet": {
+          "seconds_per_step": 0.004329059,
+          "calls": 3
+        },
+        "k.solve_validate": {
+          "seconds_per_step": 0.0031907420000000055,
+          "calls": 3
+        },
+        "epsilon.solve_validate": {
+          "seconds_per_step": 0.0021817913333333308,
+          "calls": 3
+        },
+        "native.implicit": {
+          "seconds_per_step": 0.0017114143333358811,
+          "calls": 3
+        },
+        "verify.pressure_linear": {
+          "seconds_per_step": 0.0012923756666666667,
+          "calls": 3
+        },
+        "verify.scalar_source_storage": {
+          "seconds_per_step": 0.0010307433333333216,
+          "calls": 6
+        },
+        "equation.pressure_factor": {
+          "seconds_per_step": 0.0005305359999999999,
+          "calls": 3
+        },
+        "pimple.check.input": {
+          "seconds_per_step": 0.00031949900000031545,
+          "calls": 3
+        },
+        "pimple.check.k": {
+          "seconds_per_step": 0.0002754736666666646,
+          "calls": 3
+        },
+        "pimple.check.flow": {
+          "seconds_per_step": 0.00023971533333333288,
+          "calls": 3
+        },
+        "pimple.check.epsilon": {
+          "seconds_per_step": 0.0002313746666660066,
+          "calls": 3
+        },
+        "pressure.mass_factorize": {
+          "seconds_per_step": 0.00019651933333333463,
+          "calls": 3
+        },
+        "equation.scalar_solve": {
+          "seconds_per_step": 0.00016962799999999993,
+          "calls": 6
+        },
+        "dense.triangular_solve": {
+          "seconds_per_step": 0.000165338,
+          "calls": 3
+        },
+        "momentum.factorize": {
+          "seconds_per_step": 0.00014346733333331363,
+          "calls": 3
+        },
+        "pimple.final_refresh_diagnostics": {
+          "seconds_per_step": 0.0001400769999999977,
+          "calls": 3
+        },
+        "equation.scalar_factor": {
+          "seconds_per_step": 0.00010584833333333182,
+          "calls": 6
+        },
+        "verify.completed_stage": {
+          "seconds_per_step": 5.601266666666801e-05,
+          "calls": 3
+        },
+        "equation.momentum_solve": {
+          "seconds_per_step": 4.95620000000001e-05,
+          "calls": 3
+        },
+        "pressure.solve_validate": {
+          "seconds_per_step": 2.7601666666667256e-05,
+          "calls": 3
+        },
+        "momentum.solve_validate": {
+          "seconds_per_step": 1.7327333333334166e-05,
+          "calls": 3
+        },
+        "equation.pressure_solve": {
+          "seconds_per_step": 7.443333333333337e-06,
+          "calls": 3
+        },
+        "data.evaluation_invalidate": {
+          "seconds_per_step": 2.3533333333333334e-06,
+          "calls": 6
+        }
+      },
+      "nested_explanatory_only": {
+        "domain.parts.anchor_materialization": 0.044917089333333333,
+        "domain.parts.current_K_profiles": 0.050676877,
+        "domain.parts.epsilon_rows": 1.87858879,
+        "domain.parts.fixed_rows": 1.9329470720000002,
+        "domain.parts.moving_ray_rows": 10.455197781000003
+      },
+      "samples": [
+        33.012401214,
+        33.203341587,
+        34.007187256
+      ],
+      "stdev": 0.5279244508717561,
+      "minimum": 33.012401214,
+      "maximum": 34.007187256
+    }
+  },
+  "selected": {
+    "status": "PASS_EXACT_IMPLEMENTATION_ONLY",
+    "runtime": {
+      "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/science/runtime-build-scatter-v1.json",
+      "bytes": 269477,
+      "sha256": "50b21b857671787b70417df80d01ffd22e0ccecb71f51dda81fd4fe6c1fd4f96"
+    },
+    "qualification": {
+      "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/science/W1-scatter-v1/qualification.json",
+      "bytes": 2846,
+      "sha256": "1ffa2dff9c418b9b7e61dbc31c2e120a7bbc4ac5948e8eb7439a3ccc97362d56"
+    },
+    "scalar_policy": "Off",
+    "assembly_policy": "ElementExactV1",
+    "lookup_policy": "TensorExactV1",
+    "record": "scatter-on-four-r1-v1",
+    "limitation": "no transient h/q/dt, full-duration or production-cadence admission"
+  },
+  "retention_rule": "On mean < .98*both new Off and scatter; exact parity; attribution>=.95",
+  "memo_decision": "CORRECT_BUT_NOT_RETAINED",
+  "ordinary_definition": "actual native.step including current recovery/publication, excluding scheduled audit steps",
+  "scope": "short matched evolving comparisons; native root timing only; no scientific horizon added by replays, no production confidence interval"
+}

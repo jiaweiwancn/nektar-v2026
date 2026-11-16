@@ -88,6 +88,12 @@ zero projection/history initialization and zero governing solves. `rotate` then
 deletes only owned, superseded, off-cadence recovery payloads while keeping the
 latest two, all scientific endpoints, completion metadata and the source anchor.
 The actual receipts, not this command description, establish which modes passed.
+The final post-rotation read uses `tools-v13/.../terminal_wj_h25r1.py` under
+operation `C-terminal-read-r1-v1`; it reopens the retained terminal after deletion,
+checks genuine alpha200 and scalar admission, and retains compact weak/mass-dual
+residuals. Actual final costs use `tools-v7/cost_wj_h25r1.py`; final identity/account
+closure uses `tools-v14/close_wj_h25r1.py`. These later tool identities are separate
+from the unchanged selected native runtime.
 
 The pilot log writer retains three 256 KiB native stdout chunks and a 16 KiB first
 prefix, records total bytes/rotations and a streaming full digest, and limits

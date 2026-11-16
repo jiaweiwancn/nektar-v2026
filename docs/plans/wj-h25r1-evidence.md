@@ -1,7 +1,11 @@
 # H25R1 resumed production qualification
 
-R0 status: ACTIVE, RESOURCE_BLOCKED for Linux numerical/build operations.
-This is an admission state, not a numerical failure or a production PASS.
+Final status: **TARGET_NOT_MET**. See `wj-h25r1-closure.md` for the seven-criterion
+matrix, actual pilots, complete costs and closed accounts. The sections below
+preserve each checkpoint's state at publication.
+
+At R0, Linux numerical/build admission was RESOURCE_BLOCKED. This was an
+admission state, not a numerical failure or a production PASS.
 
 The fetched GitHub head and local branch HEAD both resolve to
 `58e26235120574110253a3df6329d5bbd110ee40`. H24 close

@@ -1,0 +1,95 @@
+{
+  "status": "CLOSED_TARGET_NOT_MET",
+  "accounts": {
+    "original": {
+      "before": {
+        "path": "/home/jay/build/wj-h25-production-20261116/accounting.json",
+        "bytes": 15248,
+        "sha256": "13ef4a244a8b1aec9806f0c6a090224cd0c31cc13dcd5c226b1f1374f7218708"
+      },
+      "closed": {
+        "path": "/home/jay/build/wj-h25-production-20261116/accounting.json",
+        "bytes": 15435,
+        "sha256": "1d11e9cfb1871c3ca2dd723578d26479ba7b0871e555e009bb4324208565ef1a"
+      },
+      "usage": {
+        "build": 389.50274165614974,
+        "native": 2099.6596822449355,
+        "passive": 1916.041679986054,
+        "total": 5125.204103887139
+      },
+      "ceilings": {
+        "total": 14400,
+        "build": 2400,
+        "native": 7200,
+        "passive": 3600
+      },
+      "attempts": 22,
+      "advancing_blocks": 5,
+      "ledger_only_control_entries": [
+        "source-v1-transfer",
+        "source-v2-materialize",
+        "initial-coordination-v1",
+        "ongoing-coordination-v1",
+        "source-v3-materialize",
+        "source-v4-materialize",
+        "source-v5-materialize",
+        "checkpoint-a-transport-v1",
+        "checkpoint-a-transport-v2",
+        "source-v6-materialize",
+        "source-v7-materialize",
+        "source8-network-obstruction-v1",
+        "source-v8-materialize",
+        "tools-build-scalar-v3-transport",
+        "tools-benefit-v1-transport",
+        "tools-h350-v1-transport",
+        "tools-certificate-v1-transport",
+        "checkpoint-b-transport-v1",
+        "h350-native-CP0-v1-pre-admission",
+        "certificate-feasibility-v1-pre-admission",
+        "checkpoint-b-transport-v2"
+      ]
+    },
+    "continuation": {
+      "before": {
+        "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/accounting.json",
+        "bytes": 17757,
+        "sha256": "90c06ac379d6baf16c7de5e992bf8ddd6b5fac3a208496906a5ab1ba4f2b2646"
+      },
+      "closed": {
+        "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/accounting.json",
+        "bytes": 17944,
+        "sha256": "c5903152bb6521ebc45dd9636f3878622d378ff959623274264239529d0b24a7"
+      },
+      "usage": {
+        "build": 373.51751053507905,
+        "native": 3628.7879413690534,
+        "passive": 366.2001648649457,
+        "total": 5568.505616769078
+      },
+      "ceilings": {
+        "total": 21600,
+        "native": 14400,
+        "build": 2400,
+        "passive": 3600
+      },
+      "attempts": 28,
+      "advancing_blocks": 7,
+      "ledger_only_control_entries": []
+    }
+  },
+  "cumulative": {
+    "native": 5728.447623613989,
+    "build": 763.0202521912288,
+    "passive": 2282.2418448509998,
+    "total": 10693.709720656218
+  },
+  "fixed_reserves_fully_charged": {
+    "original_setup": 120,
+    "original_closure": 600,
+    "continuation_setup": 300,
+    "continuation_closure": 900
+  },
+  "scope": "charged Linux campaign operation wall time plus fully charged fixed control/publication reserves; Mac source work, reading and unavailable-host waiting are separate elapsed work, not one-case cost",
+  "live_owned_native_build_processes": []
+}
