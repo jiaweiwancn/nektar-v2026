@@ -69,6 +69,7 @@ public:
         EvaluationScope(const EvaluationScope&)=delete;
     };
     std::string EvaluationReuseJSON() const;
+    std::string ScalarValueChecks(const Vector &,double,const RANSWallEvolutionData &);
     std::string EvaluationReuseChecks(const Vector &,const Vector &,double,const RANSWallEvolutionData &,bool structural=false);
     std::string ImmutableRowsJSON() const;
     std::string CompleteAuditCommitment(const Vector &,const Vector &,double,double,const RANSWallEvolutionData &) const;
@@ -546,6 +547,7 @@ private:
     mutable std::map<RANSWallCoordinate,RANSWallGlobalPoint> m_kSamplingRows;
     bool m_evaluationReuse=false;
     bool m_immutableRowReuse=false;
+    bool m_exactScalarValues=false;
     std::size_t m_immutableRowEntries=196608;
     std::uint64_t m_immutableRowBytes=256ULL*1024*1024;
     mutable std::shared_ptr<ImmutableRowStore> m_immutableRows;

@@ -71,6 +71,9 @@ public:
     RANSWallGlobalPoint Point(const Coordinate &coordinate, int side=0) const;
     int LocateElement(const Coordinate &coordinate,int side=0) const;
     RANSWallGlobalPoint ElementPoint(int element, const Coordinate &coordinate) const;
+    // Identical constant-centred scalar contraction; no unused derivative or
+    // owning row arrays. Geometry/point validation is still performed.
+    double ElementValue(int element,const Coordinate &,const Vector &,int offset=0) const;
     // Same cold-factory validation, also executed on every persistent hit.
     // ElementPoint's legacy body remains unchanged for policy-off comparison.
     void ValidateElementPoint(int element,const Coordinate &coordinate) const;

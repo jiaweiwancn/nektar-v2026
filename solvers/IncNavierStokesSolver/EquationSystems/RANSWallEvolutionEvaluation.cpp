@@ -446,6 +446,7 @@ std::string RANSWallEvolutionPatch::EvaluationReuseJSON() const
     for(const auto &[key,rows]:m_surfaceCatalog){(void)key;surfaceRows+=rows.size();}
     return J::Object({{"mode",J::Quote(m_evaluationReuse?"ExactStepV1":"Off")},
         {"native_lookup",J::Quote(fields[0]->TensorLookupEnabled()?"TensorExactV1":"Off")},
+        {"scalar_value",J::Quote(m_exactScalarValues?"ValueExactV1":"Off")},
         {"scopes",J::Number(w.scopes)},{"domain_calls",J::Number(w.domainCalls)},
         {"domain_computes",J::Number(w.domainComputes)},{"domain_hits",J::Number(w.domainHits)},
         {"prefix_hits",J::Number(w.prefixHits)},{"row_constructs",J::Number(w.rowConstructs)},{"row_hits",J::Number(w.rowHits)},

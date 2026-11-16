@@ -178,3 +178,51 @@ radial sides, geometry ordering, invalid coordinates and unsupported partitions.
 Dynamic ExactStepV1 state/profile invalidation remains unchanged. Additional
 cache-release/invalidation timings resolve the callback remainder; accumulated
 domain buckets are nested explanatory costs and never added to their parent.
+
+`RANSWallScalarEvaluation=ValueExactV1`, also default-Off, computes the identical
+constant-centred long-double native scalar contraction on moving normalization
+rays without constructing unused derivative/owning-row arrays. It preserves
+coordinate/map validation, native geometry provenance, observation order, every
+coverage insertion, current-K/profile/cutoff rebuild and failure predicate. Full
+ordered-row commitment diagnostics use the original row path. Small read-only
+native controls compare full scalar inventory/failure hashes for changed K,
+epsilon, data generations, negative/nonfinite inputs and return to the original
+state. The same700-cell four-step exact trajectory/full-map comparison follows.
+
+The separately identified H25 transient seed is constructed only from the strict
+original step/time-zero IMEX1 checkpoint. It preserves its internal reference,
+defect, pressure and model/BC data. Compact C2 cubic B-splines use stored x knots
+4..8 and the five physical normal knots centred on the matching interface.
+The streamfunction produces a divergence-free representable velocity increment,
+with U increment.001 at the declared interior normalization point; K/epsilon
+increments have1% reference scale and vanish at exterior boundaries. Native
+projection and current-K dependent-trace lifting are explicitly counted INITIAL
+DATA construction, not evolved-state repair. Each dt then natively initializes
+its own IMEX1 history from identical represented fields. No ordinary restart or
+strict source signature is weakened. No initialized candidate is admitted if
+spatial/common-state identity, continuity or physical/quality checks fail.
+
+Initial transient comparison window is0→.08, with common outputs.02/.04/.06/.08.
+The smaller-dt reference is.0025; trial levels are.005,.01,.02,.04,.08 in ascending
+order, subject to physical/error and prospective resource admission. The same
+predeclared H19 scaled RMS/MAX and directional budgets apply to every admitted
+trial. The finite200-attempt/twelve-block limits remain unchanged. The actual
+surviving recipe must still demonstrate a genuine restart and bounded storage;
+unexecuted or unaffordable candidates are never marked accuracy-qualified.
+
+The next separately versioned exact candidate is
+`RANSWallScalarEvaluation=ValueExactV1`, defaultOff. Moving-ray positivity still
+visits and contracts EVERY original k point and records its original provenance,
+weight, order, coverage token, margin and first failure. It computes the identical
+constant-centred long-double scalar contraction directly from native modal
+IDs/signs/basis values, avoiding unused derivative/owning-row arrays. Fixed rows,
+current-K profiles/cutoffs, nonlocal rays, dependent epsilon, ground and closure
+checks remain unchanged. Map/point validation remains live. Complete ordered-row
+commitment diagnostics retain the old row path, so their semantics are unchanged.
+No past scalar PASS or dynamic values survive a relevant state/data change.
+
+Before advancement, a small STRICTLY imported native fixture compares direct and
+row scalar IEEE values and full inventory/failure hashes for A, changed k,
+changed epsilon, invalid k, invalid epsilon, nonfinite input, then A with new data
+generations. The four-step700-cell W0 replay and complete step20 native map must
+remain exact; source/binary/observer/cache bindings are versioned separately.

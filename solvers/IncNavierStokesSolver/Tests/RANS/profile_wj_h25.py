@@ -12,19 +12,20 @@ from wj_h16_observer import compatibility
 from cls_epawf_m3_cases import set_info,set_parameter,write
 
 def run(root,variant='profiling'):
-    assert variant in ('profiling','lookup-off','lookup-on')
-    lookup=variant=='lookup-on';steps=2 if variant=='lookup-off'else 4
-    tag='profile'if variant=='profiling'else'lookup'
-    label='W0-profile-v1'if variant=='profiling'else ('W1-lookup-v1'if lookup else'W0-lookup-off-v1')
+    assert variant in ('profiling','lookup-off','lookup-on','scalar-on')
+    lookup=variant in ('lookup-on','scalar-on');steps=2 if variant=='lookup-off'else 4
+    tag='profile'if variant=='profiling'else'scalar'if variant=='scalar-on'else'lookup'
+    label='W1-scalar-v1'if variant=='scalar-on'else'W0-profile-v1'if variant=='profiling'else ('W1-lookup-v1'if lookup else'W0-lookup-off-v1')
     terminal=16+steps
     here=Path(__file__).resolve().parent;inputs=load(root/'inputs/baseline.json')
     old=load(root/'science/cache-compatible-v2.json')
     c=compatibility(root,verify(old['historical_manifest']),root/('science/'+variant+'-cache-binding-base.json'))
     c.update(new_native_identity=identity(root/('science/runtime-build-'+tag+'-v1.json')),
-        permitted_difference='native timing and opt-in exact interval/geometry lookup only; independent numerical modules/geometry/profile/initial/reference/defect unchanged')
+        permitted_difference='native timing, exact interval/geometry lookup and value-only FE scalar contraction; independent numerical modules/geometry/profile/initial/reference/defect unchanged')
     atomic(root/('science/'+variant+'-cache-compatible.json'),c)
     folder=root/('science/'+label);folder.mkdir();d=folder/'monitor';d.mkdir();ip=folder/'intent.json'
     x=ET.parse(root/'science/W0/case.xml').getroot();set_parameter(x,'NumSteps',steps);set_info(x,'RANSWallNativeLookup','TensorExactV1'if lookup else'Off')
+    if variant=='scalar-on':set_info(x,'RANSWallScalarEvaluation','ValueExactV1')
     for k,v in dict(RANSWallCheckpoint=str(folder/'CP'),RANSWallMonitorIntent=str(ip),RANSWallReport=str(folder/'native.json')).items():set_info(x,k,v)
     write(x,folder/'case.xml')
     intent=dict(schema='WJMonitorIntentV1',policy='CheckpointAuditV1',directory=str(d),nonce=uuid.uuid4().hex,
@@ -68,4 +69,4 @@ def run(root,variant='profiling'):
     atomic(folder/'qualification.json',dict(status='PASS',variant=variant,lookup='TensorExactV1'if lookup else'Off',scope='exact numerical state/history/callback/reference/time parity for all four evolving steps; startup/final fresh physical audits',records=records))
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--variant',choices=('profiling','lookup-off','lookup-on'),default='profiling');a=p.parse_args();run(a.root,a.variant)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--variant',choices=('profiling','lookup-off','lookup-on','scalar-on'),default='profiling');a=p.parse_args();run(a.root,a.variant)

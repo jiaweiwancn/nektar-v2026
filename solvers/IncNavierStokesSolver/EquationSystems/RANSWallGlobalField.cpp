@@ -292,6 +292,28 @@ std::array<RANSWallGlobalField::Vector,3> RANSWallGlobalField::RadialGradientDer
     }
     return result;
 }
+double RANSWallGlobalField::ElementValue(int e,const Coordinate &coordinate,const Vector &state,int offset) const
+{
+    ValidateElementPoint(e,coordinate);Require(offset>=0,"invalid value row");
+    const auto &element=m_elements.at(e);
+    std::array<std::shared_ptr<const BasisData::Values>,3> basis{};
+    for(int d=0;d<m_dimension;++d)
+    {
+        const int a=m_axes[d];const double inverse=2/(element.upper[a]-element.lower[a]);
+        basis[d]=m_elementBasis[e][d]->Evaluate((coordinate[a]-element.lower[a])*inverse-1);
+    }
+    const auto map=m_field->GetLocalToGlobalMap();const int start=m_field->GetCoeff_Offset(e);
+    const double centre=state.at(offset+map->GetLocalToGlobalMap(start))/map->GetLocalToGlobalSign(start);
+    long double value=centre;const int modes=element.degree+1,count=TensorSize(modes,m_dimension);
+    for(int j=0;j<count;++j)
+    {
+        const auto index=Indices(j,modes);const double sign=map->GetLocalToGlobalSign(start+j);
+        double phi=sign,constant=sign;
+        for(int d=0;d<m_dimension;++d){phi*=basis[d]->value[index[d]];if(index[d]>=2)constant=0;}
+        value+=(long double)phi*(state.at(offset+map->GetLocalToGlobalMap(start+j))-centre*constant);
+    }
+    return value;
+}
 RANSWallGlobalPoint RANSWallGlobalField::Point(const Coordinate &coordinate,int side) const
 {
     return ElementPoint(LocateElement(coordinate,side),coordinate);

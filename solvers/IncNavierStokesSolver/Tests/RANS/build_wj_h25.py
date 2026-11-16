@@ -12,9 +12,11 @@ OLD=Path('/home/jay/build/wj-h22-early-phase-replay-20261115')
 def build(root,variant='profile'):
     if variant=='profile':
         source=root/'source-v4';output=root/'build-profile-v2';previous=OLD/'build';previous_source=OLD/'source';tag='profile';manifest='source-manifest-v4.json'
-    else:
-        assert variant=='lookup'
+    elif variant=='lookup':
         source=root/'source-v5';output=root/'build-lookup-v1';previous=root/'build-profile-v2';previous_source=root/'source-v4';tag='lookup';manifest='source-manifest-v5.json'
+    else:
+        assert variant=='scalar'
+        source=root/'source-v6';output=root/'build-scalar-v1';previous=root/'build-lookup-v1';previous_source=root/'source-v5';tag='scalar';manifest='source-manifest-v6.json'
     started=time.monotonic()
     cmake=(source/'solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt').read_text()
     for relative in re.findall(r'\$\{RANS_SOURCE_ROOT\}/([A-Za-z0-9_./-]+\.(?:cpp|h))',cmake):
@@ -60,7 +62,7 @@ def build(root,variant='profile'):
         records.append(dict(source=identity(n['file']),object=identity(newobj),old_object=identity(oldobj),dependencies=pairs))
     atomic(root/('science/'+tag+'-object-reuse.json'),dict(status='QUALIFIED_EXACT_DEPENDENCIES',objects=records,configure=config,cache=identity(OLD/'build/CMakeCache.txt')))
     names=('IncNavierStokesSolver','RANSWallResolutionProbe','WJH25CommonMassChecks','RANSWallTimingChecks','RANSWallMonitorChecks')
-    if variant=='lookup':names+=('WJH25ExactLookupChecks',)
+    if variant in ('lookup','scalar'):names+=('WJH25ExactLookupChecks',)
     command=['cmake','--build',str(output),'--target',*names,'--parallel','8']
     subprocess.run(command,check=True)
     runtime=root/('runtime-'+tag+'-v1');runtime.mkdir()
@@ -78,7 +80,7 @@ def build(root,variant='profile'):
         compiler=subprocess.check_output(['/usr/bin/c++','--version'],text=True),configure=config,build=command,seconds=time.monotonic()-started,
         compile_commands=identity(output/'compile_commands.json'),objects=objects,executables=executables,
         link_commands=[identity(p)for p in sorted(output.glob('CMakeFiles/*/link.txt'))if p.parent.name in ('IncNavierStokesSolver.dir','RANSWallResolutionProbe.dir','WJH25CommonMassChecks.dir')],
-        private_runtime=identity(root/'science/runtime-dependencies-v1.json'),old_object_proof=identity(root/('science/'+tag+'-object-reuse.json')),purpose='profiling-only baseline'if variant=='profile'else'opt-in exact containment/geometry lookup; same governing mathematics'))
+        private_runtime=identity(root/'science/runtime-dependencies-v1.json'),old_object_proof=identity(root/('science/'+tag+'-object-reuse.json')),purpose='profiling-only baseline'if variant=='profile'else'opt-in exact containment/geometry lookup and scalar value rows; same governing mathematics; explicit H25 transient initial-data helper'))
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--variant',choices=('profile','lookup'),default='profile');a=p.parse_args();build(a.root,a.variant)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--variant',choices=('profile','lookup','scalar'),default='profile');a=p.parse_args();build(a.root,a.variant)

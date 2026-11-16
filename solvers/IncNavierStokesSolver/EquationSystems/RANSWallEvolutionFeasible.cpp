@@ -320,7 +320,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
     const double us=m_robustUstar,K0=m_parameters.model.Q()*us*us;
     const double E0=us*us*us/(m_parameters.model.Kappa()*m_parameters.geometry.height);
     auto check=[&](const std::string &name,const RANSWallGlobalPoint &q,int block,bool strict,
-                   const Vector &values,int side=0,bool dependent=false,double weight=0.)
+                   const Vector &values,int side=0,bool dependent=false,double weight=0.,const double *evaluated=nullptr)
     {
         // Endpoint samplers and every native interface row carry their own
         // element. Resolve radial provenance once; a zero selector must not
@@ -331,7 +331,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             provenance.block=block;provenance.geometry=q.geometry;provenance.side=side;
             side=ResolveObservation(provenance).radialSide;
         }
-        const double value=q.Value(values,offset[block]);
+        const double value=evaluated?*evaluated:q.Value(values,offset[block]);
         if(ConstitutiveKInventory() && block==K())
         {if(q.columnAverage){auto a=q.coordinate;a[2]=0;m_coveredKFunctionals.insert(a);}else m_coveredKLocations.insert(q.coordinate);}
         // Outer eta is not physical normal distance. Terrain positivity uses
@@ -378,6 +378,18 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         }
         auto &pending=result.pendingProfiles;
         result.phase="moving_ray_k_before_normalization";
+        auto checkRayPoint=[&](const std::string &name,const RANSWallCoordinate &p,double weight=0.)
+        {
+            const int e=fields[K()]->LocateElement(p);
+            if(!m_exactScalarValues || m_auditCommitment)return check(name,*EvaluationRow(K(),e,p),K(),false,result.effectiveState,0,false,weight);
+            // Scalar positivity consumes only the value and native provenance.
+            // Preserve the exact FE contraction, map validation, observation
+            // order and live coverage token; do not create discarded gradients.
+            RANSWallGlobalPoint q;q.coordinate=p;q.element=e;q.geometry=fields[K()]->Elements()[e].geometry;
+            fields[K()]->ValidateElementPoint(e,p);q=Transform(std::move(q));
+            const double value=fields[K()]->ElementValue(e,p,result.effectiveState,offset[K()]);
+            return check(name,q,K(),false,result.effectiveState,0,false,weight,&value);
+        };
         auto ray=[&](const RANSWallCoordinate &p,const std::shared_ptr<EquilibriumAWFProfiles> &profile,
                      const std::string &name,bool source,double horizontalWeight)
         {
@@ -393,14 +405,12 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             for(const auto &q:profile->Quadrature())
             {
                 auto point=p;point[2]=q.r/scale;
-                const auto row=EvaluationRow(K(),fields[K()]->LocateElement(point),point);
-                if(!check(name,*row,K(),false,result.effectiveState,0,false,
-                    source?horizontalWeight*q.weight*q.jacobian:0.))return false;
+                if(!checkRayPoint(name,point,source?horizontalWeight*q.weight*q.jacobian:0.))return false;
             }
             if(AcceptedAWF())for(double top:{.01,.1,m_parameters.geometry.height})if(top<=m_parameters.geometry.height)
                 for(const auto &q:profile->IntegrationQuadrature(top,{.01,.1}))
                 {auto point=p;point[2]=q.r/m_mapping.At(p).scale;
-                 if(!check("constitutive_budget_reporting_source_ray",*EvaluationRow(K(),fields[K()]->LocateElement(point),point),K(),false,result.effectiveState))return false;}
+                 if(!checkRayPoint("constitutive_budget_reporting_source_ray",point))return false;}
             pending.push_back({p,profile,source});return true;
         };
         auto stateProfile=[&](const RANSWallCoordinate &p){
@@ -452,8 +462,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
                     ++result.counts["prospective_branch_"+reason];
                     if(active)for(const auto &q:active->Quadrature())
                     {auto point=p;point[2]=q.r/m_mapping.At(p).scale;
-                     if(!check("constitutive_prospective_active_normalization_ray",
-                         *EvaluationRow(K(),fields[K()]->LocateElement(point),point),K(),false,result.effectiveState))return result;}
+                     if(!checkRayPoint("constitutive_prospective_active_normalization_ray",point))return result;}
                 }
             }
         }
@@ -485,6 +494,49 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
     }
     catch(const std::exception &error)
     {result.failure=std::string(J::ExceptionType(error))+": "+error.what();return result;}
+}
+
+std::string RANSWallEvolutionPatch::ScalarValueChecks(const Vector &state,double time,const RANSWallEvolutionData &data)
+{
+    Require(Size()<=3000 && MappedBlock() && !m_evaluation,"value-only fixture is a small read-only native patch");
+    const auto original=RANSWallR3::Hash(state);std::size_t contractions=0;
+    std::vector<Vector> states{state};
+    for(int b:{K(),Epsilon()})
+    {
+        auto v=state;for(int j=offset[b];j<offset[b+1];++j)v[j]*=1.01;states.push_back(std::move(v));
+    }
+    for(const auto &s:states)for(int b=0;b<InnerPressure()+2;++b)
+        for(const auto &q:fields[b]->Quadrature(4))
+        {
+            const double old=q.Value(s,offset[b]),value=fields[b]->ElementValue(q.element,q.coordinate,s,offset[b]);
+            Require(RANSWallR3::Hash(Vector{old})==RANSWallR3::Hash(Vector{value}),"constant-centred native scalar contraction differs");++contractions;
+        }
+    auto negative=state;for(int j=offset[K()];j<offset[Epsilon()];++j)negative[j]=-1.;states.push_back(negative);
+    negative=state;for(int j=offset[Epsilon()];j<offset[InnerPressure()];++j)negative[j]=-1.;states.push_back(negative);
+    states.push_back(state);auto bad=state;bad[offset[K()]]=std::numeric_limits<double>::quiet_NaN();states.push_back(bad);states.push_back(state);
+    const bool saved=m_exactScalarValues;struct Reset{bool &v;bool old;~Reset(){v=old;}}reset{m_exactScalarValues,saved};
+    std::vector<std::string> expected,records;
+    for(bool fast:{false,true})
+    {
+        m_exactScalarValues=fast;auto input=data;
+        for(std::size_t i=0;i<states.size();++i)
+        {
+            // New scope per input so a prior numerical PASS cannot satisfy
+            // the other policy. Inventory/coverage and failure order are real.
+            ++input.generation;EvaluationScope scope(*this,input,time);
+            const auto domain=ScalarDomain(states[i],time,input,true);
+            const auto text=ScalarDomainJSON(domain,true),hash=RANSWallR3::Hash(text);
+            if(!fast)expected.push_back(hash);
+            else Require(hash==expected[i],"value-only scalar inventory/failure parity differs at "+std::to_string(i));
+            records.push_back(J::Object({{"fast",J::Boolean(fast)},{"state",J::Number(i)},{"inventory_sha256",J::Quote(hash)},
+                {"admissible",J::Boolean(domain.admissible)},{"failure",J::Quote(domain.failure)},{"limiting_point",J::Numbers(domain.limitingPoint)},
+                {"cutoff_range",J::Numbers(Vector{domain.minimumCutoff,domain.maximumCutoff})}}));
+        }
+    }
+    Require(original==RANSWallR3::Hash(state),"value-only fixture changed original input");
+    return J::Object({{"status",J::Quote("PASS")},{"native_value_comparisons",J::Number(contractions)},
+        {"actual_scalar_checks",J::List(records)},{"governing_solves","0"},{"input_state_sha256",J::Quote(original)},
+        {"scope",J::Quote("exact native values and full scalar inventories; changed k/epsilon/current cutoff; negative/nonfinite input then A; fresh data generations; no historical PASS reuse")}});
 }
 
 std::string RANSWallEvolutionPatch::CheckConstitutiveCoverage(const Vector &s,double time,

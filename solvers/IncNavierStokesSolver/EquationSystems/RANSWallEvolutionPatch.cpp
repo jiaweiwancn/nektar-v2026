@@ -381,6 +381,10 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     std::string reuse;session->LoadSolverInfo("RANSWallEvaluationReuse",reuse,"Off");
     Require(reuse=="Off" || reuse=="ExactStepV1","unknown exact evaluation reuse policy");
     m_evaluationReuse=reuse=="ExactStepV1";
+    std::string scalarValue;session->LoadSolverInfo("RANSWallScalarEvaluation",scalarValue,"Off");
+    Require(scalarValue=="Off" || scalarValue=="ValueExactV1","unknown scalar evaluation policy");
+    m_exactScalarValues=scalarValue=="ValueExactV1";
+    Require(!m_exactScalarValues || (MappedBlock() && m_dimension==2),"ValueExactV1 requires mapped serial2D");
     ConfigureImmutableRows(session);
     Require(!m_evaluationReuse || (m_dimension==2 && (!Mapped() || OpenBoundary()) && PimpleSingleSweep()),
         "ExactStepV1 is restricted to the serial flat2D one-sweep pilot");
