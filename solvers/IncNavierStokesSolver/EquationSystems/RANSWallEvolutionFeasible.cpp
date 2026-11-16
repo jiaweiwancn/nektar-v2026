@@ -12,11 +12,13 @@
 #include <algorithm>
 #include <cmath>
 #include <chrono>
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <limits>
 #include <numeric>
 #include <set>
+#include <unordered_map>
 
 namespace Nektar
 {
@@ -487,18 +489,53 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         if(NewModels())
         {
             result.phase="current_velocity_constitutive_domain";
+            // Effective and trace states have been completely formed above
+            // and are read-only for this loop. This map is born/dies in this
+            // call: full U/k/epsilon, time, data, masks and model/map identity
+            // are therefore implicit in its lifetime, never scalar-only keys.
+            // Preserve every inventory observation and its original order.
+            using PointKey=std::array<std::uint64_t,8>;
+            struct PointHash {std::size_t operator()(const PointKey &key) const noexcept
+                {std::size_t h=1469598103934665603ULL;for(auto b:key){h^=b;h*=1099511628211ULL;}return h;}};
+            struct PointValidity {double covariance,radicand;int region,side,geometry;bool radicandDefined;};
+            std::unordered_map<PointKey,PointValidity,PointHash> points;
+            const auto bit=[](double value){std::uint64_t b;std::memcpy(&b,&value,sizeof b);return b;};
+            constexpr std::size_t maximumPoints=262144;
+            if(m_scopedConstitutivePoints)++m_evaluationWork.constitutivePointScopes;
             // This check depends on current U, not just k/epsilon. Do not share
             // it across scalar-only cache keys. Use native element-side rows.
             for(const auto &p:result.observations)
             {
                 if(p.block!=K() && !p.dependentTrace)continue;
+                const bool memo=m_scopedConstitutivePoints && p.geometry>=0 && !p.functional;
+                // Owner and raw side are both present: invalid side requests
+                // cannot borrow an already validated neighbouring trace.
+                const PointKey key{std::uint64_t(p.geometry),std::uint64_t(p.block),std::uint64_t(p.side+1),
+                    std::uint64_t(p.dependentTrace),bit(p.coordinate[0]),bit(p.coordinate[1]),bit(p.coordinate[2]),
+                    p.dependentTrace?bit(p.value):0};
+                if(memo)
+                {
+                    const auto old=points.find(key);
+                    if(old!=points.end())
+                    {
+                        ++m_evaluationWork.constitutivePointHits;const auto &v=old->second;
+                        if(v.radicandDefined && v.radicand<result.minimumA95Radicand)
+                        {result.minimumA95Radicand=v.radicand;result.radicandMinimumPoint=p.coordinate;
+                         result.radicandSide=v.side;result.radicandGeometry=v.geometry;}
+                        if(v.covariance<result.minimumCovariance[v.region])
+                        {result.minimumCovariance[v.region]=v.covariance;result.covarianceMinimumPoints[v.region]=p.coordinate;
+                         result.covarianceSides[v.region]=v.side;result.covarianceGeometries[v.region]=v.geometry;}
+                        continue;
+                    }
+                }
+                ++m_evaluationWork.constitutivePointComputes;
                 const auto provenance=ResolveObservation(p);
                 const auto &row=*provenance.velocity;RANSTensor g{};
                 for(int a=0;a<m_dimension;++a)g[PhysicalAxis(a)]=row.Gradient(result.effectiveState,offset[a]);
                 const double k=EvaluationRow(K(),GeometryElement(K(),row.geometry),p.coordinate)->Value(result.effectiveState,offset[K()]);
                 try
                 {
-                    RANSTensor covariance{};
+                    RANSTensor covariance{};double radicand=0;bool radicandDefined=false;
                     if(provenance.inner)
                     {
                         const auto profile=StateProfile(result.effectiveState,p.coordinate,time,data);
@@ -508,6 +545,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
                     {
                         const double ep=p.dependentTrace?p.value:EvaluationRow(Epsilon(),GeometryElement(Epsilon(),row.geometry),p.coordinate)->Value(result.effectiveState,offset[Epsilon()]);
                         const auto law=OuterClosure(k,ep,g,p.coordinate);covariance=law.reynoldsStress;
+                        radicand=law.a95Radicand;radicandDefined=law.a95RadicandDefined;
                         if(law.a95RadicandDefined && law.a95Radicand<result.minimumA95Radicand)
                         {result.minimumA95Radicand=law.a95Radicand;result.radicandMinimumPoint=p.coordinate;
                          result.radicandSide=provenance.radialSide;result.radicandGeometry=row.geometry;}
@@ -516,6 +554,12 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
                     if(minimum<result.minimumCovariance[region])
                     {result.minimumCovariance[region]=minimum;result.covarianceMinimumPoints[region]=p.coordinate;
                      result.covarianceSides[region]=provenance.radialSide;result.covarianceGeometries[region]=row.geometry;}
+                    if(memo)
+                    {
+                        if(points.size()>=maximumPoints){points.clear();++m_evaluationWork.constitutivePointEvictions;}
+                        points.emplace(key,PointValidity{minimum,radicand,region,provenance.radialSide,row.geometry,radicandDefined});
+                        m_evaluationWork.peakConstitutivePoints=std::max<std::uint64_t>(m_evaluationWork.peakConstitutivePoints,points.size());
+                    }
                 }
                 catch(...)
                 {

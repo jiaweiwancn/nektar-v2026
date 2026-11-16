@@ -11,7 +11,7 @@ from ct_accepted9_controls import enable,compare_packets,maximum
 from ct_accepted9_pressure_run import sealed
 from ct_accepted14_component import ordering as baseline_ordering
 from ct_accepted14_pair import numerical_receipts
-from ct_accepted13_orderings import native_run
+from ct_accepted15_exec import native_run
 from ct_accepted13_memory import equal_primitives
 from ct_accepted_open import probe,require
 from ct_accepted_pilot import replay
@@ -20,8 +20,8 @@ from run_cls_epawf_picard import set_info,set_parameter,write
 from rans_request_manifest import RequestManifest,runtime_identity,sha
 from ct_accepted_feasibility import write_json
 
-POLICY='ImmutableTensorV3'
-COMPONENT='CT15-ImmutableTensorV3'
+POLICY='ImmutableTensorV4'
+COMPONENT='CT15-ImmutableTensorV4'
 def ordering(folder,maximum_rows=1048576):
     baseline_ordering(folder);policy(folder)
     root=ET.parse(folder/'case.xml').getroot();set_parameter(root,'RANSWallImmutableMaximumRows',maximum_rows);write(root,folder/'case.xml')
@@ -65,7 +65,7 @@ def main():
                 os.environ['NEKTAR_RANS_VERIFY_OWNER_INDEX']='1'
                 checks,execution=probe(a.runtime,dest,request,'dependencies')
                 os.environ.pop('NEKTAR_RANS_VERIFY_OWNER_INDEX',None)
-                require(execution['exit_code']==0 and checks['passed'] and checks['immutable_only'],'immutable dependency/owner controls')
+                require(execution['exit_code']==0 and checks['passed'] and checks['no_cross_call_state_reuse'] and checks['per_call_constitutive_points'],'scoped current-state dependency/owner controls')
                 out['dependencies']=dict(status='pass',checks=checks,execution=execution,packet_sha256=sha(dest/'dependencies.json'))
             write_json(a.output/'progress.json',out);print('CT15 small',label,'pass',flush=True)
         c=n.read(ct9/'controls-v4/one/construction.json');template=ct9/'controls-v4/one/case.xml'
@@ -101,6 +101,7 @@ def main():
                 old=n.read(a.ct14/'pair-v2/0.00025/case.evolution.json');truth=old['accepted_states'][steps]
                 difference=maximum(np.asarray(q['state'])-truth);require(difference<=1e-8,'selected update differs from CT14 oracle')
                 out['cases'][str(steps)]['maximum_absolute_coefficient_difference']=difference
+                out['cases'][str(steps)]['state_binary64_equal']=exact_vector_hash(q['state'])==exact_vector_hash(truth)
             write_json(a.output/'progress.json',out);print('CT15 timing-off training',steps,e['process_cpu_seconds'],flush=True)
     out['status']='pass';write_json(a.output/'results.json',out);m.seal(a.output,['results.json']);return 0
 if __name__=='__main__':raise SystemExit(main())

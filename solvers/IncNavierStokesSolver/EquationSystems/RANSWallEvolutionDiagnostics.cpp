@@ -510,7 +510,7 @@ std::string RANSWallEvolutionPatch::PreservationIdentity(bool legacyOperator) co
     if(!legacyOperator)out<<":numerical_operator="<<RANSWallNumericalOperatorIdentity();
     if(SerialSparse())out<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")out<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
-    if(m_immutableTensor)out<<":execution=CT15-ImmutableTensorV"<<(m_hashAssembly?3:m_sharedTensor?2:1);
+    if(m_immutableTensor)out<<":execution=CT15-ImmutableTensorV"<<(m_scopedConstitutivePoints?4:m_hashAssembly?3:m_sharedTensor?2:1);
     if(CurvedVerification())out<<":curved="<<CurvedCapabilityName()<<":"<<m_mapping.Signature()<<":CT6-conservative-v1";
     if(OpenBoundary())
     {
@@ -986,10 +986,12 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
     const bool saved=m_evaluationReuse;const auto stateHash=RANSWallR3::Hash(state),historyHash=RANSWallR3::Hash(history);
     struct Restore {bool &value;bool old;~Restore(){value=old;}} restore{m_evaluationReuse,saved};
     const bool immutable=m_immutableTensor;Restore restoreImmutable{m_immutableTensor,immutable};
+    const bool scopedPoints=m_scopedConstitutivePoints;Restore restorePoints{m_scopedConstitutivePoints,scopedPoints};
     const auto drive=[&](bool enabled)
     {
         if(immutable){m_immutableTensor=enabled;m_evaluationReuse=false;}
         else m_evaluationReuse=enabled;
+        m_scopedConstitutivePoints=scopedPoints && enabled;
         RANSWallEvolutionData input=data;
         EvaluationScope scope(*this,input,time);std::vector<std::string> values;
         const auto domain=[&](const Vector &s,double t,bool retain,bool only,const std::vector<RANSWallCoordinate> &anchors=std::vector<RANSWallCoordinate>{})
@@ -1063,7 +1065,9 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
     return J::Object({{"passed","true"},{"audit_revision",J::Quote(AuditRevision())},{"compared_queries",J::Number(off.size())},
         {"state_sha256",J::Quote(stateHash)},{"history_sha256",J::Quote(historyHash)},
         {"checks",J::Quote("exact state bytes including signed zero; time; data generation; external data; flags; ordered additional anchors; foreign data; history; alpha; residual options; coverage tripwire")},
-        {"immutable_only",immutable?"true":"false"},{"reuse",EvaluationReuseJSON()},{"governing_solves","0"},{"physical_commits","0"}});
+        {"immutable_only",immutable && !scopedPoints?"true":"false"},
+        {"per_call_constitutive_points",scopedPoints?"true":"false"},
+        {"no_cross_call_state_reuse",immutable?"true":"false"},{"reuse",EvaluationReuseJSON()},{"governing_solves","0"},{"physical_commits","0"}});
 }
 
 }

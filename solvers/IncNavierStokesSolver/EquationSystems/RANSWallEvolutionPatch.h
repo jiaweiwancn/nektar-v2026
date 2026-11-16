@@ -578,6 +578,7 @@ private:
     bool m_immutableTensor=false;
     bool m_sharedTensor=false;
     bool m_hashAssembly=false;
+    bool m_scopedConstitutivePoints=false;
     int m_immutableMaximumRows=65536;
     struct ImmutableRows;
     mutable std::shared_ptr<ImmutableRows> m_immutableRows;
@@ -591,7 +592,9 @@ private:
             rowConstructs=0,rowHits=0,rowEvictions=0,reconstructionBuilds=0,reconstructionHits=0,
             surfaceBuilds=0,surfaceHits=0,normalizationCalls=0,normalizationComputes=0,normalizationHits=0,
             residualCalls=0,residualHits=0,constraintCalls=0,constraintHits=0,
-            stateEvictions=0,inputInvalidations=0,profileReuses=0,scalarFieldReuses=0,peakStates=0,peakRows=0,peakProfiles=0;
+            stateEvictions=0,inputInvalidations=0,profileReuses=0,scalarFieldReuses=0,peakStates=0,peakRows=0,peakProfiles=0,
+            constitutivePointScopes=0,constitutivePointComputes=0,constitutivePointHits=0,
+            constitutivePointEvictions=0,peakConstitutivePoints=0;
     };
     mutable EvaluationWork m_evaluationWork;
     void PrepareEvaluation(const RANSWallEvolutionData &,double) const;
