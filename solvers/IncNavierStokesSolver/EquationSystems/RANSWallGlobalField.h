@@ -39,6 +39,8 @@ struct RANSWallGlobalPoint
     RANSWallSharedVector<double> constant;
     double weight = 0;
     bool columnAverage = false; // normalized physical functional, not a point
+    // Execution metadata only: one-call centred differences, never field state.
+    bool gradientScratch = false;
     // Only local-coordinate arithmetic may round to an endpoint. Physical
     // containment is exact and coordinates are never snapped or clamped.
     unsigned endpointRoundoffAxes = 0;
@@ -84,6 +86,7 @@ public:
     bool SharedTensorRows() const { return m_sharedTensor; }
     bool HashedBasisCache() const { return m_hashedBasis; }
     bool CachedTensorIndices() const { return m_tensorIndices; }
+    bool CentredGradientScratch() const { return m_gradientScratch; }
     int Size() const;
     std::array<std::uint64_t,6> BasisWork() const;
     RANSWallGlobalPoint Point(const Coordinate &coordinate, int side=0) const;
@@ -145,6 +148,7 @@ private:
     bool m_sharedTensor=false;
     bool m_hashedBasis=false;
     bool m_tensorIndices=false;
+    bool m_gradientScratch=false;
     std::array<int,3> TensorIndex(int element,int index,const std::array<int,3> &modes) const;
     struct NativeRow
     {

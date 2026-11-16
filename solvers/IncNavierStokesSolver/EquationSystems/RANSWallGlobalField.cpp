@@ -166,13 +166,37 @@ std::array<double,3> RANSWallGlobalPoint::Gradient(const Vector &state,int offse
                 constant[0]!=0,"invalid gradient row");
     const double centre=state.at(offset+ids[0])/constant[0];
     std::array<long double,3> value{};
-    for(int d=0;d<3;++d)
+    constexpr std::size_t maximum=128;
+    if(gradientScratch && ids.size()<=maximum)
     {
-        Require(derivative[d].size()==ids.size(),"invalid derivative row");
+        std::array<double,maximum> difference;
         for(std::size_t j=0;j<ids.size();++j)
-            value[d]+=(long double)derivative[d][j]*(state.at(offset+ids[j])-centre*constant[j]);
+            difference[j]=state.at(offset+ids[j])-centre*constant[j];
+        for(int d=0;d<3;++d)
+        {
+            Require(derivative[d].size()==ids.size(),"invalid derivative row");
+            for(std::size_t j=0;j<ids.size();++j)
+                value[d]+=(long double)derivative[d][j]*difference[j];
+        }
     }
-    return {static_cast<double>(value[0]),static_cast<double>(value[1]),static_cast<double>(value[2])};
+    else
+    {
+        for(int d=0;d<3;++d)
+        {
+            Require(derivative[d].size()==ids.size(),"invalid derivative row");
+            for(std::size_t j=0;j<ids.size();++j)
+                value[d]+=(long double)derivative[d][j]*(state.at(offset+ids[j])-centre*constant[j]);
+        }
+    }
+    const std::array<double,3> out{static_cast<double>(value[0]),static_cast<double>(value[1]),static_cast<double>(value[2])};
+    static const bool verify=[](){const char *v=std::getenv("NEKTAR_RANS_VERIFY_GRADIENT_SCRATCH");return v && std::string(v)=="1";}();
+    if(verify && gradientScratch)
+    {
+        auto cold=*this;cold.gradientScratch=false;const auto oracle=cold.Gradient(state,offset);
+        Require(std::memcmp(oracle.data(),out.data(),3*sizeof(double))==0,
+            "centred gradient scratch differs from original axis contractions");
+    }
+    return out;
 }
 
 RANSWallGlobalField::RANSWallGlobalField(
@@ -185,10 +209,11 @@ RANSWallGlobalField::RANSWallGlobalField(
     RANSWallTiming::Scope timing("geometry.field_catalog",true,true);
     session->MatchSolverInfo("RANSWallLinearBackend","AcceptedSerialSparseV1",m_serialSparse,false);
     std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
-    m_immutableTensor=immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10" || immutable=="ImmutableTensorV11" || immutable=="ImmutableTensorV12" || immutable=="ImmutableTensorV13" || immutable=="ImmutableTensorV14" || immutable=="ImmutableTensorV15" || immutable=="ImmutableTensorV16" || immutable=="ImmutableTensorV17";
+    m_immutableTensor=immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10" || immutable=="ImmutableTensorV11" || immutable=="ImmutableTensorV12" || immutable=="ImmutableTensorV13" || immutable=="ImmutableTensorV14" || immutable=="ImmutableTensorV15" || immutable=="ImmutableTensorV16" || immutable=="ImmutableTensorV17" || immutable=="ImmutableTensorV18";
     m_tensorIndices=immutable=="ImmutableTensorV17";
-    m_hashedBasis=immutable=="ImmutableTensorV15" || immutable=="ImmutableTensorV16" || immutable=="ImmutableTensorV17";
-    m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10" || immutable=="ImmutableTensorV11" || immutable=="ImmutableTensorV12" || immutable=="ImmutableTensorV13" || immutable=="ImmutableTensorV14" || immutable=="ImmutableTensorV15" || immutable=="ImmutableTensorV16" || immutable=="ImmutableTensorV17";
+    m_gradientScratch=immutable=="ImmutableTensorV18";
+    m_hashedBasis=immutable=="ImmutableTensorV15" || immutable=="ImmutableTensorV16" || immutable=="ImmutableTensorV17" || immutable=="ImmutableTensorV18";
+    m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10" || immutable=="ImmutableTensorV11" || immutable=="ImmutableTensorV12" || immutable=="ImmutableTensorV13" || immutable=="ImmutableTensorV14" || immutable=="ImmutableTensorV15" || immutable=="ImmutableTensorV16" || immutable=="ImmutableTensorV17" || immutable=="ImmutableTensorV18";
     Require(!m_sharedTensor || dimension==2,"shared immutable rows require flat2D tensor fields");
     Require((dimension==2 || dimension==3) && session->GetComm()->GetSize()==1 &&
                 !elements.empty(),"requires nonempty serial 2D/3D native field");
@@ -342,6 +367,7 @@ RANSWallGlobalPoint RANSWallGlobalField::ElementPoint(int e,const Coordinate &co
     const auto modes=element.Modes();const int count=TensorSize(modes,m_dimension);
     const auto map=m_field->GetLocalToGlobalMap();const int start=m_field->GetCoeff_Offset(e);
     RANSWallGlobalPoint result;result.coordinate=coordinate;result.geometry=element.geometry;result.element=e;
+    result.gradientScratch=m_gradientScratch;
     result.rawLocalCoordinate=rawLocal;result.endpointRoundoffAxes=endpointRoundoffAxes;
     if(m_sharedTensor){result.ids=m_nativeRows[e].ids;result.constant=m_nativeRows[e].constant;result.derivative[1]=m_nativeRows[e].zero;}
     else{result.ids.reserve(count);result.constant.reserve(count);}
@@ -464,14 +490,23 @@ std::array<std::array<double,3>,2> RANSWallGlobalField::ElementGradients(int e,c
     {
         const double centre=state.at(offsets[b]+native.ids[0])/native.constant[0];
         std::array<long double,3> value{};
-        for(int d=0;d<3;++d)for(int j=0;j<count;++j)
-            value[d]+=(long double)derivative[d][j]*(state.at(offsets[b]+native.ids[j])-centre*native.constant[j]);
+        if(m_gradientScratch)
+        {
+            std::array<double,maximum> difference;
+            for(int j=0;j<count;++j)
+                difference[j]=state.at(offsets[b]+native.ids[j])-centre*native.constant[j];
+            for(int d=0;d<3;++d)for(int j=0;j<count;++j)
+                value[d]+=(long double)derivative[d][j]*difference[j];
+        }
+        else
+            for(int d=0;d<3;++d)for(int j=0;j<count;++j)
+                value[d]+=(long double)derivative[d][j]*(state.at(offsets[b]+native.ids[j])-centre*native.constant[j]);
         for(int d=0;d<3;++d)out[b][d]=value[d];
     }
     static const bool verify=[](){const char *v=std::getenv("NEKTAR_RANS_VERIFY_GRADIENT_STREAM");return v && std::string(v)=="1";}();
     if(verify)
     {
-        const auto row=ElementPoint(e,coordinate);
+        auto row=ElementPoint(e,coordinate);row.gradientScratch=false;
         for(int b=0;b<2;++b)
         {
             const auto oracle=row.Gradient(state,offsets[b]);
