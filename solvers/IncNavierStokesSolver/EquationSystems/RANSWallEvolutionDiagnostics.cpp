@@ -549,7 +549,8 @@ std::string RANSWallEvolutionPatch::PreservationIdentity(bool legacyOperator) co
     if(!legacyOperator)out<<":numerical_operator="<<RANSWallNumericalOperatorIdentity();
     if(SerialSparse())out<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")out<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
-    if(m_hashedBasisCache)out<<":execution=CT16-HashedBasisV1";
+    if(m_currentSampler)out<<":execution=CT16-CurrentSamplerV1";
+    else if(m_hashedBasisCache)out<<":execution=CT16-HashedBasisV1";
     else if(m_observedScalars)out<<":execution=CT16-CurrentObservedScalarV1";
     else if(m_currentVelocityGradients)out<<":execution=CT16-CurrentVelocityGradientV1";
     else if(m_hashedCoverage)out<<":execution=CT16-HashedCoverageV1";
@@ -1047,6 +1048,7 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
     const bool hashedCoverage=m_hashedCoverage;Restore restoreHashedCoverage{m_hashedCoverage,hashedCoverage};
     const bool currentGradients=m_currentVelocityGradients;Restore restoreCurrentGradients{m_currentVelocityGradients,currentGradients};
     const bool observedScalars=m_observedScalars;Restore restoreObservedScalars{m_observedScalars,observedScalars};
+    const bool currentSampler=m_currentSampler;Restore restoreCurrentSampler{m_currentSampler,currentSampler};
     const auto drive=[&](bool enabled)
     {
         if(immutable){m_immutableTensor=enabled;m_evaluationReuse=false;}
@@ -1055,7 +1057,7 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
         m_streamScalarValues=stream && enabled;m_scopedScatter=scatter && enabled;
         m_scopedAuditPoints=auditPoints && enabled;m_flatMetrics=flatMetrics && enabled;m_rowLRU=rowLRU && enabled;
         m_streamGradients=streamGradients && enabled;m_scopedAuditResidual=auditResidual && enabled;m_hashedCoverage=hashedCoverage && enabled;
-        m_currentVelocityGradients=currentGradients && enabled;m_observedScalars=observedScalars && enabled;
+        m_currentVelocityGradients=currentGradients && enabled;m_observedScalars=observedScalars && enabled;m_currentSampler=currentSampler && enabled;
         RANSWallEvolutionData input=data;
         EvaluationScope scope(*this,input,time);std::vector<std::string> values;
         const auto domain=[&](const Vector &s,double t,bool retain,bool only,const std::vector<RANSWallCoordinate> &anchors=std::vector<RANSWallCoordinate>{})
@@ -1139,6 +1141,7 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
         m_evaluationWork.residualHits>0,"verification did not exercise cache hits and invalidation");
     if(flatMetrics)Require(m_evaluationWork.flatMetricQueries>0 && m_evaluationWork.profileMetricElisions>0,
         "verification did not exercise exact flat metadata and profile hits");
+    if(currentSampler)Require(m_evaluationWork.samplerHits>0 && m_evaluationWork.samplerOwnerHits>0,"verification did not exercise current sampler and immutable owner hits");
     if(observedScalars)Require(m_evaluationWork.observedScalarUses>0,"verification did not exercise current observed scalars");
     if(currentGradients)Require(m_evaluationWork.gradientHits>0 && m_evaluationWork.gradientInvalidations>0,
         "verification did not exercise pure-gradient hits and actual-velocity invalidation");
@@ -1151,6 +1154,7 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
         {"no_cross_call_state_reuse",immutable && !currentGradients?"true":"false"},
         {"no_cross_call_constitutive_validity_reuse",immutable?"true":"false"},
         {"pure_current_velocity_gradient_memo",currentGradients?"true":"false"},
+        {"same_call_current_sampler",currentSampler?"true":"false"},
         {"reuse",EvaluationReuseJSON()},{"governing_solves","0"},{"physical_commits","0"}});
 }
 

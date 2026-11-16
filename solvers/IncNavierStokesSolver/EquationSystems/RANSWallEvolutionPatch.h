@@ -597,6 +597,18 @@ private:
     bool m_currentVelocityGradients=false;
     bool m_observedScalars=false;
     bool m_hashedBasisCache=false;
+    bool m_currentSampler=false;
+    struct SamplerMemo;
+    mutable std::shared_ptr<SamplerMemo> m_samplerMemo;
+    class CurrentSamplerScope
+    {
+        const RANSWallEvolutionPatch &patch;bool owns=false;
+    public:
+        CurrentSamplerScope(const RANSWallEvolutionPatch &,const Vector &);
+        ~CurrentSamplerScope();
+        CurrentSamplerScope(const CurrentSamplerScope&)=delete;
+    };
+    double CurrentSampleK(const Vector &,const RANSWallCoordinate &,int side) const;
     struct GradientMemo;
     mutable std::shared_ptr<GradientMemo> m_gradientMemo;
     class CurrentGradientScope
@@ -639,7 +651,9 @@ private:
             flatMetricQueries=0,profileMetricElisions=0,streamGradientPairs=0,
             coverageInserts=0,coverageQueries=0,peakHashedCoverage=0,coverageSpills=0,
             gradientScopes=0,gradientHits=0,gradientMisses=0,gradientInvalidations=0,
-            gradientEvictions=0,peakGradientPoints=0,observedScalarUses=0;
+            gradientEvictions=0,peakGradientPoints=0,observedScalarUses=0,
+            samplerScopes=0,samplerHits=0,samplerMisses=0,samplerOwnerHits=0,samplerOwnerMisses=0,
+            samplerEvictions=0,samplerOwnerEvictions=0,samplerFieldChanges=0,peakSamplerValues=0,peakSamplerOwners=0;
     };
     mutable EvaluationWork m_evaluationWork;
     void PrepareEvaluation(const RANSWallEvolutionData &,double) const;

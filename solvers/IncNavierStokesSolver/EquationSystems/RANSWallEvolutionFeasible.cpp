@@ -546,6 +546,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         {
             RANSWallTiming::Scope part("domain.current_constitutive_inventory");
             CurrentGradientScope currentGradients(*this,result.effectiveState);
+            CurrentSamplerScope currentSampler(*this,result.effectiveState);
             result.phase="current_velocity_constitutive_domain";
             // Effective and trace states have been completely formed above
             // and are read-only for this loop. This map is born/dies in this
@@ -2484,6 +2485,7 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::CompleteRestrictedAud
     };
     RANSWallTiming::Scope repeatedInventory("audit.repeated_point_inventory");
     CurrentGradientScope currentGradients(*this,domain.effectiveState);
+    CurrentSamplerScope currentSampler(*this,domain.effectiveState);
     for(const auto &p:domain.observations)
     {
         if(p.block!=K() && !p.dependentTrace)continue;

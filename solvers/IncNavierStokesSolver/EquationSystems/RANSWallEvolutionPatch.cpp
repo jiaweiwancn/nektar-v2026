@@ -365,8 +365,9 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(reuse=="Off" || reuse=="ExactStepV1","unknown exact evaluation reuse policy");
     m_evaluationReuse=reuse=="ExactStepV1";
     std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
-    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10" || immutable=="ImmutableTensorV11" || immutable=="ImmutableTensorV12" || immutable=="ImmutableTensorV13" || immutable=="ImmutableTensorV14" || immutable=="ImmutableTensorV15","unknown immutable evaluation policy");
-    m_hashedBasisCache=immutable=="ImmutableTensorV15";
+    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10" || immutable=="ImmutableTensorV11" || immutable=="ImmutableTensorV12" || immutable=="ImmutableTensorV13" || immutable=="ImmutableTensorV14" || immutable=="ImmutableTensorV15" || immutable=="ImmutableTensorV16","unknown immutable evaluation policy");
+    m_currentSampler=immutable=="ImmutableTensorV16";
+    m_hashedBasisCache=immutable=="ImmutableTensorV15" || m_currentSampler;
     m_observedScalars=immutable=="ImmutableTensorV14" || m_hashedBasisCache;
     // V13 remains available as the measured complete-velocity experiment.
     // Later candidates omit its table after its timing-off throughput loss.
@@ -847,7 +848,7 @@ double RANSWallEvolutionPatch::SampleK(const Vector &s,const RANSWallCoordinate 
     auto p=point;p[2]=m_kSampling=="InterfaceTrace"?m_parameters.geometry.height:m_parameters.geometry.sampleHeight/GeometryScale(point);
     if(m_assertKCoverage)Require(CoveredK(p),"unprotected constitutive k evaluation: sampled K");
     const int side=Same(p[2],m_parameters.geometry.height)?-1:0;
-    const double k=m_streamScalarValues?PointValue(K(),fields[K()]->LocateElement(p,side),p,s):Point(K(),p,side).Value(s,offset[K()]);
+    const double k=m_currentSampler?CurrentSampleK(s,p,side):m_streamScalarValues?PointValue(K(),fields[K()]->LocateElement(p,side),p,s):Point(K(),p,side).Value(s,offset[K()]);
     Require(k>0 && std::isfinite(k),"invalid physical sampled K");return k;
 }
 std::array<double,3> RANSWallEvolutionPatch::CartesianForcing(const Vector &s,const RANSWallCoordinate &point,double time,
@@ -1937,7 +1938,8 @@ std::string RANSWallEvolutionPatch::Signature() const
     if(DisplacedAccepted())text<<":wall_sink=SamePhysicalWallDisplacedAcceptedV1:d="<<m_options.aerodynamicDisplacement;
     if(SerialSparse())text<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")text<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
-    if(m_hashedBasisCache)text<<":execution=CT16-HashedBasisV1";
+    if(m_currentSampler)text<<":execution=CT16-CurrentSamplerV1";
+    else if(m_hashedBasisCache)text<<":execution=CT16-HashedBasisV1";
     else if(m_observedScalars)text<<":execution=CT16-CurrentObservedScalarV1";
     else if(m_currentVelocityGradients)text<<":execution=CT16-CurrentVelocityGradientV1";
     else if(m_hashedCoverage)text<<":execution=CT16-HashedCoverageV1";

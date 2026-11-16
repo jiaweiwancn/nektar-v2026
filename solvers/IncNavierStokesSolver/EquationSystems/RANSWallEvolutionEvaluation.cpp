@@ -134,6 +134,82 @@ void RANSWallEvolutionPatch::PrepareEvaluation(const RANSWallEvolutionData &data
 void RANSWallEvolutionPatch::InvalidateCoverageToken() const
 {if(m_evaluation)m_evaluation->coverageToken=nullptr;}
 
+struct RANSWallEvolutionPatch::SamplerMemo
+{
+    using Key=std::array<std::uint64_t,4>;
+    struct Hash {std::size_t operator()(const Key &key) const noexcept
+        {std::size_t h=1469598103934665603ULL;for(auto b:key){h^=b;h*=1099511628211ULL;}return h;}};
+    std::shared_ptr<RANSWallGlobalField> field;
+    std::unordered_map<Key,std::pair<int,int>,Hash> owners;
+    std::unordered_map<Key,double,Hash> values;
+    const Vector *active=nullptr;
+};
+RANSWallEvolutionPatch::CurrentSamplerScope::CurrentSamplerScope(
+    const RANSWallEvolutionPatch &p,const Vector &state):patch(p)
+{
+    if(!patch.m_currentSampler)return;
+    Require(state.size()==std::size_t(patch.Size()),"current sampler state size differs");
+    if(!patch.m_samplerMemo)patch.m_samplerMemo=std::make_shared<SamplerMemo>();
+    auto &memo=*patch.m_samplerMemo;if(memo.active)return;
+    // No sampled coefficient value survives a current-inventory boundary.
+    // The supplied complete effective state is read-only in this scope.
+    memo.values.clear();memo.active=&state;owns=true;++patch.m_evaluationWork.samplerScopes;
+}
+RANSWallEvolutionPatch::CurrentSamplerScope::~CurrentSamplerScope()
+{if(owns){patch.m_samplerMemo->values.clear();patch.m_samplerMemo->active=nullptr;}}
+
+double RANSWallEvolutionPatch::CurrentSampleK(const Vector &state,const RANSWallCoordinate &p,int side) const
+{
+    if(!m_samplerMemo)m_samplerMemo=std::make_shared<SamplerMemo>();
+    auto &memo=*m_samplerMemo;const auto &field=fields.at(K());
+    if(memo.field!=field)
+    {memo.owners.clear();memo.values.clear();memo.field=field;++m_evaluationWork.samplerFieldChanges;}
+    const SamplerMemo::Key key{Bit(p[0]),Bit(p[1]),Bit(p[2]),std::uint64_t(side+1)};
+    const std::size_t maximum=std::size_t(std::min(4096,std::max(1,m_constitutiveMaximumPoints)));
+    int element;const auto old=memo.owners.find(key);
+    if(old!=memo.owners.end())
+    {
+        ++m_evaluationWork.samplerOwnerHits;element=old->second.first;
+        Require(field->Elements().at(element).geometry==old->second.second,"stale immutable sampler geometry");
+    }
+    else
+    {
+        ++m_evaluationWork.samplerOwnerMisses;element=field->LocateElement(p,side);
+        if(memo.owners.size()>=maximum){memo.owners.clear();++m_evaluationWork.samplerOwnerEvictions;}
+        memo.owners.emplace(key,std::make_pair(element,field->Elements().at(element).geometry));
+        m_evaluationWork.peakSamplerOwners=std::max<std::uint64_t>(m_evaluationWork.peakSamplerOwners,memo.owners.size());
+    }
+    // Preserve every original span/finite/strict physical/local-endpoint check
+    // before a hit, including the requested radial side. The first owner came
+    // from the unchanged deterministic native locator on this exact field.
+    field->ValidateElementCoordinate(element,p);const auto &native=field->Elements().at(element);
+    Require(!(side>0 && p[2]>=native.upper[2]) && !(side<0 && p[2]<=native.lower[2]),
+        "cached sampler radial side differs from native containment");
+    static const bool verify=[](){const char *v=std::getenv("NEKTAR_RANS_VERIFY_CURRENT_SAMPLER");return v && std::string(v)=="1";}();
+    if(verify)Require(element==field->LocateElement(p,side),"immutable sampler owner differs from original native lookup");
+    const bool scoped=memo.active==&state;
+    if(scoped)
+    {
+        const auto found=memo.values.find(key);
+        if(found!=memo.values.end())
+        {
+            ++m_evaluationWork.samplerHits;
+            if(verify){const double oracle=PointValue(K(),element,p,state);
+                Require(std::memcmp(&oracle,&found->second,sizeof oracle)==0,"current sampled K differs from fresh native value");}
+            return found->second;
+        }
+        ++m_evaluationWork.samplerMisses;
+    }
+    const double value=PointValue(K(),element,p,state);
+    if(scoped)
+    {
+        if(memo.values.size()>=maximum){memo.values.clear();++m_evaluationWork.samplerEvictions;}
+        memo.values.emplace(key,value);
+        m_evaluationWork.peakSamplerValues=std::max<std::uint64_t>(m_evaluationWork.peakSamplerValues,memo.values.size());
+    }
+    return value;
+}
+
 std::size_t RANSWallEvolutionPatch::CoordinateHash::operator()(const RANSWallCoordinate &p) const noexcept
 {
     std::size_t h=1469598103934665603ULL;
@@ -442,12 +518,18 @@ std::string RANSWallEvolutionPatch::EvaluationReuseJSON() const
         {"fixed_reconstruction_rows",J::Number(fixedRows)},{"fixed_surface_rows",J::Number(surfaceRows)},
         {"row_counter_scope",J::Quote("scoped point/derivative requests; fixed reconstruction and surface catalogs counted separately")},
         {"peak_states",J::Number(w.peakStates)},{"peak_rows",J::Number(w.peakRows)},{"peak_profiles",J::Number(w.peakProfiles)},
-        {"immutable_policy",J::Quote(m_hashedBasisCache?"ImmutableTensorV15":m_observedScalars?"ImmutableTensorV14":m_currentVelocityGradients?"ImmutableTensorV13":m_hashedCoverage?"ImmutableTensorV12":m_scopedAuditResidual?"ImmutableTensorV11":m_streamGradients?"ImmutableTensorV10":m_rowLRU?"ImmutableTensorV9":m_flatMetrics?"ImmutableTensorV8":m_scopedAuditPoints?"ImmutableTensorV7":m_scopedScatter?"ImmutableTensorV6":m_streamScalarValues?"ImmutableTensorV5":m_immutableTensor?(m_scopedConstitutivePoints?"ImmutableTensorV4":m_hashAssembly?"ImmutableTensorV3":m_sharedTensor?"ImmutableTensorV2":"ImmutableTensorV1"):"Off")},
+        {"immutable_policy",J::Quote(m_currentSampler?"ImmutableTensorV16":m_hashedBasisCache?"ImmutableTensorV15":m_observedScalars?"ImmutableTensorV14":m_currentVelocityGradients?"ImmutableTensorV13":m_hashedCoverage?"ImmutableTensorV12":m_scopedAuditResidual?"ImmutableTensorV11":m_streamGradients?"ImmutableTensorV10":m_rowLRU?"ImmutableTensorV9":m_flatMetrics?"ImmutableTensorV8":m_scopedAuditPoints?"ImmutableTensorV7":m_scopedScatter?"ImmutableTensorV6":m_streamScalarValues?"ImmutableTensorV5":m_immutableTensor?(m_scopedConstitutivePoints?"ImmutableTensorV4":m_hashAssembly?"ImmutableTensorV3":m_sharedTensor?"ImmutableTensorV2":"ImmutableTensorV1"):"Off")},
         {"scoped_matrix_scatter",m_scopedScatter?"true":"false"},
         {"flat_metric_queries",J::Number(w.flatMetricQueries)},{"profile_metric_elisions",J::Number(w.profileMetricElisions)},
         {"audit_point_scopes",J::Number(w.auditPointScopes)},{"audit_point_computes",J::Number(w.auditPointComputes)},
         {"audit_point_hits",J::Number(w.auditPointHits)},{"audit_point_evictions",J::Number(w.auditPointEvictions)},
         {"peak_audit_points",J::Number(w.peakAuditPoints)},
+        {"current_sampler_scopes",J::Number(w.samplerScopes)},{"current_sampler_hits",J::Number(w.samplerHits)},
+        {"current_sampler_misses",J::Number(w.samplerMisses)},{"sampler_owner_hits",J::Number(w.samplerOwnerHits)},
+        {"sampler_owner_misses",J::Number(w.samplerOwnerMisses)},{"sampler_value_evictions",J::Number(w.samplerEvictions)},
+        {"sampler_owner_evictions",J::Number(w.samplerOwnerEvictions)},{"sampler_field_changes",J::Number(w.samplerFieldChanges)},
+        {"peak_sampler_values",J::Number(w.peakSamplerValues)},{"peak_sampler_owners",J::Number(w.peakSamplerOwners)},
+        {"sampler_value_lifetime",J::Quote("one read-only actual domain/audit inventory; cleared at entry and exit; no cross-call K")},
         {"native_basis_index",J::Quote(fields[0]->HashedBasisCache()?"ExactHash8192V1":"Ordered8192V1")},
         {"current_observed_scalar_uses",J::Number(w.observedScalarUses)},
         {"current_gradient_scopes",J::Number(w.gradientScopes)},{"current_gradient_hits",J::Number(w.gradientHits)},
