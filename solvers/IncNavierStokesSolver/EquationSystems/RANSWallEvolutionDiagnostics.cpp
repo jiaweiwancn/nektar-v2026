@@ -1006,6 +1006,13 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
             for(int j=0;j<size[block];++j)if(!input.fixedBoundary.count(offset[block]+j))
             {test[offset[block]+j]+=increment;found=true;break;}
             Require(found,"reuse verification needs a free field coefficient");domain(test,time,true,false);
+            if(immutable)
+            {
+                std::vector<std::pair<std::string,std::string>> current;
+                for(const auto &[key,value]:CompleteRestrictedAudit(test,history,1600.,time,input))
+                    current.push_back({key,J::Numbers(value)});
+                values.push_back(J::Object(current));
+            }
         }
         domain(flow,time,true,false);
 
@@ -1038,7 +1045,10 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
         std::vector<std::pair<std::string,std::string>> audit;
         for(const auto &[key,value]:CompleteRestrictedAudit(state,history,1600.,time,input))audit.push_back({key,J::Numbers(value)});
         values.push_back(J::Object(audit));
-        values.push_back(CheckConstitutiveCoverage(state,time,input,{lower[0]+.123456789,0,m_parameters.geometry.height*.314159}));
+        // The CLS coverage tripwire requires ConstitutiveKInventory. The A95
+        // open route uses its native model-aware complete audits above.
+        if(ConstitutiveKInventory())values.push_back(CheckConstitutiveCoverage(state,time,input,
+            {lower[0]+.123456789,0,m_parameters.geometry.height*.314159}));
         return values;
     };
     const auto off=drive(false),on=drive(true);
