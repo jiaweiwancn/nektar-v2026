@@ -11,6 +11,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSharedVector.h>
 #include <algorithm>
 #include <array>
+#include <cstdint>
 #include <functional>
 #include <map>
 #include <memory>
@@ -80,6 +81,7 @@ public:
     const std::vector<Element> &Elements() const { return m_elements; }
     int Dimension() const { return m_dimension; }
     int Size() const;
+    std::array<std::uint64_t,6> BasisWork() const;
     RANSWallGlobalPoint Point(const Coordinate &coordinate, int side=0) const;
     int LocateElement(const Coordinate &coordinate,int side=0) const;
     RANSWallGlobalPoint ElementPoint(int element, const Coordinate &coordinate) const;

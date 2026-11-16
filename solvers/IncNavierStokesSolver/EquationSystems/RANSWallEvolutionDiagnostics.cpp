@@ -510,7 +510,8 @@ std::string RANSWallEvolutionPatch::PreservationIdentity(bool legacyOperator) co
     if(!legacyOperator)out<<":numerical_operator="<<RANSWallNumericalOperatorIdentity();
     if(SerialSparse())out<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")out<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
-    if(m_scopedAuditPoints)out<<":execution=CT16-ScopedAuditPointsV1";
+    if(m_flatMetrics)out<<":execution=CT16-ExactFlatMetricV1";
+    else if(m_scopedAuditPoints)out<<":execution=CT16-ScopedAuditPointsV1";
     else if(m_scopedScatter)out<<":execution=CT16-ScopedScatterV1";
     else if(m_streamScalarValues)out<<":execution=CT16-StreamScalarV1";
     else if(m_immutableTensor)out<<":execution=CT15-ImmutableTensorV"<<(m_scopedConstitutivePoints?4:m_hashAssembly?3:m_sharedTensor?2:1);
@@ -993,13 +994,14 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
     const bool stream=m_streamScalarValues;Restore restoreStream{m_streamScalarValues,stream};
     const bool scatter=m_scopedScatter;Restore restoreScatter{m_scopedScatter,scatter};
     const bool auditPoints=m_scopedAuditPoints;Restore restoreAuditPoints{m_scopedAuditPoints,auditPoints};
+    const bool flatMetrics=m_flatMetrics;Restore restoreFlatMetrics{m_flatMetrics,flatMetrics};
     const auto drive=[&](bool enabled)
     {
         if(immutable){m_immutableTensor=enabled;m_evaluationReuse=false;}
         else m_evaluationReuse=enabled;
         m_scopedConstitutivePoints=scopedPoints && enabled;
         m_streamScalarValues=stream && enabled;m_scopedScatter=scatter && enabled;
-        m_scopedAuditPoints=auditPoints && enabled;
+        m_scopedAuditPoints=auditPoints && enabled;m_flatMetrics=flatMetrics && enabled;
         RANSWallEvolutionData input=data;
         EvaluationScope scope(*this,input,time);std::vector<std::string> values;
         const auto domain=[&](const Vector &s,double t,bool retain,bool only,const std::vector<RANSWallCoordinate> &anchors=std::vector<RANSWallCoordinate>{})
@@ -1041,6 +1043,17 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
                 {"phi",J::Numbers(face.test.phi)},{"derivative",J::Rows(face.test.derivative)}}));
             values.push_back(J::List(rows));
         }
+        if(flatMetrics)
+        {
+            const double H=m_parameters.geometry.height;
+            const auto infinity=std::numeric_limits<double>::infinity(),nan=std::numeric_limits<double>::quiet_NaN();
+            for(const auto &p:std::array<RANSWallCoordinate,8>{{lower,upper,{(lower[0]+upper[0])/2,0,H},
+                {upper[0]+1,0,H},{lower[0],1,H},{lower[0],0,-1},{infinity,0,H},{lower[0],0,nan}}})
+            {
+                try{values.push_back(J::Numbers(std::array<double,2>{GeometryHeight(p),GeometryScale(p)}));}
+                catch(const std::exception &e){values.push_back(J::Object({{"failure",J::Quote(e.what())},{"type",J::Quote(J::ExceptionType(e))}}));}
+            }
+        }
         auto foreign=input;foreign.Touch();
         values.push_back(ScalarDomainJSON(ScalarDomain(state,time,foreign,true),true));
         domain(state,time,true,false);
@@ -1070,11 +1083,14 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
         "immutable verification did not reuse rows or unexpectedly reused state physics");
     else Require(m_evaluationWork.domainHits>0 && m_evaluationWork.prefixHits>0 && m_evaluationWork.inputInvalidations>0 &&
         m_evaluationWork.residualHits>0,"verification did not exercise cache hits and invalidation");
+    if(flatMetrics)Require(m_evaluationWork.flatMetricQueries>0 && m_evaluationWork.profileMetricElisions>0,
+        "verification did not exercise exact flat metadata and profile hits");
     return J::Object({{"passed","true"},{"audit_revision",J::Quote(AuditRevision())},{"compared_queries",J::Number(off.size())},
         {"state_sha256",J::Quote(stateHash)},{"history_sha256",J::Quote(historyHash)},
         {"checks",J::Quote("exact state bytes including signed zero; time; data generation; external data; flags; ordered additional anchors; foreign data; history; alpha; residual options; coverage tripwire")},
         {"immutable_only",immutable && !scopedPoints?"true":"false"},
         {"per_call_constitutive_points",scopedPoints?"true":"false"},
+        {"exact_flat_metric",flatMetrics?"true":"false"},{"additional_geometry_queries",J::Number(flatMetrics?8:0)},
         {"no_cross_call_state_reuse",immutable?"true":"false"},{"reuse",EvaluationReuseJSON()},{"governing_solves","0"},{"physical_commits","0"}});
 }
 

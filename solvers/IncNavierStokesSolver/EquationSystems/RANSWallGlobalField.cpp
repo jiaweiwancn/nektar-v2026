@@ -74,6 +74,7 @@ struct RANSWallGlobalField::BasisData
     std::vector<Array<OneD,NekDouble>> derivative;
     std::vector<Array<OneD,NekDouble>> secondDerivative;
     mutable std::map<double,std::shared_ptr<const Values>> cache;
+    mutable std::uint64_t hits=0,computes=0,evictions=0,peak=0;
 
     explicit BasisData(const LibUtilities::BasisKey &key)
         :segment(std::make_shared<StdRegions::StdSegExp>(key))
@@ -93,7 +94,8 @@ struct RANSWallGlobalField::BasisData
         Require(std::isfinite(coordinate) && coordinate>=-1. && coordinate<=1.,
                 "basis coordinate outside known native owner");
         const auto found=cache.find(coordinate);
-        if(found!=cache.end()) return found->second;
+        if(found!=cache.end()){++hits;return found->second;}
+        ++computes;
         auto result=std::make_shared<Values>();
         Array<OneD,NekDouble> local(1);local[0]=coordinate;
         for(int j=0;j<segment->GetNcoeffs();++j)
@@ -104,11 +106,23 @@ struct RANSWallGlobalField::BasisData
         }
         // Moving cutoffs can create many radial coordinates during a Jacobian.
         // Bound the cache; shared results stay valid through the current row.
-        if(cache.size()>=8192) cache.clear();
+        if(cache.size()>=8192){cache.clear();++evictions;}
         cache.emplace(coordinate,result);
+        peak=std::max<std::uint64_t>(peak,cache.size());
         return result;
     }
 };
+
+std::array<std::uint64_t,6> RANSWallGlobalField::BasisWork() const
+{
+    std::array<std::uint64_t,6> out{};
+    for(const auto &[key,b]:m_basis)
+    {
+        (void)key;out[0]+=b->hits;out[1]+=b->computes;out[2]+=b->evictions;
+        out[3]=std::max(out[3],b->peak);out[4]+=b->cache.size();++out[5];
+    }
+    return out;
+}
 
 double RANSWallGlobalPoint::Value(const Vector &state,int offset) const
 {
@@ -145,8 +159,8 @@ RANSWallGlobalField::RANSWallGlobalField(
     RANSWallTiming::Scope timing("geometry.field_catalog",true,true);
     session->MatchSolverInfo("RANSWallLinearBackend","AcceptedSerialSparseV1",m_serialSparse,false);
     std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
-    m_immutableTensor=immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7";
-    m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7";
+    m_immutableTensor=immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8";
+    m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8";
     Require(!m_sharedTensor || dimension==2,"shared immutable rows require flat2D tensor fields");
     Require((dimension==2 || dimension==3) && session->GetComm()->GetSize()==1 &&
                 !elements.empty(),"requires nonempty serial 2D/3D native field");

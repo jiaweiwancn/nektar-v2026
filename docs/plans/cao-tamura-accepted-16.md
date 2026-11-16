@@ -80,3 +80,16 @@ and a bounded read-only contraction experiment. No changed candidate has a
 fresh qualified .002 pair,selected retention cycles or complete affordable
 production forecast. CT15 remains closed UNRESOLVED; all new attempts share
 CT16's original fixed clock and allocation.
+
+
+The [contraction prototype](cao-tamura-accepted-16-evidence/primitive-contraction-v1/results.json)
+reproduces37914 actual rows/816778 coefficients for three sealed states exactly,
+but its original and packed timings overlap; no governing change is selected.
+The [flat-metric prototype](cao-tamura-accepted-16-evidence/primitive-flat_metric-v1/results.json)
+compares28288 actual native/fixed/face coordinates exactly. General two-metric
+plus identity batches use about0.430 CPU seconds versus0.002-0.003 for the
+fixed-value prototype. These are read-only primitive measurements and cannot
+establish a native or campaign speedup. The
+[opt-in flat-metric contract](cao-tamura-accepted-16-evidence/attempt-4-contract.json)
+retains general-map fallback,unchanged whole-chart validation and explicit
+current-coordinate checks. Governing qualification is pending.

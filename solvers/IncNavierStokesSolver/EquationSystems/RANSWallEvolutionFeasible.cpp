@@ -144,7 +144,7 @@ std::vector<RANSWallCoordinate> RANSWallEvolutionPatch::ConstitutiveAnchors(cons
 std::vector<RANSWallGlobalPoint> RANSWallEvolutionPatch::NormalizationRows(
     const RANSWallCoordinate &anchor,const EquilibriumAWFProfiles &profile) const
 {
-    std::vector<RANSWallGlobalPoint> rows;const double scale=m_mapping.At(anchor).scale;
+    std::vector<RANSWallGlobalPoint> rows;const double scale=GeometryScale(anchor);
     for(const auto &q:profile.Quadrature())
     {auto p=anchor;p[2]=q.r/scale;rows.push_back(Point(K(),p));}
     return rows;
@@ -300,7 +300,7 @@ void RANSWallEvolutionPatch::InitialiseScalarLocations() const
     m_scalarSamplerAnchors.assign(samplers.begin(),samplers.end());
     for(auto p:m_scalarSamplerAnchors)
     {
-        const double scale=m_mapping.At(p).scale;
+        const double scale=GeometryScale(p);
         p[2]=m_parameters.geometry.height;
         pair("physical_matching_transfer",Point(K(),p,1),false,1);
         p[2]=m_parameters.geometry.sampleHeight/scale;
@@ -327,7 +327,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         // Endpoint samplers and every native interface row carry their own
         // element. Resolve radial provenance once; a zero selector must not
         // turn an H-minus derivative into an outer constitutive observation.
-        if(!q.columnAverage && Same(Distance(q.coordinate),m_mapping.At(q.coordinate).height))
+        if(!q.columnAverage && Same(Distance(q.coordinate),GeometryHeight(q.coordinate)))
         {
             ScalarObservation provenance;provenance.coordinate=q.coordinate;
             provenance.block=block;provenance.geometry=q.geometry;provenance.side=side;
@@ -341,7 +341,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
         if(block==K())
         {
             if(name=="physical_sampled_K")result.minimumSampledK=std::min(result.minimumSampledK,value);
-            if(Distance(q.coordinate)<=m_mapping.At(q.coordinate).height && side<=0)
+            if(Distance(q.coordinate)<=GeometryHeight(q.coordinate) && side<=0)
             {if(value<result.minimumInnerK){result.minimumInnerK=value;result.scalarMinimumPoints[0]=q.coordinate;}}
             else if(value<result.minimumOuterK){result.minimumOuterK=value;result.scalarMinimumPoints[1]=q.coordinate;}
         }
@@ -415,7 +415,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             if(required || !ModelAwareAudit())
                 result.maximumBudgetRelativeDefect=std::max(result.maximumBudgetRelativeDefect,
                     std::abs(reference.budgetResidual)/std::max(1e-300,reference.productionBudget));
-            const double scale=m_mapping.At(p).scale;
+            const double scale=GeometryScale(p);
             for(const auto &q:profile->Quadrature())
             {
                 auto point=p;point[2]=q.r/scale;
@@ -424,7 +424,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
             }
             if(AcceptedAWF())for(double top:{.01,.1,m_parameters.geometry.height})if(top<=m_parameters.geometry.height)
                 for(const auto &q:profile->IntegrationQuadrature(top,{.01,.1}))
-                {auto point=p;point[2]=q.r/m_mapping.At(p).scale;
+                {auto point=p;point[2]=q.r/GeometryScale(p);
                  if(!checkAt("constitutive_budget_reporting_source_ray",point,K(),false,result.effectiveState))return false;}
             pending.push_back({p,profile,source});return true;
         };
@@ -454,7 +454,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
                 RANSWallTiming::Scope part("domain.dynamic_anchor_samples");
                 for(auto p:anchors)
                 {
-                    const double scale=m_mapping.At(p).scale;
+                    const double scale=GeometryScale(p);
                     p[2]=m_parameters.geometry.sampleHeight/scale;
                     if(!check("physical_sampled_K",SampleKRow(p),K(),true,result.effectiveState,AcceptedAWF()?-1:0))return result;
                     p[2]=m_parameters.geometry.height;
@@ -481,7 +481,7 @@ RANSWallEvolutionPatch::ScalarDomainResult RANSWallEvolutionPatch::EvaluateScala
                     const auto active=ProspectiveActiveProfile(result.effectiveState,p,reason);
                     ++result.counts["prospective_branch_"+reason];
                     if(active)for(const auto &q:active->Quadrature())
-                    {auto point=p;point[2]=q.r/m_mapping.At(p).scale;
+                    {auto point=p;point[2]=q.r/GeometryScale(p);
                      if(!checkAt("constitutive_prospective_active_normalization_ray",
                          point,K(),false,result.effectiveState))return result;}
                 }
@@ -1210,7 +1210,7 @@ std::vector<RANSWallEvolutionPatch::OuterBound> RANSWallEvolutionPatch::OuterBou
         bounds.push_back({k,1,K(),-1,p.side,p.geometry,false,K0,k.Value(state,offset[K()])/K0,
             1.,.01,.99,1.01,p.inventory});
         const double e0=us*us*us/(m_parameters.model.Kappa()*r);
-        const int side=Same(r,m_mapping.At(p.coordinate).height)?1:0;
+        const int side=Same(r,GeometryHeight(p.coordinate))?1:0;
         const auto epsilon=Point(Epsilon(),p.coordinate,side);
         const double value=p.dependentTrace?p.value:epsilon.Value(state,offset[Epsilon()]);
         bounds.push_back({epsilon,2,Epsilon(),-1,p.side,p.geometry,p.dependentTrace,e0,value/e0,

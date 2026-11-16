@@ -10,6 +10,8 @@
 #include <LibUtilities/LinearAlgebra/Lapack.hpp>
 #include <algorithm>
 #include <cmath>
+#include <cstdlib>
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <iomanip>
@@ -98,6 +100,32 @@ RANSWallCoordinate RANSWallEvolutionPatch::Physical(const RANSWallCoordinate &p)
 double RANSWallEvolutionPatch::Distance(const RANSWallCoordinate &p) const
 {return Mapped()?p[2]*(m_mapping.height+m_mapping.heightSlopeX*p[0]+m_mapping.heightSlopeY*p[1]+
     m_mapping.heightAmplitude*std::sin(m_mapping.heightWaveX*p[0])*std::cos(m_mapping.heightWaveY*p[1]))/m_mapping.height:p[2];}
+bool RANSWallEvolutionPatch::FlatMetricCoordinate(const RANSWallCoordinate &p) const
+{
+    // Finite certified bounds make these comparisons reject NaNs/infinities
+    // too. Unsupported queries keep the complete original At validation.
+    return m_flatMetrics && m_flatMetricReady && p[1]==0 &&
+        p[0]>=lower[0] && p[0]<=upper[0] && p[2]>=lower[2] && p[2]<=upper[2];
+}
+void RANSWallEvolutionPatch::VerifyFlatMetric(const RANSWallCoordinate &p) const
+{
+    static const bool verify=[](){const char *v=std::getenv("NEKTAR_RANS_VERIFY_FLAT_METRIC");return v && std::string(v)=="1";}();
+    if(!verify)return;
+    const auto oracle=m_mapping.At(p);
+    Require(std::memcmp(&oracle.height,&m_flatMetricHeight,sizeof(double))==0 &&
+        std::memcmp(&oracle.scale,&m_flatMetricScale,sizeof(double))==0 &&
+        oracle.kappa1==0 && oracle.kappa2==0,"exact flat metric differs from general map");
+}
+double RANSWallEvolutionPatch::GeometryHeight(const RANSWallCoordinate &p) const
+{
+    if(!FlatMetricCoordinate(p))return m_mapping.At(p).height;
+    ++m_evaluationWork.flatMetricQueries;VerifyFlatMetric(p);return m_flatMetricHeight;
+}
+double RANSWallEvolutionPatch::GeometryScale(const RANSWallCoordinate &p) const
+{
+    if(!FlatMetricCoordinate(p))return m_mapping.At(p).scale;
+    ++m_evaluationWork.flatMetricQueries;VerifyFlatMetric(p);return m_flatMetricScale;
+}
 RANSWallGlobalPoint RANSWallEvolutionPatch::Transform(RANSWallGlobalPoint q) const
 {
     if(!Mapped())return q;
@@ -337,8 +365,14 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(reuse=="Off" || reuse=="ExactStepV1","unknown exact evaluation reuse policy");
     m_evaluationReuse=reuse=="ExactStepV1";
     std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
-    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7","unknown immutable evaluation policy");
-    m_scopedAuditPoints=immutable=="ImmutableTensorV7";
+    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8","unknown immutable evaluation policy");
+    const bool flatMetrics=immutable=="ImmutableTensorV8";
+    Require(!flatMetrics || (m_dimension==2 && m_mapping.kind==RANSWallNormalMap::Kind::Flat &&
+        m_mapping.slopeX==0 && m_mapping.slopeY==0 && m_mapping.heightSlopeX==0 &&
+        m_mapping.heightSlopeY==0 && m_mapping.heightAmplitude==0 && m_mapping.Identity()),
+        "exact flat metric policy requires the validated canonical identity Flat map");
+    m_flatMetrics=flatMetrics;
+    m_scopedAuditPoints=immutable=="ImmutableTensorV7" || m_flatMetrics;
     m_scopedScatter=immutable=="ImmutableTensorV6" || m_scopedAuditPoints;
     m_streamScalarValues=immutable=="ImmutableTensorV5" || m_scopedScatter;
     m_immutableTensor=immutable!="Off";m_sharedTensor=immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || m_streamScalarValues;
@@ -556,6 +590,14 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     }
     Require(!inner.empty() && !outer.empty() && lower[2]==0,"incomplete wall/outer physical domains");
     m_mapping.Validate(lower,upper,.1);
+    if(m_flatMetrics)
+    {
+        Require(std::isfinite(m_mapping.heightWaveX*lower[0]) && std::isfinite(m_mapping.heightWaveX*upper[0]) &&
+            std::isfinite(m_mapping.heightWaveY*lower[1]) && std::isfinite(m_mapping.heightWaveY*upper[1]),
+            "exact flat metric chart has nonfinite height phases");
+        const auto metric=m_mapping.At(lower);m_flatMetricHeight=metric.height;m_flatMetricScale=metric.scale;
+        m_flatMetricReady=true;
+    }
     std::string transition;session->LoadSolverInfo("RANSWallTransition",transition,"Fixed");
     Require(transition=="Fixed" || transition=="Upstream" || transition=="UniformEPFlat","unknown RANSWallTransition");
     m_uniformEP=transition=="UniformEPFlat";
@@ -567,7 +609,7 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
         "curved corrections require the prescribed upstream transition");
     for(const auto &point:std::vector<RANSWallCoordinate>{lower,upper,{lower[0],upper[1],0},{upper[0],lower[1],0}})
     {
-        const double minH=m_mapping.At(point).height-std::abs(m_mapping.heightAmplitude)*2;
+        const double minH=GeometryHeight(point)-std::abs(m_mapping.heightAmplitude)*2;
         Require(parameters.geometry.roughness<minH && (AcceptedAWF() || (parameters.geometry.sampleHeight<=minH && parameters.geometry.tailStart<=minH)),
             "physical h/rK/rm do not fit every mapped ray");
     }
@@ -652,9 +694,9 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
             m_dimension==3?column[2]+(z[j]+1)*(column[3]-column[2])/2:0.,parameters.geometry.sampleHeight};
         ray.weight=w[i]*(column[1]-column[0])/2;
         if(m_dimension==3)ray.weight*=w[j]*(column[3]-column[2])/2;
-        ray.coordinate[2]=AcceptedAWF()?parameters.geometry.height:(ColumnAverageK()?m_parameters.geometry.sampleHeight:parameters.geometry.sampleHeight)/m_mapping.At(ray.coordinate).scale;
+        ray.coordinate[2]=AcceptedAWF()?parameters.geometry.height:(ColumnAverageK()?m_parameters.geometry.sampleHeight:parameters.geometry.sampleHeight)/GeometryScale(ray.coordinate);
         ray.weight*=m_mapping.At(ray.coordinate).baseArea;
-        const double scale=m_mapping.At(ray.coordinate).scale;
+        const double scale=GeometryScale(ray.coordinate);
         for(const auto &element:innerVelocity->Elements())
             if(element.lower[0]==column[0] && element.upper[0]==column[1] &&
                element.lower[1]==column[2] && element.upper[1]==column[3])
@@ -709,6 +751,13 @@ std::shared_ptr<EquilibriumAWFProfiles> RANSWallEvolutionPatch::Profile(double k
     if(AcceptedAWF())weight=1; // cutoff applicability flag; not a chi weight
     else if(weight<0)weight=m_transitionEnabled?0:m_parameters.chi;
     Require(k>0 && std::isfinite(k),"invalid physical sampled K");
+    if(FlatMetricCoordinate(chart) && MatchingEnabled())
+    {
+        if(m_profileCache.size()>4096)m_profileCache.clear();
+        const auto it=m_profileCache.find({chart[0],chart[1],k});const int active=weight>0?1:0;
+        if(it!=m_profileCache.end() && it->second[active])
+        {VerifyFlatMetric(chart);++m_evaluationWork.profileMetricElisions;return EvaluationProfile(it->second[active],weight);}
+    }
     const auto metric=m_mapping.At(chart);auto geometry=m_parameters.geometry;geometry.height=metric.height;
     if(AcceptedAWF())geometry.sampleHeight=geometry.tailStart=geometry.height;
     auto options=m_options;options.requestedWeight=weight;for(double &r:options.physicalBreakpoints)r*=metric.scale;
@@ -740,7 +789,7 @@ void RANSWallEvolutionPatch::Broadcast(Vector &value) const {m_comm->Bcast(value
 RANSWallGlobalPoint RANSWallEvolutionPatch::SampleKRow(const RANSWallCoordinate &point) const
 {
     if(!ColumnAverageK())
-    {auto p=point;p[2]=m_kSampling=="InterfaceTrace"?m_parameters.geometry.height:m_parameters.geometry.sampleHeight/m_mapping.At(point).scale;
+    {auto p=point;p[2]=m_kSampling=="InterfaceTrace"?m_parameters.geometry.height:m_parameters.geometry.sampleHeight/GeometryScale(point);
      return Point(K(),p,Same(p[2],m_parameters.geometry.height)?-1:0);}
     auto anchor=point;anchor[2]=0;
     const auto old=m_kSamplingRows.find(anchor);if(old!=m_kSamplingRows.end())return old->second;
@@ -782,7 +831,7 @@ double RANSWallEvolutionPatch::SampleK(const Vector &s,const RANSWallCoordinate 
     }
     // InterfaceTrace selects the actual native matching face. Its physical
     // distance is the local map H, rather than a fixed interior point height.
-    auto p=point;p[2]=m_kSampling=="InterfaceTrace"?m_parameters.geometry.height:m_parameters.geometry.sampleHeight/m_mapping.At(point).scale;
+    auto p=point;p[2]=m_kSampling=="InterfaceTrace"?m_parameters.geometry.height:m_parameters.geometry.sampleHeight/GeometryScale(point);
     if(m_assertKCoverage)Require(m_coveredKLocations.count(p),"unprotected constitutive k evaluation: sampled K");
     const int side=Same(p[2],m_parameters.geometry.height)?-1:0;
     const double k=m_streamScalarValues?PointValue(K(),fields[K()]->LocateElement(p,side),p,s):Point(K(),p,side).Value(s,offset[K()]);
@@ -843,7 +892,7 @@ void RANSWallEvolutionPatch::Refresh(const Vector &s,double time,const RANSWallE
                     }
                 Require(owner>=0,"wall quadrature panel crosses or lacks a native owner");
             }
-            auto p=ray.coordinate;p[2]=q.r/m_mapping.At(ray.coordinate).scale;
+            auto p=ray.coordinate;p[2]=q.r/GeometryScale(ray.coordinate);
             auto v=GeometryPoint(0,owner,p);
             if(Owner(v.geometry)!=m_comm->GetRank())continue;
             const auto kp=GeometryPoint(K(),owner,p);Require(kp.ids==v.ids,"native owned k/velocity maps differ");
@@ -1867,7 +1916,8 @@ std::string RANSWallEvolutionPatch::Signature() const
     if(DisplacedAccepted())text<<":wall_sink=SamePhysicalWallDisplacedAcceptedV1:d="<<m_options.aerodynamicDisplacement;
     if(SerialSparse())text<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")text<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
-    if(m_scopedAuditPoints)text<<":execution=CT16-ScopedAuditPointsV1";
+    if(m_flatMetrics)text<<":execution=CT16-ExactFlatMetricV1";
+    else if(m_scopedAuditPoints)text<<":execution=CT16-ScopedAuditPointsV1";
     else if(m_scopedScatter)text<<":execution=CT16-ScopedScatterV1";
     else if(m_streamScalarValues)text<<":execution=CT16-StreamScalarV1";
     else if(m_immutableTensor)text<<":execution=CT15-ImmutableTensorV"<<(m_scopedConstitutivePoints?4:m_hashAssembly?3:m_sharedTensor?2:1);

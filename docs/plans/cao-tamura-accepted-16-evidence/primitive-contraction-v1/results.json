@@ -1,0 +1,133 @@
+{
+  "schema": "CT16ActualRowContractionPrototypeV1",
+  "status": "pass",
+  "build": {
+    "command": [
+      "c++",
+      "-std=c++17",
+      "-O3",
+      "-DNDEBUG",
+      "-shared",
+      "-fPIC",
+      "-I/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/CT16PointContractionBench.cpp",
+      "-o",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/primitive-contraction-v1/contraction.so"
+    ],
+    "CPU": 0.5456529999999999,
+    "wall": 0.6183205169509165,
+    "compiler": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0\nCopyright (C) 2021 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "binary_sha256": "3f85ff74940cc89c4d6b7299ef95e337cda626c3ea5a6b131cb5627718ebaea5"
+  },
+  "rows": 37914,
+  "coefficients": 816778,
+  "states": [
+    {
+      "index": 0,
+      "binary64_equal": true,
+      "maximum_difference": 0.0,
+      "timing": {
+        "0": [
+          {
+            "CPU": 0.1139952270000002,
+            "wall": 0.11370336299296468
+          },
+          {
+            "CPU": 0.11299376600000066,
+            "wall": 0.11254041001666337
+          },
+          {
+            "CPU": 0.11170198599999992,
+            "wall": 0.11197258398169652
+          }
+        ],
+        "1": [
+          {
+            "CPU": 0.10999551399999952,
+            "wall": 0.11039653199259192
+          },
+          {
+            "CPU": 0.11199556600000093,
+            "wall": 0.11222919600550085
+          },
+          {
+            "CPU": 0.1089942939999986,
+            "wall": 0.10877486696699634
+          }
+        ]
+      }
+    },
+    {
+      "index": 1,
+      "binary64_equal": true,
+      "maximum_difference": 0.0,
+      "timing": {
+        "0": [
+          {
+            "CPU": 0.1129958259999988,
+            "wall": 0.11318913899594918
+          },
+          {
+            "CPU": 0.12499421100000063,
+            "wall": 0.12511310703121126
+          },
+          {
+            "CPU": 0.12999331299999994,
+            "wall": 0.12925026699667796
+          }
+        ],
+        "1": [
+          {
+            "CPU": 0.11499343700000075,
+            "wall": 0.11505085497628897
+          },
+          {
+            "CPU": 0.11299574599999929,
+            "wall": 0.11316452798200771
+          },
+          {
+            "CPU": 0.12199428999999995,
+            "wall": 0.12198571400949731
+          }
+        ]
+      }
+    },
+    {
+      "index": 2,
+      "binary64_equal": true,
+      "maximum_difference": 0.0,
+      "timing": {
+        "0": [
+          {
+            "CPU": 0.11271225499999993,
+            "wall": 0.11286051396746188
+          },
+          {
+            "CPU": 0.12899452300000114,
+            "wall": 0.1293695829808712
+          },
+          {
+            "CPU": 0.11799579799999904,
+            "wall": 0.11790966597618535
+          }
+        ],
+        "1": [
+          {
+            "CPU": 0.1229947599999992,
+            "wall": 0.12352771504083648
+          },
+          {
+            "CPU": 0.11599474700000023,
+            "wall": 0.11573826696258038
+          },
+          {
+            "CPU": 0.12399352999999991,
+            "wall": 0.123782955983188
+          }
+        ]
+      }
+    }
+  ],
+  "physical_advance": false,
+  "interpretation": "Read-only prototype exactness and sampled primitive timings only. No new governing runtime,accepted state,full action/history qualification or production admission."
+}

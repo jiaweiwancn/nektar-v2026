@@ -1,0 +1,59 @@
+{
+  "schema": "CT16ExactFlatMetricPrototypeV1",
+  "status": "pass",
+  "coordinates": 28288,
+  "repetitions": 32,
+  "timed_pairs": 3,
+  "build": {
+    "command": [
+      "c++",
+      "-std=c++17",
+      "-O3",
+      "-DNDEBUG",
+      "-shared",
+      "-fPIC",
+      "-I/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/library",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/CT16FlatMetricBench.cpp",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/library/SolverUtils/Turbulence/RANSWallNormalMap.cpp",
+      "-o",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/primitive-flat_metric-v1/flat-metric.so"
+    ],
+    "CPU": 1.143005,
+    "wall": 1.2744229060481302,
+    "binary_sha256": "4b40aff534c5dfa2141d7ee95d5081a009245cff34e358bd1c51eefe3e6c5295"
+  },
+  "binary64_equal": true,
+  "maximum_difference": 0.0,
+  "timing": {
+    "0": [
+      {
+        "CPU": 0.4308154939999991,
+        "wall": 0.43093412200687453
+      },
+      {
+        "CPU": 0.429980424,
+        "wall": 0.4304475900135003
+      },
+      {
+        "CPU": 0.4309800060000004,
+        "wall": 0.43093277100706473
+      }
+    ],
+    "1": [
+      {
+        "CPU": 0.0020008010000012177,
+        "wall": 0.002436381997540593
+      },
+      {
+        "CPU": 0.002999551999998573,
+        "wall": 0.0024400120018981397
+      },
+      {
+        "CPU": 0.0030007209999993734,
+        "wall": 0.002443891018629074
+      }
+    ]
+  },
+  "physical_advance": false,
+  "interpretation": "Exact sampled immutable geometry values and primitive timing only. Governing opt-in implementation,invalid-input/current-point controls and matched native timing are still required. Actual coordinates are never rounded or substituted."
+}

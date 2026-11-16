@@ -5,6 +5,7 @@
 #include <cstring>
 #include <cmath>
 #include <list>
+#include <set>
 #include <tuple>
 #include <unordered_map>
 
@@ -330,10 +331,20 @@ void RANSWallEvolutionPatch::StoreConstraints(const Vector &s,double time,const 
 std::string RANSWallEvolutionPatch::EvaluationReuseJSON() const
 {
     const auto &w=m_evaluationWork;std::size_t fixedRows=0,surfaceRows=0;
+    std::array<std::uint64_t,6> basis{};std::set<const RANSWallGlobalField*> seen;
+    for(const auto &field:fields)if(field && seen.insert(field.get()).second)
+    {
+        const auto work=field->BasisWork();
+        for(int i=0;i<6;++i)if(i==3)basis[i]=std::max(basis[i],work[i]);else basis[i]+=work[i];
+    }
     for(const auto &[key,rows]:m_reconstructionCatalog){(void)key;fixedRows+=rows.size();}
     for(const auto &[key,rows]:m_surfaceCatalog){(void)key;surfaceRows+=rows.size();}
     return J::Object({{"mode",J::Quote(m_evaluationReuse?"ExactStepV1":"Off")},
         {"scopes",J::Number(w.scopes)},{"domain_calls",J::Number(w.domainCalls)},
+        {"basis_hits",J::Number(basis[0])},{"basis_computes",J::Number(basis[1])},
+        {"basis_evictions",J::Number(basis[2])},{"peak_single_basis_entries",J::Number(basis[3])},
+        {"live_basis_entries",J::Number(basis[4])},{"basis_caches",J::Number(basis[5])},
+        {"maximum_entries_per_basis_cache",J::Number(8192)},
         {"domain_computes",J::Number(w.domainComputes)},{"domain_hits",J::Number(w.domainHits)},
         {"prefix_hits",J::Number(w.prefixHits)},{"row_constructs",J::Number(w.rowConstructs)},{"row_hits",J::Number(w.rowHits)},
         {"row_evictions",J::Number(w.rowEvictions)},{"reconstruction_builds",J::Number(w.reconstructionBuilds)},
@@ -347,8 +358,9 @@ std::string RANSWallEvolutionPatch::EvaluationReuseJSON() const
         {"fixed_reconstruction_rows",J::Number(fixedRows)},{"fixed_surface_rows",J::Number(surfaceRows)},
         {"row_counter_scope",J::Quote("scoped point/derivative requests; fixed reconstruction and surface catalogs counted separately")},
         {"peak_states",J::Number(w.peakStates)},{"peak_rows",J::Number(w.peakRows)},{"peak_profiles",J::Number(w.peakProfiles)},
-        {"immutable_policy",J::Quote(m_scopedAuditPoints?"ImmutableTensorV7":m_scopedScatter?"ImmutableTensorV6":m_streamScalarValues?"ImmutableTensorV5":m_immutableTensor?(m_scopedConstitutivePoints?"ImmutableTensorV4":m_hashAssembly?"ImmutableTensorV3":m_sharedTensor?"ImmutableTensorV2":"ImmutableTensorV1"):"Off")},
+        {"immutable_policy",J::Quote(m_flatMetrics?"ImmutableTensorV8":m_scopedAuditPoints?"ImmutableTensorV7":m_scopedScatter?"ImmutableTensorV6":m_streamScalarValues?"ImmutableTensorV5":m_immutableTensor?(m_scopedConstitutivePoints?"ImmutableTensorV4":m_hashAssembly?"ImmutableTensorV3":m_sharedTensor?"ImmutableTensorV2":"ImmutableTensorV1"):"Off")},
         {"scoped_matrix_scatter",m_scopedScatter?"true":"false"},
+        {"flat_metric_queries",J::Number(w.flatMetricQueries)},{"profile_metric_elisions",J::Number(w.profileMetricElisions)},
         {"audit_point_scopes",J::Number(w.auditPointScopes)},{"audit_point_computes",J::Number(w.auditPointComputes)},
         {"audit_point_hits",J::Number(w.auditPointHits)},{"audit_point_evictions",J::Number(w.auditPointEvictions)},
         {"peak_audit_points",J::Number(w.peakAuditPoints)},

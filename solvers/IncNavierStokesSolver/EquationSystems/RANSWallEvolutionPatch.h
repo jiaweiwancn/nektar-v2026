@@ -122,7 +122,7 @@ public:
     const RANSWallPatchParameters &Parameters() const { return m_parameters; }
     const LibUtilities::CommSharedPtr &Comm() const { return m_comm; }
     const SolverUtils::RANSWallNormalMap &Mapping() const { return m_mapping; }
-    bool Mapped() const { return !m_mapping.Identity(); }
+    bool Mapped() const { return m_flatMetrics?false:!m_mapping.Identity(); }
     int Owner(int geometry) const { return (geometry+m_ownershipShift)%m_comm->GetSize(); }
     RANSWallCoordinate Physical(const RANSWallCoordinate &chart) const;
     RANSWallGlobalPoint Point(int block,const RANSWallCoordinate &chart,int side=0) const;
@@ -582,6 +582,12 @@ private:
     bool m_streamScalarValues=false;
     bool m_scopedScatter=false;
     bool m_scopedAuditPoints=false;
+    bool m_flatMetrics=false,m_flatMetricReady=false;
+    double m_flatMetricHeight=0,m_flatMetricScale=0;
+    bool FlatMetricCoordinate(const RANSWallCoordinate &) const;
+    double GeometryHeight(const RANSWallCoordinate &) const;
+    double GeometryScale(const RANSWallCoordinate &) const;
+    void VerifyFlatMetric(const RANSWallCoordinate &) const;
     int m_constitutiveMaximumPoints=262144;
     int m_immutableMaximumRows=65536;
     struct ImmutableRows;
@@ -599,7 +605,8 @@ private:
             stateEvictions=0,inputInvalidations=0,profileReuses=0,scalarFieldReuses=0,peakStates=0,peakRows=0,peakProfiles=0,
             constitutivePointScopes=0,constitutivePointComputes=0,constitutivePointHits=0,
             constitutivePointEvictions=0,peakConstitutivePoints=0,streamScalarValues=0,
-            auditPointScopes=0,auditPointComputes=0,auditPointHits=0,auditPointEvictions=0,peakAuditPoints=0;
+            auditPointScopes=0,auditPointComputes=0,auditPointHits=0,auditPointEvictions=0,peakAuditPoints=0,
+            flatMetricQueries=0,profileMetricElisions=0;
     };
     mutable EvaluationWork m_evaluationWork;
     void PrepareEvaluation(const RANSWallEvolutionData &,double) const;
