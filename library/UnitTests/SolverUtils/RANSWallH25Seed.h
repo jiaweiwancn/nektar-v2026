@@ -18,7 +18,7 @@ std::string H25Seed(RANSWallEvolutionPatch &patch,const LibUtilities::SessionRea
 {
     Require(patch.Size()==24688 && patch.MappedBlock() && patch.InitialVelocityMode()=="FlatInletTraceV1",
         "H25 seed requires the unchanged full700-cell compatible control");
-    double dt;serial->LoadParameter("TimeStep",dt);const double sourceDt=packet.get<double>("source_dt");
+    double dt;serial->LoadParameter("TimeStep",dt);double sourceDt=packet.get<double>("source_dt");
     Require(dt>0 && sourceDt==.0025,"H25 seed source is the immutable original fine CP0");
     serial->SetParameter("TimeStep",sourceDt);OpenImportedState imported;
     try{imported=ImportOpenState(patch,serial,us,packet,data);}catch(...){serial->SetParameter("TimeStep",dt);throw;}

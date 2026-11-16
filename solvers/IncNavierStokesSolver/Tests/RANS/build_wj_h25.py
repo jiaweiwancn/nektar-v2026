@@ -16,7 +16,7 @@ def build(root,variant='profile'):
         source=root/'source-v5';output=root/'build-lookup-v1';previous=root/'build-profile-v2';previous_source=root/'source-v4';tag='lookup';manifest='source-manifest-v5.json'
     else:
         assert variant=='scalar'
-        source=root/'source-v6';output=root/'build-scalar-v1';previous=root/'build-lookup-v1';previous_source=root/'source-v5';tag='scalar';manifest='source-manifest-v6.json'
+        source=root/'source-v7';output=root/'build-scalar-v2';previous=root/'build-scalar-v1';previous_source=root/'source-v6';tag='scalar';manifest='source-manifest-v7.json'
     started=time.monotonic()
     cmake=(source/'solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt').read_text()
     for relative in re.findall(r'\$\{RANS_SOURCE_ROOT\}/([A-Za-z0-9_./-]+\.(?:cpp|h))',cmake):
