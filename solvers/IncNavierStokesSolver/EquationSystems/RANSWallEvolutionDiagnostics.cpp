@@ -11,6 +11,8 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <algorithm>
 #include <cmath>
+#include <cstdlib>
+#include <cstring>
 #include <limits>
 
 namespace Nektar
@@ -310,13 +312,37 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
     face[2]=std::sqrt(face[2]/face[0]);face[3]=std::sqrt(face[3]/face[0]);face[5]=std::sqrt(face[5]/face[0]);result["interface"]=face;
     const auto raw=Residual(s,history,alpha,time,data,false,false);
     const auto constraints=Constraints(s,time,data);
-    result["coupled_norms"]=Norms(Residual(s,history,alpha,time,data),constraints,ustar);
+    // This caller-owned residual has precisely the same actual state, history,
+    // alpha, time and data as the three immediate diagnostic consumers. No
+    // validity/result survives this Audit, and all volume physics was freshly
+    // evaluated above. Other policies and anchored/non-single-sweep cases keep
+    // their original independent calls.
+    const bool scopedResidual=m_scopedAuditResidual && PimpleSingleSweep() &&
+        OpenBoundary() && m_eta==0;
+    const bool verifyResidual=scopedResidual &&
+        std::getenv("NEKTAR_RANS_VERIFY_SCOPED_AUDIT_RESIDUAL");
+    const auto exact=[](const Vector &a,const Vector &b)
+    {
+        Require(a.size()==b.size() && (a.empty() ||
+            std::memcmp(a.data(),b.data(),a.size()*sizeof(double))==0),
+            "scoped audit residual differs from its original current-state call");
+    };
+    Vector imposed;
+    if(scopedResidual)
+    {
+        imposed=raw;for(auto [row,value]:constraints)imposed[row]=s[row]-value;
+        Maximum(imposed);
+        if(verifyResidual)exact(imposed,Residual(s,history,alpha,time,data));
+    }
+    result["coupled_norms"]=Norms(scopedResidual?imposed:
+        Residual(s,history,alpha,time,data),constraints,ustar);
     if(NewModels())
     {
         // Partition the actual common-CG equations by basis support. A shared
         // interface row is counted once; it is not a pointwise flux jump or
         // an extra two-sided equation. No reference residual is subtracted.
-        const auto physical=Residual(s,history,alpha,time,data,false);
+        const auto physical=scopedResidual?imposed:Residual(s,history,alpha,time,data,false);
+        if(verifyResidual)exact(physical,Residual(s,history,alpha,time,data,false));
         std::set<int> innerIds,outerIds;
         for(const auto &q:Quadrature(K()))
         {
@@ -451,7 +477,20 @@ RANSWallEvolutionPatch::Diagnostic RANSWallEvolutionPatch::Audit(const Vector &s
     // Mean weak stress work equals production, and the k residual carries
     // minus production. Their sum in total stored energy is zero.
     modification[2]=modification[0]-modification[1];result["constitutive_modification"]=modification;
-    auto energy=EnergyBudget(s,history,alpha,time,data);double reaction=0;
+    Vector energy;
+    if(scopedResidual)
+    {
+        // Preserve the original energy-state lift followed by Refresh side
+        // effect of its raw residual. Only the repeated identical volume load
+        // is omitted; the direct energy integrations below are unchanged.
+        const auto energyState=(GroundSafeguard() || PimpleSingleSweep())?
+            ExternalLift(s,time,data):Lift(s,time,data);
+        Refresh(MatchingEnabled()?ExternalLift(s,time,data):s,time,&data);
+        energy=EnergyBudgetFromRaw(energyState,history,alpha,time,data,raw);
+        if(verifyResidual)exact(energy,EnergyBudget(s,history,alpha,time,data));
+    }
+    else energy=EnergyBudget(s,history,alpha,time,data);
+    double reaction=0;
     for(int b=0;b<=K();++b)for(int i=0;i<size[b];++i)if(constraints.count(offset[b]+i))
         reaction+=(b==K()?m_constants[b][i]:s[offset[b]+i])*raw[offset[b]+i];
     energy.push_back(reaction);energy.push_back(AnchorEnergyWork(s));energy.push_back(energy[0]-reaction-energy[10]);
@@ -510,7 +549,8 @@ std::string RANSWallEvolutionPatch::PreservationIdentity(bool legacyOperator) co
     if(!legacyOperator)out<<":numerical_operator="<<RANSWallNumericalOperatorIdentity();
     if(SerialSparse())out<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")out<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
-    if(m_streamGradients)out<<":execution=CT16-StreamGradientV1";
+    if(m_scopedAuditResidual)out<<":execution=CT16-ScopedAuditResidualV1";
+    else if(m_streamGradients)out<<":execution=CT16-StreamGradientV1";
     else if(m_rowLRU)out<<":execution=CT16-ImmutableRowLRUV1";
     else if(m_flatMetrics)out<<":execution=CT16-ExactFlatMetricV1";
     else if(m_scopedAuditPoints)out<<":execution=CT16-ScopedAuditPointsV1";
@@ -999,6 +1039,7 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
     const bool flatMetrics=m_flatMetrics;Restore restoreFlatMetrics{m_flatMetrics,flatMetrics};
     const bool rowLRU=m_rowLRU;Restore restoreRowLRU{m_rowLRU,rowLRU};
     const bool streamGradients=m_streamGradients;Restore restoreStreamGradients{m_streamGradients,streamGradients};
+    const bool auditResidual=m_scopedAuditResidual;Restore restoreAuditResidual{m_scopedAuditResidual,auditResidual};
     const auto drive=[&](bool enabled)
     {
         if(immutable){m_immutableTensor=enabled;m_evaluationReuse=false;}
@@ -1006,7 +1047,7 @@ std::string RANSWallEvolutionPatch::EvaluationReuseChecks(const Vector &state,co
         m_scopedConstitutivePoints=scopedPoints && enabled;
         m_streamScalarValues=stream && enabled;m_scopedScatter=scatter && enabled;
         m_scopedAuditPoints=auditPoints && enabled;m_flatMetrics=flatMetrics && enabled;m_rowLRU=rowLRU && enabled;
-        m_streamGradients=streamGradients && enabled;
+        m_streamGradients=streamGradients && enabled;m_scopedAuditResidual=auditResidual && enabled;
         RANSWallEvolutionData input=data;
         EvaluationScope scope(*this,input,time);std::vector<std::string> values;
         const auto domain=[&](const Vector &s,double t,bool retain,bool only,const std::vector<RANSWallCoordinate> &anchors=std::vector<RANSWallCoordinate>{})

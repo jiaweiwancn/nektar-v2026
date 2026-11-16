@@ -434,6 +434,8 @@ public:
     { bool admissible=false;return WallTraceJSON(state,admissible); }
     const std::string &ConstitutiveFailureContext() const { return m_solveInvalidContext; }
 private:
+    Vector EnergyBudgetFromRaw(const Vector &liftedState,const Vector &history,double alpha,double time,
+        const RANSWallEvolutionData &data,const Vector &actualRaw) const;
     int m_massOrder=0,m_volumeOrder=0,m_interfaceOrder=0;
     class Factor
     {
@@ -589,6 +591,7 @@ private:
     bool m_flatMetrics=false,m_flatMetricReady=false;
     bool m_rowLRU=false;
     bool m_streamGradients=false;
+    bool m_scopedAuditResidual=false;
     double m_flatMetricHeight=0,m_flatMetricScale=0;
     bool FlatMetricCoordinate(const RANSWallCoordinate &) const;
     double GeometryHeight(const RANSWallCoordinate &) const;

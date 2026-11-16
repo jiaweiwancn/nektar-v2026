@@ -365,8 +365,9 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     Require(reuse=="Off" || reuse=="ExactStepV1","unknown exact evaluation reuse policy");
     m_evaluationReuse=reuse=="ExactStepV1";
     std::string immutable;session->LoadSolverInfo("RANSWallImmutableEvaluation",immutable,"Off");
-    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10","unknown immutable evaluation policy");
-    m_streamGradients=immutable=="ImmutableTensorV10";
+    Require(immutable=="Off" || immutable=="ImmutableTensorV1" || immutable=="ImmutableTensorV2" || immutable=="ImmutableTensorV3" || immutable=="ImmutableTensorV4" || immutable=="ImmutableTensorV5" || immutable=="ImmutableTensorV6" || immutable=="ImmutableTensorV7" || immutable=="ImmutableTensorV8" || immutable=="ImmutableTensorV9" || immutable=="ImmutableTensorV10" || immutable=="ImmutableTensorV11","unknown immutable evaluation policy");
+    m_scopedAuditResidual=immutable=="ImmutableTensorV11";
+    m_streamGradients=immutable=="ImmutableTensorV10" || m_scopedAuditResidual;
     m_rowLRU=immutable=="ImmutableTensorV9" || m_streamGradients;
     const bool flatMetrics=immutable=="ImmutableTensorV8" || m_rowLRU;
     Require(!flatMetrics || (m_dimension==2 && m_mapping.kind==RANSWallNormalMap::Kind::Flat &&
@@ -1848,9 +1849,17 @@ RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::RoughnessBudget(const Vec
 }
 RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::EnergyBudget(const Vector &state,const Vector &history,double alpha,double time,const RANSWallEvolutionData &data) const
 {
-    // R4 reports direct and weak work on the same retained epsilon-H state.
     const auto s=(GroundSafeguard() || PimpleSingleSweep())?ExternalLift(state,time,data):Lift(state,time,data);
-    const auto raw=Residual(state,history,alpha,time,data,false,false);Vector result(9);
+    const auto raw=Residual(state,history,alpha,time,data,false,false);
+    return EnergyBudgetFromRaw(s,history,alpha,time,data,raw);
+}
+RANSWallEvolutionPatch::Vector RANSWallEvolutionPatch::EnergyBudgetFromRaw(const Vector &s,const Vector &history,double alpha,double time,
+    const RANSWallEvolutionData &data,const Vector &raw) const
+{
+    // R4 reports direct and weak work on the same retained epsilon-H state.
+    // actualRaw belongs to this caller and this exact state/history/alpha/time/data.
+    Require(raw.size()==static_cast<std::size_t>(Size()),"invalid actual energy residual");
+    Vector result(9);
     for(int a=0;a<m_dimension;++a)for(int i=0;i<size[a];++i)result[0]+=s[offset[a]+i]*raw[offset[a]+i];
     for(int i=0;i<size[K()];++i)result[0]+=m_constants[K()][i]*raw[offset[K()]+i];
     auto integrate=[&](const VolumePoint &q,bool inner,const EquilibriumAWFProfiles *profile,const RANSVector &force,
@@ -1918,7 +1927,8 @@ std::string RANSWallEvolutionPatch::Signature() const
     if(DisplacedAccepted())text<<":wall_sink=SamePhysicalWallDisplacedAcceptedV1:d="<<m_options.aerodynamicDisplacement;
     if(SerialSparse())text<<":linear_backend=AcceptedSerialSparseV1:CSR1:EigenLU-LDLT-IR3-F40M:FGMRES80x1000:relative2e-12:absolute1e-25:consistent-free-M:lumped-pressure-preconditioner-only";
     if(m_predictorOrdering!="COLAMD")text<<":component=CT14-VectorCOLAMDV1:predictor_order="<<m_predictorOrdering;
-    if(m_streamGradients)text<<":execution=CT16-StreamGradientV1";
+    if(m_scopedAuditResidual)text<<":execution=CT16-ScopedAuditResidualV1";
+    else if(m_streamGradients)text<<":execution=CT16-StreamGradientV1";
     else if(m_rowLRU)text<<":execution=CT16-ImmutableRowLRUV1";
     else if(m_flatMetrics)text<<":execution=CT16-ExactFlatMetricV1";
     else if(m_scopedAuditPoints)text<<":execution=CT16-ScopedAuditPointsV1";

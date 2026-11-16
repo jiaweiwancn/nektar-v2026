@@ -1,0 +1,14 @@
+{
+  "schema": "CT16MeasuredRemedyV1",
+  "execution_policy": "ImmutableTensorV11",
+  "component": "CT16-ScopedAuditResidualV1",
+  "basis": "V9 broad diagnostics assign19.343707CPU to repeated residual evaluation. Audit constructs the identical current raw load for coupled norms,physical partition norms and energy reaction work. This is a source-supported within-call redundancy,not permission for cross-state residual reuse.",
+  "changes": [
+    "Under the explicit new policy and only unanchored(m_eta==0),open-boundary PimpleSingleSweep,one freshly computed caller-owned actual raw residual serves immediate Audit consumers with the exact same state/history/alpha/time/data. Derive imposed rows with the identical state[row]-constraint operation and retain Maximum validation. Other policies/cases call the original route.",
+    "Energy integration is factored into a private helper taking the original lifted energy state and actual raw residual. The public route preserves its original lift-before-residual order. New Audit use restores the original Refresh side effect and performs all direct physical energy integrations unchanged. No cache survives Audit; no state-dependent constitutive validity or coefficient is reused across independent calls.",
+    "Inherit V10 exact current gradients and all preceding bounded policies; new NativeSignature and PreservationIdentity prevent cross-component histories."
+  ],
+  "qualification": "Small controls enable NEKTAR_RANS_VERIFY_SCOPED_AUDIT_RESIDUAL=1. Every derived coupled/physical vector and direct energy result must be binary64 identical including signed zero to fresh original calls at that current state/time/history/data. Keep gradient,scalar,flat-map,LRU verifiers,all44dependency queries,4operators,Offupdates,restart/rollback/tinycapacity and V11-toV10history negative. Then timing-off selected0/1/2 and broad diagnosis; all vectors compare to CT14. Remaining G1-G6 unchanged.",
+  "allocation": "Same CT16 original start1794835825,24kCPU/28.8kwall/16GiB new live,16GiB processAS,onefamily/rank,6librarythreads1,compilerjobs2,project16/aggregate72; retain failed/insufficient attempts and publication reserve. No T>.002 or production ceiling change.",
+  "interpretation": "Exact within-call common-subexpression hypothesis,not a resource-admission promise or new physical qualification."
+}
