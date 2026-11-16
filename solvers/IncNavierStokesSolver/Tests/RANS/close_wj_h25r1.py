@@ -6,6 +6,7 @@ from pathlib import Path
 from run_wj_h4 import load,save
 from run_wj_h25 import usage
 from wj_h15_observer import identity,verify
+from run_wj_h15 import size
 
 
 def pins(value):
@@ -31,6 +32,7 @@ def validate(root):
         sources.append(base/'science'/d/'qualification.json')
     sources += [base/'science/C-sparse-restart-v1/strict/qualification.json']
     sources += [base/'science/C-sparse-restart-v1/strict-after-rotation/qualification.json']
+    sources += [base/'science'/n for n in ('cadence-comparison-v1.json','native-independent-replays-v1.json','complete-cost-v1.json')]
     for source in sources:
         for pin in [identity(source),*pins(load(source))]:
             p=pin['path']
@@ -51,6 +53,9 @@ def validate(root):
     out=base/'final-validation.json';assert not out.exists()
     save(out,dict(status='PASS_RETAINED_IDENTITIES',records=list(records.values()),
         selected_runtime=selected['runtime'],expected_rotated_recoveries=sorted(removed),
+        storage=dict(science_bytes=size(base/'science'),operations_bytes=size(base/'operations'),
+            source_build_runtime_bytes=sum(size(p)for p in base.iterdir()if p.is_dir()and p.name.startswith(('source','build','runtime'))),
+            namespace_bytes=size(base),free_ext4_bytes=os.statvfs(base).f_bavail*os.statvfs(base).f_frsize),
         scope='current bytes of source/runtime/library/input/selected trajectory and strict-read pins; numerical qualification remains exactly its recorded scope'))
     print('verified identities',len(records),'expected rotated payloads',len(removed),flush=True)
 
