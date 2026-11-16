@@ -1,0 +1,64 @@
+{
+  "schema": "CT15ClosedPublicationAccountingV1",
+  "status": "closed_receipts_with_explicit_publication_reserves",
+  "snapshot_sha256": "09807e1c08c59c61b153e06883ed3bc001bb39c106be78b47135044f381d2eb9",
+  "source_at_snapshot": "5950be7e17709ce1a26895aeda806c7dc701064a",
+  "external_root": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116",
+  "closed_family_count": 33,
+  "closed_family_CPU_before_exception": 21270.354156747006,
+  "exception_reserves": {
+    "CPU_seconds": 120,
+    "scope": "Conservative additional CT15 engineering charge for build-v4 child after monitor scandir race; build completed, no orphan remains; no numerical acceptance inferred from failed guard"
+  },
+  "closed_CPU_including_exception": 21390.354156747006,
+  "publication_reserve": {
+    "CPU": 240,
+    "wall": 480.0,
+    "bytes": 268435456
+  },
+  "CPU_upper_with_reserve": 21630.354156747006,
+  "elapsed_wall_at_snapshot": 28101.814564466476,
+  "wall_upper_with_reserve": 28581.814564466476,
+  "logical_live_bytes_at_snapshot": 10960403736,
+  "peak_observed_live_bytes": 10960403736,
+  "new_live_upper_with_publication_reserve": 11228839192,
+  "sampled_cumulative_process_wchar_lower_bound": 23961386528,
+  "write_accounting": "observed per-family process wchar highwaters, including pipes; may miss short-lived processes and the unadmitted queue helpers; not exact physical disk writes",
+  "failed_worker_audits": {
+    "resources-equivalence-v1": {
+      "maximum_aggregate": 120,
+      "maximum_project": 5,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "fail",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    },
+    "resources-pair-v1": {
+      "maximum_aggregate": 101,
+      "maximum_project": 12,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "fail",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    },
+    "resources-training-v2": {
+      "maximum_aggregate": 141,
+      "maximum_project": 12,
+      "aggregate_limit": 72,
+      "project_limit": 16,
+      "aggregate_status": "fail",
+      "project_status": "pass",
+      "control_helpers_counted": 2
+    }
+  },
+  "unclosed_resources": [],
+  "reserve_scope": "fixed existing source/inspection/transport/publication allowance, including metadata exporters and Mac compaction; no second reserve added for those helpers",
+  "scope": "all closed CT15 Linux families plus the documented exception and administrative reserves; historical and prospective campaign costs excluded",
+  "finite_CPU_wall_disk_checks": {
+    "CPU": true,
+    "wall": true,
+    "live_bytes": true
+  }
+}

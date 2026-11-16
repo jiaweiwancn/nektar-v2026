@@ -17,7 +17,10 @@ def require(test,message):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for key in ('snapshot','forecast','pair','output'):p.add_argument('--'+key,type=Path,required=True)
-    p.add_argument('--equivalence',type=Path);a=p.parse_args()
+    p.add_argument('--equivalence',type=Path)
+    p.add_argument('--publication-wall-reserve',type=float,default=240,
+        help='Remaining publication allowance inside the original600-second reserve; never extends the hard allocation')
+    a=p.parse_args();require(0<a.publication_wall_reserve<=600,'invalid publication reserve')
     seal=read(a.snapshot.parent/'seal.json');require(seal['files']['snapshot.json']==digest(a.snapshot),'metadata snapshot changed')
     s=read(a.snapshot);f=read(a.forecast);pair=read(a.pair);art=s['artifacts']
     require(not s['source_working_tree'],'dirty private controller checkout')
@@ -40,7 +43,7 @@ def main():
         watch=s['watches'].get(folder+'/package-budget-watch.json') or s['watches'].get(folder+'/live-budget.json') or {}
         sample=watch.get('last_sample',{});peak=max(peak,sample.get('peak_sampled_live_bytes',0));writes+=sample.get('sampled_cumulative_process_wchar',0)
     failed={k:v['resource'] for k,v in resources.items() if v['resource']['aggregate_status']!='pass' or v['resource']['project_status']!='pass'}
-    reserve=dict(CPU=240,wall=240,bytes=256*1024**2)
+    reserve=dict(CPU=240,wall=a.publication_wall_reserve,bytes=256*1024**2)
     accounting=dict(schema='CT15ClosedPublicationAccountingV1',status='closed_receipts_with_explicit_publication_reserves',
         snapshot_sha256=digest(a.snapshot),source_at_snapshot=s['source_revision'],external_root=s['external_root'],
         closed_family_count=len(resources),closed_family_CPU_before_exception=sum(r['process_cpu_seconds'] for r in resources.values()),
@@ -56,6 +59,7 @@ def main():
     decision=dict(schema='CT15UnresolvedClosureV1',status='UNRESOLVED',resource_admission_goal='NOT_ACHIEVED',gates=gates,
         gate_scope=dict(G1='small/static/changed-alpha controls passed; full trajectory comparison is required',G3='startup/step and partial workflow costs measured; unchanged heldout6-to8 not executed',G4='selected multi-cycle retirement/recovery remains unattempted',G5='no complete validated forecast; native-only extrapolation and measured probe AS with headroom exceed ceilings',G6='closed hash-bound metadata ready; final source/publication push and remote containment still required'),
         physical_T0_407='UNATTEMPTED',full_transit='UNQUALIFIED',snapshot_sha256=digest(a.snapshot),forecast_sha256=digest(a.forecast),pair_compact_sha256=digest(a.pair),
+        publisher_source_sha256=digest(Path(__file__)),
         historical_ledger=s['historical_ledger'],engineering_ledger=accounting,future_ledger=f,
         actual_equivalence=equivalence,source_and_runtime=pair['request']['request'],
         reproduction_scope='authoritative Linux numerical receipts; read-only Linux metadata export; hash checks and compaction on Mac. No new solve, physical classifier or operator validation is run by this publisher.')

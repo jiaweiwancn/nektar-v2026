@@ -1,0 +1,1731 @@
+{
+  "schema": "CT15UnresolvedClosureV1",
+  "status": "UNRESOLVED",
+  "resource_admission_goal": "NOT_ACHIEVED",
+  "gates": {
+    "G1": "PASS",
+    "G2": "PASS",
+    "G3": "UNATTEMPTED",
+    "G4": "UNATTEMPTED",
+    "G5": "FAIL",
+    "G6": "PREPARED_FOR_FINAL_PUSH"
+  },
+  "gate_scope": {
+    "G1": "small/static/changed-alpha controls passed; full trajectory comparison is required",
+    "G3": "startup/step and partial workflow costs measured; unchanged heldout6-to8 not executed",
+    "G4": "selected multi-cycle retirement/recovery remains unattempted",
+    "G5": "no complete validated forecast; native-only extrapolation and measured probe AS with headroom exceed ceilings",
+    "G6": "closed hash-bound metadata ready; final source/publication push and remote containment still required"
+  },
+  "physical_T0_407": "UNATTEMPTED",
+  "full_transit": "UNQUALIFIED",
+  "snapshot_sha256": "09807e1c08c59c61b153e06883ed3bc001bb39c106be78b47135044f381d2eb9",
+  "forecast_sha256": "8f84cf8bdce5bc1966cf4b95860f23bf5771981ca6a3cb7eb27c40bd4f891eba",
+  "pair_compact_sha256": "fd97cad545671054fe17eff3661af6736cb6f4e197ac5475d0abd56c437c6983",
+  "publisher_source_sha256": "7dbd407e535d8fef2d1f8d5ab15d8849cc8ff6397f2c7856927fa8051cb80293",
+  "historical_ledger": {
+    "scope": "historical CT11-CT14 only; no amount is added to CT15 engineering or prospective production",
+    "campaigns": {
+      "11": {
+        "external_root": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-11-20261115",
+        "closed_family_count": 17,
+        "closed_Linux_family_CPU": 6312.563442,
+        "summed_family_elapsed_wall": 4653.943281482061,
+        "receipt_hashes": {
+          "resources-controls-v1/execution.json": {
+            "sha256": "e4e5edf1ce010848ecac1b871cc8e561caa9316954ff54d09bf06f3a31bb84b4",
+            "CPU": 8.044609000000001,
+            "wall": 6.844441287015798
+          },
+          "resources-build-v1/execution.json": {
+            "sha256": "b95fd6b8f5ecd9c72a84beef2c536414e0cccf4ea906a20e0199fe2e24ae7250",
+            "CPU": 87.174938,
+            "wall": 57.42206956600421
+          },
+          "resources-build-v2/execution.json": {
+            "sha256": "ec2cfffdb0e8ea4537b893a55a90c1d4ed945a0a0da143005807a4e2f5259c63",
+            "CPU": 228.624013,
+            "wall": 118.58070256200153
+          },
+          "resources-capacity-v1/execution.json": {
+            "sha256": "3fcbce59f864f0db1103a8286715d9aa54c994015ec323014da0f2ceb6d3b54d",
+            "CPU": 1022.736464,
+            "wall": 792.0168922279845
+          },
+          "resources-collect-v1/execution.json": {
+            "sha256": "d6b71bfc8a50893230acb1a7748aedce0e78a5c820f6b4adbb0d2db9577d183d",
+            "CPU": 10.565296,
+            "wall": 10.77573028599727
+          },
+          "resources-equivalence-v1/execution.json": {
+            "sha256": "a4d0b7fd4a316ee93202f61a74133fa7eb7c37578967732240b3242db78beff9",
+            "CPU": 761.288045,
+            "wall": 573.4100454990112
+          },
+          "resources-final-inspection-v1/execution.json": {
+            "sha256": "cfa353446b4be2d90d6453037b8a3a17e8970ff2970a055664d3fc21a200a44c",
+            "CPU": 1.7217099999999999,
+            "wall": 1.7625554880069103
+          },
+          "resources-native-package-v1/execution.json": {
+            "sha256": "1653393c4c1005d9787b5bc699757f7e173a62520233d57c1ac8b4a9f3dc7510",
+            "CPU": 0.260259,
+            "wall": 0.6401239180122502
+          },
+          "resources-native-receipts-v1/execution.json": {
+            "sha256": "4def2069413a699e99a1bf8f9d9e69eb1beda64089b3bd51ab862d4c768d111e",
+            "CPU": 0.22989099999999998,
+            "wall": 0.6534643069899175
+          },
+          "resources-native-receipts-v2/execution.json": {
+            "sha256": "c9946da88fc685d3c5b904cd3debbd9d3176167cd6912b8c8a69595a476a293d",
+            "CPU": 4.17183,
+            "wall": 4.00066092601628
+          },
+          "resources-publish-v1/execution.json": {
+            "sha256": "cd370ad7bece85d33f83fb0a58f7caec1c29d37a537385d7f6a5535d84efc23f",
+            "CPU": 3.100291,
+            "wall": 4.045518044003984
+          },
+          "resources-source-final-v1/execution.json": {
+            "sha256": "3118d81c086783c8bd0373e5f038e83e3da992d3596f04c30b0e2250eace844a",
+            "CPU": 0.8830979999999999,
+            "wall": 1.7984074499981944
+          },
+          "resources-source-final-v2/execution.json": {
+            "sha256": "8c262ac0c4811ed49407614ab56029dc9c1b04f560842120822b6fcdcc71bf43",
+            "CPU": 1.565598,
+            "wall": 3.550799553981051
+          },
+          "resources-source-v1/execution.json": {
+            "sha256": "a6a763d1da0d1e268c119bf810e88ed16e639340e0e45f780f8d0cd25379f482",
+            "CPU": 7.424182,
+            "wall": 13.52836485102307
+          },
+          "resources-summary-package-v1/execution.json": {
+            "sha256": "4af275290cda76c7e7a49233e02821e128fa2537c34c5aa757d75df1036bbc36",
+            "CPU": 0.21986599999999998,
+            "wall": 0.6429134560166858
+          },
+          "resources-summary-v1/execution.json": {
+            "sha256": "edf5c1b1a2d0be2f1db9f1fc58de43e0ba11b78e385967db24fdc2b5d0ef3467",
+            "CPU": 0.8452710000000001,
+            "wall": 1.2041115209867712
+          },
+          "resources-target-v1/execution.json": {
+            "sha256": "21d8dbe3e371dcf5597bd2b90e4223c6e16a51b0fb177407a3c6a822a4f68e02",
+            "CPU": 4173.708081,
+            "wall": 3063.0664805390115
+          }
+        },
+        "published_accounting_sha256": "4703fce5307d32b3e1e5012b12dbe6e5c4f3ee972614dbb6b8ea46725c2a8d33",
+        "published_measured_CPU": null,
+        "published_upper_bounds": null,
+        "publication_scope": "prospective formula file; authoritative completed-family sums reported separately"
+      },
+      "12": {
+        "external_root": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-12-20261115",
+        "closed_family_count": 47,
+        "closed_Linux_family_CPU": 9598.852856999996,
+        "summed_family_elapsed_wall": 7650.4161416150455,
+        "receipt_hashes": {
+          "resources-inspection-v8/execution.json": {
+            "sha256": "03f5b882cdbb6ce7ca6baf84f5bcb4f6034776f7d92a3ce1c05eedaee3c12ef3",
+            "CPU": 0.23260399999999998,
+            "wall": 0.6600690899940673
+          },
+          "resources-inspection-v9/execution.json": {
+            "sha256": "7b0b08d47255a6170d3481fed8399faf8945bac4f1b4c53a67708bb027bd4cb8",
+            "CPU": 0.22783899999999996,
+            "wall": 0.6502107580017764
+          },
+          "resources-pressure-v1/execution.json": {
+            "sha256": "3e3a77354d105d353281c2b2c50aaf80d2f1801986b9fe75d2963144d110d21e",
+            "CPU": 798.597384,
+            "wall": 723.8492356160132
+          },
+          "resources-pressure-v2/execution.json": {
+            "sha256": "fd39121f02402deaa2f0358e5a0be4f292aca7435b837f5573da39e0e58035f7",
+            "CPU": 48.005496,
+            "wall": 43.77784549200442
+          },
+          "resources-pressure-v3/execution.json": {
+            "sha256": "b9c36cc80bb665d91941d1c796c5c2acaf8f72586e5da00098b2d3965fef95ed",
+            "CPU": 55.074531,
+            "wall": 50.443229628988774
+          },
+          "resources-pressure-v4/execution.json": {
+            "sha256": "8b2a962d4d3e2fd60683501b81c4ccbbcd94740ef2c1892f1b12a900db5c7dbc",
+            "CPU": 4062.393764,
+            "wall": 3166.5515037229925
+          },
+          "resources-pressure-v5/execution.json": {
+            "sha256": "33889cd59ea66e3c7f7a05d2c4c0ebe081decbb52e740687aa6c9595386ed06c",
+            "CPU": 959.694783,
+            "wall": 872.1832081349858
+          },
+          "resources-profile-v1/execution.json": {
+            "sha256": "90c1f61585ed7f89abeeb5c9dd7713c9ef3f5c4336a5e52e50d378b31af3f87e",
+            "CPU": 732.764045,
+            "wall": 527.5453935209953
+          },
+          "resources-profile-v2/execution.json": {
+            "sha256": "6630a2af6184b5cd202609fd262c7db4b5f4d57dcad92eb7c3bc8f14cb46a527",
+            "CPU": 1062.984403,
+            "wall": 781.0472741700069
+          },
+          "resources-profile-v3/execution.json": {
+            "sha256": "297142c6edd95321228f6467ffbdce56700cea71f5dd28b181c50295eb26d3d3",
+            "CPU": 1209.1766460000001,
+            "wall": 878.0779265080055
+          },
+          "resources-publication-v1/execution.json": {
+            "sha256": "ec0f97ba4c8a7348998d6bee1015f00d65d8254a954ece91ffb2b9aba4971416",
+            "CPU": 2.21571,
+            "wall": 4.558043351978995
+          },
+          "resources-source-v1/execution.json": {
+            "sha256": "d8de5a4afaef1fd428e4ac9bd8f4d3f8a0c18d67625c7117e2b5fb1f3ca122fc",
+            "CPU": 7.207181,
+            "wall": 14.036313280987088
+          },
+          "resources-source-v10/execution.json": {
+            "sha256": "1c016f385c084317c0d65ce10c33c76291eb64632b5e8389e6239aa32d50e162",
+            "CPU": 1.653613,
+            "wall": 3.6118156430020463
+          },
+          "resources-source-v11/execution.json": {
+            "sha256": "0a4e5a68af942b903998433e20b3189be08eb4fc598833b475f5b9735affd2b0",
+            "CPU": 1.795315,
+            "wall": 4.118968744005542
+          },
+          "resources-source-v12/execution.json": {
+            "sha256": "9f8c9fc66a2bec5ac740c2fd3b4b075bcd34e783de668ad25d90fb3876e9136a",
+            "CPU": 1.966137,
+            "wall": 4.045601749006892
+          },
+          "resources-source-v2/execution.json": {
+            "sha256": "4907e1eb4a2993d3249db2f3f5006088fd7ccb989aa927d22d276540e0ae4cbc",
+            "CPU": 1.8291549999999999,
+            "wall": 4.039323675999185
+          },
+          "resources-source-v3/execution.json": {
+            "sha256": "5d62d8ffa828afb50107bed984e1c38c548bef59821750adc5c5a6038ca9e1fb",
+            "CPU": 2.2979540000000003,
+            "wall": 4.714213783998275
+          },
+          "resources-source-v4/execution.json": {
+            "sha256": "28856e5f4000190c40a654db9bce4e4e5a86be650b51cf98d17f53d48cbbd335",
+            "CPU": 1.8944679999999998,
+            "wall": 4.203895863989601
+          },
+          "resources-source-v5/execution.json": {
+            "sha256": "886716792b9bda5c8524744b7584da88548b7f6e5899d0b369d6320336f6c5c1",
+            "CPU": 2.2166259999999998,
+            "wall": 4.6367640560201835
+          },
+          "resources-source-v7/execution.json": {
+            "sha256": "5761421b7fae72f8b631400448301e1fb7b60a6af0788c72dd77467bc38eabb8",
+            "CPU": 2.446597,
+            "wall": 5.135812458000146
+          },
+          "resources-source-v8/execution.json": {
+            "sha256": "fbb83c73c1f3914357159b834a4b042bd9b668367c99906c6ae66b8c1d7759d6",
+            "CPU": 1.7918329999999998,
+            "wall": 4.015101274999324
+          },
+          "resources-source-v9/execution.json": {
+            "sha256": "a39711cb1e58d4946573374d8584541ae2f86f6db05928471077ce881c43c810",
+            "CPU": 1.7293180000000001,
+            "wall": 3.5909098080010153
+          },
+          "resources-static-v1/execution.json": {
+            "sha256": "e83079e5704ae8406478c9d39f2313acbbd58b5f5b58b3990213a54ace46b41d",
+            "CPU": 281.541887,
+            "wall": 205.69153215299593
+          },
+          "resources-status-v1/execution.json": {
+            "sha256": "8b4cda9719311739afec0e53c990ec81431b001ce2db3d24b1329e1a753f6b64",
+            "CPU": 0.250328,
+            "wall": 0.6250184189993888
+          },
+          "resources-axes-v1/execution.json": {
+            "sha256": "ad0a370f82050f0597acdb57666a1d6a4a23a9de39174a423ccf578840e6a282",
+            "CPU": 100.167491,
+            "wall": 91.25546697800746
+          },
+          "resources-axes-v2/execution.json": {
+            "sha256": "e01e139f43e62f8523b6db652bd76411d7cd0ff99a94456b7901cb96ae6b5ac4",
+            "CPU": 153.224776,
+            "wall": 138.80365345900645
+          },
+          "resources-axes-v3/execution.json": {
+            "sha256": "d2bb9d7e3f2528f9d94a7cc8cb453b892a9489f76b36da18fadaee7b24cdd03a",
+            "CPU": 34.731622,
+            "wall": 31.980653811013326
+          },
+          "resources-collect-v1/execution.json": {
+            "sha256": "a46e6d8cdfe53157b7703bb56cfc5c702f1670446dc724855d05d1a82cb88517",
+            "CPU": 20.950018999999998,
+            "wall": 21.87219223700231
+          },
+          "resources-diagnostic-stop-v1/execution.json": {
+            "sha256": "4be4d8cf74127faeb482048ffd45d5a37e68ce5d89aeb2d2f30a9927930e0c8a",
+            "CPU": 0.21564899999999998,
+            "wall": 0.643130268988898
+          },
+          "resources-face-v1/execution.json": {
+            "sha256": "f7d3ff9307741348744061d362893f196ba7aaad71c390fe997087c83082a0a9",
+            "CPU": 35.099645,
+            "wall": 31.892607699002838
+          },
+          "resources-inspection-v10/execution.json": {
+            "sha256": "91da579191394be9c27a83059c6ab4fc6168b2c38bcbb8f7ec5fe34f72b34f00",
+            "CPU": 0.225427,
+            "wall": 0.6547988809761591
+          },
+          "resources-inspection-v11/execution.json": {
+            "sha256": "1b96338dc8e944dc60eb23fd1d9c18328daa87b6a1e7058b3a576f1d220d12a7",
+            "CPU": 8.583323,
+            "wall": 7.937057155999355
+          },
+          "resources-inspection-v12/execution.json": {
+            "sha256": "59a122cbd2e0540e59a40abc6a235498fe0623e4881ffc3effff00f995501817",
+            "CPU": 0.23588900000000002,
+            "wall": 0.6577885110164061
+          },
+          "resources-inspection-v13/execution.json": {
+            "sha256": "5fe7632ec9a1f1c795361a5813df89161b13f6ab91a778579e1bd43905f91f38",
+            "CPU": 0.247852,
+            "wall": 0.6638664730126038
+          },
+          "resources-inspection-v14/execution.json": {
+            "sha256": "b922141f6cdcf52c9665c7a8f5805fe9695bd8af22ff40f35f504fd5ec0b6f01",
+            "CPU": 0.257768,
+            "wall": 0.6573236089898273
+          },
+          "resources-inspection-v15/execution.json": {
+            "sha256": "b3f10bcd6b9a83f20e3539cd6624df6e5af125746cef45498815baedd53e75b3",
+            "CPU": 0.257594,
+            "wall": 0.6363299290242139
+          },
+          "resources-inspection-v16/execution.json": {
+            "sha256": "dae8a207f6ebbb0f71a4ff22bb92b47408c2b089c9ad9656cfc30f18b2a5374d",
+            "CPU": 0.24626299999999998,
+            "wall": 0.6311739750090055
+          },
+          "resources-inspection-v17/execution.json": {
+            "sha256": "ad167465fc12a0b26bd6d62bd4c253facb1b18750fa29ae823fd18b5d93ece7c",
+            "CPU": 0.24237999999999998,
+            "wall": 0.6239714559924323
+          },
+          "resources-inspection-v18/execution.json": {
+            "sha256": "de04ed519f18af11610a0962818663037af098d4d8dc1110238f7179e9ea2320",
+            "CPU": 0.245533,
+            "wall": 0.6284508630051278
+          },
+          "resources-inspection-v19/execution.json": {
+            "sha256": "da5d5d33f698bd17df68daaedca903740a2d1fb953be993b9f47a657376259b0",
+            "CPU": 0.254189,
+            "wall": 0.6390870730101597
+          },
+          "resources-inspection-v2/execution.json": {
+            "sha256": "699e8931a93193141a9d61be680bf7fc6ad6518a0d6e6cd592310731ecf4b540",
+            "CPU": 0.23105399999999998,
+            "wall": 0.6499839439929929
+          },
+          "resources-inspection-v3/execution.json": {
+            "sha256": "c6e9dcfecd726ae8d20538c3cfa91df00bb1383c498166aaf1ddeec943a2a50d",
+            "CPU": 0.216818,
+            "wall": 0.6505314290116075
+          },
+          "resources-inspection-v4/execution.json": {
+            "sha256": "aafa9e770c7e65c4943fcc016bf07b9557393dde65939c38d5bbaafa2ce0dcc0",
+            "CPU": 0.21167999999999998,
+            "wall": 0.6357938549772371
+          },
+          "resources-inspection-v5/execution.json": {
+            "sha256": "02bca354b07ba2f0769f30955707ed8469bad340e97d4a762e02f9d701d06dfc",
+            "CPU": 0.214804,
+            "wall": 0.6438566099968739
+          },
+          "resources-inspection-v6/execution.json": {
+            "sha256": "431f2b2b80a77a4f2cd48a10ce05c10a856f9f29232f17a4bd6aa18f3b364537",
+            "CPU": 0.24658399999999997,
+            "wall": 0.6603421370091382
+          },
+          "resources-inspection-v7/execution.json": {
+            "sha256": "08915ac9a46fef8c40e2eb4bd3347cc313b1bfd11c2afb827273c10c4fca519e",
+            "CPU": 0.22926,
+            "wall": 0.6540292880090419
+          },
+          "resources-source-v6/execution.json": {
+            "sha256": "3620660405b5ae3a855a7c8bde6662b462abae14b434ca592ce53816c0b489f9",
+            "CPU": 2.32962,
+            "wall": 4.534841069020331
+          }
+        },
+        "published_accounting_sha256": "b552d41ea6667f373347a22a79c83d1b76e55110db7521f01d50743ebb4d1ce5",
+        "published_measured_CPU": 9598.852856999996,
+        "published_upper_bounds": null,
+        "publication_scope": "mechanical addition of closed authoritative Linux receipts; Mac source/Git and transport not scientific CPU benchmarks; no historical or evaluated result mutated"
+      },
+      "13": {
+        "external_root": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-13-20261115",
+        "closed_family_count": 33,
+        "closed_Linux_family_CPU": 6901.472108,
+        "summed_family_elapsed_wall": 5871.917198494106,
+        "receipt_hashes": {
+          "resources-inspection-v1/execution.json": {
+            "sha256": "c5475d7f36b8fdbd9519961d16fcee808679bbb950941b9c1dcfb5f82f714fa8",
+            "CPU": 0.24358799999999997,
+            "wall": 0.6604352820140775
+          },
+          "resources-inspection-v2/execution.json": {
+            "sha256": "de1e6746dc6efdf0b9754e8e0fbb45cbbe1667b93bbf0fda56586c68e0310c35",
+            "CPU": 0.239898,
+            "wall": 0.6575201980012935
+          },
+          "resources-inspection-v3/execution.json": {
+            "sha256": "a1189db772180ba201a3fba08823915b6e5ede1061e0cf9d5abfc72b1a6d6662",
+            "CPU": 0.21089,
+            "wall": 0.6449667290144134
+          },
+          "resources-inspection-v4/execution.json": {
+            "sha256": "e9cdd4f5cc21fadac6487d093b4d59ebe21fd1b87e1d5f68c100591458e90ee8",
+            "CPU": 0.22756099999999999,
+            "wall": 0.6511092110013124
+          },
+          "resources-inspection-v5/execution.json": {
+            "sha256": "109b6b767746f3b37395ad087ba68ed9d3c17976007e82d20fc668acc70d1015",
+            "CPU": 0.247445,
+            "wall": 0.6253735319769476
+          },
+          "resources-inspection-v6/execution.json": {
+            "sha256": "ef6a6053e7c584c85be51576a4288ed990270b139973e7d8142ca8676d20ba3b",
+            "CPU": 0.21122199999999997,
+            "wall": 0.6484638119873125
+          },
+          "resources-inspection-v7/execution.json": {
+            "sha256": "27ae661c5074382919f4931990d5a11ad3d3d9a758412e56fc3c5ad3d5cad035",
+            "CPU": 0.21824,
+            "wall": 0.6470697449985892
+          },
+          "resources-inspection-v8/execution.json": {
+            "sha256": "a7642ace5e135ea63093c93881811f6ef3df8fd41c8392776917b8dd86b9e4a9",
+            "CPU": 0.23360499999999998,
+            "wall": 0.6614896120154299
+          },
+          "resources-inspection-v9/execution.json": {
+            "sha256": "765b19863bd9aef1bb0968c9f4a260ad3cd1ddcd1d4b9d6d524e2762a5bc3b77",
+            "CPU": 0.22508,
+            "wall": 0.6556889820203651
+          },
+          "resources-memory-v1/execution.json": {
+            "sha256": "6e9c308516a986978b598ca1ecf2071a55241f16bff6b28fa8fef09e7586cba9",
+            "CPU": 1042.666575,
+            "wall": 743.3841685770021
+          },
+          "resources-memory-v2/execution.json": {
+            "sha256": "022b65978caa2820612fff4f3e6d302d90418b021470a9f360d38d2b51aacc9f",
+            "CPU": 1130.0409730000001,
+            "wall": 831.6181164270092
+          },
+          "resources-orderings-v1/execution.json": {
+            "sha256": "011e6e03d8fa58691ac1f378a4f4c8c5392b1f536784e877b716f4a50a502fe5",
+            "CPU": 1795.109256,
+            "wall": 1800.1679183389933
+          },
+          "resources-orderings-v2/execution.json": {
+            "sha256": "4f8583eb00dcba4a8fe96bfedad3988796177f5257ffa05934ecdb999e8413f2",
+            "CPU": 0.319536,
+            "wall": 0.6482377290085424
+          },
+          "resources-orderings-v3/execution.json": {
+            "sha256": "0c6d3e09dc9852c757a8da3bf0f31d4a6738c5a368d1eaf5b38c997b9df623a2",
+            "CPU": 10.094446,
+            "wall": 10.751649112993618
+          },
+          "resources-orderings-v4/execution.json": {
+            "sha256": "43d636e99e18d689c9708401f0e7bc2b3ce39efa964ea734590bcbf4ca5f0d8a",
+            "CPU": 1186.275042,
+            "wall": 904.0414156170154
+          },
+          "resources-owned-stop-v1/execution.json": {
+            "sha256": "ca337181c25f4a3ff9432bfe03c7bfd6d9efb9565fd56bb4056a0e3710cf68c2",
+            "CPU": 0.27212099999999995,
+            "wall": 0.6471171119774226
+          },
+          "resources-owned-stop-v2/execution.json": {
+            "sha256": "f7b1fbb284cdd9efe69009f0fc81edbfe238a58fa8e63b6f63e416e14f22b84b",
+            "CPU": 41.150235,
+            "wall": 388.82023186501465
+          },
+          "resources-publication-v1/execution.json": {
+            "sha256": "9b426bb364d214f594dbf0a9a9fc5dc2b9d8922e688b8118e0342ba4f824d1d4",
+            "CPU": 3.458684,
+            "wall": 6.2347374399832916
+          },
+          "resources-status-v7/execution.json": {
+            "sha256": "c4ccd76d24e5724a69a99b131b9a4551da0135c8e8b2e0bfda491052bdaf5643",
+            "CPU": 0.232531,
+            "wall": 0.6569324899755884
+          },
+          "resources-status-v8/execution.json": {
+            "sha256": "95e3a09268c232ef49c42759b34d22f6876eeae5f9c3150f150cadc4c8a0394b",
+            "CPU": 0.224523,
+            "wall": 0.6552528590254951
+          },
+          "resources-status-v9/execution.json": {
+            "sha256": "b66d4df77d0d35eb2e718f94ea70b853e8787379d928d6cb75d5db6992fb6a15",
+            "CPU": 0.663685,
+            "wall": 1.2215232820017263
+          },
+          "resources-bootstrap/execution.json": {
+            "sha256": "35490a146459698b0f9d0b4878a03a66c6bf6738e45cac7e4645fa872a1c8c9c",
+            "CPU": 8.326441,
+            "wall": 16.780987118021585
+          },
+          "resources-build-v1/execution.json": {
+            "sha256": "a77dead3b5410451a260f384e765a92ac597ae70c10d4a2ed61225a68f64ccfb",
+            "CPU": 32.300402,
+            "wall": 19.687590335001005
+          },
+          "resources-build-v2/execution.json": {
+            "sha256": "eb751075d351f128c2e72a37340835046e710b05d18676ec728f015f010edd22",
+            "CPU": 332.143502,
+            "wall": 170.4120880300179
+          },
+          "resources-build-v3/execution.json": {
+            "sha256": "7be7da226bed8ea0c75c3f04100605e275797d2fc85d99244afc8b61db201d06",
+            "CPU": 36.951073,
+            "wall": 38.261259916995186
+          },
+          "resources-build-v4/execution.json": {
+            "sha256": "e036e7dcff8bf439bb5dda3c0478c61c0355585a5fd9656577883d66dae1c2c3",
+            "CPU": 55.513419999999996,
+            "wall": 34.817678705003345
+          },
+          "resources-build-v5/execution.json": {
+            "sha256": "48ade71dc2aae27fe9fd62093fc14f0eff9305d1096db70e11d092a57eca1365",
+            "CPU": 59.605018,
+            "wall": 36.162948892015265
+          },
+          "resources-build-v6/execution.json": {
+            "sha256": "e8213c690369371ccf06417cfa4605268c968de6a0c1caa2f11bf9fce1806eb6",
+            "CPU": 205.31065900000002,
+            "wall": 119.11618587101111
+          },
+          "resources-collect-v1/execution.json": {
+            "sha256": "2f0b6cca572c88f3b4b233f4d25760a06453f1b363146b192b0596ac1816ee1f",
+            "CPU": 2.819751,
+            "wall": 5.384865015017567
+          },
+          "resources-collect-v2/execution.json": {
+            "sha256": "118da97d37005f8d249d0d6d4052fe40bf4eeb027b060757e1f5a3d24a4f9add",
+            "CPU": 19.687508,
+            "wall": 22.659911355993245
+          },
+          "resources-export-v1/execution.json": {
+            "sha256": "89910e022bdf7b837382962fba960acbd1fc9dfa111f4c9f00b44fd99df17ba1",
+            "CPU": 276.211835,
+            "wall": 208.885077946994
+          },
+          "resources-export-v2/execution.json": {
+            "sha256": "69a2cdcc9b9397df2546a8d8e12b0882b3b8ccf6a6697b9de2d031c5e0a5f2b7",
+            "CPU": 282.18928900000003,
+            "wall": 214.82378646999132
+          },
+          "resources-initial-image-v1/execution.json": {
+            "sha256": "124f2867e6e7e077b68f136f4069057ce8d1aeb8adc5678ec41266a7496754e4",
+            "CPU": 377.848074,
+            "wall": 290.2254008850141
+          }
+        },
+        "published_accounting_sha256": "2cceb1c5c07d383d54c24d866b69e289996145ce5e5cc10b3ae25a12a7d9dee0",
+        "published_measured_CPU": 6901.472108,
+        "published_upper_bounds": null,
+        "publication_scope": "mechanical addition of closed authoritative Linux receipts; source/Git/transport are not native CPU benchmarks; no new numerical family after publication; no historical/evaluated seal mutation"
+      },
+      "14": {
+        "external_root": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "closed_family_count": 24,
+        "closed_Linux_family_CPU": 20350.164785,
+        "summed_family_elapsed_wall": 14177.52430429202,
+        "receipt_hashes": {
+          "resources-capacity-v1/execution.json": {
+            "sha256": "9c08ca60398ac9fa5ba4323c008b54ddc7fd7d5678f4217ad83cc13bb3702c65",
+            "CPU": 6.756433,
+            "wall": 5.690043796988903
+          },
+          "resources-budget-negative-v1/execution.json": {
+            "sha256": "4abc9c6ebc7745d3701884e4405cb6d1bf6fcdefbfa23aba9d3e351517cf4c69",
+            "CPU": 0.8224689999999999,
+            "wall": 2.9145105660136323
+          },
+          "resources-budget-positive-v1/execution.json": {
+            "sha256": "874cefd74aa7e22a6d4fc21ffc874ceb03d08f90b97a84795a559d3f3126ccec",
+            "CPU": 4.956085,
+            "wall": 9.181766283989418
+          },
+          "resources-build-runtime-v1/execution.json": {
+            "sha256": "68c9bcdd6ce247bec6911bbf89d8d9cef08dee8d2bef4a2e1eb7edddd9c8fb18",
+            "CPU": 881.353654,
+            "wall": 437.2588161790045
+          },
+          "resources-build-v1/execution.json": {
+            "sha256": "f433fbff813466cb13235815964bd961cec77f312e35fc8436177591fd123eed",
+            "CPU": 74.981426,
+            "wall": 48.23767910499009
+          },
+          "resources-build-v2/execution.json": {
+            "sha256": "972ca97562f3b69d63ca2bdfd5bc77c57d70c644c12a2ec82d0d2e4ee365bb6a",
+            "CPU": 60.033495,
+            "wall": 44.8272556560114
+          },
+          "resources-build-v3/execution.json": {
+            "sha256": "0d0733890f2ed52201dd28e345162c411023b4dd113e9296d0224ba217cb9865",
+            "CPU": 59.362284,
+            "wall": 44.149196540995035
+          },
+          "resources-build-v4/execution.json": {
+            "sha256": "1e8bb39b654ffae865d5d94fdc793175ffa3668564a4648d9bfde3235f954dae",
+            "CPU": 57.598458,
+            "wall": 41.51099528098712
+          },
+          "resources-capacity-v2/execution.json": {
+            "sha256": "22e54543844082ae88bb832312a046188cf4cf097ba71161571ec8aafca5e206",
+            "CPU": 6.043354999999998,
+            "wall": 5.146147120016394
+          },
+          "resources-capacity-v3/execution.json": {
+            "sha256": "2213d54162c2a518b71d08474bc67d07181a14e99f8e18506864176c2c062a3f",
+            "CPU": 6.105646999999998,
+            "wall": 5.12074879501597
+          },
+          "resources-capacity-v4/execution.json": {
+            "sha256": "d01bc5668c8539ddd9f25b1e3ae7dcb4fa9656896371d774ad4c2d2424b2aaa0",
+            "CPU": 17.110668999999998,
+            "wall": 13.43009627101128
+          },
+          "resources-collect-component-v1/execution.json": {
+            "sha256": "f6ee153136de8ea987ed956dc4286ad8e6ad1ebfdcf3bc305d00381d6780e6d6",
+            "CPU": 4.189622,
+            "wall": 7.413302825996652
+          },
+          "resources-collect-final-v1/execution.json": {
+            "sha256": "2e2c62e57e02a16c8a423c0b0c721a1862c650413ab53601303e003557c36c31",
+            "CPU": 49.843146999999995,
+            "wall": 51.911153171997285
+          },
+          "resources-collect-pair-v1/execution.json": {
+            "sha256": "8b13a0f6d7ab1e42757b3ac86da354b7a7fba31bd86c150d9b9ba54b50d67b2f",
+            "CPU": 26.25322,
+            "wall": 27.5261422629992
+          },
+          "resources-collect-static-v1/execution.json": {
+            "sha256": "c5ac4547703bef3f8e7615648838a36732f7c951a2b3c2fe7497de594a8931ac",
+            "CPU": 15.965183000000001,
+            "wall": 17.402967969013844
+          },
+          "resources-component-v1/execution.json": {
+            "sha256": "1141fdf1a6e9d014f6dfe94f512a824d301af8376857445a3694f076c072c4e2",
+            "CPU": 694.6395180000001,
+            "wall": 519.3339059620048
+          },
+          "resources-pair-v1/execution.json": {
+            "sha256": "2b49cdbd8dae5d701bc38df46578012d9ed3944d4460fe0818cec114b2052b4e",
+            "CPU": 4518.304966000001,
+            "wall": 3307.107822759979
+          },
+          "resources-pair-v2/execution.json": {
+            "sha256": "c364559a40af59cb4ca9dbb3cc165a2ff9bbcafbe827b497060c6a83405d7c43",
+            "CPU": 9607.247458,
+            "wall": 6387.738750622986
+          },
+          "resources-publication-final-v1/execution.json": {
+            "sha256": "ff433b17efa4e4ba8aa3fcaa2be496773a1f510d4c580103a72f416acf8fd5fd",
+            "CPU": 26.989205999999996,
+            "wall": 28.317761470010737
+          },
+          "resources-publication-pair-v1/execution.json": {
+            "sha256": "b4d4f0ad8e8f36c91fadf5faae5ec6a42e56346b22ba71eb32d41b57089a7e2a",
+            "CPU": 5.004660999999997,
+            "wall": 5.6992380440060515
+          },
+          "resources-publication-pair-v2/execution.json": {
+            "sha256": "6e252a551337f95d6497e63a67b11c8ba97319c1c1dba16dc161bd1e7a3ad1ec",
+            "CPU": 30.589351999999998,
+            "wall": 37.16063400701387
+          },
+          "resources-receipt-tests-v1/execution.json": {
+            "sha256": "639712213a2199882e055afd9badb9ac3c9a9123ce9572414ef4e1613584ce56",
+            "CPU": 0.743895,
+            "wall": 1.2189728329831269
+          },
+          "resources-static-v1/execution.json": {
+            "sha256": "7139d356a440238132d127ad45620d8629859a78c49f50e5433c56539e362e09",
+            "CPU": 2409.6559709999997,
+            "wall": 1829.6404822019977
+          },
+          "resources-timestep-v1/execution.json": {
+            "sha256": "b667a9709588a602346585b833d543b73967646d05c23106474b5cfa51994ff1",
+            "CPU": 1785.6146110000004,
+            "wall": 1299.585914566007
+          }
+        },
+        "published_accounting_sha256": "e9a32d529741a3a721a5cca99b401dfb0de5ef9ce051d947b1d3b7a5916bb618",
+        "published_measured_CPU": 20350.164785,
+        "published_upper_bounds": {
+          "CPU_seconds": 20470.164785,
+          "active_wall_seconds": 21846.445388555527,
+          "new_output_bytes": 10218237706
+        },
+        "publication_scope": "Closed measured scientific/build/controller/audit/failure/publication families include owned launcher,worker-monitor and MPI helpers. Source/Git/transport/inspection outside these benchmark receipts is covered by explicit reserves and whole elapsed wall. All numerical executions use one library thread,ranks1,compiler jobs<=2,one numerical family. The final source push is bounded by the remaining reserves,not attested before its future exit."
+      }
+    }
+  },
+  "engineering_ledger": {
+    "schema": "CT15ClosedPublicationAccountingV1",
+    "status": "closed_receipts_with_explicit_publication_reserves",
+    "snapshot_sha256": "09807e1c08c59c61b153e06883ed3bc001bb39c106be78b47135044f381d2eb9",
+    "source_at_snapshot": "5950be7e17709ce1a26895aeda806c7dc701064a",
+    "external_root": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116",
+    "closed_family_count": 33,
+    "closed_family_CPU_before_exception": 21270.354156747006,
+    "exception_reserves": {
+      "CPU_seconds": 120,
+      "scope": "Conservative additional CT15 engineering charge for build-v4 child after monitor scandir race; build completed, no orphan remains; no numerical acceptance inferred from failed guard"
+    },
+    "closed_CPU_including_exception": 21390.354156747006,
+    "publication_reserve": {
+      "CPU": 240,
+      "wall": 480.0,
+      "bytes": 268435456
+    },
+    "CPU_upper_with_reserve": 21630.354156747006,
+    "elapsed_wall_at_snapshot": 28101.814564466476,
+    "wall_upper_with_reserve": 28581.814564466476,
+    "logical_live_bytes_at_snapshot": 10960403736,
+    "peak_observed_live_bytes": 10960403736,
+    "new_live_upper_with_publication_reserve": 11228839192,
+    "sampled_cumulative_process_wchar_lower_bound": 23961386528,
+    "write_accounting": "observed per-family process wchar highwaters, including pipes; may miss short-lived processes and the unadmitted queue helpers; not exact physical disk writes",
+    "failed_worker_audits": {
+      "resources-equivalence-v1": {
+        "maximum_aggregate": 120,
+        "maximum_project": 5,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "fail",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "resources-pair-v1": {
+        "maximum_aggregate": 101,
+        "maximum_project": 12,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "fail",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "resources-training-v2": {
+        "maximum_aggregate": 141,
+        "maximum_project": 12,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "fail",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      }
+    },
+    "unclosed_resources": [],
+    "reserve_scope": "fixed existing source/inspection/transport/publication allowance, including metadata exporters and Mac compaction; no second reserve added for those helpers",
+    "scope": "all closed CT15 Linux families plus the documented exception and administrative reserves; historical and prospective campaign costs excluded",
+    "finite_CPU_wall_disk_checks": {
+      "CPU": true,
+      "wall": true,
+      "live_bytes": true
+    }
+  },
+  "future_ledger": {
+    "status": "incomplete_native_replay_extrapolation",
+    "whole_workflow_component_coverage": false,
+    "heldout_model_validated": false,
+    "headroom": 1.25,
+    "headroom_applied": "once to complete future CPU/wall/output/AS totals; not sunk research",
+    "measurements": {
+      "native": {
+        "CPU": {
+          "startup": 56.598205,
+          "step": 160.839859
+        },
+        "wall": {
+          "startup": 57.53463072201703,
+          "step": 162.52276861295104
+        }
+      },
+      "observer_CPU_per_native_wall_second": 0.06670516565132573,
+      "controller_parse_startup_CPU": 0.3083496579999996,
+      "controller_parse_CPU_per_step": 1.2677864020000018,
+      "external_monitor_CPU_per_wall_second": null,
+      "independent_CPU_per_accepted_state": null,
+      "independent_wall_per_accepted_state": null,
+      "retention_CPU_per_two_steps": null,
+      "retention_wall_per_two_steps": null,
+      "full_milestone_CPU": null,
+      "full_milestone_wall": null,
+      "short_two_step_durable_segment_bytes": null,
+      "transient_snapshot_bytes_per_actual_step": null,
+      "milestone_bound_scope": "unmeasured",
+      "paired_CPU_per_common_state": 3.839200396777768,
+      "paired_wall_per_common_state": 3.8413527908980742
+    },
+    "horizons": [
+      {
+        "horizon": "entry",
+        "requested_T": "0.407",
+        "actual_endpoints": [
+          "0.40700",
+          "0.407000"
+        ],
+        "from_state": "fresh_zero",
+        "start_is_qualified": true,
+        "total_member_steps": [
+          1628,
+          3256
+        ],
+        "additional_member_steps": [
+          1628,
+          3256
+        ],
+        "segment_length": 32,
+        "native_hard_segment_cap": 64,
+        "segments": [
+          51,
+          102
+        ],
+        "full_audit_counts": [
+          6,
+          9
+        ],
+        "CPU_components": {
+          "native_CPU": 794314.593131,
+          "replay_CPU": 794201.396721,
+          "controller_CPU": 119556.71416930798,
+          "independent_state_CPU": null,
+          "paired_comparison_CPU": 6254.057446350984,
+          "milestone_CPU": null,
+          "retention_CPU": null,
+          "collection_transfer_publication_CPU": 240.0,
+          "external_monitor_CPU": null
+        },
+        "CPU_before_headroom": null,
+        "CPU_with_headroom": null,
+        "active_wall_with_headroom": null,
+        "finite_retained_output_with_headroom": null,
+        "peak_new_live_output_with_headroom": null,
+        "measured_short_AS_bytes": 16323031040,
+        "status": "UNADMITTED",
+        "native_only_CPU_with_headroom": 992893.24141375,
+        "required_total_cost_reduction": null,
+        "scope_complete": false,
+        "native_only_active_wall_with_headroom": 1003348.8370844569,
+        "peak_AS_with_headroom": 20403788800.0,
+        "partial_observed_scope_CPU_with_headroom": 2143208.451834574,
+        "partial_observed_scope_wall_with_headroom": 2164571.68492421,
+        "partial_observed_scope": "native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors"
+      },
+      {
+        "horizon": "entry",
+        "requested_T": "0.407",
+        "actual_endpoints": [
+          "0.40700",
+          "0.407000"
+        ],
+        "from_state": "own_qualified_T0.002",
+        "start_is_qualified": true,
+        "total_member_steps": [
+          1628,
+          3256
+        ],
+        "additional_member_steps": [
+          1620,
+          3240
+        ],
+        "segment_length": 32,
+        "native_hard_segment_cap": 64,
+        "segments": [
+          51,
+          102
+        ],
+        "full_audit_counts": [
+          4,
+          7
+        ],
+        "CPU_components": {
+          "native_CPU": 790341.240105,
+          "replay_CPU": 790341.240105,
+          "controller_CPU": 118967.19481483291,
+          "independent_state_CPU": null,
+          "paired_comparison_CPU": 6223.343843176762,
+          "milestone_CPU": null,
+          "retention_CPU": null,
+          "collection_transfer_publication_CPU": 240.0,
+          "external_monitor_CPU": null
+        },
+        "CPU_before_headroom": null,
+        "CPU_with_headroom": null,
+        "active_wall_with_headroom": null,
+        "finite_retained_output_with_headroom": null,
+        "peak_new_live_output_with_headroom": null,
+        "measured_short_AS_bytes": 16323031040,
+        "status": "UNADMITTED",
+        "native_only_CPU_with_headroom": 987926.5501312499,
+        "required_total_cost_reduction": null,
+        "scope_complete": false,
+        "native_only_active_wall_with_headroom": 998329.3174492633,
+        "peak_AS_with_headroom": 20403788800.0,
+        "partial_observed_scope_CPU_with_headroom": 2132641.273585012,
+        "partial_observed_scope_wall_with_headroom": 2153901.169509625,
+        "partial_observed_scope": "native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors"
+      },
+      {
+        "horizon": "0.1transit",
+        "requested_T": "4.06216378576",
+        "actual_endpoints": [
+          "4.06225",
+          "4.062250"
+        ],
+        "from_state": "fresh_zero",
+        "start_is_qualified": true,
+        "total_member_steps": [
+          16249,
+          32498
+        ],
+        "additional_member_steps": [
+          16249,
+          32498
+        ],
+        "segment_length": 32,
+        "native_hard_segment_cap": 64,
+        "segments": [
+          508,
+          1016
+        ],
+        "full_audit_counts": [
+          34,
+          66
+        ],
+        "CPU_components": {
+          "native_CPU": 7926829.467502999,
+          "replay_CPU": 7926716.271093,
+          "controller_CPU": 1193190.5010947238,
+          "independent_state_CPU": null,
+          "paired_comparison_CPU": 62387.00644763873,
+          "milestone_CPU": null,
+          "retention_CPU": null,
+          "collection_transfer_publication_CPU": 240.0,
+          "external_monitor_CPU": null
+        },
+        "CPU_before_headroom": null,
+        "CPU_with_headroom": null,
+        "active_wall_with_headroom": null,
+        "finite_retained_output_with_headroom": null,
+        "peak_new_live_output_with_headroom": null,
+        "measured_short_AS_bytes": 16323031040,
+        "status": "UNADMITTED",
+        "native_only_CPU_with_headroom": 9908536.83437875,
+        "required_total_cost_reduction": null,
+        "scope_complete": false,
+        "native_only_active_wall_with_headroom": 10012869.060071653,
+        "peak_AS_with_headroom": 20403788800.0,
+        "partial_observed_scope_CPU_with_headroom": 21386704.057672955,
+        "partial_observed_scope_wall_with_headroom": 21595859.88850002,
+        "partial_observed_scope": "native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors"
+      },
+      {
+        "horizon": "0.1transit",
+        "requested_T": "4.06216378576",
+        "actual_endpoints": [
+          "4.06225",
+          "4.062250"
+        ],
+        "from_state": "own_qualified_T0.002",
+        "start_is_qualified": true,
+        "total_member_steps": [
+          16249,
+          32498
+        ],
+        "additional_member_steps": [
+          16241,
+          32482
+        ],
+        "segment_length": 32,
+        "native_hard_segment_cap": 64,
+        "segments": [
+          508,
+          1016
+        ],
+        "full_audit_counts": [
+          32,
+          64
+        ],
+        "CPU_components": {
+          "native_CPU": 7922856.114477,
+          "replay_CPU": 7922856.114477,
+          "controller_CPU": 1192600.981740249,
+          "independent_state_CPU": null,
+          "paired_comparison_CPU": 62356.29284446451,
+          "milestone_CPU": null,
+          "retention_CPU": null,
+          "collection_transfer_publication_CPU": 240.0,
+          "external_monitor_CPU": null
+        },
+        "CPU_before_headroom": null,
+        "CPU_with_headroom": null,
+        "active_wall_with_headroom": null,
+        "finite_retained_output_with_headroom": null,
+        "peak_new_live_output_with_headroom": null,
+        "measured_short_AS_bytes": 16323031040,
+        "status": "UNADMITTED",
+        "native_only_CPU_with_headroom": 9903570.14309625,
+        "required_total_cost_reduction": null,
+        "scope_complete": false,
+        "native_only_active_wall_with_headroom": 10007849.540436458,
+        "peak_AS_with_headroom": 20403788800.0,
+        "partial_observed_scope_CPU_with_headroom": 21376136.87942339,
+        "partial_observed_scope_wall_with_headroom": 21585189.37308543,
+        "partial_observed_scope": "native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors"
+      },
+      {
+        "horizon": "1transit",
+        "requested_T": "40.6216378576",
+        "actual_endpoints": [
+          "40.62175",
+          "40.621750"
+        ],
+        "from_state": "fresh_zero",
+        "start_is_qualified": true,
+        "total_member_steps": [
+          162487,
+          324974
+        ],
+        "additional_member_steps": [
+          162487,
+          324974
+        ],
+        "segment_length": 32,
+        "native_hard_segment_cap": 64,
+        "segments": [
+          5078,
+          10156
+        ],
+        "full_audit_counts": [
+          320,
+          637
+        ],
+        "CPU_components": {
+          "native_CPU": 79265488.75937898,
+          "replay_CPU": 79265375.56296898,
+          "controller_CPU": 11931562.664642435,
+          "independent_state_CPU": null,
+          "paired_comparison_CPU": 623823.994071626,
+          "milestone_CPU": null,
+          "retention_CPU": null,
+          "collection_transfer_publication_CPU": 240.0,
+          "external_monitor_CPU": null
+        },
+        "CPU_before_headroom": null,
+        "CPU_with_headroom": null,
+        "active_wall_with_headroom": null,
+        "finite_retained_output_with_headroom": null,
+        "peak_new_live_output_with_headroom": null,
+        "measured_short_AS_bytes": 16323031040,
+        "status": "UNADMITTED",
+        "native_only_CPU_with_headroom": 99081860.94922373,
+        "required_total_cost_reduction": null,
+        "scope_complete": false,
+        "native_only_active_wall_with_headroom": 100125136.18064798,
+        "peak_AS_with_headroom": 20403788800.0,
+        "partial_observed_scope_CPU_with_headroom": 213858113.72632754,
+        "partial_observed_scope_wall_with_headroom": 215945549.0208815,
+        "partial_observed_scope": "native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors"
+      },
+      {
+        "horizon": "1transit",
+        "requested_T": "40.6216378576",
+        "actual_endpoints": [
+          "40.62175",
+          "40.621750"
+        ],
+        "from_state": "own_qualified_T0.002",
+        "start_is_qualified": true,
+        "total_member_steps": [
+          162487,
+          324974
+        ],
+        "additional_member_steps": [
+          162479,
+          324958
+        ],
+        "segment_length": 32,
+        "native_hard_segment_cap": 64,
+        "segments": [
+          5078,
+          10155
+        ],
+        "full_audit_counts": [
+          318,
+          635
+        ],
+        "CPU_components": {
+          "native_CPU": 79261458.808148,
+          "replay_CPU": 79261458.808148,
+          "controller_CPU": 11930964.852874495,
+          "independent_state_CPU": null,
+          "paired_comparison_CPU": 623793.2804684517,
+          "milestone_CPU": null,
+          "retention_CPU": null,
+          "collection_transfer_publication_CPU": 240.0,
+          "external_monitor_CPU": null
+        },
+        "CPU_before_headroom": null,
+        "CPU_with_headroom": null,
+        "active_wall_with_headroom": null,
+        "finite_retained_output_with_headroom": null,
+        "peak_new_live_output_with_headroom": null,
+        "measured_short_AS_bytes": 16323031040,
+        "status": "UNADMITTED",
+        "native_only_CPU_with_headroom": 99076823.510185,
+        "required_total_cost_reduction": null,
+        "scope_complete": false,
+        "native_only_active_wall_with_headroom": 100120044.74272437,
+        "peak_AS_with_headroom": 20403788800.0,
+        "partial_observed_scope_CPU_with_headroom": 213847394.68704867,
+        "partial_observed_scope_wall_with_headroom": 215934724.30337325,
+        "partial_observed_scope": "native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors"
+      },
+      {
+        "horizon": "3transit",
+        "requested_T": "121.8649135728",
+        "actual_endpoints": [
+          "121.86500",
+          "121.865000"
+        ],
+        "from_state": "fresh_zero",
+        "start_is_qualified": true,
+        "total_member_steps": [
+          487460,
+          974920
+        ],
+        "additional_member_steps": [
+          487460,
+          974920
+        ],
+        "segment_length": 32,
+        "native_hard_segment_cap": 64,
+        "segments": [
+          15234,
+          30467
+        ],
+        "full_audit_counts": [
+          955,
+          1907
+        ],
+        "CPU_components": {
+          "native_CPU": 237795700.76753497,
+          "replay_CPU": 237795587.57112497,
+          "controller_CPU": 35794590.46331928,
+          "independent_state_CPU": null,
+          "paired_comparison_CPU": 1871460.4646136875,
+          "milestone_CPU": null,
+          "retention_CPU": null,
+          "collection_transfer_publication_CPU": 240.0,
+          "external_monitor_CPU": null
+        },
+        "CPU_before_headroom": null,
+        "CPU_with_headroom": null,
+        "active_wall_with_headroom": null,
+        "finite_retained_output_with_headroom": null,
+        "peak_new_live_output_with_headroom": null,
+        "measured_short_AS_bytes": 16323031040,
+        "status": "UNADMITTED",
+        "native_only_CPU_with_headroom": 297244625.9594187,
+        "required_total_cost_reduction": null,
+        "scope_complete": false,
+        "native_only_active_wall_with_headroom": 300374439.4901196,
+        "peak_AS_with_headroom": 20403788800.0,
+        "partial_observed_scope_CPU_with_headroom": 641571974.0832411,
+        "partial_observed_scope_wall_with_headroom": 647833360.3138164,
+        "partial_observed_scope": "native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors"
+      },
+      {
+        "horizon": "3transit",
+        "requested_T": "121.8649135728",
+        "actual_endpoints": [
+          "121.86500",
+          "121.865000"
+        ],
+        "from_state": "own_qualified_T0.002",
+        "start_is_qualified": true,
+        "total_member_steps": [
+          487460,
+          974920
+        ],
+        "additional_member_steps": [
+          487452,
+          974904
+        ],
+        "segment_length": 32,
+        "native_hard_segment_cap": 64,
+        "segments": [
+          15233,
+          30466
+        ],
+        "full_audit_counts": [
+          953,
+          1905
+        ],
+        "CPU_components": {
+          "native_CPU": 237791614.21809897,
+          "replay_CPU": 237791614.21809897,
+          "controller_CPU": 35793984.359137885,
+          "independent_state_CPU": null,
+          "paired_comparison_CPU": 1871429.7510105134,
+          "milestone_CPU": null,
+          "retention_CPU": null,
+          "collection_transfer_publication_CPU": 240.0,
+          "external_monitor_CPU": null
+        },
+        "CPU_before_headroom": null,
+        "CPU_with_headroom": null,
+        "active_wall_with_headroom": null,
+        "finite_retained_output_with_headroom": null,
+        "peak_new_live_output_with_headroom": null,
+        "measured_short_AS_bytes": 16323031040,
+        "status": "UNADMITTED",
+        "native_only_CPU_with_headroom": 297239517.7726237,
+        "required_total_cost_reduction": null,
+        "scope_complete": false,
+        "native_only_active_wall_with_headroom": 300369276.1339076,
+        "peak_AS_with_headroom": 20403788800.0,
+        "partial_observed_scope_CPU_with_headroom": 641561103.182933,
+        "partial_observed_scope_wall_with_headroom": 647822381.3942146,
+        "partial_observed_scope": "native evolution/replay, measured native observer/parse and paired comparisons, plus publication reserve only; missing independent audits, retention, full milestones and external monitors"
+      }
+    ],
+    "unmeasured_additional_costs": [
+      "complete heldout external-monitor validation",
+      "per-state independent audits",
+      "all full milestones/actions",
+      "retention and finite durable growth"
+    ],
+    "validity": "short-history bounds are conditional extrapolations; all proposed campaigns require live spent-plus-remaining guards and segment fill/iteration reforecasting. No long-time physical qualification.",
+    "necessary_zero_overhead_CPU_per_step": 3.9312039312039313,
+    "strict_necessary_bound_scope": "arithmetic budget bound only; observed short native timing is not a proven lower bound on all future states",
+    "publication_scope": "Arithmetic compaction on Mac from sealed authoritative Linux receipts; no fresh numerical validation or full retention/heldout forecast is claimed.",
+    "source_receipt_SHA256": {
+      "/private/tmp/ct15-current-receipts/training-v4.json": "9e0a382009aec9ae0f33627802ce5499269951f34331e69efc58cc9398d12800",
+      "/private/tmp/ct15-current-receipts/pair-v1/results.json": "27f02d571bedf9feab54901f130943929a68296221649d98589560ab31f02b7f",
+      "/private/tmp/ct15-current-receipts/static-v1/results.json": "4b1d4f4c4b712e433d88f6628c7e42e932cee9d6cf55c550b98afd778b6d9c6c",
+      "/private/tmp/ct15-current-receipts/timestep-v1/results.json": "b7f10ce840abdc055bba49ba7f87f9d332d3761a76c27ba83c811f632e8ae09c"
+    }
+  },
+  "actual_equivalence": {
+    "status": "pass",
+    "static": {
+      "target": {
+        "status": "pass",
+        "all_sparse_backend_numerical_data_equal": true,
+        "immutable_FE_rows_equal": true,
+        "oracle_sha256": "46ccf21ce4c85924ea509bb9d2c2c2df5c9474ba49079f53c7ea113b1c3a5f28",
+        "candidate_sha256": "5f09ff64b8c05f0da9726f9013b255f9200edf385d611507a9e7bdb905585784"
+      },
+      "alpha2000": {
+        "status": "pass",
+        "all_sparse_backend_numerical_data_equal": true,
+        "immutable_FE_rows_equal": false,
+        "oracle_sha256": "9d7b37e7051c603a5b15fa1f9934f7ce78f57de300dcc58eca6b13dac65d3c16",
+        "candidate_sha256": "071c1d5a1eb7423ec391cd6ab634f3a943861f79cc4f94e791be706b0141b293"
+      },
+      "q48": {
+        "status": "pass",
+        "all_sparse_backend_numerical_data_equal": true,
+        "immutable_FE_rows_equal": false,
+        "oracle_sha256": "308c5585b409b082cb468d20110c6fb343bfe9596248b3506e2f9872560d7eef",
+        "candidate_sha256": "1301fec672240c24e968095bf428d9b90af9f74887e7c63d7f70edc1c7e3c3d5"
+      },
+      "q64": {
+        "status": "pass",
+        "all_sparse_backend_numerical_data_equal": true,
+        "immutable_FE_rows_equal": false,
+        "oracle_sha256": "01f4a30f3d508128831d2fb2da00474de3396b7d571473f477ab5290caf32737",
+        "candidate_sha256": "87491c7fd079d4fde958f18cc635b45309056e60f1c08a87639efef56c480b9e"
+      }
+    },
+    "members": {
+      "0.00025": {
+        "status": "pass",
+        "times": [
+          0,
+          0.00025,
+          0.0005,
+          0.00075,
+          0.001,
+          0.00125,
+          0.0015,
+          0.00175,
+          0.002
+        ],
+        "accepted_binary64_hashes": [
+          "dd0af02695e58934d6469580aec40249700b404b7f079c0abe8db10c99d3c77a",
+          "ede14bee7cab99a58a1e7f3792a3d0487b86bc48a96e37542c043f26bd1199a6",
+          "0d02e0b27c40ec54baffcd7d806ac38da4ae33967dcf94a8de4d723448278b19",
+          "0d05e24cfa0f886ab8ff0add33234570781e92e986d0be415838b6c4cbc16d84",
+          "437bf945376a0647e96a202f809e5c91f7ac1d965e086869b7c9ae7a8b762666",
+          "e6f3401436122aa76a1f7c823a0a522da76b5fc489f0cd123dd887df1f591605",
+          "169f4361afa56b3f279bbc3c7fb165ea858f0b74fa06c5cb64982f75f5a4a9ad",
+          "8ed37ec144a4da1eb7c03300534ebcb1ac49f7b50a5454aeac61f0254e11a555",
+          "ca2930227b504059a35c4946e3b93a78cfd8f2149239b463da1bcb9df233640e"
+        ],
+        "actual_stage_hashes": [
+          {
+            "flow": "5901caf8dc414577f08ba6ac5ec1c38d503414287c17e193c9e9654536d69df3",
+            "k": "afe940384edf17d56fad98ed1da84b16ae4bbad8526fd369ac3e1ce773f304bd"
+          },
+          {
+            "flow": "db2beab72f3aa6c4f0e956da0e3f36d97a69e81899b1373849a3bfeb6bd18dd7",
+            "k": "e1dcc9ff3c6f8b9bd765aa532d0c96be037c633ffb1a88f11f3ae35242441fe4"
+          },
+          {
+            "flow": "61ccf9833a14393177c4ff8a2b86a4a89a2019831c46fd63da6d6babb38e8f52",
+            "k": "d1edd09d5ebdd59d78cd3d73835958cff6dfaffb87578e094847fe048a444799"
+          },
+          {
+            "flow": "ba9a2a26460087471537604bb341180fd4dc23d925b5ac60ec299d80dfe94992",
+            "k": "db7521f7bc02f289a34d488c0b557780ae569e9dcc6bdacf0b1db1ff258fd89b"
+          },
+          {
+            "flow": "6720c24b6304c80651fdc59c33ec20575e92a14bcb5464d430702b7f13e3b966",
+            "k": "d439bcf7255bd439343d0286bc626978b7696616acfa85f17180d1635632b335"
+          },
+          {
+            "flow": "8e9ad3f69ce597aa3fc93b93730d451a0942b1f098dbbb51d15d7a36ebd641c8",
+            "k": "01899edd13c15c0c3ecb13644051056a85c108eeb1a6583c617671919a4711c7"
+          },
+          {
+            "flow": "01694c2628e69c276fc52927e90c26cc908caf4173da213230e574eb16eec50a",
+            "k": "e45058ac2a9b9196718321d9089d93ae939e1a722518ff74fe6e5aa121f3ccce"
+          },
+          {
+            "flow": "c80e583f9ff3b247308162e516fc656a437c01dec4a38aa515372de2e91cc628",
+            "k": "0290327b736a22691bd4a8758269b2e6e2a522b84fc3187d660ee4ed1896947e"
+          }
+        ],
+        "all_initial_stage_and_accepted_numerical_data_equal": true,
+        "maximum_scaled_action_difference": 0.0,
+        "maximum_scaled_state_absolute_pressure_and_traction_difference": 0.0,
+        "oracle_report_sha256": "955f8e50b839ed23774f983166c213c137bb1c8d4ca2ebe4f4537d76e32db094",
+        "candidate_report_sha256": "dc3fd28697b8b9afc1ac71691dd166c53eec713e9ddc45ccff22b7fa0e9e132e"
+      },
+      "0.000125": {
+        "status": "pass",
+        "times": [
+          0,
+          0.000125,
+          0.00025,
+          0.000375,
+          0.0005,
+          0.000625,
+          0.00075,
+          0.000875,
+          0.001,
+          0.0011250000000000001,
+          0.0012500000000000002,
+          0.0013750000000000004,
+          0.0015000000000000005,
+          0.0016250000000000006,
+          0.0017500000000000007,
+          0.0018750000000000008,
+          0.002000000000000001
+        ],
+        "accepted_binary64_hashes": [
+          "dd0af02695e58934d6469580aec40249700b404b7f079c0abe8db10c99d3c77a",
+          "df054f9afe551333c45cccf3c2fc4068d67056c98332597d94e9da8cf631a2e4",
+          "739eb8283a1eec1ec4edef9e9a9d62a9c75739b55ea71eb69916a73f9c69b863",
+          "2a8f0bd7d2766e58b291ee7e86ae80e8d7676d6306f11712f9ead8930f1cf3e9",
+          "f1be45992356f2920d1ef2cece81efe198295bd75b274d334bbdda6959b037a2",
+          "647f323e46dfabfe1aea3312073494c0f9870a381eece277eae39b77d4981861",
+          "ae0cc1679178906627ddf29fdeaf16f61c668f2eab7aef9c1a4eb24f43024d5a",
+          "c8fd7a614f28dd9e06fc9cf6a87bc8560e89b9325b647a807ce882ac39aeec33",
+          "9e15ead6edfdfe2833187e5aa90a06747ebff44098f941cac27661ba4371e854",
+          "7e3ea0222d9385e69dccaccb8a59df1484684fa547a929c0d5edde0f8da16120",
+          "3e5d5bf928ad293f6e61dcffaa9bb665976bf82840d1aa4e748784e857ddfef6",
+          "674fa76a7d9ec77b14954ac4abdb7e321c3f0beb59940c1766f97da95c6b7b2e",
+          "cda94d33b9d602f42b2cfeafa4ea8167675f28874ff1d646582bb14aac2609dd",
+          "5016f44e1b90fd5971ef08fae74ffaadfd0f6ef552a72b86310526ffc2f9b45b",
+          "e75f5401015bf915e00df682dbeec8d416ad1889d639e126f4a2e59413dc6541",
+          "9219fa5430f7413057acfcded982c91ee1fdade90369bc6524558fab019e012b",
+          "906853677217f4af8fbe13f0314a92960a9f0354ff6f2ee40a041416159e9923"
+        ],
+        "actual_stage_hashes": [
+          {
+            "flow": "567741f3b399ae3b4d8f3e06120c5a3846f8199730a940fe32c0df870490cfb1",
+            "k": "9380ef3fe77eae962b0d56d84ab53c917205e4c27f2e9a41963229e59916276d"
+          },
+          {
+            "flow": "fef15b990ae316419e2015987b2a0bdbdcd7c7713084b512b01c617f664a3058",
+            "k": "7482dffe4a2a4a0014579983277041770646bef1d5a1a659701b4ead9eb9c458"
+          },
+          {
+            "flow": "994469c937f75a51a2b93b74b0e16bf0893c4ecde9aa4be5c5560f82e5b0dfec",
+            "k": "748182c876d352397391958bf329aa7a6e1afb68726943f46670410b690ea37d"
+          },
+          {
+            "flow": "83f8cee095655bf8affb6decbedcbd4b8935e8cee231c9c18810821ee544f0c2",
+            "k": "7ee234b3dfc156ea62cc88e5cbce59b4c5d5c67c44d479b99dfd0e39fce0c69b"
+          },
+          {
+            "flow": "bbc9b2e5f5e12cce2440f9e3033b0f27166e8dfa8badfd60f40a91d3b2f292bb",
+            "k": "cd13374a4652dd68ca18e6a0088b25c981d3fe261a3a15a9db25e8a6a5cfd731"
+          },
+          {
+            "flow": "4ae232bd708c144b89f4905f62f360f067a1f5afea6bc1f467434f4135fd57de",
+            "k": "9375ff00f98e5480bb2af280d1b39675f4cfaf586676573e8db678062425d9c9"
+          },
+          {
+            "flow": "7f6264d1eaa360dc4725bf636fedd115fed7532e68a8a5892818d79dcac35d4e",
+            "k": "5a77fe3afcbc39ac255055755875a2e7c22f62a89420540341b17d2b47768ebb"
+          },
+          {
+            "flow": "16c5e2a9b9f17442dca68a995f36aebcf39623883c6cfa3d76ce52a94de2760a",
+            "k": "bcfba06d185d3c69ce5705531e94f170942ae4dddb9e1a6d5de90b3bbe96f7a8"
+          },
+          {
+            "flow": "1fbda5419174046d7de69033e7663a02f2b089c1a348170e4fdd81e58d117ee1",
+            "k": "c694d583add0ddabcc0ba77180671e20bf62427aee38b7e87b5cd97879052b3e"
+          },
+          {
+            "flow": "7f32ba26287817d58415ed30d2266227ac7c820075d3ee0b73d60c02c67541b7",
+            "k": "7c442665db8d175ba11509f7f76740108cfececd2cb273c30cfabd5da1b23bfc"
+          },
+          {
+            "flow": "514c64d2ee4e9d49cf88cec79172aab91e8f73c605052ee406cb946a13e6f737",
+            "k": "7308ba2959fbdd757ec3565357aaaa8c844f252cc08391fc29dc7b6b4424c32f"
+          },
+          {
+            "flow": "a9e64a6b07528d9edb6272d0467589832560d29a1e10282e0d9e1bececcd1e98",
+            "k": "dcf09b375059c7d4ff97c1d9a4068177a0ac453b4086ae80b92bf180df1161bd"
+          },
+          {
+            "flow": "1c5cbec1d116592bd2690d6222a8fbc0a23fe51e20f6f498b3b8133166bfae12",
+            "k": "3bf78c3112c2e44cd3eb6897afa3b5525245e116c6f3edce31b41c109dd3da12"
+          },
+          {
+            "flow": "53df4e0ad5c72facf929f3912ea9fc88defc0040cf7dc847e6aa62b718217614",
+            "k": "391c2d26728a7a56b8aa6742c36246871ab0649823337f333f5eb113e34c45e3"
+          },
+          {
+            "flow": "7d40a1d3fb19320e5e065b12484d8a778dc9981e84a01cfda0cc62b1d7659356",
+            "k": "6c0bf7af4d3a1577a70df425e3d0f835aa685fe9f777e8c3f61c9930e51c31ea"
+          },
+          {
+            "flow": "9c647b05ca8d3aabe745208983014409b7354dce426593a8c335cdf510cc419f",
+            "k": "e710eb579f37fc7ab53b13775b5faed7b235b2c99ae8d7d8565e7db8a8875985"
+          }
+        ],
+        "all_initial_stage_and_accepted_numerical_data_equal": true,
+        "maximum_scaled_action_difference": 0.0,
+        "maximum_scaled_state_absolute_pressure_and_traction_difference": 0.0,
+        "oracle_report_sha256": "b446a9f1368f0eae0a14699d3ad9c425ffa1cf4c8fe6e3e7d2a37338cd4a8546",
+        "candidate_report_sha256": "c9ea5b529572c2f52b7bb98ee34903f281172dc258d93c033fe62c85a79d26a8"
+      }
+    },
+    "criterion": "binary64 numerical arrays identical, stronger than the prospective scaled tolerances; source paths/component/schema prose excluded"
+  },
+  "source_and_runtime": {
+    "schema": "CT15FreshSelectedPairV2",
+    "source": "3c5e0ffc846c86fa669fbc9f4ed1a4f57947854597acd00ebe6cd2c3c6bac474",
+    "contract": "b76d40a6e15375b0a27ee8eb7dfa8e59eb9f3491a59ee3856c075a5e9bd67b8a",
+    "static": "4b1d4f4c4b712e433d88f6628c7e42e932cee9d6cf55c550b98afd778b6d9c6c",
+    "component": "df223c5b6e11057c7921177fba493416c3db6985f80c9ad5d37d0737540fd993",
+    "capacity": "351b6ca047fb358f2e1f4101a36fc78a5ec7cc22a9d5b7c7f5a28a68a3637347",
+    "runtime": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/IncNavierStokesSolver",
+      "sha256": "27c47d29972dcfbdbe92d05347c3c732b8e85b6b05a147c7508df03c2bca6ab3",
+      "libraries": {
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libFieldUtils.so.5.9.0": "e8ee2e34209057c9dce56be5870220d6aeb400f7c3483d0db67800b5e674b330",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libGlobalMapping.so.5.9.0": "d31d911df25f886c11c63ab9f977c98aee34a36e3b7a82e527f8c3f9b1782660",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libSolverUtils.so.5.9.0": "80a25795989b1bc5502af85cb2b2e3bbfd02d6367268f872533cbb199f8ae48c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+        "/usr/lib/x86_64-linux-gnu/libscotch-6.1.3.so": "ebc5bf524a38c081cff46100ce6a6a417297e335ac6e0a28ad16e8d95d894966",
+        "/usr/lib/x86_64-linux-gnu/libscotcherr-6.1.3.so": "c154ad8b0c5db16d3f596dc203de7a2e202fb06652bfa7a3e31787d8537f2621"
+      }
+    },
+    "probe": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/RANSPreservationProbe",
+      "sha256": "a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd",
+      "libraries": {
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libCollections.so.5.9.0": "0d1d08d140821e18024dbb5836b811b356c6f7db339a33024f6845dd9ecdfe88",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libLibUtilities.so.5.9.0": "a8562551bc964eabc07dd8ec3cb5e0c4e8028aa68f29f36d5c3b92ae9cd10c5b",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libLocalRegions.so.5.9.0": "6dceac9a73bb8080560227c2e6dd686c3d2f797d6cebfa865864535ee39d39fc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libMatrixFreeOps.so.5.9.0": "5cb3fc6e132f69e0a927a84da32105ee49253d2d2d0d561a4c2a8c456faa1ecc",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libMultiRegions.so.5.9.0": "dc64d05e9d76e8db0ddbcfefc1adcc32384b1ce4dfb4aed26171928deeafc19e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libSpatialDomains.so.5.9.0": "40fb9c1d658b54511f604e8eb982cbbc8d487c190745cbd045fac392a15e6eda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libStdRegions.so.5.9.0": "1ceaf1a0f027a69bbd6939a574da5ef8438d37b0927422444113c4cd376a0cc7",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libblas.so.3": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libboost_iostreams.so.1.74.0": "f820f73df20bedfa380173b6cdf6159205a5f454c46288b9c8af72c02a2f638e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libboost_program_options.so.1.74.0": "ea9cc5e083371770527e933345315e413dd7c460548d8f7e868004a67d88b482",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libbz2.so.1.0": "54d16979912ab62282350dd2dc5dceb5b73b13e27bb02792087aff752d16f6e9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libc.so.6": "b2cf6c33b74d2f22543b7a469a75b538911e690f769d0b238843a49465b83793",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libevent_core-2.1.so.7": "2d04f8e4a4cd0cf3dfe214f655298b6819cf7b1ce5677c461b904830bcdb2f8f",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libevent_pthreads-2.1.so.7": "2c12e1fbd54ac804e4de1badcb318217ada877ae18cab8b3ce89cf3626635537",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libfftw3.so.3": "34610b14cb5199a78d9554bef4ef90f8fc53c11d56dd13c5011892a307f71e6d",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libgfortran.so.5": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libhwloc.so.15": "2efe6e32d0d3454b2bce0d3b8cd437f48691475717be4b431f96bcc2d4d9bc54",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/liblapack.so.3": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/liblzma.so.5": "3147e2cb512d17a4064d34f61e69591b6473543db2ec63cd797f766cd3b09037",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libm.so.6": "3dd5511ae94785c9f921429b0f2b2f7aabb461b6f0e6de6dfdbef15f24bdfee6",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libmpi.so.40": "27d2d690a5d1f971cf90e28e54e945519df7c1528a954ae4bfc8a436bfbb1982",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libmpi_cxx.so.40": "00d66f84d34258596906f499a62918c9e7adc946e6e7ebc80675ba422ce29788",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libopen-pal.so.40": "2a03b97563b724c6e42f853b90e2dc0619de3486628a7b065b74f7b30e5c35a1",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libopen-rte.so.40": "69b31a92a4fb7e2f494a027a7d4dddff4e516aab5158827165e12730d7c0ff57",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libopenblas.so.0": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libptscotch-6.1.so": "1c612cfcb69f5abe7d9139575be4eebee6e0cd4b56b11908838878570fbf61e0",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libptscotcherr-6.1.so": "8027bb6356a13e5284dace7d6e5417ee19cc4f8913573c4eab0bf3be51623d3e",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libquadmath.so.0": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libudev.so.1": "08b989e58a49b85468db9be8f5f915d756ae70865a291bb524bc87d9fedf6dda",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libz.so.1": "64c206f0146cc58bbddc4f22054436f4ff278f5a554aa3ce6921ddf7e9133370",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime/lib/libzstd.so.1": "5df4f4df42d76270bb6981fabc7c1fdccd8ad28a23d84d67f73203fb3f537667",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "a87fec14aeedb537d0b2a80c6a3308b82e774d86541dff4654a75ab1fd22df0a",
+        "/usr/lib/x86_64-linux-gnu/libscotch-6.1.3.so": "ebc5bf524a38c081cff46100ce6a6a417297e335ac6e0a28ad16e8d95d894966",
+        "/usr/lib/x86_64-linux-gnu/libscotcherr-6.1.3.so": "c154ad8b0c5db16d3f596dc203de7a2e202fb06652bfa7a3e31787d8537f2621"
+      }
+    },
+    "case": {
+      "model": "A95",
+      "policy": "Natural",
+      "provider": "DisplacedNeutralCompositeV1",
+      "wall_policy": "SamePhysicalWallDisplacedAcceptedV1",
+      "fit_policy": "CT8PhysicalBelow25mmEqualIds012V1",
+      "H": 0.1875,
+      "H_mm": 7.5,
+      "Z": 20.0,
+      "displacement": 0.0875,
+      "nu": 9.523809523809524e-05,
+      "ustar": 0.07426793792441279,
+      "B": 0.9919449895413243,
+      "K0": 0.021081109428869052,
+      "z0_m": 0.00018124943074282322,
+      "roughness_input": 0.1711243515027194,
+      "reference_column": {
+        "policy": "SamePhysicalWallDisplacedAcceptedCandidateV1",
+        "model": "A95",
+        "H": 0.1875,
+        "h_s": 0.1711243515027194,
+        "d": 0.0875,
+        "gamma": 0.0,
+        "J0": 103.10901692895743,
+        "J2": 119126.41711228852,
+        "P0": 0.0027917473575437965,
+        "A": 0.001013811394236224,
+        "minimum_required_budget": 0.00190089636419292,
+        "cutoff_margin": 0.4686478495786448,
+        "cutoff": 0.15314840882128453,
+        "original_roughness_interval": true,
+        "matching_velocity": 0.5687211477403636,
+        "metric_minimum": 1.0,
+        "reference_k": {
+          "minimum_over_K": 1.0,
+          "location": 0.1875,
+          "stationary_Q_roots": [
+            0.1875
+          ],
+          "candidates": [
+            0.0,
+            0.1875,
+            0.1875
+          ],
+          "values_over_K": [
+            3.5544801988435704,
+            1.0,
+            1.0
+          ]
+        },
+        "epsilon_H": 0.01013811394236224,
+        "epsilon_plateau": 0.01544304595403272,
+        "budget_defect": 4.336808689942018e-19,
+        "Q_ground": 0.0,
+        "Q_H": 1.3010426069826053e-18,
+        "ground_k_gradient": 0.0,
+        "interface_k_gradient": 2.2075129152452323e-16,
+        "counterfactual_flat_mechanical_work_defect": -4.336808689942018e-19,
+        "flat_covariance_minimum_over_K": 0.40925154516634393,
+        "flat_covariance_location": 0.1875,
+        "outer_covariance_minimum": 0.006111572556576726,
+        "Q": [
+          [
+            0.005714899174565924,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            -0.005714899174565924
+          ]
+        ],
+        "Pi_outer": 0.005714899174565924,
+        "outer_shear": 0.00551572660354443,
+        "outer_normal_traction": 8.673617379884035e-19,
+        "status": "admissible_frozen_column",
+        "H_mm": 7.5,
+        "nu": 9.523809523809524e-05,
+        "hr": 0.1711243515027194,
+        "zv": -0.005725641386453387,
+        "counterfactual": {
+          "epsilon_amplitude": 0.001013811394236224,
+          "traction": 0.005515726603544431,
+          "u": 0.07426793792441279
+        },
+        "outer_equilibrium": {
+          "outlet_traction": [
+            -0.011429798349131848,
+            0.005515726603544431
+          ]
+        }
+      },
+      "x": [
+        -25.0,
+        -20.0,
+        -17.0,
+        -14.000000000000002,
+        -13.0,
+        -12.0,
+        -11.0,
+        -10.0,
+        -9.0,
+        -8.0,
+        -7.000000000000001,
+        -6.0,
+        -5.0,
+        -4.0,
+        -3.0,
+        -2.5,
+        -1.875,
+        -1.25,
+        -0.625,
+        0.0,
+        0.625,
+        1.25,
+        1.875,
+        2.5,
+        3.5000000000000004,
+        5.0,
+        7.5,
+        11.25,
+        15.0,
+        20.0,
+        25.0,
+        30.0
+      ],
+      "knots": [
+        0.0,
+        0.00146484375,
+        0.0029296875,
+        0.005859375,
+        0.01171875,
+        0.0234375,
+        0.046875,
+        0.09375,
+        0.1875,
+        0.234375,
+        0.29296875,
+        0.3,
+        0.3662109375,
+        0.457763671875,
+        0.57220458984375,
+        0.7152557373046875,
+        0.8940696716308594,
+        1.0,
+        1.1175870895385742,
+        1.3969838619232178,
+        1.7462298274040222,
+        2.1827872842550278,
+        2.7284841053187847,
+        3.410605131648481,
+        4.263256414560601,
+        5.329070518200751,
+        6.661338147750939,
+        8.326672684688674,
+        10.408340855860843,
+        13.010426069826053,
+        16.263032587282567,
+        20.0
+      ],
+      "degree": 4,
+      "pressure_degree": 2,
+      "coordinate": "physical floor r=z=0; zeta=z-d only in outer log/epsilon; fixed Hh40mm normalization",
+      "integration": {
+        "normal": 32,
+        "tangential": 8,
+        "mass": 12,
+        "volume": 12,
+        "face": 64
+      }
+    },
+    "dt": [
+      0.00025,
+      0.000125
+    ],
+    "T": 0.002,
+    "component_identity": "CT15-ImmutableTensorV4",
+    "detailed_timing": false,
+    "physical_classifier_source": "c9efc156dc7024adbfdf2812f8e4aa5346d097e7fdb3078879f10d7085d69530",
+    "request_specialization_source": "6c0e5baa915af5fac4a839c75dd84e0e9a1b682fdd8504f96dcbd0467fab2d2c",
+    "timestep_admission": "b7f10ce840abdc055bba49ba7f87f9d332d3761a76c27ba83c811f632e8ae09c"
+  },
+  "reproduction_scope": "authoritative Linux numerical receipts; read-only Linux metadata export; hash checks and compaction on Mac. No new solve, physical classifier or operator validation is run by this publisher."
+}

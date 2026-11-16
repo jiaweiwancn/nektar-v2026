@@ -1,7 +1,8 @@
 # CT15: affordable production execution path
 
-Status: **IN PROGRESS**. Resource admission is not established. Physical
-T=.407 preservation is **UNATTEMPTED**.
+Status: **UNRESOLVED**. G1 implementation equivalence and G2 short scientific
+qualification pass. Resource admission is not established. Physical T=.407
+preservation is **UNATTEMPTED**; full-transit readiness is **UNQUALIFIED**.
 
 Checkpoint A fixes the [prospective contract](cao-tamura-accepted-15-evidence/contract.json)
 before builds or numerical work. The fetched branch and dedicated Mac worktree
@@ -17,6 +18,16 @@ and probe SHA256
 Publication head and tested native source are distinct. Full external receipts,
 not compact publication substitutes, are the comparison inputs.
 
+The CT8 physical manifest remains
+`004bc0fc82054296a68d56de77751fc1f0a41570ee16b0a174ae8087f262d296`:
+Original/Natural A95, 62,533 stored slots, 961 elements, P4/P2 and HA/128.
+The fixed time map is IMEX1 single sweep, flow → epsilon → k, with
+dt=.00025/.000125. The governing pressure action remains
+`D[(alpha*Mfree)^-1 G]-C`; diagonal mass is only a preconditioner. Current endpoint
+K, the dependent inner epsilon, full signed stresses, covariance/radicand
+checks, absolute Pi/outlet traction, and the original physical calibration and
+boundary conditions retain the [frozen contract](cao-tamura-accepted-15-evidence/contract.json).
+
 The four measured implementations isolate immutable geometry and FE rows from
 the unqualified ExactStepV1 state caches. Moving AWF coordinates remain exact
 keys; all current-state admissibility work remains active. Successive prospective
@@ -31,12 +42,12 @@ production will have separate ledgers.
 
 | Gate | Requirement | Current status |
 |---|---|---|
-| G1 | Exact problem/time map; affected actions <=2e-10; state/absolute Pi/traction <=1e-8; current-state/dependency/history controls | PARTIAL; full selected-trajectory comparison queued |
+| G1 | Exact problem/time map; affected actions <=2e-10; state/absolute Pi/traction <=1e-8; current-state/dependency/history controls | PASS; all initial/stage/accepted numerical data exactly equal; scaled differences0 |
 | G2 | Fresh .00025/.000125 pair to T=.002; every unchanged scientific/uncertainty criterion | PASS; shared-worker resource audit failed separately |
-| G3 | Matched timing-off startup/step/workflow measurements; frozen held-out restart workload validates model | PARTIAL measurements; fixed heldout UNATTEMPTED |
-| G4 | Two actual retirement/recovery cycles, replay/audit, interruption, continuation and full rollback | UNATTEMPTED |
-| G5 | Complete T=.407 forecast with 25% headroom <=24000 CPU s/28800 active-wall s/24 GiB output; later horizons explicit | UNRESOLVED; native-only conditional CPU forecast already41.37 times ceiling |
-| G6 | Pushed source and hash-bound runtime/input/history/resource reproduction | IN PROGRESS |
+| G3 | Matched timing-off startup/step/workflow measurements; frozen held-out restart workload validates model | UNATTEMPTED heldout; startup/step and partial workflow measurements completed |
+| G4 | Two actual retirement/recovery cycles, replay/audit, interruption, continuation and full rollback | UNATTEMPTED; complete predeclared scope declined before launch |
+| G5 | Complete T=.407 forecast with 25% headroom <=24000 CPU s/28800 active-wall s/24 GiB output; later horizons explicit | FAIL; no validated complete forecast; native-only conditional CPU already41.37 times ceiling |
+| G6 | Pushed source and hash-bound runtime/input/history/resource reproduction | PASS at final delivery; closed receipts and explicit reserves; failed shared audits retained |
 
 Checkpoint B qualifies the affected candidate in
 [sealed compact evidence](cao-tamura-accepted-15-evidence/checkpoint-b.json).
@@ -71,19 +82,29 @@ Their remaining absolute margins are8.566492270940976e-8 and
 1.5531852563239622e-4 respectively, or27.2463%/15.5319% of the unchanged
 allowances. This independent scientific PASS does not replace the pending full
 array/stage equivalence comparison.
+The earlier dt=.001/.0005 cohort remains a **FAIL** of absolute-pressure
+uncertainty. Its histories are preserved and are not relabelled as this cohort.
 
 The unrelated HIT job caused the pair's aggregate worker audit to fail at101;
 own project highwater remains12<=16. This resource failure is retained separately
-from the scientific PASS. Full selected-trajectory equivalence is currently
-queued **before spawn**, with no numerical child, while the HIT job keeps the
-host above72 workers. The user explicitly chose to wait for that job. No
-unrelated process is stopped, and the original CT15 allocation clock is not reset.
-Closed engineering expenditure including the120-second exception reserve is now
-20389.906691353 CPU seconds, before the current queue/closure helpers. A complete
-G3 heldout cannot fit the remaining pool. G4-only recovery remains conditional on
-worker admission and a prelaunch remaining-CPU/wall/storage check; it cannot
-supply G3. Unmeasured whole-workflow forecast fields are published as null, with
-the measured native-only and partial-scope extrapolations named separately.
+from the scientific PASS. The user first chose to wait and later arranged to
+reduce or pause HIT. When host headroom returned, the existing full comparison
+resumed and **passed**, without a duplicate family. All26 initial/accepted
+states and every actual flow/k-stage numerical array match CT14 exactly for
+both members. Scaled action and state/absolute-Pi/traction differences are0,
+against2e-10/1e-8. The sealed [full comparison](cao-tamura-accepted-15-evidence/equivalence-v1/results.json)
+binds each original/candidate report and numerical tree.
+
+That comparison's complete outer family used1000.447465 CPU seconds including
+6516 seconds of allocation wait,723.472382 CPU seconds in the worker monitor
+and16.071242 in the launcher. Its owned descendant family used260.903841 CPU
+seconds, exceeding the preliminary128-second allowance; that allowance was
+not a validated cost model. The unchanged live package guard remained within
+the original allocation. The aggregate audit retains its120-worker failure
+observed during waiting; project highwater was5. No unrelated job was changed
+by CT15. Full G3 calibration/heldout and G4 recovery were not admitted. Unknown
+whole-workflow forecast costs remain null. The entry resource-admission goal
+is **not achieved**.
 
 No T=.407 or meaningful-duration preservation run is authorized in CT15.
 
@@ -118,7 +139,8 @@ clears. Broad diagnostic timing measures 33.46 exclusive CPU seconds in flow
 assembly and roughly16 seconds per complete domain computation. Hits alone
 do not demonstrate savings. The separately measured independent-controller
 prototype preserves every result exactly, reducing a complete endpoint
-diagnostic bundle from19.71/20.99 to16.33/16.33 CPU seconds; it prepares only
+diagnostic bundle from19.96847/21.74463 to16.88693/17.59559 CPU seconds in the
+latest matched Python benchmark; it prepares only
 immutable arrays and recomputes all current-state contractions and physics.
 
 The [third prospective remedy](cao-tamura-accepted-15-evidence/attempt-3-contract.json)
@@ -232,6 +254,10 @@ The measured160.84 seconds/step envelope is not a proof that all future
 implementations or states require that time. The strict necessary bound is the
 arithmetic3.93-second zero-overhead allowance; the41.37-fold gap refers only to
 the declared short-history native extrapolation before other workflow costs.
+For the proposed policy that replays every retired segment, two complete native
+passes would reduce the zero-other-cost allowance to1.96560 CPU seconds per
+actual native advance. This is specific to that replay policy; another retention
+design would require its own qualification.
 
 `ImmutableTensorV4` retains exact-owner/radial-side geometry lookup, immutable
 tensor FE rows and bounded copy-on-write storage. Hashed assembly preserves
@@ -246,6 +272,39 @@ No consistent-mass factor or changing numerical factor reuse is implemented.
 The Off oracle, ExactStepV1 open-route guard and unchanged post-k epsilon lag
 remain active.
 
+The historical ledger is sunk research, excluded from both CT15 and every
+prospective campaign row. Authoritative closed Linux families give:
+
+| Historical task | Closed families | Process CPU s |
+|---|---:|---:|
+| CT11 | 17 | 6312.563442 |
+| CT12 | 47 | 9598.852857 |
+| CT13 | 33 | 6901.472108 |
+| CT14 | 24 | 20350.164785 |
+| Total | 121 | 43163.053192 |
+
+CT11's published accounting file contains prospective formulas; its actual
+closed Linux receipts supply the expenditure above. CT14 separately published
+an upper bound of20470.164785 CPU seconds including its own reserve. Summed
+family elapsed walls are not treated as simultaneous CPU sums or as a new
+production cost.
+
+| Preserved CT15 attempt/incident | Result and causal lesson |
+|---|---|
+| ImmutableTensorV1/V2 | Many immutable-row hits did not offset construction/copy/lookup cost; native one-step commands were slower than the matched CT14 control. |
+| ImmutableTensorV3 | Hashed assembly, successful literal guards and the bounded larger working set reduced selected native costs; the complete affordability gap remained. |
+| ImmutableTensorV4 and Python prototypes | The whole training family improved while the V4 native two-step command was slower than V3; exclusive native and controller costs must stay separate. Exact PreparedRows was adopted; the changed-arithmetic batched prototype was not. |
+| Build/interface and early control-driver failures | Seven nonzero closed build/driver receipts remain in the ledger. Fixes preceded passing qualification; failed commands are not credited as scientific evidence. |
+| CMake Progress-directory race | The interrupted monitor lost part of a completed build's observation; the documented120-CPU-second exception reserve remains charged. Disappearing CMake scratch paths are now tolerated by the disk walk. |
+| Python tuple-adapter failure | The failed verification-driver run is retained and charged; its corrected exact-array benchmark passed before adoption. |
+| External129-thread debugger during V2 | Aggregate141 failed the shared audit; own project12 passed. The numerical comparisons remain distinct from the failed resource audit. |
+| External HIT work during the fresh pair/queue | Pair aggregate101 failed; own project12 passed. The comparison waited, then passed after headroom returned; its historical aggregate120 audit remains failed. CT15 changed no unrelated job. |
+| ProbeWorkingSet65536V1 | Prospectively defined fixed remedy, currently UNATTEMPTED. A sparse-only subset would remain explicitly partial and could not qualify the full memory policy or G5. |
+
+All these costs stay in the one CT15 ledger. The32 closed families at checkpoint C
+sum to20269.906691353 CPU seconds before the120-second exception reserve.
+The queue/closure costs are additional and must close before final delivery.
+
 `SelectiveReplayV1` is a proposed selective policy, not a lossless archive of
 every retired file. Its code retains readable current/previous checkpoints,
 all segment anchors/reports/receipts and first-failure witnesses; it verifies
@@ -256,6 +315,12 @@ restart/rollback controls and source implementation do not substitute for G4.
 The explicitly cheaper G4-only scope preserves all required per-state audits,
 two cycles ending2/4 and rejected-step rollback, while declaring the unchanged
 G3 heldout **UNATTEMPTED**. It cannot produce resource admission.
+At12:09:53UTC, the [whole-scope admission check](cao-tamura-accepted-15-evidence/g4-admission-declined-v1.json)
+declined G4 before launch: its2600-second wall bound exceeded the2599.8064
+seconds remaining before the original guard, even ignoring the still-queued
+equivalence prerequisite. The combined2700+128 CPU allowances also exceeded
+the2724.5433-second remaining CPU pool. The fixed scope and ceilings remain
+unchanged. Source implementation is not promoted to an executed recovery PASS.
 
 Task3 is **not admitted**. Before a new physical T=.407 contract, the selected
 component needs complete trajectory equivalence, actual G4 cycles, a prospective
@@ -270,6 +335,8 @@ Reproduction uses the selected immutable runtime at
 `/media/jay/新加卷1/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime`.
 Its tested native source is`7b722daa41d18b316f8b78dafdde39fada4d5e94`, governing
 SHA256`27c47d29972dcfbdbe92d05347c3c732b8e85b6b05a147c7508df03c2bca6ab3`.
+The probe SHA256 is
+`a6edf171e3257b68b6be861bb56efb0de9abb28b95ce18029f81f2f9306974dd`.
 Later Python-controller commits do not imply a rebuilt native executable.
 All commands run from the private Linux source with the six numerical-library
 thread variables set to1. The driver sequence is:
@@ -334,3 +401,67 @@ python3 -B "$t/ct_accepted15_command.py" --control "$p/resources-reproducer-NEW"
   python3 -B "$t/ct_accepted15_controls.py" --ct14 "$b" \
     --runtime "$p/build-v10/runtime" --output "$p/reproducer-NEW" --phase selected-one
 ```
+
+
+Final closure and reproduction
+
+The [sealed closure](cao-tamura-accepted-15-evidence/closure-v1/results.json),
+[accounting](cao-tamura-accepted-15-evidence/closure-v1/closed-publication-accounting.json)
+and [Linux metadata snapshot](cao-tamura-accepted-15-evidence/linux-snapshot-v2/snapshot.json)
+close all33 families, with no unclosed resources. Closed CPU is21390.354157
+seconds including the120-second exception reserve; the existing240-second
+administrative reserve gives21630.354157<=24000. The whole-clock wall upper
+bound including480 remaining publication seconds is28581.814564<=28800.
+Observed live bytes are10960403736; with256MiB publication staging the upper
+bound is11228839192<16GiB. Sampled cumulative process wchar is23961386528
+bytes, including pipes and incomplete short-process sampling; it is not an
+exact physical-disk write total. All original deadlines and ceilings remain.
+The failed aggregate audits141/101/120 remain visible; these are not clean
+shared-resource-admission results. Metadata export and receipt compaction
+perform no new numerical validation.
+
+The fixed65536-row memory remedy remains UNATTEMPTED. By final publication,
+even the two previously measured q64 sparse commands required490.107393 wall
+seconds before new-quota uncertainty, controllers and collection, exceeding
+the remaining original guard window. No optimistic speedup was assumed to
+launch another scope. The full four-control policy is unqualified.
+
+The final publisher's G6 field says PREPARED_FOR_FINAL_PUSH because it is
+created before its own commit. Final delivery closes G6 by pushing the source,
+report and seals and verifying remote containment. Publication identity is
+separate from tested native7b722daa41d18b316f8b78dafdde39fada4d5e94 and the
+pair controller b53c965abf53fb79d51bd5f962d6d8625676866f. Linux metadata was
+exported from clean controller source5950be7e17709ce1a26895aeda806c7dc701064a.
+The final publication commit is supplied with delivery.
+
+The recorded full comparison command (inside the recorded resource/budget
+wrappers) is:
+
+```bash
+python3 -B "$t/ct_accepted15_equivalence.py" --ct14 "$b" \
+  --static "$p/static-v1" --static-proof "$p/equivalence-static-v1" \
+  --pair "$p/pair-v1" --output "$p/equivalence-v1"
+```
+
+The final metadata and publication commands are:
+
+```bash
+# Linux; the recorded output is publication-snapshot-v2.
+python3 -B "$t/ct_accepted15_snapshot.py" --root "$p" --ct14 "$b" \
+  --output "$p/publication-snapshot-v2"
+# Mac, from this dedicated worktree after copying the sealed small metadata.
+e=docs/plans/cao-tamura-accepted-15-evidence
+python3 -B "$t/ct_accepted15_publish_snapshot.py" \
+  --snapshot "$e/linux-snapshot-v2/snapshot.json" \
+  --forecast "$e/forecast-progress-v1.json" --pair "$e/fresh-pair-v1.json" \
+  --equivalence "$e/equivalence-v1/results.json" \
+  --publication-wall-reserve 480 --output "$e/closure-v1"
+```
+
+Existing sealed directories are preserved; these are recorded commands. A later
+numerical rerun needs a new authorized allocation/run root because CT15's
+original package clock is fixed. The smallest selected numerical reproducer
+is the single-step command above. Full CSR/state/history payloads stay in the
+external Linux experiment root. G3/G4 and a complete affordable forecast are
+required before Task3; none of T=.407, full-transit production or experimental
+replication is admitted by this closure.

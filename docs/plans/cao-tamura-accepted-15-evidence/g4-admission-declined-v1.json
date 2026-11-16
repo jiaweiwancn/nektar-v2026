@@ -1,0 +1,38 @@
+{
+  "schema": "CT15WholeScopeAdmissionDecisionV1",
+  "decision": "DECLINED_BEFORE_LAUNCH",
+  "gate": "G4",
+  "status": "UNATTEMPTED",
+  "observed_unix": 1794830993.193572,
+  "original_allocation_start_unix": 1794805033,
+  "plan_SHA256": "59f54e8d7798b531f4d55b2925f7d94b08f1635b5c044b72f0b833c86a97632e",
+  "declared_scope": {
+    "mode": "--retention-only",
+    "CPU_seconds": 2700,
+    "wall_seconds": 2600,
+    "new_live_bytes": 2147483648
+  },
+  "measured_available": {
+    "CPU_before_closure_reserve": 2724.5433086469993,
+    "wall_before_original_guard": 2599.8064346313477,
+    "closed_CPU_including_exception": 20389.906691353,
+    "live_queue_CPU": 645.55
+  },
+  "queued_prerequisite": {
+    "family": "resources-equivalence-v1",
+    "admitted": false,
+    "closed": false,
+    "declared_additional_CPU_allowance": 128,
+    "declared_additional_wall_allowance": 240
+  },
+  "shared_worker_witness": {
+    "external": 119,
+    "allowed_families": 0,
+    "maximum_observed": 120
+  },
+  "reason": "The complete predeclared G4 wall bound already exceeds remaining wall before the original allocation guard, even ignoring the uncompleted full-equivalence prerequisite. The combined CPU allowances also exceed the available pool. No scope, tolerance, mandatory audit, ceiling or ledger is changed to obtain a PASS.",
+  "still_authorized": "Continue waiting for the unrelated HIT job as requested; retain the existing full-equivalence queue, allow only still-affordable bounded scopes, and close our waiting queue at the original12:47:13UTC publication cutoff if it never starts.",
+  "G3": "UNATTEMPTED unchanged full heldout6-to8",
+  "physical_T0_407": "UNATTEMPTED",
+  "goal": "NOT_ACHIEVED"
+}
