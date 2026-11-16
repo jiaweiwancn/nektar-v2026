@@ -90,7 +90,7 @@ def maximum_difference(a,b):
     if isinstance(b,np.ndarray):b=b.tolist()
     if isinstance(a,dict):
         require(a.keys()==b.keys(),'prepared observation fields changed');return max((maximum_difference(v,b[k]) for k,v in a.items()),default=0.)
-    if isinstance(a,list):
+    if isinstance(a,(list,tuple)):
         require(len(a)==len(b),'prepared observation membership changed');return max((maximum_difference(x,y) for x,y in zip(a,b,strict=True)),default=0.)
     if isinstance(a,(bool,str)) or a is None:require(a==b,'prepared scientific decision changed');return 0.
     return abs(float(a)-float(b))
