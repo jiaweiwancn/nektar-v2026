@@ -80,6 +80,8 @@ public:
     const MultiRegions::ContFieldSharedPtr &Field() const { return m_field; }
     const std::vector<Element> &Elements() const { return m_elements; }
     int Dimension() const { return m_dimension; }
+    bool ImmutableOwnerIndex() const { return m_immutableTensor; }
+    bool SharedTensorRows() const { return m_sharedTensor; }
     int Size() const;
     std::array<std::uint64_t,6> BasisWork() const;
     RANSWallGlobalPoint Point(const Coordinate &coordinate, int side=0) const;

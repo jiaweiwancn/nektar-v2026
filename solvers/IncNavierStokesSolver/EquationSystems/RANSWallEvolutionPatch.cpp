@@ -638,6 +638,9 @@ RANSWallEvolutionPatch::RANSWallEvolutionPatch(const LibUtilities::SessionReader
     fields.push_back(std::make_shared<RANSWallGlobalField>(session,full,outer,m_dimension));
     fields.push_back(std::make_shared<RANSWallGlobalField>(session,pressure,inner,m_dimension));
     fields.push_back(std::make_shared<RANSWallGlobalField>(session,pressure,outer,m_dimension));
+    for(const auto &field:fields)
+        Require(field->ImmutableOwnerIndex()==m_immutableTensor && field->SharedTensorRows()==m_sharedTensor,
+            "patch and native-field immutable execution policy registrations differ");
     bool directional=false;
     for(const auto &field:fields)for(const auto &e:field->Elements())
         directional=directional || e.Directional(m_dimension);
