@@ -77,7 +77,7 @@ def main():
     a=p.parse_args();resource.setrlimit(resource.RLIMIT_CORE,(0,0));resource.setrlimit(resource.RLIMIT_AS,(16*1024**3,16*1024**3));os.environ['LD_LIBRARY_PATH']=str(a.runtime/'lib');os.environ['NEKTAR_RANS_PROBE_OBSERVER']='NativeAuditReceiptV1';os.environ.pop('NEKTAR_RANS_TIMING_FILE',None);n.reference=lru_cache(None)(n.reference)
     pair=n.read(a.pair/'results.json');require(pair['qualification']['status']=='pass','fresh pair prerequisite')
     require(pair['workflow_contract_sha256']==sha(a.root/'source/docs/plans/cao-tamura-accepted-15-evidence/workflow-contract-v2.json'),'foreign workflow contract')
-    m=RequestManifest(a.output,dict(schema='CT15ActualSegmentRecoveryV1',runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),probe=runtime_identity(a.runtime/'RANSPreservationProbe'),pair_sha256=sha(a.pair/'results.json'),training_sha256=sha(a.training/'results.json'),contract_sha256=sha(a.root/'source/docs/plans/cao-tamura-accepted-15-evidence/contract.json'),held_out='steps6-to8 fixed before training fit',retention_only=a.retention_only,retention_scope_contract_sha256=sha(a.root/'source/docs/plans/cao-tamura-accepted-15-evidence/retention-scope-contract.json'),source_sha256=sha(Path(__file__))))
+    m=RequestManifest(a.output,dict(schema='CT15ActualSegmentRecoveryV1',runtime=runtime_identity(a.runtime/'IncNavierStokesSolver'),probe=runtime_identity(a.runtime/'RANSPreservationProbe'),pair_sha256=sha(a.pair/'results.json'),training_sha256=sha(a.training/'results.json'),contract_sha256=sha(a.root/'source/docs/plans/cao-tamura-accepted-15-evidence/contract.json'),held_out='steps6-to8 fixed before training fit',retention_only=a.retention_only,retention_scope_contract_sha256=sha(a.root/'source/docs/plans/cao-tamura-accepted-15-evidence/retention-scope-contract-v2.json'),source_sha256=sha(Path(__file__))))
     c=pair['case'];ini=n.read(a.static/'target/frozen.json');weights=n.inventory(c)[2];count=len(weights)
     full=n.read(a.pair/'0.00025/case.evolution.json');full_snaps=snapshots(full)
     zero=n.read(a.training/'steps-0/case.evolution.json');two=n.read(a.training/'steps-2/case.evolution.json')
@@ -100,7 +100,7 @@ def main():
     result=dict(schema='CT15ActualSegmentRecoveryV1',status='incomplete',policy='SelectiveReplayV1',cycles=[],model=model,workflow_contract_sha256=sha(a.root/'source/docs/plans/cao-tamura-accepted-15-evidence/workflow-contract-v2.json'))
     def seal_retention(rollback,rr,re,sv,sve,se):
         require(sve['exit_code']==0 and re['exit_code']!=0 and 'deliberate' in rr['failure'] and same_history(sv,rr),'selected full rejected-step rollback')
-        retention=dict(schema='CT15ActualRetentionControlsV1',status='pass',policy='SelectiveReplayV1',binding=binding,cycles=result['cycles'],segment4_execution=result['segment4_execution'],segment6_execution=se,rollback_execution=re,rollback_predecessor_execution=sve,rollback_report_sha256=sha(rollback/'case.evolution.json'),rollback_state_and_all_native_history_binary64_equal=True,scope='two actual cycles2/4,all current-state independent audit replay,owned retirement,fresh restore,genuine continuation,interruption recovery,negative payload controls,and full native rejected-step rollback; additional heldout cost-model workload separately gated')
+        retention=dict(schema='CT15ActualRetentionControlsV1',status='pass',policy='SelectiveReplayV1',binding=binding,cycles=result['cycles'],segment4_execution=result['segment4_execution'],post_retirement_continuation_execution=se,rollback_execution=re,rollback_predecessor_execution=sve,rollback_predecessor_actual_step=sv['steps'],rollback_report_sha256=sha(rollback/'case.evolution.json'),rollback_state_and_all_native_history_binary64_equal=True,scope='two actual cycles2/4,all current-state independent audit replay,owned retirement,fresh restore,genuine continuation,interruption recovery,negative payload controls,and full native rejected-step rollback; additional heldout cost-model workload separately gated')
         write_json(a.output/'retention-controls.json',retention)
         atomic(a.output/'retention-controls-seal.json',dict(request_sha256=m.payload['sha256'],files={'retention-controls.json':sha(a.output/'retention-controls.json')}))
     previous=zero;current=two;current_folder=a.training/'steps-2'
@@ -159,16 +159,17 @@ def main():
         previous=current
         if end==2:
             current_folder,current,e=run('segment-4',Path(previous['checkpoint']));require(e['exit_code']==0 and not current['failure'],'genuine continuation after first cycle');result['segment4_execution']=e
-    six,sr,se=run('segment-6',Path(current['checkpoint']));require(se['exit_code']==0 and not sr['failure'],'segment6 continuation')
     if a.retention_only:
-        rollback,rr,re=run('rejected-step',Path(sr['checkpoint']),2,reject=8)
-        seven,sv,sve=run('rollback-predecessor7',Path(sr['checkpoint']),1)
-        seal_retention(rollback,rr,re,sv,sve,se)
+        rollback,rr,re=run('rejected-step',Path(current['checkpoint']),2,reject=6)
+        seven,sv,sve=run('rollback-predecessor5',Path(current['checkpoint']),1)
+        require(sve['exit_code']==0 and not sv['failure'] and sv['state']==full['accepted_states'][5] and snapshots(sv)==full_snaps[4:5],'genuine continuation after second retirement')
+        seal_retention(rollback,rr,re,sv,sve,sve)
         model['external_monitor_CPU_per_wall_second']=envelope([x['cycle_usage']['external_monitor_CPU']/x['cycle_usage']['wall'] for x in result['cycles']])
         admission=dict(status='declined_before_launch',reason='explicit retention-only admission; the complete G3 calibration and fixed heldout do not fit the reserved engineering pool',heldout_unchanged='coarse6-to8',G3='UNATTEMPTED',allocation_unchanged=True)
         write_json(a.output/'heldout-admission.json',admission)
-        result.update(status='partial',retention_controls_status='pass',cost_model_validation=dict(status='unattempted_resource_admission',admission=admission),held_out=dict(status='UNATTEMPTED'),segment6_execution=se,rollback_execution=re,rollback_predecessor_execution=sve)
+        result.update(status='partial',retention_controls_status='pass',cost_model_validation=dict(status='unattempted_resource_admission',admission=admission),held_out=dict(status='UNATTEMPTED'),post_retirement_continuation_execution=sve,rollback_execution=re,rollback_predecessor_execution=sve)
         write_json(a.output/'results.json',result);m.seal(a.output,['results.json','retention-controls.json','retention-controls-seal.json','heldout-admission.json']);return 0
+    six,sr,se=run('segment-6',Path(current['checkpoint']));require(se['exit_code']==0 and not sr['failure'],'segment6 continuation')
     # Freeze the complete held-out scope before executing it. Training contains
     # the original 0/1/2 commands and the two earlier real recovery/audit cycles.
     # Bounds use the observed range, never a negative intercept or heldout fit.
