@@ -24,6 +24,19 @@ def logical_size(root):
             try:total+=(Path(folder)/name).lstat().st_size
             except FileNotFoundError:pass
     return total
+
+def historical_ledger(root,ct14):
+    """Prior closed receipts are sunk research, never future campaign work."""
+    result=dict(scope='historical CT11-CT14 only; no amount is added to CT15 engineering or prospective production',campaigns={})
+    for n in (11,12,13,14):
+        directory=ct14.parent/('ct-accepted-'+str(n)+'-20261115')
+        receipts={str(f.relative_to(directory)):dict(sha256=digest(f),CPU=read(f)['process_cpu_seconds'],wall=read(f)['wall_seconds']) for f in directory.glob('resources-*/execution.json')}
+        if not receipts:raise ValueError('missing authoritative historical receipts: '+str(directory))
+        name='resource-accounting-v2.json' if n==11 else 'closed-publication-accounting.json'
+        published=root/'source/docs/plans'/('cao-tamura-accepted-'+str(n)+'-evidence')/name
+        q=read(published)
+        result['campaigns'][str(n)]=dict(external_root=str(directory),closed_family_count=len(receipts),closed_Linux_family_CPU=sum(v['CPU'] for v in receipts.values()),summed_family_elapsed_wall=sum(v['wall'] for v in receipts.values()),receipt_hashes=receipts,published_accounting_sha256=digest(published),published_measured_CPU=q.get('process_CPU_seconds',q.get('closed',{}).get('closed_CPU_seconds')),published_upper_bounds=q.get('upper_bounds'),publication_scope=q.get('scope','prospective formula file; authoritative completed-family sums reported separately'))
+    return result
 def gates(root):
     q={k:read(root/v/'results.json') for k,v in dict(component='small-v7',static='static-v1',timestep='timestep-v1',pair='pair-v1',equivalence='equivalence-v1',segments='segments-v1').items()}
     status=lambda v:isinstance(v,dict) and v.get('status')=='pass'
@@ -140,7 +153,7 @@ def main():
                 path=folder/name
                 if path.is_file():inventory[str(path.relative_to(a.root))]=dict(sha256=digest(path),bytes=path.stat().st_size)
     g['G6']='PENDING_FINAL_PUSH_AND_CLOSED_ACCOUNTING'
-    result=dict(schema='CT15CompactPublicationV1',status='UNRESOLVED',gates=g,physical_T0_407='UNATTEMPTED',full_transit_scientific_and_operational_readiness='UNQUALIFIED',external_root=str(a.root),historical_ledger=read(a.root/'baseline-v1/results.json'),engineering_ledger=dict(closed_CPU=CPU,publication_transport_CPU_reserve=240,total_CPU_upper_bound_before_current_collector=CPU+240,elapsed_wall_including_connection_outage=time.time()-START,logical_retained_bytes=logical_size(a.root),peak_sampled_live_bytes=peak,sampled_cumulative_process_wchar_lower_bound=sampled_writes,write_accounting_scope='sum of per-family /proc wchar highwaters; includes pipe writes and may miss short-lived processes; not exact physical disk bytes',exception_reserves=exception,unclosed_families=unclosed,failed_worker_audits=worker_failures,resource_receipts=resources),future_ledger=future,artifact_inventory=inventory)
+    result=dict(schema='CT15CompactPublicationV1',status='UNRESOLVED',gates=g,physical_T0_407='UNATTEMPTED',full_transit_scientific_and_operational_readiness='UNQUALIFIED',external_root=str(a.root),historical_ledger=historical_ledger(a.root,a.ct14),CT14_baseline_verification_sha256=digest(a.root/'baseline-v1/results.json'),engineering_ledger=dict(closed_CPU=CPU,publication_transport_CPU_reserve=240,total_CPU_upper_bound_before_current_collector=CPU+240,elapsed_wall_including_connection_outage=time.time()-START,logical_retained_bytes=logical_size(a.root),peak_sampled_live_bytes=peak,sampled_cumulative_process_wchar_lower_bound=sampled_writes,write_accounting_scope='sum of per-family /proc wchar highwaters; includes pipe writes and may miss short-lived processes; not exact physical disk bytes',exception_reserves=exception,unclosed_families=unclosed,failed_worker_audits=worker_failures,resource_receipts=resources),future_ledger=future,artifact_inventory=inventory)
     # The historical body contains stage paths/hashes but no numerical arrays.
     write(a.output/'results.json',result);write(a.output/'forecast.json',future);write(a.output/'artifact-inventory.json',inventory)
     write(a.output/'seal.json',dict(files={f.name:digest(f) for f in a.output.iterdir() if f.is_file()}))
