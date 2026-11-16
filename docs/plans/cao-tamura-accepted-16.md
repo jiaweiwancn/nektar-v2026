@@ -1,6 +1,6 @@
 # CT16: separate bounded production-path engineering
 
-Status: **IN PROGRESS; resource admission remains UNRESOLVED**. The user
+Status: **CLOSED UNRESOLVED; the closure goal is not met**. The user
 explicitly authorized CT16 after CT15 closed UNRESOLVED at
 `5168ed5fba02a4c92a3847827be3a2dbb6ca071b`. The objective remains
 `PASS_RESOURCE_ADMISSION_T_0.407` only when all G1–G6 pass. CT15's evidence and
@@ -27,7 +27,7 @@ unrelated work and historical archives remain intact.
 | G3 | UNRESOLVED. Timing-off 0/1/2 native models and independent-audit costs are measured; the complete workflow and frozen coarse6-to8 restart/retention heldout are unattempted. |
 | G4 | UNATTEMPTED. No selected native two-cycle retirement/recovery policy was executed or qualified. Small native restart/rollback controls do not substitute for it. |
 | G5 | UNADMITTED. Every measured native-only conditional entry extrapolation already exceeds 24,000 CPU seconds. Complete costs and qualified retention peak remain unknown. |
-| G6 | Source/contracts and progress are pushed; final closed receipts, reproduction and remote containment are pending. |
+| G6 | PASS for publication/reproduction of this closed investigation: source, actual runtimes/configurations/histories, commands, payload hashes and all 87 closed receipts are pushed. This does not supply the missing G1–G5 qualification. |
 
 The fixed physical manifest SHA256 is
 `004bc0fc82054296a68d56de77751fc1f0a41570ee16b0a174ae8087f262d296`:
@@ -57,6 +57,11 @@ The nonnegative short-run envelope is
 `step=max(0,C1-C0,(C2-C0)/2,C2-C1)`. Diagnostic timers do not supply acceptance
 speedups. Native commands include their native checks/startup/output; they do
 not include independent Python audits or the complete retention/controller path.
+The historical CT14 complete native 8/16-step commands cost 1269.812781/
+2514.342541 CPU seconds and their owned pair family cost 9607.247458. Those
+commands have different dt and do not by themselves separate startup from step
+cost. A fresh changed-component end-to-end pair/workflow comparison remains
+UNATTEMPTED; its family-time remainder is not attributed to one routine.
 
 | Policy/component | C0 / C1 / C2 native CPU seconds | Step envelope |
 |---|---:|---:|
@@ -256,12 +261,51 @@ preserved in `source-python-bytecode-v1` outside the private checkout, and
 check/transport costs use the existing publication reserve; no solver ran in
 that stopped launch.
 
-The prior [progress-v2 snapshot](cao-tamura-accepted-16-evidence/progress-v2/results.json)
-is historical progress through V10, before later costs; it is not final CT16
-accounting. The final evidence snapshot and closed publication ledger will bind
-all owned payload hashes, closed receipts including failures, actual runtime/
-configuration/history identities and later attempts. Full CSR/state/history
-arrays remain outside Git, with compact evidence and hashes in Git.
+The [final sealed snapshot](cao-tamura-accepted-16-evidence/closure-v1/results.json),
+[scientific receipts](cao-tamura-accepted-16-evidence/closure-v1/scientific-evidence.json)
+and [artifact inventory](cao-tamura-accepted-16-evidence/closure-v1/artifact-inventory.json)
+bind 8,359 retained payloads outside the source/build/tmp and the collector's own
+output. Native source and runtime bytes are separately bound by Git and build
+receipts. Full CSR/state/history files remain on Linux. Both the transferred
+snapshot seal and the closing publication seal were verified byte for byte.
+The snapshot's pending G6/current-collector field is its pre-publication state;
+the closed receipt ledger and final pushed publication resolve that bookkeeping.
+Its G1–G5 decisions are unchanged.
+The prior progress-v1/v2 snapshots remain historical progress, not final totals.
+
+The [closed publication accounting](cao-tamura-accepted-16-evidence/closure-v1/closed-publication-accounting.json)
+adds the final collector's closed receipt: **19,368.860357428 process CPU
+seconds across 87 families**, including every failed attempt and conservative
+stop witness. With the single existing 240-CPU-second publication allowance,
+the engineering CPU upper is **19,608.860357428 <= 24,000**. Elapsed wall at export
+is 23,228.578324 seconds; with the existing 600-second publication
+allowance its upper is **23,828.578324 <= 28,800**. Measured logical/observed live
+bytes are 14,586,971,729 (13.585176 GiB); including 256 MiB for publication
+and transfer duplication gives **14,855,407,185 bytes (13.835176 GiB) <= 16 GiB**.
+These are observed/sampled live-space values with an explicit reserve, not an
+exact high-frequency disk trace. The same reserve covers metadata exporters,
+source inspection, transport, Mac compaction, Git publication and verification
+once. Sampled cumulative process `wchar` is 32,392,514,577 bytes, including pipes;
+it is a lower-bound indicator and not exact physical disk I/O.
+
+Maximum recorded process AS is 11,641,085,952 bytes
+(10.841606 GiB), under the enforced 16-GiB process limit. Reported worker
+maxima are 37 aggregate and 13 project, within 72/16. Exactly two worker
+audits are incomplete: the deliberate paused-guard negative and the owned
+registry-failure interruption described above. They remain explicit exceptions,
+not passing numerical evidence. All resource directories have closed receipts.
+No owned numerical job or worker monitor remains running after closure.
+The [runtime summary](cao-tamura-accepted-16-evidence/closure-v1/runtime-bindings.json)
+and [diagnostic summary](cao-tamura-accepted-16-evidence/closure-v1/native-diagnostics.json)
+separate actual tested sources/binaries from metadata-only publication commits.
+
+These are actual costs, not a claim that the allocation was exhausted. Fourteen
+predeclared native candidates and the independent-audit remedies have not
+produced an affordable path. The contract's attempt policy rules out spending
+a full pair/retention qualification on a plainly insufficient design merely for
+another partial PASS. A different, substantially faster native execution path,
+faster complete audit path and qualified bounded q64/retention working sets are
+still required; the passing local improvements do not establish that capability.
 
 Conditional forecasts use decimal member-wise ceiling and length-32 segments
 within the existing 64-step native hard cap, two separate zero initializations

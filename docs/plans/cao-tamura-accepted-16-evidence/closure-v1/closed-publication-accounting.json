@@ -1,0 +1,3965 @@
+{
+  "schema": "CT16ClosedPublicationAccountingV1",
+  "status": "closed_receipts_with_explicit_publication_reserve",
+  "outcome": "UNRESOLVED",
+  "external_root": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+  "snapshot_sha256": "05403e86d8ee8984b14b07a7fb63fda44ac45bb4978d90ba8d1159f03fae19ae",
+  "snapshot_seal_sha256": "dee5c55dc1715fa803c374fc9f348e53432f76f23f84da2eaa03069d59db3305",
+  "source_at_snapshot": "8abc064a1ec5ba319f93c378b49d6c285d2985a5",
+  "source_at_export": "8abc064a1ec5ba319f93c378b49d6c285d2985a5",
+  "original_start_unix": 1794835825,
+  "closed_family_count": 87,
+  "closed_family_CPU": 19368.860357428,
+  "publication_reserve": {
+    "CPU": 240,
+    "wall": 600,
+    "bytes": 268435456
+  },
+  "CPU_upper_with_reserve": 19608.860357428,
+  "elapsed_wall_at_export": 23228.578323602676,
+  "wall_upper_with_reserve": 23828.578323602676,
+  "logical_live_bytes_at_export": 14586971729,
+  "peak_observed_live_bytes": 14586971729,
+  "new_live_upper_with_publication_reserve": 14855407185,
+  "sampled_cumulative_process_wchar_lower_bound": 32392514577,
+  "write_accounting": "Sampled per-family process wchar highwaters include pipes and may miss short-lived writes; not exact physical disk I/O.",
+  "maximum_reported_workers": {
+    "maximum_aggregate": 37,
+    "maximum_project": 13
+  },
+  "incomplete_or_failed_worker_audits": {
+    "resources-guard-paused-v2": {
+      "aggregate_status": "incomplete",
+      "project_status": "incomplete",
+      "aggregate_limit": 72,
+      "project_limit": 16
+    },
+    "resources-training-audit-residual-v2": {
+      "aggregate_status": "incomplete",
+      "project_status": "incomplete",
+      "aggregate_limit": 72,
+      "project_limit": 16
+    }
+  },
+  "unclosed_resources": [],
+  "maximum_recorded_process_AS_bytes": 11641085952,
+  "finite_CPU_wall_disk_checks": {
+    "CPU": true,
+    "wall": true,
+    "live_bytes": true
+  },
+  "all_receipts": {
+    "resources-build-audit-residual-v1": {
+      "sha256": "e9dd0e3a8a60c55a1ee427434a723630b8555782717ea29a50fb2fd9fc81eb12",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-audit-residual-v1",
+        "--phase",
+        "runtime"
+      ],
+      "exit_code": 1,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 60.56386463099625,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 96.976697,
+      "resource": {
+        "maximum_aggregate": 32,
+        "maximum_project": 13,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 650.0,
+        "wall": 500.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-build-audit-residual-v2": {
+      "sha256": "a48072eab607a2a4fc12ef38c9445e2b4c0aeafb1916a59e4780e4d4ec39fd18",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-audit-residual-v2",
+        "--phase",
+        "runtime"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 244.19368944194866,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 467.6209600000001,
+      "resource": {
+        "maximum_aggregate": 23,
+        "maximum_project": 13,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 650.0,
+        "wall": 500.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-build-audit-v1": {
+      "sha256": "5900bf3d9c0ef2291eb4697347836f2f371bb4db9f80b325e00ea44d50358f44",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-audit-v1",
+        "--phase",
+        "runtime"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 258.22243232897017,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 492.697734,
+      "resource": {
+        "maximum_aggregate": 35,
+        "maximum_project": 13,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1300.0,
+        "wall": 1000.0,
+        "new_bytes": 1400000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-build-basis-v1": {
+      "sha256": "23c20a7236c5e3f614331eeb327fa22da456b598417621697e78fa34a4e4d1b8",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-basis-v1",
+        "--phase",
+        "runtime"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 261.8850908129825,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 505.81168699999995,
+      "resource": {
+        "maximum_aggregate": 13,
+        "maximum_project": 13,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 650.0,
+        "wall": 500.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-build-capacity-identity-v1": {
+      "sha256": "d0d91235bd304936bf61d7a6675255f381528cbc35d5ccd459ac5726fd8fc476",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-capacity-identity-v1",
+        "--phase",
+        "runtime"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 56.00305196503177,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 67.710998,
+      "resource": {
+        "maximum_aggregate": 31,
+        "maximum_project": 13,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 500.0,
+        "wall": 600.0,
+        "new_bytes": 1400000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-build-current-gradient-v1": {
+      "sha256": "8653883e6cfaa47b7908716c45bbca2f850168c05b23d735bef5f4a9eefb4587",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-current-gradient-v1",
+        "--phase",
+        "runtime"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 250.42079642700264,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 484.477289,
+      "resource": {
+        "maximum_aggregate": 23,
+        "maximum_project": 13,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 650.0,
+        "wall": 500.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-build-gradient-scratch-v1": {
+      "sha256": "c05d947f0ea525df2c6cc28d30acdd98db030b35b4e17c47ba7b7805c34f69f7",
+      "command": [
+        "python3",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-gradient-scratch-v1",
+        "--phase",
+        "runtime"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 282.2183712120168,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 533.252146,
+      "resource": {
+        "maximum_aggregate": 21,
+        "maximum_project": 13,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 650.0,
+        "wall": 500.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-build-gradient-v1": {
+      "sha256": "60551bd9c4e632e92be159cbcaf384d605c0d84255f0f9911fc911747782a980",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-gradient-v1",
+        "--phase",
+        "runtime"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 260.4906485429965,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 498.23335499999996,
+      "resource": {
+        "maximum_aggregate": 31,
+        "maximum_project": 13,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 650.0,
+        "wall": 500.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-build-instrumented-v1": {
+      "sha256": "3f9557b79fa7d091d981f65fea32dbcce319c48f0cf0971aed8349a59ede2f77",
+      "command": [
+        "python3",
+        "-B",
+        "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-instrumented-v1",
+        "--phase",
+        "runtime"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 460.9663790540071,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 932.492577,
+      "resource": {
+        "maximum_aggregate": 37,
+        "maximum_project": 13,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 2200.0,
+        "wall": 3000.0,
+        "new_bytes": 3221225472
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-build-lru-v1": {
+      "sha256": "97108cf0e24d702b505a961de6eb1339154bce8d5d19a539facd4dc4567d3434",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-lru-v1",
+        "--phase",
+        "runtime"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 251.73017526400508,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 488.04701100000005,
+      "resource": {
+        "maximum_aggregate": 32,
+        "maximum_project": 13,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1300.0,
+        "wall": 1000.0,
+        "new_bytes": 1400000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-build-metric-v1": {
+      "sha256": "e86c49caca5b9cd57bde2b94d691c9febaa05b32d2001e5aa9a6f8bba361e4e0",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-metric-v1",
+        "--phase",
+        "runtime"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 255.19769246299984,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 492.741869,
+      "resource": {
+        "maximum_aggregate": 31,
+        "maximum_project": 13,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1300.0,
+        "wall": 1000.0,
+        "new_bytes": 1400000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-build-sampler-v1": {
+      "sha256": "6472c4ca131bef432ae3a2dd6fb853f5c6c68fd076cf37be6a17f4ecbff0d4f3",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-sampler-v1",
+        "--phase",
+        "runtime"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 260.6391071169637,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 503.06663000000003,
+      "resource": {
+        "maximum_aggregate": 21,
+        "maximum_project": 13,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 650.0,
+        "wall": 500.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-build-scatter-v1": {
+      "sha256": "a09886dfd657bec02ecbbdaa6ae8e79189d53f1fcef6b687fd0fe052d9936b21",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-scatter-v1",
+        "--phase",
+        "runtime"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 243.21993345796363,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 470.61771600000003,
+      "resource": {
+        "maximum_aggregate": 37,
+        "maximum_project": 13,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1300.0,
+        "wall": 1000.0,
+        "new_bytes": 1400000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-build-stream-v1": {
+      "sha256": "d8be8c99e535cdaf066ebcb742ac09090a12c01185e53265f55e09596da1b169",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-stream-v1",
+        "--phase",
+        "runtime"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 248.77607459301362,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 477.83141,
+      "resource": {
+        "maximum_aggregate": 35,
+        "maximum_project": 13,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1300.0,
+        "wall": 1000.0,
+        "new_bytes": 1400000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-build-tensor-index-v1": {
+      "sha256": "c90895a35584e7f860aae440e55baad3e78a9f4740f4cea4a98bd710bd74e53a",
+      "command": [
+        "python3",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_build.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--ct9",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-9-20261114",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-tensor-index-v1",
+        "--phase",
+        "runtime"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 265.240397837013,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 505.001043,
+      "resource": {
+        "maximum_aggregate": 13,
+        "maximum_project": 13,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 650.0,
+        "wall": 500.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-collect-final-v1": {
+      "sha256": "7f3b50e23efe838d5a64bda79ee868723eb668cc97be4ecec5904d54df9db8a5",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_collect.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/collect-final-v1",
+        "--active-control",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/resources-collect-final-v1"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 31.772797865967732,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 22.637882,
+      "resource": {
+        "maximum_aggregate": 12,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 70.0,
+        "wall": 90.0,
+        "new_bytes": 50000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-collect-progress-v1": {
+      "sha256": "3a6369c0d87dc9e925fefa8f2a9e0e4e9e11965283c65fbf631be3ace86b1fb2",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_collect.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/collect-progress-v1",
+        "--active-control",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/resources-collect-progress-v1"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 11.696978985972237,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 7.393847999999999,
+      "resource": {
+        "maximum_aggregate": 22,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 120.0,
+        "wall": 180.0,
+        "new_bytes": 50000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-collect-progress-v10": {
+      "sha256": "f9325c41654d9435acf36ea11b0baaea1fb5feb7353e1221e0a38282ae509331",
+      "command": [
+        "python3",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_collect.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/collect-progress-v10",
+        "--active-control",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/resources-collect-progress-v10"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 33.84840388700832,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 23.318368,
+      "resource": {
+        "maximum_aggregate": 4,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 70.0,
+        "wall": 90.0,
+        "new_bytes": 50000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-collect-progress-v11": {
+      "sha256": "dedd06eeb3604a1c47e52a1f5139fefe6b86837c025afe6916aed25bc6b58127",
+      "command": [
+        "python3",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_collect.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/collect-progress-v11",
+        "--active-control",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/resources-collect-progress-v11"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 39.84445097798016,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 27.262254,
+      "resource": {
+        "maximum_aggregate": 12,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 70.0,
+        "wall": 90.0,
+        "new_bytes": 50000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-collect-progress-v2": {
+      "sha256": "ebcd668ef80e98e73aebe07a4593f69f05423e5f03c9967117401aee60cb96bb",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_collect.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/collect-progress-v2",
+        "--active-control",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/resources-collect-progress-v2"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 13.88662414503051,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 8.303446999999998,
+      "resource": {
+        "maximum_aggregate": 4,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 120.0,
+        "wall": 180.0,
+        "new_bytes": 50000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-collect-progress-v3": {
+      "sha256": "9e90aad7cc047e43fcea96e1b9faf1412514a6ed2a6a9d8e30e02ec63bab2a2f",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_collect.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/collect-progress-v3",
+        "--active-control",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/resources-collect-progress-v3"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 17.52103416400496,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 10.508837,
+      "resource": {
+        "maximum_aggregate": 22,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 120.0,
+        "wall": 180.0,
+        "new_bytes": 50000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-collect-progress-v4": {
+      "sha256": "a4ec1a18bd6aaff38976e60bb6c886081ad6a59d12682499285a81f5328275e5",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_collect.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/collect-progress-v4",
+        "--active-control",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/resources-collect-progress-v4"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 19.793600852019154,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 13.315399,
+      "resource": {
+        "maximum_aggregate": 23,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 60.0,
+        "wall": 80.0,
+        "new_bytes": 30000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-collect-progress-v5": {
+      "sha256": "62cd5224c87aae9b0324e7cb0daec849bc557ea35e1f6a13963fd8e03cdaeee7",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_collect.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/collect-progress-v5",
+        "--active-control",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/resources-collect-progress-v5"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 29.88764331600396,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 18.485846000000002,
+      "resource": {
+        "maximum_aggregate": 4,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 70.0,
+        "wall": 90.0,
+        "new_bytes": 50000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-collect-progress-v6": {
+      "sha256": "8be15c3d9330d1f1847c60b8483cef29ac86952805d2319f907284fb3aafc934",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_collect.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/collect-progress-v6",
+        "--active-control",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/resources-collect-progress-v6"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 32.48798223701306,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 21.082689000000002,
+      "resource": {
+        "maximum_aggregate": 4,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 70.0,
+        "wall": 90.0,
+        "new_bytes": 50000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-collect-progress-v7": {
+      "sha256": "16002c699d1b69f55a81da5b49368972e01fdeb71b33e29b6a04077b304048c5",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_collect.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/collect-progress-v7",
+        "--active-control",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/resources-collect-progress-v7"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 30.940716497018002,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 20.574785,
+      "resource": {
+        "maximum_aggregate": 12,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 70.0,
+        "wall": 90.0,
+        "new_bytes": 50000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-collect-progress-v8": {
+      "sha256": "7c352499f4907f8a7de0ceba97b545e042cb140440e489c7873258ffb461092b",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_collect.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/collect-progress-v8",
+        "--active-control",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/resources-collect-progress-v8"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 32.965866610000376,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 20.937041,
+      "resource": {
+        "maximum_aggregate": 12,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 70.0,
+        "wall": 90.0,
+        "new_bytes": 50000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-collect-progress-v9": {
+      "sha256": "43d980aa697d4e3bc7849f8ca3c017a50c4e1669119b6dfcd44620a1d67596ec",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_collect.py",
+        "--root",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/collect-progress-v9",
+        "--active-control",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/resources-collect-progress-v9"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 33.18963007902494,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 22.203077999999998,
+      "resource": {
+        "maximum_aggregate": 4,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 70.0,
+        "wall": 90.0,
+        "new_bytes": 50000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-diagnostic-audit-residual-v3": {
+      "sha256": "98075a2babe7b4ca0338b414046d469b6f0e5d4bf15987b8f35da624c8813bfc",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_audit_residual_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-current-gradient-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/diagnostic-audit-residual-v3",
+        "--phase",
+        "diagnostic"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 103.63099914399209,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 115.55986999999999,
+      "resource": {
+        "maximum_aggregate": 21,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 200.0,
+        "wall": 250.0,
+        "new_bytes": 200000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-diagnostic-audit-v1": {
+      "sha256": "8b6e4f4e8ab3ee908fabd2bc3743706e362ed53a3b60002f416b1ea829232d1c",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_audit_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-audit-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/diagnostic-audit-v1",
+        "--phase",
+        "diagnostic"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 150.2997001199983,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 172.466618,
+      "resource": {
+        "maximum_aggregate": 30,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1000.0,
+        "wall": 1500.0,
+        "new_bytes": 700000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-diagnostic-basis-v1": {
+      "sha256": "f10ab341b56492ee0088be785e282b53df2140c7c624452041bc84d4be9803c2",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_basis_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-basis-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/diagnostic-basis-v1",
+        "--phase",
+        "diagnostic"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 104.21406668197596,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 114.63644500000001,
+      "resource": {
+        "maximum_aggregate": 11,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 200.0,
+        "wall": 250.0,
+        "new_bytes": 200000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-diagnostic-coverage-v2": {
+      "sha256": "00cdcfd23cd1f636f1adccbb19e985b5300651bec63422fb3856469ee1321842",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_coverage_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-current-gradient-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/diagnostic-coverage-v2",
+        "--phase",
+        "diagnostic"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 104.7590474950266,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 116.024925,
+      "resource": {
+        "maximum_aggregate": 14,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 200.0,
+        "wall": 250.0,
+        "new_bytes": 200000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-diagnostic-current-gradient-v1": {
+      "sha256": "9417c2bf9dcc85442ae2c32674efdb48de8e392f0dfb551489b29e85ec9dc281",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_current_gradient_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-current-gradient-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/diagnostic-current-gradient-v1",
+        "--phase",
+        "diagnostic"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 114.44050137599697,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 127.46664799999999,
+      "resource": {
+        "maximum_aggregate": 12,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 200.0,
+        "wall": 250.0,
+        "new_bytes": 200000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-diagnostic-gradient-scratch-v1": {
+      "sha256": "53e54bfbffa0b3a5b9b1b99d5b3e4642e1567f44993868e024b946f7ab1cb577",
+      "command": [
+        "python3",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_gradient_scratch_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-gradient-scratch-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/diagnostic-gradient-scratch-v1",
+        "--phase",
+        "diagnostic"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 102.4360869009979,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 110.27665900000001,
+      "resource": {
+        "maximum_aggregate": 19,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 200.0,
+        "wall": 250.0,
+        "new_bytes": 200000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-diagnostic-gradient-v1": {
+      "sha256": "3fa5c15745a23359169fcf88248590e4ba76b719bd7ddbf5cefaf0717017d0a5",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_gradient_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-gradient-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/diagnostic-gradient-v1",
+        "--phase",
+        "diagnostic"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 108.25791190500604,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 119.59386099999999,
+      "resource": {
+        "maximum_aggregate": 30,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 300.0,
+        "wall": 350.0,
+        "new_bytes": 200000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-diagnostic-lru-v1": {
+      "sha256": "d7beac8783b4e7c62adb088eb8357f1f127c0338a5d73a12dce4ffde67ff64f4",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_lru_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-lru-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/diagnostic-lru-v1",
+        "--phase",
+        "diagnostic"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 129.3348363750265,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 148.567191,
+      "resource": {
+        "maximum_aggregate": 29,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1000.0,
+        "wall": 1500.0,
+        "new_bytes": 700000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-diagnostic-metric-v1": {
+      "sha256": "767b5e6524c4306d81535a79177e4edbb0fbe2ee35a7aacd3cf646cb93b8905e",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_metric_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-metric-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/diagnostic-metric-v1",
+        "--phase",
+        "diagnostic"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 142.03860305197304,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 161.199454,
+      "resource": {
+        "maximum_aggregate": 13,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1000.0,
+        "wall": 1500.0,
+        "new_bytes": 700000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-diagnostic-observed-scalar-v1": {
+      "sha256": "1b23857744474aac3f305c65ad2314cf466387f3460886728983d4bfaf541ad0",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_observed_scalar_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-basis-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/diagnostic-observed-scalar-v1",
+        "--phase",
+        "diagnostic"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 102.83665981696686,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 112.60906700000001,
+      "resource": {
+        "maximum_aggregate": 11,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 200.0,
+        "wall": 250.0,
+        "new_bytes": 200000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-diagnostic-partition-v1": {
+      "sha256": "a6e7a444448423275cf75f8cf605d7138d9d6d6b2bc3f1a5477d77081033eea3",
+      "command": [
+        "python3",
+        "-B",
+        "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-instrumented-v1/runtime",
+        "--phase",
+        "diagnostic",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/diagnostic-partition-v1"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 197.54736419999972,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 228.072888,
+      "resource": {
+        "maximum_aggregate": 27,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 650.0,
+        "wall": 1200.0,
+        "new_bytes": 1073741824
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-diagnostic-sampler-v1": {
+      "sha256": "a62e71bf0d5bfc90fec2211fd3c6180281046a987bc72d68b236bd4b9d3179ba",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_sampler_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-sampler-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/diagnostic-sampler-v1",
+        "--phase",
+        "diagnostic"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 105.3003021380282,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 112.44619300000001,
+      "resource": {
+        "maximum_aggregate": 12,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 200.0,
+        "wall": 250.0,
+        "new_bytes": 200000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-diagnostic-tensor-index-v1": {
+      "sha256": "fc163660e53d2a26122f4e3d61217a30b3a6bb12632a79ad8ab626cd51dd3b79",
+      "command": [
+        "python3",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_tensor_index_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-tensor-index-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/diagnostic-tensor-index-v1",
+        "--phase",
+        "diagnostic"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 105.02351910399739,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 115.78767599999999,
+      "resource": {
+        "maximum_aggregate": 11,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 200.0,
+        "wall": 250.0,
+        "new_bytes": 200000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-diagnostic-v4-v1": {
+      "sha256": "48ecc5bdd34dbaf5f0b5b8977cc012f454e627ad7f9928311db54b0b07c94fd9",
+      "command": [
+        "python3",
+        "-B",
+        "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted15_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-15-20261116/build-v10/runtime",
+        "--phase",
+        "diagnostic",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/diagnostic-v4-v1"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 203.49359320302028,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 233.31548700000002,
+      "resource": {
+        "maximum_aggregate": 33,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 600.0,
+        "wall": 1000.0,
+        "new_bytes": 1073741824
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-guard-normal-v1": {
+      "sha256": "0dc9e759f2b201027bf7a13704ce15a171835dfdb2a67b9d022b56ebe022a5ac",
+      "command": [
+        "python3",
+        "-B",
+        "-c",
+        "import time; print(sum(i*i for i in range(100000))); time.sleep(.2)"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 7.4706463440088555,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 1.8063630000000002,
+      "resource": {
+        "maximum_aggregate": 24,
+        "maximum_project": 2,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 2.0,
+        "wall": 10.0,
+        "new_bytes": 4096
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-guard-paused-v1": {
+      "sha256": "eb87a0c2cad0cb5d702385dde4a42d3fc9abfa78722205a4dd267ac014dd4658",
+      "command": [
+        "python3",
+        "-B",
+        "-c",
+        "import pathlib,os,signal,sys,json; q=pathlib.Path(sys.argv[1]); parent=os.getppid(); v=(pathlib.Path(\"/proc\")/str(parent)/\"stat\").read_text().rsplit(\")\",1)[1].split(); outer=int(v[1]); guard=[]; children=(pathlib.Path(\"/proc\")/str(outer)/\"task\"/str(outer)/\"children\").read_text().split(); [guard.append(int(i)) for i in children if \"guard_rans_worker_budget.py\" in (pathlib.Path(\"/proc\")/i/\"cmdline\").read_bytes().decode()]; assert len(guard)==1; (q/\"paused-test-marker.json\").write_text(json.dumps(dict(leaf=os.getpid(),parent=parent,guard=guard[0],outer=outer))); handles=[os.pidfd_open(i) for i in (guard[0],parent)]; [signal.pidfd_send_signal(fd,signal.SIGSTOP) for fd in handles]; os.kill(os.getpid(),signal.SIGSTOP)",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/resources-guard-paused-v1"
+      ],
+      "exit_code": 1,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 7.461135188990738,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 1.776794,
+      "resource": {
+        "maximum_aggregate": 24,
+        "maximum_project": 2,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 5.0,
+        "wall": 10.0,
+        "new_bytes": 65536
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-guard-paused-v2": {
+      "sha256": "f1cb12c5959d7ecf3877eb66fa614db96f6715086f59bb0929d176b4e98925e9",
+      "command": [
+        "python3",
+        "-B",
+        "solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_guard_selftest.py",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/resources-guard-paused-v2"
+      ],
+      "exit_code": 124,
+      "status": "stopped_by_package_guard",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 6.815009341982659,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 3.406246073,
+      "resource": {
+        "aggregate_status": "incomplete",
+        "project_status": "incomplete",
+        "aggregate_limit": 72,
+        "project_limit": 16
+      },
+      "stop_reason": "declared family wall control",
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 5.0,
+        "wall": 10.0,
+        "new_bytes": 65536
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-independent-batch-v1": {
+      "sha256": "4f05a04e38fe657530ba870fb577f488e3e233282fea20d308510d97e821b46c",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_bulk.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/independent-batch-v1"
+      ],
+      "exit_code": 1,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 75.27476576401386,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 80.542297,
+      "resource": {
+        "maximum_aggregate": 23,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 400.0,
+        "wall": 500.0,
+        "new_bytes": 30000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-independent-batch-v2": {
+      "sha256": "2f3b7aa73731ba1a0369dae53b95b2bb4234f1f6b9140a0466e41c788bd41d79",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_bulk.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/independent-batch-v2"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 188.81764595204731,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 210.322781,
+      "resource": {
+        "maximum_aggregate": 4,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 400.0,
+        "wall": 500.0,
+        "new_bytes": 30000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-independent-blas-audit-v1": {
+      "sha256": "ecade7c02baf874b496468c51039887515574eeaabb0096c1f2c16ac03feba80",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_blas_audit.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/independent-blas-audit-v1"
+      ],
+      "exit_code": 1,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 25.640462927985936,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 19.297659000000003,
+      "resource": {
+        "maximum_aggregate": 6,
+        "maximum_project": 6,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 400.0,
+        "wall": 500.0,
+        "new_bytes": 200000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-independent-blas-audit-v2": {
+      "sha256": "399a223347d1d26962f6fc1ef0683c0737aba9bd2a45b08765abc66101311830",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_blas_audit.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/independent-blas-audit-v2"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 181.4841570139979,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 202.299925,
+      "resource": {
+        "maximum_aggregate": 12,
+        "maximum_project": 6,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 400.0,
+        "wall": 500.0,
+        "new_bytes": 200000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-independent-blas-v1": {
+      "sha256": "5fd5ade2fc57c8e1ba8dcf27cfee4335494cdb1bbfcebafb36439962a89f05a2",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_blas.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/independent-blas-v1"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 27.772006637998857,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 24.488347,
+      "resource": {
+        "maximum_aggregate": 4,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 150.0,
+        "wall": 200.0,
+        "new_bytes": 30000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-independent-inventory-v1": {
+      "sha256": "62da0744565b8c0fd6056f7f47c5703daa73aafc1ad1f401d95f96c7543dd1f9",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_inventory.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/independent-inventory-v1"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 181.72520315699512,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 204.04348099999999,
+      "resource": {
+        "maximum_aggregate": 14,
+        "maximum_project": 6,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 500.0,
+        "wall": 600.0,
+        "new_bytes": 200000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-primitive-contraction-v1": {
+      "sha256": "3b6d620fb7c475cbe762c76a3cb4a0fc96f4e3f0dd433019c46ed6fedefef5d9",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_contraction.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/primitive-contraction-v1"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 23.777171908004675,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 20.612752,
+      "resource": {
+        "maximum_aggregate": 26,
+        "maximum_project": 6,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 100.0,
+        "wall": 180.0,
+        "new_bytes": 400000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-primitive-flat_metric-v1": {
+      "sha256": "ec811ab8ed4e382137b74913cbce6797181574a794695c8f88229973c543b00d",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_flat_metric.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/primitive-flat_metric-v1"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 19.30945843202062,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 15.331979,
+      "resource": {
+        "maximum_aggregate": 28,
+        "maximum_project": 6,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 100.0,
+        "wall": 180.0,
+        "new_bytes": 400000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-selected-basis-check-v1": {
+      "sha256": "b3c4cd81cfb539fefc50c5ea782464fb4a417114fa334851317abcbf0deb55a6",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_basis_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-basis-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/selected-basis-check-v1",
+        "--phase",
+        "selected-one",
+        "--verify-basis"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 104.04051977698691,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 116.197787,
+      "resource": {
+        "maximum_aggregate": 11,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 180.0,
+        "wall": 220.0,
+        "new_bytes": 200000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-small-audit-residual-v2": {
+      "sha256": "4f74407304ccc12589bb1dc1527a7d3514ae9a6bbccb8497a6e72c69dea1e7f3",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_audit_residual_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-audit-residual-v2/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/small-audit-residual-v2",
+        "--phase",
+        "small"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 179.05250911100302,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 215.157708,
+      "resource": {
+        "maximum_aggregate": 21,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 350.0,
+        "wall": 450.0,
+        "new_bytes": 100000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-small-audit-residual-v3": {
+      "sha256": "f60e1c11ac4f359a584b74094e057b467f4cf6f55c7cc96486601be538087ca3",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_audit_residual_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-current-gradient-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/small-audit-residual-v3",
+        "--phase",
+        "small"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 168.41333943000063,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 200.16162599999998,
+      "resource": {
+        "maximum_aggregate": 22,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 350.0,
+        "wall": 450.0,
+        "new_bytes": 100000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-small-audit-v1": {
+      "sha256": "49ad79afa297a2dccbf497fcd8179a1cc4b86bac93039f01ea9f5ddcfd01b8a2",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_audit_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-audit-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/small-audit-v1",
+        "--phase",
+        "small"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 160.59081125695957,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 191.43676899999997,
+      "resource": {
+        "maximum_aggregate": 33,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1000.0,
+        "wall": 1500.0,
+        "new_bytes": 700000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-small-basis-v1": {
+      "sha256": "353579e15901a0427a858382d189c4a8a81a772d0d50289715f27b946c9cc2bb",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_basis_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-basis-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/small-basis-v1",
+        "--phase",
+        "small"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 172.48906641203212,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 204.474359,
+      "resource": {
+        "maximum_aggregate": 11,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 350.0,
+        "wall": 450.0,
+        "new_bytes": 100000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-small-coverage-v2": {
+      "sha256": "4506b7feed8ede427c923f22d5aebd52ad1bdfdb601ac9d081257718bd21dc95",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_coverage_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-current-gradient-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/small-coverage-v2",
+        "--phase",
+        "small"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 170.17511379299685,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 202.009219,
+      "resource": {
+        "maximum_aggregate": 16,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 350.0,
+        "wall": 450.0,
+        "new_bytes": 100000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-small-current-gradient-v1": {
+      "sha256": "914168d5ece0f1511abc16bb8993a9c95c1ac92e67fdaeba161eff66d0c18deb",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_current_gradient_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-current-gradient-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/small-current-gradient-v1",
+        "--phase",
+        "small"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 191.57100362097844,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 224.897992,
+      "resource": {
+        "maximum_aggregate": 14,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 350.0,
+        "wall": 450.0,
+        "new_bytes": 100000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-small-gradient-scratch-v1": {
+      "sha256": "a4d02a51a72ad71903c319489bf6333776dad66cdebd12de41bd069d0caf83f8",
+      "command": [
+        "python3",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_gradient_scratch_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-gradient-scratch-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/small-gradient-scratch-v1",
+        "--phase",
+        "small"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 177.4228798999684,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 208.70630400000002,
+      "resource": {
+        "maximum_aggregate": 19,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 350.0,
+        "wall": 450.0,
+        "new_bytes": 100000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-small-gradient-v1": {
+      "sha256": "df5fbc540ea7dcb0458c43fa54328d4de90baa8b7fdd195c93a4338235fc9361",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_gradient_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-gradient-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/small-gradient-v1",
+        "--phase",
+        "small"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 172.7118944650283,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 202.082631,
+      "resource": {
+        "maximum_aggregate": 30,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 300.0,
+        "wall": 400.0,
+        "new_bytes": 100000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-small-lru-v1": {
+      "sha256": "c847550f167b3786797b52a8d0a966a489cc231cdc0c7d5d0f3b30be5355a995",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_lru_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-lru-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/small-lru-v1",
+        "--phase",
+        "small"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 168.32513253798243,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 199.975412,
+      "resource": {
+        "maximum_aggregate": 29,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1000.0,
+        "wall": 1500.0,
+        "new_bytes": 700000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-small-metric-v1": {
+      "sha256": "8762d9cb5d960daa1453e1420610851ee3014a9fb006251fa2a321d76f474ecd",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_metric_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-metric-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/small-metric-v1",
+        "--phase",
+        "small"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 163.55318856600206,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 193.1228,
+      "resource": {
+        "maximum_aggregate": 22,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1000.0,
+        "wall": 1500.0,
+        "new_bytes": 700000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-small-observed-scalar-v1": {
+      "sha256": "15e68588ea7c176e03119355dde3fa26a651acc72b4a8dccc136a20047b7f73c",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_observed_scalar_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-basis-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/small-observed-scalar-v1",
+        "--phase",
+        "small"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 173.78922921797493,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 209.372205,
+      "resource": {
+        "maximum_aggregate": 11,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 350.0,
+        "wall": 450.0,
+        "new_bytes": 100000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-small-sampler-v1": {
+      "sha256": "a93ff4e351cbbd5ab022a3dd29a88e1ba1145a4e8e31114ea205e498e7f1a2f9",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_sampler_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-sampler-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/small-sampler-v1",
+        "--phase",
+        "small"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 174.28072837594664,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 202.71632599999998,
+      "resource": {
+        "maximum_aggregate": 11,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 350.0,
+        "wall": 450.0,
+        "new_bytes": 100000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-small-scatter-v2": {
+      "sha256": "8c0d97279b108ca04a5ec170fc21118d8d8764ddf8e36ced937f16d2515e227a",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_scatter_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-capacity-identity-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/small-scatter-v2",
+        "--phase",
+        "small"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 157.12221010198118,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 186.01028100000002,
+      "resource": {
+        "maximum_aggregate": 26,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1000.0,
+        "wall": 1500.0,
+        "new_bytes": 700000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-small-stream-v1": {
+      "sha256": "e6688452b54004af50058c6cd7a55c6ccdb9eb88abac77c15035825f5c060dce",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-stream-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/small-stream-v1",
+        "--phase",
+        "small"
+      ],
+      "exit_code": 1,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 36.34036349999951,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 38.465106000000006,
+      "resource": {
+        "maximum_aggregate": 33,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1000.0,
+        "wall": 1500.0,
+        "new_bytes": 700000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-small-stream-v2": {
+      "sha256": "b614592d2098291a5a59f87401235df6d344e2d647c04a345b85fa27206c3b26",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-scatter-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/small-stream-v2",
+        "--phase",
+        "small"
+      ],
+      "exit_code": 1,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 147.19781129201874,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 171.159041,
+      "resource": {
+        "maximum_aggregate": 35,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1000.0,
+        "wall": 1500.0,
+        "new_bytes": 700000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-small-stream-v3": {
+      "sha256": "723121af5327a01b0bd010568e2cecc7183c97e7281513cde56e0bfcb879b254",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-capacity-identity-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/small-stream-v3",
+        "--phase",
+        "small"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 158.22991506301332,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 188.29811999999998,
+      "resource": {
+        "maximum_aggregate": 29,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1000.0,
+        "wall": 1500.0,
+        "new_bytes": 700000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-small-tensor-index-v1": {
+      "sha256": "ace15a3810e682e385c0969a8cc13bd6acbf97409b78ba7f389d034731fd6448",
+      "command": [
+        "python3",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_tensor_index_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-tensor-index-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/small-tensor-index-v1",
+        "--phase",
+        "small"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 181.54409796802793,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 210.634029,
+      "resource": {
+        "maximum_aggregate": 11,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 350.0,
+        "wall": 450.0,
+        "new_bytes": 100000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-trace-comparison-v1": {
+      "sha256": "7532a843fecd489d00780ebaa0c2cc0911c89bc9afea64cac83e0bd3943aabcf",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_trace.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/trace-comparison-v1",
+        "--phase",
+        "comparison"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 113.52573043102166,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 124.754916,
+      "resource": {
+        "maximum_aggregate": 22,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 250.0,
+        "wall": 350.0,
+        "new_bytes": 100000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-trace-diagnostic-v1": {
+      "sha256": "1620e27285ca9e749068733790853c4e757a73a872339a2c0a6dd15fd29b7632",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_trace.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/trace-diagnostic-v1",
+        "--phase",
+        "diagnostic"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 43.26182410703041,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 44.090108,
+      "resource": {
+        "maximum_aggregate": 22,
+        "maximum_project": 4,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 150.0,
+        "wall": 240.0,
+        "new_bytes": 100000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-training-audit-residual-v2": {
+      "sha256": "7e85abc13fd96d246ab3379327541d45b2822e466b756a052584041936a06227",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_audit_residual_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-audit-residual-v2/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-audit-residual-v2",
+        "--phase",
+        "training"
+      ],
+      "exit_code": 124,
+      "status": "stopped_by_package_guard",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 119.22975982999196,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 138.68917035500002,
+      "resource": {
+        "aggregate_status": "incomplete",
+        "project_status": "incomplete",
+        "aggregate_limit": 72,
+        "project_limit": 16
+      },
+      "stop_reason": "launcher exception:KeyboardInterrupt:",
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 450.0,
+        "wall": 550.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-training-audit-residual-v3": {
+      "sha256": "dda84f6e8c00e5522ba0ff19d843464710a688babc86e1216df4bb01a44961a2",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_audit_residual_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-current-gradient-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-audit-residual-v3",
+        "--phase",
+        "training"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 298.5210122540011,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 348.56485200000003,
+      "resource": {
+        "maximum_aggregate": 22,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 450.0,
+        "wall": 550.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-training-audit-v1": {
+      "sha256": "3aa3c042e95f3cdab634fbd362f4eca2ae2ef7db0cd01e64d3e93f3764a5c923",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_audit_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-audit-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-audit-v1",
+        "--phase",
+        "training"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 442.093717539974,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 518.83754,
+      "resource": {
+        "maximum_aggregate": 29,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1000.0,
+        "wall": 1500.0,
+        "new_bytes": 700000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-training-basis-v1": {
+      "sha256": "5c541cf232c472bdef6ad8997115eaa8ad7eb5f9e7bce3d257b15316ad9f9675",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_basis_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-basis-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-basis-v1",
+        "--phase",
+        "training"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 274.77923842996825,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 321.004042,
+      "resource": {
+        "maximum_aggregate": 11,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 450.0,
+        "wall": 550.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-training-coverage-v2": {
+      "sha256": "7e9926fe463f127f199350bc4cd46693e1abc1707c0ad1aa346491a9ff39cd88",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_coverage_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-current-gradient-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-coverage-v2",
+        "--phase",
+        "training"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 295.94020974601153,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 351.467976,
+      "resource": {
+        "maximum_aggregate": 14,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 450.0,
+        "wall": 550.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-training-current-gradient-v1": {
+      "sha256": "3817a687d9975e63b436d26abd9b5a1025942c688595e554b2c5014b7648972b",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_current_gradient_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-current-gradient-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-current-gradient-v1",
+        "--phase",
+        "training"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 314.4176437840215,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 372.132693,
+      "resource": {
+        "maximum_aggregate": 14,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 450.0,
+        "wall": 550.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-training-gradient-scratch-v1": {
+      "sha256": "fee81c0de1cd03d7c7b3fd24fb25ce00e2f9819e591c2506d39912e9c3df8984",
+      "command": [
+        "python3",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_gradient_scratch_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-gradient-scratch-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-gradient-scratch-v1",
+        "--phase",
+        "training"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 267.524594772025,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 309.245202,
+      "resource": {
+        "maximum_aggregate": 20,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 450.0,
+        "wall": 550.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-training-gradient-v1": {
+      "sha256": "c11c00fe41d50fee337ed69dae11d8a48ae343f242f42970b4ffbc73988f3d5e",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_gradient_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-gradient-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-gradient-v1",
+        "--phase",
+        "training"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 302.3818943609949,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 351.079487,
+      "resource": {
+        "maximum_aggregate": 30,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 650.0,
+        "wall": 750.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-training-lru-v1": {
+      "sha256": "4688ab69dc1a352edc89b26b30ae68d42cca78616e1b18e3ccbd654e49a7b539",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_lru_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-lru-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-lru-v1",
+        "--phase",
+        "training"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 380.23452319501666,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 441.83665199999996,
+      "resource": {
+        "maximum_aggregate": 29,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1000.0,
+        "wall": 1500.0,
+        "new_bytes": 700000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-training-metric-v1": {
+      "sha256": "0abd1e5869505266f78fcbc3b536954842476fa224616924a0d8259998709b24",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_metric_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-metric-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-metric-v1",
+        "--phase",
+        "training"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 408.6243984059547,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 482.29980399999994,
+      "resource": {
+        "maximum_aggregate": 20,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1000.0,
+        "wall": 1500.0,
+        "new_bytes": 700000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-training-observed-scalar-v1": {
+      "sha256": "262c24336a5218dc18c551c30a03db7c8d19f12f41c4c1ab9998538ba545ca25",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_observed_scalar_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-basis-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-observed-scalar-v1",
+        "--phase",
+        "training"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 284.18527969298884,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 326.334405,
+      "resource": {
+        "maximum_aggregate": 12,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 450.0,
+        "wall": 550.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-training-sampler-v1": {
+      "sha256": "e629ab410d4c9fc47849c851301387c5f2131f807aa1e4cd176695cec98f6bf3",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_sampler_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-sampler-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-sampler-v1",
+        "--phase",
+        "training"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 280.19157100399025,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 331.008536,
+      "resource": {
+        "maximum_aggregate": 11,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 450.0,
+        "wall": 550.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-training-scatter-v2": {
+      "sha256": "73e0e4bc4fd32e3a26e9f338e45f4a87407f8a2e5bce1501e2ec5941d5cf3358",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_scatter_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-capacity-identity-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-scatter-v2",
+        "--phase",
+        "training"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 485.3816319379839,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 570.80718,
+      "resource": {
+        "maximum_aggregate": 35,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1000.0,
+        "wall": 1500.0,
+        "new_bytes": 700000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-training-stream-v3": {
+      "sha256": "b5cd43d6dbe89f14da84260b4e85f7bea16ef38887d12e9e37bad3604d519bc7",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-capacity-identity-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-stream-v3",
+        "--phase",
+        "training"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 503.56404605298303,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 599.801379,
+      "resource": {
+        "maximum_aggregate": 30,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 1000.0,
+        "wall": 1500.0,
+        "new_bytes": 700000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    },
+    "resources-training-tensor-index-v1": {
+      "sha256": "40b1abd928c1e1d23f444ccd883d8d0131eadf128e397ca82e0e2a06e7c3f30c",
+      "command": [
+        "python3",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/source/solvers/IncNavierStokesSolver/Tests/RANS/ct_accepted16_tensor_index_controls.py",
+        "--ct14",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-14-20261115",
+        "--runtime",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/build-tensor-index-v1/runtime",
+        "--output",
+        "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/ct-accepted-16-20261116/training-tensor-index-v1",
+        "--phase",
+        "training"
+      ],
+      "exit_code": 0,
+      "status": "completed",
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1"
+      },
+      "wall_seconds": 315.0646571650286,
+      "allocation_wait_seconds": 0.0,
+      "process_cpu_seconds": 367.474498,
+      "resource": {
+        "maximum_aggregate": 11,
+        "maximum_project": 11,
+        "aggregate_limit": 72,
+        "project_limit": 16,
+        "aggregate_status": "pass",
+        "project_status": "pass",
+        "control_helpers_counted": 2
+      },
+      "stop_reason": null,
+      "allocation_start_unix": 1794835825,
+      "expected": {
+        "CPU": 450.0,
+        "wall": 550.0,
+        "new_bytes": 600000000
+      },
+      "process_cpu_scope": "launcher self plus reaped descendants including worker monitor; conservative frozen-tree upper bound on forced-stop exception; no historical CT15 charge"
+    }
+  },
+  "reserve_scope": "The one existing 240 CPU/600 wall/256 MiB publication reserve includes this exporter, source inspection, transfer duplication, Mac compaction, Git publication and final verification. No second administrative reserve is added.",
+  "separate_ledgers": "Historical CT11-CT15 and prospective production excluded from new CT16 engineering; all new failures and conservative stop witnesses remain charged.",
+  "qualification_scope": "Closed resource accounting does not complete G1-G5. Fresh candidate pair, selected controls, full workflow heldout, native retention cycles and complete admitted forecast remain missing.",
+  "physical_T0_407": "UNATTEMPTED",
+  "full_transit": "UNQUALIFIED"
+}
