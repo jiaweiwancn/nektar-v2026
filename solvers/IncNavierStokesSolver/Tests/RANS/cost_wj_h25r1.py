@@ -51,8 +51,8 @@ def run(root,provisional=False):
     scientific=max((v['scientific']for v in blocks.values()if v['scientific']),key=lambda v:v['per_step'])
     fixed=max(v['fixed_seconds']for v in blocks.values())
     for v in blocks.values():assert abs(sum(v['fixed_disjoint'].values())-v['fixed_seconds'])<1e-7
-    fresh=load(base/'operations/fresh-C-r1-v1/receipt.json')['seconds']if not provisional else None
-    strict=load(base/'operations/C-terminal-read-r1-v1/receipt.json')['seconds']if not provisional else None
+    fresh=load(base/'operations/fresh-C-r1-v1/receipt.json')['seconds']if not provisional else 600.
+    strict=load(base/'operations/C-terminal-read-r1-v1/receipt.json')['seconds']if not provisional else 180.
     if not provisional:
         assert load(base/'science/fresh-C-v1/qualification.json')['status']=='PASS_GENUINE_FRESH_INITIALIZATION'
         assert load(base/'science/C-sparse-restart-v1/strict/qualification.json')['status']=='PASS'
@@ -81,7 +81,7 @@ def run(root,provisional=False):
                 equation_fraction_note='conservative numerator: fixed-stage equation work is not added',
                 attributed_fraction=1-unknown/total,
                 fixed_costs_measured=not provisional,
-                warning='provisional fixed costs incomplete'if provisional else None)
+                warning='fresh construction 600s and strict read 180s are prospective operation caps, not measured results'if provisional else None)
         forecasts[str(stride)]=dict(scientific_stride=stride,scientific_interval=stride*dt,recovery_stride=1,
             scope='short unperturbed cadence exercised; finite-perturbation production admission open'if stride==4 else'UNEXECUTED .25 cadence sensitivity only; no accuracy or operational admission',scenarios=scenarios)
     storage={};scientific_sizes=[]
