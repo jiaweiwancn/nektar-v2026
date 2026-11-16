@@ -85,6 +85,7 @@ def main():
     training=n.read(a.training/'results.json')['cases'];cpu=[training[str(i)]['execution']['process_cpu_seconds'] for i in (0,1,2)];wall=[training[str(i)]['execution']['wall_seconds'] for i in (0,1,2)]
     def fit(v):return dict(startup=max(0.,v[0]),repeated_step=max(0.,v[1]-v[0],(v[2]-v[0])/2,v[2]-v[1]),training=v)
     model=dict(CPU=fit(cpu),wall=fit(wall),fit_scope='training zero/one/two only; heldout not used for fit')
+    model['measurement_policy']='CT15PhaseSeparatedCostModelV2';model['cost_model_contract_sha256']=sha(a.root/'source/docs/plans/cao-tamura-accepted-15-evidence/cost-model-contract-v2.json')
     write_json(a.output/'frozen-model-before-heldout.json',model)
     def run(label,parent,steps=2,reject=0):
         started=time.monotonic();cpu=time.process_time();before=resource.getrusage(resource.RUSAGE_CHILDREN)
@@ -165,7 +166,14 @@ def main():
     ts=n.read(a.root/'timestep-v1/results.json');action_training=[r['execution'] for k,r in ts['controls'].items() if k.startswith('4000-')]
     action_cpu=sum(v['process_cpu_seconds']+v.get('observer_self_CPU_seconds',0) for v in action_training)
     action_wall=sum(v['wall_seconds'] for v in action_training)
-    model['complete_heldout_bounds']=dict(CPU=normal_cpu+envelope([x['cycle_usage']['CPU'] for x in result['cycles']])+action_cpu,wall=normal_wall+envelope([x['cycle_usage']['wall'] for x in result['cycles']])+action_wall,peak_address_space_bytes=envelope([x['peak_address_space_bytes'] for x in result['cycles']]+[peak_AS(action_training)]),peak_new_output_bytes=envelope([x['before_retirement_owned_bytes'] for x in result['cycles']])+sum((a.root/'timestep-v1'/k/'frozen.json').stat().st_size for k in ts['controls'] if k.startswith('4000-')))
+    audits=[n.read(a.output/('audit-replay-'+str(i)+'.json')) for i in (2,4)];separated={}
+    for key in ('CPU','wall'):
+        full=[max(0.,x['audit_usage'][key]-sum(v[key] for v in audit['phase_usage']['per_state'])) if audit.get('scheduled_full_audit',True) else 0. for x,audit in zip(result['cycles'],audits,strict=True)]
+        matched=[x['cycle_usage'][key]-f for x,f in zip(result['cycles'],full,strict=True)]
+        extra=envelope([v[key] for audit in audits for v in audit['phase_usage']['per_state']])
+        separated[key]=dict(normal=normal_cpu if key=='CPU' else normal_wall,matched_recovery_cycles=matched,matched_recovery_envelope=envelope(matched),full_audit_only=full,full_audit_bound=max(full),extra_endpoint_bundle=extra,actions=action_cpu if key=='CPU' else action_wall)
+    model['measured_component_separation']=separated
+    model['complete_heldout_bounds']=dict(CPU=sum(separated['CPU'][k] for k in ('normal','matched_recovery_envelope','full_audit_bound','extra_endpoint_bundle','actions')),wall=sum(separated['wall'][k] for k in ('normal','matched_recovery_envelope','full_audit_bound','extra_endpoint_bundle','actions')),peak_address_space_bytes=envelope([x['peak_address_space_bytes'] for x in result['cycles']]+[peak_AS(action_training)]),peak_new_output_bytes=envelope([x['before_retirement_owned_bytes'] for x in result['cycles']])+sum((a.root/'timestep-v1'/k/'frozen.json').stat().st_size for k in ts['controls'] if k.startswith('4000-')))
     model['external_monitor_CPU_per_wall_second']=envelope([x['cycle_usage']['external_monitor_CPU']/x['cycle_usage']['wall'] for x in result['cycles']])
     model['complete_heldout_bounds']['CPU']+=model['external_monitor_CPU_per_wall_second']*model['complete_heldout_bounds']['wall']
     model['scope']='one normal two-step restart, fresh predecessor restoration and two-step replay, all independent state/scalar/constitutive audits, later native/q48/q64 actions, sealed publication and retirement; no heldout measurements used for fitting'
