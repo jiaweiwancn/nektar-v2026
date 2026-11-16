@@ -60,6 +60,11 @@ def main():
     require(any(Path(s).name=='guard_rans_worker_budget.py' for s in guard['command']) and str(root) in guard['command'],'foreign worker guard')
     require(Path(parent['command'][0]).name in ('bash','sh','zsh'),'parent is not the owned command shell')
     require(not read(root/'worker-leases.json') and not (root/'live-budget.json').exists(),'numerical family already admitted')
+    # Keep stable Linux process handles throughout a long allocation wait.
+    # A departed shell/launcher must never turn into a signal to a reused PID.
+    handles={pid:os.pidfd_open(pid) for pid in (a.parent,a.launcher)}
+    require(proc(a.parent)['start']==parent['start'] and proc(a.launcher)['start']==launcher['start'],'process changed while opening stable handles')
+    def send(pid,signum):signal.pidfd_send_signal(handles[pid],signum)
     status=read(root/'worker-guard-status.json')
     witness=dict(schema='CT15PreSpawnQueueCancellationV1',control=str(root),launcher=launcher,parent=parent,guard=guard,worker_status=status,action='read_only_preflight')
     def watch_receipt(status):
@@ -79,14 +84,14 @@ def main():
     # running until the launcher's ordinary finally block closes it.
     parent_stopped=launcher_stopped=False
     try:
-        os.kill(a.parent,signal.SIGSTOP);parent_stopped=True;stopped(a.parent,parent)
-        os.kill(a.launcher,signal.SIGSTOP);launcher_stopped=True;stopped(a.launcher,launcher)
+        send(a.parent,signal.SIGSTOP);parent_stopped=True;stopped(a.parent,parent)
+        send(a.launcher,signal.SIGSTOP);launcher_stopped=True;stopped(a.launcher,launcher)
         descendants=children(a.launcher)
         require(not read(root/'worker-leases.json') and not (root/'live-budget.json').exists(),'admission raced cancellation')
         require(all(q['pid']==a.guard or Path(q['command'][0]).name=='ps' for q in descendants if q['command']),'unexpected owned child; cancellation refused')
         ignored=int(next(s.split()[1] for s in (Path('/proc')/str(a.launcher)/'status').read_text().splitlines() if s.startswith('SigIgn:')),16)
         require(not ignored & (1<<(signal.SIGINT-1)),'launcher ignores SIGINT')
-        os.kill(a.launcher,signal.SIGINT);os.kill(a.launcher,signal.SIGCONT);launcher_stopped=False
+        send(a.launcher,signal.SIGINT);send(a.launcher,signal.SIGCONT);launcher_stopped=False
         until=time.monotonic()+15
         while True:
             final=proc(a.launcher);require(final['start']==launcher['start'],'launcher PID changed')
@@ -111,8 +116,8 @@ def main():
             wall_scope='conservative process-birth-to-receipt upper bound; no scientific child was admitted'))
         print(json.dumps(dict(status='cancelled_before_spawn',CPU_upper=CPU+rounding,wall_upper=elapsed)))
     finally:
-        if launcher_stopped:os.kill(a.launcher,signal.SIGCONT)
-        if parent_stopped:os.kill(a.parent,signal.SIGCONT)
+        if launcher_stopped:send(a.launcher,signal.SIGCONT)
+        if parent_stopped:send(a.parent,signal.SIGCONT)
     if a.cancel_at_unix is not None:watch_receipt('cancelled_before_spawn')
     return 0
 

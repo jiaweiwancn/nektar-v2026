@@ -66,6 +66,12 @@ elapsed wall seconds. The latter includes worker pauses and is not a clean
 matched speedup. The compact file binds the263005549-byte raw result, request,
 actual reports, histories, configurations, mapped runtime files and full receipts.
 
+The pressure and fine-traction diagnostics reproduce CT14's reported values.
+Their remaining absolute margins are8.566492270940976e-8 and
+1.5531852563239622e-4 respectively, or27.2463%/15.5319% of the unchanged
+allowances. This independent scientific PASS does not replace the pending full
+array/stage equivalence comparison.
+
 The unrelated HIT job caused the pair's aggregate worker audit to fail at101;
 own project highwater remains12<=16. This resource failure is retained separately
 from the scientific PASS. Full selected-trajectory equivalence is currently
@@ -282,6 +288,13 @@ thread variables set to1. The driver sequence is:
 6. `ct_accepted15_collect.py` compacts hashes, every engineering attempt,
    three separate ledgers, forecast equations and all horizon decisions.
    Close its outer resource receipt and final publication accounting before D.
+
+If the shared host never admits the remaining numerical family, the read-only
+`ct_accepted15_snapshot.py` exports actual Linux receipts, artifact hashes,
+logical occupancy and historical ledgers. `ct_accepted15_publish_snapshot.py`
+compacts that sealed metadata on the Mac, rejects unclosed families and refuses
+to turn unmeasured workflow costs into a validated forecast. This fallback is
+only for the unresolved path with G4 unattempted; it runs no numerical validation.
 
 Each numerical/build/controller command is nested inside
 `ct_accepted3_command.py --control <new-owned-resource-directory> -- python3 -B ct_accepted15_budget.py --root <CT15-root> --control <same-directory> -- <command>`.
