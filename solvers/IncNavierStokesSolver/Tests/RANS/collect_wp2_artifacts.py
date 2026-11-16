@@ -11,6 +11,7 @@ from zoneinfo import ZoneInfo
 from cao_tamura_h2d_state import load
 from run_cls_epawf_picard import sha, require, THREADS
 from continue_cls_epawf_pimple import atomic
+from wp2_execution_index import executions as native_executions
 
 
 def main():
@@ -19,16 +20,12 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     root = args.root
-    executions = {}
-    for progress in root.glob('*/progress.json'):
-        for entry in load(progress).get('results', {}).values():
-            if isinstance(entry, dict) and 'observed_physical_attempts' in entry:
-                executions[entry['report']] = entry
+    executions = native_executions(root)
     groups = collections.defaultdict(list)
     commands = []
     for name, entry in sorted(executions.items()):
         report = Path(name)
-        require(sha(report) == entry['report_sha256'], 'native report changed')
+        require(not report.exists() or sha(report) == entry['report_sha256'], 'native report changed')
         groups[report.relative_to(root).parts[0]].append(entry)
         xml = report.with_name('case.xml')
         require(sha(xml) == entry['xml_sha256'], 'native case changed')
@@ -47,7 +44,8 @@ def main():
         first_steps = []
         for entry in entries:
             local_steps = []
-            for line in (Path(entry['report']).parent / 'timing.jsonl').read_text().splitlines():
+            timing = Path(entry['report']).parent / 'timing.jsonl'
+            for line in timing.read_text().splitlines() if timing.exists() else []:
                 import json
                 row = json.loads(line)
                 exclusive[row['name']] += row['exclusive_process_cpu_seconds']

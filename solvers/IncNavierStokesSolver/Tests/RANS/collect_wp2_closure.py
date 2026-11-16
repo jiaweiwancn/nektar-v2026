@@ -8,6 +8,7 @@ from pathlib import Path
 from cao_tamura_h2d_state import load
 from run_cls_epawf_picard import require,sha,state_hash
 from continue_cls_epawf_pimple import atomic
+from wp2_execution_index import executions as native_executions
 
 
 def binding(path):return dict(path=str(path),sha256=sha(path),bytes=path.stat().st_size)
@@ -77,12 +78,7 @@ def main():
                    restart_rollback_and_terminal_audit=bool(transaction_pass),perturbation_recovery=bool(recovery_pass))
         models[model]=dict(gates=gates,passed=all(gates.values()),recovery=rec,
                            unperturbed_cases={k:dict(actual_time=v['actual_time'],transit_units=v['transit_units'],unique_states=v['unique_states']) for k,v in cases.items()})
-    executions={}
-    for progress in r.glob('*/progress.json'):
-        d=load(progress)
-        for q in d.get('results',{}).values():
-            if isinstance(q,dict) and 'observed_physical_attempts' in q:
-                executions[q['report']]=q
+    executions=native_executions(r)
     counts=dict(reported_native_attempts=sum(q['observed_physical_attempts'] for q in executions.values()),
                 accepted_step_executions=sum(q['accepted_step_executions'] for q in executions.values()),
                 deliberate_post_assignment_rejections=sum(q.get('failure')=='deliberate post-assignment explicit rejection' for q in executions.values()),

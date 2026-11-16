@@ -49,6 +49,25 @@ class PhysicalComparison(unittest.TestCase):
 
 
 class ContinuationOwnership(unittest.TestCase):
+    def test_execution_index_includes_nested_legacy_and_deduplicates(self):
+        from wp2_execution_index import executions
+        from run_cls_epawf_picard import sha
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);run=root/'nested'/'run';run.mkdir(parents=True)
+            report=run/'case.evolution.json';report.write_text(json.dumps(dict(implicit_callback_count=2,step_audits=[{}])))
+            (run/'case.xml').write_text('<NEKTAR><CONDITIONS><PARAMETERS><P>NumSteps = 2</P></PARAMETERS></CONDITIONS></NEKTAR>')
+            entry=dict(report=str(report),report_sha256=sha(report))
+            (run/'progress.json').write_text(json.dumps(dict(results=dict(old=entry))))
+            mirror=root/'mirror';mirror.mkdir()
+            (mirror/'progress.json').write_text(json.dumps(dict(results=dict(reused=entry))))
+            found=executions(root)
+            self.assertEqual(len(found),1)
+            self.assertEqual(found[str(report)]['observed_physical_attempts'],2)
+            self.assertEqual(found[str(report)]['accepted_step_executions'],1)
+            self.assertEqual(found[str(report)]['requested_attempt_work'],2)
+            entry['observed_physical_attempts']=1
+            (run/'progress.json').write_text(json.dumps(dict(results=dict(wrong=entry))))
+            with self.assertRaisesRegex(ValueError,'execution count differs'):executions(root)
     def test_retained_state_audit_does_not_use_terminal_endpoint_cache(self):
         import wp2_common_quadrature as quadrature
         from wp2_all_state import Rows
