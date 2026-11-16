@@ -10,7 +10,10 @@ from wj_h15_observer import identity,verify,atomic
 OLD=Path('/home/jay/build/wj-h22-early-phase-replay-20261115')
 
 def build(root):
-    source=root/'source-v3';output=root/'build-profile-v1';started=time.monotonic()
+    source=root/'source-v4';output=root/'build-profile-v2';started=time.monotonic()
+    cmake=(source/'solvers/IncNavierStokesSolver/Tests/RANS/CMakeLists.txt').read_text()
+    for relative in re.findall(r'\$\{RANS_SOURCE_ROOT\}/([A-Za-z0-9_./-]+\.(?:cpp|h))',cmake):
+        assert(source/relative).is_file(),'missing configured source fixture: '+relative
     cache={}
     for line in(OLD/'build/CMakeCache.txt').read_text().splitlines():
         if line and not line.startswith(('#','//'))and '='in line:
@@ -65,7 +68,7 @@ def build(root):
     for c in new:
         a=shlex.split(c['command']);obj=output/a[a.index('-o')+1]
         if obj.exists():objects.append(dict(source=identity(c['file']),command=c['command'],object=identity(obj),dependency=identity(str(obj)+'.d')if Path(str(obj)+'.d').exists()else None))
-    atomic(root/'science/runtime-build-profile-v1.json',dict(status='PASS',source_manifest=identity(root/'source-manifest-v3.json'),
+    atomic(root/'science/runtime-build-profile-v1.json',dict(status='PASS',source_manifest=identity(root/'source-manifest-v4.json'),
         compiler=subprocess.check_output(['/usr/bin/c++','--version'],text=True),configure=config,build=command,seconds=time.monotonic()-started,
         compile_commands=identity(output/'compile_commands.json'),objects=objects,executables=executables,
         link_commands=[identity(p)for p in sorted(output.glob('CMakeFiles/*/link.txt'))if p.parent.name in ('IncNavierStokesSolver.dir','RANSWallResolutionProbe.dir','WJH25CommonMassChecks.dir')],
