@@ -290,3 +290,13 @@ and constant-mu time refinements on the same unit-box Q3/Q2 polynomial MMS,
 dt=.02,.01,.005 to t=.2. Require velocity orders>=1.8 for both methods and
 decreasing pressure errors, and report the stock pressure orders separately
 from the candidate's preregistered pressure-order>=1.8 gate.
+
+Final nonlinear-fixture correction: a curved interpolated streamfunction need
+not be weakly divergence-free. The earlier algebraic nonlinear fixture used
+its D U_target as g; retain that historical result, but it does not close the
+zero-continuity flow gate. Project the seed through a native mixed mass/Stokes
+problem with g=0, retain its velocity as the nonlinear target, and set the final
+nonlinear body continuity component explicitly to zero. Check the projection
+and final frozen-scalar momentum/continuity residuals, then repeat the selected
+candidate's full numerical suite and timing matrix. Per-direction native basis
+and quadrature checks now enforce actual Q3/Q2 spaces directly.

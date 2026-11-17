@@ -64,6 +64,8 @@ Flow::Flow(const std::vector<MultiRegions::ContFieldSharedPtr>&fields,Geometry g
     {
         Element a;a.velocity=fields[0]->GetExp(e);a.pressure=fields[2]->GetExp(e);a.geometry=a.velocity->GetGeom()->GetGlobalID();
         Require(a.velocity->GetNcoeffs()==16&&a.pressure->GetNcoeffs()==9,"H26 requires actual tensor Q3/Q2 spaces");
+        Require(a.velocity->GetNumBases()==2&&a.pressure->GetNumBases()==2,"H26 requires two-dimensional tensor fields");
+        for(int direction=0;direction<2;++direction){Require(a.velocity->GetBasisNumModes(direction)==4&&a.pressure->GetBasisNumModes(direction)==3,"H26 requires Q3/Q2 in each physical reference direction");Require(a.velocity->GetBasis(direction)->GetPointsKey()==a.pressure->GetBasis(direction)->GetPointsKey(),"Q3/Q2 quadrature points differ by direction");}
         int nq=a.velocity->GetTotPoints();Require(nq==a.pressure->GetTotPoints(),"Q3/Q2 quadrature grids differ");
         Array<OneD,NekDouble>x(nq),z(nq),dummy(nq),one(nq,1.),weight(nq);a.velocity->GetCoords(x,z,dummy);a.velocity->MultiplyByQuadratureMetric(one,weight);
         a.x=Vec(nq);a.z=Vec(nq);a.w=Vec(nq);a.xl=a.rl=1e100;a.xr=a.rr=-1e100;

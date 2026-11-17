@@ -76,8 +76,12 @@ struct Constitutive
 };
 void Nonlinear(Flow&flow,std::ostream&out)
 {
-    double began=Clock(),alpha=300,awf=1,constitutive=0;Vec target=Exact(flow,Polynomial(0)),lift=flow.Lift(target);Constitutive reference(flow,target);constitutive+=reference.seconds;
-    Sparse Kr=flow.StrainSamples(reference.Mu());Vec sr=flow.StressSamples(reference.Stress());Vec body=flow.ApplyFull(alpha,Kr,awf,target)-sr;
+    double began=Clock(),alpha=300,awf=1,constitutive=0;Vec seed=Exact(flow,Polynomial(0)),lift=flow.Lift(seed);
+    // First create a genuinely weakly incompressible target in the native
+    // curved Q3 space. The final nonlinear problem has g=0, rather than using
+    // the nonzero divergence of an interpolated continuous streamfunction.
+    Sparse projectionK=flow.Strain([](double,double){return 6.423173803526447e-5;}),projectionA=flow.System(1,projectionK,0);Vec projectionLoad=flow.MassAction(seed),projectionRhs=flow.LiftedRhs(1,projectionK,0,projectionLoad,lift),projected=Vec::Zero(flow.Size());auto projection=flow.Solve(projectionA,projectionRhs,projected,0,1e-12);Vec target=flow.Expand(projected,lift);target.tail(flow.PressureSize())=seed.tail(flow.PressureSize());Constitutive reference(flow,target);constitutive+=reference.seconds;
+    Sparse Kr=flow.StrainSamples(reference.Mu());Vec sr=flow.StressSamples(reference.Stress());Vec body=flow.ApplyFull(alpha,Kr,awf,target)-sr;body.tail(flow.PressureSize()).setZero();flow.PreparePreconditioner(flow.System(alpha,Kr,awf));
     Vec current=.8*target;current.tail(flow.PressureSize()).setZero();for(int c=0;c<2;++c)current.segment(c*flow.VelocitySize(),flow.DirichletSize())=lift.segment(c*flow.VelocitySize(),flow.DirichletSize());
     std::vector<SolveInfo>linear;std::vector<double>residuals;double moment=1,continuity=1;int outer=0;double weakBlend=0,low=0,high=0;
     for(;outer<60;++outer)
@@ -88,7 +92,7 @@ void Nonlinear(Flow&flow,std::ostream&out)
         if(std::max(moment,continuity)<1e-10)break;
     }
     Check(outer<60&&moment<=1e-9&&continuity<=1e-9,"nonlinear frozen-scalar flow failed");Check(weakBlend<1e-10,"complete blended stress weak identity failed");double error=(current-target).norm()/target.norm();Check(error<1e-8,"nonlinear flow direct target agreement failed");
-    out<<"{\"status\":\"PASS\",\"scope\":\"flow-only algebraic nonlinear refresh with prescribed positive k and epsilon, full adapter and current AWF pressure; not scalar transport\",\"outer_iterations\":"<<outer+1<<",\"momentum\":"<<moment<<",\"continuity\":"<<continuity<<",\"solution_error\":"<<error<<",\"complete_blend_weak_identity\":"<<weakBlend<<",\"mu_range\":["<<low<<','<<high<<"],\"constitutive_seconds\":"<<constitutive<<",\"total_seconds\":"<<Clock()-began<<",\"residuals\":[";for(int i=0;i<residuals.size();++i){if(i)out<<',';out<<residuals[i];}out<<"],\"linear\":[";for(int i=0;i<linear.size();++i){if(i)out<<',';InfoJSON(out,linear[i]);}out<<"]}";
+    out<<"{\"status\":\"PASS\",\"scope\":\"flow-only algebraic nonlinear refresh with zero continuity forcing, prescribed positive k and epsilon, full adapter and current AWF pressure; not scalar transport\",\"continuity_forcing\":0,\"projection_continuity\":"<<projection.continuity<<",\"outer_iterations\":"<<outer+1<<",\"momentum\":"<<moment<<",\"continuity\":"<<continuity<<",\"solution_error\":"<<error<<",\"complete_blend_weak_identity\":"<<weakBlend<<",\"mu_range\":["<<low<<','<<high<<"],\"constitutive_seconds\":"<<constitutive<<",\"total_seconds\":"<<Clock()-began<<",\"residuals\":[";for(int i=0;i<residuals.size();++i){if(i)out<<',';out<<residuals[i];}out<<"],\"linear\":[";for(int i=0;i<linear.size();++i){if(i)out<<',';InfoJSON(out,linear[i]);}out<<"]}";
 }
 }
 #endif

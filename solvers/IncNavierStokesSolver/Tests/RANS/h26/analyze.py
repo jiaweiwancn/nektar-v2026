@@ -26,6 +26,7 @@ def numeric(root,version):
     assert max(result['maximum_independent_momentum_residual'],result['maximum_independent_continuity_residual'])<=1e-9
     result['adapter']=load(science/f'adapter{suffix}');result['nonlinear']=load(science/f'nonlinear{suffix}');result['continuous_forcing']=load(science/f'independent-formulas{suffix}')
     assert all(result[k]['status']=='PASS'for k in ('adapter','nonlinear','continuous_forcing'))
+    assert result['nonlinear']['continuity_forcing']==0 and result['nonlinear']['projection_continuity']<=1e-9
     temporal=[load(science/f'temporal-poly-{i}{suffix}')for i in range(3)];result['temporal']=dict(rows=[dict(dt=d['dt'],errors=d['L2_errors'])for d in temporal],velocity_orders=orders([d['L2_errors'][0]for d in temporal]),pressure_orders=orders([d['L2_errors'][1]for d in temporal]));assert min(result['temporal']['velocity_orders']+result['temporal']['pressure_orders'])>=1.8
     result['spatial']={};result['WJ_C0_collar_traction']={}
     for curve in (0.,.1):
@@ -82,7 +83,7 @@ def benchmark(root,version):
 def publish(root,version,stage,output):
     assert not output.exists();output.mkdir();numerics=numeric(root,version);summary=dict(stage=stage,tested_source_revision=load(root/f'source-v{version}.json')['revision'],NUMERICS=numerics,FULL_COUPLED_MODEL_AND_PRODUCTION='NOT_QUALIFIED')
     if stage=='C':summary['COST']=benchmark(root,version);summary.update(H26_NUMERICS='PASS',H26_COST='PASS',H26_INTEGRATION_READINESS='READY')
-    else:summary.update(H26_NUMERICS='PASS',H26_COST='PRELIMINARY_V6_MATRIX_PASS_FINAL_MATRIX_PENDING',H26_INTEGRATION_READINESS='NOT_READY')
+    else:summary.update(H26_NUMERICS='PASS',H26_COST='TARGET_NOT_MET',cost_reason='final selected-binary matrix pending; predecessor v6 is preliminary evidence',H26_INTEGRATION_READINESS='NOT_READY')
     (output/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
     # Small results and receipts are published; large fields/operators remain
     # at the indexed Linux paths with exact source/runtime/input identities.
@@ -95,6 +96,14 @@ def publish(root,version,stage,output):
     index=[identity(p)for p in sorted(files)];(output/'linux-index.json').write_text(json.dumps(index,indent=2)+'\n')
     source=load(root/f'source-v{version}.json');runtime=load(root/'science'/f'runtime-v{version}.json');small=dict(source_manifest=identity(root/f'source-v{version}.json'),source_revision=source['revision'],runtime_manifest=identity(root/'science'/f'runtime-v{version}.json'),compiler=runtime['compiler'],configure=runtime['configure'],build=runtime['build'],executables=runtime['executables'],loader=runtime['loader'],library_path=runtime['libraries'],stock_object_count=len(runtime['qualified_stock_objects']))
     (output/'identities.json').write_text(json.dumps(small,indent=2)+'\n')
+    if stage=='C':
+        samples={}
+        for name in ('Snu','Smu','Nnu','Nmu','Nspace','Ntime'):
+            for repetition in range(3):
+                label=f'block-{repetition}-{name}-v{version}';data=load(root/'science'/f'{label}.json');item=dict(seconds=data['ordinary_samples'])
+                if name.startswith('N'):item.update(iterations=[r['iterations']for r in data['records'][20:]],rebuilds=[r['rebuilds']for r in data['records'][20:]],AWF_feedback=[r['AWF_feedback']for r in data['records'][20:]],pressure_correction=[r['pressure_correction']for r in data['records'][20:]])
+                samples[label]=item
+        (output/'raw-timing-samples.json').write_text(json.dumps(samples,separators=(',',':'))+'\n')
     print(json.dumps({k:v for k,v in summary.items()if k!='NUMERICS'and k!='COST'},indent=2));
     if stage=='C':print(json.dumps(summary['COST']['cost_screen'],indent=2))
 
