@@ -73,9 +73,11 @@ public:
     const Vec&PressureMean()const{return m_mean;}
     Geometry Mapping()const{return m_geometry;}
     Sparse Strain(const Function &mu,bool transpose=true)const;
+    Sparse StrainSamples(const std::vector<Vec>&mu,bool transpose=true)const;
     Sparse System(double alpha,const Sparse &K,double awf)const;
     Vec Load(const std::array<Function,2>&f)const;
     Vec StressLoad(const std::function<Tensor(double,double)> &T)const;
+    Vec StressSamples(const std::vector<std::vector<Tensor>>&T)const;
     Vec AWFLoad(const std::function<Vector(double,double)>&sampleAtH)const;
     Vec KnownKLoad(const Vec &prescribedK)const;
     Vec MassAction(const Vec &full)const;
@@ -99,6 +101,7 @@ private:
     void BuildInvariant();
     void BuildAWF();
     Vec RowScale()const;
+    Vec Precondition(const Vec&rhs)const;
     std::vector<MultiRegions::ContFieldSharedPtr>m_fields;
     std::vector<Element>m_elements;
     Geometry m_geometry;
@@ -106,7 +109,8 @@ private:
     bool m_gauge=true;
     double m_volume=0,m_length=1,m_forceScale=1;
     Sparse m_mass,m_qmass,m_div,m_grad,m_awf,m_freeMass;
-    Vec m_mean,m_scale;
+    Vec m_mean,m_scale,m_pressureOne;
+    int m_pressurePivot=0;
     Eigen::SimplicialLDLT<Sparse>m_velocityRiesz,m_pressureRiesz;
     std::unique_ptr<Eigen::SparseLU<Sparse>>m_factor;
     int m_initialIterations=0;

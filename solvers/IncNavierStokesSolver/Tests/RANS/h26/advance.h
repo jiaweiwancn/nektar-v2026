@@ -83,7 +83,16 @@ void Advance(Flow&flow,const pt::ptree&req,std::ostream&out,const fs::path&xml,c
     auto restart=req.get<std::string>("restart","");if(!restart.empty()){double t=Clock();h=ReadHistory(restart,signature,2*flow.VelocitySize()+flow.PressureSize(),dt);restoreSeconds=Clock()-t;}
     else{h.current=Exact(flow,m.Functions(0));h.previous=h.current;h.convection=flow.Convection(h.current);h.previousConvection=h.convection;}
     Sparse knu=flow.Strain([&](double,double){return m.model=="constant"?m.muRef:m.nu;}),kt=flow.Strain([&](double x,double z){return m.model=="nu"||m.model=="constant"?0.:m.Turbulent(x,z)[0];});
-    Sparse kReference=knu+kt,reference=flow.System(1.5/dt,kReference,awf);double factorSeconds=flow.PreparePreconditioner(reference);double startup=constructionSeconds+Clock()-start;
+    Sparse kReference=knu+kt,reference=flow.System(1.5/dt,kReference,awf),base=flow.System(1.5/dt,knu,awf),delta=reference-base,first=flow.System(1/dt,knu,awf)-base;double factorSeconds=flow.PreparePreconditioner(reference);
+    // Exact time-separable analytic spatial source data: sampled continuous
+    // derivatives, never A_h times a manufactured discrete state.
+    MMS molecular=m;if(m.model!="constant")molecular.model="nu";
+    auto quadratic=[&](double x,double z){auto u=m.Value(x,z,0);auto G=m.Gradient(x,z,0);auto p=m.PressureGradient(x,z,0);return Vector{u[0]*G[0][0]+u[1]*G[0][2]+p[0],0,u[0]*G[2][0]+u[1]*G[2][2]+p[2]};};
+    Vec sourceQuadratic=flow.Load({[&](double x,double z){return quadratic(x,z)[0];},[&](double x,double z){return quadratic(x,z)[2];}});
+    Vec sourceLinear=flow.Load({[&](double x,double z){return molecular.Force(x,z,0)[0]-quadratic(x,z)[0];},[&](double x,double z){return molecular.Force(x,z,0)[2]-quadratic(x,z)[2];}});
+    Vec sourceTurbulent=flow.Load({[&](double x,double z){return m.Force(x,z,0)[0]-molecular.Force(x,z,0)[0];},[&](double x,double z){return m.Force(x,z,0)[2]-molecular.Force(x,z,0)[2];}});
+    Vec sourceStress=flow.StressLoad([&](double x,double z){return m.Remainder(x,z,0);}),sourceAWF=flow.AWFLoad([&](double x,double z){auto g=m.PressureGradient(x,z,0);double hp=m.geo.Slope(x),tangent=(g[0]+hp*g[2])/(1+hp*hp);return Vector{-awf*tangent,0,-awf*hp*tangent};});
+    Vec spatialExact=Exact(flow,m.Functions(0));double startup=constructionSeconds+Clock()-start;
     std::ofstream log(output.string()+".steps.jsonl");log<<std::setprecision(17);std::vector<fs::path>owned;std::vector<double>ordinary,checkpointTimes,means;std::vector<int>iterations;double maxMomentum=0,maxContinuity=0,minimumFeedback=1e100,minimumCorrection=1e100,minMod=1e100,maxMod=-1e100;
     std::array<double,6>cost{};int totalRebuilds=1;std::uint64_t beginStep=h.step;double beginTime=h.time;
     struct Record{int step,iterations,rebuilds;double time,wall,source,assembly,solve,setup,diagnostic,io,momentum,continuity,feedback,correction,modulation;};std::vector<Record>records;
@@ -91,11 +100,10 @@ void Advance(Flow&flow,const pt::ptree&req,std::ostream&out,const fs::path&xml,c
     {
         double began=Clock();int step=int(h.step)+1;double time=step*dt,mod=m.Modulation(time),alpha=(step==1?1.:1.5)/dt;minMod=std::min(minMod,mod);maxMod=std::max(maxMod,mod);
         Sparse K=knu+mod*kt;Vec hist,conv;if(step==1){hist=h.current/dt;conv=h.convection;}else{hist=(2*h.current-.5*h.previous)/dt;conv=2*h.convection-h.previousConvection;}
-        auto fun=m.Functions(time);Vec exact=Exact(flow,fun);double pressureMean=0;if(flow.Gauge()){Vec raw=flow.Project(fun[2],2),one=flow.Project([](double,double){return 1.;},2);pressureMean=flow.PressureMean().dot(raw)/flow.PressureMean().dot(one);fun=m.Functions(time,pressureMean);}
-        Vec lift=flow.Lift(exact);Vec load=flow.MassAction(hist)-conv+flow.Load({[&](double x,double z){return m.Force(x,z,time)[0];},[&](double x,double z){return m.Force(x,z,time)[2];}})+flow.StressLoad([&](double x,double z){return m.Remainder(x,z,time);});
-        if(awf!=0)load+=flow.AWFLoad([&](double x,double z){auto g=m.PressureGradient(x,z,time);double hp=m.geo.Slope(x),tangent=(g[0]+hp*g[2])/(1+hp*hp);return Vector{-awf*tangent,0,-awf*hp*tangent};});
+        double exponential=std::exp(-time);Vec exact=spatialExact;exact.head(2*flow.VelocitySize())*=exponential;exact.tail(flow.PressureSize())*=exponential*exponential;Vec lift=flow.Lift(exact);
+        Vec load=flow.MassAction(hist)-conv+exponential*(sourceLinear+sourceStress+mod*sourceTurbulent)+exponential*exponential*(sourceQuadratic+sourceAWF);
         if(!flow.Gauge())load+=flow.TractionLoad(3,[&](double x,double z,const Vector&normal){auto G=m.Gradient(x,z,time);auto T=m.Remainder(x,z,time);auto values=m.Value(x,z,time);double mu=m.Mu(x,z,time)[0];Vector traction{};for(int i=0;i<3;++i)for(int j=0;j<3;++j)traction[i]+=(mu*(G[i][j]+G[j][i])+T[i][j]-(i==j?values[2]:0.))*normal[j];return traction;});
-        double sourceSeconds=Clock()-began,t=Clock();Sparse A=flow.System(alpha,K,awf);Vec rhs=flow.LiftedRhs(alpha,K,awf,load,lift),x=flow.Restrict(h.current);double assemblySeconds=Clock()-t;
+        double sourceSeconds=Clock()-began,t=Clock();Sparse A=base+mod*delta;if(step==1)A+=first;Vec rhs=flow.LiftedRhs(alpha,K,awf,load,lift),x=flow.Restrict(h.current);double assemblySeconds=Clock()-t;
         auto info=flow.Solve(A,rhs,x,0.,tolerance);Vec next=flow.Expand(x,lift);t=Clock();Vec nextConvection=flow.Convection(next);double convectionSeconds=Clock()-t;
         t=Clock();Vec pressure=next.tail(flow.PressureSize()),oldPressure=h.current.tail(flow.PressureSize());Vec feedback=Vec::Zero(next.size());feedback.head(2*flow.VelocitySize())=awf*(flow.AWF()*pressure);double feedbackNorm=flow.VelocityDual(feedback)/(.01/m.Lx),correction=flow.PressureNorm(pressure-oldPressure)/.01;minimumFeedback=std::min(minimumFeedback,feedbackNorm);minimumCorrection=std::min(minimumCorrection,correction);maxMomentum=std::max(maxMomentum,info.momentum);maxContinuity=std::max(maxContinuity,info.continuity);double diagnostic=Clock()-t+info.residualSeconds;
         h.previous=h.current;h.current=next;h.previousConvection=h.convection;h.convection=nextConvection;h.step=step;h.time=time;

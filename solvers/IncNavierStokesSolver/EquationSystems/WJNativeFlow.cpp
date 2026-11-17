@@ -74,7 +74,7 @@ Flow::Flow(const std::vector<MultiRegions::ContFieldSharedPtr>&fields,Geometry g
         m_elements.push_back(std::move(a));
     }
     Require(m_volume>0,"nonpositive physical volume");m_length=std::sqrt(m_volume);m_forceScale=1+1/m_length+(6.423173803526447e-5+.3819178635467331*.051*m_elements.back().rr/2)/(m_length*m_length)+.01/m_length;
-    BuildInvariant();BuildAWF();m_scale=RowScale();
+    BuildInvariant();BuildAWF();m_scale=RowScale();m_pressureOne=Project([](double,double){return 1.;},2);for(int i=0;i<m_np;++i)if(std::abs(m_pressureOne[i])>.5){m_pressurePivot=i;break;}
 }
 
 void Flow::BuildInvariant()
@@ -118,10 +118,14 @@ void Flow::BuildAWF()
 
 Sparse Flow::Strain(const Function&mu,bool transpose)const
 {
+    std::vector<Vec>values;for(const auto&e:m_elements){Vec v(e.w.size());for(int q=0;q<v.size();++q)v[q]=mu(e.x[q],e.z[q]);values.push_back(v);}return StrainSamples(values,transpose);
+}
+Sparse Flow::StrainSamples(const std::vector<Vec>&mu,bool transpose)const
+{
     std::vector<Triplet>t;t.reserve(m_elements.size()*1024);
-    for(const auto&e:m_elements)
+    for(int index=0;index<m_elements.size();++index)
     {
-        Vec w=e.w;for(int q=0;q<w.size();++q){double v=mu(e.x[q],e.z[q]);Require(std::isfinite(v)&&v>=0,"invalid physical implicit viscosity");w[q]*=v;}
+        const auto&e=m_elements[index];Require(mu.size()==m_elements.size()&&mu[index].size()==e.w.size(),"native coefficient sample layout");Vec w=e.w;for(int q=0;q<w.size();++q){double v=mu[index][q];Require(std::isfinite(v)&&v>=0,"invalid physical implicit viscosity");w[q]*=v;}
         std::array<Mat,2>grad{e.Dx,e.Dz};Mat lap=e.Dx.transpose()*w.asDiagonal()*e.Dx+e.Dz.transpose()*w.asDiagonal()*e.Dz;
         for(int i=0;i<2;++i)for(int j=0;j<2;++j){Mat k=Mat::Zero(16,16);if(i==j)k=lap;if(transpose)k.noalias()+=grad[j].transpose()*w.asDiagonal()*grad[i];for(int a=0;a<16;++a)for(int b=0;b<16;++b)t.emplace_back(i*m_nu+e.u[a],j*m_nu+e.u[b],k(a,b));}
     }
@@ -151,7 +155,11 @@ Vec Flow::Load(const std::array<Function,2>&f)const
 }
 Vec Flow::StressLoad(const std::function<Tensor(double,double)>&T)const
 {
-    Vec r=Vec::Zero(2*m_nu+m_np);for(const auto&e:m_elements){std::array<Vec,4>s;for(auto&v:s)v=Vec(e.w.size());for(int q=0;q<e.w.size();++q){auto a=T(e.x[q],e.z[q]);for(int i=0;i<2;++i)for(int j=0;j<2;++j)s[2*i+j][q]=e.w[q]*a[i?2:0][j?2:0];}for(int c=0;c<2;++c){Vec b=-e.Dx.transpose()*s[2*c]-e.Dz.transpose()*s[2*c+1];for(int j=0;j<16;++j)r[c*m_nu+e.u[j]]+=b[j];}}return r;
+    std::vector<std::vector<Tensor>>values;for(const auto&e:m_elements){std::vector<Tensor>v;for(int q=0;q<e.w.size();++q)v.push_back(T(e.x[q],e.z[q]));values.push_back(v);}return StressSamples(values);
+}
+Vec Flow::StressSamples(const std::vector<std::vector<Tensor>>&T)const
+{
+    Vec r=Vec::Zero(2*m_nu+m_np);for(int index=0;index<m_elements.size();++index){const auto&e=m_elements[index];Require(T.size()==m_elements.size()&&T[index].size()==e.w.size(),"native stress sample layout");std::array<Vec,4>s;for(auto&v:s)v=Vec(e.w.size());for(int q=0;q<e.w.size();++q){const auto&a=T[index][q];for(int i=0;i<2;++i)for(int j=0;j<2;++j)s[2*i+j][q]=e.w[q]*a[i?2:0][j?2:0];}for(int c=0;c<2;++c){Vec b=-e.Dx.transpose()*s[2*c]-e.Dz.transpose()*s[2*c+1];for(int j=0;j<16;++j)r[c*m_nu+e.u[j]]+=b[j];}}return r;
 }
 Vec Flow::AWFLoad(const std::function<Vector(double,double)>&sample)const
 {
@@ -178,7 +186,22 @@ Vec Flow::Convection(const Vec&x)const
 }
 double Flow::PreparePreconditioner(const Sparse&a)
 {
-    double t=Now();m_factor=std::make_unique<Eigen::SparseLU<Sparse>>();m_factor->analyzePattern(a);m_factor->factorize(a);Require(m_factor->info()==Eigen::Success,"sparse native-block preconditioner factorization failed");m_initialIterations=m_lastIterations=0;return Now()-t;
+    double t=Now();Sparse factor=a;
+    if(m_gauge)
+    {
+        // Factor a pressure-pinned representation; project its inverse to the
+        // physical mean gauge on every application. This avoids dense fill
+        // from the mean multiplier without changing the current operator.
+        int pivot=2*m_nf+m_pressurePivot,last=Size()-1;std::vector<Triplet>entries;
+        for(int j=0;j<a.outerSize();++j)for(Sparse::InnerIterator it(a,j);it;++it)if(it.row()!=pivot&&it.col()!=pivot&&it.row()!=last&&it.col()!=last)entries.emplace_back(it.row(),it.col(),it.value());
+        entries.emplace_back(pivot,pivot,1);entries.emplace_back(last,last,1);factor.setZero();factor.setFromTriplets(entries.begin(),entries.end());
+    }
+    m_factor=std::make_unique<Eigen::SparseLU<Sparse>>();m_factor->analyzePattern(factor);m_factor->factorize(factor);Require(m_factor->info()==Eigen::Success,"sparse native-block preconditioner factorization failed");m_initialIterations=m_lastIterations=0;return Now()-t;
+}
+Vec Flow::Precondition(const Vec&rhs)const
+{
+    Vec b=rhs;double mean=0,lambda=0;if(m_gauge){mean=b[Size()-1];lambda=m_pressureOne.dot(b.segment(2*m_nf,m_np))/m_volume;b.segment(2*m_nf,m_np)-=m_mean*lambda;b[2*m_nf+m_pressurePivot]=0;b[Size()-1]=0;}
+    Vec x=m_factor->solve(b);Require(m_factor->info()==Eigen::Success,"preconditioner application failed");if(m_gauge){x.segment(2*m_nf,m_np)-=m_pressureOne*((m_mean.dot(x.segment(2*m_nf,m_np))-mean)/m_volume);x[Size()-1]=lambda;}return x;
 }
 Vec Flow::TractionLoad(int boundary,const std::function<Vector(double,double,const Vector&)>&fun)const
 {
@@ -217,7 +240,7 @@ SolveInfo Flow::Solve(const Sparse&a,const Vec&b,Vec&x,double relativeChange,dou
         int dimension=std::min(30,400-used);Require(dimension>0,"mixed Krylov action cap exceeded");Mat V=Mat::Zero(Size(),dimension+1),Z(Size(),dimension),H=Mat::Zero(dimension+1,dimension);V.col(0)=r/beta;Vec g=Vec::Zero(dimension+1);g[0]=beta;Vec best;int done=0;
         for(int j=0;j<dimension;++j)
         {
-            Z.col(j)=m_factor->solve(V.col(j).cwiseQuotient(m_scale));Require(m_factor->info()==Eigen::Success,"preconditioner application failed");Vec v=(a*Z.col(j)).cwiseProduct(m_scale);
+            Z.col(j)=Precondition(V.col(j).cwiseQuotient(m_scale));Vec v=(a*Z.col(j)).cwiseProduct(m_scale);
             for(int pass=0;pass<2;++pass)for(int i=0;i<=j;++i){double h=V.col(i).dot(v);H(i,j)+=h;v.noalias()-=h*V.col(i);}H(j+1,j)=v.norm();if(H(j+1,j)>0)V.col(j+1)=v/H(j+1,j);
             best=H.block(0,0,j+2,j+1).colPivHouseholderQr().solve(g.head(j+2));double err=(g.head(j+2)-H.block(0,0,j+2,j+1)*best).norm();done=j+1;++used;
             if(err<tolerance*std::sqrt(m_volume)||H(j+1,j)<1e-28)break;

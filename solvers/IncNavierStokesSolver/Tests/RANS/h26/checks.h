@@ -38,29 +38,30 @@ void AdapterChecks(std::ostream&out)
 }
 struct Constitutive
 {
-    std::map<std::pair<double,double>,WallStress>values;double low=1e100,high=0,seconds=0;
+    std::vector<std::vector<WallStress>>values;double low=1e100,high=0,seconds=0;
     Constitutive(Flow&flow,const Vec&u)
     {
         double began=Clock();auto geo=flow.Mapping();int n=flow.VelocitySize();
         for(const auto&el:flow.Elements())
         {
-            Vec a(16),b(16);for(int i=0;i<16;++i){a[i]=u[el.u[i]];b[i]=u[n+el.u[i]];}Vec ux=el.Dx*a,uz=el.Dz*a,vx=el.Dx*b,vz=el.Dz*b;
-            for(int q=0;q<el.x.size();++q){double x=el.x[q],z=el.z[q],s=geo.Slope(x),r=z-geo.Ground(x);Tensor G{};G[0][0]=ux[q];G[0][2]=uz[q];G[2][0]=vx[q];G[2][2]=vz[q];Vector normal{-s/std::sqrt(1+s*s),0,1/std::sqrt(1+s*s)};auto w=Adapt(.008809015145515192,.002315524054799254,G,normal,6.423173803526447e-5,.0007*(1+r),r,geo.H);low=std::min(low,w.mu);high=std::max(high,w.mu);values.emplace(std::make_pair(x,z),w);}
+            values.emplace_back();Vec a(16),b(16);for(int i=0;i<16;++i){a[i]=u[el.u[i]];b[i]=u[n+el.u[i]];}Vec ux=el.Dx*a,uz=el.Dz*a,vx=el.Dx*b,vz=el.Dz*b;
+            for(int q=0;q<el.x.size();++q){double x=el.x[q],z=el.z[q],s=geo.Slope(x),r=z-geo.Ground(x);Tensor G{};G[0][0]=ux[q];G[0][2]=uz[q];G[2][0]=vx[q];G[2][2]=vz[q];Vector normal{-s/std::sqrt(1+s*s),0,1/std::sqrt(1+s*s)};auto w=Adapt(.008809015145515192,.002315524054799254,G,normal,6.423173803526447e-5,.0007*(1+r),r,geo.H);low=std::min(low,w.mu);high=std::max(high,w.mu);values.back().push_back(w);}
         }seconds=Clock()-began;
     }
-    const WallStress&At(double x,double z)const{return values.at({x,z});}
+    std::vector<Vec> Mu()const{std::vector<Vec>result;for(const auto&el:values){Vec v(el.size());for(int q=0;q<v.size();++q)v[q]=el[q].mu;result.push_back(v);}return result;}
+    std::vector<std::vector<Tensor>> Stress(bool complete=false)const{std::vector<std::vector<Tensor>>result;for(const auto&el:values){result.emplace_back();for(const auto&w:el)result.back().push_back(complete?w.V:w.remainder);}return result;}
 };
 void Nonlinear(Flow&flow,std::ostream&out)
 {
     double began=Clock(),alpha=300,awf=1,constitutive=0;Vec target=Exact(flow,Polynomial(0)),lift=flow.Lift(target);Constitutive reference(flow,target);constitutive+=reference.seconds;
-    Sparse Kr=flow.Strain([&](double x,double z){return reference.At(x,z).mu;});Vec sr=flow.StressLoad([&](double x,double z){return reference.At(x,z).remainder;});Vec body=flow.ApplyFull(alpha,Kr,awf,target)-sr;
+    Sparse Kr=flow.StrainSamples(reference.Mu());Vec sr=flow.StressSamples(reference.Stress());Vec body=flow.ApplyFull(alpha,Kr,awf,target)-sr;
     Vec current=.8*target;current.tail(flow.PressureSize()).setZero();for(int c=0;c<2;++c)current.segment(c*flow.VelocitySize(),flow.DirichletSize())=lift.segment(c*flow.VelocitySize(),flow.DirichletSize());
     std::vector<SolveInfo>linear;std::vector<double>residuals;double moment=1,continuity=1;int outer=0;double weakBlend=0,low=0,high=0;
     for(;outer<60;++outer)
     {
-        Constitutive data(flow,current);constitutive+=data.seconds;Sparse K=flow.Strain([&](double x,double z){return data.At(x,z).mu;});Vec load=body+flow.StressLoad([&](double x,double z){return data.At(x,z).remainder;});Sparse A=flow.System(alpha,K,awf);Vec rhs=flow.LiftedRhs(alpha,K,awf,load,lift),x=flow.Restrict(current);linear.push_back(flow.Solve(A,rhs,x,0,1e-12));current=flow.Expand(x,lift);
-        Constitutive fresh(flow,current);constitutive+=fresh.seconds;Sparse latestK=flow.Strain([&](double x,double z){return fresh.At(x,z).mu;});Vec latestStress=flow.StressLoad([&](double x,double z){return fresh.At(x,z).remainder;});Sparse latestA=flow.System(alpha,latestK,awf);Vec latestRhs=flow.LiftedRhs(alpha,latestK,awf,body+latestStress,lift);auto residual=flow.Residual(latestA,latestRhs,x);moment=residual.momentum;continuity=residual.continuity;residuals.push_back(moment);low=fresh.low;high=fresh.high;
-        Vec all=Vec::Zero(current.size());all.head(2*flow.VelocitySize())=latestK*current.head(2*flow.VelocitySize());all-=latestStress;all+=flow.StressLoad([&](double x,double z){return fresh.At(x,z).V;});weakBlend=flow.VelocityDual(all);
+        Constitutive data(flow,current);constitutive+=data.seconds;Sparse K=flow.StrainSamples(data.Mu());Vec load=body+flow.StressSamples(data.Stress());Sparse A=flow.System(alpha,K,awf);Vec rhs=flow.LiftedRhs(alpha,K,awf,load,lift),x=flow.Restrict(current);linear.push_back(flow.Solve(A,rhs,x,0,1e-12));current=flow.Expand(x,lift);
+        Constitutive fresh(flow,current);constitutive+=fresh.seconds;Sparse latestK=flow.StrainSamples(fresh.Mu());Vec latestStress=flow.StressSamples(fresh.Stress());Sparse latestA=flow.System(alpha,latestK,awf);Vec latestRhs=flow.LiftedRhs(alpha,latestK,awf,body+latestStress,lift);auto residual=flow.Residual(latestA,latestRhs,x);moment=residual.momentum;continuity=residual.continuity;residuals.push_back(moment);low=fresh.low;high=fresh.high;
+        Vec all=Vec::Zero(current.size());all.head(2*flow.VelocitySize())=latestK*current.head(2*flow.VelocitySize());all-=latestStress;all+=flow.StressSamples(fresh.Stress(true));weakBlend=flow.VelocityDual(all);
         if(std::max(moment,continuity)<1e-10)break;
     }
     Check(outer<60&&moment<=1e-9&&continuity<=1e-9,"nonlinear frozen-scalar flow failed");Check(weakBlend<1e-10,"complete blended stress weak identity failed");double error=(current-target).norm()/target.norm();Check(error<1e-8,"nonlinear flow direct target agreement failed");
