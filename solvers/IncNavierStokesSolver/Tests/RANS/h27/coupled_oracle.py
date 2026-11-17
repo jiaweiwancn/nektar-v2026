@@ -817,7 +817,11 @@ def main():
                 'independent quadrature/refinement is insufficient')
         require(0 < args.seconds <= 300 and 0 < args.direct_seconds <= args.seconds,
                 'oracle elapsed budget exceeds bounded admission')
-        packet = json.loads(args.native.read_text()); table = json.loads(args.table.read_text())
+        # Native doubles may serialize negative zero as the JSON token -0.
+        # Preserve its IEEE sign for complete-state/cache byte hashes.
+        packet = json.loads(args.native.read_text(),
+                            parse_int=lambda token: -0.0 if token == '-0' else int(token))
+        table = json.loads(args.table.read_text())
         require(packet['schema'] == 'WJH27RegisteredCoupledRunV2' and packet['normal_main'] is True,
                 'input is not a registered normal-main coupled run')
         steady_mode = packet.get('steady_mode', False)

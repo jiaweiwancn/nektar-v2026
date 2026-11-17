@@ -1,0 +1,36 @@
+
+[36mWarning : [0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	     WJ coupled path: WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon
+	         Wall tensor: FiniteNuIsotropicWallFullWJCollarV2
+	         Integration: current coupled BDF2/EX2, BE startup, no clipping
+	      Pressure gauge: fixed by total outlet traction
+=======================================================================
+WJ-H27 step 1, t=0.005, coupled residual=2.61668e-12, nonlinear iterations=72
+WJ-H27 step 2, t=0.01, coupled residual=2.95747e-12, nonlinear iterations=53
+WJ-H27 step 3, t=0.015, coupled residual=2.9441e-12, nonlinear iterations=54
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/physical-old-u.fld" (0.00307105s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/physical-old-v.fld" (0.00267511s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/physical-old-k.fld" (0.00280939s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/physical-old-epsilon.fld" (0.00165366s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/physical-old-p.fld" (0.00125428s, XML)
+-------------------------------------------
+Total Computation Time = 140.293s
+-------------------------------------------
+L 2 error (variable u) : 21.5483
+L inf error (variable u) : 1.09003
+L 2 error (variable v) : 3.55664e-05
+L inf error (variable v) : 0.000147278
+L 2 error (variable k) : 0.19682
+L inf error (variable k) : 0.017238
+L 2 error (variable epsilon) : 0.00446724
+L inf error (variable epsilon) : 0.00231566
+L 2 error (variable p) : 0.00319003
+L inf error (variable p) : 0.0023723
+-------------------------------------------
+                       Region  Elapsed time Avg (s)       Min (s)       Max (s)         Count      IO Level
+                      Execute                140.45        140.45        140.45             1             0
+

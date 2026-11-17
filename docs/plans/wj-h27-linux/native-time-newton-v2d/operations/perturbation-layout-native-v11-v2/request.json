@@ -1,0 +1,77 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-perturbation-foundation-v11-v2/runtime/WJH27PerturbationProbe",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v9/physical-aa.xml",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v11-v2/layout-request.json",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v11-v2/layout-native.json"
+  ],
+  "phase": "science",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T17:00:13.843527+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 490443,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/perturbation-foundation-controller-v11-v2.py"
+      },
+      {
+        "pid": 490463,
+        "parent": 490443,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label perturbation-layout-native-v11-v2 --phase science --seconds 30 -- /home/jay/build/wj-h27-coupling-r1-20261117/tools-perturbation-foundation-v11-v2/runtime/WJH27PerturbationProbe /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v9/physical-aa.xml /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json /home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v11-v2/layout-request.json /home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v11-v2/layout-native.json"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-perturbation-foundation-v11-v2/runtime/WJH27PerturbationProbe",
+      "bytes": 414,
+      "sha256": "6833297fba8ea626058058d953b2db142917f7bd09a09c8dc835a85b0eda471e"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v9/physical-aa.xml",
+      "bytes": 111505,
+      "sha256": "8c475f3fbdfc511ea65db500132810866ce4f6341fb6fbfb01be6a417d7e541e"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v11-v2/layout-request.json",
+      "bytes": 194,
+      "sha256": "c58e7f04ca3eca5744c23d41af19b8bd437c0fe7b101a37c4ba4127ff753b6c4"
+    }
+  ]
+}

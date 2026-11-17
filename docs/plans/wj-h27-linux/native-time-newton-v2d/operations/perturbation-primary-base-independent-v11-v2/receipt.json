@@ -1,0 +1,96 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_check.py",
+    "--native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v11-v2/primary-base-native.json",
+    "--certificate",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v11-v2/primary-certificate.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v11-v2/primary-base-independent.json",
+    "--seconds",
+    "170"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 180.0,
+  "utc": "2026-11-17T17:00:23.796093+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 490443,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/perturbation-foundation-controller-v11-v2.py"
+      },
+      {
+        "pid": 490497,
+        "parent": 490443,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label perturbation-primary-base-independent-v11-v2 --phase analysis --seconds 180 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_check.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v11-v2/primary-base-native.json --certificate /home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v11-v2/primary-certificate.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v11-v2/primary-base-independent.json --seconds 170"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_check.py",
+      "bytes": 26519,
+      "sha256": "a38d673018691fc27161826a6a464c50b9ee9a5eaf91da0c68b21c7b2913055e"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v11-v2/primary-base-native.json",
+      "bytes": 748451,
+      "sha256": "f5d9130cf436ce58fd209a6e667d6bc748b4c2efca6fc50c04775e898a2f0ecc"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v11-v2/primary-certificate.json",
+      "bytes": 10462,
+      "sha256": "b20df80d53e7e4df1a6b71470c16015062ea4a8922f5769baa37f98dbf772ba8"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 38.47595991002163,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 111202304,
+  "peak_host_workers": 7,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/perturbation-primary-base-independent-v11-v2/command.log",
+    "bytes": 123,
+    "sha256": "a835066e613d611d341049fe76a15c5e5a464367107d2300a1c7c1694e9d2ff1"
+  }
+}

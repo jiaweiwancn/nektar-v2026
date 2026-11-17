@@ -1,0 +1,84 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/reference-mechanism-publication-v1.py"
+  ],
+  "phase": "evidence",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T16:48:44.592191+00:00",
+  "allocation": {
+    "workers": 14,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 489615,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/physical-reference-x2-controller-v1.py"
+      },
+      {
+        "pid": 489620,
+        "parent": 489615,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label physical-reference-x2-native-v1 --phase science --seconds 2100 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-x2-v1/reference-x2.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-x2-v1/reference-x2.xml"
+      },
+      {
+        "pid": 489622,
+        "parent": 489620,
+        "threads": 3,
+        "args": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2 --library-path /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc:/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/geometry:/home/jay/.local/opt/nektar-v2026-mpi/lib64 /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver.elf --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-x2-v1/reference-x2.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-x2-v1/reference-x2.xml"
+      },
+      {
+        "pid": 489624,
+        "parent": 489622,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 489929,
+        "parent": 484265,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 489932,
+        "parent": 489929,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label reference-mechanism-publication-v1 --phase evidence --seconds 30 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/reference-mechanism-publication-v1.py"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/reference-mechanism-publication-v1.py",
+      "bytes": 1295,
+      "sha256": "3927598799082565130e0c6f92d0ab282fcf184798ae37a2fd7f7642aefe163a"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+
+[36mWarning : [0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	     WJ coupled path: WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon
+	         Wall tensor: FiniteNuIsotropicWallFullWJCollarV2
+	         Integration: current coupled BDF2/EX2, BE startup, no clipping
+	      Pressure gauge: native restricted mean
+=======================================================================
+WJ-H27 step 1, t=0.02, coupled residual=3.64386e-14, nonlinear iterations=3
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-prefix-u.fld" (0.000403802s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-prefix-v.fld" (0.000146688s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-prefix-k.fld" (0.000145908s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-prefix-epsilon.fld" (0.000139168s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-prefix-p.fld" (0.000125037s, XML)
+-------------------------------------------
+Total Computation Time = 0.374919s
+-------------------------------------------
+L 2 error (variable u) : 1.5901e-08
+L inf error (variable u) : 6.70363e-08
+L 2 error (variable v) : 6.27818e-09
+L inf error (variable v) : 2.63053e-08
+L 2 error (variable k) : 7.29477e-09
+L inf error (variable k) : 1.81013e-08
+L 2 error (variable epsilon) : 2.37417e-09
+L inf error (variable epsilon) : 7.11566e-09
+L 2 error (variable p) : 1.01941e-06
+L inf error (variable p) : 2.83943e-06
+-------------------------------------------
+                       Region  Elapsed time Avg (s)       Min (s)       Max (s)         Count      IO Level
+                      Execute              0.392759      0.392759      0.392759             1             0
+

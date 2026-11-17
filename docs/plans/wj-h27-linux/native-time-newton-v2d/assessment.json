@@ -1,0 +1,1601 @@
+{
+  "schema": "WJH27Source12DiagnosticAssessmentV1",
+  "TASK3_READY": false,
+  "full_H27_qualification": false,
+  "active_model": "FiniteNuIsotropicWallFullWJCollarV2",
+  "unapproved_v4_implemented": false,
+  "source_identity": "1c0091bff8ead2247d11602203de3a742a49e1cad3ca8ef2b349312b8f2ca5d9",
+  "cases": {
+    "poly-old": {
+      "source_identity": "1c0091bff8ead2247d11602203de3a742a49e1cad3ca8ef2b349312b8f2ca5d9",
+      "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+      "implicit_solver": "PicardV1",
+      "end_step": 4,
+      "end_time": 0.08,
+      "dt": 0.02,
+      "whole_operation_seconds": 2.781740281963721,
+      "peak_tree_rss_bytes": 109154304,
+      "peak_host_workers": 12,
+      "construction_seconds": 0.02867904002778232,
+      "initialisation_seconds": 0.03883726301137358,
+      "final_export_seconds": 0.014286407036706805,
+      "complete_advancing_seconds": 0.9964406379731372,
+      "complete_step_seconds": [
+        0.25055455998517573,
+        0.24917731597088277,
+        0.24884847801877186,
+        0.24786028399830684
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "time": 0.02,
+          "seconds": 0.22508420498343185,
+          "nonlinear_iterations": 8,
+          "linear_iterations": [
+            10,
+            10,
+            13
+          ],
+          "rebuilds": 4,
+          "retries": 0,
+          "residuals": [
+            2.04658439244324e-12,
+            1.0550981675626098e-17,
+            7.239277925910964e-19,
+            1.0576291216882043e-13,
+            3.6006424752663007e-13,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 0,
+            "jacobian_actions": 0,
+            "residual_evaluations": 0,
+            "preconditioner_applications": 0,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 0,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.023894519545137882,
+            "wall": 0.03756752284243703,
+            "assembly": 0.05906941328430548,
+            "flow": 0.000453065091278404,
+            "scalar": 0.0003677622298710048,
+            "rebuild": 0.0006844679592177272,
+            "guards": 0.03461230412358418,
+            "forcing": 0.05719520099228248,
+            "residual": 0.010981486993841827,
+            "nonlinear": 0,
+            "io": 0,
+            "other": 0.0002584619214758277
+          }
+        },
+        {
+          "step": 2,
+          "time": 0.04,
+          "seconds": 0.22429449303308502,
+          "nonlinear_iterations": 8,
+          "linear_iterations": [
+            10,
+            10,
+            17
+          ],
+          "rebuilds": 3,
+          "retries": 0,
+          "residuals": [
+            1.1467346446132586e-12,
+            9.871985062953876e-18,
+            9.391989620686076e-19,
+            2.4221547475246803e-13,
+            2.0432928149391828e-13,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 0,
+            "jacobian_actions": 0,
+            "residual_evaluations": 0,
+            "preconditioner_applications": 0,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 0,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.023952620453201234,
+            "wall": 0.03746189788216725,
+            "assembly": 0.0585073257680051,
+            "flow": 0.0004523650277405977,
+            "scalar": 0.00040323904249817133,
+            "rebuild": 0.0005886819562874734,
+            "guards": 0.03476552263600752,
+            "forcing": 0.05721531301969662,
+            "residual": 0.01073534501483664,
+            "nonlinear": 0,
+            "io": 0,
+            "other": 0.00021218223264440894
+          }
+        },
+        {
+          "step": 3,
+          "time": 0.06,
+          "seconds": 0.22382843698142096,
+          "nonlinear_iterations": 8,
+          "linear_iterations": [
+            11,
+            11,
+            16
+          ],
+          "rebuilds": 0,
+          "retries": 0,
+          "residuals": [
+            1.176996032875164e-12,
+            1.2386900399718141e-17,
+            5.622139828369794e-19,
+            1.5716444643428745e-13,
+            2.0857056977645404e-13,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 0,
+            "jacobian_actions": 0,
+            "residual_evaluations": 0,
+            "preconditioner_applications": 0,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 0,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.023996289004571736,
+            "wall": 0.03722669614944607,
+            "assembly": 0.058624689001590014,
+            "flow": 0.00046773196663707495,
+            "scalar": 0.0003879438736476004,
+            "rebuild": 0,
+            "guards": 0.03467731282580644,
+            "forcing": 0.05734472902258858,
+            "residual": 0.010800468211527914,
+            "nonlinear": 0,
+            "io": 0,
+            "other": 0.0003025769256055355
+          }
+        },
+        {
+          "step": 4,
+          "time": 0.08,
+          "seconds": 0.22339328296948224,
+          "nonlinear_iterations": 8,
+          "linear_iterations": [
+            11,
+            11,
+            24
+          ],
+          "rebuilds": 0,
+          "retries": 0,
+          "residuals": [
+            1.1743708158848932e-12,
+            1.3554154832949895e-17,
+            1.8163076794074538e-19,
+            1.9285217760042153e-13,
+            2.3926778324889905e-13,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 0,
+            "jacobian_actions": 0,
+            "residual_evaluations": 0,
+            "preconditioner_applications": 0,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 0,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.025358090410009027,
+            "wall": 0.03805925988126546,
+            "assembly": 0.05591474287211895,
+            "flow": 0.000549960124772042,
+            "scalar": 0.0004565548151731491,
+            "rebuild": 0,
+            "guards": 0.03472704970045015,
+            "forcing": 0.05723179399501532,
+            "residual": 0.010833047039341182,
+            "nonlinear": 0,
+            "io": 0,
+            "other": 0.0002627841313369572
+          }
+        }
+      ]
+    },
+    "poly-new": {
+      "source_identity": "1c0091bff8ead2247d11602203de3a742a49e1cad3ca8ef2b349312b8f2ca5d9",
+      "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+      "implicit_solver": "CoupledJFNKV1",
+      "end_step": 4,
+      "end_time": 0.08,
+      "dt": 0.02,
+      "whole_operation_seconds": 2.770104763971176,
+      "peak_tree_rss_bytes": 115568640,
+      "peak_host_workers": 12,
+      "construction_seconds": 0.02863681799499318,
+      "initialisation_seconds": 0.03881053999066353,
+      "final_export_seconds": 0.018232661997899413,
+      "complete_advancing_seconds": 1.345828483114019,
+      "complete_step_seconds": [
+        0.33581264602253214,
+        0.33449001400731504,
+        0.3387077540392056,
+        0.33681806904496625
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "time": 0.02,
+          "seconds": 0.3105730940005742,
+          "nonlinear_iterations": 3,
+          "linear_iterations": [
+            0,
+            0,
+            0
+          ],
+          "rebuilds": 9,
+          "retries": 0,
+          "residuals": [
+            9.616520218339458e-16,
+            8.501726691275625e-18,
+            3.829639440967382e-19,
+            3.6438565657177686e-14,
+            1.0903163272142538e-14,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 5,
+            "jacobian_actions": 8,
+            "residual_evaluations": 22,
+            "preconditioner_applications": 5,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.037792425078805536,
+            "wall": 0.10568216309184209,
+            "assembly": 0.045628208841662854,
+            "flow": 6.238301284611225e-05,
+            "scalar": 5.0862086936831474e-05,
+            "rebuild": 0.002071583003271371,
+            "guards": 0.03426079003838822,
+            "forcing": 0.05653174500912428,
+            "residual": 0.02802348625846207,
+            "nonlinear": 0.00045147654600441456,
+            "io": 0,
+            "other": 1.7971033230423927e-05
+          }
+        },
+        {
+          "step": 2,
+          "time": 0.04,
+          "seconds": 0.309686733991839,
+          "nonlinear_iterations": 3,
+          "linear_iterations": [
+            0,
+            0,
+            0
+          ],
+          "rebuilds": 9,
+          "retries": 0,
+          "residuals": [
+            2.2322470488424965e-16,
+            5.102797668125204e-18,
+            6.124755448072328e-20,
+            8.556259966711685e-15,
+            1.0323383749727895e-14,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 5,
+            "jacobian_actions": 8,
+            "residual_evaluations": 22,
+            "preconditioner_applications": 5,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.03772597276838496,
+            "wall": 0.10567432170500979,
+            "assembly": 0.04499363322975114,
+            "flow": 6.223301170393825e-05,
+            "scalar": 4.800496390089393e-05,
+            "rebuild": 0.001991657947655767,
+            "guards": 0.034294581098947674,
+            "forcing": 0.056446569971740246,
+            "residual": 0.02793577074771747,
+            "nonlinear": 0.0004976284690201283,
+            "io": 0,
+            "other": 1.6360078006982803e-05
+          }
+        },
+        {
+          "step": 3,
+          "time": 0.06,
+          "seconds": 0.3129976440104656,
+          "nonlinear_iterations": 3,
+          "linear_iterations": [
+            0,
+            0,
+            0
+          ],
+          "rebuilds": 9,
+          "retries": 0,
+          "residuals": [
+            2.2123805246280141e-16,
+            4.834053506328119e-18,
+            5.347851907126038e-19,
+            8.386682684989684e-15,
+            1.1591412967849097e-14,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 5,
+            "jacobian_actions": 8,
+            "residual_evaluations": 22,
+            "preconditioner_applications": 5,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.03776900132652372,
+            "wall": 0.10596405412070453,
+            "assembly": 0.04736195894656703,
+            "flow": 7.369404193013906e-05,
+            "scalar": 5.4221018217504025e-05,
+            "rebuild": 0.002241401991341263,
+            "guards": 0.034468512632884085,
+            "forcing": 0.05644963000668213,
+            "residual": 0.0280032271402888,
+            "nonlinear": 0.0005932509084232152,
+            "io": 0,
+            "other": 1.8691876903176308e-05
+          }
+        },
+        {
+          "step": 4,
+          "time": 0.08,
+          "seconds": 0.3112408979795873,
+          "nonlinear_iterations": 3,
+          "linear_iterations": [
+            0,
+            0,
+            0
+          ],
+          "rebuilds": 9,
+          "retries": 0,
+          "residuals": [
+            2.201330048651988e-16,
+            7.033545168819782e-18,
+            2.230595919325809e-19,
+            8.013120061078493e-15,
+            7.642653881554606e-15,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 5,
+            "jacobian_actions": 8,
+            "residual_evaluations": 22,
+            "preconditioner_applications": 5,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.03773922211257741,
+            "wall": 0.10722830583108589,
+            "assembly": 0.044935135170817375,
+            "flow": 6.307393778115511e-05,
+            "scalar": 5.735392915084958e-05,
+            "rebuild": 0.0021339760278351605,
+            "guards": 0.03415193076943979,
+            "forcing": 0.05641995900077745,
+            "residual": 0.028118527901824564,
+            "nonlinear": 0.0003769422764889896,
+            "io": 0,
+            "other": 1.6471021808683872e-05
+          }
+        }
+      ]
+    },
+    "hist-old": {
+      "source_identity": "1c0091bff8ead2247d11602203de3a742a49e1cad3ca8ef2b349312b8f2ca5d9",
+      "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+      "implicit_solver": "PicardV1",
+      "end_step": 8,
+      "end_time": 0.02,
+      "dt": 0.0025,
+      "whole_operation_seconds": 4.1726280259899795,
+      "peak_tree_rss_bytes": 114339840,
+      "peak_host_workers": 12,
+      "construction_seconds": 0.030247943999711424,
+      "initialisation_seconds": 0.08243708999361843,
+      "final_export_seconds": 0.023949842026922852,
+      "complete_advancing_seconds": 2.9339169659651816,
+      "complete_step_seconds": [
+        0.39386182598536834,
+        0.3660745549714193,
+        0.36294400499900803,
+        0.36217174300691113,
+        0.36229246901348233,
+        0.3614434929913841,
+        0.36238484299974516,
+        0.3627440319978632
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "time": 0.0025,
+          "seconds": 0.3927910180063918,
+          "nonlinear_iterations": 6,
+          "linear_iterations": [
+            6,
+            5,
+            6
+          ],
+          "rebuilds": 3,
+          "retries": 0,
+          "residuals": [
+            7.329993638061267e-12,
+            1.5278766864590622e-17,
+            7.312276614968768e-20,
+            3.031294036353642e-12,
+            3.539503608809509e-12,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 0,
+            "jacobian_actions": 0,
+            "residual_evaluations": 0,
+            "preconditioner_applications": 0,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 0,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.041389269463252276,
+            "wall": 0.03731839591637254,
+            "assembly": 0.09350180096225813,
+            "flow": 0.0003263369435444474,
+            "scalar": 0.0002320119529031217,
+            "rebuild": 0.0006383450236171484,
+            "guards": 0.07621964643476531,
+            "forcing": 0.1262514420086518,
+            "residual": 0.016752598981838673,
+            "nonlinear": 0,
+            "io": 0,
+            "other": 0.0001611703191883862
+          }
+        },
+        {
+          "step": 2,
+          "time": 0.005,
+          "seconds": 0.36482518701814115,
+          "nonlinear_iterations": 5,
+          "linear_iterations": [
+            5,
+            4,
+            5
+          ],
+          "rebuilds": 3,
+          "retries": 0,
+          "residuals": [
+            2.039230413612478e-11,
+            1.1089514305110974e-17,
+            3.557083429131159e-19,
+            7.518512723867463e-12,
+            9.66541928369581e-12,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 0,
+            "jacobian_actions": 0,
+            "residual_evaluations": 0,
+            "preconditioner_applications": 0,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 0,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.0352308388100937,
+            "wall": 0.031883194751571864,
+            "assembly": 0.07885522180004045,
+            "flow": 0.0002718059695325792,
+            "scalar": 0.00018232682486996055,
+            "rebuild": 0.0005830630543641746,
+            "guards": 0.07676363358041272,
+            "forcing": 0.12629131402354687,
+            "residual": 0.014563381031621248,
+            "nonlinear": 0,
+            "io": 0,
+            "other": 0.00020040717208757997
+          }
+        },
+        {
+          "step": 3,
+          "time": 0.0075,
+          "seconds": 0.36194767098641023,
+          "nonlinear_iterations": 5,
+          "linear_iterations": [
+            6,
+            5,
+            6
+          ],
+          "rebuilds": 0,
+          "retries": 0,
+          "residuals": [
+            1.878934016503151e-11,
+            1.0454073834172006e-17,
+            4.113155595919932e-19,
+            6.64221016682445e-12,
+            8.723077531944988e-12,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 0,
+            "jacobian_actions": 0,
+            "residual_evaluations": 0,
+            "preconditioner_applications": 0,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 0,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.03519965981831774,
+            "wall": 0.03134231292642653,
+            "assembly": 0.07862839580047876,
+            "flow": 0.00033389811869710684,
+            "scalar": 0.00021518999710679054,
+            "rebuild": 0,
+            "guards": 0.07517809432465583,
+            "forcing": 0.12672576698241755,
+            "residual": 0.014185180072672665,
+            "nonlinear": 0,
+            "io": 0,
+            "other": 0.0001391729456372559
+          }
+        },
+        {
+          "step": 4,
+          "time": 0.01,
+          "seconds": 0.36114092700881884,
+          "nonlinear_iterations": 5,
+          "linear_iterations": [
+            6,
+            5,
+            5
+          ],
+          "rebuilds": 0,
+          "retries": 0,
+          "residuals": [
+            1.683404104923709e-11,
+            1.0124250907643825e-17,
+            3.910909936150717e-19,
+            6.154558080654873e-12,
+            8.20957367439244e-12,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 0,
+            "jacobian_actions": 0,
+            "residual_evaluations": 0,
+            "preconditioner_applications": 0,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 0,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.03515510220313445,
+            "wall": 0.031293060921598226,
+            "assembly": 0.07840907736681402,
+            "flow": 0.0002785550896078348,
+            "scalar": 0.00018728908617049456,
+            "rebuild": 0,
+            "guards": 0.07508512085769325,
+            "forcing": 0.12641811999492347,
+            "residual": 0.014187761989887804,
+            "nonlinear": 0,
+            "io": 0,
+            "other": 0.00012683949898928404
+          }
+        },
+        {
+          "step": 5,
+          "time": 0.0125,
+          "seconds": 0.361279412987642,
+          "nonlinear_iterations": 5,
+          "linear_iterations": [
+            6,
+            5,
+            6
+          ],
+          "rebuilds": 0,
+          "retries": 0,
+          "residuals": [
+            1.4632638947191456e-11,
+            7.234057766208176e-18,
+            3.652829585034172e-19,
+            5.510766786714464e-12,
+            6.922072315576239e-12,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 0,
+            "jacobian_actions": 0,
+            "residual_evaluations": 0,
+            "preconditioner_applications": 0,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 0,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.035085420473478734,
+            "wall": 0.03185200912412256,
+            "assembly": 0.07815961790038273,
+            "flow": 0.00028036796720698476,
+            "scalar": 0.00019506789976730943,
+            "rebuild": 0,
+            "guards": 0.07509344047866762,
+            "forcing": 0.1262230690335855,
+            "residual": 0.014258434937801212,
+            "nonlinear": 0,
+            "io": 0,
+            "other": 0.00013198517262935638
+          }
+        },
+        {
+          "step": 6,
+          "time": 0.015,
+          "seconds": 0.3604103469988331,
+          "nonlinear_iterations": 5,
+          "linear_iterations": [
+            6,
+            5,
+            6
+          ],
+          "rebuilds": 0,
+          "retries": 0,
+          "residuals": [
+            1.2355178253331901e-11,
+            9.536211524545418e-18,
+            2.3194144375986906e-19,
+            4.665938436049171e-12,
+            5.895946235985002e-12,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 0,
+            "jacobian_actions": 0,
+            "residual_evaluations": 0,
+            "preconditioner_applications": 0,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 0,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.03516174672404304,
+            "wall": 0.03114094096235931,
+            "assembly": 0.07805633562384173,
+            "flow": 0.00027794501511380076,
+            "scalar": 0.0001888209953904152,
+            "rebuild": 0,
+            "guards": 0.07503763661952689,
+            "forcing": 0.12628924299497157,
+            "residual": 0.01412760914536193,
+            "nonlinear": 0,
+            "io": 0,
+            "other": 0.00013006891822442412
+          }
+        },
+        {
+          "step": 7,
+          "time": 0.0175,
+          "seconds": 0.3613797780126333,
+          "nonlinear_iterations": 5,
+          "linear_iterations": [
+            6,
+            5,
+            6
+          ],
+          "rebuilds": 0,
+          "retries": 0,
+          "residuals": [
+            1.0158930796019937e-11,
+            9.508004684998198e-18,
+            1.0720260738687243e-19,
+            3.942152374926245e-12,
+            5.100709225554578e-12,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 0,
+            "jacobian_actions": 0,
+            "residual_evaluations": 0,
+            "preconditioner_applications": 0,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 0,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.03517849207855761,
+            "wall": 0.03124491107882932,
+            "assembly": 0.0783621080336161,
+            "flow": 0.00028628495056182146,
+            "scalar": 0.00019860704196617007,
+            "rebuild": 0,
+            "guards": 0.0753046500030905,
+            "forcing": 0.1265123049961403,
+            "residual": 0.014161577972117811,
+            "nonlinear": 0,
+            "io": 0,
+            "other": 0.00013084185775369406
+          }
+        },
+        {
+          "step": 8,
+          "time": 0.02,
+          "seconds": 0.3616801340249367,
+          "nonlinear_iterations": 5,
+          "linear_iterations": [
+            6,
+            5,
+            6
+          ],
+          "rebuilds": 0,
+          "retries": 0,
+          "residuals": [
+            8.153363847503842e-12,
+            9.943048868390832e-18,
+            2.5973471234165083e-19,
+            3.593034315224393e-12,
+            3.94049241216677e-12,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 0,
+            "jacobian_actions": 0,
+            "residual_evaluations": 0,
+            "preconditioner_applications": 0,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 0,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.035203518462367356,
+            "wall": 0.03169537999201566,
+            "assembly": 0.07812709163408726,
+            "flow": 0.00027909595519304276,
+            "scalar": 0.0001999310334213078,
+            "rebuild": 0,
+            "guards": 0.07523392682196572,
+            "forcing": 0.12655062699923292,
+            "residual": 0.014259926043450832,
+            "nonlinear": 0,
+            "io": 0,
+            "other": 0.00013063708320260048
+          }
+        }
+      ]
+    },
+    "hist-new": {
+      "source_identity": "1c0091bff8ead2247d11602203de3a742a49e1cad3ca8ef2b349312b8f2ca5d9",
+      "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+      "implicit_solver": "CoupledJFNKV1",
+      "end_step": 8,
+      "end_time": 0.02,
+      "dt": 0.0025,
+      "whole_operation_seconds": 5.539266643987503,
+      "peak_tree_rss_bytes": 130506752,
+      "peak_host_workers": 12,
+      "construction_seconds": 0.03056258097058162,
+      "initialisation_seconds": 0.08222348801791668,
+      "final_export_seconds": 0.03017261897912249,
+      "complete_advancing_seconds": 4.316316167067271,
+      "complete_step_seconds": [
+        0.54139423702145,
+        0.5438324389979243,
+        0.5418282790342346,
+        0.5416579589946195,
+        0.544548025005497,
+        0.5439265500172041,
+        0.5429357259999961,
+        0.5161929519963451
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "time": 0.0025,
+          "seconds": 0.5402834359556437,
+          "nonlinear_iterations": 3,
+          "linear_iterations": [
+            0,
+            0,
+            0
+          ],
+          "rebuilds": 9,
+          "retries": 0,
+          "residuals": [
+            2.0987608488613528e-16,
+            4.345136979091765e-18,
+            2.297907741672312e-19,
+            1.3150959080084702e-14,
+            1.7933279606884776e-14,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 4,
+            "jacobian_actions": 7,
+            "residual_evaluations": 20,
+            "preconditioner_applications": 4,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.08070960745681077,
+            "wall": 0.10822014464065433,
+            "assembly": 0.09438284393399954,
+            "flow": 5.1153008826076984e-05,
+            "scalar": 3.922200994566083e-05,
+            "rebuild": 0.0020009070285595953,
+            "guards": 0.07650996273150668,
+            "forcing": 0.1262525800266303,
+            "residual": 0.05172053899150342,
+            "nonlinear": 0.00037733628414571285,
+            "io": 0,
+            "other": 1.9139843061566353e-05
+          }
+        },
+        {
+          "step": 2,
+          "time": 0.005,
+          "seconds": 0.5427112879697233,
+          "nonlinear_iterations": 3,
+          "linear_iterations": [
+            0,
+            0,
+            0
+          ],
+          "rebuilds": 9,
+          "retries": 0,
+          "residuals": [
+            7.584844284399013e-17,
+            4.006069709035678e-18,
+            4.2109697033543276e-19,
+            2.234372512164827e-14,
+            2.7128257445664525e-14,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 4,
+            "jacobian_actions": 7,
+            "residual_evaluations": 20,
+            "preconditioner_applications": 4,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.0825272080837749,
+            "wall": 0.10913276090286672,
+            "assembly": 0.09386031742906198,
+            "flow": 5.6242046412080526e-05,
+            "scalar": 3.887200728058815e-05,
+            "rebuild": 0.0020595219684764743,
+            "guards": 0.07669248100137338,
+            "forcing": 0.1263809369993396,
+            "residual": 0.051504677918273956,
+            "nonlinear": 0.0004383387276902795,
+            "io": 0,
+            "other": 1.9930885173380375e-05
+          }
+        },
+        {
+          "step": 3,
+          "time": 0.0075,
+          "seconds": 0.5407748319557868,
+          "nonlinear_iterations": 3,
+          "linear_iterations": [
+            0,
+            0,
+            0
+          ],
+          "rebuilds": 9,
+          "retries": 0,
+          "residuals": [
+            8.494943391109042e-17,
+            6.617896138563257e-18,
+            2.256962301350937e-19,
+            1.821664340510721e-14,
+            3.790710793928688e-14,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 4,
+            "jacobian_actions": 7,
+            "residual_evaluations": 20,
+            "preconditioner_applications": 4,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.08091840677661821,
+            "wall": 0.1068386675324291,
+            "assembly": 0.0933409322751686,
+            "flow": 5.027296720072627e-05,
+            "scalar": 3.8732076063752174e-05,
+            "rebuild": 0.001955835963599384,
+            "guards": 0.07629421190358698,
+            "forcing": 0.12996477202977985,
+            "residual": 0.05099807307124138,
+            "nonlinear": 0.0003552765119820833,
+            "io": 0,
+            "other": 1.9650848116725683e-05
+          }
+        },
+        {
+          "step": 4,
+          "time": 0.01,
+          "seconds": 0.540632963005919,
+          "nonlinear_iterations": 3,
+          "linear_iterations": [
+            0,
+            0,
+            0
+          ],
+          "rebuilds": 9,
+          "retries": 0,
+          "residuals": [
+            7.681710788975545e-17,
+            6.0712133810278155e-18,
+            1.2291903902537998e-19,
+            2.002219827290701e-14,
+            3.31264940024796e-14,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 4,
+            "jacobian_actions": 7,
+            "residual_evaluations": 20,
+            "preconditioner_applications": 4,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.08076811133651063,
+            "wall": 0.10671624029055238,
+            "assembly": 0.09327075106557459,
+            "flow": 5.155295366421342e-05,
+            "scalar": 3.770197508856654e-05,
+            "rebuild": 0.0019658560631796718,
+            "guards": 0.07646802469389513,
+            "forcing": 0.12980415299534798,
+            "residual": 0.051212148857302964,
+            "nonlinear": 0.00032130174804478884,
+            "io": 0,
+            "other": 1.7121026758104563e-05
+          }
+        },
+        {
+          "step": 5,
+          "time": 0.0125,
+          "seconds": 0.5435045280028135,
+          "nonlinear_iterations": 3,
+          "linear_iterations": [
+            0,
+            0,
+            0
+          ],
+          "rebuilds": 9,
+          "retries": 0,
+          "residuals": [
+            6.538549559731441e-17,
+            4.9793336698244634e-18,
+            2.4236391947803725e-19,
+            2.3915939492567223e-14,
+            3.3668026631331604e-14,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 4,
+            "jacobian_actions": 7,
+            "residual_evaluations": 20,
+            "preconditioner_applications": 4,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.08071634889347479,
+            "wall": 0.10861389990895987,
+            "assembly": 0.09402449982007965,
+            "flow": 5.0482049118727446e-05,
+            "scalar": 3.811292117461562e-05,
+            "rebuild": 0.001950256060808897,
+            "guards": 0.07674746122211218,
+            "forcing": 0.1300192839698866,
+            "residual": 0.051035321899689734,
+            "nonlinear": 0.00029159121913835406,
+            "io": 0,
+            "other": 1.727003837004304e-05
+          }
+        },
+        {
+          "step": 6,
+          "time": 0.015,
+          "seconds": 0.5428487019962631,
+          "nonlinear_iterations": 3,
+          "linear_iterations": [
+            0,
+            0,
+            0
+          ],
+          "rebuilds": 9,
+          "retries": 0,
+          "residuals": [
+            8.201854041780747e-17,
+            5.746202188609429e-18,
+            5.393217593845743e-20,
+            1.8653201580785667e-14,
+            3.654917819136335e-14,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 4,
+            "jacobian_actions": 7,
+            "residual_evaluations": 20,
+            "preconditioner_applications": 4,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.08077600173419341,
+            "wall": 0.10773963725659996,
+            "assembly": 0.0936031969031319,
+            "flow": 5.126401083543897e-05,
+            "scalar": 3.832101356238127e-05,
+            "rebuild": 0.0019442460034042597,
+            "guards": 0.07628761418163776,
+            "forcing": 0.13087834103498608,
+            "residual": 0.05114475090522319,
+            "nonlinear": 0.0003657768829725683,
+            "io": 0,
+            "other": 1.955206971615553e-05
+          }
+        },
+        {
+          "step": 7,
+          "time": 0.0175,
+          "seconds": 0.5418976389919408,
+          "nonlinear_iterations": 3,
+          "linear_iterations": [
+            0,
+            0,
+            0
+          ],
+          "rebuilds": 9,
+          "retries": 0,
+          "residuals": [
+            8.137375965979682e-17,
+            5.6985573440624935e-18,
+            2.9927394562168556e-19,
+            2.72688910882976e-14,
+            4.1724876204737454e-14,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 4,
+            "jacobian_actions": 7,
+            "residual_evaluations": 20,
+            "preconditioner_applications": 4,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.0808302813093178,
+            "wall": 0.10754901805194095,
+            "assembly": 0.09355067746946588,
+            "flow": 5.0614005886018276e-05,
+            "scalar": 3.825000021606684e-05,
+            "rebuild": 0.0019580970401875675,
+            "guards": 0.07658897119108588,
+            "forcing": 0.12992958800168708,
+            "residual": 0.051049171946942806,
+            "nonlinear": 0.0003359389374963939,
+            "io": 0,
+            "other": 1.7031037714332342e-05
+          }
+        },
+        {
+          "step": 8,
+          "time": 0.02,
+          "seconds": 0.5151474759913981,
+          "nonlinear_iterations": 3,
+          "linear_iterations": [
+            0,
+            0,
+            0
+          ],
+          "rebuilds": 9,
+          "retries": 0,
+          "residuals": [
+            1.414492183243497e-13,
+            4.859824591528262e-17,
+            4.797647552807563e-20,
+            3.828000144435408e-12,
+            5.483965384184569e-12,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 3,
+            "jacobian_actions": 6,
+            "residual_evaluations": 18,
+            "preconditioner_applications": 3,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 0.07671823760028929,
+            "wall": 0.09878329990897328,
+            "assembly": 0.08541137259453535,
+            "flow": 3.8390979170799255e-05,
+            "scalar": 2.805102849379182e-05,
+            "rebuild": 0.0019516749889589846,
+            "guards": 0.07565540494397283,
+            "forcing": 0.130076457047835,
+            "residual": 0.04619456216460094,
+            "nonlinear": 0.0002728818217292428,
+            "io": 0,
+            "other": 1.7142912838608027e-05
+          }
+        }
+      ]
+    },
+    "physical-old": {
+      "source_identity": "1c0091bff8ead2247d11602203de3a742a49e1cad3ca8ef2b349312b8f2ca5d9",
+      "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+      "implicit_solver": "PicardV1",
+      "end_step": 3,
+      "end_time": 0.015,
+      "dt": 0.005,
+      "whole_operation_seconds": 143.72300997102866,
+      "peak_tree_rss_bytes": 634888192,
+      "peak_host_workers": 12,
+      "construction_seconds": 1.0918114630039781,
+      "initialisation_seconds": 2.4264877490350045,
+      "final_export_seconds": 0.040592727018520236,
+      "complete_advancing_seconds": 137.86357820109697,
+      "complete_step_seconds": [
+        38.65360992704518,
+        55.669481732998975,
+        43.540486541052815
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "time": 0.005,
+          "seconds": 38.649650584033225,
+          "nonlinear_iterations": 72,
+          "linear_iterations": [
+            111,
+            79,
+            58
+          ],
+          "rebuilds": 7,
+          "retries": 0,
+          "residuals": [
+            2.6166776144423097e-12,
+            3.2470160348778923e-16,
+            0,
+            9.266150005391764e-13,
+            5.467370986625341e-13,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 0,
+            "jacobian_actions": 0,
+            "residual_evaluations": 0,
+            "preconditioner_applications": 0,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 0,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 8.101290601538494,
+            "wall": 0.7854423306998797,
+            "assembly": 18.519681101315655,
+            "flow": 2.213724431931041,
+            "scalar": 0.5340842539444566,
+            "rebuild": 3.9422715170076117,
+            "guards": 2.995412335265428,
+            "forcing": 0.0026673839893192053,
+            "residual": 1.3573107647825964,
+            "nonlinear": 0,
+            "io": 0,
+            "other": 0.19776586355874315
+          }
+        },
+        {
+          "step": 2,
+          "time": 0.01,
+          "seconds": 55.66557001200272,
+          "nonlinear_iterations": 53,
+          "linear_iterations": [
+            1016,
+            73,
+            53
+          ],
+          "rebuilds": 20,
+          "retries": 0,
+          "residuals": [
+            2.957471795811336e-12,
+            3.218123479063914e-16,
+            0,
+            1.0494220528800779e-12,
+            1.089099501658342e-12,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 0,
+            "jacobian_actions": 0,
+            "residual_evaluations": 0,
+            "preconditioner_applications": 0,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 0,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 5.981524262344465,
+            "wall": 0.5791613071924075,
+            "assembly": 13.55108755553374,
+            "flow": 17.706829653761815,
+            "scalar": 0.4320952948764898,
+            "rebuild": 13.646116172138136,
+            "guards": 2.644814683648292,
+            "forcing": 0,
+            "residual": 0.986866362974979,
+            "nonlinear": 0,
+            "io": 0,
+            "other": 0.13707471953239292
+          }
+        },
+        {
+          "step": 3,
+          "time": 0.015,
+          "seconds": 43.53656596102519,
+          "nonlinear_iterations": 54,
+          "linear_iterations": [
+            689,
+            69,
+            57
+          ],
+          "rebuilds": 9,
+          "retries": 0,
+          "residuals": [
+            2.9440957163886232e-12,
+            3.4337015395121265e-16,
+            0,
+            9.692366265403202e-13,
+            1.0005353490131903e-12,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 0,
+            "jacobian_actions": 0,
+            "residual_evaluations": 0,
+            "preconditioner_applications": 0,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 0,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 6.093921976571437,
+            "wall": 0.5900397842051461,
+            "assembly": 13.81043527496513,
+            "flow": 12.046767680556513,
+            "scalar": 0.43581137887667865,
+            "rebuild": 6.768412100034766,
+            "guards": 2.663384197978303,
+            "forcing": 0,
+            "residual": 0.9907355473260395,
+            "nonlinear": 0,
+            "io": 0,
+            "other": 0.13705802051117644
+          }
+        }
+      ]
+    },
+    "physical-new": {
+      "source_identity": "1c0091bff8ead2247d11602203de3a742a49e1cad3ca8ef2b349312b8f2ca5d9",
+      "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+      "implicit_solver": "CoupledJFNKV1",
+      "end_step": 3,
+      "end_time": 0.015,
+      "dt": 0.005,
+      "whole_operation_seconds": 39.233997920004185,
+      "peak_tree_rss_bytes": 667365376,
+      "peak_host_workers": 12,
+      "construction_seconds": 1.090770845010411,
+      "initialisation_seconds": 2.420136305037886,
+      "final_export_seconds": 0.0409575030207634,
+      "complete_advancing_seconds": 33.499832595989574,
+      "complete_step_seconds": [
+        11.534497822984122,
+        10.976840487972368,
+        10.988494285033084
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "time": 0.005,
+          "seconds": 11.530267675989307,
+          "nonlinear_iterations": 4,
+          "linear_iterations": [
+            0,
+            0,
+            0
+          ],
+          "rebuilds": 12,
+          "retries": 0,
+          "residuals": [
+            5.962503738827312e-15,
+            2.447486857109739e-16,
+            0,
+            1.701538639804946e-13,
+            6.286232807274635e-15,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 8,
+            "jacobian_actions": 13,
+            "residual_evaluations": 34,
+            "preconditioner_applications": 8,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 50,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 2.390106533886865,
+            "wall": 0.202006742823869,
+            "assembly": 2.004787716723513,
+            "flow": 0.11965330300154164,
+            "scalar": 0.0269394819624722,
+            "rebuild": 4.287480501050595,
+            "guards": 1.8749215304851532,
+            "forcing": 0.002682683989405632,
+            "residual": 0.5771426612045616,
+            "nonlinear": 0.04250378085998818,
+            "io": 0,
+            "other": 0.0020427400013431907
+          }
+        },
+        {
+          "step": 2,
+          "time": 0.01,
+          "seconds": 10.972628363000695,
+          "nonlinear_iterations": 4,
+          "linear_iterations": [
+            0,
+            0,
+            0
+          ],
+          "rebuilds": 12,
+          "retries": 0,
+          "residuals": [
+            1.0376846834620676e-14,
+            2.2725086473493074e-16,
+            0,
+            6.95229213404752e-13,
+            9.640863222547202e-15,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 7,
+            "jacobian_actions": 11,
+            "residual_evaluations": 30,
+            "preconditioner_applications": 7,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 50,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 2.235555369465146,
+            "wall": 0.18034486734541133,
+            "assembly": 1.7842142264707945,
+            "flow": 0.10367441416019574,
+            "scalar": 0.024568446970079094,
+            "rebuild": 4.248183889023494,
+            "guards": 1.8512114982004277,
+            "forcing": 0,
+            "residual": 0.510637039784342,
+            "nonlinear": 0.03241529251681641,
+            "io": 0,
+            "other": 0.001823319063987583
+          }
+        },
+        {
+          "step": 3,
+          "time": 0.015,
+          "seconds": 10.984376164036803,
+          "nonlinear_iterations": 4,
+          "linear_iterations": [
+            0,
+            0,
+            0
+          ],
+          "rebuilds": 12,
+          "retries": 0,
+          "residuals": [
+            8.960066534537262e-15,
+            2.269662420535562e-16,
+            0,
+            3.120824393476728e-13,
+            9.341744724819996e-15,
+            0
+          ],
+          "coupled_newton": {
+            "krylov_iterations": 7,
+            "jacobian_actions": 11,
+            "residual_evaluations": 30,
+            "preconditioner_applications": 7,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 50,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "disjoint_seconds": {
+            "constitutive": 2.2357006366946734,
+            "wall": 0.1814517995226197,
+            "assembly": 1.7773486352525651,
+            "flow": 0.10367504204623401,
+            "scalar": 0.024292111047543585,
+            "rebuild": 4.266007065889426,
+            "guards": 1.8515451815910637,
+            "forcing": 0,
+            "residual": 0.5111889778636396,
+            "nonlinear": 0.031183478131424636,
+            "io": 0,
+            "other": 0.0019832359976135194
+          }
+        }
+      ]
+    }
+  },
+  "independent": {
+    "poly-algorithm-independent": {
+      "status": "PASS_IMPLICIT_ALGORITHM_COMPARISON_ONLY",
+      "raw": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-algorithm-independent.json",
+        "bytes": 32310,
+        "sha256": "f28a608d85b2cfe9859b723198645bc896b29a14eb3883aee46a2840477b3b9d"
+      }
+    },
+    "hist-algorithm-independent": {
+      "status": "PASS_IMPLICIT_ALGORITHM_COMPARISON_ONLY",
+      "raw": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/hist-algorithm-independent.json",
+        "bytes": 32303,
+        "sha256": "07d55f2958e4f34059a1f82c096668cb0a71dc829888adbac3ef5455c76c9b91"
+      }
+    },
+    "poly-current-independent": {
+      "status": "PASS_CURRENT_COUPLED_STEP_ONLY",
+      "raw": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-current-independent.json",
+        "bytes": 17206,
+        "sha256": "df1b3f75bc11f667cd5a27b51ffd12e1326fa0a878c88ba466b85615e85c9f9a"
+      }
+    },
+    "hist-current-independent": {
+      "status": "PASS_CURRENT_COUPLED_STEP_ONLY",
+      "raw": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/hist-current-independent.json",
+        "bytes": 12852,
+        "sha256": "ac179156e759488084b001e2da42cfdbbf7ae79c7fa41b122774197a7e79d902"
+      }
+    },
+    "physical-algorithm-independent": {
+      "status": "PASS_IMPLICIT_ALGORITHM_COMPARISON_ONLY",
+      "raw": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/physical-algorithm-independent.json",
+        "bytes": 32622,
+        "sha256": "a72403bb52924c2f174ea0a28171d37f5f992e59e885dc9e542a64d4eaf72f6e"
+      }
+    },
+    "physical-current-independent-v2": {
+      "status": "NOT_MET",
+      "raw": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/physical-current-independent-v2.json",
+        "bytes": 25988714,
+        "sha256": "e61c6be211be713c5a7fef3879b761c8cc94d59af0becdf233bcffda4f0b6f54"
+      }
+    },
+    "history-independent": {
+      "status": "PASS_IMPLICIT_HISTORY_FOUNDATION_ONLY",
+      "raw": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/history-independent.json",
+        "bytes": 74034,
+        "sha256": "a6b757efbc61d0de37ba65ee999b881d48477306c0e1b32017c383aad9a51119"
+      }
+    }
+  },
+  "physical_prefix": {
+    "old_mean_step": 45.954526067032326,
+    "new_mean_step": 11.166610865329858,
+    "prefix_mean_speed_ratio": 4.115351257534382,
+    "warm_cost_qualified": false,
+    "accuracy_qualified_dt": false,
+    "production_forecast_qualified": false,
+    "reason": "Three initial advancing steps on v2 only; no warmed blocks/selected dt/reference/full-horizon cost qualification"
+  }
+}

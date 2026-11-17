@@ -1,0 +1,201 @@
+{
+  "schema": "WJH27Source12InitialMatrixV1",
+  "scope": "Equivalent algorithm checks on approved v2 only; all physical/production qualifications remain open",
+  "cases": {
+    "poly-old": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-old.xml",
+      "sha256": "0b7d02fa4949dabe51b8950b32c4a268bafbf33cfec0ed7753ecfa72232410dc",
+      "mode": "Manufactured",
+      "table": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+        "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+      },
+      "nx": 2,
+      "nr": 2,
+      "dt": 0.02,
+      "steps": 4,
+      "template": null,
+      "implicit_solver": "PicardV1"
+    },
+    "poly-new": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-new.xml",
+      "sha256": "7261f9ca058cc277b31e621cd0e522936ab7bcedac632d75927dde756df8535d",
+      "mode": "Manufactured",
+      "table": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+        "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+      },
+      "nx": 2,
+      "nr": 2,
+      "dt": 0.02,
+      "steps": 4,
+      "template": null,
+      "implicit_solver": "CoupledJFNKV1"
+    },
+    "hist-old": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/hist-old.xml",
+      "sha256": "ca7d409071c8e82a2fedd83ef8085f5588a3a7caa86a22b17bbbdcc70c599e4d",
+      "mode": "Manufactured",
+      "table": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+        "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+      },
+      "nx": 2,
+      "nr": 2,
+      "dt": 0.0025,
+      "steps": 8,
+      "template": null,
+      "implicit_solver": "PicardV1"
+    },
+    "hist-new": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/hist-new.xml",
+      "sha256": "a846a171ed274d5d2099799c04f1b9b6c566da3607fdb8d958f65b218e73b42f",
+      "mode": "Manufactured",
+      "table": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+        "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+      },
+      "nx": 2,
+      "nr": 2,
+      "dt": 0.0025,
+      "steps": 8,
+      "template": null,
+      "implicit_solver": "CoupledJFNKV1"
+    },
+    "physical-old": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/physical-old.xml",
+      "sha256": "671f36251c510353fbbc36419e4fc2882001a7eef0c7b5c729dc623436a00489",
+      "mode": "Physical",
+      "table": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+        "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+      },
+      "nx": 2,
+      "nr": 2,
+      "dt": 0.005,
+      "steps": 3,
+      "template": "/home/jay/build/wj-h26-native-flow-20261117/science/profile-v3/case.xml",
+      "implicit_solver": "PicardV1"
+    },
+    "physical-new": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/physical-new.xml",
+      "sha256": "426140109bf80e81d8bd8866b1ff46ee111c03ef825e94488dfe9449ad591ffa",
+      "mode": "Physical",
+      "table": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+        "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+      },
+      "nx": 2,
+      "nr": 2,
+      "dt": 0.005,
+      "steps": 3,
+      "template": "/home/jay/build/wj-h26-native-flow-20261117/science/profile-v3/case.xml",
+      "implicit_solver": "CoupledJFNKV1"
+    },
+    "poly-prefix": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-prefix.xml",
+      "sha256": "63e6a4de2858720e8fa06a0e98993fbc7534518d8adac6b1f498d33c82ca3ea1",
+      "mode": "Manufactured",
+      "table": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+        "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+      },
+      "nx": 2,
+      "nr": 2,
+      "dt": 0.02,
+      "steps": 1,
+      "template": null,
+      "implicit_solver": "CoupledJFNKV1"
+    },
+    "poly-cold": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-cold.xml",
+      "sha256": "cea76e5be41a897d94394b5a5f396d2c6984272ed1a3c62eefae1f38edb42f26",
+      "mode": "Manufactured",
+      "table": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+        "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+      },
+      "nx": 2,
+      "nr": 2,
+      "dt": 0.02,
+      "steps": 3,
+      "template": null,
+      "implicit_solver": "CoupledJFNKV1"
+    },
+    "poly-retry": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-retry.xml",
+      "sha256": "58fac7653d85f4ef37a1ad06547ff13ad0e3c1ac03742e7c708415d2a80b5a99",
+      "mode": "Manufactured",
+      "table": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+        "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+      },
+      "nx": 2,
+      "nr": 2,
+      "dt": 0.02,
+      "steps": 4,
+      "template": null,
+      "implicit_solver": "CoupledJFNKV1"
+    },
+    "poly-recovery3": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-recovery3.xml",
+      "sha256": "62b825d1cb68bc436131efa3b7f772f83a3a8d2166525395d1ec40d83fe6b564",
+      "mode": "Manufactured",
+      "table": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+        "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+      },
+      "nx": 2,
+      "nr": 2,
+      "dt": 0.02,
+      "steps": 1,
+      "template": null,
+      "implicit_solver": "CoupledJFNKV1"
+    },
+    "fail-iteration": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-iteration.xml",
+      "sha256": "02dabbe09cdf97f3716c72a7ce1cef4fe13b449a88b8ccb11c8f5dcc5c28622b",
+      "mode": "Manufactured",
+      "table": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+        "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+      },
+      "nx": 2,
+      "nr": 2,
+      "dt": 0.02,
+      "steps": 1,
+      "template": null,
+      "implicit_solver": "CoupledJFNKV1"
+    },
+    "fail-deadline": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-deadline.xml",
+      "sha256": "05957be0a81e57cd2581827a744cad1456d8730c3a4d2738456f365de06265aa",
+      "mode": "Manufactured",
+      "table": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+        "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+      },
+      "nx": 2,
+      "nr": 2,
+      "dt": 0.02,
+      "steps": 1,
+      "template": null,
+      "implicit_solver": "CoupledJFNKV1"
+    },
+    "bad-algorithm": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/bad-algorithm.xml",
+      "sha256": "0342b9d0f99c5d775a102d62789e174db9e158d1462263ab068c274b3a295375",
+      "mode": "Manufactured",
+      "table": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+        "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+      },
+      "nx": 2,
+      "nr": 2,
+      "dt": 0.02,
+      "steps": 0,
+      "template": null,
+      "implicit_solver": "PicardV1"
+    }
+  }
+}

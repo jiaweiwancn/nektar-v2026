@@ -72,6 +72,12 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     Require(m_options.andersonDepth>=0&&m_options.andersonDepth<=8,"Anderson depth must lie in [0,8]");
     Require(m_options.stressSplit=="PositiveShearV1"||m_options.stressSplit=="IsotropicMuV1","unknown numerical stress split");
     Require(m_options.steadyVelocityPC=="FullGradientV1"||m_options.steadyVelocityPC=="PositiveFrozenV1","unknown steady velocity preconditioner");
+    Require(m_options.advancement=="PicardV1"||m_options.advancement=="CoupledJFNKV1","unknown implicit coupled solver");
+    if(m_options.advancement=="CoupledJFNKV1"){
+        Require(m_options.andersonDepth==0,"Anderson acceleration is a Picard-only option");
+        Require(std::isfinite(m_options.stepNewton.maximumSeconds)&&m_options.stepNewton.maximumSeconds>0&&
+            m_options.stepNewton.acceptanceNorm==m_options.nonlinearTolerance,"implicit Newton requires explicit time cap and current coupled tolerance");
+    }
     Require(m_geometry.curve==0&&m_geometry.H==m_reference->Parameters().H&&m_geometry.h==m_reference->Parameters().roughness,
         "coupled v2 supports only the pinned flat geometry/model heights");
     for(const auto&field:m_fields)for(int e=0;e<field->GetExpSize();++e)for(int d=0;d<2;++d)
@@ -90,6 +96,9 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
         <<m_options.sourceIdentity<<'|'<<m_reference->Identity()<<'|'<<m_options.dt<<'|'<<m_options.manufactured<<'|'
         <<m_options.quadratureX<<'|'<<m_options.quadratureR<<'|'<<m_geometry.d0<<'|'<<m_geometry.H<<'|'<<m_geometry.h<<'|'
         <<m_options.linearTolerance<<'|'<<m_options.nonlinearTolerance<<'|'<<m_options.maximumIterations<<'|'<<m_options.mmsBodyAmplitude<<'|'<<int(m_options.backend)<<'|'<<m_options.mmsVariant<<'|'<<m_options.andersonDepth<<'|'<<m_options.stressSplit<<'|'<<m_options.steadyVelocityPC;
+    const auto&newton=m_options.stepNewton;
+    signature<<'|'<<m_options.advancement<<'|'<<newton.maximumSeconds<<'|'<<newton.acceptanceNorm<<'|'
+        <<newton.maximumNewtonIterations<<'|'<<newton.restartDimension<<'|'<<newton.maximumLinearCycles<<'|'<<newton.fdRelativeStep;
     for(const auto&e:m_flow.Elements()){
         signature<<'|'<<e.geometry<<','<<e.xl<<','<<e.xr<<','<<e.rl<<','<<e.rr;
         for(int a:e.u)signature<<','<<a;for(double a:e.us)signature<<','<<a;
@@ -391,7 +400,10 @@ Coupling::Data Coupling::Evaluate(const CoupledState&s,double time,bool principa
             timing.guards+=Clock()-began;
         }
     };
-    start=Clock();
+    start=Clock();const double pointTimeBefore=timing.constitutive+timing.guards;
+    auto accountSamples=[&]{timing.assembly+=Clock()-start-
+        (timing.constitutive+timing.guards-pointTimeBefore);};
+    try{
     std::vector<Vec>staticDk,staticSourceK;
     for(const auto&rp:m_rules.Static()){
         Vec mu,Dk,De,sk,se,re,bulk,shear;std::vector<Tensor>rem,viscous;samples(*rp,true,mu,Dk,De,sk,se,re,rem,bulk,shear,viscous);d.mu.push_back(std::move(mu));d.remainder.push_back(std::move(rem));d.bulk.push_back(std::move(bulk));d.shear.push_back(std::move(shear));d.viscousStress.push_back(std::move(viscous));
@@ -403,11 +415,13 @@ Coupling::Data Coupling::Evaluate(const CoupledState&s,double time,bool principa
         if(rp.get()==m_rules.Static()[i].get()){d.Dk.push_back(std::move(staticDk[i]));d.sourceK.push_back(std::move(staticSourceK[i]));}
         else{Vec mu,Dk,De,sk,se,re,bulk,shear;std::vector<Tensor>rem,viscous;samples(*rp,false,mu,Dk,De,sk,se,re,rem,bulk,shear,viscous);d.Dk.push_back(std::move(Dk));d.sourceK.push_back(std::move(sk));}
     }
-    double included=Clock()-start; // Point timers above are disjoint subcategories.
-    (void)included;
     d.coefficients=Vec(coefficient.size());for(int i=0;i<d.coefficients.size();++i)d.coefficients[i]=coefficient[i];
     d.kCoefficients=Vec(kCoefficient.size());for(int i=0;i<d.kCoefficients.size();++i)d.kCoefficients[i]=kCoefficient[i];
     d.eCoefficients=Vec(eCoefficient.size());for(int i=0;i<d.eCoefficients.size();++i)d.eCoefficients[i]=eCoefficient[i];
+    }catch(...){accountSamples();throw;}
+    // Native interpolation, gradients and complete source/coefficient data
+    // assembly, excluding the separately timed WJ kernels and point guards.
+    accountSamples();
     // Compare the actual essential coefficients with the freshly rebuilt
     // nonlinear trace projection. Pointwise projection error is a separate
     // spatial error, never an algebraic boundary condition to overconstrain.
@@ -604,6 +618,7 @@ CoupledResidual Coupling::Residual(const CoupledState&s,const Data&d,const Loads
 
 CoupledStepInfo Coupling::Advance(CoupledHistory&h,bool injectRetry)
 {
+    if(m_options.advancement=="CoupledJFNKV1")return AdvanceNewton(h,injectRetry);
     const double begin=Clock();CheckHistory(h);m_constitutiveStats={};m_lastInputHistory=h;m_hasInputHistory=true;CoupledStepInfo info;const double time=(h.step+1)*h.dt,alpha=(h.step==0?1.:1.5)/h.dt;
     m_lastAttempt={};auto saveAttempt=[&]{info.seconds=Clock()-begin;info.constitutiveStats=m_constitutiveStats;info.timing.other=info.seconds-info.timing.Sum();m_lastAttempt=info;};
     auto history=Combination(h.current,h.step==0?1/h.dt:2/h.dt,h.previous,h.step==0?0:-.5/h.dt);
@@ -870,6 +885,18 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
     out<<std::setprecision(17)<<"{\"schema\":\"WJH27NativeCoupledStateV2\",\"model\":\""<<WallModelV2<<"\",\"signature\":\""<<m_signature<<"\",\"source_identity\":\""<<m_options.sourceIdentity<<"\",\"reference_identity\":\""<<m_reference->Identity()<<"\",\"manufactured\":"<<(m_mms?"true":"false")<<",\"step\":"<<h.step<<",\"time\":"<<h.time<<",\"dt\":"<<h.dt<<",\"state_sha256\":\""<<StateHash(h.current)<<"\",\"previous_sha256\":\""<<StateHash(h.previous)<<"\",\"advection_sha256\":\""<<StateHash(h.advection)<<"\",\"previous_advection_sha256\":\""<<StateHash(h.previousAdvection)<<"\",\"sizes\":["<<m_flow.VelocitySize()<<','<<m_flow.PressureSize()<<','<<m_k.Size()<<','<<m_e.Size()<<"],\"gauge\":"<<(m_flow.Gauge()?"true":"false")<<",\"nonlinear_iterations\":"<<info.nonlinearIterations<<",\"linear_iterations\":["<<info.flowIterations<<','<<info.kIterations<<','<<info.epsilonIterations<<"],\"rebuilds\":"<<info.rebuilds<<",\"retries\":"<<info.retries<<",\"seconds\":"<<info.seconds<<",\"coefficient_drift\":"<<info.coefficientDrift<<",\"residuals\":["<<info.residual.momentum<<','<<info.residual.continuity<<','<<info.residual.gauge<<','<<info.residual.k<<','<<info.residual.epsilon<<','<<info.residual.trace<<"],\"minimum_k\":"<<info.minimumK<<",\"minimum_epsilon\":"<<info.minimumEpsilon<<",\"minimum_covariance_over_k\":"<<info.minimumCovarianceOverK<<",\"minimum_principal_over_mu\":"<<info.minimumPrincipalOverMu<<",\"disjoint_seconds\":{\"constitutive\":"<<info.timing.constitutive<<",\"wall\":"<<info.timing.wall<<",\"assembly\":"<<info.timing.assembly<<",\"flow\":"<<info.timing.flow<<",\"scalar\":"<<info.timing.scalar<<",\"rebuild\":"<<info.timing.rebuild<<",\"guards\":"<<info.timing.guards<<",\"forcing\":"<<info.timing.forcing<<",\"residual\":"<<info.timing.residual<<",\"nonlinear\":"<<info.timing.nonlinear<<",\"io\":"<<info.timing.io<<",\"other\":"<<info.timing.other<<'}';
     out<<",\"quadratureX\":"<<m_options.quadratureX<<",\"quadratureR\":"<<m_options.quadratureR<<",\"linear_tolerance\":"<<m_options.linearTolerance<<",\"nonlinear_tolerance\":"<<m_options.nonlinearTolerance<<",\"maximum_iterations\":"<<m_options.maximumIterations<<",\"mms_body_amplitude\":"<<m_options.mmsBodyAmplitude<<",\"retry_reason\":"<<RANSWallSolveJson::Quote(info.retryReason);
     out<<",\"mms_variant\":"<<RANSWallSolveJson::Quote(m_options.mmsVariant);
+    out<<",\"implicit_solver\":"<<RANSWallSolveJson::Quote(m_options.advancement)
+        <<",\"coupled_newton\":{\"krylov_iterations\":"<<info.coupledKrylovIterations
+        <<",\"jacobian_actions\":"<<info.coupledJacobianActions
+        <<",\"residual_evaluations\":"<<info.coupledResidualEvaluations
+        <<",\"preconditioner_applications\":"<<info.coupledPreconditionerApplications
+        <<",\"rejected_trials\":"<<info.coupledRejectedTrials
+        <<",\"counts_complete\":"<<(info.coupledStatisticsComplete?"true":"false")
+        <<",\"step_seconds_cap\":"<<m_options.stepNewton.maximumSeconds
+        <<",\"uncommitted_guard\":\"positivity/root/covariance\",\"physical_acceptance_guard\":\"fresh full planar principal and complete current residual\"}";
+    out<<",\"nonlinear_trace_scope\":"<<RANSWallSolveJson::Quote(m_options.advancement=="CoupledJFNKV1"?
+        "Uncommitted Newton bases and Armijo candidates; FD excluded; records are not accepted updates; times are inclusive observations":
+        "Completed Picard iterations and guarded acceleration proposals; times are inclusive observations");
     out<<",\"steady_velocity_preconditioner\":"<<RANSWallSolveJson::Quote(m_options.steadyVelocityPC);
     out<<",\"stress_split\":"<<RANSWallSolveJson::Quote(m_options.stressSplit)<<",\"all_row_action_crosschecks\":"<<(m_options.checkCurrentActions?"true":"false");
     out<<",\"current_action_checks\":{\"all_row_calls\":"<<m_actionChecks<<",\"maximum_scaled_differences_flow_k_epsilon\":["<<m_actionDifference[0]<<','<<m_actionDifference[1]<<','<<m_actionDifference[2]<<"],\"augmented_calls\":"<<m_augmentedChecks<<",\"maximum_augmented_scaled_difference\":"<<m_augmentedDifference<<",\"maximum_weak_divergence_load_norm\":"<<m_checkedWeakDivergence<<",\"maximum_gauge_multiplier\":"<<m_checkedGaugeMultiplier<<'}';

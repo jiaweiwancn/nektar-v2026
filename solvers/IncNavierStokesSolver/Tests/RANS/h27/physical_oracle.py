@@ -909,7 +909,9 @@ class PhysicalOracle:
 
 
 def load_native(path):
-    data = json.loads(Path(path).read_text())
+    # Match native coefficient/checkpoint bytes when a double is emitted -0.
+    data = json.loads(Path(path).read_text(),
+                      parse_int=lambda token: -0.0 if token == '-0' else int(token))
     if 'state' in data:
         require(data.get('normal_main') is True and data.get('factory') == 'WJNativeCoupledV2',
                 'input is not a registered normal-main coupled run')

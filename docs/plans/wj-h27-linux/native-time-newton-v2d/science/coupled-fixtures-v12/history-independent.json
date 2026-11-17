@@ -1,0 +1,1947 @@
+{
+  "schema": "WJH27ImplicitHistoryFoundationCheckV1",
+  "status": "PASS_IMPLICIT_HISTORY_FOUNDATION_ONLY",
+  "foundation_gate_pass": true,
+  "full_coupled_gate_pass": false,
+  "H27_D_pass": false,
+  "physical_cold_restart_qualified": false,
+  "terminal_handling_qualified": false,
+  "production_monitoring_storage_qualified": false,
+  "scope": "Tiny PolynomialScalarsV1/body1 implicit-Newton history/retry/rotation FOUNDATION only.",
+  "script": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-implicit-validation-v2/h27/implicit_history_check.py",
+    "sha256": "4d8b43c7732844398015464b39b15a98a037d1650676168a82e54180a595f623",
+    "bytes": 25009
+  },
+  "history_reader": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-implicit-validation-v2/h27/history_recovery_check.py",
+    "sha256": "a6321e307bf3d3f6567f88dbc5e1a5c6a13d9f623be4f8034dd7e3a6cc5da059",
+    "bytes": 23455
+  },
+  "manifest": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/history-manifest.json",
+    "sha256": "f1ca59a6dde34674f659a9de899bf886107f7678f41dda1cfc2b7088eb597ea3",
+    "bytes": 2837
+  },
+  "table": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+    "bytes": 92259
+  },
+  "prospective": {
+    "dt": 0.02,
+    "final_step": 4,
+    "final_time": 0.08,
+    "coefficient_limit": 1e-08,
+    "native_residual_limit": 3e-12,
+    "retry_step": 2,
+    "recovery_writes": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "retained_recovery": [
+      3,
+      4
+    ]
+  },
+  "workers": 1,
+  "memory_cap_bytes": 8589934592,
+  "root": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12",
+  "source_identity": "1c0091bff8ead2247d11602203de3a742a49e1cad3ca8ef2b349312b8f2ca5d9",
+  "signature": "4ebb80b9cc2414df1c41f214f8918b0d470e04789b53d7e19a7ff8db7317dedd",
+  "scales": {
+    "U": 1.0,
+    "Pi": 0.002600999999999999,
+    "k": 0.008809015145515192,
+    "epsilon": 0.000694657216439776
+  },
+  "runs": {
+    "control": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-new.result.json",
+        "sha256": "b30ab1fb2ee7770690659a59b9e2111a9572709fd428bd1d2b95957174211505",
+        "bytes": 71060
+      },
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-new.steps.jsonl",
+        "sha256": "8532a505f1eb05fb30908193acbb3e27defca4ea4f26be042b993079452a66b6",
+        "bytes": 17670
+      },
+      "final_checkpoint": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-new.final.bin",
+        "sha256": "47683ac664f867c48895f815766b42fd6382b212d7e45c1beab7681b6ff905b0",
+        "bytes": 12018,
+        "payload_sha256": "303572b284a7b5f70c7c135fc36c7e67340a356b54a7bcb444bd28c529747ed3",
+        "signature": "4ebb80b9cc2414df1c41f214f8918b0d470e04789b53d7e19a7ff8db7317dedd",
+        "step": 4,
+        "time": 0.08,
+        "dt": 0.02,
+        "history_hashes": {
+          "current": "f58c1b0cb15efd368f8158a63141fbb225c8c42500a74ae792d223ae6cb66a19",
+          "previous": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9",
+          "advection": "c4c53ca2bcf1703ffb00296a44b885064e4f0543e2350cea6fb8f2a2955195b4",
+          "previous_advection": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0"
+        }
+      },
+      "history_labels": {
+        "current": {
+          "step": 4,
+          "time": 0.08
+        },
+        "previous": {
+          "step": 3,
+          "time": 0.06
+        },
+        "older": {
+          "step": 2,
+          "time": 0.04
+        },
+        "advection": {
+          "step": 4,
+          "time": 0.08
+        },
+        "previous_advection": {
+          "step": 3,
+          "time": 0.06
+        },
+        "older_advection": {
+          "step": 2,
+          "time": 0.04
+        },
+        "final_equation": "BDF2_EX2",
+        "final_EX_coefficients": [
+          2.0,
+          -1.0
+        ]
+      },
+      "exact_hashes": {
+        "current": "f58c1b0cb15efd368f8158a63141fbb225c8c42500a74ae792d223ae6cb66a19",
+        "previous": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9",
+        "advection": "c4c53ca2bcf1703ffb00296a44b885064e4f0543e2350cea6fb8f2a2955195b4",
+        "previous_advection": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0",
+        "older": "72f6114c0b4e1d285bc3550749fce86206425781158d3eab4235107c47a2621c",
+        "older_advection": "929231393fb562b578ae18cc1ea13944ca30bd21239dac7ff7e159209e05e7ed"
+      },
+      "accepted_steps": [
+        {
+          "native_reported_residuals": [
+            9.616520218339458e-16,
+            8.501726691275625e-18,
+            3.829639440967382e-19,
+            3.6438565657177686e-14,
+            1.0903163272142538e-14,
+            0
+          ],
+          "guards": {
+            "minimum_k": 0.00880823867971808,
+            "minimum_epsilon": 0.001977029097320029,
+            "minimum_covariance_over_k": 0.6264968692567634,
+            "minimum_principal_over_mu": 0.0491924579318186
+          },
+          "newton": {
+            "krylov_iterations": 5,
+            "jacobian_actions": 8,
+            "residual_evaluations": 22,
+            "preconditioner_applications": 5,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "retries": 0,
+          "rebuilds": 9,
+          "timing": {
+            "seconds": 0.3105730940005742,
+            "categories": {
+              "constitutive": 0.037792425078805536,
+              "wall": 0.10568216309184209,
+              "assembly": 0.045628208841662854,
+              "flow": 6.238301284611225e-05,
+              "scalar": 5.0862086936831474e-05,
+              "rebuild": 0.002071583003271371,
+              "guards": 0.03426079003838822,
+              "forcing": 0.05653174500912428,
+              "residual": 0.02802348625846207,
+              "nonlinear": 0.00045147654600441456,
+              "io": 0,
+              "other": 1.7971033230423927e-05
+            },
+            "sum": 0.3105730940005742,
+            "attributed_fraction": 0.9999421358978688,
+            "attribution_gate": "NOT_EVALUATED: tiny history fixture, not the warm-cost gate"
+          }
+        },
+        {
+          "native_reported_residuals": [
+            2.2322470488424965e-16,
+            5.102797668125204e-18,
+            6.124755448072328e-20,
+            8.556259966711685e-15,
+            1.0323383749727895e-14,
+            0
+          ],
+          "guards": {
+            "minimum_k": 0.008810765590977078,
+            "minimum_epsilon": 0.001977029097320029,
+            "minimum_covariance_over_k": 0.6264439048070082,
+            "minimum_principal_over_mu": 0.04918568862218866
+          },
+          "newton": {
+            "krylov_iterations": 5,
+            "jacobian_actions": 8,
+            "residual_evaluations": 22,
+            "preconditioner_applications": 5,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "retries": 0,
+          "rebuilds": 9,
+          "timing": {
+            "seconds": 0.309686733991839,
+            "categories": {
+              "constitutive": 0.03772597276838496,
+              "wall": 0.10567432170500979,
+              "assembly": 0.04499363322975114,
+              "flow": 6.223301170393825e-05,
+              "scalar": 4.800496390089393e-05,
+              "rebuild": 0.001991657947655767,
+              "guards": 0.034294581098947674,
+              "forcing": 0.056446569971740246,
+              "residual": 0.02793577074771747,
+              "nonlinear": 0.0004976284690201283,
+              "io": 0,
+              "other": 1.6360078006982803e-05
+            },
+            "sum": 0.309686733991839,
+            "attributed_fraction": 0.9999471721704185,
+            "attribution_gate": "NOT_EVALUATED: tiny history fixture, not the warm-cost gate"
+          }
+        },
+        {
+          "native_reported_residuals": [
+            2.2123805246280141e-16,
+            4.834053506328119e-18,
+            5.347851907126038e-19,
+            8.386682684989684e-15,
+            1.1591412967849097e-14,
+            0
+          ],
+          "guards": {
+            "minimum_k": 0.008813292134989152,
+            "minimum_epsilon": 0.001977029097320029,
+            "minimum_covariance_over_k": 0.6263913887069502,
+            "minimum_principal_over_mu": 0.049179009927364375
+          },
+          "newton": {
+            "krylov_iterations": 5,
+            "jacobian_actions": 8,
+            "residual_evaluations": 22,
+            "preconditioner_applications": 5,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "retries": 0,
+          "rebuilds": 9,
+          "timing": {
+            "seconds": 0.3129976440104656,
+            "categories": {
+              "constitutive": 0.03776900132652372,
+              "wall": 0.10596405412070453,
+              "assembly": 0.04736195894656703,
+              "flow": 7.369404193013906e-05,
+              "scalar": 5.4221018217504025e-05,
+              "rebuild": 0.002241401991341263,
+              "guards": 0.034468512632884085,
+              "forcing": 0.05644963000668213,
+              "residual": 0.0280032271402888,
+              "nonlinear": 0.0005932509084232152,
+              "io": 0,
+              "other": 1.8691876903176308e-05
+            },
+            "sum": 0.3129976440104656,
+            "attributed_fraction": 0.9999402810939287,
+            "attribution_gate": "NOT_EVALUATED: tiny history fixture, not the warm-cost gate"
+          }
+        },
+        {
+          "native_reported_residuals": [
+            2.201330048651988e-16,
+            7.033545168819782e-18,
+            2.230595919325809e-19,
+            8.013120061078493e-15,
+            7.642653881554606e-15,
+            0
+          ],
+          "guards": {
+            "minimum_k": 0.008815817948028857,
+            "minimum_epsilon": 0.001977029097320029,
+            "minimum_covariance_over_k": 0.6263392977322375,
+            "minimum_principal_over_mu": 0.04917242996357564
+          },
+          "newton": {
+            "krylov_iterations": 5,
+            "jacobian_actions": 8,
+            "residual_evaluations": 22,
+            "preconditioner_applications": 5,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "retries": 0,
+          "rebuilds": 9,
+          "timing": {
+            "seconds": 0.3112408979795873,
+            "categories": {
+              "constitutive": 0.03773922211257741,
+              "wall": 0.10722830583108589,
+              "assembly": 0.044935135170817375,
+              "flow": 6.307393778115511e-05,
+              "scalar": 5.735392915084958e-05,
+              "rebuild": 0.0021339760278351605,
+              "guards": 0.03415193076943979,
+              "forcing": 0.05641995900077745,
+              "residual": 0.028118527901824564,
+              "nonlinear": 0.0003769422764889896,
+              "io": 0,
+              "other": 1.6471021808683872e-05
+            },
+            "sum": 0.3112408979795873,
+            "attributed_fraction": 0.9999470795068527,
+            "attribution_gate": "NOT_EVALUATED: tiny history fixture, not the warm-cost gate"
+          }
+        }
+      ]
+    },
+    "prefix": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-prefix.result.json",
+        "sha256": "4ac9ef69a8d85da2cc016c7774475c79d416207bb670cb55820df7dd1a843be8",
+        "bytes": 70055
+      },
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-prefix.steps.jsonl",
+        "sha256": "1164b9152fb159290d62429a0d2e7444b1efee979106e996d04c54fb7b1deb56",
+        "bytes": 4404
+      },
+      "final_checkpoint": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-prefix.final.bin",
+        "sha256": "89eef6a924fbcbe4ea7654635e8411ce546c2849c5cbd5170650ce824fbcf620",
+        "bytes": 12018,
+        "payload_sha256": "3a9f0bdb601a7a2e0cc3a24b1e1380617135bb6583cee761bb95e444b322b410",
+        "signature": "4ebb80b9cc2414df1c41f214f8918b0d470e04789b53d7e19a7ff8db7317dedd",
+        "step": 1,
+        "time": 0.02,
+        "dt": 0.02,
+        "history_hashes": {
+          "current": "d95038133c523d184610a1d793b3e8b7637320477953a11fcd7e2edc827c2d10",
+          "previous": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+          "advection": "8df3428de45baabcdd394b7980a027498462be22d48e68a2c6cb735a7861c54d",
+          "previous_advection": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b"
+        }
+      },
+      "history_labels": {
+        "current": {
+          "step": 1,
+          "time": 0.02
+        },
+        "previous": {
+          "step": 0,
+          "time": 0.0
+        },
+        "older": {
+          "step": 0,
+          "time": 0.0
+        },
+        "advection": {
+          "step": 1,
+          "time": 0.02
+        },
+        "previous_advection": {
+          "step": 0,
+          "time": 0.0
+        },
+        "older_advection": {
+          "step": 0,
+          "time": 0.0
+        },
+        "final_equation": "BE_STARTUP",
+        "final_EX_coefficients": [
+          1.0,
+          0.0
+        ]
+      },
+      "exact_hashes": {
+        "current": "d95038133c523d184610a1d793b3e8b7637320477953a11fcd7e2edc827c2d10",
+        "previous": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+        "advection": "8df3428de45baabcdd394b7980a027498462be22d48e68a2c6cb735a7861c54d",
+        "previous_advection": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b",
+        "older": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+        "older_advection": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b"
+      },
+      "accepted_steps": [
+        {
+          "native_reported_residuals": [
+            9.616520218339458e-16,
+            8.501726691275625e-18,
+            3.829639440967382e-19,
+            3.6438565657177686e-14,
+            1.0903163272142538e-14,
+            0
+          ],
+          "guards": {
+            "minimum_k": 0.00880823867971808,
+            "minimum_epsilon": 0.001977029097320029,
+            "minimum_covariance_over_k": 0.6264968692567634,
+            "minimum_principal_over_mu": 0.0491924579318186
+          },
+          "newton": {
+            "krylov_iterations": 5,
+            "jacobian_actions": 8,
+            "residual_evaluations": 22,
+            "preconditioner_applications": 5,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "retries": 0,
+          "rebuilds": 9,
+          "timing": {
+            "seconds": 0.3100898750126362,
+            "categories": {
+              "constitutive": 0.03792984742904082,
+              "wall": 0.10551137803122401,
+              "assembly": 0.04524971084902063,
+              "flow": 6.289401790127158e-05,
+              "scalar": 4.9142923671752214e-05,
+              "rebuild": 0.0020999429980292916,
+              "guards": 0.03429882135242224,
+              "forcing": 0.0564625000115484,
+              "residual": 0.0279843081953004,
+              "nonlinear": 0.00042291812133044004,
+              "io": 0,
+              "other": 1.841108314692974e-05
+            },
+            "sum": 0.3100898750126362,
+            "attributed_fraction": 0.9999406266226971,
+            "attribution_gate": "NOT_EVALUATED: tiny history fixture, not the warm-cost gate"
+          }
+        }
+      ]
+    },
+    "cold": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-cold.result.json",
+        "sha256": "a4f42eb233f056d4dde49401ce10157e448e1bdaca457a3258cd5df7026b479c",
+        "bytes": 71020
+      },
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-cold.steps.jsonl",
+        "sha256": "5b7a8f9f8a59440380e8a27b2c20bd53d2cc67a786590cc84121fc47695619f4",
+        "bytes": 13266
+      },
+      "final_checkpoint": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-cold.final.bin",
+        "sha256": "47683ac664f867c48895f815766b42fd6382b212d7e45c1beab7681b6ff905b0",
+        "bytes": 12018,
+        "payload_sha256": "303572b284a7b5f70c7c135fc36c7e67340a356b54a7bcb444bd28c529747ed3",
+        "signature": "4ebb80b9cc2414df1c41f214f8918b0d470e04789b53d7e19a7ff8db7317dedd",
+        "step": 4,
+        "time": 0.08,
+        "dt": 0.02,
+        "history_hashes": {
+          "current": "f58c1b0cb15efd368f8158a63141fbb225c8c42500a74ae792d223ae6cb66a19",
+          "previous": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9",
+          "advection": "c4c53ca2bcf1703ffb00296a44b885064e4f0543e2350cea6fb8f2a2955195b4",
+          "previous_advection": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0"
+        }
+      },
+      "history_labels": {
+        "current": {
+          "step": 4,
+          "time": 0.08
+        },
+        "previous": {
+          "step": 3,
+          "time": 0.06
+        },
+        "older": {
+          "step": 2,
+          "time": 0.04
+        },
+        "advection": {
+          "step": 4,
+          "time": 0.08
+        },
+        "previous_advection": {
+          "step": 3,
+          "time": 0.06
+        },
+        "older_advection": {
+          "step": 2,
+          "time": 0.04
+        },
+        "final_equation": "BDF2_EX2",
+        "final_EX_coefficients": [
+          2.0,
+          -1.0
+        ]
+      },
+      "exact_hashes": {
+        "current": "f58c1b0cb15efd368f8158a63141fbb225c8c42500a74ae792d223ae6cb66a19",
+        "previous": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9",
+        "advection": "c4c53ca2bcf1703ffb00296a44b885064e4f0543e2350cea6fb8f2a2955195b4",
+        "previous_advection": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0",
+        "older": "72f6114c0b4e1d285bc3550749fce86206425781158d3eab4235107c47a2621c",
+        "older_advection": "929231393fb562b578ae18cc1ea13944ca30bd21239dac7ff7e159209e05e7ed"
+      },
+      "accepted_steps": [
+        {
+          "native_reported_residuals": [
+            2.2322470488424965e-16,
+            5.102797668125204e-18,
+            6.124755448072328e-20,
+            8.556259966711685e-15,
+            1.0323383749727895e-14,
+            0
+          ],
+          "guards": {
+            "minimum_k": 0.008810765590977078,
+            "minimum_epsilon": 0.001977029097320029,
+            "minimum_covariance_over_k": 0.6264439048070082,
+            "minimum_principal_over_mu": 0.04918568862218866
+          },
+          "newton": {
+            "krylov_iterations": 5,
+            "jacobian_actions": 8,
+            "residual_evaluations": 22,
+            "preconditioner_applications": 5,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "retries": 0,
+          "rebuilds": 9,
+          "timing": {
+            "seconds": 0.31243384903064,
+            "categories": {
+              "constitutive": 0.03774541523307562,
+              "wall": 0.10596154205268249,
+              "assembly": 0.04573331982828677,
+              "flow": 6.256293272599578e-05,
+              "scalar": 4.9682974349707365e-05,
+              "rebuild": 0.002090451947879046,
+              "guards": 0.0343102456536144,
+              "forcing": 0.05806438496802002,
+              "residual": 0.027995553915388882,
+              "nonlinear": 0.00039681955240666866,
+              "io": 0,
+              "other": 2.3869972210377455e-05
+            },
+            "sum": 0.31243384903064,
+            "attributed_fraction": 0.9999235999163201,
+            "attribution_gate": "NOT_EVALUATED: tiny history fixture, not the warm-cost gate"
+          }
+        },
+        {
+          "native_reported_residuals": [
+            2.2123805246280141e-16,
+            4.834053506328119e-18,
+            5.347851907126038e-19,
+            8.386682684989684e-15,
+            1.1591412967849097e-14,
+            0
+          ],
+          "guards": {
+            "minimum_k": 0.008813292134989152,
+            "minimum_epsilon": 0.001977029097320029,
+            "minimum_covariance_over_k": 0.6263913887069502,
+            "minimum_principal_over_mu": 0.049179009927364375
+          },
+          "newton": {
+            "krylov_iterations": 5,
+            "jacobian_actions": 8,
+            "residual_evaluations": 22,
+            "preconditioner_applications": 5,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "retries": 0,
+          "rebuilds": 9,
+          "timing": {
+            "seconds": 0.3120443689986132,
+            "categories": {
+              "constitutive": 0.03769348334753886,
+              "wall": 0.10614031937438995,
+              "assembly": 0.045190510572865605,
+              "flow": 6.267405115067959e-05,
+              "scalar": 4.80152084492147e-05,
+              "rebuild": 0.0019839450251311064,
+              "guards": 0.0343517807777971,
+              "forcing": 0.05806981504429132,
+              "residual": 0.02800721616949886,
+              "nonlinear": 0.00047974754124879837,
+              "io": 0,
+              "other": 1.6861886251717806e-05
+            },
+            "sum": 0.3120443689986132,
+            "attributed_fraction": 0.9999459631772692,
+            "attribution_gate": "NOT_EVALUATED: tiny history fixture, not the warm-cost gate"
+          }
+        },
+        {
+          "native_reported_residuals": [
+            2.201330048651988e-16,
+            7.033545168819782e-18,
+            2.230595919325809e-19,
+            8.013120061078493e-15,
+            7.642653881554606e-15,
+            0
+          ],
+          "guards": {
+            "minimum_k": 0.008815817948028857,
+            "minimum_epsilon": 0.001977029097320029,
+            "minimum_covariance_over_k": 0.6263392977322375,
+            "minimum_principal_over_mu": 0.04917242996357564
+          },
+          "newton": {
+            "krylov_iterations": 5,
+            "jacobian_actions": 8,
+            "residual_evaluations": 22,
+            "preconditioner_applications": 5,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "retries": 0,
+          "rebuilds": 9,
+          "timing": {
+            "seconds": 0.31408715702127665,
+            "categories": {
+              "constitutive": 0.03752638684818521,
+              "wall": 0.10805928491754457,
+              "assembly": 0.045212458935566247,
+              "flow": 6.769201718270779e-05,
+              "scalar": 4.823401104658842e-05,
+              "rebuild": 0.002107252017594874,
+              "guards": 0.03421340027125552,
+              "forcing": 0.05808664596406743,
+              "residual": 0.02814641414443031,
+              "nonlinear": 0.0005994169041514397,
+              "io": 0,
+              "other": 1.9970990251749754e-05
+            },
+            "sum": 0.31408715702127665,
+            "attributed_fraction": 0.9999364157693006,
+            "attribution_gate": "NOT_EVALUATED: tiny history fixture, not the warm-cost gate"
+          }
+        }
+      ]
+    },
+    "retry": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-retry.result.json",
+        "sha256": "eac9cf90ef5ec5841a6bf7859e2a3d37d719d9c7620dbadefd386a77fdae04ab",
+        "bytes": 71065
+      },
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-retry.steps.jsonl",
+        "sha256": "4ff6828be8f752a44ea54cc8c940504f3562eeb0cf52c9577ff08e074cc383a5",
+        "bytes": 17902
+      },
+      "final_checkpoint": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-retry.final.bin",
+        "sha256": "47683ac664f867c48895f815766b42fd6382b212d7e45c1beab7681b6ff905b0",
+        "bytes": 12018,
+        "payload_sha256": "303572b284a7b5f70c7c135fc36c7e67340a356b54a7bcb444bd28c529747ed3",
+        "signature": "4ebb80b9cc2414df1c41f214f8918b0d470e04789b53d7e19a7ff8db7317dedd",
+        "step": 4,
+        "time": 0.08,
+        "dt": 0.02,
+        "history_hashes": {
+          "current": "f58c1b0cb15efd368f8158a63141fbb225c8c42500a74ae792d223ae6cb66a19",
+          "previous": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9",
+          "advection": "c4c53ca2bcf1703ffb00296a44b885064e4f0543e2350cea6fb8f2a2955195b4",
+          "previous_advection": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0"
+        }
+      },
+      "history_labels": {
+        "current": {
+          "step": 4,
+          "time": 0.08
+        },
+        "previous": {
+          "step": 3,
+          "time": 0.06
+        },
+        "older": {
+          "step": 2,
+          "time": 0.04
+        },
+        "advection": {
+          "step": 4,
+          "time": 0.08
+        },
+        "previous_advection": {
+          "step": 3,
+          "time": 0.06
+        },
+        "older_advection": {
+          "step": 2,
+          "time": 0.04
+        },
+        "final_equation": "BDF2_EX2",
+        "final_EX_coefficients": [
+          2.0,
+          -1.0
+        ]
+      },
+      "exact_hashes": {
+        "current": "f58c1b0cb15efd368f8158a63141fbb225c8c42500a74ae792d223ae6cb66a19",
+        "previous": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9",
+        "advection": "c4c53ca2bcf1703ffb00296a44b885064e4f0543e2350cea6fb8f2a2955195b4",
+        "previous_advection": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0",
+        "older": "72f6114c0b4e1d285bc3550749fce86206425781158d3eab4235107c47a2621c",
+        "older_advection": "929231393fb562b578ae18cc1ea13944ca30bd21239dac7ff7e159209e05e7ed"
+      },
+      "accepted_steps": [
+        {
+          "native_reported_residuals": [
+            9.616520218339458e-16,
+            8.501726691275625e-18,
+            3.829639440967382e-19,
+            3.6438565657177686e-14,
+            1.0903163272142538e-14,
+            0
+          ],
+          "guards": {
+            "minimum_k": 0.00880823867971808,
+            "minimum_epsilon": 0.001977029097320029,
+            "minimum_covariance_over_k": 0.6264968692567634,
+            "minimum_principal_over_mu": 0.0491924579318186
+          },
+          "newton": {
+            "krylov_iterations": 5,
+            "jacobian_actions": 8,
+            "residual_evaluations": 22,
+            "preconditioner_applications": 5,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "retries": 0,
+          "rebuilds": 9,
+          "timing": {
+            "seconds": 0.31034601700957865,
+            "categories": {
+              "constitutive": 0.03758387843845412,
+              "wall": 0.10599710384849459,
+              "assembly": 0.04542523279087618,
+              "flow": 7.883500074967742e-05,
+              "scalar": 4.857900785282254e-05,
+              "rebuild": 0.0020701710018329322,
+              "guards": 0.03417669190093875,
+              "forcing": 0.056437218037899584,
+              "residual": 0.028111966385040432,
+              "nonlinear": 0.00039891968481242657,
+              "io": 0,
+              "other": 1.7420912627130747e-05
+            },
+            "sum": 0.31034601700957865,
+            "attributed_fraction": 0.9999438661633393,
+            "attribution_gate": "NOT_EVALUATED: tiny history fixture, not the warm-cost gate"
+          }
+        },
+        {
+          "native_reported_residuals": [
+            2.2322470488424965e-16,
+            5.102797668125204e-18,
+            6.124755448072328e-20,
+            8.556259966711685e-15,
+            1.0323383749727895e-14,
+            0
+          ],
+          "guards": {
+            "minimum_k": 0.008810765590977078,
+            "minimum_epsilon": 0.001977029097320029,
+            "minimum_covariance_over_k": 0.6264439048070082,
+            "minimum_principal_over_mu": 0.04918568862218866
+          },
+          "newton": {
+            "krylov_iterations": 5,
+            "jacobian_actions": 8,
+            "residual_evaluations": 23,
+            "preconditioner_applications": 5,
+            "rejected_trials": 0,
+            "counts_complete": false,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "retries": 1,
+          "rebuilds": 12,
+          "timing": {
+            "seconds": 0.3288092839648016,
+            "categories": {
+              "constitutive": 0.04390283237444237,
+              "wall": 0.1134321428835392,
+              "assembly": 0.04804126895032823,
+              "flow": 6.271398160606623e-05,
+              "scalar": 4.8061192501336336e-05,
+              "rebuild": 0.0025910589611157775,
+              "guards": 0.03456955461297184,
+              "forcing": 0.05646813998464495,
+              "residual": 0.02909513801569119,
+              "nonlinear": 0.0005604008329100907,
+              "io": 0,
+              "other": 3.797217505052686e-05
+            },
+            "sum": 0.3288092839648016,
+            "attributed_fraction": 0.9998845161103949,
+            "attribution_gate": "NOT_EVALUATED: tiny history fixture, not the warm-cost gate"
+          }
+        },
+        {
+          "native_reported_residuals": [
+            2.2123805246280141e-16,
+            4.834053506328119e-18,
+            5.347851907126038e-19,
+            8.386682684989684e-15,
+            1.1591412967849097e-14,
+            0
+          ],
+          "guards": {
+            "minimum_k": 0.008813292134989152,
+            "minimum_epsilon": 0.001977029097320029,
+            "minimum_covariance_over_k": 0.6263913887069502,
+            "minimum_principal_over_mu": 0.049179009927364375
+          },
+          "newton": {
+            "krylov_iterations": 5,
+            "jacobian_actions": 8,
+            "residual_evaluations": 22,
+            "preconditioner_applications": 5,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "retries": 0,
+          "rebuilds": 9,
+          "timing": {
+            "seconds": 0.3129043730441481,
+            "categories": {
+              "constitutive": 0.03762499417643994,
+              "wall": 0.10608327569207177,
+              "assembly": 0.04721871670335531,
+              "flow": 6.788299651816487e-05,
+              "scalar": 4.836387233808637e-05,
+              "rebuild": 0.0021515749976970255,
+              "guards": 0.034322820138186216,
+              "forcing": 0.05654723400948569,
+              "residual": 0.02824553387472406,
+              "nonlinear": 0.0005729565746150911,
+              "io": 0,
+              "other": 2.1020008716732264e-05
+            },
+            "sum": 0.3129043730441481,
+            "attributed_fraction": 0.9999328228988549,
+            "attribution_gate": "NOT_EVALUATED: tiny history fixture, not the warm-cost gate"
+          }
+        },
+        {
+          "native_reported_residuals": [
+            2.201330048651988e-16,
+            7.033545168819782e-18,
+            2.230595919325809e-19,
+            8.013120061078493e-15,
+            7.642653881554606e-15,
+            0
+          ],
+          "guards": {
+            "minimum_k": 0.008815817948028857,
+            "minimum_epsilon": 0.001977029097320029,
+            "minimum_covariance_over_k": 0.6263392977322375,
+            "minimum_principal_over_mu": 0.04917242996357564
+          },
+          "newton": {
+            "krylov_iterations": 5,
+            "jacobian_actions": 8,
+            "residual_evaluations": 22,
+            "preconditioner_applications": 5,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "retries": 0,
+          "rebuilds": 9,
+          "timing": {
+            "seconds": 0.3109202670166269,
+            "categories": {
+              "constitutive": 0.037568789965007454,
+              "wall": 0.10749721509637311,
+              "assembly": 0.04480703850276768,
+              "flow": 6.291194586083293e-05,
+              "scalar": 4.725216422230005e-05,
+              "rebuild": 0.0019615049241110682,
+              "guards": 0.034200926311314106,
+              "forcing": 0.05641321698203683,
+              "residual": 0.02790228696539998,
+              "nonlinear": 0.0004429440596140921,
+              "io": 0,
+              "other": 1.6180099919438362e-05
+            },
+            "sum": 0.3109202670166269,
+            "attributed_fraction": 0.9999479606135853,
+            "attribution_gate": "NOT_EVALUATED: tiny history fixture, not the warm-cost gate"
+          }
+        }
+      ]
+    },
+    "recovery3": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-recovery3.result.json",
+        "sha256": "46248439e7546f99bb8ceb1640b6207b205eebafe7fba971d1f20cee276895c1",
+        "bytes": 70846
+      },
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-recovery3.steps.jsonl",
+        "sha256": "e3ae8cf7b2f4dceb431bda8f37e0fa1978b9d1070f9f7acc0ce3b47a77c8362e",
+        "bytes": 4420
+      },
+      "final_checkpoint": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-recovery3.final.bin",
+        "sha256": "47683ac664f867c48895f815766b42fd6382b212d7e45c1beab7681b6ff905b0",
+        "bytes": 12018,
+        "payload_sha256": "303572b284a7b5f70c7c135fc36c7e67340a356b54a7bcb444bd28c529747ed3",
+        "signature": "4ebb80b9cc2414df1c41f214f8918b0d470e04789b53d7e19a7ff8db7317dedd",
+        "step": 4,
+        "time": 0.08,
+        "dt": 0.02,
+        "history_hashes": {
+          "current": "f58c1b0cb15efd368f8158a63141fbb225c8c42500a74ae792d223ae6cb66a19",
+          "previous": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9",
+          "advection": "c4c53ca2bcf1703ffb00296a44b885064e4f0543e2350cea6fb8f2a2955195b4",
+          "previous_advection": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0"
+        }
+      },
+      "history_labels": {
+        "current": {
+          "step": 4,
+          "time": 0.08
+        },
+        "previous": {
+          "step": 3,
+          "time": 0.06
+        },
+        "older": {
+          "step": 2,
+          "time": 0.04
+        },
+        "advection": {
+          "step": 4,
+          "time": 0.08
+        },
+        "previous_advection": {
+          "step": 3,
+          "time": 0.06
+        },
+        "older_advection": {
+          "step": 2,
+          "time": 0.04
+        },
+        "final_equation": "BDF2_EX2",
+        "final_EX_coefficients": [
+          2.0,
+          -1.0
+        ]
+      },
+      "exact_hashes": {
+        "current": "f58c1b0cb15efd368f8158a63141fbb225c8c42500a74ae792d223ae6cb66a19",
+        "previous": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9",
+        "advection": "c4c53ca2bcf1703ffb00296a44b885064e4f0543e2350cea6fb8f2a2955195b4",
+        "previous_advection": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0",
+        "older": "72f6114c0b4e1d285bc3550749fce86206425781158d3eab4235107c47a2621c",
+        "older_advection": "929231393fb562b578ae18cc1ea13944ca30bd21239dac7ff7e159209e05e7ed"
+      },
+      "accepted_steps": [
+        {
+          "native_reported_residuals": [
+            2.201330048651988e-16,
+            7.033545168819782e-18,
+            2.230595919325809e-19,
+            8.013120061078493e-15,
+            7.642653881554606e-15,
+            0
+          ],
+          "guards": {
+            "minimum_k": 0.008815817948028857,
+            "minimum_epsilon": 0.001977029097320029,
+            "minimum_covariance_over_k": 0.6263392977322375,
+            "minimum_principal_over_mu": 0.04917242996357564
+          },
+          "newton": {
+            "krylov_iterations": 5,
+            "jacobian_actions": 8,
+            "residual_evaluations": 22,
+            "preconditioner_applications": 5,
+            "rejected_trials": 0,
+            "counts_complete": true,
+            "step_seconds_cap": 5,
+            "uncommitted_guard": "positivity/root/covariance",
+            "physical_acceptance_guard": "fresh full planar principal and complete current residual"
+          },
+          "retries": 0,
+          "rebuilds": 9,
+          "timing": {
+            "seconds": 0.31050305400276557,
+            "categories": {
+              "constitutive": 0.03751267021289095,
+              "wall": 0.10581642913166434,
+              "assembly": 0.04559928848175332,
+              "flow": 6.362394196912646e-05,
+              "scalar": 4.964496474713087e-05,
+              "rebuild": 0.002082362014334649,
+              "guards": 0.034271252108737826,
+              "forcing": 0.05649583099875599,
+              "residual": 0.028086578007787466,
+              "nonlinear": 0.0005028921295888722,
+              "io": 0,
+              "other": 2.2482010535895824e-05
+            },
+            "sum": 0.31050305400276557,
+            "attributed_fraction": 0.9999275948811257,
+            "attribution_gate": "NOT_EVALUATED: tiny history fixture, not the warm-cost gate"
+          }
+        }
+      ]
+    }
+  },
+  "input_checkpoints": {
+    "cold": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-prefix.final.bin",
+      "sha256": "89eef6a924fbcbe4ea7654635e8411ce546c2849c5cbd5170650ce824fbcf620",
+      "bytes": 12018,
+      "payload_sha256": "3a9f0bdb601a7a2e0cc3a24b1e1380617135bb6583cee761bb95e444b322b410",
+      "signature": "4ebb80b9cc2414df1c41f214f8918b0d470e04789b53d7e19a7ff8db7317dedd",
+      "step": 1,
+      "time": 0.02,
+      "dt": 0.02,
+      "history_hashes": {
+        "current": "d95038133c523d184610a1d793b3e8b7637320477953a11fcd7e2edc827c2d10",
+        "previous": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+        "advection": "8df3428de45baabcdd394b7980a027498462be22d48e68a2c6cb735a7861c54d",
+        "previous_advection": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b"
+      }
+    },
+    "recovery3": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-new.recovery-3.bin",
+      "sha256": "3e4be915a727f707c3eaddacb7d5de5c40bcc08ae98bbb893e957acfc8843633",
+      "bytes": 12018,
+      "payload_sha256": "abefaaf5b2920c4e4657f8235be34db6b832e3a09552bb77c522e16cefd6334e",
+      "signature": "4ebb80b9cc2414df1c41f214f8918b0d470e04789b53d7e19a7ff8db7317dedd",
+      "step": 3,
+      "time": 0.06,
+      "dt": 0.02,
+      "history_hashes": {
+        "current": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9",
+        "previous": "72f6114c0b4e1d285bc3550749fce86206425781158d3eab4235107c47a2621c",
+        "advection": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0",
+        "previous_advection": "929231393fb562b578ae18cc1ea13944ca30bd21239dac7ff7e159209e05e7ed"
+      }
+    }
+  },
+  "comparisons": {
+    "cold": {
+      "current": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "f58c1b0cb15efd368f8158a63141fbb225c8c42500a74ae792d223ae6cb66a19",
+        "second_sha256": "f58c1b0cb15efd368f8158a63141fbb225c8c42500a74ae792d223ae6cb66a19"
+      },
+      "previous": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9",
+        "second_sha256": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9"
+      },
+      "advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "c4c53ca2bcf1703ffb00296a44b885064e4f0543e2350cea6fb8f2a2955195b4",
+        "second_sha256": "c4c53ca2bcf1703ffb00296a44b885064e4f0543e2350cea6fb8f2a2955195b4"
+      },
+      "previous_advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0",
+        "second_sha256": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0"
+      },
+      "older": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "72f6114c0b4e1d285bc3550749fce86206425781158d3eab4235107c47a2621c",
+        "second_sha256": "72f6114c0b4e1d285bc3550749fce86206425781158d3eab4235107c47a2621c"
+      },
+      "older_advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "929231393fb562b578ae18cc1ea13944ca30bd21239dac7ff7e159209e05e7ed",
+        "second_sha256": "929231393fb562b578ae18cc1ea13944ca30bd21239dac7ff7e159209e05e7ed"
+      },
+      "essential_lifts": {
+        "essential_flow_lift": 0.0,
+        "essential_k_lift": 0.0,
+        "essential_epsilon_lift": 0.0
+      }
+    },
+    "retry": {
+      "current": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "f58c1b0cb15efd368f8158a63141fbb225c8c42500a74ae792d223ae6cb66a19",
+        "second_sha256": "f58c1b0cb15efd368f8158a63141fbb225c8c42500a74ae792d223ae6cb66a19"
+      },
+      "previous": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9",
+        "second_sha256": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9"
+      },
+      "advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "c4c53ca2bcf1703ffb00296a44b885064e4f0543e2350cea6fb8f2a2955195b4",
+        "second_sha256": "c4c53ca2bcf1703ffb00296a44b885064e4f0543e2350cea6fb8f2a2955195b4"
+      },
+      "previous_advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0",
+        "second_sha256": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0"
+      },
+      "older": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "72f6114c0b4e1d285bc3550749fce86206425781158d3eab4235107c47a2621c",
+        "second_sha256": "72f6114c0b4e1d285bc3550749fce86206425781158d3eab4235107c47a2621c"
+      },
+      "older_advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "929231393fb562b578ae18cc1ea13944ca30bd21239dac7ff7e159209e05e7ed",
+        "second_sha256": "929231393fb562b578ae18cc1ea13944ca30bd21239dac7ff7e159209e05e7ed"
+      },
+      "essential_lifts": {
+        "essential_flow_lift": 0.0,
+        "essential_k_lift": 0.0,
+        "essential_epsilon_lift": 0.0
+      }
+    },
+    "recovery3": {
+      "current": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "f58c1b0cb15efd368f8158a63141fbb225c8c42500a74ae792d223ae6cb66a19",
+        "second_sha256": "f58c1b0cb15efd368f8158a63141fbb225c8c42500a74ae792d223ae6cb66a19"
+      },
+      "previous": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9",
+        "second_sha256": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9"
+      },
+      "advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "c4c53ca2bcf1703ffb00296a44b885064e4f0543e2350cea6fb8f2a2955195b4",
+        "second_sha256": "c4c53ca2bcf1703ffb00296a44b885064e4f0543e2350cea6fb8f2a2955195b4"
+      },
+      "previous_advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0",
+        "second_sha256": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0"
+      },
+      "older": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "72f6114c0b4e1d285bc3550749fce86206425781158d3eab4235107c47a2621c",
+        "second_sha256": "72f6114c0b4e1d285bc3550749fce86206425781158d3eab4235107c47a2621c"
+      },
+      "older_advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "929231393fb562b578ae18cc1ea13944ca30bd21239dac7ff7e159209e05e7ed",
+        "second_sha256": "929231393fb562b578ae18cc1ea13944ca30bd21239dac7ff7e159209e05e7ed"
+      },
+      "essential_lifts": {
+        "essential_flow_lift": 0.0,
+        "essential_k_lift": 0.0,
+        "essential_epsilon_lift": 0.0
+      }
+    },
+    "prefix_at_step1": {
+      "current": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "d95038133c523d184610a1d793b3e8b7637320477953a11fcd7e2edc827c2d10",
+        "second_sha256": "d95038133c523d184610a1d793b3e8b7637320477953a11fcd7e2edc827c2d10"
+      },
+      "previous": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+        "second_sha256": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1"
+      },
+      "advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "8df3428de45baabcdd394b7980a027498462be22d48e68a2c6cb735a7861c54d",
+        "second_sha256": "8df3428de45baabcdd394b7980a027498462be22d48e68a2c6cb735a7861c54d"
+      },
+      "previous_advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b",
+        "second_sha256": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b"
+      },
+      "older": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+        "second_sha256": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1"
+      },
+      "older_advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b",
+        "second_sha256": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b"
+      }
+    }
+  },
+  "negatives": [
+    {
+      "name": "fail-iteration",
+      "category": "iteration_bound",
+      "exit": 1,
+      "marker": "NEWTON_NOT_CONVERGED",
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/coupled-fail-iteration-native-v12/command.log",
+        "sha256": "cc43ecd5e5904819f126d4a575bc70bf2435caaa15675683280f4900b94976c4",
+        "bytes": 670
+      },
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-iteration.xml",
+        "sha256": "02dabbe09cdf97f3716c72a7ce1cef4fe13b449a88b8ccb11c8f5dcc5c28622b",
+        "bytes": 5981
+      },
+      "failure": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-iteration.failure.json",
+        "sha256": "cbc25518d9ad877c736e3e5ffadf01c9d10cf26d37521be713b55ebb559166fe",
+        "bytes": 67695
+      },
+      "checkpoint": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-iteration.failed-accepted.bin",
+        "sha256": "4cfc929bff61f4778fc96295d9820a4f356d61d8f280e342174243cda483d3fc",
+        "bytes": 12018,
+        "payload_sha256": "1d28708d2a6b3c6db320fe41dd1d96712e895ddc248ab76dd57eca3e2cffa5e5",
+        "signature": "faa281fd10a36da4733c4e6e0c54dd1e72143a14c3bfbcd55e4775fc31660cc0",
+        "step": 0,
+        "time": 0.0,
+        "dt": 0.02,
+        "history_hashes": {
+          "current": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+          "previous": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+          "advection": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b",
+          "previous_advection": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b"
+        }
+      },
+      "source_identity": "1c0091bff8ead2247d11602203de3a742a49e1cad3ca8ef2b349312b8f2ca5d9",
+      "altered_signature": "faa281fd10a36da4733c4e6e0c54dd1e72143a14c3bfbcd55e4775fc31660cc0",
+      "accepted_seed_comparisons": {
+        "current": {
+          "coefficient_MAX_reference_scaled": {
+            "U": 0.0,
+            "Pi": 0.0,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "exact_hash_equal": true,
+          "first_sha256": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+          "second_sha256": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1"
+        },
+        "previous": {
+          "coefficient_MAX_reference_scaled": {
+            "U": 0.0,
+            "Pi": 0.0,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "exact_hash_equal": true,
+          "first_sha256": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+          "second_sha256": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1"
+        },
+        "advection": {
+          "coefficient_MAX_reference_scaled": {
+            "U": 0.0,
+            "Pi": 0.0,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "exact_hash_equal": true,
+          "first_sha256": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b",
+          "second_sha256": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b"
+        },
+        "previous_advection": {
+          "coefficient_MAX_reference_scaled": {
+            "U": 0.0,
+            "Pi": 0.0,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "exact_hash_equal": true,
+          "first_sha256": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b",
+          "second_sha256": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b"
+        }
+      },
+      "failed_attempt": {
+        "nonlinear_iterations": 1,
+        "seconds": 0.11922696599503979,
+        "retries": 0,
+        "residuals": [
+          2.428274874454607e-07,
+          1.731537069271857e-08,
+          2.354569613632194e-19,
+          0.00015509385223183014,
+          4.427480886988195e-05,
+          0
+        ],
+        "coupled_krylov_iterations": 1,
+        "coupled_residual_evaluations": 6,
+        "coupled_statistics_complete": true,
+        "coupled_preconditioner_applications": 1,
+        "rebuilds": 3,
+        "disjoint_seconds": {
+          "constitutive": 0.011184025031980127,
+          "wall": 0.029554340231698006,
+          "assembly": 0.012351938930805773,
+          "flow": 1.2599979527294636e-05,
+          "scalar": 1.04309874586761e-05,
+          "rebuild": 0.0007150180172175169,
+          "guards": 0.0009470679797232151,
+          "forcing": 0.05665891000535339,
+          "residual": 0.007555325049906969,
+          "nonlinear": 0.00021067779744043946,
+          "io": 0,
+          "other": 2.6631983928382397e-05
+        },
+        "acceleration_proposals": 0,
+        "acceleration_accepted": 0,
+        "nonlinear_trace": [
+          {
+            "residuals": [
+              3.930268659162935e-05,
+              4.092298358142245e-06,
+              5.293955920339605e-20,
+              0.012253244443443294,
+              0.04287652081898501,
+              0
+            ],
+            "accelerated": false,
+            "seconds": 0.002745437028352171
+          },
+          {
+            "residuals": [
+              2.428274874454607e-07,
+              1.731537069271857e-08,
+              2.354569613632194e-19,
+              0.00015509385223183014,
+              4.427480886988195e-05,
+              0
+            ],
+            "accelerated": false,
+            "seconds": 0.002561796980444342
+          }
+        ]
+      },
+      "timing": {
+        "seconds": 0.11922696599503979,
+        "categories": {
+          "constitutive": 0.011184025031980127,
+          "wall": 0.029554340231698006,
+          "assembly": 0.012351938930805773,
+          "flow": 1.2599979527294636e-05,
+          "scalar": 1.04309874586761e-05,
+          "rebuild": 0.0007150180172175169,
+          "guards": 0.0009470679797232151,
+          "forcing": 0.05665891000535339,
+          "residual": 0.007555325049906969,
+          "nonlinear": 0.00021067779744043946,
+          "io": 0,
+          "other": 2.6631983928382397e-05
+        },
+        "sum": 0.11922696599503979,
+        "attributed_fraction": 0.9997766278483553,
+        "attribution_gate": "NOT_EVALUATED: tiny history fixture, not the warm-cost gate"
+      },
+      "accepted_residual_kind": "steady diagnostic of fresh initial state"
+    },
+    {
+      "name": "fail-deadline",
+      "category": "deadline",
+      "exit": 1,
+      "marker": "cooperative deadline",
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/coupled-fail-deadline-native-v12/command.log",
+        "sha256": "ea126fc3cd6dc4ad86dcb764d4fb73cce525d05c97bb448934061d6e1a43bb64",
+        "bytes": 651
+      },
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-deadline.xml",
+        "sha256": "05957be0a81e57cd2581827a744cad1456d8730c3a4d2738456f365de06265aa",
+        "bytes": 5985
+      },
+      "failure": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-deadline.failure.json",
+        "sha256": "5d8385869d59de6b67999bcb3c43d16ddc0ea8ec9be3bf722636264699dba76d",
+        "bytes": 67086
+      },
+      "checkpoint": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-deadline.failed-accepted.bin",
+        "sha256": "ac33cc07cf4a718fdb091d46ef54ab6e0372e3878c2ff5ecd46edbeceadccc77",
+        "bytes": 12018,
+        "payload_sha256": "62d7c84372fabdf0828e68950184ec5627ea10532a3f0fc50412b4ac9fb0ce0f",
+        "signature": "6b486951fb19cb7824b08fca9aee713760bdbfef649bca43bc6755efa383f6d3",
+        "step": 0,
+        "time": 0.0,
+        "dt": 0.02,
+        "history_hashes": {
+          "current": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+          "previous": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+          "advection": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b",
+          "previous_advection": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b"
+        }
+      },
+      "source_identity": "1c0091bff8ead2247d11602203de3a742a49e1cad3ca8ef2b349312b8f2ca5d9",
+      "altered_signature": "6b486951fb19cb7824b08fca9aee713760bdbfef649bca43bc6755efa383f6d3",
+      "accepted_seed_comparisons": {
+        "current": {
+          "coefficient_MAX_reference_scaled": {
+            "U": 0.0,
+            "Pi": 0.0,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "exact_hash_equal": true,
+          "first_sha256": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+          "second_sha256": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1"
+        },
+        "previous": {
+          "coefficient_MAX_reference_scaled": {
+            "U": 0.0,
+            "Pi": 0.0,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "exact_hash_equal": true,
+          "first_sha256": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+          "second_sha256": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1"
+        },
+        "advection": {
+          "coefficient_MAX_reference_scaled": {
+            "U": 0.0,
+            "Pi": 0.0,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "exact_hash_equal": true,
+          "first_sha256": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b",
+          "second_sha256": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b"
+        },
+        "previous_advection": {
+          "coefficient_MAX_reference_scaled": {
+            "U": 0.0,
+            "Pi": 0.0,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "exact_hash_equal": true,
+          "first_sha256": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b",
+          "second_sha256": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b"
+        }
+      },
+      "failed_attempt": {
+        "nonlinear_iterations": 0,
+        "seconds": 0.05650144099490717,
+        "retries": 0,
+        "residuals": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "coupled_krylov_iterations": 0,
+        "coupled_residual_evaluations": 0,
+        "coupled_statistics_complete": true,
+        "coupled_preconditioner_applications": 0,
+        "rebuilds": 0,
+        "disjoint_seconds": {
+          "constitutive": 0,
+          "wall": 0,
+          "assembly": 0,
+          "flow": 0,
+          "scalar": 0,
+          "rebuild": 0,
+          "guards": 0,
+          "forcing": 0.0564118159818463,
+          "residual": 0,
+          "nonlinear": 8.642504690214992e-05,
+          "io": 0,
+          "other": 3.1999661587178707e-06
+        },
+        "acceleration_proposals": 0,
+        "acceleration_accepted": 0,
+        "nonlinear_trace": []
+      },
+      "timing": {
+        "seconds": 0.05650144099490717,
+        "categories": {
+          "constitutive": 0,
+          "wall": 0,
+          "assembly": 0,
+          "flow": 0,
+          "scalar": 0,
+          "rebuild": 0,
+          "guards": 0,
+          "forcing": 0.0564118159818463,
+          "residual": 0,
+          "nonlinear": 8.642504690214992e-05,
+          "io": 0,
+          "other": 3.1999661587178707e-06
+        },
+        "sum": 0.05650144099490717,
+        "attributed_fraction": 0.9999433648752604,
+        "attribution_gate": "NOT_EVALUATED: tiny history fixture, not the warm-cost gate"
+      },
+      "accepted_residual_kind": "steady diagnostic of fresh initial state"
+    },
+    {
+      "name": "bad-algorithm",
+      "category": "algorithm_identity",
+      "exit": 1,
+      "marker": "scientific identity differs",
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/coupled-bad-algorithm-native-v12/command.log",
+        "sha256": "966d6f9af680543dc74dcb29c35f9a3d8b41bfedc64776c244f28ef570901be7",
+        "bytes": 611
+      },
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/bad-algorithm.xml",
+        "sha256": "0342b9d0f99c5d775a102d62789e174db9e158d1462263ab068c274b3a295375",
+        "bytes": 5924
+      },
+      "input_checkpoint": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-prefix.final.bin",
+        "sha256": "89eef6a924fbcbe4ea7654635e8411ce546c2849c5cbd5170650ce824fbcf620",
+        "bytes": 12018,
+        "payload_sha256": "3a9f0bdb601a7a2e0cc3a24b1e1380617135bb6583cee761bb95e444b322b410",
+        "signature": "4ebb80b9cc2414df1c41f214f8918b0d470e04789b53d7e19a7ff8db7317dedd",
+        "step": 1,
+        "time": 0.02,
+        "dt": 0.02,
+        "history_hashes": {
+          "current": "d95038133c523d184610a1d793b3e8b7637320477953a11fcd7e2edc827c2d10",
+          "previous": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+          "advection": "8df3428de45baabcdd394b7980a027498462be22d48e68a2c6cb735a7861c54d",
+          "previous_advection": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b"
+        }
+      },
+      "initialisation_rejection_only": true
+    }
+  ],
+  "rotation": {
+    "removed_absent": [
+      "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-new.recovery-1.bin",
+      "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-new.recovery-2.bin"
+    ],
+    "retained": [
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-new.recovery-3.bin",
+        "sha256": "3e4be915a727f707c3eaddacb7d5de5c40bcc08ae98bbb893e957acfc8843633",
+        "bytes": 12018
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-new.recovery-4.bin",
+        "sha256": "47683ac664f867c48895f815766b42fd6382b212d7e45c1beab7681b6ff905b0",
+        "bytes": 12018
+      }
+    ],
+    "science": [
+      {
+        "file": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-new.science-1.json",
+          "sha256": "06a3460ff05fa06454a04a04c96093244871c2fe9ca2178dc24d533e0c8daf3f",
+          "bytes": 69406
+        },
+        "history_labels": {
+          "current": {
+            "step": 1,
+            "time": 0.02
+          },
+          "previous": {
+            "step": 0,
+            "time": 0.0
+          },
+          "older": {
+            "step": 0,
+            "time": 0.0
+          },
+          "advection": {
+            "step": 1,
+            "time": 0.02
+          },
+          "previous_advection": {
+            "step": 0,
+            "time": 0.0
+          },
+          "older_advection": {
+            "step": 0,
+            "time": 0.0
+          },
+          "final_equation": "BE_STARTUP",
+          "final_EX_coefficients": [
+            1.0,
+            0.0
+          ]
+        },
+        "hashes": {
+          "current": "d95038133c523d184610a1d793b3e8b7637320477953a11fcd7e2edc827c2d10",
+          "previous": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+          "advection": "8df3428de45baabcdd394b7980a027498462be22d48e68a2c6cb735a7861c54d",
+          "previous_advection": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b",
+          "older": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+          "older_advection": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b"
+        }
+      },
+      {
+        "file": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-new.science-2.json",
+          "sha256": "31b29013876c3c3712ac88dd6738af3a7dd2f7df6032b521afe9c384b2209f1d",
+          "bytes": 69557
+        },
+        "history_labels": {
+          "current": {
+            "step": 2,
+            "time": 0.04
+          },
+          "previous": {
+            "step": 1,
+            "time": 0.02
+          },
+          "older": {
+            "step": 0,
+            "time": 0.0
+          },
+          "advection": {
+            "step": 2,
+            "time": 0.04
+          },
+          "previous_advection": {
+            "step": 1,
+            "time": 0.02
+          },
+          "older_advection": {
+            "step": 0,
+            "time": 0.0
+          },
+          "final_equation": "BDF2_EX2",
+          "final_EX_coefficients": [
+            2.0,
+            -1.0
+          ]
+        },
+        "hashes": {
+          "current": "72f6114c0b4e1d285bc3550749fce86206425781158d3eab4235107c47a2621c",
+          "previous": "d95038133c523d184610a1d793b3e8b7637320477953a11fcd7e2edc827c2d10",
+          "advection": "929231393fb562b578ae18cc1ea13944ca30bd21239dac7ff7e159209e05e7ed",
+          "previous_advection": "8df3428de45baabcdd394b7980a027498462be22d48e68a2c6cb735a7861c54d",
+          "older": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+          "older_advection": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b"
+        }
+      },
+      {
+        "file": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-new.science-3.json",
+          "sha256": "1f44cf672bab6a8fdb105a82c1166d363a82c5dfe9f4d74248041806dd3b76d9",
+          "bytes": 70021
+        },
+        "history_labels": {
+          "current": {
+            "step": 3,
+            "time": 0.06
+          },
+          "previous": {
+            "step": 2,
+            "time": 0.04
+          },
+          "older": {
+            "step": 1,
+            "time": 0.02
+          },
+          "advection": {
+            "step": 3,
+            "time": 0.06
+          },
+          "previous_advection": {
+            "step": 2,
+            "time": 0.04
+          },
+          "older_advection": {
+            "step": 1,
+            "time": 0.02
+          },
+          "final_equation": "BDF2_EX2",
+          "final_EX_coefficients": [
+            2.0,
+            -1.0
+          ]
+        },
+        "hashes": {
+          "current": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9",
+          "previous": "72f6114c0b4e1d285bc3550749fce86206425781158d3eab4235107c47a2621c",
+          "advection": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0",
+          "previous_advection": "929231393fb562b578ae18cc1ea13944ca30bd21239dac7ff7e159209e05e7ed",
+          "older": "d95038133c523d184610a1d793b3e8b7637320477953a11fcd7e2edc827c2d10",
+          "older_advection": "8df3428de45baabcdd394b7980a027498462be22d48e68a2c6cb735a7861c54d"
+        },
+        "checkpoint": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-new.recovery-3.bin",
+          "sha256": "3e4be915a727f707c3eaddacb7d5de5c40bcc08ae98bbb893e957acfc8843633",
+          "bytes": 12018,
+          "payload_sha256": "abefaaf5b2920c4e4657f8235be34db6b832e3a09552bb77c522e16cefd6334e",
+          "signature": "4ebb80b9cc2414df1c41f214f8918b0d470e04789b53d7e19a7ff8db7317dedd",
+          "step": 3,
+          "time": 0.06,
+          "dt": 0.02,
+          "history_hashes": {
+            "current": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9",
+            "previous": "72f6114c0b4e1d285bc3550749fce86206425781158d3eab4235107c47a2621c",
+            "advection": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0",
+            "previous_advection": "929231393fb562b578ae18cc1ea13944ca30bd21239dac7ff7e159209e05e7ed"
+          }
+        }
+      },
+      {
+        "file": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-new.science-4.json",
+          "sha256": "afca66055b860e88da1cf8545b79d813be75cb1596e39020ac81e936ec801735",
+          "bytes": 70189
+        },
+        "history_labels": {
+          "current": {
+            "step": 4,
+            "time": 0.08
+          },
+          "previous": {
+            "step": 3,
+            "time": 0.06
+          },
+          "older": {
+            "step": 2,
+            "time": 0.04
+          },
+          "advection": {
+            "step": 4,
+            "time": 0.08
+          },
+          "previous_advection": {
+            "step": 3,
+            "time": 0.06
+          },
+          "older_advection": {
+            "step": 2,
+            "time": 0.04
+          },
+          "final_equation": "BDF2_EX2",
+          "final_EX_coefficients": [
+            2.0,
+            -1.0
+          ]
+        },
+        "hashes": {
+          "current": "f58c1b0cb15efd368f8158a63141fbb225c8c42500a74ae792d223ae6cb66a19",
+          "previous": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9",
+          "advection": "c4c53ca2bcf1703ffb00296a44b885064e4f0543e2350cea6fb8f2a2955195b4",
+          "previous_advection": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0",
+          "older": "72f6114c0b4e1d285bc3550749fce86206425781158d3eab4235107c47a2621c",
+          "older_advection": "929231393fb562b578ae18cc1ea13944ca30bd21239dac7ff7e159209e05e7ed"
+        },
+        "checkpoint": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-new.recovery-4.bin",
+          "sha256": "47683ac664f867c48895f815766b42fd6382b212d7e45c1beab7681b6ff905b0",
+          "bytes": 12018,
+          "payload_sha256": "303572b284a7b5f70c7c135fc36c7e67340a356b54a7bcb444bd28c529747ed3",
+          "signature": "4ebb80b9cc2414df1c41f214f8918b0d470e04789b53d7e19a7ff8db7317dedd",
+          "step": 4,
+          "time": 0.08,
+          "dt": 0.02,
+          "history_hashes": {
+            "current": "f58c1b0cb15efd368f8158a63141fbb225c8c42500a74ae792d223ae6cb66a19",
+            "previous": "eab55e95d2eb37b217422f802c3bf5112dbf82ecea16ca7ef10634f32607c8d9",
+            "advection": "c4c53ca2bcf1703ffb00296a44b885064e4f0543e2350cea6fb8f2a2955195b4",
+            "previous_advection": "b0f7636f3d84c80b0a8a81b48f0369a35ba5d7d91d036b83195c34ff975e96e0"
+          }
+        }
+      }
+    ]
+  },
+  "cache_scope": "Complete explicit vectors, binary hashes, shifts, duplicate BE seeds and restart equivalence; no independent advection recomputation here.",
+  "elapsed_seconds": 0.04956928000319749
+}

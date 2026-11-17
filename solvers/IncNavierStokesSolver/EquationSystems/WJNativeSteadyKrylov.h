@@ -32,8 +32,9 @@ struct SteadyTrialValidity
 struct SteadyKrylovCallbacks
 {
     // All callbacks use PHYSICAL coordinates/residuals/corrections. Residual
-    // must be the current steady equations with essential Gamma eliminated;
-    // it must not include a pseudo-time/physical-time mass term.
+    // must be the caller's current fixed equations with essential Gamma
+    // eliminated. Steady preparation uses alpha=0; an implicit physical step
+    // supplies its exact BDF mass/history. This engine adds no mass or time.
     std::function<SteadyVector(const SteadyVector &)> Residual;
     // A fixed norm of raw residuals, including all required blocks. The caller
     // owns its physical thresholds; return a norm ratio if acceptanceNorm=1.

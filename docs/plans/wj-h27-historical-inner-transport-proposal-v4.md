@@ -17,7 +17,17 @@ The [source-v11 checkpoint](wj-h27-steady-history-checkpoint-v2.md), commit
 Inner-k physical RMS departures are .132331/.132795 in Kin units, against
 .05; MAX departures are .459519/.440730 against .10. The inter-mesh inner-k
 RMS/MAX differences .013824/.129202 exceed .001, so this is not a resolved
-continuum barrier proof. An unchanged-physics x refinement is in progress.
+continuum barrier proof. A supplementary unchanged-physics x refinement was
+admitted.
+Its subsequently completed 5600-cell result gives inner-k RMS/MAX
+.132643/.423656; the 2800/5600 differences .008029/.130882 also miss .001.
+It independently meets the discrete equations but remains unqualified.
+Bound assessments are `science/physical-reference-x2-v1/independent-x2.json`
+(SHA256 `cf44ae37d709c05fee890bbfaadfc950070204bf4abfa522019de70dc2960155`)
+and `comparison-x2.json`
+(SHA256 `61fc29c975c134e731cf9e389f721614154a9a36b227f822fe5a2dbb3ab15929`)
+in the same Linux namespace; compact copies are in
+`wj-h27-linux/native-time-newton-v2d`. Equations in this proposal are unchanged.
 
 The [v3 diffusion-only proposal](wj-h27-inner-diffusion-amendment-proposal-v3.md)
 does not have affirmative mechanism evidence. Its inactive zero-endpoint-flux

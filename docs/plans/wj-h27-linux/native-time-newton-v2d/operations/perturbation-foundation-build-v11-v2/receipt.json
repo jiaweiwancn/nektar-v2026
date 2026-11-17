@@ -1,0 +1,71 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/perturbation-foundation-build-v11-v2.py"
+  ],
+  "phase": "build",
+  "seconds_cap": 120.0,
+  "utc": "2026-11-17T17:00:01.753399+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 490443,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/perturbation-foundation-controller-v11-v2.py"
+      },
+      {
+        "pid": 490444,
+        "parent": 490443,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label perturbation-foundation-build-v11-v2 --phase build --seconds 120 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/perturbation-foundation-build-v11-v2.py"
+      }
+    ]
+  },
+  "reservation": 16,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/perturbation-foundation-build-v11-v2.py",
+      "bytes": 1448,
+      "sha256": "38fe5abd430f6589d1ec4404a2d622435837da412215482b8331a49285ca4771"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 11.89595834701322,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 1074946048,
+  "peak_host_workers": 8,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/perturbation-foundation-build-v11-v2/command.log",
+    "bytes": 7823,
+    "sha256": "57e54c5726f08acaa519836f6be91154004e7b2df3d0b2080bead4a86f3c4651"
+  }
+}

@@ -1,0 +1,315 @@
+{
+  "schema": "WJH27IndependentPerturbationCheckV1",
+  "status": "PASS_NATIVE_PERTURBATION_CONSTRUCTION_ONLY",
+  "full_coupled_gate_pass": false,
+  "developed_reference_qualified": false,
+  "native_construction_pass": true,
+  "script_sha256": "a38d673018691fc27161826a6a464c50b9ee9a5eaf91da0c68b21c7b2913055e",
+  "polynomial_certificate_code_sha256": "7c24d4a3e2ff1fdbf62f808c43ab761e4bdbfbbf1bf65d4d466d0ade442ccd5c",
+  "native_sha256": "5607f87f2e65f746f80d27eac7c7da5c5803f215fbb7b6eb3a6a886a0b8bce31",
+  "certificate_sha256": "b20df80d53e7e4df1a6b71470c16015062ea4a8922f5769baa37f98dbf772ba8",
+  "reference_sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+  "prospective": {
+    "velocity_relative_peak": 1e-08,
+    "exact_Q3_representation_abs": 1e-12,
+    "divergence_abs": 1e-13,
+    "epsilon_normalized_peak_abs": 1e-05,
+    "half_peak_area_minimum": 0.05,
+    "half_peak_area_refinements": [
+      0.01,
+      0.003,
+      0.001
+    ]
+  },
+  "shape": "PrimaryQuartile",
+  "layout": {
+    "shape": "PrimaryQuartile",
+    "x_knots": [
+      -2.5,
+      -1.25,
+      0,
+      1.25,
+      2.5
+    ],
+    "r_knots": [
+      0.09999999999999998,
+      0.1685751788867231,
+      0.2319696124895478,
+      0.3568853963386317,
+      0.41840674658489074
+    ],
+    "H": 0.15,
+    "epsilon_peak_radius": 0.29536404609237255
+  },
+  "mesh_xml_sha256": "e260588c0b558172f685313fcc9810d96e08fb480ae9f4638301a8ec4c75d84a",
+  "base_mesh_xml_sha256": "8c475f3fbdfc511ea65db500132810866ce4f6341fb6fbfb01be6a417d7e541e",
+  "source_identity": "dfdd5d8fb2384d08a5a54e5fd8d76f0ec7e37334fbebeb3b16e439553d8c080b",
+  "norms": {
+    "velocity": {
+      "global_peak_enclosure": [
+        0.000999999999363575,
+        0.001000000000636425
+      ],
+      "peak_subdivision": {
+        "lower": 9.999999987271506e-07,
+        "upper": 1.0000000012728497e-06,
+        "subdivisions": 48,
+        "active_boxes": 727,
+        "relative_gap": 2.5456990809397306e-09
+      },
+      "peak_deviation_limit": 1.0000000000000001e-11,
+      "peak_pass": true,
+      "representation_pass": true,
+      "domain_RMS_enclosure": [
+        1.660477930811111e-05,
+        1.6604779308111118e-05
+      ],
+      "support_RMS_enclosure": [
+        0.0002936228662390794,
+        0.0002936228662390795
+      ],
+      "energy_enclosure": [
+        1.3725621328831953e-07,
+        1.3725621328831959e-07
+      ],
+      "support_area_enclosure": [
+        1.5920337329244587,
+        1.5920337329244592
+      ],
+      "half_peak_area_refinement": [
+        {
+          "relative_support_uncertainty_target": 0.01,
+          "lower": 0.19574991294790697,
+          "upper": 0.211651670103036,
+          "unresolved_area_upper": 0.015901757155128964,
+          "subdivisions": 852,
+          "active_boxes": 373
+        },
+        {
+          "relative_support_uncertainty_target": 0.003,
+          "lower": 0.20124879041554297,
+          "upper": 0.2060235761020862,
+          "unresolved_area_upper": 0.004774785686543172,
+          "subdivisions": 2930,
+          "active_boxes": 1232
+        },
+        {
+          "relative_support_uncertainty_target": 0.001,
+          "lower": 0.20280764055522435,
+          "upper": 0.204399665479224,
+          "unresolved_area_upper": 0.0015920249239995922,
+          "subdivisions": 8869,
+          "active_boxes": 3682
+        }
+      ],
+      "representation_error_RMS_enclosure": [
+        1.3216809423385047e-20,
+        1.321680942338505e-20
+      ],
+      "normalized_field_gradient_RMS_enclosure": [
+        0.000397601349047894,
+        0.00039760134904789413
+      ],
+      "normalized_field_gradient_MAX_upper": 0.03001998421924384,
+      "pass_": true
+    },
+    "k": {
+      "global_peak_enclosure": [
+        0.009999999999999998,
+        0.010000000000000007
+      ],
+      "peak_subdivision": {
+        "lower": 9.999999999999999e-05,
+        "upper": 0.00010000000000000011,
+        "subdivisions": 0,
+        "active_boxes": 700,
+        "relative_gap": 1.2197274440461927e-15
+      },
+      "peak_deviation_limit": 1e-12,
+      "peak_pass": true,
+      "representation_pass": true,
+      "domain_RMS_enclosure": [
+        0.00017896798490469877,
+        0.00017896798490469882
+      ],
+      "support_RMS_enclosure": [
+        0.0031646968452679605,
+        0.0031646968452679614
+      ],
+      "energy_enclosure": [
+        1.5944705192503637e-05,
+        1.5944705192503643e-05
+      ],
+      "support_area_enclosure": [
+        1.5920337329244587,
+        1.5920337329244592
+      ],
+      "half_peak_area_refinement": [
+        {
+          "relative_support_uncertainty_target": 0.01,
+          "lower": 0.21927695668083771,
+          "upper": 0.23515270752016515,
+          "unresolved_area_upper": 0.015875750839327383,
+          "subdivisions": 460,
+          "active_boxes": 205
+        },
+        {
+          "relative_support_uncertainty_target": 0.003,
+          "lower": 0.2249189230891251,
+          "upper": 0.22969196360396094,
+          "unresolved_area_upper": 0.004773040514835802,
+          "subdivisions": 1525,
+          "active_boxes": 635
+        },
+        {
+          "relative_support_uncertainty_target": 0.001,
+          "lower": 0.2264716067031977,
+          "upper": 0.2280635426094757,
+          "unresolved_area_upper": 0.0015919359062779627,
+          "subdivisions": 4571,
+          "active_boxes": 1897
+        }
+      ],
+      "representation_error_RMS_enclosure": [
+        7.579871998245899e-20,
+        7.579871998245901e-20
+      ],
+      "normalized_field_gradient_RMS_enclosure": [
+        0.002781941351697054,
+        0.0027819413516970547
+      ],
+      "normalized_field_gradient_MAX_upper": 0.3125273051571805,
+      "pass_": true
+    },
+    "epsilon": {
+      "global_peak_enclosure": [
+        0.01000000065221983,
+        0.01000000066822691
+      ],
+      "peak_subdivision": {
+        "lower": 0.00010000001304439708,
+        "upper": 0.0001000000133645386,
+        "subdivisions": 49,
+        "active_boxes": 51,
+        "relative_gap": 3.2014148166509913e-09
+      },
+      "peak_deviation_limit": 1e-05,
+      "peak_pass": true,
+      "representation_pass": true,
+      "domain_RMS_enclosure": [
+        0.00016493849855503065,
+        0.0001649384985550307
+      ],
+      "support_RMS_enclosure": [
+        0.003164690668777713,
+        0.0031646906687777137
+      ],
+      "energy_enclosure": [
+        1.34408261972295e-05,
+        1.3440826197229504e-05
+      ],
+      "support_area_enclosure": [
+        1.3420337329244565,
+        1.342033732924457
+      ],
+      "half_peak_area_refinement": [
+        {
+          "relative_support_uncertainty_target": 0.01,
+          "lower": 0.18463992638255966,
+          "upper": 0.19804489522848281,
+          "unresolved_area_upper": 0.013404968845923125,
+          "subdivisions": 521,
+          "active_boxes": 227
+        },
+        {
+          "relative_support_uncertainty_target": 0.003,
+          "lower": 0.18957956563295272,
+          "upper": 0.1936037670490339,
+          "unresolved_area_upper": 0.004024201416081107,
+          "subdivisions": 1761,
+          "active_boxes": 742
+        },
+        {
+          "relative_support_uncertainty_target": 0.001,
+          "lower": 0.19091540121387335,
+          "upper": 0.19225711500585907,
+          "unresolved_area_upper": 0.0013417137919856626,
+          "subdivisions": 5271,
+          "active_boxes": 2199
+        }
+      ],
+      "representation_error_RMS_enclosure": [
+        5.587980498698118e-09,
+        5.58798049869812e-09
+      ],
+      "normalized_field_gradient_RMS_enclosure": [
+        0.002222207876874667,
+        0.002222207876874668
+      ],
+      "normalized_field_gradient_MAX_upper": 0.12263566857753222,
+      "pass_": true
+    }
+  },
+  "polynomial_diagnostics": {
+    "global_representation_error_upper": {
+      "velocity": 3.887627550821119e-18,
+      "k": 3.906295687625244e-17,
+      "epsilon": 4.525449055374728e-06
+    },
+    "outside_support_peak_upper": {
+      "velocity": 4.5173288903659714e-33,
+      "k": 2.864794064805833e-32,
+      "epsilon": 1.1656095526300541e-20
+    },
+    "strong_divergence_MAX_upper": 7.675321027884007e-17,
+    "gradient_MAX_upper": {
+      "velocity": 0.03001998421924384,
+      "k": 0.3125273051571805,
+      "epsilon": 0.12263566857753222
+    },
+    "synthetic_Kbase_constant_error_upper": 6.365097476416624e-16
+  },
+  "weak_divergence": {
+    "independent_D_action_dual_RMS": 8.225171736700342e-20,
+    "native_D_action_difference_dual_RMS": 1.175440053279125e-19,
+    "native_reported_dual_RMS": 1.2819105738597853e-19,
+    "pass_": true
+  },
+  "synthetic_dependent_Gamma": {
+    "role": "Synthetic Kbase=Kin only; no developed-state qualification",
+    "dependent_Gamma_increment_coefficient_error": 1.8742934473084272e-15,
+    "Gamma_projection_quadrature_change": 6.576280120132179e-16,
+    "sampled_physical_Gamma_projection_target_MAX": 3.7910370816749023e-08,
+    "induced_relative_Gamma_change_MAX": 0.015037437733209646,
+    "interface_K_at_x0": 0.008897105296970343,
+    "one_percent_K_increment_error": 7.632783294297951e-17,
+    "cutoff_base": 0.02954486569124273,
+    "cutoff_new": 0.029449823941990447,
+    "cutoff_change": -9.504174925228231e-05,
+    "cutoff_native_error_over_H": 0.0,
+    "pass_": true
+  },
+  "helper_formula_comparison": {
+    "reference_scaled_errors": {
+      "unit_velocity": 3.1776553605420216e-16,
+      "unit_gradient": 1.618859048189157e-15,
+      "k_jet": 1.5675635956064196e-17,
+      "epsilon_jet": 9.190948564654682e-18
+    },
+    "pass_": true
+  },
+  "essential_increment_MAX": {
+    "velocity": 0.0,
+    "k": 0.0,
+    "epsilon": 0.0
+  },
+  "essential_pass": true,
+  "synthetic_increment_composition_error": {
+    "k": 9.710477090551182e-17,
+    "epsilon": 0.0
+  },
+  "synthetic_composition_pass": true,
+  "epsilon_gradient_convention": "Gradient of r*delta_e/Ain, not grad(delta_e)/(Ain/r).",
+  "state_scope": "Increment and synthetic Kin interface only. No developed reference, coupled histories, admissibility of a seeded physical state, or pilot qualification.",
+  "elapsed_seconds": 109.75726821797434
+}

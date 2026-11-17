@@ -1,0 +1,373 @@
+{
+  "schema": "WJH27PerturbationPeakCertificateV1",
+  "status": "PASS_MATHEMATICAL_SHAPE_ONLY",
+  "full_coupled_gate_pass": false,
+  "developed_reference_qualified": false,
+  "native_projected_shape_qualified": false,
+  "script_sha256": "7c24d4a3e2ff1fdbf62f808c43ab761e4bdbfbbf1bf65d4d466d0ade442ccd5c",
+  "layout_export_sha256": "6a2773c271889df7b6e93071faba5946d4c2e243be3bb908c960b91a5225b8e6",
+  "shape": "SecondaryLowerSkew",
+  "arithmetic": "Exact rational polynomial construction from binary64 knots; outward-rounded interval Bernstein de Casteljau; 180-bit integer sqrt enclosure and outward binary64 serialization.",
+  "peak_method": "Global Bernstein upper bounds and enclosed attained-point lower bounds, never a sampled global upper bound.",
+  "half_area_relative_support_uncertainty_levels": [
+    0.01,
+    0.003,
+    0.001
+  ],
+  "normalized_epsilon_projection_peak_tolerance": 1e-05,
+  "closed_form_algorithm_controls": {
+    "interior_maximum": {
+      "lower": 0.9999999997615714,
+      "upper": 1.000000003337869,
+      "subdivisions": 74,
+      "active_boxes": 12,
+      "relative_gap": 3.576297703276095e-09
+    },
+    "edge_maximum": {
+      "lower": 1.9999999999999998,
+      "upper": 2.0000000000000004,
+      "subdivisions": 0,
+      "active_boxes": 1,
+      "relative_gap": 3.33066907387547e-16
+    },
+    "half_area": [
+      {
+        "relative_support_uncertainty_target": 0.01,
+        "lower": 0.34374999999999994,
+        "upper": 0.35156250000000006,
+        "unresolved_area_upper": 0.007812500000000002,
+        "subdivisions": 7,
+        "active_boxes": 1
+      },
+      {
+        "relative_support_uncertainty_target": 0.003,
+        "lower": 0.34960937499999994,
+        "upper": 0.35156250000000006,
+        "unresolved_area_upper": 0.0019531250000000004,
+        "subdivisions": 9,
+        "active_boxes": 1
+      },
+      {
+        "relative_support_uncertainty_target": 0.001,
+        "lower": 0.34960937499999994,
+        "upper": 0.35058593750000006,
+        "unresolved_area_upper": 0.0009765625000000002,
+        "subdivisions": 10,
+        "active_boxes": 1
+      }
+    ],
+    "exact_energy": "37/300",
+    "status": "PASS"
+  },
+  "normalization": {
+    "layout": {
+      "shape": "SecondaryLowerSkew",
+      "x_knots": [
+        -2.5,
+        -1.25,
+        0,
+        1.25,
+        2.5
+      ],
+      "r_knots": [
+        0.09999999999999998,
+        0.15928758944336155,
+        0.2319696124895478,
+        0.29536404609237255,
+        0.41840674658489074
+      ],
+      "H": 0.15,
+      "epsilon_peak_radius": 0.29536404609237255
+    },
+    "unitPeakLower": 6.686549138266722,
+    "unitPeakEstimate": 6.686549140952627,
+    "unitPeakUpper": 6.686549143638531
+  },
+  "target_shape_norms": {
+    "velocity": {
+      "unit_squared_peak": {
+        "lower": 44.70993937845545,
+        "upper": 44.709939450293156,
+        "subdivisions": 52,
+        "active_boxes": 28,
+        "relative_gap": 1.6067501943476376e-09
+      },
+      "unit_peak_enclosure": [
+        6.686549138266722,
+        6.686549143638531
+      ],
+      "normalized_peak_enclosure": [
+        0.000999999999598312,
+        0.0010000000004016878
+      ],
+      "energy_enclosure": [
+        1.2931378527600002e-07,
+        1.2931378527600008e-07
+      ],
+      "domain_RMS_enclosure": [
+        1.611719697153351e-05,
+        1.6117196971533517e-05
+      ],
+      "support_RMS_enclosure": [
+        0.00028500093152155373,
+        0.00028500093152155384
+      ],
+      "support_area_enclosure": [
+        1.5920337329244536,
+        1.592033732924454
+      ],
+      "half_peak_area_refinement": [
+        {
+          "relative_support_uncertainty_target": 0.01,
+          "lower": 0.17869691518190414,
+          "upper": 0.19459428690632252,
+          "unresolved_area_upper": 0.015897371724418345,
+          "subdivisions": 865,
+          "active_boxes": 351
+        },
+        {
+          "relative_support_uncertainty_target": 0.003,
+          "lower": 0.18355815936371273,
+          "upper": 0.18833405483434892,
+          "unresolved_area_upper": 0.004775895470636149,
+          "subdivisions": 2854,
+          "active_boxes": 1174
+        },
+        {
+          "relative_support_uncertainty_target": 0.001,
+          "lower": 0.1851103588469296,
+          "upper": 0.18670227247679955,
+          "unresolved_area_upper": 0.0015919136298698756,
+          "subdivisions": 8467,
+          "active_boxes": 3486
+        }
+      ],
+      "domain_RMS_pass": true,
+      "support_RMS_pass": true,
+      "half_peak_area_pass": true
+    },
+    "k": {
+      "unit_squared_peak": {
+        "lower": 0.9999999999999999,
+        "upper": 1.0000000000000002,
+        "subdivisions": 0,
+        "active_boxes": 6,
+        "relative_gap": 3.33066907387547e-16
+      },
+      "unit_peak_enclosure": [
+        0.9999999999999998,
+        1.0000000000000002
+      ],
+      "normalized_peak_enclosure": [
+        0.009999999999999997,
+        0.010000000000000004
+      ],
+      "energy_enclosure": [
+        1.5944705192503582e-05,
+        1.594470519250359e-05
+      ],
+      "domain_RMS_enclosure": [
+        0.00017896798490469844,
+        0.0001789679849046985
+      ],
+      "support_RMS_enclosure": [
+        0.0031646968452679596,
+        0.0031646968452679605
+      ],
+      "support_area_enclosure": [
+        1.5920337329244536,
+        1.592033732924454
+      ],
+      "half_peak_area_refinement": [
+        {
+          "relative_support_uncertainty_target": 0.01,
+          "lower": 0.21946928153504686,
+          "upper": 0.2353892351612601,
+          "unresolved_area_upper": 0.01591995362621319,
+          "subdivisions": 478,
+          "active_boxes": 193
+        },
+        {
+          "relative_support_uncertainty_target": 0.003,
+          "lower": 0.22486387337354216,
+          "upper": 0.22963618208579775,
+          "unresolved_area_upper": 0.004772308712255545,
+          "subdivisions": 1546,
+          "active_boxes": 629
+        },
+        {
+          "relative_support_uncertainty_target": 0.001,
+          "lower": 0.22646454235023258,
+          "upper": 0.22805595358068842,
+          "unresolved_area_upper": 0.0015914112304557795,
+          "subdivisions": 4581,
+          "active_boxes": 1880
+        }
+      ],
+      "domain_RMS_pass": true,
+      "support_RMS_pass": true,
+      "half_peak_area_pass": true
+    },
+    "epsilon": {
+      "unit_squared_peak": {
+        "lower": 0.9999999999999999,
+        "upper": 1.0000000000000002,
+        "subdivisions": 0,
+        "active_boxes": 6,
+        "relative_gap": 3.33066907387547e-16
+      },
+      "unit_peak_enclosure": [
+        0.9999999999999998,
+        1.0000000000000002
+      ],
+      "normalized_peak_enclosure": [
+        0.009999999999999997,
+        0.010000000000000004
+      ],
+      "energy_enclosure": [
+        1.3440878661891339e-05,
+        1.3440878661891342e-05
+      ],
+      "domain_RMS_enclosure": [
+        0.00016493882046359412,
+        0.00016493882046359417
+      ],
+      "support_RMS_enclosure": [
+        0.0031646968452679596,
+        0.0031646968452679605
+      ],
+      "support_area_enclosure": [
+        1.3420337329244536,
+        1.342033732924454
+      ],
+      "half_peak_area_refinement": [
+        {
+          "relative_support_uncertainty_target": 0.01,
+          "lower": 0.1846174618178906,
+          "upper": 0.19803761713634024,
+          "unresolved_area_upper": 0.013420155318449603,
+          "subdivisions": 556,
+          "active_boxes": 224
+        },
+        {
+          "relative_support_uncertainty_target": 0.003,
+          "lower": 0.18955411171893266,
+          "upper": 0.19357760707393384,
+          "unresolved_area_upper": 0.0040234953550011485,
+          "subdivisions": 1767,
+          "active_boxes": 724
+        },
+        {
+          "relative_support_uncertainty_target": 0.001,
+          "lower": 0.19090315246214304,
+          "upper": 0.19224503833269918,
+          "unresolved_area_upper": 0.0013418858705560909,
+          "subdivisions": 5237,
+          "active_boxes": 2163
+        }
+      ],
+      "domain_RMS_pass": true,
+      "support_RMS_pass": true,
+      "half_peak_area_pass": true
+    }
+  },
+  "mesh_xml_sha256": "8c475f3fbdfc511ea65db500132810866ce4f6341fb6fbfb01be6a417d7e541e",
+  "source_identity": "dfdd5d8fb2384d08a5a54e5fd8d76f0ec7e37334fbebeb3b16e439553d8c080b",
+  "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+  "frozen_layout": {
+    "shape": "SecondaryLowerSkew",
+    "x_knots": [
+      -2.5,
+      -1.25,
+      0,
+      1.25,
+      2.5
+    ],
+    "r_knots": [
+      0.09999999999999998,
+      0.15928758944336155,
+      0.2319696124895478,
+      0.29536404609237255,
+      0.41840674658489074
+    ],
+    "H": 0.15,
+    "epsilon_peak_radius": 0.29536404609237255
+  },
+  "domain": [
+    -10.000000000000002,
+    15,
+    -1.3877787807814457e-17,
+    19.912500000000005
+  ],
+  "x_edges": [
+    -10.000000000000002,
+    -7.5,
+    -5.000000000000001,
+    -2.5000000000000004,
+    -1.2500000000000002,
+    0,
+    1.25,
+    2.5,
+    3.9999999999999996,
+    5.499999999999999,
+    6.499999999999999,
+    7.499999999999999,
+    10,
+    12.499999999999998,
+    15
+  ],
+  "r_edges": [
+    -1.3877787807814457e-17,
+    0.0004999999999999866,
+    0.000999999999999987,
+    0.002999999999999989,
+    0.0049999999999999906,
+    0.012499999999999983,
+    0.01999999999999999,
+    0.023209949154884654,
+    0.02641989830976932,
+    0.038209949154884626,
+    0.04999999999999999,
+    0.07499999999999998,
+    0.09999999999999998,
+    0.10427251771267729,
+    0.1085450354253546,
+    0.12927251771267728,
+    0.14999999999999997,
+    0.15928758944336155,
+    0.1685751788867231,
+    0.2319696124895478,
+    0.29536404609237255,
+    0.3568853963386317,
+    0.41840674658489074,
+    0.5437145711365121,
+    0.6690223956881335,
+    0.7943157002137353,
+    0.9196090047393369,
+    0.9822774370411668,
+    1.0449458693429958,
+    1.1072077409162702,
+    1.1694696124895443,
+    1.2939933556360923,
+    1.41851709878264,
+    1.6695393086144399,
+    1.92056151844624,
+    2.170030085493912,
+    2.419498652541585,
+    2.6697367809683095,
+    2.9199749093950342,
+    3.419652564817392,
+    3.91933022023975,
+    4.419806477093203,
+    4.920282733946656,
+    5.54566025462317,
+    6.171037775299688,
+    6.795674774649189,
+    7.420311773998692,
+    9.916405886999344,
+    12.412499999999996,
+    16.1625,
+    19.912500000000005
+  ],
+  "elapsed_seconds": 3.0576959250029176
+}

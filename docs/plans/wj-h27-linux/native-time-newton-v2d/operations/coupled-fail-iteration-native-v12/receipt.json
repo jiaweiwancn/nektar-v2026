@@ -1,0 +1,82 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v12/IncNavierStokesSolver",
+    "--use-opt-file",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-iteration.xml.opt",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-iteration.xml"
+  ],
+  "phase": "science",
+  "seconds_cap": 20.0,
+  "utc": "2026-11-17T17:35:08.424981+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 491691,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-remaining-controller-v12.py"
+      },
+      {
+        "pid": 491955,
+        "parent": 491691,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label coupled-fail-iteration-native-v12 --phase science --seconds 20 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v12/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-iteration.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-iteration.xml"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v12/IncNavierStokesSolver",
+      "bytes": 380,
+      "sha256": "3db3719030cc3c2483367910b5de1eb479e88efb6d1fd92e6bc0bf85bda9a0fa"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-iteration.xml.opt",
+      "bytes": 55,
+      "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-iteration.xml",
+      "bytes": 5981,
+      "sha256": "02dabbe09cdf97f3716c72a7ce1cef4fe13b449a88b8ccb11c8f5dcc5c28622b"
+    }
+  ],
+  "status": "FAIL",
+  "seconds": 1.3540383130311966,
+  "exit": 1,
+  "reason": null,
+  "peak_tree_rss_bytes": 155648,
+  "peak_host_workers": 7,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/coupled-fail-iteration-native-v12/command.log",
+    "bytes": 670,
+    "sha256": "cc43ecd5e5904819f126d4a575bc70bf2435caaa15675683280f4900b94976c4"
+  }
+}

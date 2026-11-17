@@ -26,7 +26,14 @@ void AttemptJSON(std::ostream&out,const WJNative::CoupledStepInfo&info)
 {
     out<<std::setprecision(17)<<"{\"nonlinear_iterations\":"<<info.nonlinearIterations<<",\"seconds\":"<<info.seconds<<",\"retries\":"<<info.retries
        <<",\"residuals\":["<<info.residual.momentum<<','<<info.residual.continuity<<','<<info.residual.gauge<<','<<info.residual.k<<','<<info.residual.epsilon<<','<<info.residual.trace
-       <<"],\"acceleration_proposals\":"<<info.accelerationProposals<<",\"acceleration_accepted\":"<<info.accelerationAccepted<<",\"nonlinear_trace\":[";
+       <<"],\"coupled_krylov_iterations\":"<<info.coupledKrylovIterations<<",\"coupled_residual_evaluations\":"<<info.coupledResidualEvaluations
+       <<",\"coupled_statistics_complete\":"<<(info.coupledStatisticsComplete?"true":"false")
+       <<",\"coupled_preconditioner_applications\":"<<info.coupledPreconditionerApplications<<",\"rebuilds\":"<<info.rebuilds
+       <<",\"disjoint_seconds\":{\"constitutive\":"<<info.timing.constitutive<<",\"wall\":"<<info.timing.wall
+       <<",\"assembly\":"<<info.timing.assembly<<",\"flow\":"<<info.timing.flow<<",\"scalar\":"<<info.timing.scalar
+       <<",\"rebuild\":"<<info.timing.rebuild<<",\"guards\":"<<info.timing.guards<<",\"forcing\":"<<info.timing.forcing
+       <<",\"residual\":"<<info.timing.residual<<",\"nonlinear\":"<<info.timing.nonlinear<<",\"io\":"<<info.timing.io<<",\"other\":"<<info.timing.other<<'}'
+       <<",\"acceleration_proposals\":"<<info.accelerationProposals<<",\"acceleration_accepted\":"<<info.accelerationAccepted<<",\"nonlinear_trace\":[";
     for(int i=0;i<int(info.nonlinearTrace.size());++i){const auto&t=info.nonlinearTrace[i];if(i)out<<',';
         out<<"{\"residuals\":["<<t.residual.momentum<<','<<t.residual.continuity<<','<<t.residual.gauge<<','<<t.residual.k<<','<<t.residual.epsilon<<','<<t.residual.trace
            <<"],\"accelerated\":"<<(t.accelerated?"true":"false")<<",\"seconds\":"<<t.seconds<<'}';}out<<"]}";
@@ -87,6 +94,15 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadParameter("WJQuadratureX",options.quadratureX,8);m_session->LoadParameter("WJQuadratureR",options.quadratureR,12);
     m_session->LoadSolverInfo("WJStressSplit",options.stressSplit,"PositiveShearV1");
     m_session->LoadSolverInfo("WJSteadyVelocityPC",options.steadyVelocityPC,"FullGradientV1");
+    m_session->LoadSolverInfo("WJImplicitSolver",options.advancement,"PicardV1");
+    if(options.advancement=="CoupledJFNKV1"){
+        options.stepNewton.acceptanceNorm=options.nonlinearTolerance;
+        m_session->LoadParameter("WJStepNewtonSeconds",options.stepNewton.maximumSeconds,0.);
+        m_session->LoadParameter("WJStepNewtonIterations",options.stepNewton.maximumNewtonIterations,20);
+        m_session->LoadParameter("WJStepKrylovDimension",options.stepNewton.restartDimension,40);
+        m_session->LoadParameter("WJStepLinearCycles",options.stepNewton.maximumLinearCycles,8);
+        m_session->LoadParameter("WJStepFDStep",options.stepNewton.fdRelativeStep,1e-6);
+    }
     std::string currentActions;m_session->LoadSolverInfo("WJCheckCurrentActions",currentActions,"False");Check(currentActions=="True"||currentActions=="False","invalid current action check switch");options.checkCurrentActions=currentActions=="True";
     m_session->LoadParameter("WJAndersonDepth",options.andersonDepth,0);std::string trace;m_session->LoadSolverInfo("WJNonlinearTrace",trace,"False");Check(trace=="True"||trace=="False","WJNonlinearTrace must be True/False");options.recordNonlinearTrace=trace=="True";
     m_session->LoadParameter("WJMMSBodyAmplitude",options.mmsBodyAmplitude,0.);

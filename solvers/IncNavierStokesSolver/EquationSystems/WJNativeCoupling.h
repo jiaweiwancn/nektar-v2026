@@ -27,6 +27,9 @@ struct CoupledOptions
     bool manufactured=false,recordNonlinearTrace=false,checkCurrentActions=false;
     // Numerical split only; the complete current V is identical in both.
     std::string stressSplit="PositiveShearV1",steadyVelocityPC="FullGradientV1";
+    // Equivalent solvers of the same current implicit BDF/EX equations.
+    std::string advancement="PicardV1";
+    SteadyKrylovOptions stepNewton;
     ConstitutiveBackend backend=ConstitutiveBackend::Historical;
     std::string sourceIdentity,mmsVariant="Historical",initialSourceIdentity;
 };
@@ -53,6 +56,10 @@ struct CoupledStepInfo
     struct Iteration {CoupledResidual residual;bool accelerated=false;double seconds=0;};
     std::vector<Iteration>nonlinearTrace;
     int accelerationProposals=0,accelerationAccepted=0,accelerationInadmissible=0;
+    long long coupledKrylovIterations=0,coupledJacobianActions=0,
+              coupledResidualEvaluations=0,coupledPreconditionerApplications=0,
+              coupledRejectedTrials=0;
+    bool coupledStatisticsComplete=true;
 };
 
 /** Supported flat serial, fully coupled BDF2/EX2 velocity/modified-pressure,
@@ -94,6 +101,7 @@ public:
     std::array<double,5> MMSErrors(const CoupledState&state,double time)const;
     void ResetPreconditioners();
 private:
+    CoupledStepInfo AdvanceNewton(CoupledHistory&history,bool injectRetry);
     struct Data
     {
         struct VelocityInput {double k,E,aux,r;Tensor gradient;};

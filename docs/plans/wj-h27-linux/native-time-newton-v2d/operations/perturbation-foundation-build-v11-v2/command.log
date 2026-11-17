@@ -1,0 +1,57 @@
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/../h26/common.h:4,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_probe.cpp:2:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_probe.cpp: In function ‘void {anonymous}::ElementsJSON(std::ostream&, const Nektar::WJNative::Flow&, const std::map<int, {anonymous}::Map>&, const std::map<int, {anonymous}::Map>&)’:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_probe.cpp:50:9: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   50 |         if(!first)o<<',';first=false;o<<"{\"geometry\":"<<e.geometry<<",\"bounds\":["<<e.xl<<','<<e.xr<<','<<e.rl<<','<<e.rr<<"],\"u\":";List(o,e.u);o<<",\"us\":";List(o,e.us);o<<",\"p\":";List(o,e.p);o<<",\"ps\":";List(o,e.ps);
+      |         ^~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_probe.cpp:50:26: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   50 |         if(!first)o<<',';first=false;o<<"{\"geometry\":"<<e.geometry<<",\"bounds\":["<<e.xl<<','<<e.xr<<','<<e.rl<<','<<e.rr<<"],\"u\":";List(o,e.u);o<<",\"us\":";List(o,e.us);o<<",\"p\":";List(o,e.p);o<<",\"ps\":";List(o,e.ps);
+      |                          ^~~~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_probe.cpp: In function ‘int main(int, char**)’:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_probe.cpp:94:17: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   94 |                 if(!first)out<<',';first=false;out<<'"'<<ShapeName(shape)<<"\":";LayoutJSON(out,layout);
+      |                 ^~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_probe.cpp:94:36: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   94 |                 if(!first)out<<',';first=false;out<<'"'<<ShapeName(shape)<<"\":";LayoutJSON(out,layout);
+      |                                    ^~~~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_probe.cpp:130:17: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+  130 |                 if(!first)out<<',';first=false;out<<"{\"x\":"<<x<<",\"r\":"<<r<<",\"z\":"<<z<<",\"unit_velocity\":";List(out,u);out<<",\"unit_gradient\":[";for(int c=0;c<3;++c){if(c)out<<',';List(out,g[c]);}out<<"],\"k_jet\":["<<a.value<<','<<a.dx<<','<<a.dr<<"],\"epsilon_jet\":["<<b.value<<','<<b.dx<<','<<b.dr<<"]}";
+      |                 ^~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_probe.cpp:130:36: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  130 |                 if(!first)out<<',';first=false;out<<"{\"x\":"<<x<<",\"r\":"<<r<<",\"z\":"<<z<<",\"unit_velocity\":";List(out,u);out<<",\"unit_gradient\":[";for(int c=0;c<3;++c){if(c)out<<',';List(out,g[c]);}out<<"],\"k_jet\":["<<a.value<<','<<a.dx<<','<<a.dr<<"],\"epsilon_jet\":["<<b.value<<','<<b.dx<<','<<b.dr<<"]}";
+      |                                    ^~~~~
+In file included from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/StdRegions/StdExpansion3D.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/SpatialDomains/Geometry3D.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/SpatialDomains/HexGeom.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/SpatialDomains/MeshGraph.h:45,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/SpatialDomains/Conditions.h:44,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/../h26/common.h:4,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_probe.cpp:2:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/StdRegions/StdExpansion.h: In instantiation of ‘Nektar::NekDouble Nektar::StdRegions::StdExpansion::BaryEvaluate(const NekDouble&, const NekDouble*, Nektar::NekDouble&, Nektar::NekDouble&) [with int DIR = 0; bool DERIV = true; bool DERIV2 = true; Nektar::NekDouble = double]’:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/StdRegions/StdExpansion1D.h:70:57:   required from here
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/library/StdRegions/StdExpansion.h:1440:41: warning: comparison of integer expressions of different signedness: ‘int’ and ‘const size_t’ {aka ‘const long unsigned int’} [-Wsign-compare]
+ 1440 |                     for (int kk = 0; kk < nquad; kk++)
+      |                                      ~~~^~~~~~~

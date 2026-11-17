@@ -1,0 +1,51 @@
+{
+  "schema": "WJH27ImplicitHistoryFoundationV1",
+  "root": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12",
+  "runs": {
+    "control": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-new.result.json",
+    "prefix": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-prefix.result.json",
+    "cold": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-cold.result.json",
+    "retry": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-retry.result.json",
+    "recovery3": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-recovery3.result.json"
+  },
+  "input_checkpoints": {
+    "cold": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-prefix.final.bin",
+      "sha256": "89eef6a924fbcbe4ea7654635e8411ce546c2849c5cbd5170650ce824fbcf620"
+    },
+    "recovery3": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/poly-new.recovery-3.bin",
+      "sha256": "3e4be915a727f707c3eaddacb7d5de5c40bcc08ae98bbb893e957acfc8843633"
+    }
+  },
+  "negatives": [
+    {
+      "name": "fail-iteration",
+      "category": "iteration_bound",
+      "exit": 1,
+      "session": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-iteration.xml",
+      "log": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/coupled-fail-iteration-native-v12/command.log",
+      "expected_marker": "NEWTON_NOT_CONVERGED",
+      "failure": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-iteration.failure.json",
+      "checkpoint": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-iteration.failed-accepted.bin"
+    },
+    {
+      "name": "fail-deadline",
+      "category": "deadline",
+      "exit": 1,
+      "session": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-deadline.xml",
+      "log": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/coupled-fail-deadline-native-v12/command.log",
+      "expected_marker": "cooperative deadline",
+      "failure": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-deadline.failure.json",
+      "checkpoint": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/fail-deadline.failed-accepted.bin"
+    },
+    {
+      "name": "bad-algorithm",
+      "category": "algorithm_identity",
+      "exit": 1,
+      "session": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v12/bad-algorithm.xml",
+      "log": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/coupled-bad-algorithm-native-v12/command.log",
+      "expected_marker": "scientific identity differs"
+    }
+  ]
+}
