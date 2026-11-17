@@ -266,3 +266,27 @@ The nonlinear adapter cache preserves element/quadrature identity. Native C0
 gradients from coincident points in adjacent elements must remain distinct.
 The v3 coordinate-keyed prototype failed the complete-stress weak identity;
 v4 fixes that bug and passes it at 3.31e-17 without imposing a C1 constraint.
+
+The final scientific restart signature also pins H, h, molecular nu and the
+prescribed wall/model constants, in addition to the mesh and all evolving-rule
+inputs. A changed-H restart must fail before advancement. Requalify the selected
+binary and repeat the full matched matrix after this identity repair.
+
+Additional native C0 collar fixture: project 0.01 times a smooth trigonometric
+velocity onto Q3 in [0,1] x [0,.3], flat/curved graph coordinates, with unchanged
+physical H=.15 and h=.10854503542535461. Use n=2,4,8 in each direction so H
+is an element interface. Evaluate each element's distinct physical gradient
+limit, common positive K/epsilon, finite molecular nu and the full-WJ collar
+stress. Measure L2 physical total-traction jumps and their weak moments against
+1,x,x², normalized by K. Pressure is continuous Q2 and its trace mismatch must
+be below1e-11. The expected gradient/traction order is3; the final finite-grid
+L2 and weak-moment rates must each exceed2.8, with positive selected R spectra.
+This is a prescribed tensor/trace fixture, not a transported-scalar trajectory.
+
+The initial wall-trace n=4->8 rates are about2.74 and miss the2.8 finite-grid
+target. Retain those observations and extend to n=16 to resolve the asymptotic
+gradient error; do not lower the target. Add actual stock/native constant-nu
+and constant-mu time refinements on the same unit-box Q3/Q2 polynomial MMS,
+dt=.02,.01,.005 to t=.2. Require velocity orders>=1.8 for both methods and
+decreasing pressure errors, and report the stock pressure orders separately
+from the candidate's preregistered pressure-order>=1.8 gate.

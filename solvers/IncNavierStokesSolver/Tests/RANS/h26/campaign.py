@@ -90,6 +90,30 @@ class Campaign:
                 tracecase=folder/f'wall-c{curve}-n{n}.xml'
                 if not tracecase.exists():mesh(tracecase,[i/n for i in range(n+1)],[.3*i/n for i in range(n+1)],curve=curve,natural=True,quadrature=12)
                 trace=self.launch(f'wall-trace-c{curve}-n{n}',tracecase,dict(mode='wall_trace',curve=curve));print('WJ-COLLAR-TRACTION',curve,n,trace,flush=True)
+            n=16;tracecase=folder/f'wall-c{curve}-n{n}.xml'
+            if not tracecase.exists():mesh(tracecase,[i/n for i in range(n+1)],[.3*i/n for i in range(n+1)],curve=curve,natural=True,quadrature=12)
+            trace=self.launch(f'wall-trace-c{curve}-n{n}',tracecase,dict(mode='wall_trace',curve=curve));print('WJ-COLLAR-TRACTION-REFINEMENT',curve,n,trace,flush=True)
+    def constant_limit(self):
+        from fixtures import mesh
+        folder=self.root/f'science/constant-limit-v{self.version}';folder.mkdir(exist_ok=True);mu=load(self.matrix/'config.json')['mu_ref']
+        for model in ('nu','constant'):
+            for j,dt in enumerate((.02,.01,.005)):
+                case=folder/f'{model}-{j}.xml'
+                if not case.exists():
+                    mesh(case,[0.,.5,1.],[0.,.15,.5,1.],quadrature=12);x=E.parse(case).getroot();c=x.find('CONDITIONS')
+                    for item in c.find('SOLVERINFO'):
+                        if item.get('PROPERTY')=='SolverType':item.set('VALUE','VCSWeakPressure')
+                    for item in c.find('PARAMETERS'):
+                        key=item.text.split('=')[0].strip()
+                        if key in ('TimeStep','Kinvis'):item.text=f'{key} = '+str(dt if key=='TimeStep'else mu if model=='constant'else 6.423173803526447e-5)
+                    expressions=dict(u='exp(-t)*x^2*(1-x)*(2*y-3*y^2)',v='-exp(-t)*(2*x-3*x^2)*y^2*(1-y)',p='0.01*exp(-2*t)*(x^2+y^2)')
+                    for item in c.findall('BOUNDARYCONDITIONS/REGION/D'):item.set('VALUE',expressions[item.get('VAR')]);item.set('USERDEFINEDTYPE','TimeDependent')
+                    for f in c.findall('FUNCTION'):
+                        if f.get('NAME')=='InitialConditions':
+                            for item in f:item.set('VALUE',expressions[item.get('VAR')].replace('exp(-t)','1').replace('exp(-2*t)','1'))
+                    E.indent(x);case.write_text(E.tostring(x,encoding='unicode')+'\n')
+                for stock in (True,False):
+                    d=self.launch(f'constant-{model}-dt{j}-{"S"if stock else"N"}',case,dict(mode='advance',model=model,mu_ref=mu,d0=0,dt=dt,steps=round(.2/dt),warmup=0,stress=0,awf=0,checkpoint_stride=0),stock);print('CONSTANT-LIMIT',model,dt,'S'if stock else'N',d['L2_errors'],flush=True)
     def benchmark(self,pilot=False):
         config=load(self.matrix/'config.json')['cases']
         repetitions=1 if pilot else 3
@@ -103,6 +127,6 @@ class Campaign:
             c=config['Ntime'];first=load(self.root/'science'/f'block-2-Ntime-v{self.version}.json');request=dict(c['request']);request.update(steps=20,warmup=0,restart=first['final_checkpoint'],checkpoint_stride=0);self.launch('restart-700',Path(c['case']['path']),request,False,120)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--version',type=int,required=True);p.add_argument('--mode',choices=('prepare','verify','pilot','benchmark'),required=True);a=p.parse_args();c=Campaign(a.root,a.version)
+    p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--version',type=int,required=True);p.add_argument('--mode',choices=('prepare','verify','constant_limit','pilot','benchmark'),required=True);a=p.parse_args();c=Campaign(a.root,a.version)
     if a.mode=='pilot':c.benchmark(True)
     else:getattr(c,a.mode)()
