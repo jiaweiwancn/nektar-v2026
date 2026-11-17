@@ -1,0 +1,85 @@
+{
+  "schema": "WJH27FourScheduledRecoveryAuditV1",
+  "status": "PASS_FOUR_SCHEDULED_WRITES",
+  "archive": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/protected-retention-v2/qualification-before-retention.tar.gz",
+    "bytes": 32066948,
+    "sha256": "5dc4ad1ede6ed3bac323a76eb301dda463bc5cd3c6a87d4c2d2fff8298bb0968"
+  },
+  "writes": [
+    {
+      "step": 3,
+      "original": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch1.recovery-3.bin",
+        "sha256": "28a2331b1399c5f940b3c4c8f57fe4bed3c6a5c8e899ad5cc74c45c23d17f012",
+        "bytes": 859058
+      },
+      "archived_or_retained_input": "protected_archive",
+      "four_complete_history_hashes": {
+        "current": "37a7636e5596bb54acafc011e343133e507d79d2851196023766e630ea4f01c5",
+        "previous": "decd352564f3f52b527bdb44b99f9e886ebcefcc7f0967e0c1472c8a33c2069d",
+        "advection": "0b869e7e666e0c6908d2986e27bbf5858e74221dc910c7f3e31bd422d9929626",
+        "previous_advection": "a71cc17f727e73620591a07738f7e06e0c829341f4b4ba5058ce9bd4b1916d52"
+      },
+      "accepted_scientific_state_sha256": "37a7636e5596bb54acafc011e343133e507d79d2851196023766e630ea4f01c5",
+      "status": "MET"
+    },
+    {
+      "step": 6,
+      "original": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.recovery-6.bin",
+        "sha256": "a994ff79909f12a2f2feb02b65b20d5b0341518f442ec4de7826a2c4b07b9a10",
+        "bytes": 859058
+      },
+      "archived_or_retained_input": "protected_archive",
+      "four_complete_history_hashes": {
+        "current": "1628249812c161f0ede8e2fe89e02b0ca51992402c2af95995127aa93ccbe8cf",
+        "previous": "e2a32ea20ab868245ead7a3f5271e7bc5fe95becdb2ee9908f0a5f0ef15394e6",
+        "advection": "8ebefbbecb8535d3962a30269b2c2e326f9b6108a14e3c07b972543cf50fbf36",
+        "previous_advection": "1ddfd006fb058b69c425f552e23d79f4b627168e3332e6a04fe30683e8b4420d"
+      },
+      "accepted_scientific_state_sha256": "1628249812c161f0ede8e2fe89e02b0ca51992402c2af95995127aa93ccbe8cf",
+      "status": "MET"
+    },
+    {
+      "step": 9,
+      "original": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.recovery-9.bin",
+        "sha256": "5bc916cb011804fe4472302ece1c873995bed148af59187ace8a80addb64e218",
+        "bytes": 859058
+      },
+      "archived_or_retained_input": "retained",
+      "four_complete_history_hashes": {
+        "current": "cd70f14d5a00c7d5e717d224bc6a46837fc96edf310689b89645ab6f2701406e",
+        "previous": "5eeddafcff5359f76c2e881001251c2a22ea230d7bd7bd6ddb104b383e78c4db",
+        "advection": "0a99f70bc54740c6be05a7d12ae36a5bd58f9c155abc694a2426801119659ef7",
+        "previous_advection": "a789b9d0fb72ef1ae749c0fe33f51c5005bc9cbbdefd76e5430e4d44405e3bc3"
+      },
+      "accepted_scientific_state_sha256": "cd70f14d5a00c7d5e717d224bc6a46837fc96edf310689b89645ab6f2701406e",
+      "status": "MET"
+    },
+    {
+      "step": 12,
+      "original": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.recovery-12.bin",
+        "sha256": "b56315c0dd59c803dde26f75dfbcdec13f7a6767aef541594b5004f200b40b81",
+        "bytes": 859058
+      },
+      "archived_or_retained_input": "retained",
+      "four_complete_history_hashes": {
+        "current": "8ae42b16baa951f9273a2f18e69da8f7099d0b363175feff02d7ebecbb0b0d1a",
+        "previous": "abca2ae627e22689417f7ae17f8fae5f08bcc8d2ebb6a719701bc5a2e893722c",
+        "advection": "b924f1af33dc342d6b71dd948d85f332f31dcd491a041abcda3b99a6d417e985",
+        "previous_advection": "89a911d4c1337516acfc4a140bab96628323d83857892c3459ae23d6ab90a30c"
+      },
+      "accepted_scientific_state_sha256": "8ae42b16baa951f9273a2f18e69da8f7099d0b363175feff02d7ebecbb0b0d1a",
+      "status": "MET"
+    }
+  ],
+  "reader": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/physical_cache_history_check.py",
+    "bytes": 52279,
+    "sha256": "14808d05cd355f99967b1b0533f9a91de3bb89e06687177dc43df558e1daf1a3"
+  },
+  "scope": "All four exact recovery binaries independently bind current/previous/explicit histories to their accepted scientific frames; latest9/12 separately cold-imported after actual rotation."
+}

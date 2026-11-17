@@ -1,0 +1,71 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v15/IncNavierStokesSolver",
+    "--use-opt-file",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload9.xml.opt",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload9.xml"
+  ],
+  "phase": "science",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T20:41:22.786853+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 497238,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/scientific-retention-controller-v16b.py"
+      },
+      {
+        "pid": 497292,
+        "parent": 497238,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label scientific-retained-reload9-native-v16b --phase science --seconds 30 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v15/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload9.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload9.xml"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v15/IncNavierStokesSolver",
+      "bytes": 380,
+      "sha256": "dee206e8198228c52b299cef44ee5bffb82d90a003ab86aaebc84fabd3bd0a1b"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload9.xml.opt",
+      "bytes": 55,
+      "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload9.xml",
+      "bytes": 112274,
+      "sha256": "c6ca0d6de13bf6c0260449a7508092084fc4af5901500740a593b7a1d5e9716e"
+    }
+  ]
+}

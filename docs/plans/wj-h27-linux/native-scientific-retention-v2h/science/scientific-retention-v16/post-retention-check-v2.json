@@ -1,0 +1,199 @@
+{
+  "schema": "WJH27PostRetentionColdImportCheckV1",
+  "status": "PASS_BOUNDED_SCIENTIFIC_RETENTION_FOUNDATION_ONLY",
+  "foundation_gate_pass": true,
+  "full_H27_qualification": false,
+  "H27_D_pass": false,
+  "TASK3_READY": false,
+  "manifest": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/post-retention-manifest-v2.json",
+    "sha256": "700dd8304dc58c0fdc92be1ecb8c15ca070ab3d699a5cf97f0ecb3c4af3fc55a",
+    "bytes": 2225
+  },
+  "workers": 1,
+  "sources": {
+    "checker": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/scientific_recovery_check.py",
+      "sha256": "de1513e5c22b7476f1c0a2d807429b6f9200cdaa274206de4994d33f3bb282a3",
+      "bytes": 10013
+    },
+    "retention": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/scientific_retention_check.py",
+      "sha256": "15793738ba2b39d9d25d3e6e36780a1ea26db4a2f3bfbf2074fe60da87ed1271",
+      "bytes": 21206
+    },
+    "accumulator": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/scientific_accumulator.py",
+      "sha256": "48b88852744c31532bcb0e0274e319df710928db4529abb116d1a419ca98011c",
+      "bytes": 18815
+    },
+    "history": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/physical_cache_history_check.py",
+      "sha256": "14808d05cd355f99967b1b0533f9a91de3bb89e06687177dc43df558e1daf1a3",
+      "bytes": 52279
+    },
+    "JSON_reader": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/history_recovery_check.py",
+      "sha256": "a6321e307bf3d3f6567f88dbc5e1a5c6a13d9f623be4f8034dd7e3a6cc5da059",
+      "bytes": 23455
+    }
+  },
+  "storage": {
+    "actual_run_directory_bytes": 216101101,
+    "protected_retention_evidence_bytes": 32083570,
+    "retained_selected_payload_bytes": 29898925,
+    "removed_selected_payload_bytes": 56672766,
+    "epoch_native_and_V2_generation_working_bytes": 44467742,
+    "maximum_measured_bytes": {
+      "scientific_frame": 4709595,
+      "recovery": 859058,
+      "final_checkpoint": 859058,
+      "statistics_npz": 8542328
+    },
+    "maximum_measured_step_log_bytes": 5243,
+    "maximum_four_frame_index_bytes": 2035,
+    "illustrative_batch_steps": 500,
+    "illustrative_raw_payload_peak_bytes": 2537601650,
+    "illustrative_current_batch_log_index_bytes": 2875875,
+    "formula": "(N+2)*SCImax+(ceil(N/3)+2)*RECmax+3*FINALmax+3*STATmax; logs/indices separately",
+    "forecast_scope": "Measured 700-cell every-step fixture only; input/XML/FLD/metadata and qualification evidence remain separately charged; no selected production resolution or rigorous future-byte bound",
+    "V2_generation_metadata": "Per-batch provenance plus previous-generation hash; cumulative JSON records retained, older array payloads rotated",
+    "qualification_archive_is_production_saving": false,
+    "production_storage_qualified": false
+  },
+  "assessment": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/retention-assessment-v2.json",
+    "sha256": "38e8c4feb80e87da17acfdb65400784df23fd4dcc0accc1d5e09cb2e6a9e1af8",
+    "bytes": 112648
+  },
+  "retention_receipt": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/protected-retention-v2/retention-receipt.json",
+    "sha256": "d2407e7eaabfbd092897d281496a67717b995a061929fb2b9bc7617d5d62d703",
+    "bytes": 6812
+  },
+  "reloads": {
+    "9": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload9.result.json",
+        "sha256": "76f4c2f3a7f3ecee3f9d56b13709b465e8cf1a784bdd6c118646f115056ca2eb",
+        "bytes": 2289116
+      },
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload9.xml",
+        "sha256": "c6ca0d6de13bf6c0260449a7508092084fc4af5901500740a593b7a1d5e9716e",
+        "bytes": 112274
+      },
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.recovery-9.bin",
+        "sha256": "5bc916cb011804fe4472302ece1c873995bed148af59187ace8a80addb64e218",
+        "bytes": 859058,
+        "payload_sha256": "12e8dd648f987808f7d2999993b38ef3a5a45badf001133f9ba06b895b459734",
+        "signature": "1fd735b441d394046a41508267371a55fe402865fc3d254e57ebd784d6551b45",
+        "step": 9,
+        "time": 0.045,
+        "dt": 0.005,
+        "hashes": {
+          "current": "cd70f14d5a00c7d5e717d224bc6a46837fc96edf310689b89645ab6f2701406e",
+          "previous": "5eeddafcff5359f76c2e881001251c2a22ea230d7bd7bd6ddb104b383e78c4db",
+          "advection": "0a99f70bc54740c6be05a7d12ae36a5bd58f9c155abc694a2426801119659ef7",
+          "previous_advection": "a789b9d0fb72ef1ae749c0fe33f51c5005bc9cbbdefd76e5430e4d44405e3bc3"
+        }
+      },
+      "output": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload9.final.bin",
+        "sha256": "5bc916cb011804fe4472302ece1c873995bed148af59187ace8a80addb64e218",
+        "bytes": 859058
+      },
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload9.steps.jsonl",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "scientific_index": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload9.science-index.json",
+        "sha256": "3956dcb5f6689c589a2fbde1308d879c27e993855879e28ca5eaae7ef3063d64",
+        "bytes": 714
+      },
+      "complete_binary_history_exact": true,
+      "accepted_steps": 0,
+      "advancing_residual_evidence_claimed": false,
+      "history_roles": [
+        "current",
+        "previous",
+        "advection",
+        "previous_advection"
+      ],
+      "process_seconds": null,
+      "construction_seconds": 1.1068956750095822,
+      "initialisation_seconds": 3.6242438059998676,
+      "final_export_seconds": 0.04205648403149098
+    },
+    "12": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload12.result.json",
+        "sha256": "928614c7c5a07f55b6501658d6b57813c7cf07e92b54108f4d3bad3539629117",
+        "bytes": 2289052
+      },
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload12.xml",
+        "sha256": "21f9715db9382423f89d4925a215ed55b1d3a44b12c1968bec2e2f1e94e30243",
+        "bytes": 112276
+      },
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.recovery-12.bin",
+        "sha256": "b56315c0dd59c803dde26f75dfbcdec13f7a6767aef541594b5004f200b40b81",
+        "bytes": 859058,
+        "payload_sha256": "fdfe480103d8ef6442c9f32e392284ab3fa7001b8b240e54b8b178b8bc695308",
+        "signature": "1fd735b441d394046a41508267371a55fe402865fc3d254e57ebd784d6551b45",
+        "step": 12,
+        "time": 0.06,
+        "dt": 0.005,
+        "hashes": {
+          "current": "8ae42b16baa951f9273a2f18e69da8f7099d0b363175feff02d7ebecbb0b0d1a",
+          "previous": "abca2ae627e22689417f7ae17f8fae5f08bcc8d2ebb6a719701bc5a2e893722c",
+          "advection": "b924f1af33dc342d6b71dd948d85f332f31dcd491a041abcda3b99a6d417e985",
+          "previous_advection": "89a911d4c1337516acfc4a140bab96628323d83857892c3459ae23d6ab90a30c"
+        }
+      },
+      "output": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload12.final.bin",
+        "sha256": "b56315c0dd59c803dde26f75dfbcdec13f7a6767aef541594b5004f200b40b81",
+        "bytes": 859058
+      },
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload12.steps.jsonl",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "scientific_index": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload12.science-index.json",
+        "sha256": "5eb339a0c46fca50da071e9961079ce2c0c9becf4bb6098bf8d3dbfab8d90eb1",
+        "bytes": 716
+      },
+      "complete_binary_history_exact": true,
+      "accepted_steps": 0,
+      "advancing_residual_evidence_claimed": false,
+      "history_roles": [
+        "current",
+        "previous",
+        "advection",
+        "previous_advection"
+      ],
+      "process_seconds": null,
+      "construction_seconds": 1.0999744969885796,
+      "initialisation_seconds": 3.62072900502244,
+      "final_export_seconds": 0.04117487999610603
+    }
+  },
+  "retained_statistics": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/accumulated-v2/generation3.json",
+    "sha256": "835dfdffd198ba818182e22bf3d778ff829bb56630f841afbb1cbc4f68d088b6",
+    "bytes": 10051
+  },
+  "actual_rotation": true,
+  "both_retained_recoveries_cold_imported": true,
+  "monitoring_escalation_qualified": false,
+  "selected_recipe_qualified": false,
+  "elapsed_seconds": 0.4436924449983053,
+  "maximum_resident_bytes": 101785600
+}

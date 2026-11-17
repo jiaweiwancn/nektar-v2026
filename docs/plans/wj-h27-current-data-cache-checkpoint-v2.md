@@ -175,3 +175,8 @@ scientific output is still retained. The next operational work addresses that
 storage gap. The original Task3 horizon505.02466521278404 and terminal interval
 [447.8483832973273,505.02466521278404] remain unchanged. No qualified full-Task3
 launch command exists yet.
+
+The subsequent [scientific-retention checkpoint](wj-h27-scientific-retention-checkpoint-v2.md)
+qualifies persisted short-window statistics, actual owned raw/statistics
+rotation and both retained cold imports on this same executable. It preserves
+the unresolved physical, selected-recipe, monitoring and complete-cost gates.

@@ -1,0 +1,33 @@
+
+[36mWarning : [0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	     WJ coupled path: WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon
+	         Wall tensor: FiniteNuIsotropicWallFullWJCollarV2
+	         Integration: current coupled BDF2/EX2, BE startup, no clipping
+	      Pressure gauge: fixed by total outlet traction
+=======================================================================
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload12-u.fld" (0.00319717s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload12-v.fld" (0.00270185s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload12-k.fld" (0.00285307s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload12-epsilon.fld" (0.0016904s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/reload12-p.fld" (0.00126035s, XML)
+-------------------------------------------
+Total Computation Time = 3.6213s
+-------------------------------------------
+L 2 error (variable u) : 21.5483
+L inf error (variable u) : 1.09003
+L 2 error (variable v) : 6.9876e-05
+L inf error (variable v) : 0.000284262
+L 2 error (variable k) : 0.196819
+L inf error (variable k) : 0.017238
+L 2 error (variable epsilon) : 0.00446759
+L inf error (variable epsilon) : 0.00231616
+L 2 error (variable p) : 0.00319257
+L inf error (variable p) : 0.00237679
+-------------------------------------------
+                       Region  Elapsed time Avg (s)       Min (s)       Max (s)         Count      IO Level
+                      Execute               3.72818       3.72818       3.72818             1             0
+

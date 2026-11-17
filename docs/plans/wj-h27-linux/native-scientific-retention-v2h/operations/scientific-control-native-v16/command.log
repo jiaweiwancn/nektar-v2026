@@ -1,0 +1,45 @@
+
+[36mWarning : [0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	     WJ coupled path: WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon
+	         Wall tensor: FiniteNuIsotropicWallFullWJCollarV2
+	         Integration: current coupled BDF2/EX2, BE startup, no clipping
+	      Pressure gauge: fixed by total outlet traction
+=======================================================================
+WJ-H27 step 1, t=0.005, coupled residual=6.91998e-14, nonlinear iterations=4
+WJ-H27 step 2, t=0.01, coupled residual=5.59545e-13, nonlinear iterations=4
+WJ-H27 step 3, t=0.015, coupled residual=6.19441e-14, nonlinear iterations=4
+WJ-H27 step 4, t=0.02, coupled residual=1.35201e-13, nonlinear iterations=4
+WJ-H27 step 5, t=0.025, coupled residual=1.00038e-13, nonlinear iterations=4
+WJ-H27 step 6, t=0.03, coupled residual=7.02185e-14, nonlinear iterations=4
+WJ-H27 step 7, t=0.035, coupled residual=5.11275e-14, nonlinear iterations=4
+WJ-H27 step 8, t=0.04, coupled residual=4.089e-14, nonlinear iterations=4
+WJ-H27 step 9, t=0.045, coupled residual=3.13128e-14, nonlinear iterations=4
+WJ-H27 step 10, t=0.05, coupled residual=3.42474e-14, nonlinear iterations=4
+WJ-H27 step 11, t=0.055, coupled residual=3.32278e-14, nonlinear iterations=4
+WJ-H27 step 12, t=0.06, coupled residual=3.24743e-14, nonlinear iterations=4
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control-u.fld" (0.00317045s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control-v.fld" (0.00270569s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control-k.fld" (0.00285304s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control-epsilon.fld" (0.00168983s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control-p.fld" (0.00127529s, XML)
+-------------------------------------------
+Total Computation Time = 78.9754s
+-------------------------------------------
+L 2 error (variable u) : 21.5483
+L inf error (variable u) : 1.09003
+L 2 error (variable v) : 6.9876e-05
+L inf error (variable v) : 0.000284262
+L 2 error (variable k) : 0.196819
+L inf error (variable k) : 0.017238
+L 2 error (variable epsilon) : 0.00446759
+L inf error (variable epsilon) : 0.00231616
+L 2 error (variable p) : 0.00319257
+L inf error (variable p) : 0.00237679
+-------------------------------------------
+                       Region  Elapsed time Avg (s)       Min (s)       Max (s)         Count      IO Level
+                      Execute               79.1331       79.1331       79.1331             1             0
+

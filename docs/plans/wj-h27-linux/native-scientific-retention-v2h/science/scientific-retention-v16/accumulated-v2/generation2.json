@@ -1,0 +1,297 @@
+{
+  "schema": "WJH27ScientificAccumulatorV2",
+  "status": "PASS_SCIENTIFIC_ACCUMULATOR_BATCH_ONLY",
+  "full_H27_qualification": false,
+  "H27_D_pass": false,
+  "TASK3_READY": false,
+  "window": [
+    0.0173,
+    0.0537
+  ],
+  "weight": 0.0227,
+  "covered_until": 0.04,
+  "window_complete": false,
+  "statistics_defined": true,
+  "last_time": 0.04,
+  "last_step": 8,
+  "last_native_hashes": {
+    "state_sha256": "5eeddafcff5359f76c2e881001251c2a22ea230d7bd7bd6ddb104b383e78c4db",
+    "previous_sha256": "d6bc700ca95ce518490b358fe2608ff5bd0c53ff4ed5892014ba6e0b96b91831",
+    "advection_sha256": "a789b9d0fb72ef1ae749c0fe33f51c5005bc9cbbdefd76e5430e4d44405e3bc3",
+    "previous_advection_sha256": "0ecd48f3d8b47c21c783824c657dade4de6bedbd906c85d74cfde7f016e224bd"
+  },
+  "layout_sha256": "7e4c368d5af3084323b826f80aa1e711428f454e726e9bab4a4a07ca8097ff73",
+  "source_identity": "47fb3597c4e56348361cfab6eadf9a34ba8d89027e57ed01153ca4d9c5ab10d1",
+  "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+  "signature": "1fd735b441d394046a41508267371a55fe402865fc3d254e57ebd784d6551b45",
+  "dt": 0.005,
+  "sampling": "IndependentSignedGauss5EndpointsV1",
+  "math": "WeightedLinearSegmentWelfordV1",
+  "batch_number": 2,
+  "cumulative_frame_count": 8,
+  "cumulative_segment_count": 5,
+  "provenance_policy": "Per-batch frames/segments plus immutable previous-generation identity; no cumulative list copies",
+  "previous_generation": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/accumulated-v2/generation1.json",
+    "sha256": "98e0bece64fe7521a09770d517fb93b26aeff7ad42a3f0aeb9d14cc6c19d842c",
+    "bytes": 9361
+  },
+  "native_result": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.result.json",
+    "sha256": "c8a53db0a62678da63794e10314874bd5bbb570b5cab3b73aa658970fe09bfdd",
+    "bytes": 4710146
+  },
+  "native_index": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.science-index.json",
+    "sha256": "76a56b8b8f6ef216081a8ccf8d2ffd918e02e26f78f3958e9a01499bda98913e",
+    "bytes": 2026
+  },
+  "session": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.xml",
+    "sha256": "fa07a5fc2854632e88f8107aee67c5fcd38092e92967a6d0a23fe1180e20d75d",
+    "bytes": 112267
+  },
+  "segments": [
+    {
+      "left_step": 4,
+      "right_step": 5,
+      "left": 0.02,
+      "right": 0.025,
+      "lo": 0.02,
+      "hi": 0.025,
+      "weight": 0.005000000000000001,
+      "lower_fraction": 0.0,
+      "upper_fraction": 1.0
+    },
+    {
+      "left_step": 5,
+      "right_step": 6,
+      "left": 0.025,
+      "right": 0.03,
+      "lo": 0.025,
+      "hi": 0.03,
+      "weight": 0.0049999999999999975,
+      "lower_fraction": 0.0,
+      "upper_fraction": 1.0
+    },
+    {
+      "left_step": 6,
+      "right_step": 7,
+      "left": 0.03,
+      "right": 0.035,
+      "lo": 0.03,
+      "hi": 0.035,
+      "weight": 0.0050000000000000044,
+      "lower_fraction": 0.0,
+      "upper_fraction": 1.0
+    },
+    {
+      "left_step": 7,
+      "right_step": 8,
+      "left": 0.035,
+      "right": 0.04,
+      "lo": 0.035,
+      "hi": 0.04,
+      "weight": 0.0049999999999999975,
+      "lower_fraction": 0.0,
+      "upper_fraction": 1.0
+    }
+  ],
+  "frames": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.science-5.json",
+      "sha256": "9419d5f9374929ab30665738717061179e807152588ed636b3ba6eeab6f57036",
+      "bytes": 4709326,
+      "step": 5,
+      "time": 0.025,
+      "hashes": {
+        "state_sha256": "e2a32ea20ab868245ead7a3f5271e7bc5fe95becdb2ee9908f0a5f0ef15394e6",
+        "previous_sha256": "1af54419e8def98be5202dfd850c8d03c13a2baf4aa8bf7a8b00cadbceb822de",
+        "advection_sha256": "1ddfd006fb058b69c425f552e23d79f4b627168e3332e6a04fe30683e8b4420d",
+        "previous_advection_sha256": "786755daeee28d4e47476425804031fe346c1cc7f5cba48a8ba172b67a6e3c77"
+      },
+      "origin": "current_process_accepted_step"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.science-6.json",
+      "sha256": "25b232ebae0722a652158a7d5385a2fd84be3f00c401e3a57027620b2877623c",
+      "bytes": 4709312,
+      "step": 6,
+      "time": 0.03,
+      "hashes": {
+        "state_sha256": "1628249812c161f0ede8e2fe89e02b0ca51992402c2af95995127aa93ccbe8cf",
+        "previous_sha256": "e2a32ea20ab868245ead7a3f5271e7bc5fe95becdb2ee9908f0a5f0ef15394e6",
+        "advection_sha256": "8ebefbbecb8535d3962a30269b2c2e326f9b6108a14e3c07b972543cf50fbf36",
+        "previous_advection_sha256": "1ddfd006fb058b69c425f552e23d79f4b627168e3332e6a04fe30683e8b4420d"
+      },
+      "origin": "current_process_accepted_step"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.science-7.json",
+      "sha256": "c04015e28d3d289f85e7b70c4e4c7eb9b38350293c41db1780a5b81b44184a07",
+      "bytes": 4709366,
+      "step": 7,
+      "time": 0.035,
+      "hashes": {
+        "state_sha256": "d6bc700ca95ce518490b358fe2608ff5bd0c53ff4ed5892014ba6e0b96b91831",
+        "previous_sha256": "1628249812c161f0ede8e2fe89e02b0ca51992402c2af95995127aa93ccbe8cf",
+        "advection_sha256": "0ecd48f3d8b47c21c783824c657dade4de6bedbd906c85d74cfde7f016e224bd",
+        "previous_advection_sha256": "8ebefbbecb8535d3962a30269b2c2e326f9b6108a14e3c07b972543cf50fbf36"
+      },
+      "origin": "current_process_accepted_step"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.science-8.json",
+      "sha256": "cff890b5236b08ca1c66b781bc36c86c30cf5dd3a57e06f2edebbd20ba66815d",
+      "bytes": 4709138,
+      "step": 8,
+      "time": 0.04,
+      "hashes": {
+        "state_sha256": "5eeddafcff5359f76c2e881001251c2a22ea230d7bd7bd6ddb104b383e78c4db",
+        "previous_sha256": "d6bc700ca95ce518490b358fe2608ff5bd0c53ff4ed5892014ba6e0b96b91831",
+        "advection_sha256": "a789b9d0fb72ef1ae749c0fe33f51c5005bc9cbbdefd76e5430e4d44405e3bc3",
+        "previous_advection_sha256": "0ecd48f3d8b47c21c783824c657dade4de6bedbd906c85d74cfde7f016e224bd"
+      },
+      "origin": "current_process_accepted_step"
+    }
+  ],
+  "variance_policy": "M2 accumulates nonnegative centered linear-segment moments; no floor or raw-moment cancellation",
+  "observations_are_scaled": true,
+  "raw_scientific_frames_deleted": false,
+  "continuum_supremum_claim": false,
+  "helper_sources": {
+    "accumulator": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/scientific_accumulator.py",
+      "sha256": "48b88852744c31532bcb0e0274e319df710928db4529abb116d1a419ca98011c",
+      "bytes": 18815
+    },
+    "observations": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/terminal_output_check.py",
+      "sha256": "64471e899287c1659f893d0de23800e28be404e1764044790c4fb8d2d5f89e1e",
+      "bytes": 30111
+    },
+    "fields": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/implicit_algorithm_check.py",
+      "sha256": "ef9ba86a8be2bd8920a25789f4c356bbc7271d1b79bec2947e163f7ae36af093",
+      "bytes": 29224
+    },
+    "reference": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/physical_oracle.py",
+      "sha256": "94fbd2c1fd7c458dfeaa13989a0eec1449dd5d6db854ff89695e705a59dc2358",
+      "bytes": 65735
+    },
+    "history": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/physical_cache_history_check.py",
+      "sha256": "14808d05cd355f99967b1b0533f9a91de3bb89e06687177dc43df558e1daf1a3",
+      "bytes": 52279
+    },
+    "JSON_reader": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/history_recovery_check.py",
+      "sha256": "a6321e307bf3d3f6567f88dbc5e1a5c6a13d9f623be4f8034dd7e3a6cc5da059",
+      "bytes": 23455
+    }
+  },
+  "arrays": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/accumulated-v2/generation2.npz",
+    "sha256": "a11d0395f4428f921031be78e887c91e23b52ae2de44a2cbdfacab658716754c",
+    "bytes": 8503217
+  },
+  "groups": {
+    "inner_U": {
+      "region": "inner",
+      "field": "U",
+      "points": 10976,
+      "components": 2
+    },
+    "inner_k": {
+      "region": "inner",
+      "field": "k",
+      "points": 10976,
+      "components": 1
+    },
+    "inner_Pi": {
+      "region": "inner",
+      "field": "Pi",
+      "points": 10976,
+      "components": 1
+    },
+    "inner_R": {
+      "region": "inner",
+      "field": "R",
+      "points": 10976,
+      "components": 9
+    },
+    "inner_G": {
+      "region": "inner",
+      "field": "G",
+      "points": 10976,
+      "components": 9
+    },
+    "inner_Ew": {
+      "region": "inner",
+      "field": "Ew",
+      "points": 10976,
+      "components": 1
+    },
+    "ground_traction": {
+      "region": "ground",
+      "field": "traction",
+      "points": 98,
+      "components": 2
+    },
+    "outer_U": {
+      "region": "outer",
+      "field": "U",
+      "points": 23324,
+      "components": 2
+    },
+    "outer_k": {
+      "region": "outer",
+      "field": "k",
+      "points": 23324,
+      "components": 1
+    },
+    "outer_Pi": {
+      "region": "outer",
+      "field": "Pi",
+      "points": 23324,
+      "components": 1
+    },
+    "outer_R": {
+      "region": "outer",
+      "field": "R",
+      "points": 23324,
+      "components": 9
+    },
+    "outer_G": {
+      "region": "outer",
+      "field": "G",
+      "points": 23324,
+      "components": 9
+    },
+    "outer_epsilon": {
+      "region": "outer",
+      "field": "epsilon",
+      "points": 23324,
+      "components": 1
+    },
+    "interface_K": {
+      "region": "interface",
+      "field": "K",
+      "points": 98,
+      "components": 1
+    },
+    "interface_Gamma": {
+      "region": "interface",
+      "field": "Gamma",
+      "points": 98,
+      "components": 1
+    },
+    "interface_cutoff": {
+      "region": "interface",
+      "field": "cutoff",
+      "points": 98,
+      "components": 1
+    }
+  }
+}

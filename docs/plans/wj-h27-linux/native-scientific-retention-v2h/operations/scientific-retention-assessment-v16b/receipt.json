@@ -1,0 +1,90 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/scientific_retention_check.py",
+    "--manifest",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/retention-manifest-v2.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/retention-assessment-v2.json",
+    "--seconds",
+    "110",
+    "--commit-retention"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 120.0,
+  "utc": "2026-11-17T20:40:40.899229+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 497238,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/scientific-retention-controller-v16b.py"
+      },
+      {
+        "pid": 497260,
+        "parent": 497238,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label scientific-retention-assessment-v16b --phase analysis --seconds 120 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/scientific_retention_check.py --manifest /home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/retention-manifest-v2.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/retention-assessment-v2.json --seconds 110 --commit-retention"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/scientific_retention_check.py",
+      "bytes": 21206,
+      "sha256": "15793738ba2b39d9d25d3e6e36780a1ea26db4a2f3bfbf2074fe60da87ed1271"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/retention-manifest-v2.json",
+      "bytes": 4708,
+      "sha256": "6de3fec268624d4b523982737c89c5196de5b070483079b21e07c6ecf9a8479c"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 41.68120689899661,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 770551808,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/scientific-retention-assessment-v16b/command.log",
+    "bytes": 96,
+    "sha256": "f67558642edcb809dd94b5e2569503b00e1d66fc47bf9398cdc6f94105083255"
+  }
+}

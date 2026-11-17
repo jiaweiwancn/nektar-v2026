@@ -1,0 +1,71 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/scientific_recovery_check.py",
+    "--manifest",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/post-retention-manifest-v2.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/post-retention-check-v2.json",
+    "--seconds",
+    "25"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T20:41:36.160449+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 497238,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/scientific-retention-controller-v16b.py"
+      },
+      {
+        "pid": 497324,
+        "parent": 497238,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label scientific-post-retention-check-v16b --phase analysis --seconds 30 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/scientific_recovery_check.py --manifest /home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/post-retention-manifest-v2.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/post-retention-check-v2.json --seconds 25"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/scientific_recovery_check.py",
+      "bytes": 10013,
+      "sha256": "de1513e5c22b7476f1c0a2d807429b6f9200cdaa274206de4994d33f3bb282a3"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/post-retention-manifest-v2.json",
+      "bytes": 2225,
+      "sha256": "700dd8304dc58c0fdc92be1ecb8c15ca070ab3d699a5cf97f0ecb3c4af3fc55a"
+    }
+  ]
+}

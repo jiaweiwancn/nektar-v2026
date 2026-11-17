@@ -1,0 +1,89 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16/h27/scientific_accumulator.py",
+    "--manifest",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2-accumulator-manifest.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--output",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/generation2",
+    "--seconds",
+    "55"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 60.0,
+  "utc": "2026-11-17T20:30:12.824592+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 496988,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/scientific-data-controller-v16.py"
+      },
+      {
+        "pid": 497133,
+        "parent": 496988,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label scientific-accumulator-2-v16 --phase analysis --seconds 60 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16/h27/scientific_accumulator.py --manifest /home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2-accumulator-manifest.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --output /home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/generation2 --seconds 55"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16/h27/scientific_accumulator.py",
+      "bytes": 18483,
+      "sha256": "a1e955b8c419dd2948bd5a1a5fffe364094b42a4178a28a8423d4dace09fb099"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2-accumulator-manifest.json",
+      "bytes": 1263,
+      "sha256": "e81d604f5dda15bad01b97c7d9b415f81c8e6aa6f25570ae76c9d20f56494878"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 6.586298963986337,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 163041280,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/scientific-accumulator-2-v16/command.log",
+    "bytes": 343,
+    "sha256": "e54e40ce2b2b0d010bf9af5ce6c81bcf05c74349e85f4ab655a32116af3be636"
+  }
+}

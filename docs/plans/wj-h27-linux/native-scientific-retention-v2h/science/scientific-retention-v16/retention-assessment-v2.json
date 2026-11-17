@@ -1,0 +1,3641 @@
+{
+  "schema": "WJH27ScientificRetentionCheckV1",
+  "status": "PASS_SCIENTIFIC_REDUCTION_AND_ROTATION_ONLY",
+  "foundation_gate_pass": true,
+  "full_H27_qualification": false,
+  "H27_D_pass": false,
+  "TASK3_READY": false,
+  "manifest": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/retention-manifest-v2.json",
+    "sha256": "6de3fec268624d4b523982737c89c5196de5b070483079b21e07c6ecf9a8479c",
+    "bytes": 4708
+  },
+  "table": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+    "bytes": 92259
+  },
+  "workers": 1,
+  "streaming_comparison_limit": 2e-12,
+  "cold_comparison_limit": 1e-08,
+  "sources": {
+    "checker": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/scientific_retention_check.py",
+      "sha256": "15793738ba2b39d9d25d3e6e36780a1ea26db4a2f3bfbf2074fe60da87ed1271",
+      "bytes": 21206
+    },
+    "accumulator": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/scientific_accumulator.py",
+      "sha256": "48b88852744c31532bcb0e0274e319df710928db4529abb116d1a419ca98011c",
+      "bytes": 18815
+    },
+    "terminal": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/terminal_output_check.py",
+      "sha256": "64471e899287c1659f893d0de23800e28be404e1764044790c4fb8d2d5f89e1e",
+      "bytes": 30111
+    },
+    "history": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/physical_cache_history_check.py",
+      "sha256": "14808d05cd355f99967b1b0533f9a91de3bb89e06687177dc43df558e1daf1a3",
+      "bytes": 52279
+    },
+    "fields": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/implicit_algorithm_check.py",
+      "sha256": "ef9ba86a8be2bd8920a25789f4c356bbc7271d1b79bec2947e163f7ae36af093",
+      "bytes": 29224
+    },
+    "reference": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/physical_oracle.py",
+      "sha256": "94fbd2c1fd7c458dfeaa13989a0eec1449dd5d6db854ff89695e705a59dc2358",
+      "bytes": 65735
+    },
+    "transient": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/physical_transient_oracle.py",
+      "sha256": "a5acc31d47a09a2d94562a5052649b825292d1a76680b97fb67b9960fc6a1be3",
+      "bytes": 29987
+    },
+    "JSON_reader": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-scientific-retention-v16b/h27/history_recovery_check.py",
+      "sha256": "a6321e307bf3d3f6567f88dbc5e1a5c6a13d9f623be4f8034dd7e3a6cc5da059",
+      "bytes": 23455
+    }
+  },
+  "memory_cap_bytes": 8589934592,
+  "runs": {
+    "control": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control.result.json",
+        "sha256": "46d807b4737c566dfbd3ed42cf16651cf48c014d46748fc14f6a53634dbbf526",
+        "bytes": 4709598
+      },
+      "index": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control.science-index.json",
+        "sha256": "504bafe53d6859044bb92c19140c01cf0ae6a5e507eceea593187463e1a554ae",
+        "bytes": 4652
+      },
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control.xml",
+        "sha256": "38b8c9a0854da4c61ab6fda75e9bf115f9925a06dacc8c3d5b43a8c8af4244ad",
+        "bytes": 112134
+      },
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control.steps.jsonl",
+        "sha256": "6b21a3d73cade28e9b85b4304f9d4e176ab2d2d96748c5658dc4f6156ee6ac93",
+        "bytes": 62747
+      },
+      "frames": [
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control.science-1.json",
+          "sha256": "008937bc19150f57cf280ae94c15ef41e6b706f90782d1b7a7fab97422f61e98",
+          "bytes": 3727826
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control.science-2.json",
+          "sha256": "b96591f64dabc9d0c525ad97bf43e90de43e617a0945710c5515aa4a9e32ae6e",
+          "bytes": 4294431
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control.science-3.json",
+          "sha256": "2929a7f6edd1383637e219f614c2aec63fd3a0dab16509c0debb8ac387605e77",
+          "bytes": 4709597
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control.science-4.json",
+          "sha256": "ba3e1b122d387b76acc2fbecda800bd9107a5d08a808614f28687c119673f23a",
+          "bytes": 4709231
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control.science-5.json",
+          "sha256": "0487fbe9a939b6a4e9c9a7fb41eabb8fb33c25050e8463fc0f1343c09946e43e",
+          "bytes": 4709281
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control.science-6.json",
+          "sha256": "900da0b5b47d39968961849c4113a30e6a4ff2a34fa306161d04f4e318dbd4a1",
+          "bytes": 4709197
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control.science-7.json",
+          "sha256": "1d1848837244e97e9e091f9dc27e50761c2275941272599077870f6ad7f455d9",
+          "bytes": 4709202
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control.science-8.json",
+          "sha256": "e832afa86d0af6189789241421a77d5908204aee480f272a378425e3980022a8",
+          "bytes": 4709025
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control.science-9.json",
+          "sha256": "f1b985b058884032881971521e1cbcbbbda955d8c0438cc7e40eccdf0d829bd4",
+          "bytes": 4708832
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control.science-10.json",
+          "sha256": "7df3b44cd5a149da3e8f61769cced5d14f2da2ac0ed0b7e95e85e231c87a2025",
+          "bytes": 4708674
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control.science-11.json",
+          "sha256": "b4fd33161042160e5bb69874e95ffcd9f3a7a3db1f5e45a1c473e1468ad07a26",
+          "bytes": 4708384
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control.science-12.json",
+          "sha256": "00490bf2852715089718248273716e409a2f6855bf0c67469f09a8c76f168d1f",
+          "bytes": 4708269
+        }
+      ],
+      "checkpoint": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/control.final.bin",
+        "sha256": "d61aa7fc60c3940552ff8237969c79ea82e218b7a3a8cfb29b221da10850d334",
+        "bytes": 859058,
+        "payload_sha256": "70953fd24d4c9637ffceed35d1b82e60b29916b6809ce2779a7b60301df83251",
+        "signature": "1fd735b441d394046a41508267371a55fe402865fc3d254e57ebd784d6551b45",
+        "step": 12,
+        "time": 0.06,
+        "dt": 0.005,
+        "hashes": {
+          "current": "e11d5bcdfad70c5a42bc4dff6232e632b06eda5803faa09f1aee0239f89bfa1c",
+          "previous": "0adda7bcb702d5afc634b21b2abd612033e0eb4568a0819e41b41ca593985404",
+          "advection": "07948ee6f1529955054fb75f210642a888a7670c810eea7f037cbcd3076e284b",
+          "previous_advection": "e12adc669122e1e8e7a451447461424434c32d6f24c5a5b43feb24dafd82349e"
+        }
+      },
+      "expected_schedule": {
+        "1": 1,
+        "2": 1,
+        "3": 3,
+        "4": 5,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+        "8": 1,
+        "9": 1,
+        "10": 17,
+        "11": 33,
+        "12": 129
+      },
+      "complete_advancing_seconds": 76.543287303939,
+      "complete_step_seconds": [
+        7.445366572006606,
+        6.9356435719528235,
+        5.753374212014023,
+        6.935210169001948,
+        5.4758426590124145,
+        6.919372287986334,
+        5.450105213967618,
+        6.916267965047155,
+        5.479089383967221,
+        6.878642934956588,
+        5.472227180027403,
+        6.882145153998863
+      ],
+      "scientific_frame_seconds": 1.5936897880746983,
+      "scientific_index_seconds": 9.689497528597713e-05
+    },
+    "epochs": [
+      {
+        "result": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch1.result.json",
+          "sha256": "091ecfcd2dc61aefe24e35154e1bf414616bb73a66b96e6f32b330d036e55fd1",
+          "bytes": 4710241
+        },
+        "index": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch1.science-index.json",
+          "sha256": "c65485f08c135513bf2378b6e22e82ea155b0f30729a4625480dc32148005f20",
+          "bytes": 1976
+        },
+        "session": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch1.xml",
+          "sha256": "e80f14d392440ad8b77e9c0cb6eb0797a1687935d9b87183bf48d87cd5127120",
+          "bytes": 112132
+        },
+        "log": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch1.steps.jsonl",
+          "sha256": "868e6b50f6db8edec485a5ee5b173482d282876dbdab639b75a48c9956feef63",
+          "bytes": 20892
+        },
+        "frames": [
+          {
+            "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch1.science-1.json",
+            "sha256": "9f66074a6b153ebf99b1619cfca7c3a182610beea74a31c9fbba3d7e8237016f",
+            "bytes": 3727824
+          },
+          {
+            "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch1.science-2.json",
+            "sha256": "560ad08bc45d79d73b4a8f49509228d35bd3b73bf6387067d74fbd496ffc1b94",
+            "bytes": 4294426
+          },
+          {
+            "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch1.science-3.json",
+            "sha256": "ca3afea0fb0c2d550faa624d0cf91f7c16477d96781b391f047c07bbf66fbeab",
+            "bytes": 4709595
+          },
+          {
+            "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch1.science-4.json",
+            "sha256": "db12c9d7e47d7ea0f5d06786e31fed7ac1927a397a92e8d270b4effba2fdbbde",
+            "bytes": 4709231
+          }
+        ],
+        "checkpoint": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch1.final.bin",
+          "sha256": "f2133242879130a5f570f96c8b7b3781e62a0ada31b95a6aa557774148e3d5fa",
+          "bytes": 859058,
+          "payload_sha256": "d1f651b59eb71040a7f8b30a5e45ffc334d5790cd26507736024f93e7ee71a19",
+          "signature": "1fd735b441d394046a41508267371a55fe402865fc3d254e57ebd784d6551b45",
+          "step": 4,
+          "time": 0.02,
+          "dt": 0.005,
+          "hashes": {
+            "current": "1af54419e8def98be5202dfd850c8d03c13a2baf4aa8bf7a8b00cadbceb822de",
+            "previous": "37a7636e5596bb54acafc011e343133e507d79d2851196023766e630ea4f01c5",
+            "advection": "786755daeee28d4e47476425804031fe346c1cc7f5cba48a8ba172b67a6e3c77",
+            "previous_advection": "0b869e7e666e0c6908d2986e27bbf5858e74221dc910c7f3e31bd422d9929626"
+          }
+        },
+        "complete_advancing_seconds": 26.87681742507266,
+        "complete_step_seconds": [
+          7.412262450030539,
+          6.875195075001102,
+          5.734866334008984,
+          6.854493566032033
+        ],
+        "scientific_frame_seconds": 0.5205929540097713,
+        "scientific_index_seconds": 6.036297418177128e-05
+      },
+      {
+        "result": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.result.json",
+          "sha256": "c8a53db0a62678da63794e10314874bd5bbb570b5cab3b73aa658970fe09bfdd",
+          "bytes": 4710146
+        },
+        "index": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.science-index.json",
+          "sha256": "76a56b8b8f6ef216081a8ccf8d2ffd918e02e26f78f3958e9a01499bda98913e",
+          "bytes": 2026
+        },
+        "session": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.xml",
+          "sha256": "fa07a5fc2854632e88f8107aee67c5fcd38092e92967a6d0a23fe1180e20d75d",
+          "bytes": 112267
+        },
+        "log": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.steps.jsonl",
+          "sha256": "56b02afc944b86153dbac962b855806c127050eded0e8ec981dd42ec05646b6e",
+          "bytes": 20921
+        },
+        "frames": [
+          {
+            "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.science-5.json",
+            "sha256": "9419d5f9374929ab30665738717061179e807152588ed636b3ba6eeab6f57036",
+            "bytes": 4709326
+          },
+          {
+            "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.science-6.json",
+            "sha256": "25b232ebae0722a652158a7d5385a2fd84be3f00c401e3a57027620b2877623c",
+            "bytes": 4709312
+          },
+          {
+            "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.science-7.json",
+            "sha256": "c04015e28d3d289f85e7b70c4e4c7eb9b38350293c41db1780a5b81b44184a07",
+            "bytes": 4709366
+          },
+          {
+            "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.science-8.json",
+            "sha256": "cff890b5236b08ca1c66b781bc36c86c30cf5dd3a57e06f2edebbd20ba66815d",
+            "bytes": 4709138
+          }
+        ],
+        "checkpoint": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.final.bin",
+          "sha256": "4db46fe2bb73cd844637144b5c83a10f8b5077c2b34422ec7012173de998f674",
+          "bytes": 859058,
+          "payload_sha256": "63ec6e8937e2c7fa1058b2095251b1118b306421b44d8255e2d6a2b0932a2d9b",
+          "signature": "1fd735b441d394046a41508267371a55fe402865fc3d254e57ebd784d6551b45",
+          "step": 8,
+          "time": 0.04,
+          "dt": 0.005,
+          "hashes": {
+            "current": "5eeddafcff5359f76c2e881001251c2a22ea230d7bd7bd6ddb104b383e78c4db",
+            "previous": "d6bc700ca95ce518490b358fe2608ff5bd0c53ff4ed5892014ba6e0b96b91831",
+            "advection": "a789b9d0fb72ef1ae749c0fe33f51c5005bc9cbbdefd76e5430e4d44405e3bc3",
+            "previous_advection": "0ecd48f3d8b47c21c783824c657dade4de6bedbd906c85d74cfde7f016e224bd"
+          }
+        },
+        "complete_advancing_seconds": 24.771445782040246,
+        "complete_step_seconds": [
+          6.907167867990211,
+          5.505879438016564,
+          6.9011265150038525,
+          5.457271961029619
+        ],
+        "scientific_frame_seconds": 0.5419068470364437,
+        "scientific_index_seconds": 6.443395977839828e-05
+      },
+      {
+        "result": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.result.json",
+          "sha256": "a3750b0335d23962fec07caa2f997ecf3a8eb50eab6d653ffb2ac9ad476d13cd",
+          "bytes": 4709717
+        },
+        "index": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.science-index.json",
+          "sha256": "73951907c3f9a53b00a82001429f256fbb2c979a3925fa74245f42a3fe652a64",
+          "bytes": 2035
+        },
+        "session": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.xml",
+          "sha256": "fb26f186fe915bdc79399d37d2cc9f2c4f0811abb4226aab7c6cb7045d439fc0",
+          "bytes": 112267
+        },
+        "log": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.steps.jsonl",
+          "sha256": "000aac2a54a9e9085829b4c939da64e463145caa038ba3678efcc660bfd6f06d",
+          "bytes": 20928
+        },
+        "frames": [
+          {
+            "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.science-9.json",
+            "sha256": "ddcee36fe2430451c7ac7493f64eedcc0970c065f55fc5099c8d1c7ba5552399",
+            "bytes": 4709004
+          },
+          {
+            "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.science-10.json",
+            "sha256": "724bd76e5f3f7a81ed5dea273961d1cb1d6fa8c3df10be327419a5df9649b016",
+            "bytes": 4708622
+          },
+          {
+            "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.science-11.json",
+            "sha256": "932154900de04aa7fbaa3ccf3da8e27f04cd9558633d3cc52aca927472ceb8f8",
+            "bytes": 4708562
+          },
+          {
+            "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.science-12.json",
+            "sha256": "330fff3d2f396abb70da7567fbd64180475a32a32a6f4b980ca15c0b44a1cb09",
+            "bytes": 4708586
+          }
+        ],
+        "checkpoint": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.final.bin",
+          "sha256": "b56315c0dd59c803dde26f75dfbcdec13f7a6767aef541594b5004f200b40b81",
+          "bytes": 859058,
+          "payload_sha256": "fdfe480103d8ef6442c9f32e392284ab3fa7001b8b240e54b8b178b8bc695308",
+          "signature": "1fd735b441d394046a41508267371a55fe402865fc3d254e57ebd784d6551b45",
+          "step": 12,
+          "time": 0.06,
+          "dt": 0.005,
+          "hashes": {
+            "current": "8ae42b16baa951f9273a2f18e69da8f7099d0b363175feff02d7ebecbb0b0d1a",
+            "previous": "abca2ae627e22689417f7ae17f8fae5f08bcc8d2ebb6a719701bc5a2e893722c",
+            "advection": "b924f1af33dc342d6b71dd948d85f332f31dcd491a041abcda3b99a6d417e985",
+            "previous_advection": "89a911d4c1337516acfc4a140bab96628323d83857892c3459ae23d6ab90a30c"
+          }
+        },
+        "complete_advancing_seconds": 24.766696520964615,
+        "complete_step_seconds": [
+          6.9453232899541035,
+          5.488803044019733,
+          6.88165704999119,
+          5.4509131369995885
+        ],
+        "scientific_frame_seconds": 0.5312403700081632,
+        "scientific_index_seconds": 6.236199988052249e-05
+      }
+    ]
+  },
+  "generations": [
+    {
+      "identity": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/accumulated-v2/generation1.json",
+        "sha256": "98e0bece64fe7521a09770d517fb93b26aeff7ad42a3f0aeb9d14cc6c19d842c",
+        "bytes": 9361
+      },
+      "weight": 0.002700000000000001,
+      "batch_number": 1,
+      "frames": 4,
+      "segments": 1,
+      "arrays": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/accumulated-v2/generation1.npz",
+        "sha256": "020cc71650c8899ac862b7fb15330ea062aa248e79623e36ae00e728e4bef855",
+        "bytes": 8399748
+      },
+      "covered_until": 0.02
+    },
+    {
+      "identity": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/accumulated-v2/generation2.json",
+        "sha256": "dd7d8dc6ae470a6a25e107da371311563a17872819885b11c70f859a8979a81f",
+        "bytes": 10255
+      },
+      "weight": 0.0227,
+      "batch_number": 2,
+      "frames": 4,
+      "segments": 4,
+      "arrays": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/accumulated-v2/generation2.npz",
+        "sha256": "a11d0395f4428f921031be78e887c91e23b52ae2de44a2cbdfacab658716754c",
+        "bytes": 8503217
+      },
+      "covered_until": 0.04
+    },
+    {
+      "identity": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/accumulated-v2/generation3.json",
+        "sha256": "835dfdffd198ba818182e22bf3d778ff829bb56630f841afbb1cbc4f68d088b6",
+        "bytes": 10051
+      },
+      "weight": 0.0364,
+      "batch_number": 3,
+      "frames": 4,
+      "segments": 3,
+      "arrays": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/accumulated-v2/generation3.npz",
+        "sha256": "a6cd60fe6e9c4d8709100700c5fab3497290181d1cac3ad8cea8d72d20381d5a",
+        "bytes": 8542328
+      },
+      "covered_until": 0.0537
+    }
+  ],
+  "endpoint": {
+    "coefficients": {
+      "current": {
+        "U": {
+          "scaled_MAX": 1.4900384135845633e-14,
+          "scaled_coefficient_RMS": 4.088304603440975e-16
+        },
+        "Pi": {
+          "scaled_MAX": 1.37050085548584e-09,
+          "scaled_coefficient_RMS": 5.7793024836420726e-11
+        },
+        "k": {
+          "scaled_MAX": 5.788973258799129e-15,
+          "scaled_coefficient_RMS": 4.173810381176321e-16
+        },
+        "epsilon": {
+          "scaled_MAX": 1.7290036839919074e-15,
+          "scaled_coefficient_RMS": 1.0450696487221946e-16
+        }
+      },
+      "previous": {
+        "U": {
+          "scaled_MAX": 6.205101456816348e-15,
+          "scaled_coefficient_RMS": 3.042816001778344e-16
+        },
+        "Pi": {
+          "scaled_MAX": 1.5674735406497862e-09,
+          "scaled_coefficient_RMS": 6.018444518123833e-11
+        },
+        "k": {
+          "scaled_MAX": 4.7292505687973405e-15,
+          "scaled_coefficient_RMS": 4.075177348510219e-16
+        },
+        "epsilon": {
+          "scaled_MAX": 3.2511102680405658e-15,
+          "scaled_coefficient_RMS": 1.446137399581452e-16
+        }
+      },
+      "advection": {
+        "U": {
+          "scaled_MAX": 6.172545741788126e-16,
+          "scaled_coefficient_RMS": 1.8623240246705383e-17
+        },
+        "Pi": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "k": {
+          "scaled_MAX": 2.7569629819560193e-15,
+          "scaled_coefficient_RMS": 8.187564362115486e-17
+        },
+        "epsilon": {
+          "scaled_MAX": 1.1705796904142941e-17,
+          "scaled_coefficient_RMS": 1.1759902223860348e-18
+        }
+      },
+      "previous_advection": {
+        "U": {
+          "scaled_MAX": 4.930252942980385e-16,
+          "scaled_coefficient_RMS": 1.5966397987896075e-17
+        },
+        "Pi": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "k": {
+          "scaled_MAX": 1.5754074182605824e-15,
+          "scaled_coefficient_RMS": 6.778370779273429e-17
+        },
+        "epsilon": {
+          "scaled_MAX": 1.7558695356214412e-17,
+          "scaled_coefficient_RMS": 1.2784981427982756e-18
+        }
+      },
+      "older": {
+        "U": {
+          "scaled_MAX": 1.0116637915714843e-14,
+          "scaled_coefficient_RMS": 3.2710243707168253e-16
+        },
+        "Pi": {
+          "scaled_MAX": 8.944633521336537e-10,
+          "scaled_coefficient_RMS": 4.803465763365442e-11
+        },
+        "k": {
+          "scaled_MAX": 5.972443933955812e-15,
+          "scaled_coefficient_RMS": 4.1601111217949886e-16
+        },
+        "epsilon": {
+          "scaled_MAX": 2.2427387630437824e-15,
+          "scaled_coefficient_RMS": 1.118363973129736e-16
+        }
+      },
+      "older_advection": {
+        "U": {
+          "scaled_MAX": 5.505657230583196e-16,
+          "scaled_coefficient_RMS": 1.53164996592062e-17
+        },
+        "Pi": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "k": {
+          "scaled_MAX": 1.5754074182605824e-15,
+          "scaled_coefficient_RMS": 6.917166683073036e-17
+        },
+        "epsilon": {
+          "scaled_MAX": 1.4632246130178678e-17,
+          "scaled_coefficient_RMS": 1.196648414475429e-18
+        }
+      }
+    },
+    "owner_fields": {
+      "current": [
+        {
+          "norms": {
+            "whole/U": {
+              "RMS": 1.3695174206382058e-16,
+              "MAX": 6.502293520658953e-16,
+              "component_RMS": [
+                1.3695174206382058e-16
+              ],
+              "component_MAX": [
+                6.502293520658953e-16
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradU": {
+              "RMS": 7.979277643629177e-16,
+              "MAX": 5.192718797104229e-14,
+              "component_RMS": [
+                7.979277643629177e-16
+              ],
+              "component_MAX": [
+                5.192718797104229e-14
+              ],
+              "measure": 497.8125000000007
+            },
+            "whole/Pi": {
+              "RMS": 3.73053656963235e-11,
+              "MAX": 1.7722772760167138e-10,
+              "component_RMS": [
+                3.73053656963235e-11
+              ],
+              "component_MAX": [
+                1.7722772760167138e-10
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradPi": {
+              "RMS": 1.7177739418447953e-11,
+              "MAX": 2.566663873876617e-10,
+              "component_RMS": [
+                1.7177739418447953e-11
+              ],
+              "component_MAX": [
+                2.566663873876617e-10
+              ],
+              "measure": 497.8125000000007
+            },
+            "whole/k": {
+              "RMS": 1.7159249899165222e-16,
+              "MAX": 1.2905377601238092e-15,
+              "component_RMS": [
+                1.7159249899165222e-16
+              ],
+              "component_MAX": [
+                1.2905377601238092e-15
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradk": {
+              "RMS": 3.952177919728587e-15,
+              "MAX": 7.604236759404474e-13,
+              "component_RMS": [
+                3.952177919728587e-15
+              ],
+              "component_MAX": [
+                7.604236759404474e-13
+              ],
+              "measure": 497.8125000000007
+            },
+            "outer/epsilon": {
+              "RMS": 1.4032203550263676e-16,
+              "MAX": 7.552575956399815e-16,
+              "component_RMS": [
+                1.4032203550263676e-16
+              ],
+              "component_MAX": [
+                7.552575956399815e-16
+              ],
+              "measure": 494.0625000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "outer/gradepsilon": {
+              "RMS": 8.963802181856798e-16,
+              "MAX": 1.571232251073859e-13,
+              "component_RMS": [
+                8.963802181856798e-16
+              ],
+              "component_MAX": [
+                1.571232251073859e-13
+              ],
+              "measure": 494.0625000000007
+            }
+          },
+          "pressure_mean_over_tau": [
+            -0.012113433848563162,
+            -0.012113433878155923
+          ],
+          "quadrature": 8,
+          "owner_grid": 9,
+          "gradient_gate": false,
+          "pressure_alignment": "NONE; native pressure level is retained"
+        },
+        {
+          "norms": {
+            "whole/U": {
+              "RMS": 1.3695174206382066e-16,
+              "MAX": 6.502293520658953e-16,
+              "component_RMS": [
+                1.3695174206382066e-16
+              ],
+              "component_MAX": [
+                6.502293520658953e-16
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradU": {
+              "RMS": 7.979277643629177e-16,
+              "MAX": 5.192718797104229e-14,
+              "component_RMS": [
+                7.979277643629177e-16
+              ],
+              "component_MAX": [
+                5.192718797104229e-14
+              ],
+              "measure": 497.81250000000074
+            },
+            "whole/Pi": {
+              "RMS": 3.73053656963235e-11,
+              "MAX": 1.7722772760167138e-10,
+              "component_RMS": [
+                3.73053656963235e-11
+              ],
+              "component_MAX": [
+                1.7722772760167138e-10
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradPi": {
+              "RMS": 1.717773941844796e-11,
+              "MAX": 2.566663873876617e-10,
+              "component_RMS": [
+                1.717773941844796e-11
+              ],
+              "component_MAX": [
+                2.566663873876617e-10
+              ],
+              "measure": 497.81250000000074
+            },
+            "whole/k": {
+              "RMS": 1.7159249899165227e-16,
+              "MAX": 1.2957707350159443e-15,
+              "component_RMS": [
+                1.7159249899165227e-16
+              ],
+              "component_MAX": [
+                1.2957707350159443e-15
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradk": {
+              "RMS": 3.952177919728587e-15,
+              "MAX": 7.604236759404474e-13,
+              "component_RMS": [
+                3.952177919728587e-15
+              ],
+              "component_MAX": [
+                7.604236759404474e-13
+              ],
+              "measure": 497.81250000000074
+            },
+            "outer/epsilon": {
+              "RMS": 1.4032203550263676e-16,
+              "MAX": 7.552575956399815e-16,
+              "component_RMS": [
+                1.4032203550263676e-16
+              ],
+              "component_MAX": [
+                7.552575956399815e-16
+              ],
+              "measure": 494.06250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "outer/gradepsilon": {
+              "RMS": 8.963802181856802e-16,
+              "MAX": 1.571232251073859e-13,
+              "component_RMS": [
+                8.963802181856802e-16
+              ],
+              "component_MAX": [
+                1.571232251073859e-13
+              ],
+              "measure": 494.06250000000074
+            }
+          },
+          "pressure_mean_over_tau": [
+            -0.012113433848563162,
+            -0.012113433878155923
+          ],
+          "quadrature": 12,
+          "owner_grid": 17,
+          "gradient_gate": false,
+          "pressure_alignment": "NONE; native pressure level is retained"
+        }
+      ],
+      "previous": [
+        {
+          "norms": {
+            "whole/U": {
+              "RMS": 1.1639558135142694e-16,
+              "MAX": 5.863910730488823e-16,
+              "component_RMS": [
+                1.1639558135142694e-16
+              ],
+              "component_MAX": [
+                5.863910730488823e-16
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradU": {
+              "RMS": 7.258173646833952e-16,
+              "MAX": 5.692350687948293e-14,
+              "component_RMS": [
+                7.258173646833952e-16
+              ],
+              "component_MAX": [
+                5.692350687948293e-14
+              ],
+              "measure": 497.8125000000007
+            },
+            "whole/Pi": {
+              "RMS": 6.715925098108266e-11,
+              "MAX": 2.3080447833054916e-10,
+              "component_RMS": [
+                6.715925098108266e-11
+              ],
+              "component_MAX": [
+                2.3080447833054916e-10
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradPi": {
+              "RMS": 1.9244357690599478e-11,
+              "MAX": 2.3887066753054044e-10,
+              "component_RMS": [
+                1.9244357690599478e-11
+              ],
+              "component_MAX": [
+                2.3887066753054044e-10
+              ],
+              "measure": 497.8125000000007
+            },
+            "whole/k": {
+              "RMS": 1.579571767554944e-16,
+              "MAX": 1.3244828127518212e-15,
+              "component_RMS": [
+                1.579571767554944e-16
+              ],
+              "component_MAX": [
+                1.3244828127518212e-15
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradk": {
+              "RMS": 4.271931927337343e-15,
+              "MAX": 9.993704503337527e-13,
+              "component_RMS": [
+                4.271931927337343e-15
+              ],
+              "component_MAX": [
+                9.993704503337527e-13
+              ],
+              "measure": 497.8125000000007
+            },
+            "outer/epsilon": {
+              "RMS": 1.2563278762525785e-16,
+              "MAX": 7.700576547486198e-16,
+              "component_RMS": [
+                1.2563278762525785e-16
+              ],
+              "component_MAX": [
+                7.700576547486198e-16
+              ],
+              "measure": 494.0625000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "outer/gradepsilon": {
+              "RMS": 8.779369991256777e-16,
+              "MAX": 1.1067216615127795e-13,
+              "component_RMS": [
+                8.779369991256777e-16
+              ],
+              "component_MAX": [
+                1.1067216615127795e-13
+              ],
+              "measure": 494.0625000000007
+            }
+          },
+          "pressure_mean_over_tau": [
+            -0.012102383538043198,
+            -0.012102383488332041
+          ],
+          "quadrature": 8,
+          "owner_grid": 9,
+          "gradient_gate": false,
+          "pressure_alignment": "NONE; native pressure level is retained"
+        },
+        {
+          "norms": {
+            "whole/U": {
+              "RMS": 1.1639558135142699e-16,
+              "MAX": 5.947346763789061e-16,
+              "component_RMS": [
+                1.1639558135142699e-16
+              ],
+              "component_MAX": [
+                5.947346763789061e-16
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradU": {
+              "RMS": 7.258173646833952e-16,
+              "MAX": 5.692350687948293e-14,
+              "component_RMS": [
+                7.258173646833952e-16
+              ],
+              "component_MAX": [
+                5.692350687948293e-14
+              ],
+              "measure": 497.81250000000074
+            },
+            "whole/Pi": {
+              "RMS": 6.715925098108266e-11,
+              "MAX": 2.3080447833054916e-10,
+              "component_RMS": [
+                6.715925098108266e-11
+              ],
+              "component_MAX": [
+                2.3080447833054916e-10
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradPi": {
+              "RMS": 1.9244357690599488e-11,
+              "MAX": 2.3887066753054044e-10,
+              "component_RMS": [
+                1.9244357690599488e-11
+              ],
+              "component_MAX": [
+                2.3887066753054044e-10
+              ],
+              "measure": 497.81250000000074
+            },
+            "whole/k": {
+              "RMS": 1.5795717675549442e-16,
+              "MAX": 1.3306279212290448e-15,
+              "component_RMS": [
+                1.5795717675549442e-16
+              ],
+              "component_MAX": [
+                1.3306279212290448e-15
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradk": {
+              "RMS": 4.271931927337344e-15,
+              "MAX": 9.993704503337527e-13,
+              "component_RMS": [
+                4.271931927337344e-15
+              ],
+              "component_MAX": [
+                9.993704503337527e-13
+              ],
+              "measure": 497.81250000000074
+            },
+            "outer/epsilon": {
+              "RMS": 1.2563278762525792e-16,
+              "MAX": 7.700576547486198e-16,
+              "component_RMS": [
+                1.2563278762525792e-16
+              ],
+              "component_MAX": [
+                7.700576547486198e-16
+              ],
+              "measure": 494.06250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "outer/gradepsilon": {
+              "RMS": 8.779369991256778e-16,
+              "MAX": 1.1067216615127795e-13,
+              "component_RMS": [
+                8.779369991256778e-16
+              ],
+              "component_MAX": [
+                1.1067216615127795e-13
+              ],
+              "measure": 494.06250000000074
+            }
+          },
+          "pressure_mean_over_tau": [
+            -0.0121023835380432,
+            -0.012102383488332041
+          ],
+          "quadrature": 12,
+          "owner_grid": 17,
+          "gradient_gate": false,
+          "pressure_alignment": "NONE; native pressure level is retained"
+        }
+      ],
+      "older": [
+        {
+          "norms": {
+            "whole/U": {
+              "RMS": 1.1601986444077375e-16,
+              "MAX": 8.229722584559887e-16,
+              "component_RMS": [
+                1.1601986444077375e-16
+              ],
+              "component_MAX": [
+                8.229722584559887e-16
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradU": {
+              "RMS": 6.891448477411723e-16,
+              "MAX": 8.069643428828558e-14,
+              "component_RMS": [
+                6.891448477411723e-16
+              ],
+              "component_MAX": [
+                8.069643428828558e-14
+              ],
+              "measure": 497.8125000000007
+            },
+            "whole/Pi": {
+              "RMS": 5.210570187416947e-11,
+              "MAX": 2.2628263934770495e-10,
+              "component_RMS": [
+                5.210570187416947e-11
+              ],
+              "component_MAX": [
+                2.2628263934770495e-10
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradPi": {
+              "RMS": 1.8113645551590247e-11,
+              "MAX": 2.2531503219386025e-10,
+              "component_RMS": [
+                1.8113645551590247e-11
+              ],
+              "component_MAX": [
+                2.2531503219386025e-10
+              ],
+              "measure": 497.8125000000007
+            },
+            "whole/k": {
+              "RMS": 1.4459255628309822e-16,
+              "MAX": 1.5408034880947399e-15,
+              "component_RMS": [
+                1.4459255628309822e-16
+              ],
+              "component_MAX": [
+                1.5408034880947399e-15
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradk": {
+              "RMS": 4.789655281795082e-15,
+              "MAX": 9.28810829651406e-13,
+              "component_RMS": [
+                4.789655281795082e-15
+              ],
+              "component_MAX": [
+                9.28810829651406e-13
+              ],
+              "measure": 497.8125000000007
+            },
+            "outer/epsilon": {
+              "RMS": 1.096981175794974e-16,
+              "MAX": 7.552575956399815e-16,
+              "component_RMS": [
+                1.096981175794974e-16
+              ],
+              "component_MAX": [
+                7.552575956399815e-16
+              ],
+              "measure": 494.0625000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "outer/gradepsilon": {
+              "RMS": 7.925841609612135e-16,
+              "MAX": 7.422156160090475e-14,
+              "component_RMS": [
+                7.925841609612135e-16
+              ],
+              "component_MAX": [
+                7.422156160090475e-14
+              ],
+              "measure": 494.0625000000007
+            }
+          },
+          "pressure_mean_over_tau": [
+            -0.012090998983065395,
+            -0.012090999019847186
+          ],
+          "quadrature": 8,
+          "owner_grid": 9,
+          "gradient_gate": false,
+          "pressure_alignment": "NONE; native pressure level is retained"
+        },
+        {
+          "norms": {
+            "whole/U": {
+              "RMS": 1.1601986444077375e-16,
+              "MAX": 8.229722584559887e-16,
+              "component_RMS": [
+                1.1601986444077375e-16
+              ],
+              "component_MAX": [
+                8.229722584559887e-16
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradU": {
+              "RMS": 6.891448477411725e-16,
+              "MAX": 8.069643428828558e-14,
+              "component_RMS": [
+                6.891448477411725e-16
+              ],
+              "component_MAX": [
+                8.069643428828558e-14
+              ],
+              "measure": 497.81250000000074
+            },
+            "whole/Pi": {
+              "RMS": 5.2105701874169475e-11,
+              "MAX": 2.2628263934770495e-10,
+              "component_RMS": [
+                5.2105701874169475e-11
+              ],
+              "component_MAX": [
+                2.2628263934770495e-10
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradPi": {
+              "RMS": 1.8113645551590253e-11,
+              "MAX": 2.2531503219386025e-10,
+              "component_RMS": [
+                1.8113645551590253e-11
+              ],
+              "component_MAX": [
+                2.2531503219386025e-10
+              ],
+              "measure": 497.81250000000074
+            },
+            "whole/k": {
+              "RMS": 1.4459255628309827e-16,
+              "MAX": 1.5475784638671355e-15,
+              "component_RMS": [
+                1.4459255628309827e-16
+              ],
+              "component_MAX": [
+                1.5475784638671355e-15
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradk": {
+              "RMS": 4.789655281795082e-15,
+              "MAX": 9.28810829651406e-13,
+              "component_RMS": [
+                4.789655281795082e-15
+              ],
+              "component_MAX": [
+                9.28810829651406e-13
+              ],
+              "measure": 497.81250000000074
+            },
+            "outer/epsilon": {
+              "RMS": 1.0969811757949743e-16,
+              "MAX": 7.588614316383255e-16,
+              "component_RMS": [
+                1.0969811757949743e-16
+              ],
+              "component_MAX": [
+                7.588614316383255e-16
+              ],
+              "measure": 494.06250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "outer/gradepsilon": {
+              "RMS": 7.925841609612136e-16,
+              "MAX": 7.422156160090475e-14,
+              "component_RMS": [
+                7.925841609612136e-16
+              ],
+              "component_MAX": [
+                7.422156160090475e-14
+              ],
+              "measure": 494.06250000000074
+            }
+          },
+          "pressure_mean_over_tau": [
+            -0.012090998983065399,
+            -0.012090999019847191
+          ],
+          "quadrature": 12,
+          "owner_grid": 17,
+          "gradient_gate": false,
+          "pressure_alignment": "NONE; native pressure level is retained"
+        }
+      ]
+    },
+    "dependent": {
+      "current": {
+        "K_over_Kin": 3.938518545651456e-16,
+        "Gamma_over_epsilon_H": 7.803864602761961e-16,
+        "cutoff_over_H": 6.938893903907228e-17,
+        "Ew_over_local_reference": 1.0329273093943795e-15,
+        "native_epsilon_H_difference": 5.618782513988612e-16,
+        "native_Gamma_pointwise_gap_old": 2.7219989612847325e-09,
+        "native_Gamma_pointwise_gap_new": 2.7219989612847325e-09,
+        "gate_pass": true,
+        "pointwise_gap_note": "Diagnostic only: endpoint-constrained native Gamma projection need not equal nonlinear Gamma pointwise; exact projected trace/current equations are separate oracle gates."
+      },
+      "previous": {
+        "K_over_Kin": 3.938518545651456e-16,
+        "Gamma_over_epsilon_H": 6.243091682209569e-16,
+        "cutoff_over_H": 6.938893903907228e-17,
+        "Ew_over_local_reference": 1.0329273093943795e-15,
+        "native_epsilon_H_difference": 5.618782513988612e-16,
+        "native_Gamma_pointwise_gap_old": 2.239565612314909e-09,
+        "native_Gamma_pointwise_gap_new": 2.239565612314909e-09,
+        "gate_pass": true,
+        "pointwise_gap_note": "Diagnostic only: endpoint-constrained native Gamma projection need not equal nonlinear Gamma pointwise; exact projected trace/current equations are separate oracle gates."
+      },
+      "older": {
+        "K_over_Kin": 3.938518545651456e-16,
+        "Gamma_over_epsilon_H": 7.803864602761961e-16,
+        "cutoff_over_H": 6.938893903907228e-17,
+        "Ew_over_local_reference": 1.0329273093943795e-15,
+        "native_epsilon_H_difference": 3.745855009325741e-16,
+        "native_Gamma_pointwise_gap_old": 1.811030996488772e-09,
+        "native_Gamma_pointwise_gap_new": 1.811030996488772e-09,
+        "gate_pass": true,
+        "pointwise_gap_note": "Diagnostic only: endpoint-constrained native Gamma projection need not equal nonlinear Gamma pointwise; exact projected trace/current equations are separate oracle gates."
+      }
+    },
+    "exact_hashes": {
+      "current": {
+        "first": "e11d5bcdfad70c5a42bc4dff6232e632b06eda5803faa09f1aee0239f89bfa1c",
+        "second": "8ae42b16baa951f9273a2f18e69da8f7099d0b363175feff02d7ebecbb0b0d1a",
+        "equal": false
+      },
+      "previous": {
+        "first": "0adda7bcb702d5afc634b21b2abd612033e0eb4568a0819e41b41ca593985404",
+        "second": "abca2ae627e22689417f7ae17f8fae5f08bcc8d2ebb6a719701bc5a2e893722c",
+        "equal": false
+      },
+      "advection": {
+        "first": "07948ee6f1529955054fb75f210642a888a7670c810eea7f037cbcd3076e284b",
+        "second": "b924f1af33dc342d6b71dd948d85f332f31dcd491a041abcda3b99a6d417e985",
+        "equal": false
+      },
+      "previous_advection": {
+        "first": "e12adc669122e1e8e7a451447461424434c32d6f24c5a5b43feb24dafd82349e",
+        "second": "89a911d4c1337516acfc4a140bab96628323d83857892c3459ae23d6ab90a30c",
+        "equal": false
+      },
+      "older": {
+        "first": "bd209efa65071b7d3613458fe25c8325ad1dc4c05947ff062c72d55f552d4561",
+        "second": "7d7b78a9f64205a2a4c58a9ccec3064bd762b8a3f268c4487d3c5c1d62f6da91",
+        "equal": false
+      },
+      "older_advection": {
+        "first": "8c18b047b74cac5c2d778780c2f65f30f9b7314c5c67895a55470ff5c1b062fe",
+        "second": "49c89ba46d4f99ecc0df3968af6853b10b95dd9a6103693378630563eba38adb",
+        "equal": false
+      }
+    },
+    "unavailable_history_roles": []
+  },
+  "current_equations": {
+    "file": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3-current-independent.json",
+      "sha256": "78d6c22057bf29f60d7eec21e32e9479247fa8a5a9749aa6672df53262ce292e",
+      "bytes": 25990234
+    },
+    "overall_status": "NOT_MET",
+    "current_equations": "MET",
+    "residuals": {
+      "momentum": 1.0014471150431699e-14,
+      "continuity": 6.459298532511859e-16,
+      "k": 1.2170955770430932e-13,
+      "epsilon": 1.165117609507495e-14
+    },
+    "overall_NOT_MET_allowed": true,
+    "scope": "Full supplied transient oracle verifies these accepted equations; other physical/mesh/long-time gates remain open."
+  },
+  "common_clock_coefficients": {
+    "1": {
+      "U": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "Pi": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "k": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "epsilon": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      }
+    },
+    "2": {
+      "U": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "Pi": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "k": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "epsilon": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      }
+    },
+    "3": {
+      "U": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "Pi": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "k": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "epsilon": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      }
+    },
+    "4": {
+      "U": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "Pi": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "k": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "epsilon": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      }
+    },
+    "5": {
+      "U": {
+        "scaled_MAX": 8.267530131582253e-15,
+        "scaled_coefficient_RMS": 3.3356745154609774e-16
+      },
+      "Pi": {
+        "scaled_MAX": 6.0259805316402e-10,
+        "scaled_coefficient_RMS": 5.449212040915007e-11
+      },
+      "k": {
+        "scaled_MAX": 5.600081057098164e-14,
+        "scaled_coefficient_RMS": 2.0558902666432993e-15
+      },
+      "epsilon": {
+        "scaled_MAX": 2.1734899513657168e-15,
+        "scaled_coefficient_RMS": 7.677114611672113e-17
+      }
+    },
+    "6": {
+      "U": {
+        "scaled_MAX": 7.017456098095682e-15,
+        "scaled_coefficient_RMS": 2.971277793528009e-16
+      },
+      "Pi": {
+        "scaled_MAX": 9.673598437703177e-10,
+        "scaled_coefficient_RMS": 5.8007555470103046e-11
+      },
+      "k": {
+        "scaled_MAX": 9.012438140791496e-15,
+        "scaled_coefficient_RMS": 5.945579918555803e-16
+      },
+      "epsilon": {
+        "scaled_MAX": 2.9530180413112702e-15,
+        "scaled_coefficient_RMS": 1.0904731371544783e-16
+      }
+    },
+    "7": {
+      "U": {
+        "scaled_MAX": 8.999682858513366e-15,
+        "scaled_coefficient_RMS": 3.3449248512568604e-16
+      },
+      "Pi": {
+        "scaled_MAX": 1.0824487896848904e-09,
+        "scaled_coefficient_RMS": 5.473186215603022e-11
+      },
+      "k": {
+        "scaled_MAX": 5.009303275250446e-15,
+        "scaled_coefficient_RMS": 3.9163562082579447e-16
+      },
+      "epsilon": {
+        "scaled_MAX": 3.097701162342271e-15,
+        "scaled_coefficient_RMS": 1.1002003706921109e-16
+      }
+    },
+    "8": {
+      "U": {
+        "scaled_MAX": 8.668618032920856e-15,
+        "scaled_coefficient_RMS": 3.230393241910137e-16
+      },
+      "Pi": {
+        "scaled_MAX": 9.203934075368559e-10,
+        "scaled_coefficient_RMS": 6.346479554689765e-11
+      },
+      "k": {
+        "scaled_MAX": 5.624696798008486e-15,
+        "scaled_coefficient_RMS": 4.0257296067016486e-16
+      },
+      "epsilon": {
+        "scaled_MAX": 1.6951351845418375e-15,
+        "scaled_coefficient_RMS": 1.0310621146365375e-16
+      }
+    },
+    "9": {
+      "U": {
+        "scaled_MAX": 6.706246193488027e-15,
+        "scaled_coefficient_RMS": 3.0529553428270576e-16
+      },
+      "Pi": {
+        "scaled_MAX": 7.614434051119749e-10,
+        "scaled_coefficient_RMS": 4.580882378067e-11
+      },
+      "k": {
+        "scaled_MAX": 4.272300597174675e-15,
+        "scaled_coefficient_RMS": 3.944256606781954e-16
+      },
+      "epsilon": {
+        "scaled_MAX": 2.8595484474042543e-15,
+        "scaled_coefficient_RMS": 1.1201735262281566e-16
+      }
+    },
+    "10": {
+      "U": {
+        "scaled_MAX": 1.0116637915714843e-14,
+        "scaled_coefficient_RMS": 3.2710243707168253e-16
+      },
+      "Pi": {
+        "scaled_MAX": 8.944633521336537e-10,
+        "scaled_coefficient_RMS": 4.803465763365442e-11
+      },
+      "k": {
+        "scaled_MAX": 5.972443933955812e-15,
+        "scaled_coefficient_RMS": 4.1601111217949886e-16
+      },
+      "epsilon": {
+        "scaled_MAX": 2.2427387630437824e-15,
+        "scaled_coefficient_RMS": 1.118363973129736e-16
+      }
+    },
+    "11": {
+      "U": {
+        "scaled_MAX": 6.205101456816348e-15,
+        "scaled_coefficient_RMS": 3.042816001778344e-16
+      },
+      "Pi": {
+        "scaled_MAX": 1.5674735406497862e-09,
+        "scaled_coefficient_RMS": 6.018444518123833e-11
+      },
+      "k": {
+        "scaled_MAX": 4.7292505687973405e-15,
+        "scaled_coefficient_RMS": 4.075177348510219e-16
+      },
+      "epsilon": {
+        "scaled_MAX": 3.2511102680405658e-15,
+        "scaled_coefficient_RMS": 1.446137399581452e-16
+      }
+    },
+    "12": {
+      "U": {
+        "scaled_MAX": 1.4900384135845633e-14,
+        "scaled_coefficient_RMS": 4.088304603440975e-16
+      },
+      "Pi": {
+        "scaled_MAX": 1.37050085548584e-09,
+        "scaled_coefficient_RMS": 5.7793024836420726e-11
+      },
+      "k": {
+        "scaled_MAX": 5.788973258799129e-15,
+        "scaled_coefficient_RMS": 4.173810381176321e-16
+      },
+      "epsilon": {
+        "scaled_MAX": 1.7290036839919074e-15,
+        "scaled_coefficient_RMS": 1.0450696487221946e-16
+      }
+    }
+  },
+  "reductions": {
+    "split": {
+      "artifact": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/retention-assessment-v2-split.npz",
+        "sha256": "7c6d9b9ffb52d49520877d26cd3dbbee605079cf909d925ef8c480400ba4909e",
+        "bytes": 8492156
+      },
+      "bytes": 8492156,
+      "interval": [
+        0.0173,
+        0.0537
+      ],
+      "window_measure": 0.0364,
+      "frames": [
+        {
+          "step": 1,
+          "time": 0.005
+        },
+        {
+          "step": 2,
+          "time": 0.01
+        },
+        {
+          "step": 3,
+          "time": 0.015
+        },
+        {
+          "step": 4,
+          "time": 0.02
+        },
+        {
+          "step": 5,
+          "time": 0.025
+        },
+        {
+          "step": 6,
+          "time": 0.03
+        },
+        {
+          "step": 7,
+          "time": 0.035
+        },
+        {
+          "step": 8,
+          "time": 0.04
+        },
+        {
+          "step": 9,
+          "time": 0.045
+        },
+        {
+          "step": 10,
+          "time": 0.05
+        },
+        {
+          "step": 11,
+          "time": 0.055
+        },
+        {
+          "step": 12,
+          "time": 0.06
+        }
+      ],
+      "clipped_segments": [
+        {
+          "i": 2,
+          "left": 0.015,
+          "right": 0.02,
+          "lo": 0.0173,
+          "hi": 0.02,
+          "weight": 0.002700000000000001,
+          "lower_fraction": 0.4599999999999999,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 3,
+          "left": 0.02,
+          "right": 0.025,
+          "lo": 0.02,
+          "hi": 0.025,
+          "weight": 0.005000000000000001,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 4,
+          "left": 0.025,
+          "right": 0.03,
+          "lo": 0.025,
+          "hi": 0.03,
+          "weight": 0.0049999999999999975,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 5,
+          "left": 0.03,
+          "right": 0.035,
+          "lo": 0.03,
+          "hi": 0.035,
+          "weight": 0.0050000000000000044,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 6,
+          "left": 0.035,
+          "right": 0.04,
+          "lo": 0.035,
+          "hi": 0.04,
+          "weight": 0.0049999999999999975,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 7,
+          "left": 0.04,
+          "right": 0.045,
+          "lo": 0.04,
+          "hi": 0.045,
+          "weight": 0.0049999999999999975,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 8,
+          "left": 0.045,
+          "right": 0.05,
+          "lo": 0.045,
+          "hi": 0.05,
+          "weight": 0.0050000000000000044,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 9,
+          "left": 0.05,
+          "right": 0.055,
+          "lo": 0.05,
+          "hi": 0.0537,
+          "weight": 0.003699999999999995,
+          "lower_fraction": 0.0,
+          "upper_fraction": 0.7399999999999993
+        }
+      ],
+      "checks": {
+        "inner_U": {
+          "points": 10976,
+          "components": 2,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 8.673617379884035e-18,
+          "second_moment_time_Gauss_MAX": 3.469446951953614e-18,
+          "centered_second_identity_MAX": 1.3470294689361945e-16
+        },
+        "inner_k": {
+          "points": 10976,
+          "components": 1,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 4.163336342344337e-17,
+          "second_moment_time_Gauss_MAX": 8.326672684688674e-17,
+          "centered_second_identity_MAX": 3.1202254321960332e-15
+        },
+        "inner_Pi": {
+          "points": 10976,
+          "components": 1,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 1.734723475976807e-17,
+          "centered_second_identity_MAX": 6.181490939106724e-16
+        },
+        "inner_R": {
+          "points": 10976,
+          "components": 9,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 1.1102230246251565e-16,
+          "second_moment_time_Gauss_MAX": 3.3306690738754696e-16,
+          "centered_second_identity_MAX": 1.5320210378089172e-14
+        },
+        "inner_G": {
+          "points": 10976,
+          "components": 9,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 9.933301485634581e-16
+        },
+        "inner_Ew": {
+          "points": 10976,
+          "components": 1,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "centered_second_identity_MAX": 8.386080068363293e-16
+        },
+        "ground_traction": {
+          "points": 98,
+          "components": 2,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 1.3877787807814457e-17,
+          "second_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "centered_second_identity_MAX": 7.573266363992884e-16
+        },
+        "outer_U": {
+          "points": 23324,
+          "components": 2,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 8.949000744552748e-16
+        },
+        "outer_k": {
+          "points": 23324,
+          "components": 1,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 1.090725007970313e-15
+        },
+        "outer_Pi": {
+          "points": 23324,
+          "components": 1,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 1.734723475976807e-18,
+          "second_moment_time_Gauss_MAX": 1.0842021724855044e-19,
+          "centered_second_identity_MAX": 3.74751198666944e-18
+        },
+        "outer_R": {
+          "points": 23324,
+          "components": 9,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 6.938893903907228e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-16,
+          "centered_second_identity_MAX": 8.123901548792905e-15
+        },
+        "outer_G": {
+          "points": 23324,
+          "components": 9,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 9.826969922180194e-16
+        },
+        "outer_epsilon": {
+          "points": 23324,
+          "components": 1,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 1.0438350106001781e-15
+        },
+        "interface_K": {
+          "points": 98,
+          "components": 1,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 1.3877787807814457e-17,
+          "second_moment_time_Gauss_MAX": 1.3877787807814457e-17,
+          "centered_second_identity_MAX": 7.344756939123407e-16
+        },
+        "interface_Gamma": {
+          "points": 98,
+          "components": 1,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 1.3877787807814457e-17,
+          "second_moment_time_Gauss_MAX": 1.3877787807814457e-17,
+          "centered_second_identity_MAX": 7.401538923912087e-16
+        },
+        "interface_cutoff": {
+          "points": 98,
+          "components": 1,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 2.6020852139652106e-18,
+          "second_moment_time_Gauss_MAX": 8.673617379884035e-19,
+          "centered_second_identity_MAX": 2.44342898016783e-17
+        }
+      },
+      "physical_arrays_recoverable": "mean_scaled*fixed_scale; sd_scaled*fixed_scale",
+      "raw_scientific_frames_retained": true,
+      "continuum_supremum_claim": false,
+      "spatial_quadrature_qualified": false
+    },
+    "control": {
+      "artifact": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/retention-assessment-v2-control.npz",
+        "sha256": "c10ff52d49383aeb72c6484a0eb1a60d66e7627da34f6ece7f2ce82e6623c310",
+        "bytes": 8492083
+      },
+      "bytes": 8492083,
+      "interval": [
+        0.0173,
+        0.0537
+      ],
+      "window_measure": 0.0364,
+      "frames": [
+        {
+          "step": 1,
+          "time": 0.005
+        },
+        {
+          "step": 2,
+          "time": 0.01
+        },
+        {
+          "step": 3,
+          "time": 0.015
+        },
+        {
+          "step": 4,
+          "time": 0.02
+        },
+        {
+          "step": 5,
+          "time": 0.025
+        },
+        {
+          "step": 6,
+          "time": 0.03
+        },
+        {
+          "step": 7,
+          "time": 0.035
+        },
+        {
+          "step": 8,
+          "time": 0.04
+        },
+        {
+          "step": 9,
+          "time": 0.045
+        },
+        {
+          "step": 10,
+          "time": 0.05
+        },
+        {
+          "step": 11,
+          "time": 0.055
+        },
+        {
+          "step": 12,
+          "time": 0.06
+        }
+      ],
+      "clipped_segments": [
+        {
+          "i": 2,
+          "left": 0.015,
+          "right": 0.02,
+          "lo": 0.0173,
+          "hi": 0.02,
+          "weight": 0.002700000000000001,
+          "lower_fraction": 0.4599999999999999,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 3,
+          "left": 0.02,
+          "right": 0.025,
+          "lo": 0.02,
+          "hi": 0.025,
+          "weight": 0.005000000000000001,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 4,
+          "left": 0.025,
+          "right": 0.03,
+          "lo": 0.025,
+          "hi": 0.03,
+          "weight": 0.0049999999999999975,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 5,
+          "left": 0.03,
+          "right": 0.035,
+          "lo": 0.03,
+          "hi": 0.035,
+          "weight": 0.0050000000000000044,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 6,
+          "left": 0.035,
+          "right": 0.04,
+          "lo": 0.035,
+          "hi": 0.04,
+          "weight": 0.0049999999999999975,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 7,
+          "left": 0.04,
+          "right": 0.045,
+          "lo": 0.04,
+          "hi": 0.045,
+          "weight": 0.0049999999999999975,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 8,
+          "left": 0.045,
+          "right": 0.05,
+          "lo": 0.045,
+          "hi": 0.05,
+          "weight": 0.0050000000000000044,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 9,
+          "left": 0.05,
+          "right": 0.055,
+          "lo": 0.05,
+          "hi": 0.0537,
+          "weight": 0.003699999999999995,
+          "lower_fraction": 0.0,
+          "upper_fraction": 0.7399999999999993
+        }
+      ],
+      "checks": {
+        "inner_U": {
+          "points": 10976,
+          "components": 2,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 8.673617379884035e-18,
+          "second_moment_time_Gauss_MAX": 3.469446951953614e-18,
+          "centered_second_identity_MAX": 1.3470294189133254e-16
+        },
+        "inner_k": {
+          "points": 10976,
+          "components": 1,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 4.163336342344337e-17,
+          "second_moment_time_Gauss_MAX": 8.326672684688674e-17,
+          "centered_second_identity_MAX": 2.7269853042355408e-15
+        },
+        "inner_Pi": {
+          "points": 10976,
+          "components": 1,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 1.734723475976807e-17,
+          "centered_second_identity_MAX": 5.717564868623108e-16
+        },
+        "inner_R": {
+          "points": 10976,
+          "components": 9,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 1.1102230246251565e-16,
+          "second_moment_time_Gauss_MAX": 4.440892098500626e-16,
+          "centered_second_identity_MAX": 1.5677997095009388e-14
+        },
+        "inner_G": {
+          "points": 10976,
+          "components": 9,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 1.031135187763108e-15
+        },
+        "inner_Ew": {
+          "points": 10976,
+          "components": 1,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 1.113135743869686e-15
+        },
+        "ground_traction": {
+          "points": 98,
+          "components": 2,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 1.3877787807814457e-17,
+          "second_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "centered_second_identity_MAX": 9.179308367406643e-16
+        },
+        "outer_U": {
+          "points": 23324,
+          "components": 2,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 8.869332353591204e-16
+        },
+        "outer_k": {
+          "points": 23324,
+          "components": 1,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 1.090725008429759e-15
+        },
+        "outer_Pi": {
+          "points": 23324,
+          "components": 1,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 1.3010426069826053e-18,
+          "second_moment_time_Gauss_MAX": 1.0842021724855044e-19,
+          "centered_second_identity_MAX": 3.831977053378455e-18
+        },
+        "outer_R": {
+          "points": 23324,
+          "components": 9,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 6.938893903907228e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-16,
+          "centered_second_identity_MAX": 9.135654989423148e-15
+        },
+        "outer_G": {
+          "points": 23324,
+          "components": 9,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 1.0385977876321073e-15
+        },
+        "outer_epsilon": {
+          "points": 23324,
+          "components": 1,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 1.185247955121403e-15
+        },
+        "interface_K": {
+          "points": 98,
+          "components": 1,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 1.3877787807814457e-17,
+          "second_moment_time_Gauss_MAX": 1.3877787807814457e-17,
+          "centered_second_identity_MAX": 8.33297989550036e-16
+        },
+        "interface_Gamma": {
+          "points": 98,
+          "components": 1,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 1.3877787807814457e-17,
+          "centered_second_identity_MAX": 9.121020893999084e-16
+        },
+        "interface_cutoff": {
+          "points": 98,
+          "components": 1,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 2.6020852139652106e-18,
+          "second_moment_time_Gauss_MAX": 8.673617379884035e-19,
+          "centered_second_identity_MAX": 1.7694746099451646e-17
+        }
+      },
+      "physical_arrays_recoverable": "mean_scaled*fixed_scale; sd_scaled*fixed_scale",
+      "raw_scientific_frames_retained": true,
+      "continuum_supremum_claim": false,
+      "spatial_quadrature_qualified": false
+    }
+  },
+  "comparisons": {
+    "stream_vs_two_pass": {
+      "mean/inner/U": {
+        "RMS": 5.1282925142044355e-17,
+        "MAX": 1.6653345369377348e-16,
+        "component_RMS": [
+          5.1282925142044355e-17,
+          4.345887063079411e-21
+        ],
+        "component_MAX": [
+          1.6653345369377348e-16,
+          8.131516293641283e-20
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "sd/inner/U": {
+        "RMS": 1.3561893804349689e-17,
+        "MAX": 1.1102230246251565e-16,
+        "component_RMS": [
+          1.3561893804349689e-17,
+          1.0598550478629774e-21
+        ],
+        "component_MAX": [
+          1.1102230246251565e-16,
+          1.6940658945086007e-20
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "mean/inner/k": {
+        "RMS": 2.0096205536970873e-16,
+        "MAX": 8.881784197001252e-16,
+        "component_RMS": [
+          2.0096205536970873e-16
+        ],
+        "component_MAX": [
+          8.881784197001252e-16
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "sd/inner/k": {
+        "RMS": 5.922559219707218e-17,
+        "MAX": 4.440892098500626e-16,
+        "component_RMS": [
+          5.922559219707218e-17
+        ],
+        "component_MAX": [
+          4.440892098500626e-16
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "mean/inner/Pi": {
+        "RMS": 9.130017984467767e-17,
+        "MAX": 4.440892098500626e-16,
+        "component_RMS": [
+          9.130017984467767e-17
+        ],
+        "component_MAX": [
+          4.440892098500626e-16
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "sd/inner/Pi": {
+        "RMS": 2.2169412793634314e-17,
+        "MAX": 1.0237579013694376e-16,
+        "component_RMS": [
+          2.2169412793634314e-17
+        ],
+        "component_MAX": [
+          1.0237579013694376e-16
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "mean/inner/R": {
+        "RMS": 4.641063872429005e-16,
+        "MAX": 1.7763568394002505e-15,
+        "component_RMS": [
+          4.641063872429005e-16,
+          0.0,
+          1.5098766734840922e-16,
+          0.0,
+          4.42316769900772e-16,
+          0.0,
+          1.5099393542614882e-16,
+          0.0,
+          3.860606541004622e-16
+        ],
+        "component_MAX": [
+          1.7763568394002505e-15,
+          0.0,
+          6.661338147750939e-16,
+          0.0,
+          1.7763568394002505e-15,
+          0.0,
+          6.661338147750939e-16,
+          0.0,
+          1.7763568394002505e-15
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "sd/inner/R": {
+        "RMS": 1.2447890535707503e-16,
+        "MAX": 8.881784197001252e-16,
+        "component_RMS": [
+          1.240788234567704e-16,
+          0.0,
+          3.70108983018989e-17,
+          0.0,
+          1.2447890535707503e-16,
+          0.0,
+          3.7005099797261377e-17,
+          0.0,
+          1.0349258991679502e-16
+        ],
+        "component_MAX": [
+          8.881784197001252e-16,
+          0.0,
+          2.0847852524180643e-16,
+          0.0,
+          8.881784197001252e-16,
+          0.0,
+          2.0847852524180643e-16,
+          0.0,
+          8.881784197001252e-16
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "mean/inner/G": {
+        "RMS": 1.7211366485327715e-16,
+        "MAX": 6.661338147750939e-16,
+        "component_RMS": [
+          2.43117070359688e-21,
+          0.0,
+          1.7211366485327715e-16,
+          0.0,
+          0.0,
+          0.0,
+          6.527660024474913e-22,
+          0.0,
+          1.0773680230665498e-18
+        ],
+        "component_MAX": [
+          8.131516293641283e-20,
+          0.0,
+          6.661338147750939e-16,
+          0.0,
+          0.0,
+          0.0,
+          8.131516293641283e-20,
+          0.0,
+          2.7755575615628914e-17
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "sd/inner/G": {
+        "RMS": 4.972762161834547e-17,
+        "MAX": 3.3306690738754696e-16,
+        "component_RMS": [
+          7.4142526831515145e-22,
+          0.0,
+          4.972762161834547e-17,
+          0.0,
+          0.0,
+          0.0,
+          2.137590280584772e-22,
+          0.0,
+          2.9795289077768477e-19
+        ],
+        "component_MAX": [
+          2.0328790734103208e-20,
+          0.0,
+          3.3306690738754696e-16,
+          0.0,
+          0.0,
+          0.0,
+          1.3552527156068805e-20,
+          0.0,
+          6.071532165918825e-18
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "mean/inner/Ew": {
+        "RMS": 1.911458369456121e-16,
+        "MAX": 4.440892098500626e-16,
+        "component_RMS": [
+          1.911458369456121e-16
+        ],
+        "component_MAX": [
+          4.440892098500626e-16
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "sd/inner/Ew": {
+        "RMS": 5.613976358550758e-17,
+        "MAX": 1.9280502758581286e-16,
+        "component_RMS": [
+          5.613976358550758e-17
+        ],
+        "component_MAX": [
+          1.9280502758581286e-16
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "mean/ground/traction": {
+        "RMS": 1.5997669469771887e-16,
+        "MAX": 4.440892098500626e-16,
+        "component_RMS": [
+          1.5997669469771887e-16,
+          1.4695754946689004e-16
+        ],
+        "component_MAX": [
+          4.440892098500626e-16,
+          3.3306690738754696e-16
+        ],
+        "measure": 25.000000000000014,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "sd/ground/traction": {
+        "RMS": 4.2988089622678155e-17,
+        "MAX": 1.91649674645758e-16,
+        "component_RMS": [
+          4.2988089622678155e-17,
+          3.0361132680040875e-17
+        ],
+        "component_MAX": [
+          1.91649674645758e-16,
+          7.25432897346473e-17
+        ],
+        "measure": 25.000000000000014,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "mean/outer/U": {
+        "RMS": 1.5753645472107458e-16,
+        "MAX": 6.661338147750939e-16,
+        "component_RMS": [
+          1.5753645472107458e-16,
+          3.16342288557702e-23
+        ],
+        "component_MAX": [
+          6.661338147750939e-16,
+          3.3881317890172014e-21
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "sd/outer/U": {
+        "RMS": 4.774370539895009e-17,
+        "MAX": 3.3306690738754696e-16,
+        "component_RMS": [
+          4.774370539895009e-17,
+          1.0309166408867401e-23
+        ],
+        "component_MAX": [
+          3.3306690738754696e-16,
+          8.470329472543003e-22
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "mean/outer/k": {
+        "RMS": 1.6917258005348408e-16,
+        "MAX": 6.661338147750939e-16,
+        "component_RMS": [
+          1.6917258005348408e-16
+        ],
+        "component_MAX": [
+          6.661338147750939e-16
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "sd/outer/k": {
+        "RMS": 4.6170473860504986e-17,
+        "MAX": 2.220446049250313e-16,
+        "component_RMS": [
+          4.6170473860504986e-17
+        ],
+        "component_MAX": [
+          2.220446049250313e-16
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "mean/outer/Pi": {
+        "RMS": 1.4817557636143167e-18,
+        "MAX": 2.7755575615628914e-17,
+        "component_RMS": [
+          1.4817557636143167e-18
+        ],
+        "component_MAX": [
+          2.7755575615628914e-17
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "sd/outer/Pi": {
+        "RMS": 4.130793286591384e-19,
+        "MAX": 1.0408340855860843e-17,
+        "component_RMS": [
+          4.130793286591384e-19
+        ],
+        "component_MAX": [
+          1.0408340855860843e-17
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "mean/outer/R": {
+        "RMS": 4.623886513176846e-16,
+        "MAX": 1.7763568394002505e-15,
+        "component_RMS": [
+          4.623886513176846e-16,
+          0.0,
+          1.7725343293957503e-16,
+          0.0,
+          3.9750000974567243e-16,
+          0.0,
+          1.7725343293957503e-16,
+          0.0,
+          2.2334053401908543e-16
+        ],
+        "component_MAX": [
+          1.7763568394002505e-15,
+          0.0,
+          6.661338147750939e-16,
+          0.0,
+          1.3322676295501878e-15,
+          0.0,
+          6.661338147750939e-16,
+          0.0,
+          6.661338147750939e-16
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "sd/outer/R": {
+        "RMS": 1.1872721436886278e-16,
+        "MAX": 5.169651982445236e-16,
+        "component_RMS": [
+          1.1872721436886278e-16,
+          0.0,
+          4.853292417931032e-17,
+          0.0,
+          1.1725891423430725e-16,
+          0.0,
+          4.853292417931032e-17,
+          0.0,
+          5.977365784807897e-17
+        ],
+        "component_MAX": [
+          4.498561807318843e-16,
+          0.0,
+          2.0776229932789882e-16,
+          0.0,
+          5.169651982445236e-16,
+          0.0,
+          2.0776229932789882e-16,
+          0.0,
+          2.4530312380500953e-16
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "mean/outer/G": {
+        "RMS": 1.674771325912561e-16,
+        "MAX": 6.661338147750939e-16,
+        "component_RMS": [
+          3.0159225981128943e-22,
+          0.0,
+          1.674771325912561e-16,
+          0.0,
+          0.0,
+          0.0,
+          5.823336347020499e-22,
+          0.0,
+          3.360099893344153e-22
+        ],
+        "component_MAX": [
+          4.0657581468206416e-20,
+          0.0,
+          6.661338147750939e-16,
+          0.0,
+          0.0,
+          0.0,
+          2.0328790734103208e-20,
+          0.0,
+          5.421010862427522e-20
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "sd/outer/G": {
+        "RMS": 4.382629115600983e-17,
+        "MAX": 4.440892098500626e-16,
+        "component_RMS": [
+          9.744919007013331e-23,
+          0.0,
+          4.382629115600983e-17,
+          0.0,
+          0.0,
+          0.0,
+          1.825286990861276e-22,
+          0.0,
+          1.0483226934746267e-22
+        ],
+        "component_MAX": [
+          1.3552527156068805e-20,
+          0.0,
+          4.440892098500626e-16,
+          0.0,
+          0.0,
+          0.0,
+          6.776263578034403e-21,
+          0.0,
+          2.0328790734103208e-20
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "mean/outer/epsilon": {
+        "RMS": 1.7913908866117833e-16,
+        "MAX": 6.661338147750939e-16,
+        "component_RMS": [
+          1.7913908866117833e-16
+        ],
+        "component_MAX": [
+          6.661338147750939e-16
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "sd/outer/epsilon": {
+        "RMS": 5.2466825962065e-17,
+        "MAX": 4.440892098500626e-16,
+        "component_RMS": [
+          5.2466825962065e-17
+        ],
+        "component_MAX": [
+          4.440892098500626e-16
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "mean/interface/K": {
+        "RMS": 1.9657957523831425e-16,
+        "MAX": 4.440892098500626e-16,
+        "component_RMS": [
+          1.9657957523831425e-16
+        ],
+        "component_MAX": [
+          4.440892098500626e-16
+        ],
+        "measure": 25.000000000000014,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "sd/interface/K": {
+        "RMS": 6.163910517405258e-17,
+        "MAX": 1.7156482940046403e-16,
+        "component_RMS": [
+          6.163910517405258e-17
+        ],
+        "component_MAX": [
+          1.7156482940046403e-16
+        ],
+        "measure": 25.000000000000014,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "mean/interface/Gamma": {
+        "RMS": 1.879927392225806e-16,
+        "MAX": 4.440892098500626e-16,
+        "component_RMS": [
+          1.879927392225806e-16
+        ],
+        "component_MAX": [
+          4.440892098500626e-16
+        ],
+        "measure": 25.000000000000014,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "sd/interface/Gamma": {
+        "RMS": 5.849343383158313e-17,
+        "MAX": 1.4966733364804585e-16,
+        "component_RMS": [
+          5.849343383158313e-17
+        ],
+        "component_MAX": [
+          1.4966733364804585e-16
+        ],
+        "measure": 25.000000000000014,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "mean/interface/cutoff": {
+        "RMS": 2.4962912237268257e-17,
+        "MAX": 8.326672684688674e-17,
+        "component_RMS": [
+          2.4962912237268257e-17
+        ],
+        "component_MAX": [
+          8.326672684688674e-17
+        ],
+        "measure": 25.000000000000014,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      },
+      "sd/interface/cutoff": {
+        "RMS": 6.1081324786928494e-18,
+        "MAX": 2.7755575615628914e-17,
+        "component_RMS": [
+          6.1081324786928494e-18
+        ],
+        "component_MAX": [
+          2.7755575615628914e-17
+        ],
+        "measure": 25.000000000000014,
+        "limits": [
+          2e-12,
+          2e-12
+        ],
+        "status": "MET"
+      }
+    },
+    "split_vs_uninterrupted": {
+      "mean/inner/U": {
+        "RMS": 3.5692856229915507e-17,
+        "MAX": 2.220446049250313e-16,
+        "component_RMS": [
+          3.5692856229915507e-17,
+          8.628700714004409e-19
+        ],
+        "component_MAX": [
+          2.220446049250313e-16,
+          8.4500006818089e-18
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "sd/inner/U": {
+        "RMS": 1.7050619241011634e-17,
+        "MAX": 1.0721658343050208e-16,
+        "component_RMS": [
+          1.7050619241011634e-17,
+          6.482346560906555e-19
+        ],
+        "component_MAX": [
+          1.0721658343050208e-16,
+          7.582638943820497e-18
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "mean/inner/k": {
+        "RMS": 4.59263822187073e-16,
+        "MAX": 1.9984014443252818e-15,
+        "component_RMS": [
+          4.59263822187073e-16
+        ],
+        "component_MAX": [
+          1.9984014443252818e-15
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "sd/inner/k": {
+        "RMS": 1.9456996835550193e-16,
+        "MAX": 1.7694179454963432e-15,
+        "component_RMS": [
+          1.9456996835550193e-16
+        ],
+        "component_MAX": [
+          1.7694179454963432e-15
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "mean/inner/Pi": {
+        "RMS": 2.5418563319099338e-12,
+        "MAX": 4.0222408737022874e-12,
+        "component_RMS": [
+          2.5418563319099338e-12
+        ],
+        "component_MAX": [
+          4.0222408737022874e-12
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "sd/inner/Pi": {
+        "RMS": 1.0047115681840444e-11,
+        "MAX": 2.8155739041922688e-11,
+        "component_RMS": [
+          1.0047115681840444e-11
+        ],
+        "component_MAX": [
+          2.8155739041922688e-11
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "mean/inner/R": {
+        "RMS": 1.2709953197567565e-15,
+        "MAX": 9.325873406851315e-15,
+        "component_RMS": [
+          1.2709953197567565e-15,
+          0.0,
+          4.517252497461687e-16,
+          0.0,
+          1.0444166784976985e-15,
+          0.0,
+          4.517252497461687e-16,
+          0.0,
+          1.2307395524480774e-15
+        ],
+        "component_MAX": [
+          9.325873406851315e-15,
+          0.0,
+          2.6645352591003757e-15,
+          0.0,
+          4.440892098500626e-15,
+          0.0,
+          2.6645352591003757e-15,
+          0.0,
+          8.43769498715119e-15
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "sd/inner/R": {
+        "RMS": 6.975499621126645e-16,
+        "MAX": 5.833454921368164e-15,
+        "component_RMS": [
+          6.975499621126645e-16,
+          0.0,
+          3.357887213548187e-16,
+          0.0,
+          4.45732095394579e-16,
+          0.0,
+          3.357890359176965e-16,
+          0.0,
+          6.828692676821498e-16
+        ],
+        "component_MAX": [
+          5.833454921368164e-15,
+          0.0,
+          1.9814201277987276e-15,
+          0.0,
+          4.066191827689636e-15,
+          0.0,
+          1.9814201277987276e-15,
+          0.0,
+          5.612264125653965e-15
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "mean/inner/G": {
+        "RMS": 1.725815798081973e-15,
+        "MAX": 2.0761170560490427e-14,
+        "component_RMS": [
+          1.840351512076189e-17,
+          0.0,
+          1.725815798081973e-15,
+          0.0,
+          0.0,
+          0.0,
+          2.3443973725901058e-18,
+          0.0,
+          1.148816059366664e-16
+        ],
+        "component_MAX": [
+          1.758506912092983e-16,
+          0.0,
+          2.0761170560490427e-14,
+          0.0,
+          0.0,
+          0.0,
+          3.262646504859437e-17,
+          0.0,
+          2.462873655018072e-15
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "sd/inner/G": {
+        "RMS": 1.3579146774945809e-15,
+        "MAX": 1.4006591025905735e-14,
+        "component_RMS": [
+          1.1737585752790707e-17,
+          0.0,
+          1.3579146774945809e-15,
+          0.0,
+          0.0,
+          0.0,
+          1.943672907962958e-18,
+          0.0,
+          7.281576277661636e-17
+        ],
+        "component_MAX": [
+          1.2566631759790533e-16,
+          0.0,
+          1.4006591025905735e-14,
+          0.0,
+          0.0,
+          0.0,
+          2.044520813351392e-17,
+          0.0,
+          2.1009669698424105e-15
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "mean/inner/Ew": {
+        "RMS": 1.130423112670336e-16,
+        "MAX": 6.661338147750939e-16,
+        "component_RMS": [
+          1.130423112670336e-16
+        ],
+        "component_MAX": [
+          6.661338147750939e-16
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "sd/inner/Ew": {
+        "RMS": 5.8022656972867e-17,
+        "MAX": 3.238715177121543e-16,
+        "component_RMS": [
+          5.8022656972867e-17
+        ],
+        "component_MAX": [
+          3.238715177121543e-16
+        ],
+        "measure": 3.7500000000000124,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "mean/ground/traction": {
+        "RMS": 2.5418627734946406e-12,
+        "MAX": 4.021227795192317e-12,
+        "component_RMS": [
+          2.9913988425706183e-16,
+          2.5418627734946406e-12
+        ],
+        "component_MAX": [
+          9.992007221626409e-16,
+          4.021227795192317e-12
+        ],
+        "measure": 25.000000000000014,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "sd/ground/traction": {
+        "RMS": 9.529108097178216e-12,
+        "MAX": 1.2006064070983931e-11,
+        "component_RMS": [
+          2.0557677319371715e-16,
+          9.529108097178216e-12
+        ],
+        "component_MAX": [
+          9.394035842182763e-16,
+          1.2006064070983931e-11
+        ],
+        "measure": 25.000000000000014,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "mean/outer/U": {
+        "RMS": 1.1802233523444127e-16,
+        "MAX": 6.661338147750939e-16,
+        "component_RMS": [
+          1.1802233523444127e-16,
+          2.137842437316976e-17
+        ],
+        "component_MAX": [
+          6.661338147750939e-16,
+          1.288379563682827e-16
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "sd/outer/U": {
+        "RMS": 4.772390190619541e-17,
+        "MAX": 2.0595505527325826e-16,
+        "component_RMS": [
+          4.772390190619541e-17,
+          1.8733870341152964e-17
+        ],
+        "component_MAX": [
+          2.0595505527325826e-16,
+          7.828679184812964e-17
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "mean/outer/k": {
+        "RMS": 1.2195079779275658e-16,
+        "MAX": 6.661338147750939e-16,
+        "component_RMS": [
+          1.2195079779275658e-16
+        ],
+        "component_MAX": [
+          6.661338147750939e-16
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "sd/outer/k": {
+        "RMS": 6.07231923530922e-17,
+        "MAX": 3.065477238033799e-16,
+        "component_RMS": [
+          6.07231923530922e-17
+        ],
+        "component_MAX": [
+          3.065477238033799e-16
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "mean/outer/Pi": {
+        "RMS": 4.20326151878349e-12,
+        "MAX": 1.590603863899087e-11,
+        "component_RMS": [
+          4.20326151878349e-12
+        ],
+        "component_MAX": [
+          1.590603863899087e-11
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "sd/outer/Pi": {
+        "RMS": 9.83033707996082e-12,
+        "MAX": 3.1809803183089075e-11,
+        "component_RMS": [
+          9.83033707996082e-12
+        ],
+        "component_MAX": [
+          3.1809803183089075e-11
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "mean/outer/R": {
+        "RMS": 1.0841498834762381e-14,
+        "MAX": 1.9051427102567686e-13,
+        "component_RMS": [
+          1.0841498834762381e-14,
+          0.0,
+          7.452159389005355e-15,
+          0.0,
+          8.882889511186454e-15,
+          0.0,
+          7.452159389005355e-15,
+          0.0,
+          5.794800895057233e-15
+        ],
+        "component_MAX": [
+          1.9051427102567686e-13,
+          0.0,
+          8.704148513061227e-14,
+          0.0,
+          1.6342482922482304e-13,
+          0.0,
+          8.704148513061227e-14,
+          0.0,
+          9.170442183403793e-14
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "sd/outer/R": {
+        "RMS": 8.051278598192192e-15,
+        "MAX": 1.3161227437653663e-13,
+        "component_RMS": [
+          8.051278598192192e-15,
+          0.0,
+          5.917647883795439e-15,
+          0.0,
+          6.967562692547209e-15,
+          0.0,
+          5.917647883795439e-15,
+          0.0,
+          4.480380451547434e-15
+        ],
+        "component_MAX": [
+          1.3161227437653663e-13,
+          0.0,
+          7.054771325108023e-14,
+          0.0,
+          1.0550536617760277e-13,
+          0.0,
+          7.054771325108023e-14,
+          0.0,
+          6.893637060590373e-14
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "mean/outer/G": {
+        "RMS": 6.824895737423826e-15,
+        "MAX": 1.2476156697859218e-13,
+        "component_RMS": [
+          6.824895737423826e-15,
+          0.0,
+          5.599933969201774e-15,
+          0.0,
+          0.0,
+          0.0,
+          3.132213372215665e-15,
+          0.0,
+          2.932339258735069e-15
+        ],
+        "component_MAX": [
+          1.2476156697859218e-13,
+          0.0,
+          3.6193270602780103e-14,
+          0.0,
+          0.0,
+          0.0,
+          4.1786338950146036e-14,
+          0.0,
+          5.66218172541144e-14
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "sd/outer/G": {
+        "RMS": 5.1619328667103145e-15,
+        "MAX": 8.564163366864295e-14,
+        "component_RMS": [
+          5.1619328667103145e-15,
+          0.0,
+          3.919325955916815e-15,
+          0.0,
+          0.0,
+          0.0,
+          2.7198006577582234e-15,
+          0.0,
+          2.410392153466982e-15
+        ],
+        "component_MAX": [
+          8.564163366864295e-14,
+          0.0,
+          2.5140568278778628e-14,
+          0.0,
+          0.0,
+          0.0,
+          2.524360268997162e-14,
+          0.0,
+          4.68946259896011e-14
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "mean/outer/epsilon": {
+        "RMS": 1.1814183259157546e-16,
+        "MAX": 6.661338147750939e-16,
+        "component_RMS": [
+          1.1814183259157546e-16
+        ],
+        "component_MAX": [
+          6.661338147750939e-16
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "sd/outer/epsilon": {
+        "RMS": 5.133273980826861e-17,
+        "MAX": 3.1433043271516343e-16,
+        "component_RMS": [
+          5.133273980826861e-17
+        ],
+        "component_MAX": [
+          3.1433043271516343e-16
+        ],
+        "measure": 494.06250000000097,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "mean/interface/K": {
+        "RMS": 9.485226907877787e-17,
+        "MAX": 4.440892098500626e-16,
+        "component_RMS": [
+          9.485226907877787e-17
+        ],
+        "component_MAX": [
+          4.440892098500626e-16
+        ],
+        "measure": 25.000000000000014,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "sd/interface/K": {
+        "RMS": 3.22716095034723e-17,
+        "MAX": 1.1361422328111381e-16,
+        "component_RMS": [
+          3.22716095034723e-17
+        ],
+        "component_MAX": [
+          1.1361422328111381e-16
+        ],
+        "measure": 25.000000000000014,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "mean/interface/Gamma": {
+        "RMS": 1.0385501677238463e-16,
+        "MAX": 4.440892098500626e-16,
+        "component_RMS": [
+          1.0385501677238463e-16
+        ],
+        "component_MAX": [
+          4.440892098500626e-16
+        ],
+        "measure": 25.000000000000014,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "sd/interface/Gamma": {
+        "RMS": 5.5014621774192894e-17,
+        "MAX": 2.057951248649048e-16,
+        "component_RMS": [
+          5.5014621774192894e-17
+        ],
+        "component_MAX": [
+          2.057951248649048e-16
+        ],
+        "measure": 25.000000000000014,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "mean/interface/cutoff": {
+        "RMS": 5.576941868370286e-18,
+        "MAX": 5.551115123125783e-17,
+        "component_RMS": [
+          5.576941868370286e-18
+        ],
+        "component_MAX": [
+          5.551115123125783e-17
+        ],
+        "measure": 25.000000000000014,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      },
+      "sd/interface/cutoff": {
+        "RMS": 2.1883575415436037e-18,
+        "MAX": 1.2934616621046793e-17,
+        "component_RMS": [
+          2.1883575415436037e-18
+        ],
+        "component_MAX": [
+          1.2934616621046793e-17
+        ],
+        "measure": 25.000000000000014,
+        "limits": [
+          1e-08,
+          1e-08
+        ],
+        "status": "MET"
+      }
+    }
+  },
+  "stale_generation_control": "REJECTED_IMMEDIATE_PREDECESSOR",
+  "verified_reduction": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/retention-assessment-v2-verified-reduction.json",
+    "sha256": "ba23e98fd9899c87ed7e4c2f35716c7b3dabcf01935f4d3c4535885b800eaa3d",
+    "bytes": 82462
+  },
+  "retention": {
+    "receipt": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/protected-retention-v2/retention-receipt.json",
+      "sha256": "d2407e7eaabfbd092897d281496a67717b995a061929fb2b9bc7617d5d62d703",
+      "bytes": 6812
+    },
+    "schema": "WJH27OwnedRetentionReceiptV1",
+    "status": "PASS_ACTUAL_OWNED_ROTATION",
+    "plan": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/protected-retention-v2/verified-plan.json",
+      "sha256": "b756fcc27a851f15f9904e5a2683464f474f343e775112c8cba880b6563a0f44",
+      "bytes": 9810
+    },
+    "retained": [
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.science-11.json",
+        "sha256": "932154900de04aa7fbaa3ccf3da8e27f04cd9558633d3cc52aca927472ceb8f8",
+        "bytes": 4708562
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.science-12.json",
+        "sha256": "330fff3d2f396abb70da7567fbd64180475a32a32a6f4b980ca15c0b44a1cb09",
+        "bytes": 4708586
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.recovery-12.bin",
+        "sha256": "b56315c0dd59c803dde26f75dfbcdec13f7a6767aef541594b5004f200b40b81",
+        "bytes": 859058
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.recovery-9.bin",
+        "sha256": "5bc916cb011804fe4472302ece1c873995bed148af59187ace8a80addb64e218",
+        "bytes": 859058
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.final.bin",
+        "sha256": "4db46fe2bb73cd844637144b5c83a10f8b5077c2b34422ec7012173de998f674",
+        "bytes": 859058
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/accumulated-v2/generation2.npz",
+        "sha256": "a11d0395f4428f921031be78e887c91e23b52ae2de44a2cbdfacab658716754c",
+        "bytes": 8503217
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.final.bin",
+        "sha256": "b56315c0dd59c803dde26f75dfbcdec13f7a6767aef541594b5004f200b40b81",
+        "bytes": 859058
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/accumulated-v2/generation3.npz",
+        "sha256": "a6cd60fe6e9c4d8709100700c5fab3497290181d1cac3ad8cea8d72d20381d5a",
+        "bytes": 8542328
+      }
+    ],
+    "removed": [
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch1.science-1.json",
+        "sha256": "9f66074a6b153ebf99b1619cfca7c3a182610beea74a31c9fbba3d7e8237016f",
+        "bytes": 3727824
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch1.science-2.json",
+        "sha256": "560ad08bc45d79d73b4a8f49509228d35bd3b73bf6387067d74fbd496ffc1b94",
+        "bytes": 4294426
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch1.science-3.json",
+        "sha256": "ca3afea0fb0c2d550faa624d0cf91f7c16477d96781b391f047c07bbf66fbeab",
+        "bytes": 4709595
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch1.science-4.json",
+        "sha256": "db12c9d7e47d7ea0f5d06786e31fed7ac1927a397a92e8d270b4effba2fdbbde",
+        "bytes": 4709231
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch1.recovery-3.bin",
+        "sha256": "28a2331b1399c5f940b3c4c8f57fe4bed3c6a5c8e899ad5cc74c45c23d17f012",
+        "bytes": 859058
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.science-5.json",
+        "sha256": "9419d5f9374929ab30665738717061179e807152588ed636b3ba6eeab6f57036",
+        "bytes": 4709326
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.science-6.json",
+        "sha256": "25b232ebae0722a652158a7d5385a2fd84be3f00c401e3a57027620b2877623c",
+        "bytes": 4709312
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.science-7.json",
+        "sha256": "c04015e28d3d289f85e7b70c4e4c7eb9b38350293c41db1780a5b81b44184a07",
+        "bytes": 4709366
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.science-8.json",
+        "sha256": "cff890b5236b08ca1c66b781bc36c86c30cf5dd3a57e06f2edebbd20ba66815d",
+        "bytes": 4709138
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.recovery-6.bin",
+        "sha256": "a994ff79909f12a2f2feb02b65b20d5b0341518f442ec4de7826a2c4b07b9a10",
+        "bytes": 859058
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.science-9.json",
+        "sha256": "ddcee36fe2430451c7ac7493f64eedcc0970c065f55fc5099c8d1c7ba5552399",
+        "bytes": 4709004
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.science-10.json",
+        "sha256": "724bd76e5f3f7a81ed5dea273961d1cb1d6fa8c3df10be327419a5df9649b016",
+        "bytes": 4708622
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch1.final.bin",
+        "sha256": "f2133242879130a5f570f96c8b7b3781e62a0ada31b95a6aa557774148e3d5fa",
+        "bytes": 859058
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/accumulated-v2/generation1.npz",
+        "sha256": "020cc71650c8899ac862b7fb15330ea062aa248e79623e36ae00e728e4bef855",
+        "bytes": 8399748
+      }
+    ],
+    "archive": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/protected-retention-v2/qualification-before-retention.tar.gz",
+      "sha256": "5dc4ad1ede6ed3bac323a76eb301dda463bc5cd3c6a87d4c2d2fff8298bb0968",
+      "bytes": 32066948
+    },
+    "removed_payload_bytes": 56672766,
+    "retained_payload_bytes": 29898925,
+    "immutable_indices": [
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch1.science-index.json",
+        "sha256": "c65485f08c135513bf2378b6e22e82ea155b0f30729a4625480dc32148005f20",
+        "bytes": 1976
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch2.science-index.json",
+        "sha256": "76a56b8b8f6ef216081a8ccf8d2ffd918e02e26f78f3958e9a01499bda98913e",
+        "bytes": 2026
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scientific-retention-v16/epoch3.science-index.json",
+        "sha256": "73951907c3f9a53b00a82001429f256fbb2c979a3925fa74245f42a3fe652a64",
+        "bytes": 2035
+      }
+    ],
+    "original_indices_describe_pre_retention_writes": true,
+    "full_H27_qualification": false,
+    "H27_D_pass": false,
+    "TASK3_READY": false
+  },
+  "raw_payload_rotation_performed": true,
+  "retained_recovery_cold_imports_still_required": true,
+  "production_storage_qualified": false,
+  "monitoring_escalation_qualified": false,
+  "long_pilots_qualified": false,
+  "elapsed_seconds": 40.31542172702029,
+  "maximum_resident_bytes": 769712128
+}
