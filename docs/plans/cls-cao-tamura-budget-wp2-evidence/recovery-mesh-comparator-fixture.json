@@ -1,0 +1,269 @@
+{
+  "version": "WP2RecoveryMeshComparatorFixtureV1",
+  "scope": "Existing completed unperturbed same-dt level4/level5 standard states; zero new PDE solves.",
+  "passed": true,
+  "native_replays": [
+    {
+      "maximum_absolute_by_column": [
+        0.0,
+        0.0,
+        0.0,
+        1.5543122344752192e-15,
+        0.0,
+        0.0,
+        3.469446951953614e-18,
+        2.6020852139652106e-18,
+        3.379158533732226e-18,
+        1.3322676295501878e-15,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scalar_gradient_polynomial_replay_errors": [
+        9.21891686253562e-15,
+        1.573745578298258e-10,
+        6.048389870547122e-14,
+        5.6736837450444e-12
+      ],
+      "passed": true
+    },
+    {
+      "maximum_absolute_by_column": [
+        0.0,
+        0.0,
+        0.0,
+        1.3322676295501878e-15,
+        0.0,
+        0.0,
+        3.469446951953614e-18,
+        3.469446951953614e-18,
+        3.447979960696638e-18,
+        1.7763568394002505e-15,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scalar_gradient_polynomial_replay_errors": [
+        9.167959360428801e-15,
+        1.5817258613992635e-10,
+        4.833478317025838e-14,
+        3.7623237858497305e-12
+      ],
+      "passed": true
+    }
+  ],
+  "comparison": {
+    "principal": {
+      "passed": true,
+      "gates": {
+        "0_U": {
+          "value": 2.775420819279088e-06,
+          "limit": 0.00025,
+          "passed": true
+        },
+        "0_U_point": {
+          "value": 3.0981477301545395e-05,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "0_W": {
+          "value": 2.6359981145206165e-06,
+          "limit": 0.00025,
+          "passed": true
+        },
+        "0_W_point": {
+          "value": 6.703265159999219e-06,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "0_k": {
+          "value": 1.5968730271754445e-05,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "0_k_point": {
+          "value": 8.551226043480162e-05,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "0_pi": {
+          "value": 5.165144086153089e-05,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "0_pi_point": {
+          "value": 0.00014084748988546755,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "0_mechanical_pressure": {
+          "value": 5.835959700454464e-05,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "0_mechanical_pressure_point": {
+          "value": 0.00030305570007826244,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "0_nut": {
+          "value": 1.082281880384153e-06,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "0_nut_point": {
+          "value": 3.08107898262589e-05,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "0_total_shear": {
+          "value": 0.0001808276879406349,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "0_total_shear_point": {
+          "value": 0.0014150732777295201,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "0_total_normal_stress": {
+          "value": 5.130036137743828e-05,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "0_total_normal_stress_point": {
+          "value": 0.00014121177940912657,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "0_full_velocity_gradient": {
+          "value": 0.0002103206075677849,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "1_U": {
+          "value": 4.5023462080023815e-08,
+          "limit": 0.00025,
+          "passed": true
+        },
+        "1_U_point": {
+          "value": 2.407766775739652e-06,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "1_W": {
+          "value": 6.578438699430839e-07,
+          "limit": 0.00025,
+          "passed": true
+        },
+        "1_W_point": {
+          "value": 7.588435919312083e-06,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "1_k": {
+          "value": 1.922834674820702e-07,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "1_k_point": {
+          "value": 6.267328846773319e-06,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "1_epsilon": {
+          "value": 4.576990792180611e-06,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "1_epsilon_point": {
+          "value": 2.165554991371704e-05,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "1_pi": {
+          "value": 1.0007399605062444e-05,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "1_pi_point": {
+          "value": 0.00012827555831251088,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "1_mechanical_pressure": {
+          "value": 9.995403065415105e-06,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "1_mechanical_pressure_point": {
+          "value": 0.00013521299678230796,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "1_nut": {
+          "value": 1.1719863683797826e-08,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "1_nut_point": {
+          "value": 1.326461671904667e-05,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "1_total_shear": {
+          "value": 5.990244786267407e-06,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "1_total_shear_point": {
+          "value": 0.000347971522610646,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "1_total_normal_stress": {
+          "value": 1.0127128403532408e-05,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "1_total_normal_stress_point": {
+          "value": 0.00012831265829657329,
+          "limit": 0.0025,
+          "passed": true
+        },
+        "1_full_velocity_gradient": {
+          "value": 5.3042053495563825e-05,
+          "limit": 0.0025,
+          "passed": true
+        }
+      },
+      "reference_integration_roundoff": 0.0,
+      "pressure": "absolute; original relative regional offset retained"
+    },
+    "full_tensor_RMS_over_ustar2": {
+      "0_R": 0.00023086753768106666,
+      "0_T": 0.0002709380054740481,
+      "1_R": 8.545587369766745e-06,
+      "1_T": 1.9310401657390155e-05
+    },
+    "GL28_covariance_inner_outer_selected_confirmation": [
+      [
+        0.006837969204541946,
+        0.00671623951166823
+      ],
+      [
+        0.006838332264962803,
+        0.0067162394108667
+      ]
+    ],
+    "passed": true
+  },
+  "negative_checks": [
+    "parameters",
+    "boundary"
+  ],
+  "source_sha256": "fd0017f438cb5badcb5723e3a415914349d76f996aeee1262a301522d42d5d1b",
+  "seconds": 2.1302643759991042
+}

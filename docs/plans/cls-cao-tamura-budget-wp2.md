@@ -565,3 +565,26 @@ protocol tests pass. See [fresh-seed receipt](cls-cao-tamura-budget-wp2-evidence
 and [launch identity](cls-cao-tamura-budget-wp2-evidence/confirmation-recovery-launch.json).
 This is initialization/launch evidence only; no physical endpoint or recovery
 classification is inferred from it.
+
+
+The exact saved confirmation h0 also passes a retrospective independent GL28
+check: inner/outer covariance minima .00683839618/.00671346219, positive finite
+scalars and bitwise preservation of all non-k, inner/interface-k and prescribed
+coefficient rows, including signed zeros. Endpoint K is bitwise unchanged;
+auxiliary viscosity and dependent E_C are unchanged. The integrated setup TKE
+increment is 5.59378196475e-6 per density and unit span. This is the prescribed
+initial disturbance, not positivity-correction supply. The check uses the already
+declared GL28 set; it is not relabelled as fresh or as a prelaunch check. See
+[independent seed receipt](cls-cao-tamura-budget-wp2-evidence/confirmation-recovery-independent-seed.json).
+
+The matched-mesh comparison reconstructs each mesh's coefficient fields on the
+same GL28 physical panels, recomputes the actual selected tensors and current
+endpoint quantities, and retains absolute pressure. It verifies common model,
+transport/reference parameters, boundary definition, timestep and runtime while
+preserving distinct native reference/seed hashes. Its positive fixture reuses
+completed unperturbed level4/level5 standard states; changed viscosity and outlet
+datum reject. See [comparator fixture](cls-cao-tamura-budget-wp2-evidence/recovery-mesh-comparator-fixture.json).
+The [recovery comparison command](cls-cao-tamura-budget-wp2-evidence/confirmation-recovery-mesh-comparison-command.json)
+is prepared for the frozen terminal control; that recovery comparison remains
+unexecuted until its trajectory is available. No new governing solves were used
+by these checks.

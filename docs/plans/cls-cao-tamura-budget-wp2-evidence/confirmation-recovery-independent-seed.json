@@ -1,0 +1,158 @@
+{
+  "version": "WP2ConfirmationSeedIndependentV1",
+  "passed": true,
+  "seed_sha256": "8c3df6a346dd4a45d45e106ebc2d035805fc148fad5abad29094d775ab0d6018",
+  "fixed_reference_sha256": "0bb2af720f26013551b49068e94ccee47fcbdbf9c22674fbfdef32ba6d089df8",
+  "protected_rows": 9772,
+  "protected_rows_bitwise_unchanged": true,
+  "endpoint_K_bitwise_unchanged": true,
+  "dependent_epsilon_and_auxiliary_viscosity_unchanged": true,
+  "setup_integrated_TKE_increment_per_density_unit_span": 5.593781964747728e-06,
+  "GL28": {
+    "order": 28,
+    "point_count": 254016,
+    "minimum_covariance_inner_outer": [
+      0.006838396175850053,
+      0.006713462194413253
+    ],
+    "witnesses": [
+      {
+        "region": 0,
+        "physical": [
+          0.026376982247100857,
+          0.0,
+          0.006499377001065095
+        ],
+        "geometry": 183,
+        "element": 183,
+        "radial_side": 0,
+        "tangential_side": 0,
+        "k": 0.018385755349641965,
+        "epsilon": 0.14306497149487,
+        "epsilon_semantics": "dependent inner E_C",
+        "gradient": [
+          [
+            7.507324368820502e-16,
+            0.0,
+            25.4498804818409
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "tensor": [
+          [
+            0.012257170233094644,
+            0.0,
+            -0.00541877405724459
+          ],
+          [
+            0.0,
+            0.012257170233094644,
+            0.0
+          ],
+          [
+            -0.00541877405724459,
+            0.0,
+            0.012257170233094644
+          ]
+        ],
+        "eigenvalues": [
+          0.006838396175850053,
+          0.012257170233094644,
+          0.017675944290339234
+        ],
+        "critical_eigenvector": [
+          -0.7071067811865475,
+          0.0,
+          -0.7071067811865475
+        ]
+      },
+      {
+        "region": 1,
+        "physical": [
+          -0.06075698820471496,
+          0.0,
+          0.5996442497573955
+        ],
+        "geometry": 313,
+        "element": 313,
+        "radial_side": 0,
+        "tangential_side": 0,
+        "k": 0.018385755345041957,
+        "epsilon": 0.0015502027465966264,
+        "epsilon_semantics": "actual retained outer coefficients",
+        "gradient": [
+          [
+            4.0692157743244346e-14,
+            0.0,
+            0.2824771928667335
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "tensor": [
+          [
+            0.012257170230026374,
+            0.0,
+            -0.00554370803561392
+          ],
+          [
+            0.0,
+            0.012257170230027972,
+            0.0
+          ],
+          [
+            -0.00554370803561392,
+            0.0,
+            0.012257170230027972
+          ]
+        ],
+        "eigenvalues": [
+          0.006713462194413253,
+          0.012257170230027972,
+          0.01780087826564109
+        ],
+        "critical_eigenvector": [
+          -0.7071067811865984,
+          0.0,
+          -0.7071067811864965
+        ]
+      }
+    ],
+    "positive_scalars": true,
+    "minimum_k": 0.01838571082896889,
+    "minimum_epsilon": 0.001162808557665503,
+    "physical_volume": 0.6400000000000383,
+    "strong_divergence_RMS_over_ustar_H": 7.126613515834918e-16,
+    "strong_divergence_accuracy_passed": true,
+    "covariance_margin_passed": true,
+    "polynomial_fit_error": 7.180945403773736e-14,
+    "passed": true,
+    "scope": "fixed GL28 on the common union partition; actual affine native polynomials reconstructed from validated native rows, selected tensors freshly recomputed; finite sampling, complements exact native sided inventories; no freshness/selection claim"
+  },
+  "report": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-seed-confirmation-standard/h0/case.evolution.json",
+    "sha256": "3a0fd944aecb00b32b4b2392aefaf45d340b75e90b1048a903925653d279aeee"
+  },
+  "rows_sha256": "cfddd72ac191a4a2aec0ead356fbced36639203b917d3e694ae7e0ad5d134c96",
+  "source_sha256": "bb5984fa1e214852eb9f0f84c498034c890ba1197ac975fcf4f999313046e504",
+  "seconds": 1.226367190014571,
+  "governing_solves": 0,
+  "scope": "Retrospective read-only check of the exact saved h0. Predeclared seen GL28 volume grid complements native sided inventory. Not a fresh audit or an alteration of the running state."
+}
