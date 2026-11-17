@@ -153,6 +153,33 @@ Vec Flow::StressLoad(const std::function<Tensor(double,double)>&T)const
 {
     Vec r=Vec::Zero(2*m_nu+m_np);for(const auto&e:m_elements){std::array<Vec,4>s;for(auto&v:s)v=Vec(e.w.size());for(int q=0;q<e.w.size();++q){auto a=T(e.x[q],e.z[q]);for(int i=0;i<2;++i)for(int j=0;j<2;++j)s[2*i+j][q]=e.w[q]*a[i?2:0][j?2:0];}for(int c=0;c<2;++c){Vec b=-e.Dx.transpose()*s[2*c]-e.Dz.transpose()*s[2*c+1];for(int j=0;j<16;++j)r[c*m_nu+e.u[j]]+=b[j];}}return r;
 }
+Vec Flow::AWFLoad(const std::function<Vector(double,double)>&sample)const
+{
+    Vec result=Vec::Zero(2*m_nu+m_np);auto rule=Gauss(16);
+    for(const auto&e:m_elements)
+    {
+        double lower=std::max(0.,e.rl),upper=std::min(e.rr,m_geometry.h);if(upper<=lower)continue;
+        for(int a=0;a<16;++a){double xi=rule.first[a],x=(e.xl+e.xr)/2+(e.xr-e.xl)*xi/2;auto f=sample(x,m_geometry.Ground(x)+m_geometry.H);for(int b=0;b<16;++b){double r=(lower+upper)/2+(upper-lower)*rule.first[b]/2,eta=2*(r-e.rl)/(e.rr-e.rl)-1;Vec v=Evaluate(e.velocity,e.B,xi,eta);double w=rule.second[a]*rule.second[b]*(e.xr-e.xl)*(upper-lower)/4;for(int j=0;j<16;++j){result[e.u[j]]+=w*v[j]*f[0];result[m_nu+e.u[j]]+=w*v[j]*f[2];}}}
+    }return result;
+}
+Vec Flow::KnownKLoad(const Vec&k)const
+{
+    Require(k.size()==m_np,"known mechanical-pressure k trace size");Vec r=Vec::Zero(2*m_nu+m_np);r.head(2*m_nu)=(-2./3)*(m_awf*k);return r;
+}
+Vec Flow::MassAction(const Vec&x)const
+{
+    Vec y=Vec::Zero(2*m_nu+m_np);for(int c=0;c<2;++c)y.segment(c*m_nu,m_nu)=m_mass*x.segment(c*m_nu,m_nu);return y;
+}
+Vec Flow::Convection(const Vec&x)const
+{
+    Vec out=Vec::Zero(2*m_nu+m_np);
+    for(const auto&e:m_elements){Vec u(16),v(16);for(int j=0;j<16;++j){u[j]=x[e.u[j]];v[j]=x[m_nu+e.u[j]];}Vec up=e.B*u,vp=e.B*v;for(int c=0;c<2;++c){const auto&coeff=c==0?u:v;Vec conv=up.cwiseProduct(e.Dx*coeff)+vp.cwiseProduct(e.Dz*coeff);Vec rhs=e.B.transpose()*e.w.asDiagonal()*conv;for(int j=0;j<16;++j)out[c*m_nu+e.u[j]]+=rhs[j];}}
+    return out;
+}
+double Flow::PreparePreconditioner(const Sparse&a)
+{
+    double t=Now();m_factor=std::make_unique<Eigen::SparseLU<Sparse>>();m_factor->analyzePattern(a);m_factor->factorize(a);Require(m_factor->info()==Eigen::Success,"sparse native-block preconditioner factorization failed");m_initialIterations=m_lastIterations=0;return Now()-t;
+}
 Vec Flow::TractionLoad(int boundary,const std::function<Vector(double,double,const Vector&)>&fun)const
 {
     Vec result=Vec::Zero(2*m_nu+m_np);auto rule=Gauss(20);
@@ -164,7 +191,9 @@ Vec Flow::TractionLoad(int boundary,const std::function<Vector(double,double,con
 }
 Vec Flow::Project(const Function&f,int c)const
 {
-    auto field=m_fields[c];Array<OneD,NekDouble>x(field->GetTotPoints()),z(x.size()),d(x.size()),v(x.size()),coef(field->GetNcoeffs());field->GetCoords(x,z,d);for(int q=0;q<x.size();++q)v[q]=f(x[q],z[q]);field->FwdTransLocalElmt(v,coef);field->UpdateCoeffs()=coef;field->AvgAssemble();field->GlobalToLocal();auto map=field->GetLocalToGlobalMap();Array<OneD,NekDouble>g(map->GetNumGlobalCoeffs());map->LocalToGlobal(field->GetCoeffs(),g,true);Vec out(g.size());for(int i=0;i<g.size();++i)out[i]=g[i];return out;
+    auto field=m_fields[c];Array<OneD,NekDouble>x(field->GetTotPoints()),z(x.size()),d(x.size()),v(x.size()),coef(field->GetNcoeffs());field->GetCoords(x,z,d);for(int q=0;q<x.size();++q)v[q]=f(x[q],z[q]);field->FwdTransLocalElmt(v,coef);
+    for(int b=0;b<field->GetBndConditions().size();++b)if(field->GetBndConditions()[b]->GetBoundaryConditionType()==SpatialDomains::eDirichlet){auto boundary=field->GetBndCondExpansions()[b];int nq=boundary->GetTotPoints();Array<OneD,NekDouble>bx(nq),bz(nq),bd(nq),values(nq);boundary->GetCoords(bx,bz,bd);for(int q=0;q<nq;++q)values[q]=f(bx[q],bz[q]);boundary->FwdTrans(values,boundary->UpdateCoeffs());}
+    field->ImposeDirichletConditions(coef);field->UpdateCoeffs()=coef;field->AvgAssemble();field->GlobalToLocal();auto map=field->GetLocalToGlobalMap();Array<OneD,NekDouble>g(map->GetNumGlobalCoeffs());map->LocalToGlobal(field->GetCoeffs(),g,true);Vec out(g.size());for(int i=0;i<g.size();++i)out[i]=g[i];return out;
 }
 Vec Flow::Lift(const Vec&x)const{Vec l=Vec::Zero(x.size());for(int c=0;c<2;++c)l.segment(c*m_nu,m_nd)=x.segment(c*m_nu,m_nd);return l;}
 Vec Flow::Restrict(const Vec&x)const{Vec y=Vec::Zero(Size());for(int c=0;c<2;++c)y.segment(c*m_nf,m_nf)=x.segment(c*m_nu+m_nd,m_nf);y.segment(2*m_nf,m_np)=x.tail(m_np);return y;}
@@ -180,7 +209,7 @@ SolveInfo Flow::Residual(const Sparse&a,const Vec&b,const Vec&x)const
 SolveInfo Flow::Solve(const Sparse&a,const Vec&b,Vec&x,double relativeChange,double tolerance)
 {
     Require(x.size()==Size()&&b.size()==Size(),"mixed solve size mismatch");SolveInfo info;double begin=Now();
-    if(!m_factor||relativeChange>.25){double t=Now();m_factor=std::make_unique<Eigen::SparseLU<Sparse>>();m_factor->analyzePattern(a);m_factor->factorize(a);Require(m_factor->info()==Eigen::Success,"sparse native-block preconditioner factorization failed");info.factorSeconds+=Now()-t;info.rebuilds++;}
+    if(!m_factor||relativeChange>.25||m_lastIterations>30||(m_initialIterations>0&&m_lastIterations>2*m_initialIterations)){info.factorSeconds+=PreparePreconditioner(a);info.rebuilds++;}
     int used=0;double correction=0;
     for(int restart=0;restart<14;++restart)
     {
@@ -198,6 +227,7 @@ SolveInfo Flow::Solve(const Sparse&a,const Vec&b,Vec&x,double relativeChange,dou
         if(used>=400)throw std::runtime_error("current native mixed system did not converge");
     }
     double t=Now();auto exact=Residual(a,b,x);info.residualSeconds=Now()-t;info.momentum=exact.momentum;info.continuity=exact.continuity;info.gauge=exact.gauge;info.iterations=used;info.correction=correction;info.solveSeconds=Now()-begin-info.factorSeconds-info.residualSeconds;
+    if(!m_initialIterations&&used)m_initialIterations=used;m_lastIterations=used;
     Require(std::max({info.momentum,info.continuity,info.gauge})<=1e-9,"true current momentum/continuity/gauge residual failed");return info;
 }
 Vec Flow::Physical(const Vec&x,int c)const
@@ -212,4 +242,9 @@ double Flow::StrongDivergence(const Vec&x)const
 {
     double norm=0;for(const auto&e:m_elements){Vec u(16),v(16);for(int j=0;j<16;++j){u[j]=x[e.u[j]];v[j]=x[m_nu+e.u[j]];}Vec div=e.Dx*u+e.Dz*v;norm+=div.cwiseProduct(div).dot(e.w);}return std::sqrt(norm/m_volume);
 }
+double Flow::VelocityDual(const Vec&r)const
+{
+    double value=0;for(int c=0;c<2;++c){Vec f=r.segment(c*m_nu+m_nd,m_nf),z=m_velocityRiesz.solve(f);value+=f.dot(z);}return std::sqrt(std::max(0.,value)/m_volume);
+}
+double Flow::PressureNorm(const Vec&p)const{return std::sqrt(std::max(0.,p.dot(m_qmass*p))/m_volume);}
 }

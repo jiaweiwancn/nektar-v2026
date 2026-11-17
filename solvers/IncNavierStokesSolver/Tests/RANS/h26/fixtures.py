@@ -21,7 +21,7 @@ def symbolic():
     import sympy as s
     x,z,t,nu,a=s.symbols('x z t nu a',real=True)
     psi=s.exp(-t)*x*x*(1-x)*z*z*(1-z)
-    u=[s.diff(psi,z),-s.diff(psi,x)];p=s.exp(-2*t)*(x*x+z*z-s.Rational(2,3))
+    u=[s.diff(psi,z),-s.diff(psi,x)];p=s.exp(-2*t)*(x*x+z*z-s.Rational(2,3))/100
     mu=nu+a*(1+x+z)/100;rem=[[x*z*s.exp(-t)/1000,(x+z)*s.exp(-t)/2000],[(x+z)*s.exp(-t)/2000,-x*z*s.exp(-t)/1000]]
     g=s.Matrix(u).jacobian([x,z]);stress=mu*(g+g.T)+s.Matrix(rem)
     f=[s.simplify(s.diff(u[i],t)+sum(u[j]*g[i,j]for j in range(2))+s.diff(p,[x,z][i])-sum(s.diff(stress[i,j],[x,z][j])for j in range(2)))for i in range(2)]

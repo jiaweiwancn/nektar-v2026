@@ -79,6 +79,13 @@ def analyze(path,curve,out):
     result=dict(status='PASS_TINY_NATIVE_INDEPENDENT_ASSEMBLY',curve=curve,source=str(path),checks=checks,direct_solution_relative_error=float(relative),independent_momentum_residual=momentum,independent_continuity_residual=continuity,unaugmented_null_modes=nulls,gauge=gauge,smallest_singular_values=singular[-5:].tolist(),constant_pressure_C_action=nullC,
         mutations=dict(missing_transpose=float(wrong_strain),wrong_AWF_sign=float(wrong_awf),stale_20percent_viscosity=float(stale)),native=data['solve'],current_coefficient_retained_preconditioner=data['changed_mu_retained_preconditioner'],scope='tiny algebraic/direct operator oracle; does not replace continuous MMS')
     assert data['changed_mu_retained_preconditioner']['rebuilds']==0
+    if 'changed_rhs' in data:
+        F2=F.copy();F2[:2*nf,:2*nf]+=.2*ref['K'][np.ix_(keep,keep)]
+        rhs2=np.array(data['changed_rhs']);direct2=la.solve(F2,rhs2)
+        actual2=np.r_[np.array(data['changed_solution'])[keep],np.array(data['changed_solution'])[2*n:],0.]if gauge else np.r_[np.array(data['changed_solution'])[keep],np.array(data['changed_solution'])[2*n:]]
+        change=la.norm(actual2-actual)/la.norm(actual);agreement=la.norm(actual2-direct2)/la.norm(direct2)
+        assert change>1e-6 and agreement<=1e-8 and data['changed_mu_retained_preconditioner']['iterations']>0,(change,agreement)
+        result['genuine_20percent_coefficient_change']=dict(solution_relative_change=float(change),independent_direct_error=float(agreement))
     out.write_text(json.dumps(result,indent=2)+'\n');print(result['status'],curve,'operator max',max(v['relative_error']for v in checks.values()),'direct',relative,flush=True)
 
 

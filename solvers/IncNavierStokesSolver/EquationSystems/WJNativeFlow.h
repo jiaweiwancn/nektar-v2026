@@ -76,6 +76,11 @@ public:
     Sparse System(double alpha,const Sparse &K,double awf)const;
     Vec Load(const std::array<Function,2>&f)const;
     Vec StressLoad(const std::function<Tensor(double,double)> &T)const;
+    Vec AWFLoad(const std::function<Vector(double,double)>&sampleAtH)const;
+    Vec KnownKLoad(const Vec &prescribedK)const;
+    Vec MassAction(const Vec &full)const;
+    Vec Convection(const Vec &full)const;
+    double PreparePreconditioner(const Sparse &a);
     Vec TractionLoad(int boundary,const std::function<Vector(double,double,const Vector&)>&t)const;
     Vec Project(const Function &f,int component)const;
     Vec Lift(const Vec &full)const;
@@ -87,6 +92,8 @@ public:
     SolveInfo Residual(const Sparse &current,const Vec &rhs,const Vec &x)const;
     std::array<double,3> Error(const Vec &full,const std::array<Function,3>&exact)const;
     double StrongDivergence(const Vec &full)const;
+    double VelocityDual(const Vec &load)const;
+    double PressureNorm(const Vec &pressure)const;
     Vec Physical(const Vec &full,int component)const;
 private:
     void BuildInvariant();
@@ -103,6 +110,7 @@ private:
     Eigen::SimplicialLDLT<Sparse>m_velocityRiesz,m_pressureRiesz;
     std::unique_ptr<Eigen::SparseLU<Sparse>>m_factor;
     int m_initialIterations=0;
+    int m_lastIterations=0;
 };
 }
 #endif
