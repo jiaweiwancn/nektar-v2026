@@ -58,6 +58,22 @@ class PhysicalComparison(unittest.TestCase):
 
 
 class ContinuationOwnership(unittest.TestCase):
+    def test_confirmation_readback_requires_checked_terminal_snapshot(self):
+        from complete_wp2_confirmation_mesh_readback import qualified_terminal
+        from run_cls_epawf_picard import sha
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)
+            self.assertIsNone(qualified_terminal(root,dict(status='physical')))
+            with self.assertRaisesRegex(ValueError,'supervisor stopped'):
+                qualified_terminal(root,dict(status='terminal_stop'))
+            path=root/'confirmation-recovery-terminal-progress.json'
+            path.write_text(json.dumps(dict(status='completed_bounded_trajectory',accepted_steps=120,actual_time=1.2,Treq=1.194)))
+            s=dict(status='assessment',terminal_progress_sha256=sha(path),jobs=dict(physical=dict(exit_code=0)))
+            self.assertEqual(qualified_terminal(root,s),path)
+            s['jobs']['physical']['exit_code']=1
+            with self.assertRaisesRegex(ValueError,'physical job did not succeed'):qualified_terminal(root,s)
+            s['jobs']['physical']['exit_code']=0;path.write_text('{}')
+            with self.assertRaisesRegex(ValueError,'snapshot changed'):qualified_terminal(root,s)
     def test_cumulative_resource_extension_preserves_origin_and_acceptance(self):
         import hashlib
         from wp2_budget import wall_limit

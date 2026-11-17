@@ -588,3 +588,15 @@ The [recovery comparison command](cls-cao-tamura-budget-wp2-evidence/confirmatio
 is prepared for the frozen terminal control; that recovery comparison remains
 unexecuted until its trajectory is available. No new governing solves were used
 by these checks.
+
+
+A bounded read-only completion process is attached to the actual owned physical
+supervisor. It waits for the hash-bound 120-step terminal snapshot and a checked
+zero process return before invoking only the frozen mesh-comparison command.
+It verifies the live controller while waiting, stops on a failed/missing owner,
+respects the unchanged cumulative clock and cannot restart or extend the solver.
+This prevents a delayed interactive readback from leaving the matched comparison
+unexecuted after the numerical endpoint. Fourteen focused Linux protocol tests
+pass, including failed-process and changed-snapshot cases. See
+[readback owner](cls-cao-tamura-budget-wp2-evidence/confirmation-recovery-readback-tail-launch.json).
+The launch receipt remains a waiting state; its result is a separate artifact.
