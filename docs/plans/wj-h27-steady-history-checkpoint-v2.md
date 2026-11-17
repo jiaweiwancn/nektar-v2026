@@ -16,6 +16,10 @@ serialization fixes, identified below. The production C++/headers match exactly.
 This commit binds the tested overlay; it is not a claim that the build was made
 from this as-yet-uncreated commit. The previous source-v9 checkpoint is
 `0802c605b54e1d89485b62e688b542a56c2f5114`.
+The four perturbation-certificate validation adjuncts listed in the source-v11
+manifest are included in the subsequent review checkpoint for complete replay.
+They were not exercised by the source-v11 three-target build or by the results
+claimed in this document; their numerical qualification is separate.
 
 The evidence directory is
 [`wj-h27-linux/native-steady-history-v2c2`](wj-h27-linux/native-steady-history-v2c2/inventory.json).
