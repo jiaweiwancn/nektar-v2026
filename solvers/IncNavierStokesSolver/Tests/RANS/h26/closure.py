@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Read-only final provenance/resource audit, then close only the new ledger."""
-import argparse,datetime,hashlib,json,os,platform,subprocess
+import argparse,datetime,hashlib,json,math,os,platform,subprocess
 from pathlib import Path
 from run import scientific_workers,size,update_journal
 
@@ -52,6 +52,9 @@ def audit(root,version,output):
     revision=subprocess.check_output(['git','-C',str(checkout),'rev-parse','HEAD'],text=True,env=environment).strip();status=subprocess.check_output(['git','-C',str(checkout),'status','--short'],text=True,env=environment)
     models=sorted({line.split(':',1)[1].strip()for line in Path('/proc/cpuinfo').read_text().splitlines()if line.startswith('model name')})
     summary=load(output/'summary.json');assert summary['H26_INTEGRATION_READINESS']=='READY'and summary['H26_NUMERICS']=='PASS'and summary['H26_COST']=='PASS'
+    nu=6.423173803526447e-5;k=.008809015145515192;rough=.10854503542535461;H=.15;top=19.9125;slope=.3819178635467331*.051;x=rough*math.sqrt(k)/(70*nu);power=max(.5-.4*x**.7,1-.79*x**(-.28));zv=nu*(-10.7*math.expm1(power*math.log(x)))/math.sqrt(k);assert zv<0 and 1+zv*1.875/(.35*H)>0
+    turbulent_min=-slope*zv;turbulent_max=slope*top
+    write(output/'prescribed-model-range.json',dict(scope='derived from parameters/functions pinned before timing; no range/geometry adjustment',nu=nu,K=k,roughness=rough,H=H,top_r=top,slope=slope,viscosity_intercept_height=zv,mu_t_range=[turbulent_min,turbulent_max],Nspace_mu_range=[nu+turbulent_min,nu+turbulent_max],Ntime_mu_envelope=[nu+.9*turbulent_min,nu+1.1*turbulent_max],mu_ref=nu+slope*top/2,monotonicity_lower_bound_for_profile_derivative_over_slope=1+zv*1.875/(.35*H)))
     result=dict(status='PASS',tested_source=source['revision'],source_files_checked=len(files),scientific_old_source_files_checked=len(old_files),indexed_immutable_files_checked=len(checked_index),runtime_manifest=identity(root/'science'/f'runtime-v{version}.json'),native_map_snapshots=maps,actual_loaded_files=loaded,mapped_virtual_or_deleted_files=sorted(nonfiles),old_closed_accounts_unchanged=originals,old_auxiliary_bytecode_created_since_takeover=caches,source_build_runtime_bytes=code_bytes,science_bytes=science_bytes,free_bytes=free,peak_build_tree_rss_bytes=peak_build,peak_science_or_analysis_tree_rss_bytes=peak_science,peak_recorded_actual_host_workers=host,maximum_start_admission_bound=admission,live_workers=scientific_workers(),filesystem=subprocess.check_output(['findmnt','-n','-o','FSTYPE,SOURCE,TARGET','-T',str(root)],text=True).strip(),host=platform.uname()._asdict(),cpu_models=models,controller_cpu_affinity=sorted(os.sched_getaffinity(0)),general_checkout=dict(path=str(checkout),revision=revision,status=status,note='read-only snapshot; no intended H26 source was synchronized into this unrelated working tree'),account_before_close=identity(root/'accounting.json'),operation_receipts=receipts,failed_operations=failures,bytes_check_note='heavy H26 files are confined to the new ext4 namespace; old pinned source/data/account files were checked without writes')
     write(output/'runtime-resource-audit.json',result);print('PASS runtime/source/resources',host,peak_science,code_bytes,science_bytes)
 def close(root,version,output):
