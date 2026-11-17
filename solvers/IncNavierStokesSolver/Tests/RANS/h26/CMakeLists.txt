@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.16)
+project(WJH26NativeFlow CXX)
+find_package(Nektar++ REQUIRED)
+find_package(Eigen3 REQUIRED NO_MODULE)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+get_filename_component(H26_SOURCE_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../../../.." ABSOLUTE)
+add_definitions(${NEKTAR++_DEFINITIONS} -DENABLE_NEKTAR_EXCEPTIONS)
+include_directories(${H26_SOURCE_ROOT}/library ${H26_SOURCE_ROOT}/solvers)
+include_directories(SYSTEM ${NEKTAR++_INCLUDE_DIRS} ${NEKTAR++_TP_INCLUDE_DIRS})
+add_library(WJNativeFlow STATIC
+    ${H26_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp
+    ${H26_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSModels.cpp
+    ${H26_SOURCE_ROOT}/library/SolverUtils/Turbulence/WJEARSM.cpp
+    ${H26_SOURCE_ROOT}/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp)
+target_link_libraries(WJNativeFlow PUBLIC Eigen3::Eigen ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
+target_compile_definitions(WJNativeFlow PRIVATE SOLVER_UTILS_EXPORTS)
+target_compile_options(WJNativeFlow PRIVATE -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra -Wno-sign-compare)
+add_executable(WJNativeFlowDriver driver.cpp)
+target_link_libraries(WJNativeFlowDriver WJNativeFlow)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
