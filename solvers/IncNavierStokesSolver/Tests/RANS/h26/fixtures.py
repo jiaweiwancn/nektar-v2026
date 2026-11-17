@@ -58,7 +58,7 @@ def mesh(path,xs,rs,degree=3,quadrature=8,curve=0.,natural=False):
     ET.SubElement(g,'DOMAIN').text='C[0]'
     ex=ET.SubElement(x,'EXPANSIONS')
     for fields,modes in (('u,v',degree+1),('p',degree)):
-        ET.SubElement(ex,'E',COMPOSITE='C[0]',NUMMODES=str(modes),TYPE='MODIFIED',FIELDS=fields,NUMPOINTS=str(quadrature),POINTSTYPE='GaussLobattoLegendre')
+        ET.SubElement(ex,'E',COMPOSITE='C[0]',NUMMODES=f'{modes},{modes}',BASISTYPE='Modified_A,Modified_A',FIELDS=fields,NUMPOINTS=f'{quadrature},{quadrature}',POINTSTYPE='GaussLobattoLegendre,GaussLobattoLegendre')
     c=ET.SubElement(x,'CONDITIONS');si=ET.SubElement(c,'SOLVERINFO')
     for k,v in dict(SolverType='VelocityCorrectionScheme',EQTYPE='UnsteadyNavierStokes',Projection='Continuous',GlobalSysSoln='DirectStaticCond',AdvectionType='Convective',SpectralVanishingViscosity='False').items():ET.SubElement(si,'I',PROPERTY=k,VALUE=v)
     ts=ET.SubElement(c,'TIMEINTEGRATIONSCHEME');ET.SubElement(ts,'METHOD').text='IMEX';ET.SubElement(ts,'ORDER').text='2'
