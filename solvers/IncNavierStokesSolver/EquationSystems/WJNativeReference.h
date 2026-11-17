@@ -38,6 +38,11 @@ public:
 
     double Cutoff(double K) const;
     double CutoffDerivative(double K) const;
+    std::array<double,2> LogCutoffDerivativeBounds() const { return m_logCutoffSlopeBounds; }
+    std::array<double,2> CutoffRadiusRange() const;
+    // Geometry-only inversion of the unchanged certified decreasing table.
+    // This selects x integration panels, never a new cutoff calibration.
+    double KAtCutoff(double radius) const;
     double Amplitude(double K) const;
     double AmplitudeDerivative(double K) const;
     double AmplitudeSecondDerivative(double K) const;
@@ -76,6 +81,7 @@ private:
     ReferenceParameters m_p{};
     std::string m_identity;
     Polynomial m_logCutoff, m_logCutoffDerivative;
+    std::array<double,2> m_logCutoffSlopeBounds{};
     std::array<Polynomial,3> m_outlet;
     double m_inletA=0, m_inletSlope=0, m_inletD=0, m_inletCutoff=0;
 };

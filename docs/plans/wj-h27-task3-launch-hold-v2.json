@@ -1,0 +1,356 @@
+{
+  "schema": "WJH27Task3LaunchHoldV2",
+  "status": "NOT_READY_DO_NOT_LAUNCH",
+  "gates": {
+    "H27_MODEL_AND_REFERENCE": "NOT_MET",
+    "H27_COUPLED_NUMERICS": "NOT_MET",
+    "H27_PHYSICAL_PILOTS_AND_ACCURACY": "NOT_MET",
+    "H27_RESTART_MONITORING_STORAGE": "NOT_MET",
+    "H27_COMPLETE_COST": "TARGET_NOT_MET",
+    "TASK3_READY": "NO"
+  },
+  "goal_complete": false,
+  "model": {
+    "name": "FiniteNuIsotropicWallFullWJCollarV2",
+    "user_approved_tensor": "Isotropic lower-wall normal block blended into the full-WJ collar",
+    "v4_implemented": false,
+    "contracts": [
+      {
+        "path": "docs/plans/wj-h27-amended-candidate-v2.md",
+        "bytes": 5039,
+        "sha256": "727b59a125429f8ecd1cb865be627de59b489cdd20773589a74961bdd9ae1922"
+      },
+      {
+        "path": "docs/plans/wj-h27-contract.md",
+        "bytes": 12335,
+        "sha256": "be940f784f446f89327da8794a7e492b9cada6e255b0cd04bb59cece20bb0682"
+      }
+    ],
+    "nu": 6.423173803526447e-05,
+    "Kin": 0.008809015145515192,
+    "H": 0.15,
+    "h": 0.10854503542535461,
+    "d0": 0.0875,
+    "dependent_wall_dissipation": "Ew=A(K)/max(r,c(K))",
+    "inner_k_diffusivity": "nu+Cd*k^2/(sigmaK*actualEw)",
+    "actual_production": "-R:G",
+    "forcing": "No application equilibrium or balance forcing",
+    "units": "Unchanged retained inlet/domain unit conversion and reference scales in the bound contracts"
+  },
+  "numerical_source_identity": "56c35390fdf092180913f60c3ae348ca10cdcdf4e6b889c3afd589eddb511acf",
+  "mac_parent": "edf8d4ce7770e47641b99b2be4a87197e60b9426",
+  "source_manifest": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v19.json",
+    "bytes": 1141639,
+    "sha256": "26e414f6d5238c7d5bf44cdd1c2fe38d341bbdff697f4f3105c6dd247b84eb82"
+  },
+  "coupled_solver_executable": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v19/IncNavierStokesSolver.elf",
+    "bytes": 9932832,
+    "sha256": "37307b1662d694124326568fd1137050a56955928c48f6406989a171596fc52b"
+  },
+  "loader": {
+    "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2",
+    "bytes": 240936,
+    "sha256": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+  },
+  "runtime_dependencies": {
+    "path": "docs/plans/wj-h27-linux/native-cutoff-panels-v2i/runtime-dependencies.json",
+    "bytes": 46190,
+    "sha256": "51a9dc5afa2f08a81752d92df5c0aea45c745de9be37cea57493dd8c092d9579"
+  },
+  "table_sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+  "physical_boundary_input": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.xml",
+    "bytes": 112069,
+    "sha256": "67330c216dbe0682a0b8c37328000cae98826fcf4e6d4b74c7295e7e4c30d8e0"
+  },
+  "boundary_contract": "Retained inlet and roughness, impermeable lower wall/AWF shear, original top and open total-traction outlet; transported k, outer-only epsilon with dependent trace at H; no pressure gauge on the physical outlet case",
+  "developed_candidate": {
+    "result": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/reference-r2.result.json",
+      "bytes": 47147684,
+      "sha256": "f48243ee0d94b39eb394ab05eb6a00bc23d0caf91956783ab7e62699afcd072e"
+    },
+    "session": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/reference-r2.xml",
+      "bytes": 903446,
+      "sha256": "d52494a153cfa9669095e55bceeed175ed7ccc3d8cc9d8915fae1fa7d0ee8e00"
+    },
+    "qualified": false,
+    "mesh": {
+      "nx": 28,
+      "nr": 200,
+      "cells": 5600,
+      "p_velocity_k_epsilon": 3,
+      "p_pressure": 2,
+      "quadratureX": 8,
+      "quadratureR": 12,
+      "scalar_quadrature": "CubicCutoffFacePanelsV1"
+    },
+    "physical_time_advanced": 0,
+    "physical_development": "NOT_MET",
+    "inner_k": {
+      "RMS": 0.13279468209091205,
+      "MAX": 0.44168324293315253,
+      "component_RMS": [
+        0.13279468209091205
+      ],
+      "component_MAX": [
+        0.44168324293315253
+      ],
+      "measure": 3.7500000000000386,
+      "limits": [
+        0.05,
+        0.1
+      ],
+      "status": "NOT_MET"
+    }
+  },
+  "qualified_reference": null,
+  "qualified_initial_states": null,
+  "qualified_restart_state": null,
+  "diagnostic_startup": {
+    "session": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.xml",
+      "bytes": 112069,
+      "sha256": "67330c216dbe0682a0b8c37328000cae98826fcf4e6d4b74c7295e7e4c30d8e0"
+    },
+    "steps": 12,
+    "end_time": 0.06,
+    "dt": 0.005,
+    "cells": 700,
+    "qualified_long_pilot": false
+  },
+  "diagnostic_retained_restart": {
+    "9": {
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.recovery-9.bin",
+        "sha256": "cf2dbf0ee04ba3abf37800bccff23440035bf473c1977f0266787bcc9a5eb2aa",
+        "bytes": 859058,
+        "payload_sha256": "43d2a1d6bfe8037d68683cfc0d139bb740f7dd5bab4f0abc25d6f603d198c05f",
+        "signature": "29a462771c855e66a053e30fbdead3f7032388652669da35e4cf98767a593f27",
+        "step": 9,
+        "time": 0.045,
+        "dt": 0.005,
+        "hashes": {
+          "current": "7dcbdaa9b1c2299eab075c6150a1c366ef5f0e04c2c1930ce17fd528e747918d",
+          "previous": "559ea67be83e2514d95b803eda58c52d8487c27327094cb15ce5d19aad6c525b",
+          "advection": "f5e489fc09a618b7c484854ed6717a3814f0aa2399f5dcda1f392858924eab55",
+          "previous_advection": "e02cc7efdb19938482887913b68b5fcbcb501d0f619d027ce670cd094d8689e8"
+        }
+      },
+      "science": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.science-9.json",
+        "sha256": "d2e6b31a8a10491746bffeb9ef30975927560f2c12c8a54a15bea277f543e734",
+        "bytes": 4709019
+      },
+      "four_history_binding": true
+    },
+    "12": {
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.recovery-12.bin",
+        "sha256": "04aba27bd386dd9e6a387b5e47cb5d3631bd12a3b678035ad8a168601f6c91f8",
+        "bytes": 859058,
+        "payload_sha256": "a5049083e1b0d215fcafe4a685420bf7b44961ed12a9be118c0593d573c4604f",
+        "signature": "29a462771c855e66a053e30fbdead3f7032388652669da35e4cf98767a593f27",
+        "step": 12,
+        "time": 0.06,
+        "dt": 0.005,
+        "hashes": {
+          "current": "e11d5bcdfad70c5a42bc4dff6232e632b06eda5803faa09f1aee0239f89bfa1c",
+          "previous": "0adda7bcb702d5afc634b21b2abd612033e0eb4568a0819e41b41ca593985404",
+          "advection": "07948ee6f1529955054fb75f210642a888a7670c810eea7f037cbcd3076e284b",
+          "previous_advection": "e12adc669122e1e8e7a451447461424434c32d6f24c5a5b43feb24dafd82349e"
+        }
+      },
+      "science": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.science-12.json",
+        "sha256": "282dd8846f6e992989af74303c13d7193d1160fbef536a22574e0b1c24610bda",
+        "bytes": 4708458
+      },
+      "four_history_binding": true
+    }
+  },
+  "diagnostic_derived_panel_cold_reload": {
+    "path": "docs/plans/wj-h27-linux/native-cutoff-panels-v2i/science/cutoff-panels-v19/radial-zero-independent.json",
+    "bytes": 1874,
+    "sha256": "b71147d59ed1e582153026551a3a3de44ebb069d72a77e24c0e79064fda10395"
+  },
+  "qualified_mesh_p_q_dt": null,
+  "diagnostic_scalar_quadrature": "CubicCutoffFacePanelsV1",
+  "horizon": 505.02466521278404,
+  "terminal_window": [
+    447.8483832973273,
+    505.02466521278404
+  ],
+  "required_principal_pilot_duration": 26.13350407707765,
+  "planned_case_classes": [
+    "developed_control",
+    "retained_inlet_startup",
+    "finite_perturbation_positive",
+    "finite_perturbation_second_sign_or_shape"
+  ],
+  "finite_perturbation_contract": {
+    "path": "docs/plans/wj-h27-finite-perturbation-shape.md",
+    "bytes": 10251,
+    "sha256": "3f7b0ceda3cac71704fd8e829c1cc105720bbb0cd09403e84cdb15c2f0921bb3"
+  },
+  "source19_finite_perturbation_fields": null,
+  "preservation": {
+    "developed_reference": "Compare against an independently resolved same-inlet finite-nu developed state once qualified",
+    "retained_inlet": "Separately enforce the frozen engineering envelopes; the current inner-k RMS/MAX .13279468209091205/.44168324293315253 fail .05/.10"
+  },
+  "scientific_observables": [
+    "U",
+    "W",
+    "modified and mechanical pressure",
+    "velocity gradient",
+    "R",
+    "k",
+    "outer epsilon",
+    "K",
+    "Gamma",
+    "Ew",
+    "cutoff",
+    "wall traction",
+    "interface scalar/traction fluxes",
+    "current coupled residuals",
+    "conservation accounts",
+    "principal/covariance guards"
+  ],
+  "acceptance_and_abort_contracts": [
+    {
+      "path": "docs/plans/wj-h27-physical-oracle.md",
+      "bytes": 5864,
+      "sha256": "f49ed5aaa6554844e00d32e27f722d1c86bc12b6e2eea126f5bdff767d2d69af"
+    },
+    {
+      "path": "docs/plans/wj-h27-contract.md",
+      "bytes": 12335,
+      "sha256": "be940f784f446f89327da8794a7e492b9cada6e255b0cd04bb59cece20bb0682"
+    }
+  ],
+  "current_guard_policy": "Fresh current positivity, physical-root/covariance and full planar principal/residual checks; reject invalid/unconverged steps; no state clipping",
+  "monitoring": {
+    "diagnostic_accepted_guard_cadence": "Every accepted step",
+    "production_expensive_audit_cadence": null,
+    "detection_escalation_qualified": false
+  },
+  "recovery_retention": {
+    "source19_retained_continuation": {
+      "path": "docs/plans/wj-h27-linux/native-cutoff-recovery-v2i2/science/cutoff-recovery-v19/independent.json",
+      "bytes": 36616,
+      "sha256": "84c65e70b802524e686e82b268cffa77b59c437ccedcf39c8abe97de8fb279bc"
+    },
+    "observed_writes": [
+      3,
+      6,
+      9,
+      12
+    ],
+    "observed_removed": [
+      3,
+      6
+    ],
+    "retained": [
+      9,
+      12
+    ],
+    "prior_source_checkpoint_rejected": true,
+    "removed_binary_byte_audit_claimed": false,
+    "persisted_statistics_proof_source": "source15; separately bound, not transferred to source19",
+    "production_policy_qualified": false
+  },
+  "storage": {
+    "diagnostic_resource_snapshot": {
+      "primary": {
+        "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026",
+        "head": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+        "status": " M docs/developer-guide/src/library\n",
+        "preserved": true
+      },
+      "source_build_runtime_bytes": 3001775477,
+      "science_bytes": 2667216047,
+      "free_bytes": 69542166528,
+      "aggregate_closed_prior_and_current_seconds": 15711.35558184865,
+      "account_closed": false,
+      "campaign_ceiling": 43200,
+      "evidence_protected": 3600,
+      "workers_ceiling": 72,
+      "max_phase_actual_host_workers": 15,
+      "max_phase_tree_rss_bytes": 6036103168,
+      "ranks": 1,
+      "all_six_thread_limits_one": true
+    },
+    "selected_production_allocation_and_peak_bytes": null,
+    "qualified": false
+  },
+  "cost": {
+    "per_trajectory_complete_forecasts": {
+      "developed_control": null,
+      "retained_inlet_startup": null,
+      "finite_perturbation_positive": null,
+      "finite_perturbation_second_sign_or_shape": null
+    },
+    "total_campaign_forecast": null,
+    "required_margin": 1.25,
+    "per_trajectory_limit_seconds": 86400,
+    "formula": "fresh initialization + accepted advancement + rejected attempts + periodic checks/output/recovery + one complete cold restart provision + terminal assessment/export",
+    "observed_unqualified_700_cell_startup_proxy": {
+      "dt": 0.005,
+      "steps": 101005,
+      "initial_block_mean": 6.606334507678791,
+      "warm_block_means": [
+        6.32767639736024,
+        5.831102799992853,
+        6.317736720336446
+      ],
+      "largest_warm_mean": 6.32767639736024,
+      "advancement_only_seconds": 639126.954515371,
+      "one_point_two_five_advancement_only_seconds": 798908.6931442139,
+      "four_trajectory_advancement_only_seconds": 2556507.818061484,
+      "complete_fixed_costs": "NOT_QUALIFIED",
+      "monitoring_and_statistics_cost": "NOT_QUALIFIED",
+      "long_state_and_perturbation_cost": "NOT_QUALIFIED",
+      "selected_mesh_p_q_dt": "NOT_QUALIFIED",
+      "production_forecast_qualified": false,
+      "scope": "Short700-cell work-class extrapolation only; excluded components are unknown, not zero. All actual operations remain in the aggregate account, and overlapping/subset timings are not added twice."
+    },
+    "forecast_qualified": false,
+    "accounting": "Every measured development operation including the missing-fixture failure and expected signature rejection remains charged in the open common account; subset timers are not added twice"
+  },
+  "launch_commands": null,
+  "abort_before_launch": [
+    "Physical developed reference fails the retained-inlet inner-k envelope",
+    "Selected-source19 h/p/q/dt and required-duration four-case pilots are unqualified",
+    "Monitoring escalation, persisted reduction and full storage are not qualified on one selected recipe",
+    "Complete per-trajectory and campaign cost is unqualified; .005 short-work proxy exceeds the one-day target"
+  ],
+  "diagnostic_commands": {
+    "operator": "See docs/plans/wj-h27-cutoff-panels-checkpoint-v2.md",
+    "retained_history": "Use source-bound tools-cutoff-recovery-v19b/h27/retained_recovery_check.py with the archived manifest and a fresh output path"
+  },
+  "next_model_decision": {
+    "path": "docs/plans/wj-h27-historical-inner-transport-proposal-v4.md",
+    "bytes": 14075,
+    "sha256": "940a709d657f119304ffb9bd36c7147b8e1e1a6996b335eb4e5229506e4c665d"
+  },
+  "evidence": [
+    {
+      "path": "docs/plans/wj-h27-linux/native-cutoff-panels-v2i/inventory.json",
+      "bytes": 272047,
+      "sha256": "bc9d3bbe3af45cc15ec07df4f6c1761aff04cac5ebb4141b5e8c68f63202bebc"
+    },
+    {
+      "path": "docs/plans/wj-h27-linux/native-cutoff-recovery-v2i2/inventory.json",
+      "bytes": 32586,
+      "sha256": "21d4c47b92bead89cbbd3f2cdc72dd45c18210ac3389f92f5ec0a86139d24478"
+    },
+    {
+      "path": "docs/plans/wj-h27-linux/native-cutoff-panels-v2i/post-publication-summary.json",
+      "bytes": 254219,
+      "sha256": "eee65171d07004ec8a328c42ce4415bc127a24455a0561cf4bf1530b993c9f25"
+    }
+  ]
+}

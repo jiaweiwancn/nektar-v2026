@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 #include <IncNavierStokesSolver/EquationSystems/WJNativeCoupling.h>
+#include <IncNavierStokesSolver/EquationSystems/WJNativeCutoffPanels.h>
 #include <IncNavierStokesSolver/EquationSystems/WJNativeWallV2.h>
 #include <IncNavierStokesSolver/EquationSystems/WJNativeFailures.h>
 #include <IncNavierStokesSolver/EquationSystems/WJNativeAdmissibility.h>
@@ -89,6 +90,10 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     for(const auto&field:m_fields)for(int e=0;e<field->GetExpSize();++e)for(int d=0;d<2;++d)
         Require(field->GetExp(e)->GetBasis(d)->GetBasisType()==LibUtilities::eModified_A,"coupled fields require the declared native Modified_A basis");
     m_flow.SetTransportedKSpace(m_fields[2]);BuildTopology();
+    m_cutoffRange=m_reference->CutoffRadiusRange();
+    for(const auto&e:m_flow.Elements())for(double radius:{e.rl,e.rr})
+        if(radius>=m_cutoffRange[0]&&radius<=m_cutoffRange[1]&&!m_cutoffFaceK.count(radius))
+            m_cutoffFaceK.emplace(radius,m_reference->KAtCutoff(radius));
     Require(std::isfinite(m_options.mmsBodyAmplitude),"nonfinite MMS body amplitude");
     Require(m_options.manufactured||m_options.mmsBodyAmplitude==0,"the prescribed MMS body is verification-only");
     Require(m_options.mmsVariant=="Historical"||m_options.mmsVariant=="PolynomialScalarsV1","unknown continuous MMS variant");
@@ -98,7 +103,7 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     else Require(std::abs(m_geometry.d0-m_reference->Parameters().d0)<1e-14&&
         std::abs(m_top-m_reference->Parameters().topRadius)<1e-12&&std::abs(m_left+10)<1e-12&&std::abs(m_right-15)<1e-12,
         "application geometry differs from the retained physical domain");
-    std::ostringstream signature;signature<<std::setprecision(17)<<"WJ-H27-coupled-v2-BDF2-EX2|"<<WallModelV2<<'|'
+    std::ostringstream signature;signature<<std::setprecision(17)<<"WJ-H27-coupled-v2-BDF2-EX2|"<<WallModelV2<<"|CubicCutoffFacePanelsV1|"
         <<m_options.sourceIdentity<<'|'<<m_reference->Identity()<<'|'<<m_options.dt<<'|'<<m_options.manufactured<<'|'
         <<m_options.quadratureX<<'|'<<m_options.quadratureR<<'|'<<m_geometry.d0<<'|'<<m_geometry.H<<'|'<<m_geometry.h<<'|'
         <<m_options.linearTolerance<<'|'<<m_options.nonlinearTolerance<<'|'<<m_options.maximumIterations<<'|'<<m_options.mmsBodyAmplitude<<'|'<<int(m_options.backend)<<'|'<<m_options.mmsVariant<<'|'<<m_options.andersonDepth<<'|'<<m_options.stressSplit<<'|'<<m_options.steadyVelocityPC;
@@ -190,7 +195,7 @@ void Coupling::BuildTopology()
 const Element&Coupling::Owner(int geometry)const{return m_flow.Elements().at(m_geometryIndex.at(geometry));}
 const Element&Coupling::HOwner(const Element&e)const{return m_flow.Elements().at(m_hOwner.at(e.geometry));}
 NativeRule Coupling::HRule(const NativeRule&rule)const
-{return m_rules.Points(HOwner(Owner(rule.geometry)),rule.x,Vec::Constant(rule.x.size(),m_geometry.d0+m_geometry.H));}
+{return m_rules.HorizontalTrace(HOwner(Owner(rule.geometry)),rule.x,2);}
 double Coupling::InterfaceK(const Element&e,double x,const CoupledState&s)const
 {
     const auto&owner=HOwner(e);const auto&trace=m_hKTrace.at(owner.geometry);std::array<double,4>c{};
@@ -203,6 +208,36 @@ std::array<double,2>Coupling::InterfaceVelocity(const Element&e,double x,const C
     const auto&owner=HOwner(e);std::array<double,4>c{};for(int j=0;j<4;++j)c[j]=s.flow[owner.u[j]]*owner.us[j];
     return CubicTrace(c,(x-owner.xl)/(owner.xr-owner.xl),owner.xr-owner.xl);
 }
+std::vector<double>Coupling::CutoffXBreaks(const Element&e,const std::array<double,4>&c,double left,double right)const
+{
+    std::vector<double>levels;
+    for(double radius:{e.rl,e.rr}){auto found=m_cutoffFaceK.find(radius);if(found!=m_cutoffFaceK.end())levels.push_back(found->second);}
+    auto parameters=CubicCutoffPanels(c,levels);std::vector<double>points;
+    const double roundoff=64*std::numeric_limits<double>::epsilon()*std::max({std::abs(e.xl),std::abs(e.xr),e.xr-e.xl});
+    for(double t:parameters){const double x=left+(right-left)*t;if(x>e.xl+roundoff&&x<e.xr-roundoff)points.push_back(x);}
+    return points;
+}
+std::vector<double>Coupling::CurrentCutoffXBreaks(const Element&e,const CoupledState&s)const
+{
+    const auto&owner=HOwner(e);const auto&trace=m_hKTrace.at(owner.geometry);std::array<double,4>c{};
+    for(int j=0;j<4;++j)c[j]=s.k[trace.ids[j]]*trace.signs[j];
+    return CutoffXBreaks(e,c,owner.xl,owner.xr);
+}
+std::vector<double>Coupling::MMSCutoffXBreaks(const Element&e,double time)const
+{
+    Require(bool(m_mms),"exact cutoff panels require the declared continuous MMS");
+    // Both declared MMS variants have the same exact quadratic interface K.
+    // Its own surface is independent of the current numerical trace.
+    const double width=e.xr-e.xl;const auto middle=m_mms->InterfaceK((e.xl+e.xr)/2,time);
+    const std::array<double,4>c{middle.value-width*middle.dx/2+width*width*middle.dxx/8,
+        middle.value+width*middle.dx/2+width*width*middle.dxx/8,-width*width*middle.dxx/2,0.};
+    for(double t:{.211,.533,.877}){
+        const double exact=m_mms->InterfaceK(e.xl+width*t,time).value;
+        Require(std::abs(CubicTrace(c,t,width)[0]-exact)<=64*std::numeric_limits<double>::epsilon()*m_reference->Parameters().KIn,
+            "continuous MMS interface K is not the declared quadratic trace");
+    }
+    return CutoffXBreaks(e,c,e.xl,e.xr);
+}
 void Coupling::CheckTraceEvaluation()const
 {
     CoupledState synthetic;synthetic.k=m_k.Project([&](double,double){return m_reference->Parameters().KIn;});
@@ -210,7 +245,7 @@ void Coupling::CheckTraceEvaluation()const
     for(int j=0;j<synthetic.k.size();++j)synthetic.k[j]+=1e-4*m_reference->Parameters().KIn*std::sin(double(j+1));
     for(int j=0;j<synthetic.flow.size();++j)synthetic.flow[j]=std::cos(.7*(j+1));
     for(const auto&entry:m_hKTrace){const auto&e=Owner(entry.first);for(double t:{0.,.135,.555,.8,1.}){
-        double x=e.xl+t*(e.xr-e.xl);auto rule=m_rules.Points(e,Vec::Constant(1,x),Vec::Constant(1,m_geometry.d0+m_geometry.H));
+        double x=e.xl+t*(e.xr-e.xl);auto rule=m_rules.HorizontalTrace(e,Vec::Constant(1,x),2);
         const double K=m_k.Evaluate(rule,synthetic.k)[0],fast=InterfaceK(e,x,synthetic);
         Require(std::abs(K-fast)<=2e-13*m_reference->Parameters().KIn,"direct native H scalar trace disagrees with owned basis evaluation");
         auto velocity=InterfaceVelocity(e,x,synthetic);Vec local=Local(synthetic.flow,rule.u);
@@ -363,7 +398,8 @@ Coupling::Data Coupling::Evaluate(const CoupledState&s,double time,bool principa
         auto bound=CubicBounds(c);RequireState(bound[0]>=p.KMinimum&&bound[1]<=p.KMaximum,"current interface K polynomial left the qualified reference interval");
     }
     timing.guards+=Clock()-start;start=Clock();
-    d.kRules=m_rules.Cutoff([&](const Element&e,double x){return m_reference->Cutoff(InterfaceK(e,x,s));});
+    const CutoffPartition partition{m_cutoffRange,[&](const Element&e){return CurrentCutoffXBreaks(e,s);}};
+    d.kRules=m_rules.Cutoff([&](const Element&e,double x){return m_reference->Cutoff(InterfaceK(e,x,s));},&partition);
     timing.wall+=Clock()-start;
     std::vector<double>coefficient,kCoefficient,eCoefficient;const int n=m_flow.VelocitySize();
     auto samples=[&](const NativeRule&r,bool flowPart,Vec&mu,Vec&Dk,Vec&De,Vec&sourceK,Vec&sourceE,Vec&reactionE,std::vector<Tensor>&rem,Vec&bulk,Vec&shear,std::vector<Tensor>&viscous){
@@ -541,7 +577,8 @@ Coupling::Loads Coupling::Forcing(double time,CoupledTiming&timing,bool freezeMa
         load.epsilon=m_e.Source(m_rules.Static(),esource);
         // The continuous forcing has its OWN exact cutoff surface. It is
         // integrated independently of the current numerical cutoff surface.
-        auto exactRules=m_rules.Cutoff([&](const Element&,double x){return m_reference->Cutoff(m_mms->InterfaceK(x,time).value);});
+        const CutoffPartition exactPartition{m_cutoffRange,[&](const Element&e){return MMSCutoffXBreaks(e,time);}};
+        auto exactRules=m_rules.Cutoff([&](const Element&,double x){return m_reference->Cutoff(m_mms->InterfaceK(x,time).value);},&exactPartition);
         std::vector<Vec>ksource;
         for(const auto&rp:exactRules){Vec f(rp->w.size());for(int q=0;q<f.size();++q){f[q]=m_mms->Forcing(rp->x[q],rp->z[q],time).k;if(freezeManufactured)f[q]-=m_mms->Fields(rp->x[q],rp->z[q],time).k.dt;}ksource.push_back(std::move(f));}
         load.k=m_k.Source(exactRules,ksource);
@@ -812,7 +849,7 @@ SteadyKrylovResult Coupling::SolveSteady(CoupledHistory&history,const SteadyKryl
             if(normal[2]>=-.5)return 0.;const Element*owner=nullptr;
             for(const auto&e:m_flow.Elements())if(std::abs(e.rl-m_geometry.H)<1e-12&&x>=e.xl-1e-12&&x<=e.xr+1e-12){owner=&e;break;}
             Require(owner!=nullptr,"steady Gamma derivative has no outer owner");
-            auto rule=m_rules.Points(*owner,Vec::Constant(1,x),Vec::Constant(1,m_geometry.d0+m_geometry.H));
+            auto rule=m_rules.HorizontalTrace(*owner,Vec::Constant(1,x),2);
             return m_reference->AmplitudeDerivative(InterfaceK(*owner,x,pcState))*m_k.Evaluate(rule,dk)[0]/m_geometry.H;
         },m_rules);
         result.tail(ne)=m_e.ApplyLinearPreconditioner(rhs.tail(ne)-m_e.Restrict(epsilonPCFull*trace));return result;
@@ -900,6 +937,9 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
 {
     out<<std::setprecision(17)<<"{\"schema\":\"WJH27NativeCoupledStateV2\",\"model\":\""<<WallModelV2<<"\",\"signature\":\""<<m_signature<<"\",\"source_identity\":\""<<m_options.sourceIdentity<<"\",\"reference_identity\":\""<<m_reference->Identity()<<"\",\"manufactured\":"<<(m_mms?"true":"false")<<",\"step\":"<<h.step<<",\"time\":"<<h.time<<",\"dt\":"<<h.dt<<",\"state_sha256\":\""<<StateHash(h.current)<<"\",\"previous_sha256\":\""<<StateHash(h.previous)<<"\",\"advection_sha256\":\""<<StateHash(h.advection)<<"\",\"previous_advection_sha256\":\""<<StateHash(h.previousAdvection)<<"\",\"sizes\":["<<m_flow.VelocitySize()<<','<<m_flow.PressureSize()<<','<<m_k.Size()<<','<<m_e.Size()<<"],\"gauge\":"<<(m_flow.Gauge()?"true":"false")<<",\"nonlinear_iterations\":"<<info.nonlinearIterations<<",\"linear_iterations\":["<<info.flowIterations<<','<<info.kIterations<<','<<info.epsilonIterations<<"],\"rebuilds\":"<<info.rebuilds<<",\"retries\":"<<info.retries<<",\"seconds\":"<<info.seconds<<",\"coefficient_drift\":"<<info.coefficientDrift<<",\"residuals\":["<<info.residual.momentum<<','<<info.residual.continuity<<','<<info.residual.gauge<<','<<info.residual.k<<','<<info.residual.epsilon<<','<<info.residual.trace<<"],\"minimum_k\":"<<info.minimumK<<",\"minimum_epsilon\":"<<info.minimumEpsilon<<",\"minimum_covariance_over_k\":"<<info.minimumCovarianceOverK<<",\"minimum_principal_over_mu\":"<<info.minimumPrincipalOverMu<<",\"disjoint_seconds\":{\"constitutive\":"<<info.timing.constitutive<<",\"wall\":"<<info.timing.wall<<",\"assembly\":"<<info.timing.assembly<<",\"flow\":"<<info.timing.flow<<",\"scalar\":"<<info.timing.scalar<<",\"rebuild\":"<<info.timing.rebuild<<",\"guards\":"<<info.timing.guards<<",\"forcing\":"<<info.timing.forcing<<",\"residual\":"<<info.timing.residual<<",\"nonlinear\":"<<info.timing.nonlinear<<",\"io\":"<<info.timing.io<<",\"other\":"<<info.timing.other<<'}';
     out<<",\"quadratureX\":"<<m_options.quadratureX<<",\"quadratureR\":"<<m_options.quadratureR<<",\"linear_tolerance\":"<<m_options.linearTolerance<<",\"nonlinear_tolerance\":"<<m_options.nonlinearTolerance<<",\"maximum_iterations\":"<<m_options.maximumIterations<<",\"mms_body_amplitude\":"<<m_options.mmsBodyAmplitude<<",\"retry_reason\":"<<RANSWallSolveJson::Quote(info.retryReason);
+    const auto slopes=m_reference->LogCutoffDerivativeBounds();
+    out<<",\"scalar_quadrature_policy\":\"CubicCutoffFacePanelsV1\",\"cutoff_radius_range\":["<<m_cutoffRange[0]<<','<<m_cutoffRange[1]
+       <<"],\"cutoff_log_slope_bounds\":["<<slopes[0]<<','<<slopes[1]<<']';
     out<<",\"mms_variant\":"<<RANSWallSolveJson::Quote(m_options.mmsVariant);
     out<<",\"implicit_solver\":"<<RANSWallSolveJson::Quote(m_options.advancement)
         <<",\"coupled_newton\":{\"krylov_iterations\":"<<info.coupledKrylovIterations

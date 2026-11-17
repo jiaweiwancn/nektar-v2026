@@ -1,0 +1,69 @@
+{
+  "argv": [
+    "cmake",
+    "--build",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/trace-geometry-v17/build",
+    "--target",
+    "WJH27TraceGeometryProbe",
+    "--parallel",
+    "1"
+  ],
+  "phase": "build",
+  "seconds_cap": 100.0,
+  "utc": "2026-11-17T21:05:32.513818+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 497503,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/trace-geometry-v17/controller.py"
+      },
+      {
+        "pid": 497531,
+        "parent": 497503,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label trace-geometry-build-v17 --phase build --seconds 100 -- cmake --build /home/jay/build/wj-h27-coupling-r1-20261117/trace-geometry-v17/build --target WJH27TraceGeometryProbe --parallel 1"
+      }
+    ]
+  },
+  "reservation": 16,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [],
+  "status": "PASS",
+  "seconds": 7.982375313993543,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 911331328,
+  "peak_host_workers": 8,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/trace-geometry-build-v17/command.log",
+    "bytes": 5244,
+    "sha256": "4dcfb8fbd49665522d42a09c5a2a96ca203babf5af256a0721f7ac52359e9b09"
+  }
+}

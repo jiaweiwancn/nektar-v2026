@@ -1,0 +1,84 @@
+{
+  "schema": "WJH27CutoffPanelOperatorCheckV1",
+  "status": "PASS_NATIVE_CUTOFF_PANEL_OPERATOR_ONLY",
+  "operator_gate_pass": true,
+  "full_H27_qualification": false,
+  "TASK3_READY": false,
+  "manifest": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/operator-manifest.json",
+    "sha256": "dcbe09e8931f490937c6dc357396b02ffb4fcd0739ec244295813595dfeba75e",
+    "bytes": 911
+  },
+  "table": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+    "bytes": 92259
+  },
+  "checker": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v19/solvers/IncNavierStokesSolver/Tests/RANS/h27/cutoff_panel_check.py",
+    "sha256": "9715c6b6bae2eb1180cdff7e11485c041fe76eb4148010b9ccad51cb0f60695f",
+    "bytes": 5053
+  },
+  "workers": 1,
+  "cells": {
+    "896": {
+      "errors": {
+        "k_volume": 2.0043264939522292e-14,
+        "Ew_load": 3.6537201712670845e-16
+      },
+      "points": 576,
+      "area": 0.0036843908890985687,
+      "original_bounds": [
+        -10.0,
+        -8.749999999999998,
+        0.026419898309769332,
+        0.029367411021048187
+      ],
+      "scale": 3.2455855144067516e-05
+    },
+    "924": {
+      "errors": {
+        "k_volume": 2.338380909610934e-14,
+        "Ew_load": 3.131760146800358e-16
+      },
+      "points": 576,
+      "area": 0.0036843908890985765,
+      "original_bounds": [
+        -10.0,
+        -8.749999999999998,
+        0.02936741102104816,
+        0.032314923732327014
+      ],
+      "scale": 3.2455855144067516e-05
+    }
+  },
+  "inverse_residual_over_H_MAX": 6.938893903907228e-17,
+  "Kin_times_derivative_difference_over_H_MAX": 2.6079923836860508e-17,
+  "native_slope_bounds": [
+    -42.545745694837876,
+    -31.70095688834545
+  ],
+  "independent_slope_bounds": [
+    -42.54574569483786,
+    -31.700956888345452
+  ],
+  "sources": {
+    "native": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/operator-native.json",
+      "sha256": "fd9538732927edc8c12d19743023ee714050fc389e09c6ec8cac5d060dd54bb5",
+      "bytes": 4671
+    },
+    "witness": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/radial-quadrature-v18/cutoff-crossing-witness-v1.json",
+      "sha256": "d523c14041a85c298a009109b3fc8c5dbcf28f47979f39ebbb6bf3590f9b1a9b",
+      "bytes": 7456
+    },
+    "request": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/operator-request.json",
+      "sha256": "8062ef77f2bae8e58bcb730fa2195a9f0c57e2d26748189240ecc5ca384ab123",
+      "bytes": 10787
+    }
+  },
+  "scope": "Actual local conservative k/Ew rows on two retained original owners; not a physical trajectory or global uniqueness claim",
+  "elapsed_seconds": 0.00751757703255862
+}

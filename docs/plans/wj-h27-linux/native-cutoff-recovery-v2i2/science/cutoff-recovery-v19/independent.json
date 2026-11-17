@@ -1,0 +1,1206 @@
+{
+  "schema": "WJH27RetainedRecoveryContinuationCheckV1",
+  "status": "PASS_RETAINED_RECOVERY_CONTINUATION_ONLY",
+  "foundation_gate_pass": true,
+  "full_H27_qualification": false,
+  "TASK3_READY": false,
+  "manifest": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/manifest.json",
+    "sha256": "635852ce613016ff52e50ab97fa611705e35a1b8950fe78fb665bf1f500492dc",
+    "bytes": 3282
+  },
+  "table": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+    "bytes": 92259
+  },
+  "workers": 1,
+  "sources": {
+    "checker": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-cutoff-recovery-v19b/h27/retained_recovery_check.py",
+      "sha256": "925c8d4bb8c3fa87656eb94918365b819afafef8573467150228786a49e36fcc",
+      "bytes": 8266
+    },
+    "cold": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-cutoff-recovery-v19b/h27/cold_cache_offset_check.py",
+      "sha256": "c988f85ef8cd6492c33619b175917cf22179a03cea399f60b6ea37ba7dec7218",
+      "bytes": 9394
+    },
+    "history": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-cutoff-recovery-v19b/h27/physical_cache_history_check.py",
+      "sha256": "14808d05cd355f99967b1b0533f9a91de3bb89e06687177dc43df558e1daf1a3",
+      "bytes": 52279
+    },
+    "reference": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-cutoff-recovery-v19b/h27/physical_oracle.py",
+      "sha256": "b39928dffe9cf97f7c5282d3d198fe5369f07ae882bb48c4e873e732b0f23a7a",
+      "bytes": 68587
+    },
+    "sessions": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-cutoff-recovery-v19b/h27/terminal_output_check.py",
+      "sha256": "64471e899287c1659f893d0de23800e28be404e1764044790c4fb8d2d5f89e1e",
+      "bytes": 30111
+    }
+  },
+  "comparison": {
+    "coefficients": {
+      "current": {
+        "U": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "Pi": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "k": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "epsilon": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        }
+      },
+      "previous": {
+        "U": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "Pi": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "k": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "epsilon": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        }
+      },
+      "advection": {
+        "U": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "Pi": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "k": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "epsilon": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        }
+      },
+      "previous_advection": {
+        "U": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "Pi": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "k": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "epsilon": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        }
+      },
+      "older": {
+        "U": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "Pi": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "k": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "epsilon": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        }
+      },
+      "older_advection": {
+        "U": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "Pi": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "k": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "epsilon": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        }
+      }
+    },
+    "owner_fields": {
+      "current": [
+        {
+          "norms": {
+            "whole/U": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradU": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007
+            },
+            "whole/Pi": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradPi": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007
+            },
+            "whole/k": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradk": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007
+            },
+            "outer/epsilon": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 494.0625000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "outer/gradepsilon": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 494.0625000000007
+            }
+          },
+          "pressure_mean_over_tau": [
+            -0.012113433848563162,
+            -0.012113433848563162
+          ],
+          "quadrature": 8,
+          "owner_grid": 9,
+          "gradient_gate": false,
+          "pressure_alignment": "NONE; native pressure level is retained"
+        },
+        {
+          "norms": {
+            "whole/U": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradU": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074
+            },
+            "whole/Pi": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradPi": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074
+            },
+            "whole/k": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradk": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074
+            },
+            "outer/epsilon": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 494.06250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "outer/gradepsilon": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 494.06250000000074
+            }
+          },
+          "pressure_mean_over_tau": [
+            -0.012113433848563162,
+            -0.012113433848563162
+          ],
+          "quadrature": 12,
+          "owner_grid": 17,
+          "gradient_gate": false,
+          "pressure_alignment": "NONE; native pressure level is retained"
+        }
+      ],
+      "previous": [
+        {
+          "norms": {
+            "whole/U": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradU": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007
+            },
+            "whole/Pi": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradPi": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007
+            },
+            "whole/k": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradk": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007
+            },
+            "outer/epsilon": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 494.0625000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "outer/gradepsilon": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 494.0625000000007
+            }
+          },
+          "pressure_mean_over_tau": [
+            -0.012102383538043198,
+            -0.012102383538043198
+          ],
+          "quadrature": 8,
+          "owner_grid": 9,
+          "gradient_gate": false,
+          "pressure_alignment": "NONE; native pressure level is retained"
+        },
+        {
+          "norms": {
+            "whole/U": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradU": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074
+            },
+            "whole/Pi": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradPi": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074
+            },
+            "whole/k": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradk": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074
+            },
+            "outer/epsilon": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 494.06250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "outer/gradepsilon": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 494.06250000000074
+            }
+          },
+          "pressure_mean_over_tau": [
+            -0.0121023835380432,
+            -0.0121023835380432
+          ],
+          "quadrature": 12,
+          "owner_grid": 17,
+          "gradient_gate": false,
+          "pressure_alignment": "NONE; native pressure level is retained"
+        }
+      ],
+      "older": [
+        {
+          "norms": {
+            "whole/U": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradU": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007
+            },
+            "whole/Pi": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradPi": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007
+            },
+            "whole/k": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradk": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.8125000000007
+            },
+            "outer/epsilon": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 494.0625000000007,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "outer/gradepsilon": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 494.0625000000007
+            }
+          },
+          "pressure_mean_over_tau": [
+            -0.012090998983065395,
+            -0.012090998983065395
+          ],
+          "quadrature": 8,
+          "owner_grid": 9,
+          "gradient_gate": false,
+          "pressure_alignment": "NONE; native pressure level is retained"
+        },
+        {
+          "norms": {
+            "whole/U": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradU": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074
+            },
+            "whole/Pi": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradPi": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074
+            },
+            "whole/k": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "whole/gradk": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 497.81250000000074
+            },
+            "outer/epsilon": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 494.06250000000074,
+              "limits": [
+                1e-08,
+                1e-08
+              ],
+              "status": "MET"
+            },
+            "outer/gradepsilon": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 494.06250000000074
+            }
+          },
+          "pressure_mean_over_tau": [
+            -0.012090998983065399,
+            -0.012090998983065399
+          ],
+          "quadrature": 12,
+          "owner_grid": 17,
+          "gradient_gate": false,
+          "pressure_alignment": "NONE; native pressure level is retained"
+        }
+      ]
+    },
+    "dependent": {
+      "current": {
+        "K_over_Kin": 0.0,
+        "Gamma_over_epsilon_H": 0.0,
+        "cutoff_over_H": 0.0,
+        "Ew_over_local_reference": 0.0,
+        "native_epsilon_H_difference": 0.0,
+        "native_Gamma_pointwise_gap_old": 2.7219989612847325e-09,
+        "native_Gamma_pointwise_gap_new": 2.7219989612847325e-09,
+        "gate_pass": true,
+        "pointwise_gap_note": "Diagnostic only: endpoint-constrained native Gamma projection need not equal nonlinear Gamma pointwise; exact projected trace/current equations are separate oracle gates."
+      },
+      "previous": {
+        "K_over_Kin": 0.0,
+        "Gamma_over_epsilon_H": 0.0,
+        "cutoff_over_H": 0.0,
+        "Ew_over_local_reference": 0.0,
+        "native_epsilon_H_difference": 0.0,
+        "native_Gamma_pointwise_gap_old": 2.239565612314909e-09,
+        "native_Gamma_pointwise_gap_new": 2.239565612314909e-09,
+        "gate_pass": true,
+        "pointwise_gap_note": "Diagnostic only: endpoint-constrained native Gamma projection need not equal nonlinear Gamma pointwise; exact projected trace/current equations are separate oracle gates."
+      },
+      "older": {
+        "K_over_Kin": 0.0,
+        "Gamma_over_epsilon_H": 0.0,
+        "cutoff_over_H": 0.0,
+        "Ew_over_local_reference": 0.0,
+        "native_epsilon_H_difference": 0.0,
+        "native_Gamma_pointwise_gap_old": 1.811030996488772e-09,
+        "native_Gamma_pointwise_gap_new": 1.811030996488772e-09,
+        "gate_pass": true,
+        "pointwise_gap_note": "Diagnostic only: endpoint-constrained native Gamma projection need not equal nonlinear Gamma pointwise; exact projected trace/current equations are separate oracle gates."
+      }
+    },
+    "exact_hashes": {
+      "current": {
+        "first": "e11d5bcdfad70c5a42bc4dff6232e632b06eda5803faa09f1aee0239f89bfa1c",
+        "second": "e11d5bcdfad70c5a42bc4dff6232e632b06eda5803faa09f1aee0239f89bfa1c",
+        "equal": true
+      },
+      "previous": {
+        "first": "0adda7bcb702d5afc634b21b2abd612033e0eb4568a0819e41b41ca593985404",
+        "second": "0adda7bcb702d5afc634b21b2abd612033e0eb4568a0819e41b41ca593985404",
+        "equal": true
+      },
+      "advection": {
+        "first": "07948ee6f1529955054fb75f210642a888a7670c810eea7f037cbcd3076e284b",
+        "second": "07948ee6f1529955054fb75f210642a888a7670c810eea7f037cbcd3076e284b",
+        "equal": true
+      },
+      "previous_advection": {
+        "first": "e12adc669122e1e8e7a451447461424434c32d6f24c5a5b43feb24dafd82349e",
+        "second": "e12adc669122e1e8e7a451447461424434c32d6f24c5a5b43feb24dafd82349e",
+        "equal": true
+      },
+      "older": {
+        "first": "bd209efa65071b7d3613458fe25c8325ad1dc4c05947ff062c72d55f552d4561",
+        "second": "bd209efa65071b7d3613458fe25c8325ad1dc4c05947ff062c72d55f552d4561",
+        "equal": true
+      },
+      "older_advection": {
+        "first": "8c18b047b74cac5c2d778780c2f65f30f9b7314c5c67895a55470ff5c1b062fe",
+        "second": "8c18b047b74cac5c2d778780c2f65f30f9b7314c5c67895a55470ff5c1b062fe",
+        "equal": true
+      }
+    },
+    "unavailable_history_roles": []
+  },
+  "current_equations": {
+    "file": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/cold-current-v19b.json",
+      "sha256": "c8db6a42864abbaecae93a8c3bc409ebb8a3dbdaf60274734eac33df856f5aab",
+      "bytes": 25993150
+    },
+    "overall_status": "NOT_MET",
+    "current_equations": "MET",
+    "residuals": {
+      "momentum": 1.0864190567137352e-14,
+      "continuity": 6.628508553230888e-16,
+      "k": 1.3207476756023315e-13,
+      "epsilon": 1.1784605946801764e-14
+    },
+    "overall_NOT_MET_allowed": true,
+    "scope": "Full supplied transient oracle verifies these accepted equations; other physical/mesh/long-time gates remain open."
+  },
+  "retained_recoveries": {
+    "9": {
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.recovery-9.bin",
+        "sha256": "cf2dbf0ee04ba3abf37800bccff23440035bf473c1977f0266787bcc9a5eb2aa",
+        "bytes": 859058,
+        "payload_sha256": "43d2a1d6bfe8037d68683cfc0d139bb740f7dd5bab4f0abc25d6f603d198c05f",
+        "signature": "29a462771c855e66a053e30fbdead3f7032388652669da35e4cf98767a593f27",
+        "step": 9,
+        "time": 0.045,
+        "dt": 0.005,
+        "hashes": {
+          "current": "7dcbdaa9b1c2299eab075c6150a1c366ef5f0e04c2c1930ce17fd528e747918d",
+          "previous": "559ea67be83e2514d95b803eda58c52d8487c27327094cb15ce5d19aad6c525b",
+          "advection": "f5e489fc09a618b7c484854ed6717a3814f0aa2399f5dcda1f392858924eab55",
+          "previous_advection": "e02cc7efdb19938482887913b68b5fcbcb501d0f619d027ce670cd094d8689e8"
+        }
+      },
+      "science": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.science-9.json",
+        "sha256": "d2e6b31a8a10491746bffeb9ef30975927560f2c12c8a54a15bea277f543e734",
+        "bytes": 4709019
+      },
+      "four_history_binding": true
+    },
+    "12": {
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.recovery-12.bin",
+        "sha256": "04aba27bd386dd9e6a387b5e47cb5d3631bd12a3b678035ad8a168601f6c91f8",
+        "bytes": 859058,
+        "payload_sha256": "a5049083e1b0d215fcafe4a685420bf7b44961ed12a9be118c0593d573c4604f",
+        "signature": "29a462771c855e66a053e30fbdead3f7032388652669da35e4cf98767a593f27",
+        "step": 12,
+        "time": 0.06,
+        "dt": 0.005,
+        "hashes": {
+          "current": "e11d5bcdfad70c5a42bc4dff6232e632b06eda5803faa09f1aee0239f89bfa1c",
+          "previous": "0adda7bcb702d5afc634b21b2abd612033e0eb4568a0819e41b41ca593985404",
+          "advection": "07948ee6f1529955054fb75f210642a888a7670c810eea7f037cbcd3076e284b",
+          "previous_advection": "e12adc669122e1e8e7a451447461424434c32d6f24c5a5b43feb24dafd82349e"
+        }
+      },
+      "science": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.science-12.json",
+        "sha256": "282dd8846f6e992989af74303c13d7193d1160fbef536a22574e0b1c24610bda",
+        "bytes": 4708458
+      },
+      "four_history_binding": true
+    }
+  },
+  "observed_writes": [
+    3,
+    6,
+    9,
+    12
+  ],
+  "observed_removed": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.recovery-3.bin",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.recovery-6.bin"
+  ],
+  "removed_binary_byte_audit_claimed": false,
+  "write_seconds": [
+    0.026649481034837663,
+    0.026599931006785482,
+    0.020223542000167072,
+    0.027259556984063238
+  ],
+  "control": {
+    "result": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.result.json",
+      "sha256": "816e9f7aeb3db29bbe0f2244a61ab12a64ccc1dda547a38be7629eb9be48361b",
+      "bytes": 4709770
+    },
+    "session": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.xml",
+      "sha256": "67330c216dbe0682a0b8c37328000cae98826fcf4e6d4b74c7295e7e4c30d8e0",
+      "bytes": 112069
+    },
+    "log": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.steps.jsonl",
+      "sha256": "e419747b8edd8f78289bb73fa0fcdf096e7298458364d545cd0351c4abbae8a4",
+      "bytes": 64980
+    },
+    "binary": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.final.bin",
+      "sha256": "04aba27bd386dd9e6a387b5e47cb5d3631bd12a3b678035ad8a168601f6c91f8",
+      "bytes": 859058,
+      "payload_sha256": "a5049083e1b0d215fcafe4a685420bf7b44961ed12a9be118c0593d573c4604f",
+      "signature": "29a462771c855e66a053e30fbdead3f7032388652669da35e4cf98767a593f27",
+      "step": 12,
+      "time": 0.06,
+      "dt": 0.005,
+      "hashes": {
+        "current": "e11d5bcdfad70c5a42bc4dff6232e632b06eda5803faa09f1aee0239f89bfa1c",
+        "previous": "0adda7bcb702d5afc634b21b2abd612033e0eb4568a0819e41b41ca593985404",
+        "advection": "07948ee6f1529955054fb75f210642a888a7670c810eea7f037cbcd3076e284b",
+        "previous_advection": "e12adc669122e1e8e7a451447461424434c32d6f24c5a5b43feb24dafd82349e"
+      }
+    },
+    "whole_native_times": {
+      "construction_seconds": 1.1045958569739014,
+      "initialisation_seconds": 2.4166109539801255,
+      "complete_advancing_seconds": 75.24855127610499,
+      "complete_step_seconds": [
+        7.327769865049049,
+        6.759929427993484,
+        5.731304229993839,
+        6.759354324021842,
+        5.313752284040675,
+        6.909922584018204,
+        5.298697312013246,
+        6.738896486989688,
+        5.455714600975625,
+        6.750686077983119,
+        5.296102446038276,
+        6.906421636987943
+      ],
+      "final_export_seconds": 0.040619462030008435
+    }
+  },
+  "continued": {
+    "result": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/cold9.result.json",
+      "sha256": "20caa8707a130000ff8e281450bb1580778db108426caaac936af02744e7b35c",
+      "bytes": 4709322
+    },
+    "session": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/cold9.xml",
+      "sha256": "7979624dba730fee17a84ece822a03d69b3bbf175e9be6ba02d7ba058717ac85",
+      "bytes": 112195
+    },
+    "log": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/cold9.steps.jsonl",
+      "sha256": "ee97c2051ce43043cbbc91ca7ffd341045686faf8f92fc980e725d65d1cfa2c1",
+      "bytes": 16257
+    },
+    "binary": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/cold9.final.bin",
+      "sha256": "04aba27bd386dd9e6a387b5e47cb5d3631bd12a3b678035ad8a168601f6c91f8",
+      "bytes": 859058,
+      "payload_sha256": "a5049083e1b0d215fcafe4a685420bf7b44961ed12a9be118c0593d573c4604f",
+      "signature": "29a462771c855e66a053e30fbdead3f7032388652669da35e4cf98767a593f27",
+      "step": 12,
+      "time": 0.06,
+      "dt": 0.005,
+      "hashes": {
+        "current": "e11d5bcdfad70c5a42bc4dff6232e632b06eda5803faa09f1aee0239f89bfa1c",
+        "previous": "0adda7bcb702d5afc634b21b2abd612033e0eb4568a0819e41b41ca593985404",
+        "advection": "07948ee6f1529955054fb75f210642a888a7670c810eea7f037cbcd3076e284b",
+        "previous_advection": "e12adc669122e1e8e7a451447461424434c32d6f24c5a5b43feb24dafd82349e"
+      }
+    },
+    "whole_native_times": {
+      "construction_seconds": 1.1032331970054656,
+      "initialisation_seconds": 3.6189605289837345,
+      "complete_advancing_seconds": 18.971241802035365,
+      "complete_step_seconds": [
+        6.779308496974409,
+        5.3114537200308405,
+        6.880479585030116
+      ],
+      "final_export_seconds": 0.040926877001766115
+    }
+  },
+  "first_cold_inverse_event": {
+    "attempt": 0,
+    "base": 0,
+    "alpha": 300,
+    "drift": 0,
+    "age_before": 0,
+    "age_used": 1,
+    "reason": "cold",
+    "refreshed": true
+  },
+  "uninterrupted_first_event": {
+    "attempt": 0,
+    "base": 0,
+    "alpha": 300,
+    "drift": 0.0033261833384660325,
+    "age_before": 8,
+    "age_used": 1,
+    "reason": "age",
+    "refreshed": true
+  },
+  "zero": {
+    "result": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/zero12.result.json",
+      "sha256": "5ccbe72b845a2f2c0b0927f4d99378d38fcec13551523daa54dbb35bb1bba94b",
+      "bytes": 2289122
+    },
+    "session": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/zero12.xml",
+      "sha256": "46e221d2cf7f475aed88b361af2cc5b0dfe1e5de9e51f0b220b7c992a27a960c",
+      "bytes": 112197
+    },
+    "binary": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/zero12.final.bin",
+      "sha256": "04aba27bd386dd9e6a387b5e47cb5d3631bd12a3b678035ad8a168601f6c91f8",
+      "bytes": 859058,
+      "payload_sha256": "a5049083e1b0d215fcafe4a685420bf7b44961ed12a9be118c0593d573c4604f",
+      "signature": "29a462771c855e66a053e30fbdead3f7032388652669da35e4cf98767a593f27",
+      "step": 12,
+      "time": 0.06,
+      "dt": 0.005,
+      "hashes": {
+        "current": "e11d5bcdfad70c5a42bc4dff6232e632b06eda5803faa09f1aee0239f89bfa1c",
+        "previous": "0adda7bcb702d5afc634b21b2abd612033e0eb4568a0819e41b41ca593985404",
+        "advection": "07948ee6f1529955054fb75f210642a888a7670c810eea7f037cbcd3076e284b",
+        "previous_advection": "e12adc669122e1e8e7a451447461424434c32d6f24c5a5b43feb24dafd82349e"
+      }
+    },
+    "four_binary_histories_exact": true,
+    "advanced_steps": 0,
+    "inverse_factorizations": 0
+  },
+  "incompatible_source_rejection": {
+    "receipt": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/cutoff-recovery-prior-source-native-v19/receipt.json",
+      "sha256": "5541f6d5fdd3ec0acf7126d771bfa4ea56c6da2caa9ea929f0f9ebab88e8daba",
+      "bytes": 3099
+    },
+    "log": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/cutoff-recovery-prior-source-native-v19/command.log",
+      "sha256": "4e8bbf447f857999ea5a5c4786409dfc05ec1777331001d90a4ddf43bd4a7212",
+      "bytes": 619
+    },
+    "input": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/htrace-regression-v18/physical.final.bin",
+      "sha256": "7afe79662e947f5e531648aeb5be8a886dd810d34d96a8c3d60cfb03a5794e9e",
+      "bytes": 859058
+    },
+    "pre_advancement": true
+  },
+  "scope": "Short source19 physical cold continuation/retained payloads. Does not qualify monitoring escalation, persisted statistics, selected h/p/q/dt, physical development or complete cost.",
+  "elapsed_seconds": 7.98435875994619,
+  "maximum_resident_bytes": 203472896
+}

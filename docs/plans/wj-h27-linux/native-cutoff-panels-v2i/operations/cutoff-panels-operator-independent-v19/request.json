@@ -1,0 +1,76 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v19/solvers/IncNavierStokesSolver/Tests/RANS/h27/cutoff_panel_check.py",
+    "--manifest",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/operator-manifest.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/operator-independent.json"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T22:37:46.336062+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 502061,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/cutoff-panels-controller-v19.py"
+      },
+      {
+        "pid": 502084,
+        "parent": 502061,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label cutoff-panels-operator-independent-v19 --phase analysis --seconds 30 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/solvers/IncNavierStokesSolver/Tests/RANS/h27/cutoff_panel_check.py --manifest /home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/operator-manifest.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/operator-independent.json"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v19/solvers/IncNavierStokesSolver/Tests/RANS/h27/cutoff_panel_check.py",
+      "bytes": 5053,
+      "sha256": "9715c6b6bae2eb1180cdff7e11485c041fe76eb4148010b9ccad51cb0f60695f"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/operator-manifest.json",
+      "bytes": 911,
+      "sha256": "dcbe09e8931f490937c6dc357396b02ffb4fcd0739ec244295813595dfeba75e"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ]
+}

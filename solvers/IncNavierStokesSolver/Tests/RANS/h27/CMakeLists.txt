@@ -75,6 +75,17 @@ foreach(probe reference admissibility coupled_mms constitutive steady_krylov ini
     target_link_libraries(${name} PRIVATE WJNativeMixedFlow)
     target_compile_options(${name} PRIVATE -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra)
 endforeach()
+add_executable(WJH27TraceGeometryProbe trace_geometry_probe.cpp)
+target_link_libraries(WJH27TraceGeometryProbe PRIVATE WJNativeMixedFlow)
+target_compile_options(WJH27TraceGeometryProbe PRIVATE
+    -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra)
+add_executable(WJH27CutoffPanelProbe cutoff_panel_probe.cpp)
+target_link_libraries(WJH27CutoffPanelProbe PRIVATE WJNativeMixedFlow)
+target_compile_options(WJH27CutoffPanelProbe PRIVATE
+    -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra)
+add_executable(WJH27CutoffPanelsUnit cutoff_panels_unit.cpp)
+target_compile_options(WJH27CutoffPanelsUnit PRIVATE
+    -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra)
 # The real production main, Standard Driver and complete existing factory
 # source inventory. No probe is relabelled as the application executable.
 set(h27_solver_root "${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver")

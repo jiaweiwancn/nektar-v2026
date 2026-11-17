@@ -139,6 +139,16 @@ Reference::Reference(const std::string &json, const std::string &expectedSha256)
     for (std::size_t j=0;j<n;++j)
         Require(std::abs(derivative[j]*2/(p.KMaximum-p.KMinimum)-m_logCutoffDerivative.coefficients[j])
                     <=1e-10*(1+std::abs(m_logCutoffDerivative.coefficients[j])),"analytic derivative coefficients differ");
+    // |T_j|<=1 on the complete admitted interval. Enclose the derivative
+    // derived from the value polynomial itself, including arithmetic reserve.
+    const long double scale=2.L/(p.KMaximum-p.KMinimum),constant=derivative[0]*scale;
+    long double tail=0;
+    for(std::size_t j=1;j<n;++j)tail+=std::abs(derivative[j]*scale);
+    const long double reserve=32*(n+1)*std::numeric_limits<double>::epsilon()*(std::abs(constant)+tail);
+    m_logCutoffSlopeBounds={std::nextafter(double(constant-tail-reserve),-std::numeric_limits<double>::infinity()),
+        std::nextafter(double(constant+tail+reserve),std::numeric_limits<double>::infinity())};
+    Require(std::isfinite(m_logCutoffSlopeBounds[0])&&m_logCutoffSlopeBounds[1]<0,
+        "cutoff table has no certified strictly decreasing inverse");
     Require(Number(cutoff,"maximum_budget_or_ground_flux_error")<=1e-10 &&
             Number(cutoff,"maximum_K_in_times_derivative_error")<=1e-8,"cutoff qualification tolerance failed");
     Require(cutoff.get<int>("heldout_K_count")>=33,"missing complete-IVP validation coverage");
@@ -201,6 +211,22 @@ double Reference::Cutoff(double K) const
 }
 double Reference::CutoffDerivative(double K) const
 { const double v=Cutoff(K)*m_logCutoffDerivative.Evaluate(K); Finite(v,"cutoff derivative"); return v; }
+std::array<double,2> Reference::CutoffRadiusRange() const
+{ return {Cutoff(m_p.KMaximum),Cutoff(m_p.KMinimum)}; }
+double Reference::KAtCutoff(double radius) const
+{
+    Finite(radius,"cutoff face radius");const auto range=CutoffRadiusRange();
+    Require(radius>=range[0]&&radius<=range[1],"cutoff face radius outside qualified inverse interval");
+    if(radius==range[0])return m_p.KMaximum;if(radius==range[1])return m_p.KMinimum;
+    double lower=m_p.KMinimum,upper=m_p.KMaximum;
+    for(int iteration=0;iteration<80;++iteration){
+        const double middle=(lower+upper)/2;if(middle==lower||middle==upper)break;
+        if(Cutoff(middle)>radius)lower=middle;else upper=middle;
+    }
+    const double K=(lower+upper)/2;
+    Require(std::abs(Cutoff(K)-radius)<=256*std::numeric_limits<double>::epsilon()*m_p.H,
+        "cutoff face inverse failed its current residual");return K;
+}
 double Reference::Amplitude(double K) const
 { CheckK(K); return K*std::sqrt(K)/m_p.cLength; }
 double Reference::AmplitudeDerivative(double K) const

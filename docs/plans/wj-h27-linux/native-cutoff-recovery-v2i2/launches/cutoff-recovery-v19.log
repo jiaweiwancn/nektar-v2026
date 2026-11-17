@@ -1,0 +1,13 @@
+cutoff-recovery-fixtures-v19 PASS 1.7759701519971713
+cutoff-recovery-cold9-native-v19 PASS 26.01350254699355
+cutoff-recovery-zero12-native-v19 PASS 7.071080457011703
+cutoff-recovery-prior-source-native-v19 FAIL 3.5389556710142642
+cutoff-recovery-cold-current-v19 FAIL 41.51039512100397
+Traceback (most recent call last):
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/cutoff-recovery-controller-v19.py", line 13, in <module>
+    run('cutoff-recovery-cold-current-v19','analysis',150,['python3','-B',t/'physical_transient_oracle.py','--native',o/'cold9.result.json','--table',table,'--out',o/'cold-current.json','--seconds','140'])
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/cutoff-recovery-controller-v19.py", line 4, in run
+    def run(label,phase,cap,args,check=True):return subprocess.run(base+['--label',label,'--phase',phase,'--seconds',str(cap),'--']+list(map(str,args)),check=check)
+  File "/usr/lib/python3.10/subprocess.py", line 526, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['python3', '-B', '/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py', '--root', '/home/jay/build/wj-h27-coupling-r1-20261117', '--label', 'cutoff-recovery-cold-current-v19', '--phase', 'analysis', '--seconds', '150', '--', 'python3', '-B', '/home/jay/build/wj-h27-coupling-r1-20261117/tools-cutoff-recovery-v19/h27/physical_transient_oracle.py', '--native', '/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/cold9.result.json', '--table', '/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json', '--out', '/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/cold-current.json', '--seconds', '140']' returned non-zero exit status 1.

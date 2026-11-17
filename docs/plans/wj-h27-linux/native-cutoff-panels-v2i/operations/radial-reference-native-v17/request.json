@@ -1,0 +1,71 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v15/IncNavierStokesSolver",
+    "--use-opt-file",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-r2-v17/reference-r2.xml.opt",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-r2-v17/reference-r2.xml"
+  ],
+  "phase": "science",
+  "seconds_cap": 2000.0,
+  "utc": "2026-11-17T21:00:03.510064+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 497467,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/radial-reference-controller-v17.py"
+      },
+      {
+        "pid": 497473,
+        "parent": 497467,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label radial-reference-native-v17 --phase science --seconds 2000 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v15/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-r2-v17/reference-r2.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-r2-v17/reference-r2.xml"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v15/IncNavierStokesSolver",
+      "bytes": 380,
+      "sha256": "dee206e8198228c52b299cef44ee5bffb82d90a003ab86aaebc84fabd3bd0a1b"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-r2-v17/reference-r2.xml.opt",
+      "bytes": 55,
+      "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-r2-v17/reference-r2.xml",
+      "bytes": 903458,
+      "sha256": "9ba769b0fc3215722a66ec84a0b991960e31120a414e4c4db22bf6fbb69dc6bc"
+    }
+  ]
+}

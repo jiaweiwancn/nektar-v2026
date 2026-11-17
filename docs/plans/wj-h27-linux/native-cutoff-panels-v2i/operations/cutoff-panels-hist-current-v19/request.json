@@ -1,0 +1,80 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v19/solvers/IncNavierStokesSolver/Tests/RANS/h27/coupled_oracle.py",
+    "--native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/hist.result.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/hist-current.json",
+    "--seconds",
+    "30",
+    "--direct-seconds",
+    "25"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 35.0,
+  "utc": "2026-11-17T22:38:08.511692+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 502061,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/cutoff-panels-controller-v19.py"
+      },
+      {
+        "pid": 502128,
+        "parent": 502061,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label cutoff-panels-hist-current-v19 --phase analysis --seconds 35 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/solvers/IncNavierStokesSolver/Tests/RANS/h27/coupled_oracle.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/hist.result.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/hist-current.json --seconds 30 --direct-seconds 25"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v19/solvers/IncNavierStokesSolver/Tests/RANS/h27/coupled_oracle.py",
+      "bytes": 58933,
+      "sha256": "e307d89b462ddee6629a95a9b09d8171254bd4990aa2423e88ae563e910bf2c0"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/hist.result.json",
+      "bytes": 66968,
+      "sha256": "2cb9ce028cd1f2d3859aec8acd08f1b7a67b348c591d24e87001ff78bd1db399"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ]
+}

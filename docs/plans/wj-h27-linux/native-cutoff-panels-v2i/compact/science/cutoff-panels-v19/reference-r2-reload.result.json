@@ -1,0 +1,177 @@
+{
+  "schema": "WJH27RegisteredCoupledRunV2",
+  "factory": "WJNativeCoupledV2",
+  "normal_main": true,
+  "qualification": "execution evidence; closure gates are assessed independently",
+  "construction_seconds": 13.04229446296813,
+  "initialisation_seconds": 28.05230051698163,
+  "restart": true,
+  "complete_advancing_seconds": 0,
+  "final_export_seconds": 0.1736893630004488,
+  "complete_step_seconds": [],
+  "recovery_seconds": [],
+  "rotated_recovery_count": 0,
+  "retained_recovery": [],
+  "scientific_index": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/reference-r2-reload.science-index.json",
+  "scientific_frame_seconds": 0,
+  "scientific_index_seconds": 8.073396747931838e-05,
+  "scientific_timing_scope": "subsets of complete step/export totals; do not add twice",
+  "steady_mode": false,
+  "steady_solver": null,
+  "state": {
+    "schema": "WJH27NativeCoupledStateV2",
+    "model": "FiniteNuIsotropicWallFullWJCollarV2",
+    "signature": "3e5ebd28da6f28e9061065d5afac4f2795c7e862d9e1713fc1ee596f6de318f4",
+    "source_identity": "56c35390fdf092180913f60c3ae348ca10cdcdf4e6b889c3afd589eddb511acf",
+    "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+    "manufactured": false,
+    "step": 0,
+    "time": 0,
+    "dt": 0.05,
+    "state_sha256": "fa5a9dd2c2a38828c63789f85cddf7bbdc884715fb6ef4307dea051ef2fb9712",
+    "previous_sha256": "fa5a9dd2c2a38828c63789f85cddf7bbdc884715fb6ef4307dea051ef2fb9712",
+    "advection_sha256": "0b115ab56584d3d65ba73e3478d82c2d7d2bd43e0daaa5b80bb89bc3145972ed",
+    "previous_advection_sha256": "0b115ab56584d3d65ba73e3478d82c2d7d2bd43e0daaa5b80bb89bc3145972ed",
+    "sizes": [
+      51085,
+      22857,
+      51085,
+      34765
+    ],
+    "gauge": false,
+    "nonlinear_iterations": 0,
+    "linear_iterations": [
+      0,
+      0,
+      0
+    ],
+    "rebuilds": 0,
+    "retries": 0,
+    "seconds": 0,
+    "coefficient_drift": 0,
+    "residuals": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "minimum_k": 0,
+    "minimum_epsilon": 0,
+    "minimum_covariance_over_k": 0,
+    "minimum_principal_over_mu": 0,
+    "disjoint_seconds": {
+      "constitutive": 0,
+      "wall": 0,
+      "assembly": 0,
+      "flow": 0,
+      "scalar": 0,
+      "rebuild": 0,
+      "guards": 0,
+      "forcing": 0,
+      "residual": 0,
+      "nonlinear": 0,
+      "io": 0,
+      "other": 0
+    },
+    "quadratureX": 8,
+    "quadratureR": 12,
+    "linear_tolerance": 1e-12,
+    "nonlinear_tolerance": 1e-10,
+    "maximum_iterations": 60,
+    "mms_body_amplitude": 0,
+    "retry_reason": "",
+    "scalar_quadrature_policy": "CubicCutoffFacePanelsV1",
+    "cutoff_radius_range": [
+      0.028661026763011046,
+      0.03059290528812411
+    ],
+    "cutoff_log_slope_bounds": [
+      -42.545745694837876,
+      -31.70095688834545
+    ],
+    "mms_variant": "Historical",
+    "implicit_solver": "PicardV1",
+    "coupled_newton": {
+      "krylov_iterations": 0,
+      "jacobian_actions": 0,
+      "residual_evaluations": 0,
+      "preconditioner_applications": 0,
+      "rejected_trials": 0,
+      "counts_complete": true,
+      "step_seconds_cap": 0,
+      "uncommitted_guard": "positivity/root/covariance",
+      "physical_acceptance_guard": "fresh full planar principal and complete current residual",
+      "preconditioner_policy": "RebuildEveryNewtonV1",
+      "drift_measure": "CurrentInverseOperatorFrobeniusV1",
+      "relative_drift_limit": 0.02,
+      "maximum_uses": 8,
+      "refreshes": 0,
+      "reuses": 0,
+      "maximum_used_age": 0,
+      "refresh_reasons": {
+        "cold": 0,
+        "alpha": 0,
+        "drift": 0,
+        "age": 0,
+        "control": 0,
+        "retry": 0,
+        "injected": 0
+      },
+      "preconditioner_events_recorded": false,
+      "preconditioner_events": []
+    },
+    "nonlinear_trace_scope": "Completed Picard iterations and guarded acceleration proposals; times are inclusive observations",
+    "steady_velocity_preconditioner": "FullGradientV1",
+    "stress_split": "PositiveShearV1",
+    "all_row_action_crosschecks": false,
+    "current_action_checks": {
+      "all_row_calls": 0,
+      "maximum_scaled_differences_flow_k_epsilon": [
+        0,
+        0,
+        0
+      ],
+      "augmented_calls": 0,
+      "maximum_augmented_scaled_difference": 0,
+      "maximum_weak_divergence_load_norm": 0,
+      "maximum_gauge_multiplier": 0
+    },
+    "basis": "Modified_A",
+    "anderson_depth": 0,
+    "acceleration": {
+      "proposals": 0,
+      "accepted": 0,
+      "inadmissible_trials": 0
+    },
+    "initial_field_transfer": {
+      "packet_sha256": "",
+      "source_state_sha256": "",
+      "projected": false,
+      "source_was_candidate": false
+    },
+    "constitutive_backend": "FastFull3DV1",
+    "constitutive_calls": {
+      "values": 0,
+      "directions": 0,
+      "fallbacks": 0,
+      "root_iterations": 0,
+      "maximum_normalized_root_residual": 0
+    },
+    "geometry": {
+      "d0": 0.0875,
+      "H": 0.15,
+      "h": 0.10854503542535461,
+      "left": -10,
+      "right": 15,
+      "top": 19.9125
+    }
+  },
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/reference-r2-reload.result.json",
+    "bytes": 18400723,
+    "sha256": "d823e8727eff8e641e65971acea191ef7d768ae2e1f382bbe99d8301ca880df7"
+  },
+  "publication_scope": "Compact evidence; raw signed fields, histories and per-owner profile/interface rows remain at the exact Linux artifact identity."
+}

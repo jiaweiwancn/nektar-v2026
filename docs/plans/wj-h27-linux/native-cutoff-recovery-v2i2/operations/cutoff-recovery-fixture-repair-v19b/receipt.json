@@ -1,0 +1,71 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/cutoff-recovery-fixture-repair-v19b.py"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 15.0,
+  "utc": "2026-11-17T23:00:21.089396+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 502929,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/cutoff-recovery-controller-v19b.py"
+      },
+      {
+        "pid": 502930,
+        "parent": 502929,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label cutoff-recovery-fixture-repair-v19b --phase analysis --seconds 15 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/cutoff-recovery-fixture-repair-v19b.py"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/cutoff-recovery-fixture-repair-v19b.py",
+      "bytes": 1081,
+      "sha256": "32915d39ffb81797d74f837c65ce87e935a6730eb255df3d69bff22298a693f2"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 1.807383781997487,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 389120,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/cutoff-recovery-fixture-repair-v19b/command.log",
+    "bytes": 34,
+    "sha256": "c7dd83a2f2b6e73dbc4d6ad9ddcc09f1ca1e7a152580e721c9c50af7d767cbf6"
+  }
+}

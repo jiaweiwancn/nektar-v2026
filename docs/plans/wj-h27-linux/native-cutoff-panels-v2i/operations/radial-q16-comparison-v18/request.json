@@ -1,0 +1,78 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-radial-quadrature-v18/h27/steady_quadrature_compare.py",
+    "--manifest",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/radial-quadrature-v18/q16-comparison-manifest.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/radial-quadrature-v18/q8-q16-independent.json",
+    "--seconds",
+    "110"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 120.0,
+  "utc": "2026-11-17T21:59:18.382401+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 499297,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/quadrature-controller-v18.py"
+      },
+      {
+        "pid": 499952,
+        "parent": 499297,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label radial-q16-comparison-v18 --phase analysis --seconds 120 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools-radial-quadrature-v18/h27/steady_quadrature_compare.py --manifest /home/jay/build/wj-h27-coupling-r1-20261117/science/radial-quadrature-v18/q16-comparison-manifest.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/radial-quadrature-v18/q8-q16-independent.json --seconds 110"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-radial-quadrature-v18/h27/steady_quadrature_compare.py",
+      "bytes": 5362,
+      "sha256": "4aeb4581ffaf077c06c8750349445483c9a383d975b4b670bcbfe490143f5a17"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/radial-quadrature-v18/q16-comparison-manifest.json",
+      "bytes": 1251,
+      "sha256": "edf3de653f4823530f1f04512a2e18c399d1fd6ba1263773e1a232b5674d1a5d"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ]
+}

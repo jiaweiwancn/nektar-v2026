@@ -28,6 +28,7 @@ from numpy.polynomial.chebyshev import chebval
 from numpy.polynomial.legendre import leggauss
 from scipy.sparse import coo_matrix
 from scipy.sparse.linalg import splu
+from scipy.optimize import brentq
 import fixtures
 from fixtures import modified
 
@@ -123,6 +124,12 @@ class Reference:
         self.z0 = .005676270321216798
         self.lo, self.hi = table['cutoff_table']['domain']
         self.coefficients = table['cutoff_table']['coefficients']
+        derivative = np.polynomial.chebyshev.chebder(self.coefficients)*2/(self.hi-self.lo)
+        reserve = 32*(len(derivative)+1)*np.finfo(float).eps*float(np.sum(abs(derivative)))
+        self.log_cutoff_slope_bounds = (float(derivative[0]-np.sum(abs(derivative[1:]))-reserve),
+                                       float(derivative[0]+np.sum(abs(derivative[1:]))+reserve))
+        require(self.log_cutoff_slope_bounds[1] < 0, 'independent cutoff inverse lacks a decreasing certificate')
+        self.cutoff_radius_range = tuple(self.cutoff(np.asarray([self.hi,self.lo])))
         self.a = self.kappa*math.sqrt(self.Kin/self.qe)
         self.zv = float(self.intercept(np.array([self.Kin]))[0])
         require(self.zv < 0, 'historical inlet requires the fixed negative roughness intercept')
@@ -358,18 +365,49 @@ class PhysicalOracle:
         values = [lo, hi, .4*self.ref.H, .75*self.ref.H, self.ref.h, self.ref.H, *extras]
         return sorted(set([lo, hi]+[float(v) for v in values if lo+eps < v < hi-eps]))
 
-    def rule(self, e, bounds=None, extra_cutoff=None):
+    def cutoff_x_splits(self, e, bounds=None):
+        """Independent direct-c(K) roots; no native inverse levels or panels."""
+        xl,xr,rl,rr = bounds if bounds is not None else e['bounds']
+        if rr < self.ref.cutoff_radius_range[0] or rl > self.ref.cutoff_radius_range[1]: return []
+        fit_nodes = np.asarray([-1.,-.5,.5,1.]);points = (xl+xr)/2+(xr-xl)*fit_nodes/2
+        values = self.trace(e,'k',points)
+        polynomial = np.polynomial.Chebyshev.fit(points,values,3,domain=[xl,xr])
+        held = (xl+xr)/2+(xr-xl)*np.asarray([-.81,-.27,.19,.71])/2
+        require(float(np.max(abs(polynomial(held)-self.trace(e,'k',held)))) <= 1e-12*self.ref.Kin,
+                'independent interface trace is not the declared cubic')
+        critical = []
+        for value in polynomial.deriv().roots():
+            if abs(np.imag(value)) <= 64*np.finfo(float).eps*max(abs(xl),abs(xr),xr-xl):
+                point = float(np.real(value))
+                if xl < point < xr: critical.append(point)
+        panels = sorted(set([xl,xr,*critical]));cut = self.ref.cutoff(self.trace(e,'k',np.asarray(panels)))
+        if not any(float(np.min(cut)) <= face <= float(np.max(cut)) for face in (rl,rr)): return []
+        roots = list(critical)
+        for face in (rl,rr):
+            def residual(point):return float(self.ref.cutoff(self.trace(e,'k',np.asarray([point])))[0]-face)
+            for left,right in zip(panels,panels[1:]):
+                a,b = residual(left),residual(right)
+                if (a < 0 < b) or (b < 0 < a):
+                    roots.append(brentq(residual,left,right,xtol=8*np.finfo(float).eps*max(abs(left),abs(right),right-left),
+                                        rtol=4*np.finfo(float).eps))
+        return sorted(set(roots))
+
+    def rule(self, e, bounds=None, extra_cutoff=None, extra_x_splits=()):
         a, w = self.gauss
         xl, xr, rl, rr = bounds if bounds is not None else e['bounds']
-        xnodes = (xl+xr)/2+(xr-xl)*a/2
-        cutoff = self.ref.cutoff(self.trace(e, 'k', xnodes))
-        extra = extra_cutoff(xnodes) if extra_cutoff else cutoff
         xs, rs, weights = [], [], []
-        for x, wx, c, c2 in zip(xnodes, w, cutoff, extra):
-            cuts = self.cuts(rl, rr, (c, c2))
-            for lo, hi in zip(cuts[:-1], cuts[1:]):
-                xs.extend(np.full(self.order, x)); rs.extend((lo+hi)/2+(hi-lo)*a/2)
-                weights.extend(wx*w*(xr-xl)*(hi-lo)/4)
+        panels = sorted(set([xl,xr,*self.cutoff_x_splits(e,bounds),*extra_x_splits]))
+        require(panels[0] == xl and panels[-1] == xr and all(right > left for left,right in zip(panels,panels[1:])),
+                'independent cutoff x partitions left the original owner')
+        for left,right in zip(panels,panels[1:]):
+            xnodes = (left+right)/2+(right-left)*a/2
+            cutoff = self.ref.cutoff(self.trace(e, 'k', xnodes))
+            extra = extra_cutoff(xnodes) if extra_cutoff else cutoff
+            for x, wx, c, c2 in zip(xnodes, w, cutoff, extra):
+                cuts = self.cuts(rl, rr, (c, c2))
+                for lo, hi in zip(cuts[:-1], cuts[1:]):
+                    xs.extend(np.full(self.order, x)); rs.extend((lo+hi)/2+(hi-lo)*a/2)
+                    weights.extend(wx*w*(right-left)*(hi-lo)/4)
         return np.asarray(xs), np.asarray(rs), np.asarray(weights)
 
     def face(self, e, side, endpoints=False):
@@ -863,7 +901,8 @@ class PhysicalOracle:
                 if right-left <= 1e-12 or top-bottom <= 1e-12: continue
                 self.clock(); count += 1
                 bounds = (left, right, bottom, top)
-                x, r, weight = self.rule(e, bounds, lambda x: finer.ref.cutoff(finer.trace(fine, 'k', x)))
+                x, r, weight = self.rule(e, bounds, lambda x: finer.ref.cutoff(finer.trace(fine, 'k', x)),
+                                         finer.cutoff_x_splits(fine,bounds))
                 # Include both side limits for all common subcell endpoints.
                 # Each pair has a common nonempty interior, defining the side;
                 # no nearest-cell search averages opposite gradients.

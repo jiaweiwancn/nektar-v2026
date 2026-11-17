@@ -1,0 +1,33 @@
+
+[36mWarning : [0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	     WJ coupled path: WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon
+	         Wall tensor: FiniteNuIsotropicWallFullWJCollarV2
+	         Integration: current coupled BDF2/EX2, BE startup, no clipping
+	      Pressure gauge: fixed by total outlet traction
+=======================================================================
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/htrace-regression-v18/reference-r2-u.fld" (0.0248824s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/htrace-regression-v18/reference-r2-v.fld" (0.0232361s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/htrace-regression-v18/reference-r2-k.fld" (0.0244288s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/htrace-regression-v18/reference-r2-epsilon.fld" (0.0158219s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/htrace-regression-v18/reference-r2-p.fld" (0.0118524s, XML)
+-------------------------------------------
+Total Computation Time = 438.122s
+-------------------------------------------
+L 2 error (variable u) : 21.549
+L inf error (variable u) : 1.0901
+L 2 error (variable v) : 0.00203286
+L inf error (variable v) : 0.000918358
+L 2 error (variable k) : 0.197105
+L inf error (variable k) : 0.017238
+L 2 error (variable epsilon) : 0.00465326
+L inf error (variable epsilon) : 0.00248226
+L 2 error (variable p) : 0.00449009
+L inf error (variable p) : 0.00238404
+-------------------------------------------
+                       Region  Elapsed time Avg (s)       Min (s)       Max (s)         Count      IO Level
+                      Execute               439.615       439.615       439.615             1             0
+

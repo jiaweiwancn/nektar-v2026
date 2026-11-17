@@ -1,0 +1,102 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v18/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_oracle.py",
+    "--native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-x2-v1/reference-x2.result.json",
+    "--compare-finer",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/htrace-regression-v18/reference-r2.result.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/htrace-regression-v18/comparison-x2-r2.json",
+    "--seconds",
+    "570"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 600.0,
+  "utc": "2026-11-17T21:32:10.681737+00:00",
+  "allocation": {
+    "workers": 6,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 498335,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/htrace-regression-controller-v18.py"
+      },
+      {
+        "pid": 499053,
+        "parent": 497461,
+        "threads": 1,
+        "args": "python3 -B -"
+      },
+      {
+        "pid": 499054,
+        "parent": 498335,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label radial-reference-comparison-x2-v18 --phase analysis --seconds 600 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v18/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_oracle.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-x2-v1/reference-x2.result.json --compare-finer /home/jay/build/wj-h27-coupling-r1-20261117/science/htrace-regression-v18/reference-r2.result.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/htrace-regression-v18/comparison-x2-r2.json --seconds 570"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v18/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_oracle.py",
+      "bytes": 65735,
+      "sha256": "94fbd2c1fd7c458dfeaa13989a0eec1449dd5d6db854ff89695e705a59dc2358"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-x2-v1/reference-x2.result.json",
+      "bytes": 47102413,
+      "sha256": "e60ea109d0633d96f6b79a8d679c402228e3c9ab2c47a1261d052ccfdaeceb89"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/htrace-regression-v18/reference-r2.result.json",
+      "bytes": 47206178,
+      "sha256": "b3e3cb96977d35bc53128191392d7cd7a4145c9e4b0a8733db72323a8ebe07df"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 264.98747694597114,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 3036401664,
+  "peak_host_workers": 7,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/radial-reference-comparison-x2-v18/command.log",
+    "bytes": 371,
+    "sha256": "eea2e85f8c6c2c52cb089d6166ce5886adc783bc72610c0645a2b6554e04ccf6"
+  }
+}

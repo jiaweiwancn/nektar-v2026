@@ -1,0 +1,82 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v18/IncNavierStokesSolver",
+    "--use-opt-file",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/radial-quadrature-v18/reference-q16.xml.opt",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/radial-quadrature-v18/reference-q16.xml"
+  ],
+  "phase": "science",
+  "seconds_cap": 1400.0,
+  "utc": "2026-11-17T21:45:58.275719+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 499297,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/quadrature-controller-v18.py"
+      },
+      {
+        "pid": 499406,
+        "parent": 499297,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label radial-q16-native-v18 --phase science --seconds 1400 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v18/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/radial-quadrature-v18/reference-q16.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/radial-quadrature-v18/reference-q16.xml"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v18/IncNavierStokesSolver",
+      "bytes": 380,
+      "sha256": "745c9dc234d69bddc7256acabcf8868af8b6bb1430180d9d81fac9b29c8a0103"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/radial-quadrature-v18/reference-q16.xml.opt",
+      "bytes": 55,
+      "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/radial-quadrature-v18/reference-q16.xml",
+      "bytes": 903452,
+      "sha256": "e7010a76276282d7188cc09c390c7f0d059b17581e671ba23784d259da79f668"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 420.12478910398204,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 6036103168,
+  "peak_host_workers": 14,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/radial-q16-native-v18/command.log",
+    "bytes": 1923,
+    "sha256": "3860d0423a0fe9f0638b1e1f9f0c807147a2002c96e01fa8bcbbce59dd259b49"
+  }
+}

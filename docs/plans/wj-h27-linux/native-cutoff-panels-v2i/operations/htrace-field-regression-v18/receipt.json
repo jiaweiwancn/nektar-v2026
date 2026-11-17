@@ -1,0 +1,89 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v18/solvers/IncNavierStokesSolver/Tests/RANS/h27/htrace_regression_check.py",
+    "--manifest",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/htrace-regression-v18/regression-manifest.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/htrace-regression-v18/regression-independent.json",
+    "--seconds",
+    "85"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 90.0,
+  "utc": "2026-11-17T21:19:34.626751+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 498335,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/htrace-regression-controller-v18.py"
+      },
+      {
+        "pid": 498539,
+        "parent": 498335,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label htrace-field-regression-v18 --phase analysis --seconds 90 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v18/solvers/IncNavierStokesSolver/Tests/RANS/h27/htrace_regression_check.py --manifest /home/jay/build/wj-h27-coupling-r1-20261117/science/htrace-regression-v18/regression-manifest.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/htrace-regression-v18/regression-independent.json --seconds 85"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v18/solvers/IncNavierStokesSolver/Tests/RANS/h27/htrace_regression_check.py",
+      "bytes": 7363,
+      "sha256": "e524de920846242e3a344e91637fe1d6e7f7a5031fb7f85a4a0e23e3672edcc6"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/htrace-regression-v18/regression-manifest.json",
+      "bytes": 2663,
+      "sha256": "59a12005fcc211a5057886edeac0a65ffa5e26767e2c953ded32b1ca2a47bd13"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 10.147400702000596,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 106766336,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/htrace-field-regression-v18/command.log",
+    "bytes": 87,
+    "sha256": "c7c5016a0340196bd515a486978cfaf68fb6c892e74f9475a158db23de77ae80"
+  }
+}

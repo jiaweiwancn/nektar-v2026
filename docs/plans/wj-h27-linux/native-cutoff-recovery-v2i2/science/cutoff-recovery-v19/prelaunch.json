@@ -1,0 +1,100 @@
+{
+  "schema": "WJH27RetainedRecoveryInputsV1",
+  "source_identity": "56c35390fdf092180913f60c3ae348ca10cdcdf4e6b889c3afd589eddb511acf",
+  "control": {
+    "result": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.result.json",
+      "bytes": 4709770,
+      "sha256": "816e9f7aeb3db29bbe0f2244a61ab12a64ccc1dda547a38be7629eb9be48361b"
+    },
+    "session": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.xml",
+      "bytes": 112069,
+      "sha256": "67330c216dbe0682a0b8c37328000cae98826fcf4e6d4b74c7295e7e4c30d8e0"
+    }
+  },
+  "inputs": {
+    "9": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.recovery-9.bin",
+      "bytes": 859058,
+      "sha256": "cf2dbf0ee04ba3abf37800bccff23440035bf473c1977f0266787bcc9a5eb2aa"
+    },
+    "12": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.recovery-12.bin",
+      "bytes": 859058,
+      "sha256": "04aba27bd386dd9e6a387b5e47cb5d3631bd12a3b678035ad8a168601f6c91f8"
+    }
+  },
+  "cases": {
+    "cold9": {
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/cold9.xml",
+        "bytes": 112195,
+        "sha256": "7979624dba730fee17a84ece822a03d69b3bbf175e9be6ba02d7ba058717ac85"
+      },
+      "options": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/cold9.xml.opt",
+        "bytes": 55,
+        "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+      },
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.recovery-9.bin",
+        "bytes": 859058,
+        "sha256": "cf2dbf0ee04ba3abf37800bccff23440035bf473c1977f0266787bcc9a5eb2aa"
+      },
+      "output_prefix": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/cold9"
+    },
+    "zero12": {
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/zero12.xml",
+        "bytes": 112197,
+        "sha256": "46e221d2cf7f475aed88b361af2cc5b0dfe1e5de9e51f0b220b7c992a27a960c"
+      },
+      "options": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/zero12.xml.opt",
+        "bytes": 55,
+        "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+      },
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.recovery-12.bin",
+        "bytes": 859058,
+        "sha256": "04aba27bd386dd9e6a387b5e47cb5d3631bd12a3b678035ad8a168601f6c91f8"
+      },
+      "output_prefix": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/zero12"
+    },
+    "prior-source": {
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/prior-source.xml",
+        "bytes": 112201,
+        "sha256": "7e8cf175eb1adf0fa26c7f5d18549dbeafe4140e64542cd84c515c088ba386f1"
+      },
+      "options": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/prior-source.xml.opt",
+        "bytes": 55,
+        "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+      },
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/htrace-regression-v18/physical.final.bin",
+        "bytes": 859058,
+        "sha256": "7afe79662e947f5e531648aeb5be8a886dd810d34d96a8c3d60cfb03a5794e9e"
+      },
+      "output_prefix": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-recovery-v19/prior-source"
+    }
+  },
+  "source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v19.json",
+    "bytes": 1141639,
+    "sha256": "26e414f6d5238c7d5bf44cdd1c2fe38d341bbdff697f4f3105c6dd247b84eb82"
+  },
+  "runtime": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/runtime-v19.json",
+    "bytes": 3336,
+    "sha256": "b42dd0c1bc018ecbf3e2b5a39faaf374fb44f2afe084ee68195ae499629b3b04"
+  },
+  "helpers": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-cutoff-recovery-v19/overlay.json",
+    "bytes": 19197,
+    "sha256": "eeba540f5b7b93592c3663dedfc3aa9322cdc60a4cf2571ef6f3a7f52c430ae1"
+  },
+  "TASK3_READY": false
+}

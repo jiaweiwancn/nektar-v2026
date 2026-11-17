@@ -1,0 +1,137 @@
+{
+  "algorithm": "WJH27SteadyJFNKV1",
+  "status": "CONVERGED",
+  "reason": "current true steady residual meets caller acceptance norm",
+  "converged": true,
+  "has_evaluated_state": true,
+  "true_norm": 1.915058684864861e-11,
+  "last_accepted_norm": 1.915058684864861e-11,
+  "preconditioner_mass_only": 0,
+  "physical_time_advanced": 0,
+  "residual_evaluations": 6,
+  "validity_evaluations": 6,
+  "nonlinear_validation_enabled": true,
+  "nonlinear_validation_evaluations": 2,
+  "nonlinear_validation_rejected_trials": 0,
+  "nonlinear_validation_seconds": 27.473417154000003,
+  "preconditioner_applications": 1,
+  "preconditioner_preparations": 1,
+  "jacobian_actions": 2,
+  "fd_rejected_trials": 0,
+  "line_search_rejected_trials": 0,
+  "linear_iterations": 1,
+  "accepted_newton_steps": 1,
+  "total_seconds": 54.398172032,
+  "callback_seconds": {
+    "residual": 4.394400525,
+    "validity": 0.035290641,
+    "norm": 0.102166906,
+    "precondition": 0.215738919,
+    "prepare": 22.032200793,
+    "arnoldi": 0.000384893
+  },
+  "newton": [
+    {
+      "iteration": 0,
+      "base_norm": 7.627185184371488e-09,
+      "forcing": 0.3,
+      "linear_true_norm": 1.914578048910223e-11,
+      "linear_converged": true,
+      "accepted": true,
+      "accepted_norm": 1.915058684864861e-11,
+      "accepted_step": 1
+    }
+  ],
+  "line_search": [
+    {
+      "newton": 0,
+      "trial": 0,
+      "step": 1,
+      "nonlinear_validation_attempted": true,
+      "nonlinear_validated": true,
+      "admissible": true,
+      "evaluated": true,
+      "true_norm": 1.915058684864861e-11,
+      "accepted": true,
+      "sufficient_decrease": true,
+      "reason": ""
+    }
+  ],
+  "best_from_accepted_iterate": true,
+  "finite_differences": [
+    {
+      "newton": 0,
+      "cycle": 0,
+      "iteration": 0,
+      "reduction": 0,
+      "purpose": "arnoldi",
+      "method": "central",
+      "relative_step": 1e-06,
+      "parameter_step": 1.4233186627425832e-05,
+      "scaled_coordinate_step": 1.7964809998951873e-06,
+      "scaled_direction_infinity_norm": 0.12621776464544912,
+      "nonlinear_validation_enabled": true,
+      "admissibility_scope": "domain/root/covariance; uncommitted derivative probes",
+      "plus_admissible": true,
+      "minus_admissible": true,
+      "half_admissible": false,
+      "plus_reason": "",
+      "minus_reason": "",
+      "half_reason": "",
+      "seconds": 1.977348566
+    },
+    {
+      "newton": 0,
+      "cycle": 0,
+      "iteration": 0,
+      "reduction": 0,
+      "purpose": "true-linear-residual",
+      "method": "central",
+      "relative_step": 1e-06,
+      "parameter_step": 177.64600636980202,
+      "scaled_coordinate_step": 1.7964809998951873e-06,
+      "scaled_direction_infinity_norm": 1.0112701301911002e-08,
+      "nonlinear_validation_enabled": true,
+      "admissibility_scope": "domain/root/covariance; uncommitted derivative probes",
+      "plus_admissible": true,
+      "minus_admissible": true,
+      "half_admissible": false,
+      "plus_reason": "",
+      "minus_reason": "",
+      "half_reason": "",
+      "seconds": 1.914491896
+    }
+  ],
+  "linear_checks": [
+    {
+      "newton": 0,
+      "cycle": 0,
+      "iteration": -1,
+      "least_squares_rank": 0,
+      "projected_norm": 8.013437736348152e-08,
+      "true_scaled_norm": 8.013437736348152e-08,
+      "true_norm": 7.627185184371488e-09,
+      "true_checked": true,
+      "breakdown": false,
+      "converged": false
+    },
+    {
+      "newton": 0,
+      "cycle": 0,
+      "iteration": 0,
+      "least_squares_rank": 1,
+      "projected_norm": 3.481711817667527e-10,
+      "true_scaled_norm": 3.481711817667457e-10,
+      "true_norm": 1.914578048910223e-11,
+      "true_checked": true,
+      "breakdown": false,
+      "converged": true
+    }
+  ],
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/reference-r2.steady.json",
+    "bytes": 9709278,
+    "sha256": "1878dc17932835b2e41dd9e32fa972f9fb126063ebdd0091817c698371f4f063"
+  },
+  "publication_scope": "Compact evidence; raw signed fields, histories and per-owner profile/interface rows remain at the exact Linux artifact identity."
+}

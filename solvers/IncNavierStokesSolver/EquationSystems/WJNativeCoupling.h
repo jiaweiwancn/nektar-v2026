@@ -137,6 +137,10 @@ private:
     NativeRule HRule(const NativeRule&rule)const;
     double InterfaceK(const Element&element,double x,const CoupledState&state)const;
     std::array<double,2> InterfaceVelocity(const Element&element,double x,const CoupledState&state)const;
+    std::vector<double> CutoffXBreaks(const Element&element,const std::array<double,4>&coefficients,
+                                    double traceLeft,double traceRight)const;
+    std::vector<double> CurrentCutoffXBreaks(const Element&element,const CoupledState&state)const;
+    std::vector<double> MMSCutoffXBreaks(const Element&element,double time)const;
     void CheckTraceEvaluation()const;
     double NativeRadius(double physicalZ)const;
     double NativeX(double x)const;
@@ -174,6 +178,8 @@ private:
     std::map<int,int>m_geometryIndex,m_hOwner;
     struct KTrace {std::array<int,4>ids;std::array<double,4>signs;};
     std::map<int,KTrace>m_hKTrace;
+    std::array<double,2>m_cutoffRange{};
+    std::map<double,double>m_cutoffFaceK;
     std::vector<std::pair<int,int>>m_boundaryFaces;
     std::string m_signature;
     Vec m_preconditionerCoefficients;

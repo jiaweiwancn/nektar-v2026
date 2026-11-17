@@ -1,0 +1,78 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/cutoff-crossing-witness-v18.py"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T21:51:33.133111+00:00",
+  "allocation": {
+    "workers": 13,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 499297,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/quadrature-controller-v18.py"
+      },
+      {
+        "pid": 499406,
+        "parent": 499297,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label radial-q16-native-v18 --phase science --seconds 1400 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v18/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/radial-quadrature-v18/reference-q16.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/radial-quadrature-v18/reference-q16.xml"
+      },
+      {
+        "pid": 499408,
+        "parent": 499406,
+        "threads": 3,
+        "args": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2 --library-path /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc:/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/geometry:/home/jay/.local/opt/nektar-v2026-mpi/lib64 /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v18/IncNavierStokesSolver.elf --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/radial-quadrature-v18/reference-q16.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/radial-quadrature-v18/reference-q16.xml"
+      },
+      {
+        "pid": 499410,
+        "parent": 499408,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 499640,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label cutoff-crossing-witness-v18 --phase analysis --seconds 30 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/cutoff-crossing-witness-v18.py"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/cutoff-crossing-witness-v18.py",
+      "bytes": 5239,
+      "sha256": "e49e2bbed8c6a895903f21e1ce8f31cd4ce8ec1b2363a30ec677b8c8ad8c38c3"
+    }
+  ]
+}

@@ -4,6 +4,7 @@
 #include <cmath>
 #include <limits>
 #include <stdexcept>
+#include <utility>
 namespace Nektar::WJNative
 {
 namespace
@@ -61,11 +62,27 @@ NativeRule RuleFactory::Evaluate(const Element&e,const Vec&xi,const Vec&eta,cons
     }
     return r;
 }
-NativeRule RuleFactory::Volume(const Element&e,const std::function<double(const Element&,double)>&cutoff)const
+NativeRule RuleFactory::Volume(const Element&e,const std::function<double(const Element&,double)>&cutoff,
+    const std::vector<double>&xBreaks)const
 {
     auto x=Gauss(m_nx),z=Gauss(m_nz);std::vector<double>xs,ys,ws;const auto geo=m_flow.Mapping();
-    for(int i=0;i<m_nx;++i)
+    const double xRoundoff=64*std::numeric_limits<double>::epsilon()*std::max({std::abs(e.xl),std::abs(e.xr),e.xr-e.xl});
+    std::vector<double>xPanels{e.xl,e.xr};
+    for(double point:xBreaks){
+        Require(std::isfinite(point)&&point>=e.xl-xRoundoff&&point<=e.xr+xRoundoff,"cutoff x partition left its original owner");
+        if(point>e.xl+xRoundoff&&point<e.xr-xRoundoff)xPanels.push_back(point);
+    }
+    std::sort(xPanels.begin(),xPanels.end());
+    if(xPanels.size()>2){
+        std::vector<double>distinct;
+        for(double point:xPanels)if(distinct.empty()||point-distinct.back()>xRoundoff)distinct.push_back(point);
+        xPanels=std::move(distinct);
+    }
+    for(int panel=0;panel+1<int(xPanels.size());++panel)for(int i=0;i<m_nx;++i)
     {
+        const double left=xPanels[panel],right=xPanels[panel+1],physicalX=(left+right)/2+(right-left)*x.first[i]/2;
+        // Preserve the original unsplit rule exactly when there is no x event.
+        const double xi=xPanels.size()==2?x.first[i]:2*(physicalX-e.xl)/(e.xr-e.xl)-1;
         std::vector<double>cuts{e.rl,e.rr};
         // Native physical coordinates at an existing material edge can differ
         // from its supplied model radius by a few arithmetic ulps. Do not
@@ -75,18 +92,27 @@ NativeRule RuleFactory::Volume(const Element&e,const std::function<double(const 
         const double roundoff=64*std::numeric_limits<double>::epsilon()*
             std::max({geo.H,std::abs(e.rl),std::abs(e.rr)});
         for(double a:{.4*geo.H,.75*geo.H,geo.H,geo.h})if(a>e.rl+roundoff&&a<e.rr-roundoff)cuts.push_back(a);
-        if(cutoff){double physicalX=(e.xl+e.xr)/2+(e.xr-e.xl)*x.first[i]/2,c=cutoff(e,physicalX);Require(std::isfinite(c)&&c>0&&c<.4*geo.H,"current cutoff left certified below-collar branch");if(c>e.rl+roundoff&&c<e.rr-roundoff)cuts.push_back(c);}
+        if(cutoff){double c=cutoff(e,physicalX);Require(std::isfinite(c)&&c>0&&c<.4*geo.H,"current cutoff left certified below-collar branch");if(c>e.rl+roundoff&&c<e.rr-roundoff)cuts.push_back(c);}
         std::sort(cuts.begin(),cuts.end());cuts.erase(std::unique(cuts.begin(),cuts.end()),cuts.end());
-        for(int s=0;s+1<int(cuts.size());++s)for(int j=0;j<m_nz;++j){double physicalR=(cuts[s]+cuts[s+1])/2+(cuts[s+1]-cuts[s])*z.first[j]/2;xs.push_back(x.first[i]);ys.push_back(2*(physicalR-e.rl)/(e.rr-e.rl)-1);ws.push_back(x.second[i]*z.second[j]*(e.xr-e.xl)*(cuts[s+1]-cuts[s])/4);}
+        for(int s=0;s+1<int(cuts.size());++s)for(int j=0;j<m_nz;++j){double physicalR=(cuts[s]+cuts[s+1])/2+(cuts[s+1]-cuts[s])*z.first[j]/2;xs.push_back(xi);ys.push_back(2*(physicalR-e.rl)/(e.rr-e.rl)-1);ws.push_back(x.second[i]*z.second[j]*(right-left)*(cuts[s+1]-cuts[s])/4);}
     }
     Vec xi(xs.size()),eta(ys.size()),weight(ws.size());for(int i=0;i<int(xs.size());++i){xi[i]=xs[i];eta[i]=ys[i];weight[i]=ws[i];}return Evaluate(e,xi,eta,weight);
 }
-Rules RuleFactory::Cutoff(const std::function<double(const Element&,double)>&cutoff)const
+Rules RuleFactory::Cutoff(const std::function<double(const Element&,double)>&cutoff,const CutoffPartition*partition)const
 {
     Require(bool(cutoff),"missing current cutoff function");Rules result=m_static;auto q=Gauss(m_nx);
+    if(partition)Require(bool(partition->xBreaks)&&std::isfinite(partition->radiusRange[0])&&std::isfinite(partition->radiusRange[1])&&
+        partition->radiusRange[0]>0&&partition->radiusRange[1]>=partition->radiusRange[0]&&partition->radiusRange[1]<.4*m_flow.Mapping().H,
+        "invalid certified cutoff partition range");
     for(int i=0;i<int(m_flow.Elements().size());++i)
     {
         const auto&e=m_flow.Elements()[i];if(e.rl>=.4*m_flow.Mapping().H||e.rr<=0)continue;bool intersects=false;
+        if(partition){
+            // The whole certified range protects narrow intersections that
+            // are absent at every original x Gauss node.
+            if(e.rr<partition->radiusRange[0]||e.rl>partition->radiusRange[1])continue;
+            result[i]=std::make_shared<NativeRule>(Volume(e,cutoff,partition->xBreaks(e)));continue;
+        }
         for(int j=0;j<m_nx;++j){double x=(e.xl+e.xr)/2+(e.xr-e.xl)*q.first[j]/2,c=cutoff(e,x);Require(std::isfinite(c)&&c>0&&c<.4*m_flow.Mapping().H,"cutoff outside certified below-collar branch");intersects|=c>e.rl&&c<e.rr;}
         if(intersects)result[i]=std::make_shared<NativeRule>(Volume(e,cutoff));
     }
@@ -117,5 +143,15 @@ NativeRule RuleFactory::Points(const Element&e,const Vec&x,const Vec&z)const
     Vec eta=2*(z.array()-m_flow.Mapping().d0-(e.rl+e.rr)/2)/(e.rr-e.rl);
     Require((xi.array().abs()<=1+1e-11).all()&&(eta.array().abs()<=1+1e-11).all(),"native point lies outside its specified owner");
     return Evaluate(e,xi,eta,Vec::Zero(x.size()));
+}
+NativeRule RuleFactory::HorizontalTrace(const Element&e,const Vec&x,int side)const
+{
+    Require(side==2||side==3,"native horizontal trace requires lower/upper side");
+    // Use the same endpoint-relative parameter as the direct edge polynomial.
+    // The selected original owner and edge remain explicit; no state, cutoff
+    // or arbitrary physical sampling point is snapped to this edge.
+    Vec xi=2*(x.array()-e.xl)/(e.xr-e.xl)-1;
+    Require((xi.array().abs()<=1+1e-11).all(),"native horizontal trace lies outside its specified owner");
+    return Evaluate(e,xi,Vec::Constant(x.size(),side==2?-1.:1.),Vec::Zero(x.size()));
 }
 }

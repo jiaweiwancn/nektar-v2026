@@ -1,0 +1,71 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/cutoff-panels-assessment-v19.py"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 60.0,
+  "utc": "2026-11-17T22:51:29.779866+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 502764,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/cutoff-panels-publication-controller-v19.py"
+      },
+      {
+        "pid": 502765,
+        "parent": 502764,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label cutoff-panels-assessment-v19 --phase analysis --seconds 60 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/cutoff-panels-assessment-v19.py"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/cutoff-panels-assessment-v19.py",
+      "bytes": 11227,
+      "sha256": "5a9ad31bc8537e2d0de1cf0d1f7056b33764a18fd8de3ad69b7464bd4823ff0d"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 17.46443694102345,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 689209344,
+  "peak_host_workers": 7,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/cutoff-panels-assessment-v19/command.log",
+    "bytes": 1502,
+    "sha256": "1a7405bc3cd77a15c1b22cceffdbbed9965990d114a6ad084bf20f243cb73c7b"
+  }
+}

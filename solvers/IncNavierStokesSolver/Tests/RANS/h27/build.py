@@ -9,7 +9,7 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True)
     p.add_argument('--version',type=int,required=True)
     p.add_argument('--targets',default='WJH27PrincipalProbe');a=p.parse_args()
-    targets=a.targets.split(',');assert set(targets)<=set(('WJH27PrincipalProbe','WJH27MixedProbe','WJH27ScalarProbe','WJH27ReferenceProbe','WJH27AdmissibilityProbe','WJH27CoupledMMSProbe','WJH27ConstitutiveProbe','WJH27SteadyKrylovProbe','WJH27InitialFieldsProbe','WJH27PerturbationProbe','WJH27FlowTangentProbe','WJNativeFlowDriver','IncNavierStokesSolver'))
+    targets=a.targets.split(',');assert set(targets)<=set(('WJH27PrincipalProbe','WJH27MixedProbe','WJH27ScalarProbe','WJH27ReferenceProbe','WJH27AdmissibilityProbe','WJH27CoupledMMSProbe','WJH27ConstitutiveProbe','WJH27SteadyKrylovProbe','WJH27InitialFieldsProbe','WJH27PerturbationProbe','WJH27FlowTangentProbe','WJH27TraceGeometryProbe','WJH27CutoffPanelProbe','WJH27CutoffPanelsUnit','WJNativeFlowDriver','IncNavierStokesSolver'))
     root=a.root.resolve();source=root/f'source-v{a.version}'
     build=root/f'build-v{a.version}';runtime=root/f'runtime-v{a.version}'
     assert source.is_dir()and not build.exists()and not runtime.exists()
