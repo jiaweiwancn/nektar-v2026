@@ -1,0 +1,921 @@
+{
+  "stage": "B",
+  "tested_source_revision": "8aeb00a2f37437cd17e043a9ba6f86a6f208e1d6",
+  "NUMERICS": {
+    "operator_direct_traction_work": [
+      {
+        "status": "PASS_TINY_NATIVE_INDEPENDENT_ASSEMBLY",
+        "curve": 0.0,
+        "source": "/home/jay/build/wj-h26-native-flow-20261117/science/algebra-c0.0-n0-v8.json",
+        "checks": {
+          "mass": {
+            "relative_error": 6.675770513220822e-16,
+            "independent_quadrature_error": 1.004172363060494e-15
+          },
+          "pressure_mass": {
+            "relative_error": 6.514998774316561e-16,
+            "independent_quadrature_error": 9.99569707267369e-16
+          },
+          "D": {
+            "relative_error": 1.030465008630743e-15,
+            "independent_quadrature_error": 1.8014263225357934e-15
+          },
+          "G": {
+            "relative_error": 1.030465008630743e-15,
+            "independent_quadrature_error": 1.8014263225357934e-15
+          },
+          "C": {
+            "relative_error": 8.279532041330698e-16,
+            "independent_quadrature_error": 6.478282577831591e-16
+          },
+          "K": {
+            "relative_error": 1.5873058772222234e-15,
+            "independent_quadrature_error": 2.2102154226497687e-15
+          },
+          "system": {
+            "relative_error": 3.3983040456965845e-16
+          },
+          "natural_total_traction": {
+            "relative_error": 1.6327196206490217e-16,
+            "independent_quadrature_error": 0.0
+          }
+        },
+        "direct_solution_relative_error": 3.066545123146959e-12,
+        "independent_momentum_residual": 3.2647518207339704e-14,
+        "independent_continuity_residual": 1.3407581200809671e-14,
+        "unaugmented_null_modes": 1,
+        "gauge": true,
+        "smallest_singular_values": [
+          1.1588265689126495e-05,
+          8.237954424929002e-06,
+          6.861515932985165e-06,
+          4.57096614425722e-06,
+          4.4729351084748e-19
+        ],
+        "constant_pressure_C_action": 0.0,
+        "mutations": {
+          "missing_transpose": 0.45094778890636605,
+          "wrong_AWF_sign": 0.14417040160860178,
+          "stale_20percent_viscosity": 0.001657718566356452
+        },
+        "native": {
+          "iterations": 1,
+          "rebuilds": 1,
+          "momentum": 2.903065492971174e-14,
+          "continuity": 1.3369572191804663e-14,
+          "gauge": 1.7283983357077832e-13,
+          "pressure_correction": 2.2205794101234995,
+          "factor_seconds": 0.00045589200453832746,
+          "solve_seconds": 3.869208740070462e-05,
+          "residual_seconds": 7.820955943316221e-06
+        },
+        "current_coefficient_retained_preconditioner": {
+          "iterations": 5,
+          "rebuilds": 0,
+          "momentum": 3.253672175694391e-12,
+          "continuity": 1.290281392910112e-16,
+          "gauge": 5.336307567702108e-18,
+          "pressure_correction": 0.024480702307602457,
+          "factor_seconds": 0,
+          "solve_seconds": 7.871398702263832e-05,
+          "residual_seconds": 6.839982233941555e-06
+        },
+        "scope": "tiny algebraic/direct operator oracle; does not replace continuous MMS",
+        "full_strain_work_identity": {
+          "discrete_energy": 0.005396825396825402,
+          "independent_physical_integral": 0.0053968253968254,
+          "relative_error": 3.2143405584276115e-16
+        },
+        "known_minus_two_thirds_Ck_relative_error": 2.294336505790139e-14,
+        "genuine_20percent_coefficient_change": {
+          "solution_relative_change": 0.010784674669155494,
+          "independent_direct_error": 6.6496732620838895e-12
+        }
+      },
+      {
+        "status": "PASS_TINY_NATIVE_INDEPENDENT_ASSEMBLY",
+        "curve": 0.0,
+        "source": "/home/jay/build/wj-h26-native-flow-20261117/science/algebra-c0.0-n1-v8.json",
+        "checks": {
+          "mass": {
+            "relative_error": 6.675770513220822e-16,
+            "independent_quadrature_error": 1.004172363060494e-15
+          },
+          "pressure_mass": {
+            "relative_error": 6.514998774316561e-16,
+            "independent_quadrature_error": 9.99569707267369e-16
+          },
+          "D": {
+            "relative_error": 1.030465008630743e-15,
+            "independent_quadrature_error": 1.8014263225357934e-15
+          },
+          "G": {
+            "relative_error": 1.030465008630743e-15,
+            "independent_quadrature_error": 1.8014263225357934e-15
+          },
+          "C": {
+            "relative_error": 8.279532041330698e-16,
+            "independent_quadrature_error": 6.478282577831591e-16
+          },
+          "K": {
+            "relative_error": 1.5873058772222238e-15,
+            "independent_quadrature_error": 2.2102154226497687e-15
+          },
+          "system": {
+            "relative_error": 5.453885437538438e-16
+          },
+          "natural_total_traction": {
+            "relative_error": 1.6327196206490217e-16,
+            "independent_quadrature_error": 0.0
+          }
+        },
+        "direct_solution_relative_error": 9.909919697041562e-13,
+        "independent_momentum_residual": 2.0127256097832097e-14,
+        "independent_continuity_residual": 9.549951447591101e-15,
+        "unaugmented_null_modes": 0,
+        "gauge": false,
+        "smallest_singular_values": [
+          1.5319291895649792e-05,
+          1.3210403375803465e-05,
+          1.07292141552613e-05,
+          8.067933627990062e-06,
+          5.82913933387738e-06
+        ],
+        "constant_pressure_C_action": 0.0,
+        "mutations": {
+          "missing_transpose": 0.4509477889063661,
+          "wrong_AWF_sign": 0.12296898630253714,
+          "stale_20percent_viscosity": 0.0015151895746733685
+        },
+        "native": {
+          "iterations": 1,
+          "rebuilds": 1,
+          "momentum": 1.6282646514636984e-14,
+          "continuity": 9.69065038511909e-15,
+          "gauge": 0,
+          "pressure_correction": 3.3696151486486845,
+          "factor_seconds": 0.00043190200813114643,
+          "solve_seconds": 4.2451953049749136e-05,
+          "residual_seconds": 8.660019375383854e-06
+        },
+        "current_coefficient_retained_preconditioner": {
+          "iterations": 6,
+          "rebuilds": 0,
+          "momentum": 2.5201790011635233e-13,
+          "continuity": 1.3011398504247324e-16,
+          "gauge": 0,
+          "pressure_correction": 0.040945281615353,
+          "factor_seconds": 0,
+          "solve_seconds": 0.00010572501923888922,
+          "residual_seconds": 7.879978511482477e-06
+        },
+        "scope": "tiny algebraic/direct operator oracle; does not replace continuous MMS",
+        "full_strain_work_identity": {
+          "discrete_energy": 0.005396825396825392,
+          "independent_physical_integral": 0.0053968253968253894,
+          "relative_error": 4.821510837641427e-16
+        },
+        "known_minus_two_thirds_Ck_relative_error": 2.294336505790139e-14,
+        "genuine_20percent_coefficient_change": {
+          "solution_relative_change": 0.012224907497015514,
+          "independent_direct_error": 1.688307192094647e-13
+        }
+      },
+      {
+        "status": "PASS_TINY_NATIVE_INDEPENDENT_ASSEMBLY",
+        "curve": 0.1,
+        "source": "/home/jay/build/wj-h26-native-flow-20261117/science/algebra-c0.1-n0-v8.json",
+        "checks": {
+          "mass": {
+            "relative_error": 4.602784307526876e-15,
+            "independent_quadrature_error": 1.0526730434077575e-15
+          },
+          "pressure_mass": {
+            "relative_error": 4.59217610027655e-15,
+            "independent_quadrature_error": 1.0467679285145367e-15
+          },
+          "D": {
+            "relative_error": 3.757084684055068e-15,
+            "independent_quadrature_error": 1.8209330711553898e-15
+          },
+          "G": {
+            "relative_error": 3.757084684055068e-15,
+            "independent_quadrature_error": 1.8209330711553898e-15
+          },
+          "C": {
+            "relative_error": 3.1004898869138614e-15,
+            "independent_quadrature_error": 7.874103119266512e-16
+          },
+          "K": {
+            "relative_error": 3.279062386952335e-15,
+            "independent_quadrature_error": 2.193828993205792e-15
+          },
+          "system": {
+            "relative_error": 5.042089319827071e-15
+          },
+          "natural_total_traction": {
+            "relative_error": 1.3303691560141888e-16,
+            "independent_quadrature_error": 0.0
+          }
+        },
+        "direct_solution_relative_error": 1.7352673669847376e-12,
+        "independent_momentum_residual": 4.281902003855636e-14,
+        "independent_continuity_residual": 1.3087381404300242e-14,
+        "unaugmented_null_modes": 1,
+        "gauge": true,
+        "smallest_singular_values": [
+          1.1588750735297336e-05,
+          8.244389283802595e-06,
+          6.852290741593888e-06,
+          4.5734699107624675e-06,
+          2.564484724303928e-19
+        ],
+        "constant_pressure_C_action": 1.0137027814410857e-18,
+        "mutations": {
+          "missing_transpose": 0.4508499193700093,
+          "wrong_AWF_sign": 0.14414818143664912,
+          "stale_20percent_viscosity": 0.0016627279163416884
+        },
+        "native": {
+          "iterations": 1,
+          "rebuilds": 1,
+          "momentum": 3.343712673712525e-14,
+          "continuity": 1.3067538158641944e-14,
+          "gauge": 1.5385667075170929e-13,
+          "pressure_correction": 2.219700699744591,
+          "factor_seconds": 0.0005919300019741058,
+          "solve_seconds": 3.906100755557418e-05,
+          "residual_seconds": 7.6700234785676e-06
+        },
+        "current_coefficient_retained_preconditioner": {
+          "iterations": 5,
+          "rebuilds": 0,
+          "momentum": 3.2597208376935573e-12,
+          "continuity": 2.2115940272387672e-16,
+          "gauge": 1.6567964448294144e-16,
+          "pressure_correction": 0.024436878943167182,
+          "factor_seconds": 0,
+          "solve_seconds": 8.04250012151897e-05,
+          "residual_seconds": 6.829970516264439e-06
+        },
+        "scope": "tiny algebraic/direct operator oracle; does not replace continuous MMS",
+        "full_strain_work_identity": {
+          "discrete_energy": 0.005480575086688825,
+          "independent_physical_integral": 0.005480575086688837,
+          "relative_error": 2.2156551346829634e-15
+        },
+        "known_minus_two_thirds_Ck_relative_error": 1.2784579855209405e-14,
+        "genuine_20percent_coefficient_change": {
+          "solution_relative_change": 0.01077136874762827,
+          "independent_direct_error": 6.57063026966003e-12
+        }
+      },
+      {
+        "status": "PASS_TINY_NATIVE_INDEPENDENT_ASSEMBLY",
+        "curve": 0.1,
+        "source": "/home/jay/build/wj-h26-native-flow-20261117/science/algebra-c0.1-n1-v8.json",
+        "checks": {
+          "mass": {
+            "relative_error": 4.602784307526876e-15,
+            "independent_quadrature_error": 1.0526730434077575e-15
+          },
+          "pressure_mass": {
+            "relative_error": 4.59217610027655e-15,
+            "independent_quadrature_error": 1.0467679285145367e-15
+          },
+          "D": {
+            "relative_error": 3.7570846840550675e-15,
+            "independent_quadrature_error": 1.8209330711553898e-15
+          },
+          "G": {
+            "relative_error": 3.7570846840550675e-15,
+            "independent_quadrature_error": 1.8209330711553898e-15
+          },
+          "C": {
+            "relative_error": 3.1004898869138614e-15,
+            "independent_quadrature_error": 7.874103119266512e-16
+          },
+          "K": {
+            "relative_error": 3.279062386952334e-15,
+            "independent_quadrature_error": 2.1938289932057917e-15
+          },
+          "system": {
+            "relative_error": 5.410107680922187e-15
+          },
+          "natural_total_traction": {
+            "relative_error": 1.3303691560141888e-16,
+            "independent_quadrature_error": 0.0
+          }
+        },
+        "direct_solution_relative_error": 2.96314521341301e-13,
+        "independent_momentum_residual": 4.410834246769592e-14,
+        "independent_continuity_residual": 4.087769830560212e-15,
+        "unaugmented_null_modes": 0,
+        "gauge": false,
+        "smallest_singular_values": [
+          1.5301110259322863e-05,
+          1.3205372069757653e-05,
+          1.072149684213458e-05,
+          8.059416907809013e-06,
+          5.8222058786429635e-06
+        ],
+        "constant_pressure_C_action": 1.0137027814410857e-18,
+        "mutations": {
+          "missing_transpose": 0.4508499193700091,
+          "wrong_AWF_sign": 0.12302150567125103,
+          "stale_20percent_viscosity": 0.0015184696252637576
+        },
+        "native": {
+          "iterations": 1,
+          "rebuilds": 1,
+          "momentum": 1.9270468263680463e-14,
+          "continuity": 4.0382825274678134e-15,
+          "gauge": 0,
+          "pressure_correction": 3.3733735743807483,
+          "factor_seconds": 0.0006050500087440014,
+          "solve_seconds": 4.2481988202780485e-05,
+          "residual_seconds": 8.600996807217598e-06
+        },
+        "current_coefficient_retained_preconditioner": {
+          "iterations": 6,
+          "rebuilds": 0,
+          "momentum": 2.5809611264438397e-13,
+          "continuity": 1.3436607490443844e-16,
+          "gauge": 0,
+          "pressure_correction": 0.04256230797593126,
+          "factor_seconds": 0,
+          "solve_seconds": 0.00010520505020394921,
+          "residual_seconds": 8.360948413610458e-06
+        },
+        "scope": "tiny algebraic/direct operator oracle; does not replace continuous MMS",
+        "full_strain_work_identity": {
+          "discrete_energy": 0.0054837437397181376,
+          "independent_physical_integral": 0.00548374373971815,
+          "relative_error": 2.214374870198032e-15
+        },
+        "known_minus_two_thirds_Ck_relative_error": 1.2784579855209405e-14,
+        "genuine_20percent_coefficient_change": {
+          "solution_relative_change": 0.012664073295300194,
+          "independent_direct_error": 3.0343920968987457e-13
+        }
+      }
+    ],
+    "maximum_operator_or_traction_discrepancy": 5.410107680922187e-15,
+    "maximum_direct_solution_error": 3.066545123146959e-12,
+    "maximum_independent_momentum_residual": 4.410834246769592e-14,
+    "maximum_independent_continuity_residual": 1.3407581200809671e-14,
+    "adapter": {
+      "status": "PASS",
+      "fixtures": 15,
+      "maximum_dimensionless_identity_error": 3.938518545651456e-16,
+      "minimum_R_eigenvalue_over_k": 0.5488038009176859,
+      "seconds": 0.0003019039868377149,
+      "checks": "independent planar cubic/C/d, trace, work, covariance, full-WJ collar, positive realizability, finite-nu total traction"
+    },
+    "nonlinear": {
+      "status": "PASS",
+      "scope": "flow-only algebraic nonlinear refresh with zero continuity forcing, prescribed positive k and epsilon, full adapter and current AWF pressure; not scalar transport",
+      "continuity_forcing": 0,
+      "projection_continuity": 4.472217412245165e-16,
+      "outer_iterations": 6,
+      "momentum": 6.694540412270011e-12,
+      "continuity": 2.1000962960104681e-16,
+      "solution_error": 6.847434517009533e-12,
+      "complete_blend_weak_identity": 3.755415621875688e-17,
+      "mu_range": [
+        0.0007642317380352645,
+        0.011234311419598441
+      ],
+      "constitutive_seconds": 0.05449466605205089,
+      "total_seconds": 0.06480323901632801,
+      "residuals": [
+        0.0016361735878719836,
+        8.220794609410371e-06,
+        1.812136750532665e-07,
+        5.673097613480925e-09,
+        1.8969600366945087e-10,
+        6.694540412270011e-12
+      ],
+      "linear": [
+        {
+          "iterations": 4,
+          "rebuilds": 0,
+          "momentum": 5.230410891241245e-13,
+          "continuity": 1.668352926071164e-16,
+          "gauge": 0,
+          "pressure_correction": 3.3731345698759223,
+          "factor_seconds": 0,
+          "solve_seconds": 7.598398951813579e-05,
+          "residual_seconds": 6.539979949593544e-06
+        },
+        {
+          "iterations": 2,
+          "rebuilds": 0,
+          "momentum": 5.040331636625152e-14,
+          "continuity": 2.5462883803820545e-16,
+          "gauge": 0,
+          "pressure_correction": 0.0041544571641550605,
+          "factor_seconds": 0,
+          "solve_seconds": 4.3531996197998524e-05,
+          "residual_seconds": 6.199989002197981e-06
+        },
+        {
+          "iterations": 2,
+          "rebuilds": 0,
+          "momentum": 1.7487318227647404e-14,
+          "continuity": 1.2404196090008803e-16,
+          "gauge": 0,
+          "pressure_correction": 3.719579620103634e-05,
+          "factor_seconds": 0,
+          "solve_seconds": 4.038197221234441e-05,
+          "residual_seconds": 6.149988621473312e-06
+        },
+        {
+          "iterations": 1,
+          "rebuilds": 0,
+          "momentum": 1.0004713292262354e-14,
+          "continuity": 1.515722059629504e-16,
+          "gauge": 0,
+          "pressure_correction": 6.357946138724082e-07,
+          "factor_seconds": 0,
+          "solve_seconds": 2.9240967705845833e-05,
+          "residual_seconds": 6.360001862049103e-06
+        },
+        {
+          "iterations": 1,
+          "rebuilds": 0,
+          "momentum": 1.6140149427450665e-14,
+          "continuity": 1.6870911459243316e-16,
+          "gauge": 0,
+          "pressure_correction": 2.4969697107921213e-08,
+          "factor_seconds": 0,
+          "solve_seconds": 3.0322058591991663e-05,
+          "residual_seconds": 6.169953849166632e-06
+        },
+        {
+          "iterations": 1,
+          "rebuilds": 0,
+          "momentum": 2.519585610229833e-14,
+          "continuity": 2.1000962960104681e-16,
+          "gauge": 0,
+          "pressure_correction": 7.167545738228111e-10,
+          "factor_seconds": 0,
+          "solve_seconds": 3.075203858315945e-05,
+          "residual_seconds": 6.199989002197981e-06
+        }
+      ]
+    },
+    "continuous_forcing": {
+      "status": "PASS",
+      "maximum_relative_errors": {
+        "polynomial": 7.605744759226748e-16,
+        "trigonometric": 3.8227827786122314e-16
+      },
+      "samples": 12,
+      "derivation": "independent SymPy continuous physical derivatives; compiled Force does not read generated expressions"
+    },
+    "temporal": {
+      "rows": [
+        {
+          "dt": 0.04,
+          "errors": [
+            2.0729596649118764e-05,
+            5.4602973597151596e-06
+          ]
+        },
+        {
+          "dt": 0.02,
+          "errors": [
+            5.0500917980292e-06,
+            1.2992365539518843e-06
+          ]
+        },
+        {
+          "dt": 0.01,
+          "errors": [
+            1.2483760494800312e-06,
+            3.1745785023161827e-07
+          ]
+        }
+      ],
+      "velocity_orders": [
+        2.0373105273503844,
+        2.016257028648535
+      ],
+      "pressure_orders": [
+        2.0713153919662624,
+        2.033027169306325
+      ]
+    },
+    "spatial": {
+      "0.0": {
+        "rows": [
+          {
+            "n": 2,
+            "L2": [
+              0.13096062682568874,
+              0.42339724457730404
+            ],
+            "H1": 1.8089778402472887,
+            "traction": [
+              0.10925116812637767,
+              0.09330618746418007
+            ],
+            "strong_divergence": 0.25040104585826484,
+            "momentum": 9.161421562928438e-11,
+            "continuity": 1.3916562151199532e-13
+          },
+          {
+            "n": 4,
+            "L2": [
+              0.004612709755066271,
+              0.009272451821156436
+            ],
+            "H1": 0.189591456153133,
+            "traction": [
+              0.011502582475947485,
+              0.007845513174941579
+            ],
+            "strong_divergence": 0.08769578915222329,
+            "momentum": 1.10301844273734e-10,
+            "continuity": 7.808498329799303e-14
+          },
+          {
+            "n": 8,
+            "L2": [
+              0.00023540436559327395,
+              0.00022247710318993357
+            ],
+            "H1": 0.022231103241643704,
+            "traction": [
+              0.0013849780108069164,
+              0.0006592296439864912
+            ],
+            "strong_divergence": 0.010597192852844077,
+            "momentum": 9.147307096858894e-11,
+            "continuity": 2.470023620861089e-14
+          }
+        ],
+        "velocity_L2_orders": [
+          4.827374805236862,
+          4.292401536112773
+        ],
+        "pressure_L2_orders": [
+          5.512917203618838,
+          5.381222096514333
+        ],
+        "velocity_H1_orders": [
+          3.254208878770715,
+          3.092242500852377
+        ],
+        "traction_L2_orders": [
+          3.2476189992546614,
+          3.0540228248997607
+        ],
+        "traction_weak_orders": [
+          3.5720330324124396,
+          3.573014793297324
+        ]
+      },
+      "0.1": {
+        "rows": [
+          {
+            "n": 2,
+            "L2": [
+              0.13131877610433598,
+              0.4226010244879637
+            ],
+            "H1": 1.8111552874650727,
+            "traction": [
+              0.11075014931522555,
+              0.09262046226321347
+            ],
+            "strong_divergence": 0.257976602120819,
+            "momentum": 7.579565710700386e-11,
+            "continuity": 2.3962067561219057e-13
+          },
+          {
+            "n": 4,
+            "L2": [
+              0.004676634614772981,
+              0.009347784018873134
+            ],
+            "H1": 0.19025713650888923,
+            "traction": [
+              0.011443856887532905,
+              0.007648667473278254
+            ],
+            "strong_divergence": 0.08784026392612478,
+            "momentum": 1.1127717074571177e-10,
+            "continuity": 2.6847248506175003e-13
+          },
+          {
+            "n": 8,
+            "L2": [
+              0.00023693971103104828,
+              0.0002262409674928699
+            ],
+            "H1": 0.022307283324199192,
+            "traction": [
+              0.0013868216376744522,
+              0.0006433072586946309
+            ],
+            "strong_divergence": 0.010644619233525589,
+            "momentum": 9.174943700367202e-11,
+            "continuity": 1.9632441001920507e-14
+          }
+        ],
+        "velocity_L2_orders": [
+          4.8114586834227975,
+          4.302878796217567
+        ],
+        "pressure_L2_orders": [
+          5.498528053548666,
+          5.368692301046509
+        ],
+        "velocity_H1_orders": [
+          3.250887772403856,
+          3.0923638381026484
+        ],
+        "traction_L2_orders": [
+          3.274663377636877,
+          3.0447192047255767
+        ],
+        "traction_weak_orders": [
+          3.5980506244347406,
+          3.5716285555196268
+        ]
+      }
+    },
+    "WJ_C0_collar_traction": {
+      "0.0": {
+        "rows": [
+          {
+            "status": "PASS_FIXTURE_REQUIRES_REFINEMENT_COMPARISON",
+            "scope": "native C0 projection of smooth prescribed velocity, common positive k/E and full-WJ collar, distinct element gradients; no C1 constraint",
+            "faces": 2,
+            "L2_traction_jump_over_k": 0.013441919292809287,
+            "weak_traction_moments_over_k": 0.00441904282262806,
+            "pressure_trace_mismatch": 0,
+            "minimum_R_eigenvalue_over_k": 0.3045484077522909
+          },
+          {
+            "status": "PASS_FIXTURE_REQUIRES_REFINEMENT_COMPARISON",
+            "scope": "native C0 projection of smooth prescribed velocity, common positive k/E and full-WJ collar, distinct element gradients; no C1 constraint",
+            "faces": 4,
+            "L2_traction_jump_over_k": 0.006032038039522541,
+            "weak_traction_moments_over_k": 0.0020637691895886746,
+            "pressure_trace_mismatch": 0,
+            "minimum_R_eigenvalue_over_k": 0.3313224697417149
+          },
+          {
+            "status": "PASS_FIXTURE_REQUIRES_REFINEMENT_COMPARISON",
+            "scope": "native C0 projection of smooth prescribed velocity, common positive k/E and full-WJ collar, distinct element gradients; no C1 constraint",
+            "faces": 8,
+            "L2_traction_jump_over_k": 0.0009036336488176664,
+            "weak_traction_moments_over_k": 0.0003084167611978095,
+            "pressure_trace_mismatch": 0,
+            "minimum_R_eigenvalue_over_k": 0.3340104357459311
+          },
+          {
+            "status": "PASS_FIXTURE_REQUIRES_REFINEMENT_COMPARISON",
+            "scope": "native C0 projection of smooth prescribed velocity, common positive k/E and full-WJ collar, distinct element gradients; no C1 constraint",
+            "faces": 16,
+            "L2_traction_jump_over_k": 0.00011737423541277055,
+            "weak_traction_moments_over_k": 4.005606549636636e-05,
+            "pressure_trace_mismatch": 0,
+            "minimum_R_eigenvalue_over_k": 0.3341714356845587
+          }
+        ],
+        "L2_orders": [
+          1.1560217150474965,
+          2.738835627809945,
+          2.944622233650832
+        ],
+        "weak_orders": [
+          1.0984522817215185,
+          2.742328552733042,
+          2.9447885473724953
+        ]
+      },
+      "0.1": {
+        "rows": [
+          {
+            "status": "PASS_FIXTURE_REQUIRES_REFINEMENT_COMPARISON",
+            "scope": "native C0 projection of smooth prescribed velocity, common positive k/E and full-WJ collar, distinct element gradients; no C1 constraint",
+            "faces": 2,
+            "L2_traction_jump_over_k": 0.013519378304550756,
+            "weak_traction_moments_over_k": 0.004901590870600312,
+            "pressure_trace_mismatch": 0,
+            "minimum_R_eigenvalue_over_k": 0.3057015119509853
+          },
+          {
+            "status": "PASS_FIXTURE_REQUIRES_REFINEMENT_COMPARISON",
+            "scope": "native C0 projection of smooth prescribed velocity, common positive k/E and full-WJ collar, distinct element gradients; no C1 constraint",
+            "faces": 4,
+            "L2_traction_jump_over_k": 0.006119823149549103,
+            "weak_traction_moments_over_k": 0.0025355132401431784,
+            "pressure_trace_mismatch": 0,
+            "minimum_R_eigenvalue_over_k": 0.3316829518049417
+          },
+          {
+            "status": "PASS_FIXTURE_REQUIRES_REFINEMENT_COMPARISON",
+            "scope": "native C0 projection of smooth prescribed velocity, common positive k/E and full-WJ collar, distinct element gradients; no C1 constraint",
+            "faces": 8,
+            "L2_traction_jump_over_k": 0.0009172165783574812,
+            "weak_traction_moments_over_k": 0.0003807095499498399,
+            "pressure_trace_mismatch": 0,
+            "minimum_R_eigenvalue_over_k": 0.33486203920118396
+          },
+          {
+            "status": "PASS_FIXTURE_REQUIRES_REFINEMENT_COMPARISON",
+            "scope": "native C0 projection of smooth prescribed velocity, common positive k/E and full-WJ collar, distinct element gradients; no C1 constraint",
+            "faces": 16,
+            "L2_traction_jump_over_k": 0.00011914267870274017,
+            "weak_traction_moments_over_k": 4.945831351596725e-05,
+            "pressure_trace_mismatch": 0,
+            "minimum_R_eigenvalue_over_k": 0.33515214160149226
+          }
+        ],
+        "L2_orders": [
+          1.1434669424058672,
+          2.7381556261084117,
+          2.944572130456705
+        ],
+        "weak_orders": [
+          0.9509722613528574,
+          2.7355151430967117,
+          2.944405808718551
+        ]
+      }
+    },
+    "restart": {
+      "completed_time": 0.4,
+      "step": 80,
+      "all_four_history_vector_differences": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "restore_seconds": 6.382301216945052e-05,
+      "changed_height_rejected": true
+    },
+    "tolerance_tightening": {
+      "tolerances": [
+        1e-11,
+        1e-13
+      ],
+      "velocity_L2_change": 2.297303857244618e-13,
+      "pressure_L2_change": 5.146823490134542e-14,
+      "changes_over_discretization_errors": [
+        1.840233844762948e-07,
+        1.6212619994684028e-07
+      ]
+    },
+    "stock_native_constant_limits": {
+      "nu": {
+        "S": {
+          "rows": [
+            {
+              "dt": 0.02,
+              "errors": [
+                1.2313133799033507e-05,
+                1.2859973687032049e-06
+              ]
+            },
+            {
+              "dt": 0.01,
+              "errors": [
+                3.080322153109889e-06,
+                3.11299239070734e-07
+              ]
+            },
+            {
+              "dt": 0.005,
+              "errors": [
+                7.703659705451415e-07,
+                7.659843259832328e-08
+              ]
+            }
+          ],
+          "velocity_orders": [
+            1.9990448398510414,
+            1.9994653605698995
+          ],
+          "pressure_orders": [
+            2.0465137353014566,
+            2.022915274036819
+          ]
+        },
+        "N": {
+          "rows": [
+            {
+              "dt": 0.02,
+              "errors": [
+                1.2326581260490591e-05,
+                1.281386939290753e-06
+              ]
+            },
+            {
+              "dt": 0.01,
+              "errors": [
+                3.081969341193311e-06,
+                3.108285433410443e-07
+              ]
+            },
+            {
+              "dt": 0.005,
+              "errors": [
+                7.705586090326431e-07,
+                7.654207454812349e-08
+              ]
+            }
+          ],
+          "velocity_orders": [
+            1.999848312773669,
+            1.9998759122295748
+          ],
+          "pressure_orders": [
+            2.0435152934033995,
+            2.021794083764257
+          ]
+        }
+      },
+      "constant": {
+        "S": {
+          "rows": [
+            {
+              "dt": 0.02,
+              "errors": [
+                1.4750666017594042e-06,
+                3.153542178859116e-06
+              ]
+            },
+            {
+              "dt": 0.01,
+              "errors": [
+                2.7480716228512425e-07,
+                5.625916397641732e-07
+              ]
+            },
+            {
+              "dt": 0.005,
+              "errors": [
+                5.95446680776631e-08,
+                1.1785442279022106e-07
+              ]
+            }
+          ],
+          "velocity_orders": [
+            2.4242885854273433,
+            2.2063753725551076
+          ],
+          "pressure_orders": [
+            2.486813210332528,
+            2.2550822136008626
+          ]
+        },
+        "N": {
+          "rows": [
+            {
+              "dt": 0.02,
+              "errors": [
+                1.0571132304759005e-06,
+                1.8232165057983332e-06
+              ]
+            },
+            {
+              "dt": 0.01,
+              "errors": [
+                2.3437223218179053e-07,
+                4.4430373195259613e-07
+              ]
+            },
+            {
+              "dt": 0.005,
+              "errors": [
+                5.5704412742853387e-08,
+                1.0981556396835347e-07
+              ]
+            }
+          ],
+          "velocity_orders": [
+            2.173256358057432,
+            2.0729381297500793
+          ],
+          "pressure_orders": [
+            2.036867726162285,
+            2.01646371990571
+          ]
+        }
+      }
+    },
+    "status": "PASS"
+  },
+  "FULL_COUPLED_MODEL_AND_PRODUCTION": "NOT_QUALIFIED",
+  "H26_NUMERICS": "PASS",
+  "H26_COST": "TARGET_NOT_MET",
+  "cost_reason": "final selected-binary matrix pending; predecessor v6 is preliminary evidence",
+  "H26_INTEGRATION_READINESS": "NOT_READY"
+}
