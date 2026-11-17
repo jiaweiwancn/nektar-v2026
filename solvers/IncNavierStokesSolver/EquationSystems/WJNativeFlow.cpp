@@ -265,6 +265,19 @@ double Flow::StrongDivergence(const Vec&x)const
 {
     double norm=0;for(const auto&e:m_elements){Vec u(16),v(16);for(int j=0;j<16;++j){u[j]=x[e.u[j]];v[j]=x[m_nu+e.u[j]];}Vec div=e.Dx*u+e.Dz*v;norm+=div.cwiseProduct(div).dot(e.w);}return std::sqrt(norm/m_volume);
 }
+double Flow::GradientError(const Vec&x,const std::function<Tensor(double,double)>&exact)const
+{
+    double error=0;for(const auto&e:m_elements){Vec u(16),v(16);for(int j=0;j<16;++j){u[j]=x[e.u[j]];v[j]=x[m_nu+e.u[j]];}std::array<Vec,4>G{e.Dx*u,e.Dz*u,e.Dx*v,e.Dz*v};for(int q=0;q<e.w.size();++q){auto ex=exact(e.x[q],e.z[q]);for(int i=0;i<2;++i)for(int j=0;j<2;++j)error+=e.w[q]*std::pow(G[2*i+j][q]-ex[i?2:0][j?2:0],2);}}return std::sqrt(error/m_volume);
+}
+std::array<double,2>Flow::TractionError(const Vec&x,int boundary,const Function&mu,const std::function<Tensor(double,double)>&remainder,const std::function<Vector(double,double,const Vector&)>&exact)const
+{
+    Require(boundary==3,"H26 traction error currently uses the natural top trace");double error=0,area=0;Eigen::Matrix<double,2,3>moments=Eigen::Matrix<double,2,3>::Zero();auto rule=Gauss(20);
+    for(const auto&e:m_elements)if(std::abs(e.rr-m_elements.back().rr)<1e-10)
+    {
+        Vec u(16),v(16),p(9);for(int j=0;j<16;++j){u[j]=x[e.u[j]];v[j]=x[m_nu+e.u[j]];}for(int j=0;j<9;++j)p[j]=x[2*m_nu+e.p[j]];
+        for(int q=0;q<20;++q){double xi=rule.first[q],px=(e.xl+e.xr)/2+(e.xr-e.xl)*xi/2,z=e.rr+m_geometry.Ground(px),s=m_geometry.Slope(px),norm=std::sqrt(1+s*s),weight=rule.second[q]*(e.xr-e.xl)*norm/2;Vector normal{-s/norm,0,1/norm};Vec bx=Evaluate(e.velocity,e.Dx,xi,1),bz=Evaluate(e.velocity,e.Dz,xi,1),bp=Evaluate(e.pressure,e.P,xi,1);Tensor G{};G[0][0]=bx.dot(u);G[0][2]=bz.dot(u);G[2][0]=bx.dot(v);G[2][2]=bz.dot(v);auto T=remainder(px,z);auto ex=exact(px,z,normal);double pressure=bp.dot(p),viscosity=mu(px,z);for(int i=0;i<2;++i){int a=i?2:0;double delta=-ex[a];for(int j=0;j<3;++j)delta+=(viscosity*(G[a][j]+G[j][a])+T[a][j]-(a==j?pressure:0))*normal[j];error+=weight*delta*delta;double X=(px-m_elements.front().xl)/(m_elements.back().xr-m_elements.front().xl);for(int j=0;j<3;++j)moments(i,j)+=weight*delta*std::pow(X,j);}area+=weight;}
+    }return {std::sqrt(error/area),moments.norm()/area};
+}
 double Flow::VelocityDual(const Vec&r)const
 {
     double value=0;for(int c=0;c<2;++c){Vec f=r.segment(c*m_nu+m_nd,m_nf),z=m_velocityRiesz.solve(f);value+=f.dot(z);}return std::sqrt(std::max(0.,value)/m_volume);

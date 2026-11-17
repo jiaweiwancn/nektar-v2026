@@ -1,31 +1,4 @@
-// SPDX-License-Identifier: MIT
-#include <IncNavierStokesSolver/EquationSystems/WJNativeFlow.h>
-#include <LibUtilities/BasicUtils/SessionReader.h>
-#include <SpatialDomains/MeshGraphIO.h>
-#include <boost/property_tree/json_parser.hpp>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <filesystem>
-#include <chrono>
-using namespace Nektar;
-using namespace Nektar::WJNative;
-namespace fs=std::filesystem;
-namespace pt=boost::property_tree;
-double Clock(){return std::chrono::duration<double>(std::chrono::steady_clock::now().time_since_epoch()).count();}
-void VectorJSON(std::ostream&o,const Vec&v){o<<'[';for(int i=0;i<v.size();++i){if(i)o<<',';o<<v[i];}o<<']';}
-void MatrixJSON(std::ostream&o,const Sparse&a){o<<"{\"rows\":"<<a.rows()<<",\"cols\":"<<a.cols()<<",\"entries\":[";bool comma=false;for(int j=0;j<a.outerSize();++j)for(Sparse::InnerIterator it(a,j);it;++it){if(comma)o<<',';comma=true;o<<'['<<it.row()<<','<<it.col()<<','<<it.value()<<']';}o<<"]}";}
-void InfoJSON(std::ostream&o,const SolveInfo&i){o<<"{\"iterations\":"<<i.iterations<<",\"rebuilds\":"<<i.rebuilds<<",\"momentum\":"<<i.momentum<<",\"continuity\":"<<i.continuity<<",\"gauge\":"<<i.gauge<<",\"pressure_correction\":"<<i.correction<<",\"factor_seconds\":"<<i.factorSeconds<<",\"solve_seconds\":"<<i.solveSeconds<<",\"residual_seconds\":"<<i.residualSeconds<<'}';}
-std::array<Function,3>Polynomial(double t)
-{
-    double a=std::exp(-t),b=std::exp(-2*t);
-    return {[=](double x,double z){return a*x*x*(1-x)*(2*z-3*z*z);},[=](double x,double z){return-a*(2*x-3*x*x)*z*z*(1-z);},[=](double x,double z){return b*(x*x+z*z);}};
-}
-Vec Exact(Flow&flow,const std::array<Function,3>&f)
-{
-    Vec x(2*flow.VelocitySize()+flow.PressureSize());for(int c=0;c<2;++c)x.segment(c*flow.VelocitySize(),flow.VelocitySize())=flow.Project(f[c],c);x.tail(flow.PressureSize())=flow.Project(f[2],2);
-    if(flow.Gauge()){Vec one=flow.Project([](double,double){return 1.;},2);x.tail(flow.PressureSize())-=one*(flow.PressureMean().dot(x.tail(flow.PressureSize()))/flow.PressureMean().dot(one));}return x;
-}
+#include "common.h"
 #include "advance.h"
 #include "checks.h"
 void Algebra(Flow&flow,const pt::ptree&request,std::ostream&o)
@@ -37,6 +10,7 @@ void Algebra(Flow&flow,const pt::ptree&request,std::ostream&o)
     o<<"{\"mode\":\"algebra_only_not_continuous_MMS\",\"velocity_size\":"<<flow.VelocitySize()<<",\"pressure_size\":"<<flow.PressureSize()<<",\"dirichlet_size\":"<<flow.DirichletSize()<<",\"gauge\":"<<(flow.Gauge()?"true":"false")<<",\"alpha\":"<<alpha<<",\"awf\":"<<awf<<",\"error\":"<<error<<",\"solve\":";InfoJSON(o,info);o<<",\"changed_mu_retained_preconditioner\":";InfoJSON(o,changed);
     o<<",\"target\":";VectorJSON(o,target);o<<",\"lift\":";VectorJSON(o,lift);o<<",\"solution\":";VectorJSON(o,solved);o<<",\"rhs\":";VectorJSON(o,b);
     o<<",\"changed_rhs\":";VectorJSON(o,b2);o<<",\"changed_solution\":";VectorJSON(o,solved2);
+    Vec knownK=flow.Project([](double x,double z){return .008809015145515192*(1+.1*x+.05*z);},2);o<<",\"known_k_coefficients\":";VectorJSON(o,knownK);o<<",\"known_mechanical_pressure_k_load\":";VectorJSON(o,flow.KnownKLoad(knownK));
     Vec traction=flow.TractionLoad(3,[&](double x,double z,const Vector&n){double ux=(2*x-3*x*x)*(2*z-3*z*z),uz=x*x*(1-x)*(2-6*z),vx=-(2-6*x)*z*z*(1-z),p=x*x+z*z;double tx=mu(x,z)*2*ux+.001*x*z-p,tz=-mu(x,z)*2*ux-.001*x*z-p,off=mu(x,z)*(uz+vx)+.0005*(x+z);return Vector{tx*n[0]+off*n[2],0,off*n[0]+tz*n[2]};});o<<",\"top_total_traction\":";VectorJSON(o,traction);
     for(const auto&entry:std::vector<std::pair<std::string,const Sparse*>>{{"mass",&flow.Mass()},{"pressure_mass",&flow.PressureMass()},{"D",&flow.Divergence()},{"G",&flow.Gradient()},{"C",&flow.AWF()},{"K",&k},{"system",&a}}){o<<",\""<<entry.first<<"\":";MatrixJSON(o,*entry.second);}
     o<<",\"mean\":";VectorJSON(o,flow.PressureMean());o<<",\"strong_divergence\":"<<flow.StrongDivergence(solved)<<",\"elements\":[";bool comma=false;
@@ -53,7 +27,7 @@ int main(int argc,char**argv)
         std::vector<MultiRegions::ContFieldSharedPtr>fields;for(std::string name:{"u","v","p"})fields.push_back(MemoryManager<MultiRegions::ContField>::AllocateSharedPtr(session,graph,name,true,false));
         Geometry geometry;geometry.d0=request.get<double>("d0",0);geometry.curve=request.get<double>("curve",0);geometry.H=request.get<double>("H",.15);geometry.h=request.get<double>("h",.10854503542535461);
         Flow flow(fields,geometry);double construction=Clock()-began;if(const char*operation=std::getenv("H26_OPERATION")){std::ifstream maps("/proc/self/maps");std::ofstream snapshot(std::string(operation)+".native-maps");snapshot<<maps.rdbuf();}
-        std::ofstream out(argv[3]);out<<std::setprecision(17);auto mode=request.get<std::string>("mode","algebra");if(mode=="algebra")Algebra(flow,request,out);else if(mode=="advance")H26::Advance(flow,request,out,xml,argv[3],construction);else if(mode=="adapter")H26::AdapterChecks(out);else if(mode=="nonlinear")H26::Nonlinear(flow,out);else throw std::runtime_error("unknown H26 mode");out<<'\n';out.close();session->Finalise();return 0;
+        std::ofstream out(argv[3]);out<<std::setprecision(17);auto mode=request.get<std::string>("mode","algebra");if(mode=="algebra")Algebra(flow,request,out);else if(mode=="advance")H26::Advance(flow,request,out,xml,argv[3],construction);else if(mode=="adapter")H26::AdapterChecks(out);else if(mode=="nonlinear")H26::Nonlinear(flow,out);else if(mode=="formula")H26::Formula(out);else throw std::runtime_error("unknown H26 mode");out<<'\n';out.close();session->Finalise();return 0;
     }
     catch(const std::exception&e){std::cerr<<"H26 failure: "<<e.what()<<'\n';return 1;}
 }

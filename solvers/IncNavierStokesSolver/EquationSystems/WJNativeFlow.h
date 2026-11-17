@@ -71,6 +71,7 @@ public:
     const Sparse&Gradient()const{return m_grad;}
     const Sparse&AWF()const{return m_awf;}
     const Vec&PressureMean()const{return m_mean;}
+    const Vec&PressureOne()const{return m_pressureOne;}
     Geometry Mapping()const{return m_geometry;}
     Sparse Strain(const Function &mu,bool transpose=true)const;
     Sparse StrainSamples(const std::vector<Vec>&mu,bool transpose=true)const;
@@ -93,6 +94,8 @@ public:
     SolveInfo Solve(const Sparse &current,const Vec &rhs,Vec &x,double relativeChange=0,double tolerance=1e-11);
     SolveInfo Residual(const Sparse &current,const Vec &rhs,const Vec &x)const;
     std::array<double,3> Error(const Vec &full,const std::array<Function,3>&exact)const;
+    double GradientError(const Vec&full,const std::function<Tensor(double,double)>&exact)const;
+    std::array<double,2> TractionError(const Vec&full,int boundary,const Function&mu,const std::function<Tensor(double,double)>&remainder,const std::function<Vector(double,double,const Vector&)>&exact)const;
     double StrongDivergence(const Vec &full)const;
     double VelocityDual(const Vec &load)const;
     double PressureNorm(const Vec &pressure)const;

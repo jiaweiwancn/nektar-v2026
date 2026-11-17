@@ -96,6 +96,9 @@ def analyze(path,curve,out):
     result=dict(status='PASS_TINY_NATIVE_INDEPENDENT_ASSEMBLY',curve=curve,source=str(path),checks=checks,direct_solution_relative_error=float(relative),independent_momentum_residual=momentum,independent_continuity_residual=continuity,unaugmented_null_modes=nulls,gauge=gauge,smallest_singular_values=singular[-5:].tolist(),constant_pressure_C_action=nullC,
         mutations=dict(missing_transpose=float(wrong_strain),wrong_AWF_sign=float(wrong_awf),stale_20percent_viscosity=float(stale)),native=data['solve'],current_coefficient_retained_preconditioner=data['changed_mu_retained_preconditioner'],scope='tiny algebraic/direct operator oracle; does not replace continuous MMS')
     result['full_strain_work_identity']=dict(discrete_energy=energy,independent_physical_integral=ref['energy'],relative_error=work)
+    if 'known_mechanical_pressure_k_load'in data:
+        reference=(-2/3)*ref['C']@np.array(data['known_k_coefficients']);actual_k=np.array(data['known_mechanical_pressure_k_load'])[:2*n];error_k=float(la.norm(reference-actual_k)/la.norm(reference));assert error_k<=1e-10
+        result['known_minus_two_thirds_Ck_relative_error']=error_k
     assert data['changed_mu_retained_preconditioner']['rebuilds']==0
     if 'changed_rhs' in data:
         F2=F.copy();F2[:2*nf,:2*nf]+=.2*ref['K'][np.ix_(keep,keep)]
