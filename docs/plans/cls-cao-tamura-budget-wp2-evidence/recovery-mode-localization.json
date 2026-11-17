@@ -1,0 +1,1601 @@
+{
+  "version": "WP2RecoveryModalSummaryV1",
+  "source_sha256": "19b6a53f08652c1c56cb17f6997be9ebc53f54e36f75bfafa21887fb71128942",
+  "evaluation_sources": {
+    "wp2_all_state.py": "1082f0d31ec8e45e0478b0164481ae6357c785f60536f06150be1fc7ddde8567",
+    "cao_tamura_h2g_constitutive.py": "6c46da42c9b3007589883f63575f74a8087925bc93ed950e79e8d4bb0c000f88",
+    "analyze_wp2_approach.py": "15cac16879e090dee4f52d48d88515413468fb81031415d4d5915a7e96f511e1"
+  },
+  "rows_sha256": "9445db73a22ebb19dd30a98f344827f63a3df4d4e1d754df4f60833faaaf9abb",
+  "bindings": {
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-CLS/progress.json": "300987b58522106292de4bb7015ef1171fc14761dcf5678d825be9450cfeab4a",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-CLS/step30/case.evolution.json": "ec65ce86783860c80b02389f6579c23a6a72ae2a360174be9ee24ebc214ee9b8",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-CLS/step60/case.evolution.json": "f22f09084877e8873d006534c928f662c147a3cbeaea8fc29ee4ff177ca92c73",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-CLS/step90/case.evolution.json": "aec90940d6fbe7841c06391dcc6cad79eccfb0507fc7b43860696df9b0ab5def",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-CLS/step120/case.evolution.json": "71a32a0e71954ed61e38d8eceb7d40346a34dff483fbfb3fbd1820dbbb14d70a",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/progress.json": "535ab2726d0b96effeb3c996d1c8d73a9665a218b4467b06ff77f492b4bec82c",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step30/case.evolution.json": "267c791728a775539df480821c1c158177bb1b4bc6637511d8dee9d61a9fba87",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step60/case.evolution.json": "0257cbcfc3700543143646b8a2d1bd06662703fdc5c43c6721b703da3704af04",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step90/case.evolution.json": "0491e01535672cb51d4860c5be1373e4b5030d58d3297b48d071e18bcb943aa3",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-recovery-standard/step120/case.evolution.json": "0dee4a54194e3210acb3161dc7bef6aea2dba2c7782ef7f28167ffcdb9328df7",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/global-half-step-terminal-input/fine.json": "af70723169314e979afcd49f31efd41acdc73258d070802573d76c966d75b061",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-half-step-standard/step32/case.evolution.json": "f6975a441a3530e7f3c8fa73e5ba6636c6393b256fd8ca6b72cef17ec4eaac6e",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-half-step-standard/step60/case.evolution.json": "e3fc7692e3bb89055aa4359959364e3623d3600da390be88beada144bf1cb1ed",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-half-step-standard/step120/case.evolution.json": "2e90c82e5a1a502e6c7955dc2f1d6f34907b525dee025baada30eacf8d33e413",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-half-step-standard/step180/case.evolution.json": "c9a03df70f7c3efe85467695da8dcab4ad804b6a8bb48a64f685b8002575760f",
+    "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-half-step-standard/step240/case.evolution.json": "95bf180ddbcba56433c57237f976411ae6ba0308efc4625f2986ebfeb4138ad7"
+  },
+  "seconds": 20.76274316594936,
+  "peak_RSS_KiB": 406404,
+  "governing_solves": 0,
+  "scope": "Affine native-element Legendre decomposition with physical GL8 integration, exact for squared cubic fields. Outside local Q1 is orthogonal to every local Q1 pressure polynomial; continuous global pressure has additional conformity restrictions. This is not a global pressure-space feasibility or inf-sup proof, not a curved-metric claim, not a residual percentage, and not a runtime correction. Production terms retain their signed projection and are not added as norms.",
+  "cases": {
+    "CLS_coarse": {
+      "dt": 0.01,
+      "reference_sha256": "ebb8ba217720bc1bcd7bcc2a6144fdc01935fbbfbcb8579bf62507cf814df943",
+      "solver_sha256": "8f64823373d97b86880cc9b624b19886f9921a2e9a0d56a9def1f0528af485df",
+      "native_tuple_replay": {
+        "maximum_absolute_by_column": [
+          0.0,
+          0.0,
+          0.0,
+          1.5543122344752192e-15,
+          0.0,
+          0.0,
+          1.0408340855860843e-17,
+          6.071532165918825e-18,
+          5.204170427930421e-18,
+          1.5543122344752192e-15,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scalar_gradient_polynomial_replay_errors": [
+          9.211381657436846e-15,
+          1.5435241973449365e-10,
+          6.241188121869357e-14,
+          5.824674076393421e-12
+        ],
+        "passed": true
+      },
+      "history": [
+        {
+          "actual_time": 0.3000000000000001,
+          "state_sha256": "056775c4d1ff90ff13f5887c8b23e4d97391a7b07c27fa7027b297e2e4dd7c93",
+          "native_weak_continuity_gates": {
+            "weak_continuity_unused_gauge": {
+              "value": 1.6870242565251854e-15,
+              "limit": 1e-09,
+              "passed": true
+            }
+          },
+          "strong_divergence_L2_squared": 8.666861705604537e-07,
+          "strong_divergence_RMS_over_ustar_H": 0.00010184810134169326,
+          "maximum_absolute_divergence": 0.22649670605566163,
+          "maximum_divergence_physical": [
+            0.5900724641243841,
+            0.0,
+            1.5893028195691046e-06
+          ],
+          "pressure_polynomial_orthogonal_energy_fractions": {
+            "outside_local_Q1": 0.8616067190232327,
+            "outside_local_Q2": 0.027502714152174673
+          },
+          "field_order": [
+            "divergence",
+            "U_minus_native_cold",
+            "W_minus_native_cold",
+            "k_minus_native_cold",
+            "pi_minus_native_cold"
+          ],
+          "largest_divergence_elements": [
+            {
+              "element": 35,
+              "geometry": 35,
+              "lower": [
+                0.1,
+                0.0,
+                2.790216142849547e-05
+              ],
+              "upper": [
+                0.6,
+                0.0,
+                5e-05
+              ],
+              "area": 1.1048919285752266e-05,
+              "divergence_L2_squared": 5.6144816424574046e-08,
+              "maximum_absolute_divergence": 0.1829616054538616,
+              "limiting_physical": [
+                0.5900724641243841,
+                0.0,
+                2.8340915598879832e-05
+              ],
+              "k_departure_L2_squared": 1.447060488038642e-12,
+              "pressure_departure_L2_squared": 4.140387438695534e-15,
+              "fraction_of_physical_divergence_L2_squared": 0.06478102262583385
+            },
+            {
+              "element": 53,
+              "geometry": 53,
+              "lower": [
+                0.1,
+                0.0,
+                0.0001
+              ],
+              "upper": [
+                0.6,
+                0.0,
+                0.0001414213562373095
+              ],
+              "area": 2.071067811865475e-05,
+              "divergence_L2_squared": 4.427650673636374e-08,
+              "maximum_absolute_divergence": 0.12151098351233243,
+              "limiting_physical": [
+                0.5900724641243841,
+                0.0,
+                0.00010082242400012512
+              ],
+              "k_departure_L2_squared": 2.630457335160058e-12,
+              "pressure_departure_L2_squared": 7.770716791693498e-15,
+              "fraction_of_physical_divergence_L2_squared": 0.05108712731360623
+            },
+            {
+              "element": 47,
+              "geometry": 47,
+              "lower": [
+                0.1,
+                0.0,
+                7.071067811865475e-05
+              ],
+              "upper": [
+                0.6,
+                0.0,
+                0.0001
+              ],
+              "area": 1.4644660940672625e-05,
+              "divergence_L2_squared": 4.3768712072399884e-08,
+              "maximum_absolute_divergence": 0.1413424460752042,
+              "limiting_physical": [
+                0.5900724641243841,
+                0.0,
+                7.129221970615379e-05
+              ],
+              "k_departure_L2_squared": 1.890674214869995e-12,
+              "pressure_departure_L2_squared": 5.491278254934763e-15,
+              "fraction_of_physical_divergence_L2_squared": 0.050501223579114324
+            }
+          ],
+          "production_work": [
+            {
+              "region": 0,
+              "total_production_departure_RMS": 0.001979558765209055,
+              "isotropic_work_departure_RMS": 0.00022304207637743087,
+              "signed_projection_on_total_production_departure": 0.030406880253910328
+            },
+            {
+              "region": 1,
+              "total_production_departure_RMS": 3.521536899438119e-05,
+              "isotropic_work_departure_RMS": 3.8763661789253595e-06,
+              "signed_projection_on_total_production_departure": 0.03260292205024048
+            }
+          ]
+        },
+        {
+          "actual_time": 0.6000000000000003,
+          "state_sha256": "136431b5b34a7ed16e3380ef684fb7850de60b08fb8dffcf00ff0f44f10e6b54",
+          "native_weak_continuity_gates": {
+            "weak_continuity_unused_gauge": {
+              "value": 1.0316454345269954e-14,
+              "limit": 1e-09,
+              "passed": true
+            }
+          },
+          "strong_divergence_L2_squared": 1.674965955046461e-07,
+          "strong_divergence_RMS_over_ustar_H": 4.477390732006528e-05,
+          "maximum_absolute_divergence": 0.07278220357107087,
+          "maximum_divergence_physical": [
+            0.09900724641243841,
+            0.0,
+            7.728890584685781e-08
+          ],
+          "pressure_polynomial_orthogonal_energy_fractions": {
+            "outside_local_Q1": 0.7749117021995611,
+            "outside_local_Q2": 0.1788408626084291
+          },
+          "field_order": [
+            "divergence",
+            "U_minus_native_cold",
+            "W_minus_native_cold",
+            "k_minus_native_cold",
+            "pi_minus_native_cold"
+          ],
+          "largest_divergence_elements": [
+            {
+              "element": 118,
+              "geometry": 118,
+              "lower": [
+                0.05,
+                0.0,
+                0.002998182850083459
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.004
+              ],
+              "area": 5.009085749582705e-05,
+              "divergence_L2_squared": 1.0299421866213165e-08,
+              "maximum_absolute_divergence": 0.03448809140764418,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.0031000343551234447
+              ],
+              "k_departure_L2_squared": 4.255155174191324e-15,
+              "pressure_departure_L2_squared": 2.2407966743461347e-14,
+              "fraction_of_physical_divergence_L2_squared": 0.06149033558074603
+            },
+            {
+              "element": 112,
+              "geometry": 112,
+              "lower": [
+                0.05,
+                0.0,
+                0.0022472751006336437
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.002998182850083459
+              ],
+              "area": 3.754538747249077e-05,
+              "divergence_L2_squared": 8.181221226970452e-09,
+              "maximum_absolute_divergence": 0.03509177769164597,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.0026916002226423214
+              ],
+              "k_departure_L2_squared": 7.0749360707788704e-15,
+              "pressure_departure_L2_squared": 1.6477898803049417e-14,
+              "fraction_of_physical_divergence_L2_squared": 0.048844104576104753
+            },
+            {
+              "element": 124,
+              "geometry": 124,
+              "lower": [
+                0.05,
+                0.0,
+                0.004
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.005099019513592784
+              ],
+              "area": 5.495097567963922e-05,
+              "divergence_L2_squared": 8.040882799886704e-09,
+              "maximum_absolute_divergence": 0.031609081482437136,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.004021821111298389
+              ],
+              "k_departure_L2_squared": 1.5451612570769341e-15,
+              "pressure_departure_L2_squared": 2.490172073734431e-14,
+              "fraction_of_physical_divergence_L2_squared": 0.04800624619061981
+            }
+          ],
+          "production_work": [
+            {
+              "region": 0,
+              "total_production_departure_RMS": 0.00091993223903337,
+              "isotropic_work_departure_RMS": 8.347904321529754e-05,
+              "signed_projection_on_total_production_departure": 0.02355354702802197
+            },
+            {
+              "region": 1,
+              "total_production_departure_RMS": 2.0644844839192474e-05,
+              "isotropic_work_departure_RMS": 1.3299474256199478e-06,
+              "signed_projection_on_total_production_departure": 0.015673314085417018
+            }
+          ]
+        },
+        {
+          "actual_time": 0.9000000000000006,
+          "state_sha256": "842d83f20339c93f88c388559f471f1cb360604e162956661c32a6c2b39c8c30",
+          "native_weak_continuity_gates": {
+            "weak_continuity_unused_gauge": {
+              "value": 1.4741896414150424e-14,
+              "limit": 1e-09,
+              "passed": true
+            }
+          },
+          "strong_divergence_L2_squared": 1.5093868526100174e-07,
+          "strong_divergence_RMS_over_ustar_H": 4.2503264265823135e-05,
+          "maximum_absolute_divergence": 0.13359349477715096,
+          "maximum_divergence_physical": [
+            0.08813831024790823,
+            0.0,
+            7.728890584685781e-08
+          ],
+          "pressure_polynomial_orthogonal_energy_fractions": {
+            "outside_local_Q1": 0.4396442311328289,
+            "outside_local_Q2": 0.057698255331600515
+          },
+          "field_order": [
+            "divergence",
+            "U_minus_native_cold",
+            "W_minus_native_cold",
+            "k_minus_native_cold",
+            "pi_minus_native_cold"
+          ],
+          "largest_divergence_elements": [
+            {
+              "element": 34,
+              "geometry": 34,
+              "lower": [
+                0.05,
+                0.0,
+                2.790216142849547e-05
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                5e-05
+              ],
+              "area": 1.1048919285752266e-06,
+              "divergence_L2_squared": 5.135327888386691e-09,
+              "maximum_absolute_divergence": 0.10886908324287643,
+              "limiting_physical": [
+                0.08813831024790823,
+                0.0,
+                2.8340915598879832e-05
+              ],
+              "k_departure_L2_squared": 6.9217958426647624e-15,
+              "pressure_departure_L2_squared": 4.543938004005309e-16,
+              "fraction_of_physical_divergence_L2_squared": 0.034022609111154845
+            },
+            {
+              "element": 52,
+              "geometry": 52,
+              "lower": [
+                0.05,
+                0.0,
+                0.0001
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.0001414213562373095
+              ],
+              "area": 2.071067811865475e-06,
+              "divergence_L2_squared": 4.239320584304063e-09,
+              "maximum_absolute_divergence": 0.07346668527542838,
+              "limiting_physical": [
+                0.08813831024790823,
+                0.0,
+                0.00010082242400012512
+              ],
+              "k_departure_L2_squared": 1.1380116844040461e-14,
+              "pressure_departure_L2_squared": 8.523292826873702e-16,
+              "fraction_of_physical_divergence_L2_squared": 0.028086375450889017
+            },
+            {
+              "element": 35,
+              "geometry": 35,
+              "lower": [
+                0.1,
+                0.0,
+                2.790216142849547e-05
+              ],
+              "upper": [
+                0.6,
+                0.0,
+                5e-05
+              ],
+              "area": 1.1048919285752266e-05,
+              "divergence_L2_squared": 4.137820257800062e-09,
+              "maximum_absolute_divergence": 0.03414881735910826,
+              "limiting_physical": [
+                0.10992753587561596,
+                0.0,
+                2.8340915598879832e-05
+              ],
+              "k_departure_L2_squared": 8.151402680366537e-14,
+              "pressure_departure_L2_squared": 3.126884140353065e-15,
+              "fraction_of_physical_divergence_L2_squared": 0.027413914800205014
+            }
+          ],
+          "production_work": [
+            {
+              "region": 0,
+              "total_production_departure_RMS": 0.0004992180039069341,
+              "isotropic_work_departure_RMS": 9.631891070939556e-05,
+              "signed_projection_on_total_production_departure": 0.1034453922941823
+            },
+            {
+              "region": 1,
+              "total_production_departure_RMS": 8.621426627083354e-06,
+              "isotropic_work_departure_RMS": 8.543602869656332e-07,
+              "signed_projection_on_total_production_departure": 0.017760245556179877
+            }
+          ]
+        },
+        {
+          "actual_time": 1.2000000000000008,
+          "state_sha256": "c646e7c9c2bc79b3af9a1d359a938c5fce00a3d54699186579065475909fa93a",
+          "native_weak_continuity_gates": {
+            "weak_continuity_unused_gauge": {
+              "value": 5.391687742459027e-15,
+              "limit": 1e-09,
+              "passed": true
+            }
+          },
+          "strong_divergence_L2_squared": 1.8102855075855573e-07,
+          "strong_divergence_RMS_over_ustar_H": 4.654741217989139e-05,
+          "maximum_absolute_divergence": 0.06750482730260908,
+          "maximum_divergence_physical": [
+            0.07958586606239125,
+            0.0,
+            1.5893028195691046e-06
+          ],
+          "pressure_polynomial_orthogonal_energy_fractions": {
+            "outside_local_Q1": 0.6158652684699133,
+            "outside_local_Q2": 0.013494969160519121
+          },
+          "field_order": [
+            "divergence",
+            "U_minus_native_cold",
+            "W_minus_native_cold",
+            "k_minus_native_cold",
+            "pi_minus_native_cold"
+          ],
+          "largest_divergence_elements": [
+            {
+              "element": 112,
+              "geometry": 112,
+              "lower": [
+                0.05,
+                0.0,
+                0.0022472751006336437
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.002998182850083459
+              ],
+              "area": 3.754538747249077e-05,
+              "divergence_L2_squared": 7.981975220243606e-09,
+              "maximum_absolute_divergence": 0.035947016426852184,
+              "limiting_physical": [
+                0.0509927535875616,
+                0.0,
+                0.002262184427877526
+              ],
+              "k_departure_L2_squared": 8.539232414304886e-16,
+              "pressure_departure_L2_squared": 1.9114368995260583e-14,
+              "fraction_of_physical_divergence_L2_squared": 0.044092355525120745
+            },
+            {
+              "element": 94,
+              "geometry": 94,
+              "lower": [
+                0.05,
+                0.0,
+                0.0011166596300937904
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.0015
+              ],
+              "area": 1.9167018495310482e-05,
+              "divergence_L2_squared": 7.613270891420576e-09,
+              "maximum_absolute_divergence": 0.045221178796238,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.0011361461170344386
+              ],
+              "k_departure_L2_squared": 6.090903369677468e-15,
+              "pressure_departure_L2_squared": 1.006532028532556e-14,
+              "fraction_of_physical_divergence_L2_squared": 0.04205563630443392
+            },
+            {
+              "element": 111,
+              "geometry": 111,
+              "lower": [
+                0.0,
+                0.0,
+                0.0022472751006336437
+              ],
+              "upper": [
+                0.05,
+                0.0,
+                0.002998182850083459
+              ],
+              "area": 3.754538747249077e-05,
+              "divergence_L2_squared": 6.93777858150212e-09,
+              "maximum_absolute_divergence": 0.03216118914936921,
+              "limiting_physical": [
+                0.049007246412438414,
+                0.0,
+                0.002262184427877526
+              ],
+              "k_departure_L2_squared": 9.947731824514427e-16,
+              "pressure_departure_L2_squared": 2.1198362727997862e-14,
+              "fraction_of_physical_divergence_L2_squared": 0.038324223181542695
+            }
+          ],
+          "production_work": [
+            {
+              "region": 0,
+              "total_production_departure_RMS": 0.00025615875033415357,
+              "isotropic_work_departure_RMS": 8.276520450007158e-05,
+              "signed_projection_on_total_production_departure": 0.1778963148946683
+            },
+            {
+              "region": 1,
+              "total_production_departure_RMS": 5.56897938410706e-06,
+              "isotropic_work_departure_RMS": 1.0551823765720438e-06,
+              "signed_projection_on_total_production_departure": 0.08908320190126533
+            }
+          ]
+        }
+      ],
+      "native_T1p2_regional_strong_L2": [
+        0.0004193971210145674,
+        7.165616263272819e-05
+      ],
+      "inner_fraction_of_squared_strong_divergence": 0.9716364870528285
+    },
+    "standard_coarse": {
+      "dt": 0.01,
+      "reference_sha256": "a1b87e794a37b36fe5c0032aaef9c553e48b4c947b2e1ec5e8a0b8b75179eeb5",
+      "solver_sha256": "8f64823373d97b86880cc9b624b19886f9921a2e9a0d56a9def1f0528af485df",
+      "native_tuple_replay": {
+        "maximum_absolute_by_column": [
+          0.0,
+          0.0,
+          0.0,
+          1.9984014443252818e-15,
+          0.0,
+          0.0,
+          3.469446951953614e-18,
+          2.6020852139652106e-18,
+          3.435565634063442e-18,
+          1.6653345369377348e-15,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scalar_gradient_polynomial_replay_errors": [
+          8.912900799351586e-15,
+          1.6092915888776815e-10,
+          6.158268339717665e-14,
+          6.02717875608505e-12
+        ],
+        "passed": true
+      },
+      "history": [
+        {
+          "actual_time": 0.3000000000000001,
+          "state_sha256": "a5bbf5fc6e180b27465bfc14531a7adde31d2f8a071e4d2a97654e6a0c406d05",
+          "native_weak_continuity_gates": {
+            "weak_continuity_unused_gauge": {
+              "value": 2.73057970392162e-15,
+              "limit": 1e-09,
+              "passed": true
+            }
+          },
+          "strong_divergence_L2_squared": 5.548228863236099e-07,
+          "strong_divergence_RMS_over_ustar_H": 8.148903738079062e-05,
+          "maximum_absolute_divergence": 0.07875938488130149,
+          "maximum_divergence_physical": [
+            0.5900724641243841,
+            0.0,
+            1.5893028195691046e-06
+          ],
+          "pressure_polynomial_orthogonal_energy_fractions": {
+            "outside_local_Q1": 0.9426697768717648,
+            "outside_local_Q2": 0.07239772771327485
+          },
+          "field_order": [
+            "divergence",
+            "U_minus_native_cold",
+            "W_minus_native_cold",
+            "k_minus_native_cold",
+            "pi_minus_native_cold"
+          ],
+          "largest_divergence_elements": [
+            {
+              "element": 166,
+              "geometry": 166,
+              "lower": [
+                0.05,
+                0.0,
+                0.012
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.014696938456699069
+              ],
+              "area": 0.00013484692283495344,
+              "divergence_L2_squared": 2.121576031865114e-08,
+              "maximum_absolute_divergence": 0.032429901773436534,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.012053547906566417
+              ],
+              "k_departure_L2_squared": 8.55073573272961e-15,
+              "pressure_departure_L2_squared": 1.2671992592870264e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.03823879807704379
+            },
+            {
+              "element": 178,
+              "geometry": 178,
+              "lower": [
+                0.05,
+                0.0,
+                0.018
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.025
+              ],
+              "area": 0.00035000000000000016,
+              "divergence_L2_squared": 1.801426411738203e-08,
+              "maximum_absolute_divergence": 0.021783672266449006,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.018138985502258623
+              ],
+              "k_departure_L2_squared": 2.933912138792076e-14,
+              "pressure_departure_L2_squared": 2.1092920718393297e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.0324684950124334
+            },
+            {
+              "element": 172,
+              "geometry": 172,
+              "lower": [
+                0.05,
+                0.0,
+                0.014696938456699069
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.018
+              ],
+              "area": 0.0001651530771650465,
+              "divergence_L2_squared": 1.7644900672507134e-08,
+              "maximum_absolute_divergence": 0.027529408963155772,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.014762520980640044
+              ],
+              "k_departure_L2_squared": 1.3090521828403825e-14,
+              "pressure_departure_L2_squared": 1.3383412785857886e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.031802762840996875
+            }
+          ],
+          "production_work": [
+            {
+              "region": 0,
+              "total_production_departure_RMS": 0.002856732416617738,
+              "isotropic_work_departure_RMS": 0.0001005629497770973,
+              "signed_projection_on_total_production_departure": 0.0017183387476684753
+            },
+            {
+              "region": 1,
+              "total_production_departure_RMS": 4.7988049146253516e-05,
+              "isotropic_work_departure_RMS": 8.349426231627017e-06,
+              "signed_projection_on_total_production_departure": 0.03173650156248373
+            }
+          ]
+        },
+        {
+          "actual_time": 0.6000000000000003,
+          "state_sha256": "832b5d672ca997489125aa483f1094c45b3f1a18d21ebe2fcd3324d932905a7c",
+          "native_weak_continuity_gates": {
+            "weak_continuity_unused_gauge": {
+              "value": 3.485686031299558e-15,
+              "limit": 1e-09,
+              "passed": true
+            }
+          },
+          "strong_divergence_L2_squared": 3.3456379228098706e-06,
+          "strong_divergence_RMS_over_ustar_H": 0.0002001066276773519,
+          "maximum_absolute_divergence": 0.2550184097702316,
+          "maximum_divergence_physical": [
+            0.09900724641243841,
+            0.0,
+            7.728890584685781e-08
+          ],
+          "pressure_polynomial_orthogonal_energy_fractions": {
+            "outside_local_Q1": 0.9206138347443873,
+            "outside_local_Q2": 0.041646272538012334
+          },
+          "field_order": [
+            "divergence",
+            "U_minus_native_cold",
+            "W_minus_native_cold",
+            "k_minus_native_cold",
+            "pi_minus_native_cold"
+          ],
+          "largest_divergence_elements": [
+            {
+              "element": 112,
+              "geometry": 112,
+              "lower": [
+                0.05,
+                0.0,
+                0.0022472751006336437
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.002998182850083459
+              ],
+              "area": 3.754538747249077e-05,
+              "divergence_L2_squared": 1.194080360616989e-07,
+              "maximum_absolute_divergence": 0.1346566335536177,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.002262184427877526
+              ],
+              "k_departure_L2_squared": 1.8453759485346796e-14,
+              "pressure_departure_L2_squared": 4.1380530333405283e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.03569066313111753
+            },
+            {
+              "element": 118,
+              "geometry": 118,
+              "lower": [
+                0.05,
+                0.0,
+                0.002998182850083459
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.004
+              ],
+              "area": 5.009085749582705e-05,
+              "divergence_L2_squared": 1.0797019667128574e-07,
+              "maximum_absolute_divergence": 0.1157718277111131,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.003018074001476667
+              ],
+              "k_departure_L2_squared": 4.080370220912679e-15,
+              "pressure_departure_L2_squared": 5.414229145105939e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.03227193114209017
+            },
+            {
+              "element": 111,
+              "geometry": 111,
+              "lower": [
+                0.0,
+                0.0,
+                0.0022472751006336437
+              ],
+              "upper": [
+                0.05,
+                0.0,
+                0.002998182850083459
+              ],
+              "area": 3.754538747249077e-05,
+              "divergence_L2_squared": 9.50629651737901e-08,
+              "maximum_absolute_divergence": 0.12090429633094285,
+              "limiting_physical": [
+                0.049007246412438414,
+                0.0,
+                0.002262184427877526
+              ],
+              "k_departure_L2_squared": 2.9874655351037326e-14,
+              "pressure_departure_L2_squared": 5.716921636971984e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.028414002760331708
+            }
+          ],
+          "production_work": [
+            {
+              "region": 0,
+              "total_production_departure_RMS": 0.0022565779373327,
+              "isotropic_work_departure_RMS": 0.0003693635940936914,
+              "signed_projection_on_total_production_departure": 0.06260739162045445
+            },
+            {
+              "region": 1,
+              "total_production_departure_RMS": 3.884063381202054e-05,
+              "isotropic_work_departure_RMS": 7.69423853385869e-06,
+              "signed_projection_on_total_production_departure": 0.035786935173039124
+            }
+          ]
+        },
+        {
+          "actual_time": 0.9000000000000006,
+          "state_sha256": "7845ee460663ec0e8e8c0d5ab493629ac2874e4cfa53b6df18e7dabb37c2b632",
+          "native_weak_continuity_gates": {
+            "weak_continuity_unused_gauge": {
+              "value": 2.8035243021157138e-15,
+              "limit": 1e-09,
+              "passed": true
+            }
+          },
+          "strong_divergence_L2_squared": 1.0337450899095967e-05,
+          "strong_divergence_RMS_over_ustar_H": 0.0003517456487986407,
+          "maximum_absolute_divergence": 0.506391123776577,
+          "maximum_divergence_physical": [
+            0.09900724641243841,
+            0.0,
+            7.728890584685781e-08
+          ],
+          "pressure_polynomial_orthogonal_energy_fractions": {
+            "outside_local_Q1": 0.8865151823528006,
+            "outside_local_Q2": 0.026635677448828082
+          },
+          "field_order": [
+            "divergence",
+            "U_minus_native_cold",
+            "W_minus_native_cold",
+            "k_minus_native_cold",
+            "pi_minus_native_cold"
+          ],
+          "largest_divergence_elements": [
+            {
+              "element": 112,
+              "geometry": 112,
+              "lower": [
+                0.05,
+                0.0,
+                0.0022472751006336437
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.002998182850083459
+              ],
+              "area": 3.754538747249077e-05,
+              "divergence_L2_squared": 3.895796364224807e-07,
+              "maximum_absolute_divergence": 0.2514127188478455,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.002262184427877526
+              ],
+              "k_departure_L2_squared": 5.322243082945938e-14,
+              "pressure_departure_L2_squared": 5.961694043762986e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.03768623814760274
+            },
+            {
+              "element": 118,
+              "geometry": 118,
+              "lower": [
+                0.05,
+                0.0,
+                0.002998182850083459
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.004
+              ],
+              "area": 5.009085749582705e-05,
+              "divergence_L2_squared": 3.244792285259622e-07,
+              "maximum_absolute_divergence": 0.20848581394270577,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.003018074001476667
+              ],
+              "k_departure_L2_squared": 1.1087811756512573e-14,
+              "pressure_departure_L2_squared": 7.75100189333747e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.03138870807641163
+            },
+            {
+              "element": 94,
+              "geometry": 94,
+              "lower": [
+                0.05,
+                0.0,
+                0.0011166596300937904
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.0015
+              ],
+              "area": 1.9167018495310482e-05,
+              "divergence_L2_squared": 3.0071453001432467e-07,
+              "maximum_absolute_divergence": 0.2809698542073532,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.0014217443834504215
+              ],
+              "k_departure_L2_squared": 3.2630166139187134e-13,
+              "pressure_departure_L2_squared": 3.125224983443475e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.02908981459255326
+            }
+          ],
+          "production_work": [
+            {
+              "region": 0,
+              "total_production_departure_RMS": 0.0029635229366606003,
+              "isotropic_work_departure_RMS": 0.0006839981812975151,
+              "signed_projection_on_total_production_departure": 0.13830596913365723
+            },
+            {
+              "region": 1,
+              "total_production_departure_RMS": 4.41889554980189e-05,
+              "isotropic_work_departure_RMS": 9.435938350299979e-06,
+              "signed_projection_on_total_production_departure": 0.05521555126015539
+            }
+          ]
+        },
+        {
+          "actual_time": 1.2000000000000008,
+          "state_sha256": "c5565b90b3876b4ec9f301e1074acf99df96089599544386a0b9aefe375c54e5",
+          "native_weak_continuity_gates": {
+            "weak_continuity_unused_gauge": {
+              "value": 3.345903461293376e-15,
+              "limit": 1e-09,
+              "passed": true
+            }
+          },
+          "strong_divergence_L2_squared": 2.1679467615058146e-05,
+          "strong_divergence_RMS_over_ustar_H": 0.0005093851857566358,
+          "maximum_absolute_divergence": 0.7601674187307936,
+          "maximum_divergence_physical": [
+            0.09900724641243841,
+            0.0,
+            7.728890584685781e-08
+          ],
+          "pressure_polynomial_orthogonal_energy_fractions": {
+            "outside_local_Q1": 0.8586676291114629,
+            "outside_local_Q2": 0.029521501754471463
+          },
+          "field_order": [
+            "divergence",
+            "U_minus_native_cold",
+            "W_minus_native_cold",
+            "k_minus_native_cold",
+            "pi_minus_native_cold"
+          ],
+          "largest_divergence_elements": [
+            {
+              "element": 112,
+              "geometry": 112,
+              "lower": [
+                0.05,
+                0.0,
+                0.0022472751006336437
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.002998182850083459
+              ],
+              "area": 3.754538747249077e-05,
+              "divergence_L2_squared": 9.273511903187823e-07,
+              "maximum_absolute_divergence": 0.3866795255106036,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.002262184427877526
+              ],
+              "k_departure_L2_squared": 1.2788991219287105e-13,
+              "pressure_departure_L2_squared": 9.420234248165917e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.042775551816349115
+            },
+            {
+              "element": 118,
+              "geometry": 118,
+              "lower": [
+                0.05,
+                0.0,
+                0.002998182850083459
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.004
+              ],
+              "area": 5.009085749582705e-05,
+              "divergence_L2_squared": 8.44034493669546e-07,
+              "maximum_absolute_divergence": 0.33198155323017975,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.003018074001476667
+              ],
+              "k_departure_L2_squared": 3.7002370022691296e-14,
+              "pressure_departure_L2_squared": 1.2212545880176897e-12,
+              "fraction_of_physical_divergence_L2_squared": 0.03893243637972437
+            },
+            {
+              "element": 111,
+              "geometry": 111,
+              "lower": [
+                0.0,
+                0.0,
+                0.0022472751006336437
+              ],
+              "upper": [
+                0.05,
+                0.0,
+                0.002998182850083459
+              ],
+              "area": 3.754538747249077e-05,
+              "divergence_L2_squared": 6.401534560800322e-07,
+              "maximum_absolute_divergence": 0.31514718174999345,
+              "limiting_physical": [
+                0.049007246412438414,
+                0.0,
+                0.002262184427877526
+              ],
+              "k_departure_L2_squared": 1.7520982592079164e-13,
+              "pressure_departure_L2_squared": 9.771471667161066e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.029528098542207455
+            }
+          ],
+          "production_work": [
+            {
+              "region": 0,
+              "total_production_departure_RMS": 0.004135465258476345,
+              "isotropic_work_departure_RMS": 0.0009825997368559983,
+              "signed_projection_on_total_production_departure": 0.15226388590442352
+            },
+            {
+              "region": 1,
+              "total_production_departure_RMS": 5.924503285871171e-05,
+              "isotropic_work_departure_RMS": 1.611453403478255e-05,
+              "signed_projection_on_total_production_departure": 0.09032730547829397
+            }
+          ]
+        }
+      ],
+      "native_T1p2_regional_strong_L2": [
+        0.004536788834275485,
+        0.0010473846897159427
+      ],
+      "inner_fraction_of_squared_strong_divergence": 0.9493984489042804
+    },
+    "standard_half": {
+      "dt": 0.005,
+      "reference_sha256": "a1b87e794a37b36fe5c0032aaef9c553e48b4c947b2e1ec5e8a0b8b75179eeb5",
+      "solver_sha256": "8f64823373d97b86880cc9b624b19886f9921a2e9a0d56a9def1f0528af485df",
+      "native_tuple_replay": {
+        "maximum_absolute_by_column": [
+          0.0,
+          0.0,
+          0.0,
+          1.3322676295501878e-15,
+          0.0,
+          0.0,
+          3.469446951953614e-18,
+          3.469446951953614e-18,
+          3.4372596999579508e-18,
+          1.6653345369377348e-15,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scalar_gradient_polynomial_replay_errors": [
+          9.16020731489553e-15,
+          1.6589729590066327e-10,
+          6.194177115670385e-14,
+          5.966782623545441e-12
+        ],
+        "passed": true
+      },
+      "history": [
+        {
+          "actual_time": 0.30000000000000016,
+          "state_sha256": "6266bb94bf63f2974e594acf7148102a953298355fc4956ee8ad2465ca157f28",
+          "native_weak_continuity_gates": {
+            "weak_continuity_unused_gauge": {
+              "value": 3.9629121026417094e-16,
+              "limit": 1e-09,
+              "passed": true
+            }
+          },
+          "strong_divergence_L2_squared": 5.816203509131688e-07,
+          "strong_divergence_RMS_over_ustar_H": 8.343375714720255e-05,
+          "maximum_absolute_divergence": 0.08420495829602442,
+          "maximum_divergence_physical": [
+            0.5900724641243841,
+            0.0,
+            1.5893028195691046e-06
+          ],
+          "pressure_polynomial_orthogonal_energy_fractions": {
+            "outside_local_Q1": 0.9292668372199999,
+            "outside_local_Q2": 0.08529465037652703
+          },
+          "field_order": [
+            "divergence",
+            "U_minus_native_cold",
+            "W_minus_native_cold",
+            "k_minus_native_cold",
+            "pi_minus_native_cold"
+          ],
+          "largest_divergence_elements": [
+            {
+              "element": 166,
+              "geometry": 166,
+              "lower": [
+                0.05,
+                0.0,
+                0.012
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.014696938456699069
+              ],
+              "area": 0.00013484692283495344,
+              "divergence_L2_squared": 2.55860860463739e-08,
+              "maximum_absolute_divergence": 0.03564835933104837,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.012053547906566417
+              ],
+              "k_departure_L2_squared": 3.915620714853359e-15,
+              "pressure_departure_L2_squared": 1.837566133021865e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.04399104330892591
+            },
+            {
+              "element": 154,
+              "geometry": 154,
+              "lower": [
+                0.05,
+                0.0,
+                0.009
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.010499999999999999
+              ],
+              "area": 7.499999999999998e-05,
+              "divergence_L2_squared": 2.1528986803301803e-08,
+              "maximum_absolute_divergence": 0.04149940612962792,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.009014891303813423
+              ],
+              "k_departure_L2_squared": 1.489128778247143e-15,
+              "pressure_departure_L2_squared": 1.1852972254316066e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.037015532158564214
+            },
+            {
+              "element": 142,
+              "geometry": 142,
+              "lower": [
+                0.05,
+                0.0,
+                0.0065
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.00775
+              ],
+              "area": 6.250000000000001e-05,
+              "divergence_L2_squared": 2.0230836022909123e-08,
+              "maximum_absolute_divergence": 0.04272424718230544,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.007380176674220109
+              ],
+              "k_departure_L2_squared": 1.467491648135504e-15,
+              "pressure_departure_L2_squared": 1.07670349083728e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.03478357659106296
+            }
+          ],
+          "production_work": [
+            {
+              "region": 0,
+              "total_production_departure_RMS": 0.002836056967400991,
+              "isotropic_work_departure_RMS": 9.835957232442774e-05,
+              "signed_projection_on_total_production_departure": 0.002436990259300382
+            },
+            {
+              "region": 1,
+              "total_production_departure_RMS": 4.7181835650665975e-05,
+              "isotropic_work_departure_RMS": 9.03917763900092e-06,
+              "signed_projection_on_total_production_departure": 0.03682995118451955
+            }
+          ]
+        },
+        {
+          "actual_time": 0.6000000000000004,
+          "state_sha256": "f0e62152b5483551ad5cd37a45722e65cc888ac52cb1ed42f45924bd122080c7",
+          "native_weak_continuity_gates": {
+            "weak_continuity_unused_gauge": {
+              "value": 1.2686268156007241e-15,
+              "limit": 1e-09,
+              "passed": true
+            }
+          },
+          "strong_divergence_L2_squared": 3.286372392438073e-06,
+          "strong_divergence_RMS_over_ustar_H": 0.0001983263369895627,
+          "maximum_absolute_divergence": 0.27897613272861094,
+          "maximum_divergence_physical": [
+            0.09900724641243841,
+            0.0,
+            7.728890584685781e-08
+          ],
+          "pressure_polynomial_orthogonal_energy_fractions": {
+            "outside_local_Q1": 0.897171426747992,
+            "outside_local_Q2": 0.046638492128100395
+          },
+          "field_order": [
+            "divergence",
+            "U_minus_native_cold",
+            "W_minus_native_cold",
+            "k_minus_native_cold",
+            "pi_minus_native_cold"
+          ],
+          "largest_divergence_elements": [
+            {
+              "element": 112,
+              "geometry": 112,
+              "lower": [
+                0.05,
+                0.0,
+                0.0022472751006336437
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.002998182850083459
+              ],
+              "area": 3.754538747249077e-05,
+              "divergence_L2_squared": 9.189214145229399e-08,
+              "maximum_absolute_divergence": 0.11456719732521843,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.002262184427877526
+              ],
+              "k_departure_L2_squared": 1.94868668565004e-14,
+              "pressure_departure_L2_squared": 8.236127329605447e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.02796157296833961
+            },
+            {
+              "element": 118,
+              "geometry": 118,
+              "lower": [
+                0.05,
+                0.0,
+                0.002998182850083459
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.004
+              ],
+              "area": 5.009085749582705e-05,
+              "divergence_L2_squared": 8.65143451754725e-08,
+              "maximum_absolute_divergence": 0.10176627399972972,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.003018074001476667
+              ],
+              "k_departure_L2_squared": 4.6980539465619595e-15,
+              "pressure_departure_L2_squared": 1.075541073825041e-12,
+              "fraction_of_physical_divergence_L2_squared": 0.02632518012095695
+            },
+            {
+              "element": 111,
+              "geometry": 111,
+              "lower": [
+                0.0,
+                0.0,
+                0.0022472751006336437
+              ],
+              "upper": [
+                0.05,
+                0.0,
+                0.002998182850083459
+              ],
+              "area": 3.754538747249077e-05,
+              "divergence_L2_squared": 7.369207462507237e-08,
+              "maximum_absolute_divergence": 0.10390048687964724,
+              "limiting_physical": [
+                0.049007246412438414,
+                0.0,
+                0.002262184427877526
+              ],
+              "k_departure_L2_squared": 3.150791907116625e-14,
+              "pressure_departure_L2_squared": 1.0203726132627053e-12,
+              "fraction_of_physical_divergence_L2_squared": 0.02242353142773396
+            }
+          ],
+          "production_work": [
+            {
+              "region": 0,
+              "total_production_departure_RMS": 0.0023277406912148657,
+              "isotropic_work_departure_RMS": 0.00038390698015582385,
+              "signed_projection_on_total_production_departure": 0.07021126272089029
+            },
+            {
+              "region": 1,
+              "total_production_departure_RMS": 3.9403269646064776e-05,
+              "isotropic_work_departure_RMS": 7.471486980893615e-06,
+              "signed_projection_on_total_production_departure": 0.022955418697901894
+            }
+          ]
+        },
+        {
+          "actual_time": 0.9000000000000007,
+          "state_sha256": "87326d86b4f44b0e4db44e8b0ae33eb634e0149056217f3d3afd6fef06fd9f45",
+          "native_weak_continuity_gates": {
+            "weak_continuity_unused_gauge": {
+              "value": 1.815170941376257e-15,
+              "limit": 1e-09,
+              "passed": true
+            }
+          },
+          "strong_divergence_L2_squared": 1.0137957280718636e-05,
+          "strong_divergence_RMS_over_ustar_H": 0.00034833509516913084,
+          "maximum_absolute_divergence": 0.4893421403907778,
+          "maximum_divergence_physical": [
+            0.09900724641243841,
+            0.0,
+            7.728890584685781e-08
+          ],
+          "pressure_polynomial_orthogonal_energy_fractions": {
+            "outside_local_Q1": 0.9121763341138122,
+            "outside_local_Q2": 0.024192032155555192
+          },
+          "field_order": [
+            "divergence",
+            "U_minus_native_cold",
+            "W_minus_native_cold",
+            "k_minus_native_cold",
+            "pi_minus_native_cold"
+          ],
+          "largest_divergence_elements": [
+            {
+              "element": 35,
+              "geometry": 35,
+              "lower": [
+                0.1,
+                0.0,
+                2.790216142849547e-05
+              ],
+              "upper": [
+                0.6,
+                0.0,
+                5e-05
+              ],
+              "area": 1.1048919285752266e-05,
+              "divergence_L2_squared": 2.779763413652486e-07,
+              "maximum_absolute_divergence": 0.35691650778551687,
+              "limiting_physical": [
+                0.10992753587561596,
+                0.0,
+                2.8340915598879832e-05
+              ],
+              "k_departure_L2_squared": 3.8986168576133255e-12,
+              "pressure_departure_L2_squared": 1.735575913860533e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.02741936404623951
+            },
+            {
+              "element": 112,
+              "geometry": 112,
+              "lower": [
+                0.05,
+                0.0,
+                0.0022472751006336437
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.002998182850083459
+              ],
+              "area": 3.754538747249077e-05,
+              "divergence_L2_squared": 2.542477105015445e-07,
+              "maximum_absolute_divergence": 0.19994305084864167,
+              "limiting_physical": [
+                0.09900724641243841,
+                0.0,
+                0.002262184427877526
+              ],
+              "k_departure_L2_squared": 4.1640009534420666e-14,
+              "pressure_departure_L2_squared": 1.612797324054882e-12,
+              "fraction_of_physical_divergence_L2_squared": 0.025078790870927993
+            },
+            {
+              "element": 94,
+              "geometry": 94,
+              "lower": [
+                0.05,
+                0.0,
+                0.0011166596300937904
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.0015
+              ],
+              "area": 1.9167018495310482e-05,
+              "divergence_L2_squared": 2.5044034047979395e-07,
+              "maximum_absolute_divergence": 0.25904686891294887,
+              "limiting_physical": [
+                0.0509927535875616,
+                0.0,
+                0.0011621302754665859
+              ],
+              "k_departure_L2_squared": 3.3882409973981874e-13,
+              "pressure_departure_L2_squared": 8.407906214644234e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.0247032349363028
+            }
+          ],
+          "production_work": [
+            {
+              "region": 0,
+              "total_production_departure_RMS": 0.0030376516834158653,
+              "isotropic_work_departure_RMS": 0.0006952243963973754,
+              "signed_projection_on_total_production_departure": 0.134717639702883
+            },
+            {
+              "region": 1,
+              "total_production_departure_RMS": 4.5562259908854606e-05,
+              "isotropic_work_departure_RMS": 8.362212585423342e-06,
+              "signed_projection_on_total_production_departure": 0.03333559899025057
+            }
+          ]
+        },
+        {
+          "actual_time": 1.1999999999999964,
+          "state_sha256": "553b86b77515c7510b752a2925d45849bdaec30e37a783b0e7b03d67892f7538",
+          "native_weak_continuity_gates": {
+            "weak_continuity_unused_gauge": {
+              "value": 5.134263685129617e-15,
+              "limit": 1e-09,
+              "passed": true
+            }
+          },
+          "strong_divergence_L2_squared": 3.308203927414543e-05,
+          "strong_divergence_RMS_over_ustar_H": 0.0006292426340238948,
+          "maximum_absolute_divergence": 0.6802057441004177,
+          "maximum_divergence_physical": [
+            0.09900724641243841,
+            0.0,
+            7.728890584685781e-08
+          ],
+          "pressure_polynomial_orthogonal_energy_fractions": {
+            "outside_local_Q1": 0.9184447998344359,
+            "outside_local_Q2": 0.018249777913711872
+          },
+          "field_order": [
+            "divergence",
+            "U_minus_native_cold",
+            "W_minus_native_cold",
+            "k_minus_native_cold",
+            "pi_minus_native_cold"
+          ],
+          "largest_divergence_elements": [
+            {
+              "element": 94,
+              "geometry": 94,
+              "lower": [
+                0.05,
+                0.0,
+                0.0011166596300937904
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.0015
+              ],
+              "area": 1.9167018495310482e-05,
+              "divergence_L2_squared": 1.092945084499071e-06,
+              "maximum_absolute_divergence": 0.5525008807081803,
+              "limiting_physical": [
+                0.0509927535875616,
+                0.0,
+                0.0011204652553686062
+              ],
+              "k_departure_L2_squared": 9.801798947821581e-13,
+              "pressure_departure_L2_squared": 9.390990208756077e-13,
+              "fraction_of_physical_divergence_L2_squared": 0.03303741572404332
+            },
+            {
+              "element": 112,
+              "geometry": 112,
+              "lower": [
+                0.05,
+                0.0,
+                0.0022472751006336437
+              ],
+              "upper": [
+                0.1,
+                0.0,
+                0.002998182850083459
+              ],
+              "area": 3.754538747249077e-05,
+              "divergence_L2_squared": 1.0125887780877812e-06,
+              "maximum_absolute_divergence": 0.4134936838303608,
+              "limiting_physical": [
+                0.0509927535875616,
+                0.0,
+                0.002262184427877526
+              ],
+              "k_departure_L2_squared": 1.0891209232158234e-13,
+              "pressure_departure_L2_squared": 1.809904171930541e-12,
+              "fraction_of_physical_divergence_L2_squared": 0.0306084147260882
+            },
+            {
+              "element": 111,
+              "geometry": 111,
+              "lower": [
+                0.0,
+                0.0,
+                0.0022472751006336437
+              ],
+              "upper": [
+                0.05,
+                0.0,
+                0.002998182850083459
+              ],
+              "area": 3.754538747249077e-05,
+              "divergence_L2_squared": 9.908545763702992e-07,
+              "maximum_absolute_divergence": 0.39900714987740254,
+              "limiting_physical": [
+                0.0009927535875615956,
+                0.0,
+                0.002262184427877526
+              ],
+              "k_departure_L2_squared": 2.021778635633681e-13,
+              "pressure_departure_L2_squared": 1.974878829529603e-12,
+              "fraction_of_physical_divergence_L2_squared": 0.029951435827738727
+            }
+          ],
+          "production_work": [
+            {
+              "region": 0,
+              "total_production_departure_RMS": 0.004467124476517008,
+              "isotropic_work_departure_RMS": 0.001178367985936364,
+              "signed_projection_on_total_production_departure": 0.1517966688534222
+            },
+            {
+              "region": 1,
+              "total_production_departure_RMS": 6.542725359681715e-05,
+              "isotropic_work_departure_RMS": 1.5443033804849834e-05,
+              "signed_projection_on_total_production_departure": 0.068482766945804
+            }
+          ]
+        }
+      ],
+      "native_T1p2_regional_strong_L2": [
+        0.005663436451744867,
+        0.0010037563604744096
+      ],
+      "inner_fraction_of_squared_strong_divergence": 0.9695445972104795
+    }
+  },
+  "full_artifact": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-mode-localization.json",
+    "sha256": "897041bd65ec417228a7b0bca053f91bbb1fc6c7a1b0703f00df76fd97925165"
+  }
+}

@@ -600,3 +600,53 @@ unexecuted after the numerical endpoint. Fourteen focused Linux protocol tests
 pass, including failed-process and changed-snapshot cases. See
 [readback owner](cls-cao-tamura-budget-wp2-evidence/confirmation-recovery-readback-tail-launch.json).
 The launch receipt remains a waiting state; its result is a separate artifact.
+
+
+## Recovery-mode localization
+
+Zero-solve replay at exact retained T=.3,.6,.9,1.2 decomposes the native affine
+Q3 fields on each complete native element using physical GL8 quadrature. Squared
+field/gradient integration is exact for these flat polynomial spaces. The modal
+sum reproduces the independent physical divergence integral and the native
+strong-continuity diagnostic. A manufactured P1+P2+P3 fixture verifies the modal
+normalization. No gradient, state, history, pressure gauge or source is changed.
+
+| T=1.2 trajectory | RMS(div U)/(u_tau/H) | Sampled max abs(div U), 1/s | Inner share of squared L2 divergence | Outside element-local Q1 | Outside element-local Q2 |
+|---|---:|---:|---:|---:|---:|
+| CLS dt=.01 | .00004655 | .06750 | .97164 | .61587 | .01349 |
+| Standard dt=.01 | .00050939 | .76017 | .94940 | .85867 | .02952 |
+| Standard dt=.005 | .00062924 | .68021 | .96954 | .91844 | .01825 |
+
+All three meet the global RMS divergence budget, despite the localized sampled
+peaks. The standard peaks lie near x=.099007 at very small positive height;
+the largest integrated contributions are distributed among inner elements near
+x=.05--.1. Q1-orthogonal divergence is invisible to every local Q1 pressure
+polynomial. The continuous global pressure space has additional conformity
+restrictions: this local decomposition is not an inf-sup proof or a guarantee
+that Q2 removes the mode.
+
+The isotropic stress-work departure is evaluated explicitly as
+-2/3*(k div U-k_ref div U_ref). Its signed projection onto the complete inner
+production departure at T=1.2 is .17790 for CLS, .15226 for standard dt=.01
+and .15180 for standard dt=.005. These are signed projection coefficients,
+not additive norm percentages or a causal attribution of the traction error.
+Production-work norms use the existing GL8 diagnostic grid; polynomial exactness
+is asserted only for the field/modal integrals. Full native turbulence budgets
+remain separate.
+
+At T=.6 the running radial-confirmation control's native common-grid differences
+from the selected dt=.01 control pass the quarter-budget test. Its full GL28
+matched-time result and terminal recovery remain pending. If that agreement
+persists, the data favor a tightly controlled inner-pressure Q2 / outer-pressure
+Q1 representation test before more radial knots or smaller timesteps. This uses
+an existing native pressure-degree capability and would have an estimated 9093
+slots on level4, within the retained 12000-slot numerical policy. It still needs
+explicit predeclaration, operator/rank/identity checks and native execution;
+no pressure-space change has been adopted or launched here. No grad-div source,
+stress clipping, calibration change or weakened gate is proposed.
+
+See [modal summary](cls-cao-tamura-budget-wp2-evidence/recovery-mode-localization.json),
+[polynomial check](cls-cao-tamura-budget-wp2-evidence/recovery-mode-polynomial-fixture.json)
+and [reproducible command](cls-cao-tamura-budget-wp2-evidence/recovery-mode-localization-command.json).
+The twelve-state localization takes 20.76 seconds, Python peak RSS 406404 KiB,
+with zero governing solves. Full modal tensors stay in the indexed Linux artifact.
