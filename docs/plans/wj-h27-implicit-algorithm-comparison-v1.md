@@ -1,4 +1,4 @@
-# Picard and coupled Newton comparison gates
+# Implicit algorithm and Newton cache comparison gates
 
 This prospective test compares accepted normal-main v2 outputs from
 `PicardV1` and opt-in `CoupledJFNKV1`. It changes no PDE, reference table,
@@ -6,6 +6,13 @@ current-equation acceptance threshold or history scheme. A comparison PASS
 is not an independent equation audit or full H27 qualification. The existing
 physical transient or coupled MMS oracle must separately verify both routes'
 complete current equations.
+
+The optional `--comparison` selects `PicardNewtonV1` (the unchanged default)
+or `NewtonCacheV1`. The latter compares two `CoupledJFNKV1` trajectories:
+old policy `RebuildEveryNewtonV1`, new policy `OperatorDriftV1`. Both modes
+retain every fixed coefficient, physical field, trace, cutoff, explicit-history
+and identity gate below. No pressure alignment or tolerance relaxation is
+introduced by the cache comparison.
 
 Use `h27/implicit_algorithm_check.py --old OLD.result.json --new
 NEW.result.json --table TABLE.json --out NEW-CHECK.json --seconds CAP`.
@@ -20,6 +27,46 @@ not proof of convergence; Picard's Newton counters must be zero. No Newton
 status field is presumed. A completed registered `.result.json`, accepted
 step/time and the separate current-equation audit establish the relevant
 completion evidence.
+
+For `NewtonCacheV1`, require identical finite
+`coupled_newton.relative_drift_limit` in [0,.25], identical positive finite
+`step_seconds_cap`, identical
+positive integer `maximum_uses`, and identical guard descriptions. The
+new policy changes only reuse of the preconditioner; actual residuals,
+Jacobian actions and physical acceptance guards must remain fresh. Metadata
+comparison alone does not verify those equations.
+
+A zero drift threshold is supported: exactly unchanged operators may reuse,
+and every nonzero operator change refreshes. The zero-threshold native
+adversarial control is separate from the paired equivalence/reuse test and
+need not demonstrate positive reuse. Ordinary paired comparisons use .02;
+`NewtonCacheV1` still requires positive aggregate reuse to establish that its
+tested optimization was exercised.
+
+Require sibling `PREFIX.steps.jsonl` files for both completed
+`PREFIX.result.json` inputs, written with InfoSteps=1. They contain bare
+native state records. Verify consecutive positive steps, clocks, source,
+reference, signature and configuration bindings, and the accepted state and
+explicit-advection hash chain. Require matching old/new logged step intervals
+and exact final-record/result hash and `coupled_newton` agreement. Hash both
+logs. Aggregate each per-physical-step record once; the final result is a
+duplicate, not a second observation. A run resumed after step zero is reported
+by its actual logged interval, without claiming evidence for an unprovided
+prefix.
+
+The `refreshes`, `reuses`, `maximum_used_age` and all seven
+`refresh_reasons` counters must be nonnegative integers. Reasons are exclusive
+(`injected`, `retry`, `control`, `cold`, `alpha`, `drift`, `age` precedence)
+and sum to refreshes. The first prepare/use after factorization has age1;
+every reuse increments the age; it must never exceed `maximum_uses`.
+An unused step has maximum age0. A step with reuse must report maximum age>=2.
+The rebuild control must have zero reuses and age<=1; only its control,
+retry or injected refresh reasons may be nonzero. OperatorDrift must have
+zero control-reason refreshes. Across the logged interval both routes must
+have positive refresh counts, and OperatorDrift must have positive reuse
+count. A final step with zero refreshes is valid when the interval establishes
+the required work. The checker records per-step counters and totals, without
+assuming that callback application counts equal factorization counts.
 
 Require exact equality of the model, scientific source and qualified v2
 reference identities; Modified_A basis, full Q3/Q2 topology, geometry IDs,

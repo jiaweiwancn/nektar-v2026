@@ -1,0 +1,37 @@
+
+[36mWarning : [0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	     WJ coupled path: WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon
+	         Wall tensor: FiniteNuIsotropicWallFullWJCollarV2
+	         Integration: current coupled BDF2/EX2, BE startup, no clipping
+	      Pressure gauge: native restricted mean
+=======================================================================
+WJ-H27 step 1, t=0.02, coupled residual=3.63179e-14, nonlinear iterations=3
+WJ-H27 step 2, t=0.04, coupled residual=8.96527e-15, nonlinear iterations=3
+WJ-H27 step 3, t=0.06, coupled residual=8.08496e-15, nonlinear iterations=3
+WJ-H27 step 4, t=0.08, coupled residual=8.14803e-15, nonlinear iterations=3
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v13/poly-cache-u.fld" (0.000599211s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v13/poly-cache-v.fld" (0.000168885s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v13/poly-cache-k.fld" (0.000152362s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v13/poly-cache-epsilon.fld" (0.000124331s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v13/poly-cache-p.fld" (0.000134341s, XML)
+-------------------------------------------
+Total Computation Time = 1.27859s
+-------------------------------------------
+L 2 error (variable u) : 1.94016e-08
+L inf error (variable u) : 6.76803e-08
+L 2 error (variable v) : 7.97226e-09
+L inf error (variable v) : 3.18936e-08
+L 2 error (variable k) : 1.06913e-08
+L inf error (variable k) : 2.68095e-08
+L 2 error (variable epsilon) : 3.47938e-09
+L inf error (variable epsilon) : 1.02632e-08
+L 2 error (variable p) : 9.17932e-09
+L inf error (variable p) : 3.16752e-08
+-------------------------------------------
+                       Region  Elapsed time Avg (s)       Min (s)       Max (s)         Count      IO Level
+                      Execute                1.3057        1.3057        1.3057             1             0
+

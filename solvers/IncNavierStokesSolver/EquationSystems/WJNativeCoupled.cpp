@@ -22,7 +22,7 @@ double Clock(){return std::chrono::duration<double>(std::chrono::steady_clock::n
 void Check(bool ok,const char*message){if(!ok)throw std::runtime_error(message);}
 void VecJSON(std::ostream&out,const WJNative::Vec&v)
 {out<<'[';for(int i=0;i<v.size();++i){if(i)out<<',';out<<RANSWallSolveJson::Number(v[i]);}out<<']';}
-void AttemptJSON(std::ostream&out,const WJNative::CoupledStepInfo&info)
+void AttemptJSON(std::ostream&out,const WJNative::CoupledStepInfo&info,const WJNative::CoupledOptions&options)
 {
     out<<std::setprecision(17)<<"{\"nonlinear_iterations\":"<<info.nonlinearIterations<<",\"seconds\":"<<info.seconds<<",\"retries\":"<<info.retries
        <<",\"residuals\":["<<info.residual.momentum<<','<<info.residual.continuity<<','<<info.residual.gauge<<','<<info.residual.k<<','<<info.residual.epsilon<<','<<info.residual.trace
@@ -36,7 +36,8 @@ void AttemptJSON(std::ostream&out,const WJNative::CoupledStepInfo&info)
        <<",\"acceleration_proposals\":"<<info.accelerationProposals<<",\"acceleration_accepted\":"<<info.accelerationAccepted<<",\"nonlinear_trace\":[";
     for(int i=0;i<int(info.nonlinearTrace.size());++i){const auto&t=info.nonlinearTrace[i];if(i)out<<',';
         out<<"{\"residuals\":["<<t.residual.momentum<<','<<t.residual.continuity<<','<<t.residual.gauge<<','<<t.residual.k<<','<<t.residual.epsilon<<','<<t.residual.trace
-           <<"],\"accelerated\":"<<(t.accelerated?"true":"false")<<",\"seconds\":"<<t.seconds<<'}';}out<<"]}";
+           <<"],\"accelerated\":"<<(t.accelerated?"true":"false")<<",\"seconds\":"<<t.seconds<<'}';}out<<']';
+    WJNative::WriteStepPreconditionerFields(out,options,info);out<<'}';
 }
 void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mass)
 {
@@ -95,6 +96,9 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadSolverInfo("WJStressSplit",options.stressSplit,"PositiveShearV1");
     m_session->LoadSolverInfo("WJSteadyVelocityPC",options.steadyVelocityPC,"FullGradientV1");
     m_session->LoadSolverInfo("WJImplicitSolver",options.advancement,"PicardV1");
+    m_session->LoadSolverInfo("WJStepPreconditioner",options.stepPreconditioner,"RebuildEveryNewtonV1");
+    m_session->LoadParameter("WJStepPCRelativeDrift",options.stepPCRelativeDrift,.02);
+    m_session->LoadParameter("WJStepPCMaximumUses",options.stepPCMaximumUses,8);
     if(options.advancement=="CoupledJFNKV1"){
         options.stepNewton.acceptanceNorm=options.nonlinearTolerance;
         m_session->LoadParameter("WJStepNewtonSeconds",options.stepNewton.maximumSeconds,0.);
@@ -183,7 +187,7 @@ void WJNativeCoupled::v_DoSolve()
             auto diagnostic=m_history.step?m_last:m_coupling->AuditSteadyState(m_history.current,m_history.time);
             const std::string path=m_prefix+".failure.json";Check(!std::filesystem::exists(path),"coupled failure evidence is immutable");std::ofstream out(path);Check(bool(out),"cannot create coupled failure evidence");
             out<<std::setprecision(17)<<"{\"schema\":\"WJH27CoupledFailureV1\",\"status\":\"FAILED_WITH_ACCEPTED_HISTORY_PRESERVED\",\"reason\":"<<RANSWallSolveJson::Quote(e.what())<<",\"exception_type\":"<<RANSWallSolveJson::Quote(RANSWallSolveJson::ExceptionType(e))<<",\"elapsed_solve_seconds\":"<<Clock()-solveStart
-               <<",\"accepted_state_residual_kind\":"<<RANSWallSolveJson::Quote(m_history.step?"last accepted complete time-step residual":"steady diagnostic of fresh initial state")<<",\"failed_attempt\":";AttemptJSON(out,m_coupling->LastAttemptInfo());out<<",\"state\":";m_coupling->Report(out,m_history,diagnostic,true);out<<"}\n"<<std::flush;Check(bool(out),"coupled failure evidence write failed");out.close();Check(!out.fail(),"coupled failure evidence close failed");
+               <<",\"accepted_state_residual_kind\":"<<RANSWallSolveJson::Quote(m_history.step?"last accepted complete time-step residual":"steady diagnostic of fresh initial state")<<",\"failed_attempt\":";AttemptJSON(out,m_coupling->LastAttemptInfo(),m_coupling->Options());out<<",\"state\":";m_coupling->Report(out,m_history,diagnostic,true);out<<"}\n"<<std::flush;Check(bool(out),"coupled failure evidence write failed");out.close();Check(!out.fail(),"coupled failure evidence close failed");
         }catch(const std::exception&journal){std::cerr<<"WJ-H27 failure-journal error: "<<journal.what()<<std::endl;}
         std::cerr<<"WJ-H27 coupled advancement: "<<e.what()<<std::endl;throw std::runtime_error(e.what());
     }

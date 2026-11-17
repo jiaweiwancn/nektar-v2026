@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
-"""Linux-only PicardV1/CoupledJFNKV1 accepted-output equivalence check.
+"""Linux-only implicit-algorithm and Newton-cache output equivalence check.
 
 This compares coefficients, owner-resolved fields, dependent wall quantities
 and complete exported histories. Complete PDE residuals are separate audits.
@@ -29,6 +29,7 @@ LIMIT = 1e-8
 FIELDS = ('U', 'Pi', 'k', 'epsilon')
 STATE_NAMES = ('accepted', 'input_current', 'input_previous')
 CACHE_NAMES = ('current_advection', 'previous_advection', 'input_advection', 'input_previous_advection')
+REFRESH_REASONS = ('cold', 'alpha', 'drift', 'age', 'control', 'retry', 'injected')
 EXACT_KEYS = ('model', 'source_identity', 'reference_identity', 'manufactured', 'basis', 'sizes',
               'geometry', 'elements', 'free_velocity_ids', 'k_free_ids', 'epsilon_free_ids',
               'gauge', 'step', 'time', 'dt', 'quadratureX', 'quadratureR', 'linear_tolerance',
@@ -91,6 +92,96 @@ def load(path, algorithm):
         if algorithm == 'PicardV1': require(stats[key] == 0, 'Picard artifact contains Newton work')
     require(isinstance(stats['uncommitted_guard'], str) and isinstance(stats['physical_acceptance_guard'], str), 'missing guard provenance')
     return dict(data=d, states=states, hashes=hashes, native=identity(path), scheme=scheme)
+
+
+def cache_policy_statistics(data, expected):
+    """Per-step metadata, with first use age1 and exclusive refresh reasons."""
+    s = data['coupled_newton']
+    require(s['preconditioner_policy'] == expected, 'wrong Newton preconditioner policy')
+    require(isinstance(s['relative_drift_limit'], (int, float)) and not isinstance(s['relative_drift_limit'], bool) and
+            math.isfinite(s['relative_drift_limit']) and 0 <= s['relative_drift_limit'] <= .25,
+            'relative drift limit must be finite and lie in [0,.25]')
+    require(type(s['maximum_uses']) is int and s['maximum_uses'] > 0, 'maximum uses must be a positive integer')
+    require(isinstance(s['step_seconds_cap'], (int, float)) and not isinstance(s['step_seconds_cap'], bool) and
+            math.isfinite(s['step_seconds_cap']) and s['step_seconds_cap'] > 0, 'invalid Newton step wall cap')
+    for key in ('refreshes', 'reuses', 'maximum_used_age'):
+        require(type(s[key]) is int and s[key] >= 0, 'invalid per-step preconditioner counter: '+key)
+    reasons = s['refresh_reasons']
+    require(set(reasons) == set(REFRESH_REASONS) and
+            all(type(v) is int and v >= 0 for v in reasons.values()), 'malformed exclusive refresh reasons')
+    require(sum(reasons.values()) == s['refreshes'], 'exclusive refresh reasons do not sum to refreshes')
+    used = s['refreshes']+s['reuses']
+    require((1 <= s['maximum_used_age'] <= s['maximum_uses']) if used else s['maximum_used_age'] == 0,
+            'preconditioner use age is inconsistent or exceeds maximum_uses')
+    if s['reuses']: require(s['maximum_used_age'] >= 2, 'a reused factorization cannot have first-use age1')
+    if expected == 'RebuildEveryNewtonV1':
+        require(s['reuses'] == 0 and s['maximum_used_age'] <= 1,
+                'rebuild control reused a preconditioner')
+        require(all(reasons[key] == 0 for key in ('cold', 'alpha', 'drift', 'age')),
+                'rebuild control violates declared refresh-reason precedence')
+    else:
+        require(reasons['control'] == 0, 'operator-drift policy reports a rebuild-control refresh')
+    return s
+
+
+def cache_log(path, final, expected, deadline):
+    """Bind consecutive per-step evidence once; final JSON duplicates last row."""
+    log = path.with_name(path.name[:-len('.result.json')]+'.steps.jsonl')
+    require(log.is_file(), 'NewtonCacheV1 requires the sibling complete per-step .steps.jsonl')
+    bound_keys = ('schema', 'model', 'source_identity', 'reference_identity', 'signature', 'sizes', 'gauge',
+                  'basis', 'manufactured', 'implicit_solver', 'dt', 'quadratureX', 'quadratureR',
+                  'linear_tolerance', 'nonlinear_tolerance', 'maximum_iterations', 'mms_variant',
+                  'mms_body_amplitude', 'constitutive_backend', 'stress_split', 'steady_velocity_preconditioner',
+                  'anderson_depth')
+    policy_keys = ('relative_drift_limit', 'maximum_uses', 'step_seconds_cap', 'uncommitted_guard',
+                   'physical_acceptance_guard')
+    total = dict(refreshes=0, reuses=0, maximum_used_age=0,
+                 refresh_reasons={key: 0 for key in REFRESH_REASONS})
+    rows = []; previous = None
+    with log.open() as stream:
+        for line in stream:
+            clock(deadline); require(line.strip(), 'blank native step-log record')
+            d = native_json(line)
+            require(all(d[key] == final[key] for key in bound_keys), 'step-log scientific/configuration binding differs')
+            require(type(d['step']) is int and 0 < d['step'] <= final['step'] and
+                    math.isfinite(d['time']) and abs(d['time']-d['step']*d['dt']) <= 2e-13*max(1., d['time']),
+                    'step-log scientific clock is invalid')
+            if previous is not None:
+                require(d['step'] == previous['step']+1, 'step log is not consecutive; use InfoSteps=1')
+                require(d['previous_sha256'] == previous['state_sha256'] and
+                        d['previous_advection_sha256'] == previous['advection_sha256'],
+                        'step-log accepted state/advection history chain differs')
+            s = cache_policy_statistics(d, expected)
+            require(all(s[key] == final['coupled_newton'][key] for key in policy_keys), 'step-log policy settings/guards changed')
+            for key in ('refreshes', 'reuses'): total[key] += s[key]
+            total['maximum_used_age'] = max(total['maximum_used_age'], s['maximum_used_age'])
+            for key in REFRESH_REASONS: total['refresh_reasons'][key] += s['refresh_reasons'][key]
+            rows.append(dict(step=d['step'], time=d['time'], refreshes=s['refreshes'], reuses=s['reuses'],
+                             maximum_used_age=s['maximum_used_age'], refresh_reasons=s['refresh_reasons']))
+            previous = d
+    require(previous is not None and previous['step'] == final['step'] and previous['time'] == final['time'],
+            'step log does not end at the completed result')
+    for key in ('state_sha256', 'previous_sha256', 'advection_sha256', 'previous_advection_sha256', 'coupled_newton'):
+        require(previous[key] == final[key], 'final result differs from duplicate final step-log record: '+key)
+    require(total['refreshes'] > 0, 'logged trajectory does not exercise preconditioner refresh')
+    if expected == 'OperatorDriftV1': require(total['reuses'] > 0, 'logged trajectory does not exercise preconditioner reuse')
+    return dict(log=identity(log), counts_are='PER_PHYSICAL_STEP', final_result_counted_again=False,
+                first_logged_step=rows[0]['step'], last_logged_step=rows[-1]['step'],
+                complete_logged_interval=True, totals=total, steps=rows)
+
+
+def newton_cache_evidence(old, new, old_path, new_path, deadline):
+    a, b = old['data'], new['data']
+    sa = cache_policy_statistics(a, 'RebuildEveryNewtonV1')
+    sb = cache_policy_statistics(b, 'OperatorDriftV1')
+    for key in ('relative_drift_limit', 'maximum_uses', 'step_seconds_cap', 'uncommitted_guard', 'physical_acceptance_guard'):
+        require(sa[key] == sb[key], 'Newton-cache comparison changed common policy setting/guard: '+key)
+    first = cache_log(old_path, a, 'RebuildEveryNewtonV1', deadline)
+    second = cache_log(new_path, b, 'OperatorDriftV1', deadline)
+    require([(r['step'], r['time']) for r in first['steps']] == [(r['step'], r['time']) for r in second['steps']],
+            'old/new step-log intervals or scientific clocks differ')
+    return dict(old=first, new=second, gate_pass=True,
+                scope='Recorded refresh/reuse coverage and bounded ages; fresh residual/Jv/guard equations need independent validation.')
 
 
 def inventory(data, ref):
@@ -251,6 +342,7 @@ def cache_duals(old, new, data, ref, deadline):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for key in ('old', 'new', 'table', 'out'): parser.add_argument('--'+key, type=Path, required=True)
+    parser.add_argument('--comparison', choices=('PicardNewtonV1', 'NewtonCacheV1'), default='PicardNewtonV1')
     parser.add_argument('--seconds', type=float, required=True); args = parser.parse_args()
     require(sys.platform.startswith('linux') and math.isfinite(args.seconds) and 0 < args.seconds <= 180,
             'Linux-only analysis requires explicit cap in (0,180] seconds')
@@ -259,6 +351,7 @@ def main():
     cap = min([8*1024**3]+[v for v in (soft, hard) if v != resource.RLIM_INFINITY]); resource.setrlimit(resource.RLIMIT_AS, (cap, hard))
     began = time.monotonic(); deadline = began+args.seconds
     report = dict(schema='WJH27ImplicitAlgorithmComparisonV1', status='NOT_MET', comparison_gate_pass=False,
+        comparison=args.comparison,
         full_H27_qualification=False, complete_current_equations_verified_here=False,
         native_json_parser='PreserveLiteralNegativeZeroV1; metadata/map integers retain integer type',
         old=identity(args.old), new=identity(args.new), table=identity(args.table), limit=LIMIT,
@@ -269,12 +362,15 @@ def main():
     try:
         require(report['table']['sha256'] == po.TABLE_SHA, 'table is not the pinned qualified v2 reference')
         ref = po.Reference(json.loads(args.table.read_text()))
-        old, new = load(args.old, 'PicardV1'), load(args.new, 'CoupledJFNKV1'); a, b = old['data'], new['data']
+        old_solver = 'PicardV1' if args.comparison == 'PicardNewtonV1' else 'CoupledJFNKV1'
+        old, new = load(args.old, old_solver), load(args.new, 'CoupledJFNKV1'); a, b = old['data'], new['data']
         for key in EXACT_KEYS: require(a[key] == b[key], 'comparison changed non-algorithm identity/configuration: '+key)
         require(a['reference_identity'] == po.TABLE_SHA, 'native reference identity mismatch')
         for key in ('step', 'time', 'dt'): require(a['input_history'][key] == b['input_history'][key], 'input-history clock differs')
         for key in ('scales', 'reference_scales'):
             require((key in a) == (key in b) and a.get(key) == b.get(key), 'reported scales differ')
+        if args.comparison == 'NewtonCacheV1':
+            report['preconditioner_reuse_evidence'] = newton_cache_evidence(old, new, args.old, args.new, deadline)
         owners, _ = inventory(a, ref)
         report.update(source_identity=a['source_identity'], reference_identity=a['reference_identity'],
             exact_metadata_sha256=digest({key: a[key] for key in EXACT_KEYS}),
@@ -305,6 +401,7 @@ def main():
             dependent=all(v['gate_pass'] for v in report['dependent'].values()),
             lifts=all(v <= LIMIT for v in lifts.values()),
             explicit_history_duals=all(v <= LIMIT for row in report['explicit_history_full_mass_dual'].values() for v in row.values()))
+        if args.comparison == 'NewtonCacheV1': gates['preconditioner_reuse_coverage'] = report['preconditioner_reuse_evidence']['gate_pass']
         report.update(gates=gates, comparison_gate_pass=bool(all(gates.values())),
                       status='PASS_IMPLICIT_ALGORITHM_COMPARISON_ONLY' if all(gates.values()) else 'NOT_MET')
     except Exception as error:

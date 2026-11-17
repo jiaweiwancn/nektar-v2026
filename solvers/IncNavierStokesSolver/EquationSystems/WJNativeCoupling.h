@@ -30,6 +30,9 @@ struct CoupledOptions
     // Equivalent solvers of the same current implicit BDF/EX equations.
     std::string advancement="PicardV1";
     SteadyKrylovOptions stepNewton;
+    std::string stepPreconditioner="RebuildEveryNewtonV1";
+    double stepPCRelativeDrift=.02;
+    int stepPCMaximumUses=8;
     ConstitutiveBackend backend=ConstitutiveBackend::Historical;
     std::string sourceIdentity,mmsVariant="Historical",initialSourceIdentity;
 };
@@ -60,7 +63,22 @@ struct CoupledStepInfo
               coupledResidualEvaluations=0,coupledPreconditionerApplications=0,
               coupledRejectedTrials=0;
     bool coupledStatisticsComplete=true;
+    int timePCRefreshes=0,timePCReuses=0,timePCMaximumUsedAge=0;
+    // Exclusive reasons: cold, alpha, drift, age, control, retry, injected.
+    std::array<int,7>timePCRefreshReasons{};
+    struct TimePCEvent
+    {
+        int attempt=0,base=0,ageBefore=0,ageUsed=0;
+        double alpha=0,drift=0;
+        std::string reason;
+        bool refreshed=false;
+    };
+    std::vector<TimePCEvent>timePCEvents;
 };
+
+// Append comma-prefixed numerical cache members to an open diagnostic object.
+void WriteStepPreconditionerFields(std::ostream&out,const CoupledOptions&options,
+                                  const CoupledStepInfo&info);
 
 /** Supported flat serial, fully coupled BDF2/EX2 velocity/modified-pressure,
  * full-domain k and outer-only epsilon. E_w and the reference cutoff are
@@ -160,6 +178,13 @@ private:
     Vec m_preconditionerCoefficients;
     Vec m_kPreconditionerCoefficients,m_ePreconditionerCoefficients;
     double m_flowFactorAlpha=-1,m_kFactorAlpha=-1,m_eFactorAlpha=-1;
+    // These are inverse approximations only. Current residual/Jv/constitutive
+    // data never read them, and no derived factor is serialized in a restart.
+    std::array<Sparse,3>m_timePCOperators;
+    Sparse m_timePCEpsilonFull;
+    double m_timePCAlpha=-1;
+    int m_timePCUses=0;
+    bool m_timePCReady=false;
     CoupledHistory m_lastInputHistory;
     CoupledStepInfo m_lastAttempt;
     bool m_hasInputHistory=false;

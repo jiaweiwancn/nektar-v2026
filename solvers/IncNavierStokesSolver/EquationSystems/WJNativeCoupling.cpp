@@ -73,6 +73,12 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     Require(m_options.stressSplit=="PositiveShearV1"||m_options.stressSplit=="IsotropicMuV1","unknown numerical stress split");
     Require(m_options.steadyVelocityPC=="FullGradientV1"||m_options.steadyVelocityPC=="PositiveFrozenV1","unknown steady velocity preconditioner");
     Require(m_options.advancement=="PicardV1"||m_options.advancement=="CoupledJFNKV1","unknown implicit coupled solver");
+    Require(m_options.stepPreconditioner=="RebuildEveryNewtonV1"||m_options.stepPreconditioner=="OperatorDriftV1",
+        "unknown implicit Newton preconditioner policy");
+    Require(std::isfinite(m_options.stepPCRelativeDrift)&&m_options.stepPCRelativeDrift>=0&&m_options.stepPCRelativeDrift<=.25&&
+        m_options.stepPCMaximumUses>=1&&m_options.stepPCMaximumUses<=64,"invalid Newton preconditioner refresh policy");
+    Require(m_options.advancement=="CoupledJFNKV1"||m_options.stepPreconditioner=="RebuildEveryNewtonV1",
+        "Newton preconditioner reuse is not a Picard option");
     if(m_options.advancement=="CoupledJFNKV1"){
         Require(m_options.andersonDepth==0,"Anderson acceleration is a Picard-only option");
         Require(std::isfinite(m_options.stepNewton.maximumSeconds)&&m_options.stepNewton.maximumSeconds>0&&
@@ -99,6 +105,7 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     const auto&newton=m_options.stepNewton;
     signature<<'|'<<m_options.advancement<<'|'<<newton.maximumSeconds<<'|'<<newton.acceptanceNorm<<'|'
         <<newton.maximumNewtonIterations<<'|'<<newton.restartDimension<<'|'<<newton.maximumLinearCycles<<'|'<<newton.fdRelativeStep;
+    signature<<'|'<<m_options.stepPreconditioner<<'|'<<m_options.stepPCRelativeDrift<<'|'<<m_options.stepPCMaximumUses;
     for(const auto&e:m_flow.Elements()){
         signature<<'|'<<e.geometry<<','<<e.xl<<','<<e.xr<<','<<e.rl<<','<<e.rr;
         for(int a:e.u)signature<<','<<a;for(double a:e.us)signature<<','<<a;
@@ -832,7 +839,14 @@ SteadyKrylovResult Coupling::SolveSteady(CoupledHistory&history,const SteadyKryl
     return result;
 }
 void Coupling::ResetPreconditioners()
-{m_flow.ResetPreconditioner();m_k.ResetPreconditioner();m_e.ResetPreconditioner();m_preconditionerCoefficients.resize(0);m_kPreconditionerCoefficients.resize(0);m_ePreconditionerCoefficients.resize(0);m_flowFactorAlpha=m_kFactorAlpha=m_eFactorAlpha=-1;}
+{
+    m_flow.ResetPreconditioner();m_k.ResetPreconditioner();m_e.ResetPreconditioner();
+    m_preconditionerCoefficients.resize(0);m_kPreconditionerCoefficients.resize(0);m_ePreconditionerCoefficients.resize(0);
+    m_flowFactorAlpha=m_kFactorAlpha=m_eFactorAlpha=-1;
+    m_timePCReady=false;m_timePCAlpha=-1;m_timePCUses=0;
+    for(auto&matrix:m_timePCOperators)matrix.resize(0,0);
+    m_timePCEpsilonFull.resize(0,0);
+}
 
 void Coupling::CheckHistory(const CoupledHistory&h)const
 {
@@ -857,8 +871,9 @@ CoupledHistory Coupling::ReadHistory(const std::filesystem::path&path)const
     CoupledHistory h;stream.read(reinterpret_cast<char*>(&h.step),sizeof(h.step));stream.read(reinterpret_cast<char*>(&h.time),sizeof(double));stream.read(reinterpret_cast<char*>(&h.dt),sizeof(double));
     for(auto*s:{&h.current,&h.previous,&h.advection,&h.previousAdvection}){int which=0;for(auto*v:{&s->flow,&s->k,&s->epsilon}){std::uint64_t n=0;stream.read(reinterpret_cast<char*>(&n),sizeof(n));const int expected=which==0?2*m_flow.VelocitySize()+m_flow.PressureSize():which==1?m_k.Size():m_e.Size();++which;Require(n==std::uint64_t(expected),"coupled checkpoint vector inventory differs");v->resize(n);stream.read(reinterpret_cast<char*>(v->data()),n*sizeof(double));}}
     Require(stream.good()&&stream.peek()==std::char_traits<char>::eof(),"coupled checkpoint has truncated/trailing bytes");CheckHistory(h);
-    // Derived state is rebuilt cold. Recheck the trace and every current
-    // scientific guard, then compare reconstructed explicit histories.
+    // Reconstruct scientific derived data and compare the explicit histories.
+    // Normal factory cold restarts use a new Coupling instance. External
+    // same-instance reloads call ResetPreconditioners for cold inverse setup.
     CoupledTiming timing;auto data=Evaluate(h.current,h.time,true,timing);Require(data.traceError<1e-10,"restored dependent trace differs");auto adv=Advection(h.current,data.kRules);
     for(const auto pair:{std::make_pair(&adv.flow,&h.advection.flow),std::make_pair(&adv.k,&h.advection.k),std::make_pair(&adv.epsilon,&h.advection.epsilon)})Require((*pair.first-*pair.second).norm()<=1e-12*std::max(pair.first->norm(),1e-30),"restored explicit history differs from current state");
     auto previous=Evaluate(h.previous,h.step>0?(h.step-1)*h.dt:0,true,timing);auto oldAdv=Advection(h.previous,previous.kRules);
@@ -893,7 +908,8 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
         <<",\"rejected_trials\":"<<info.coupledRejectedTrials
         <<",\"counts_complete\":"<<(info.coupledStatisticsComplete?"true":"false")
         <<",\"step_seconds_cap\":"<<m_options.stepNewton.maximumSeconds
-        <<",\"uncommitted_guard\":\"positivity/root/covariance\",\"physical_acceptance_guard\":\"fresh full planar principal and complete current residual\"}";
+        <<",\"uncommitted_guard\":\"positivity/root/covariance\",\"physical_acceptance_guard\":\"fresh full planar principal and complete current residual\"";
+    WriteStepPreconditionerFields(out,m_options,info);out<<'}';
     out<<",\"nonlinear_trace_scope\":"<<RANSWallSolveJson::Quote(m_options.advancement=="CoupledJFNKV1"?
         "Uncommitted Newton bases and Armijo candidates; FD excluded; records are not accepted updates; times are inclusive observations":
         "Completed Picard iterations and guarded acceleration proposals; times are inclusive observations");

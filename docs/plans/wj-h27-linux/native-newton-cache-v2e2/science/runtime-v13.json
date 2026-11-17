@@ -1,0 +1,59 @@
+{
+  "scope": "opt-in H27 native targets; qualification scope belongs to each test",
+  "source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v13.json",
+    "bytes": 1130573,
+    "sha256": "0ad2898e9b969b9bff6daf7557995baf2892934faf07cf7e34e01127a407d68e"
+  },
+  "configure": [
+    "cmake",
+    "-S",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v13/solvers/IncNavierStokesSolver/Tests/RANS/h27",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/build-v13",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math",
+    "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+  ],
+  "build": [
+    "cmake",
+    "--build",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/build-v13",
+    "--target",
+    "IncNavierStokesSolver",
+    "--parallel",
+    "4"
+  ],
+  "executables": [
+    {
+      "executable": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v13/IncNavierStokesSolver.elf",
+        "bytes": 9892216,
+        "sha256": "808364eb743afb60b9cdaa1c4e08c3b97ca9ba2d5bcde7390fcb7d0a87e3a8f5"
+      },
+      "wrapper": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v13/IncNavierStokesSolver",
+        "bytes": 380,
+        "sha256": "991c320d2f2732d679a86012348b61048f2f1dd5b56428a74d1e2af12710183a"
+      },
+      "link": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v13/CMakeFiles/IncNavierStokesSolver.dir/link.txt",
+        "bytes": 12653,
+        "sha256": "19096cfe9bfa791c8acf05473b56e002695792fb0ff893dcf9bdc2b5b520efcd"
+      }
+    }
+  ],
+  "loader": {
+    "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2",
+    "bytes": 240936,
+    "sha256": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+  },
+  "libraries": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc:/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/geometry:/home/jay/.local/opt/nektar-v2026-mpi/lib64",
+  "compiler": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0\nCopyright (C) 2021 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "compile_commands": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v13/compile_commands.json",
+    "bytes": 153241,
+    "sha256": "9bc7ac8192422ac7c70ce022d1499722107e608695dea7de1751829ac12efcc9"
+  }
+}

@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/checkpoint13-publication.py", line 70, in <module>
+    prior = read(r/'evidence/native-time-newton-v2d/accounting-open-after-publication.json')['entries']
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/checkpoint13-publication.py", line 11, in read
+    return json.loads(path.read_text(), parse_int=lambda t: -0.0 if t == '-0' else int(t))
+  File "/usr/lib/python3.10/pathlib.py", line 1134, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/usr/lib/python3.10/pathlib.py", line 1119, in open
+    return self._accessor.open(self, mode, buffering, encoding, errors,
+FileNotFoundError: [Errno 2] No such file or directory: '/home/jay/build/wj-h27-coupling-r1-20261117/evidence/native-time-newton-v2d/accounting-open-after-publication.json'

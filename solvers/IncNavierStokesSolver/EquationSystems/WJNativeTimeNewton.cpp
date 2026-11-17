@@ -3,6 +3,7 @@
 #include <IncNavierStokesSolver/EquationSystems/WJNativeFailures.h>
 #include <chrono>
 #include <cmath>
+#include <iomanip>
 #include <stdexcept>
 
 namespace Nektar::WJNative
@@ -21,6 +22,42 @@ struct AccountTime
     double &value;
     double start;
 };
+constexpr std::array<const char*,7> RefreshNames{
+    "cold","alpha","drift","age","control","retry","injected"};
+double OperatorChange(const Sparse &current,const Sparse &saved)
+{
+    if(current.rows()!=saved.rows()||current.cols()!=saved.cols())
+        throw std::logic_error("Newton inverse-operator cache has different field maps");
+    const double scale=saved.norm(), difference=(current-saved).norm();
+    if(!(std::isfinite(scale)&&scale>0&&std::isfinite(difference)&&difference>=0))
+        throw std::runtime_error("invalid Newton inverse-operator drift norm");
+    const double relative=difference/scale;
+    if(!std::isfinite(relative))throw std::runtime_error("nonfinite Newton inverse-operator drift");
+    return relative;
+}
+}
+
+void WriteStepPreconditionerFields(std::ostream &out,const CoupledOptions &options,
+                                  const CoupledStepInfo &info)
+{
+    out<<std::setprecision(17)<<",\"preconditioner_policy\":\""<<options.stepPreconditioner
+       <<"\",\"relative_drift_limit\":"<<options.stepPCRelativeDrift
+       <<",\"maximum_uses\":"<<options.stepPCMaximumUses
+       <<",\"refreshes\":"<<info.timePCRefreshes<<",\"reuses\":"<<info.timePCReuses
+       <<",\"maximum_used_age\":"<<info.timePCMaximumUsedAge<<",\"refresh_reasons\":{";
+    for(int i=0;i<int(RefreshNames.size());++i)
+    {if(i)out<<',';out<<'"'<<RefreshNames[i]<<"\":"<<info.timePCRefreshReasons[i];}
+    out<<"},\"preconditioner_events_recorded\":"<<(options.recordNonlinearTrace&&options.advancement=="CoupledJFNKV1"?"true":"false")
+       <<",\"preconditioner_events\":[";
+    for(int i=0;i<int(info.timePCEvents.size());++i)
+    {
+        const auto &e=info.timePCEvents[i];if(i)out<<',';
+        out<<"{\"attempt\":"<<e.attempt<<",\"base\":"<<e.base
+           <<",\"alpha\":"<<e.alpha<<",\"drift\":"<<e.drift
+           <<",\"age_before\":"<<e.ageBefore<<",\"age_used\":"<<e.ageUsed
+           <<",\"reason\":\""<<e.reason<<"\",\"refreshed\":"<<(e.refreshed?"true":"false")<<'}';
+    }
+    out<<']';
 }
 
 CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetry)
@@ -64,7 +101,10 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
         rowScale.tail(ne)=m_e.ResidualRowScale();
         checkDeadline();
     }
-    catch(...){save();throw;}
+    catch(...){
+        {AccountTime timer(info.timing.rebuild);ResetPreconditioners();}
+        save();throw;
+    }
 
     auto norms=[&](const Vec &raw) {
         if(raw.size()!=size||!raw.allFinite())
@@ -83,11 +123,13 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
         try
         {
             checkDeadline();
+            if(attempt||m_options.stepPreconditioner=="RebuildEveryNewtonV1")
             { AccountTime timer(info.timing.rebuild);ResetPreconditioners(); }
             CoupledState initial;
             { AccountTime timer(info.timing.wall);initial=DirichletState(history.current,time); }
             CoupledState pcState;
-            Sparse epsilonPCFull;
+            const Sparse *epsilonPCFull=nullptr;
+            int prepareBase=0;
             Vec validatedUnknowns;
             std::shared_ptr<const Data> validatedData;
             auto unpack=[&](const Vec &x) {
@@ -183,18 +225,54 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
                 // EX advection is fixed history, so it has no current-state
                 // transport Jacobian. Alpha is the actual BE/BDF2 coefficient.
                 Sparse flowPC=VelocityTangent(data,info.timing), kPC, ePC;
+                double drift=0;
+                const int previousAge=m_timePCUses;
                 {
                     AccountTime timer(info.timing.assembly);
                     kPC=m_k.Diffusion(data.kRules,data.Dk);
                     ePC=m_e.Diffusion(m_rules.Static(),data.De,data.reactionE);
-                    epsilonPCFull=ePC+alpha*m_e.Mass();
+                    if(m_timePCReady)
+                        drift=std::max({OperatorChange(flowPC,m_timePCOperators[0]),
+                            OperatorChange(kPC,m_timePCOperators[1]),
+                            OperatorChange(ePC,m_timePCOperators[2])});
+                    info.coefficientDrift=std::max(info.coefficientDrift,drift);
                 }
+                // This norm is a numerical refresh heuristic for inverse
+                // operators only. No residual, Jv, load or physical coefficient
+                // is ever taken from this cache. Alpha changes always refresh.
+                int reason=-1;
+                if(injectRetry&&attempt==0)reason=6;
+                else if(attempt)reason=5; // cold retry: fresh at EVERY base
+                else if(m_options.stepPreconditioner=="RebuildEveryNewtonV1")reason=4;
+                else if(!m_timePCReady)reason=0;
+                else if(alpha!=m_timePCAlpha)reason=1;
+                else if(drift>m_options.stepPCRelativeDrift)reason=2;
+                else if(m_timePCUses>=m_options.stepPCMaximumUses)reason=3;
+                if(reason>=0)
                 {
-                    AccountTime timer(info.timing.rebuild);
-                    m_flow.PrepareLinearPreconditioner(m_flow.System(alpha,flowPC,1.));++info.rebuilds;
-                    m_k.PrepareLinearPreconditioner(m_k.System(alpha,kPC));++info.rebuilds;
-                    m_e.PrepareLinearPreconditioner(m_e.System(alpha,ePC));++info.rebuilds;
+                    m_timePCReady=false; // a partial factorization cannot be reused
+                    {
+                        AccountTime timer(info.timing.rebuild);
+                        m_flow.PrepareLinearPreconditioner(m_flow.System(alpha,flowPC,1.));++info.rebuilds;
+                        m_k.PrepareLinearPreconditioner(m_k.System(alpha,kPC));++info.rebuilds;
+                        m_e.PrepareLinearPreconditioner(m_e.System(alpha,ePC));++info.rebuilds;
+                    }
+                    {
+                        AccountTime timer(info.timing.assembly);
+                        m_timePCOperators={std::move(flowPC),std::move(kPC),std::move(ePC)};
+                        m_timePCEpsilonFull=m_timePCOperators[2]+alpha*m_e.Mass();
+                    }
+                    m_timePCAlpha=alpha;m_timePCUses=0;m_timePCReady=true;
+                    ++info.timePCRefreshes;++info.timePCRefreshReasons[reason];
                 }
+                else ++info.timePCReuses;
+                ++m_timePCUses;
+                info.timePCMaximumUsedAge=std::max(info.timePCMaximumUsedAge,m_timePCUses);
+                epsilonPCFull=&m_timePCEpsilonFull;
+                if(m_options.recordNonlinearTrace)
+                    info.timePCEvents.push_back({attempt,prepareBase,previousAge,m_timePCUses,
+                        alpha,drift,reason<0?"reuse":RefreshNames[reason],reason>=0});
+                ++prepareBase;
                 if(injectRetry&&attempt==0)
                     throw NativeLinearFailure("qualification injected recoverable Krylov failure");
             };
@@ -230,8 +308,10 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
                 }
                 {
                     AccountTime timer(info.timing.scalar);
+                    if(!epsilonPCFull||!m_timePCReady)
+                        throw std::logic_error("unprepared Newton inverse-operator cache");
                     result.tail(ne)=m_e.ApplyLinearPreconditioner(
-                        rhs.tail(ne)-m_e.Restrict(epsilonPCFull*trace));
+                        rhs.tail(ne)-m_e.Restrict((*epsilonPCFull)*trace));
                 }
                 return result;
             };
@@ -289,9 +369,13 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
         catch(const NativeLinearFailure &error)
         {
             info.retryReason=error.what();
+            {AccountTime timer(info.timing.rebuild);ResetPreconditioners();}
             if(attempt==1){save();throw;}
         }
-        catch(...){save();throw;}
+        catch(...){
+            {AccountTime timer(info.timing.rebuild);ResetPreconditioners();}
+            save();throw;
+        }
     }
     throw std::runtime_error("unreachable implicit retry state");
 }
