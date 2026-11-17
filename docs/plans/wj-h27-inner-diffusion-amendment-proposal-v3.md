@@ -8,6 +8,10 @@ The existing v2 sources, executable identities, tables and results remain
 unchanged. Implementation requires a separately reviewed, explicitly approved
 version. No claim is made that the proposal will pass H27.
 
+The subsequent [v4 proposal](wj-h27-historical-inner-transport-proposal-v4.md)
+supplies the independent two-factor control. Diffusion-only v3 is not the
+recommended candidate from that evidence; it remains inactive and preserved.
+
 ## Evidence and its limits
 
 The source-v11 physical v2 steady calculations on 700 and 2800 cells have

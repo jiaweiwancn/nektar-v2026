@@ -1,0 +1,287 @@
+{
+  "schema": "WJH27InactiveReferenceFactorialV1",
+  "status": "PASS_INACTIVE_COLUMN_CONTROLS_ONLY",
+  "proposal_only": true,
+  "active_model_changed": false,
+  "runtime_table_produced": false,
+  "physical_reference_qualified": false,
+  "full_H27_qualification": false,
+  "TASK3_READY": false,
+  "scope": "Independent Kin columns only; no new actual-flow PDE or history",
+  "sources": {
+    "control": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-reference-factorial-v1/reference_factorial_control.py",
+      "sha256": "77c2641053eeb32dcacf10606f1f22be5f202186dfb267d50af0f61c0c46b1ac"
+    },
+    "fast": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/fast_reference.py",
+      "sha256": "65664ef400cfd90f5bb4d83e24b08e0f9ac52d1f6f4385b87012360accd526e0"
+    },
+    "oracle": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/reference_oracle.py",
+      "sha256": "f5c97e5c1f5426df4ac363b8d8dd99b84d636514a0cb899dec1219ceda4b35e9"
+    }
+  },
+  "existing_table": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+  },
+  "historical_logc": -1.736517843996261,
+  "trials": [
+    {
+      "diffusion": "scalar",
+      "logc": -1.6247253152137495,
+      "reference_QH_over_A": 0.0,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": -9.148307111850329e-13
+    },
+    {
+      "diffusion": "scalar",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.0,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": -0.11179252878347737
+    },
+    {
+      "diffusion": "scalar",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.025,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": -0.0526684025460326
+    },
+    {
+      "diffusion": "scalar",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.05,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": 0.016213596392747588
+    },
+    {
+      "diffusion": "scalar",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.025,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": -0.0526684025460326
+    },
+    {
+      "diffusion": "scalar",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.05,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": 0.016213596392747588
+    },
+    {
+      "diffusion": "scalar",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.04411544502099974,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": -0.0011587428274652065
+    },
+    {
+      "diffusion": "scalar",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.044507947480703476,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": -2.545079373602807e-05
+    },
+    {
+      "diffusion": "scalar",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.04451674825112538,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": 7.351687834888931e-11
+    },
+    {
+      "diffusion": "scalar",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.044516748225703645,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": 5.297845495633169e-15
+    },
+    {
+      "diffusion": "scalar",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.044516748225599194,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": -3.0009675300313177e-13
+    },
+    {
+      "diffusion": "scalar",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.044516748225703645,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": 5.297845495633169e-15
+    },
+    {
+      "diffusion": "auxiliary",
+      "logc": -1.6240098718344576,
+      "reference_QH_over_A": 0.0,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": -4.918418103350142e-13
+    },
+    {
+      "diffusion": "auxiliary",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.0,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": -0.112507972162416
+    },
+    {
+      "diffusion": "auxiliary",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.025,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": -0.052758806953080016
+    },
+    {
+      "diffusion": "auxiliary",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.05,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": 0.014575409540160395
+    },
+    {
+      "diffusion": "auxiliary",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.025,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": -0.052758806953080016
+    },
+    {
+      "diffusion": "auxiliary",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.05,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": 0.014575409540160395
+    },
+    {
+      "diffusion": "auxiliary",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.04458840902172538,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": -0.0008129013201438069
+    },
+    {
+      "diffusion": "auxiliary",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.044874281167814244,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": -1.2601441858858635e-05
+    },
+    {
+      "diffusion": "auxiliary",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.04487877859370792,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": -1.1002165324625057e-11
+    },
+    {
+      "diffusion": "auxiliary",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.04487877859763451,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": 3.4824573780234402e-15
+    },
+    {
+      "diffusion": "auxiliary",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.04487877859753003,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": -2.891124839532466e-13
+    },
+    {
+      "diffusion": "auxiliary",
+      "logc": -1.736517843996261,
+      "reference_QH_over_A": 0.04487877859763451,
+      "status": "PASS_IVP_ONLY",
+      "ground_flux_over_A": 3.4824573780234402e-15
+    }
+  ],
+  "rows": [
+    {
+      "diffusion": "scalar",
+      "cutoff_policy": "full-WJ zero-endpoint-flux calibration",
+      "logc": -1.6247253152137495,
+      "c_over_H": 0.1969657712749514,
+      "reference_QH_over_A": 0.0,
+      "ground_flux_over_A": -9.148307111850329e-13,
+      "budget_over_A": 8.881784197001252e-15,
+      "minimum_k_over_K": 1.0,
+      "minimum_shear_tangent": 0.00011490971129249645,
+      "traction_error_over_tau": 5.168822352487605e-15,
+      "ground_k_over_K": 1.6304373780714778,
+      "ground_k_departure_over_K": -0.32642485985368874,
+      "inner_k_departure_RMS_over_K": 0.09938390066263801,
+      "inner_k_departure_sampled_MAX_over_K": 0.3264248598536885,
+      "inner_U_departure_RMS": 0.0067616047054221045,
+      "inner_U_departure_sampled_MAX": 0.015737326786919914,
+      "velocity_anchor": 0.42150691439976745,
+      "interpretation": "Counterfactual column versus unchanged inlet; not a 2D application result",
+      "column_controls_pass": true
+    },
+    {
+      "diffusion": "scalar",
+      "cutoff_policy": "historical cutoff, independently solved reference QH",
+      "logc": -1.736517843996261,
+      "c_over_H": 0.17613265539846232,
+      "reference_QH_over_A": 0.044516748225703645,
+      "ground_flux_over_A": 5.297845495633169e-15,
+      "budget_over_A": -5.966616090091748e-13,
+      "minimum_k_over_K": 0.98809825397069,
+      "minimum_shear_tangent": 0.00011490971129249645,
+      "traction_error_over_tau": 6.002503377082379e-15,
+      "ground_k_over_K": 1.4705772758189513,
+      "ground_k_departure_over_K": -0.4862849621062153,
+      "inner_k_departure_RMS_over_K": 0.1165300800256927,
+      "inner_k_departure_sampled_MAX_over_K": 0.4862849621062151,
+      "inner_U_departure_RMS": 0.002298088869120187,
+      "inner_U_departure_sampled_MAX": 0.006271671782626442,
+      "velocity_anchor": 0.4309725694040609,
+      "interpretation": "Counterfactual column versus unchanged inlet; not a 2D application result",
+      "column_controls_pass": true
+    },
+    {
+      "diffusion": "auxiliary",
+      "cutoff_policy": "full-WJ zero-endpoint-flux calibration",
+      "logc": -1.6240098718344576,
+      "c_over_H": 0.19710673955335495,
+      "reference_QH_over_A": 0.0,
+      "ground_flux_over_A": -4.918418103350142e-13,
+      "budget_over_A": 8.881784197001252e-15,
+      "minimum_k_over_K": 1.0,
+      "minimum_shear_tangent": 0.00011490971129249645,
+      "traction_error_over_tau": 5.3355585574065596e-15,
+      "ground_k_over_K": 2.381861212238158,
+      "ground_k_departure_over_K": 0.4249989743129914,
+      "inner_k_departure_RMS_over_K": 0.1884674141918991,
+      "inner_k_departure_sampled_MAX_over_K": 0.4249989743129916,
+      "inner_U_departure_RMS": 0.0068235232535330545,
+      "inner_U_departure_sampled_MAX": 0.015839710919812233,
+      "velocity_anchor": 0.42140453026687513,
+      "interpretation": "Counterfactual column versus unchanged inlet; not a 2D application result",
+      "column_controls_pass": true
+    },
+    {
+      "diffusion": "auxiliary",
+      "cutoff_policy": "historical cutoff, independently solved reference QH",
+      "logc": -1.736517843996261,
+      "c_over_H": 0.17613265539846232,
+      "reference_QH_over_A": 0.04487877859763451,
+      "ground_flux_over_A": 3.4824573780234402e-15,
+      "budget_over_A": -2.8505670046641285e-13,
+      "minimum_k_over_K": 0.9883047446811342,
+      "minimum_shear_tangent": 0.00011490971129249645,
+      "traction_error_over_tau": 5.8357671721634245e-15,
+      "ground_k_over_K": 1.935394997031848,
+      "ground_k_departure_over_K": -0.02146724089331853,
+      "inner_k_departure_RMS_over_K": 0.018938559468185016,
+      "inner_k_departure_sampled_MAX_over_K": 0.02146724089398977,
+      "inner_U_departure_RMS": 0.002317305247410102,
+      "inner_U_departure_sampled_MAX": 0.006322335898180653,
+      "velocity_anchor": 0.4309219052885067,
+      "interpretation": "Counterfactual column versus unchanged inlet; not a 2D application result",
+      "column_controls_pass": true
+    }
+  ],
+  "elapsed_seconds": 10.792271441023331
+}
