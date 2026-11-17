@@ -351,6 +351,29 @@
       "path": "docs/plans/wj-h27-linux/native-cutoff-panels-v2i/post-publication-summary.json",
       "bytes": 254219,
       "sha256": "eee65171d07004ec8a328c42ce4415bc127a24455a0561cf4bf1530b993c9f25"
+    },
+    {
+      "path": "docs/plans/wj-h27-linux/native-mms-requalification-v2j/inventory.json",
+      "bytes": 116890,
+      "sha256": "6bd6f960c5eb603bfecc2ebc34a0eee52bcfacf4208434842641c4ae2f41a76d"
+    },
+    {
+      "path": "docs/plans/wj-h27-linux/native-mms-requalification-v2j/post-publication-summary.json",
+      "bytes": 249620,
+      "sha256": "b5aac7d9ec3f31faa6d4a2b615ceccfe948855ce7a181e02c6a8f7c12d5e9e82"
     }
-  ]
+  ],
+  "source19_numerical_MMS_foundations": {
+    "status": "PASS_SOURCE19_COUPLED_MMS_FOUNDATIONS_ONLY",
+    "report": {
+      "path": "docs/plans/wj-h27-linux/native-mms-requalification-v2j/assessment.json",
+      "bytes": 442316,
+      "sha256": "442b3a9b1f52684d7dca868d212570bac9bdfba3a6ebe19ab69055eeb855a471"
+    },
+    "temporal_source": "CoupledJFNKV1 with CurrentDataDriftV1; six source19 endpoints",
+    "steady_spatial_source": "True t=0 current-advection Historical MMS; five source19 endpoints",
+    "moving_cutoff_source": "Two continuous MMS variants with distinct current/exact surface roots and independent dense references; eight-cell two-step cases only",
+    "physical_dt_selected": false,
+    "full_H27_numerical_closure_claimed": false
+  }
 }

@@ -1,0 +1,301 @@
+{
+  "schema": "WJH27MovingCutoffMMSCheckV1",
+  "status": "PASS_MOVING_CUTOFF_COUPLED_MMS_ONLY",
+  "foundation_gate_pass": true,
+  "full_H27_qualification": false,
+  "TASK3_READY": false,
+  "manifest": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/manifest.json",
+    "sha256": "54bcbf165c85091d0cd20c0e95231e917f1671756aaea958b5b99f5329717a83",
+    "bytes": 2693
+  },
+  "checker": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-mms-requalification-v19/h27/mms_cutoff_crossing_check.py",
+    "sha256": "d0766f27b629621490bdf1c5ee82eee0f75f1997cb134b8d32600e5dc491fd4e",
+    "bytes": 8218
+  },
+  "oracle": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-mms-requalification-v19/h27/coupled_oracle.py",
+    "sha256": "44891e974a4104313cd6f64764d01f6f7a207eb28498e3153635f00d0a041ff6",
+    "bytes": 62217
+  },
+  "continuous_mms": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-mms-requalification-v19/h27/coupled_mms_check.py",
+    "sha256": "dc0283398bfa0a41870134459c3e3d07ca016a4ca13ae643e8b83ffc1699dc6a",
+    "bytes": 25085
+  },
+  "workers": 1,
+  "geometry": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/geometry.json",
+    "sha256": "5e8138435d012dbdba1a2d1d21a6953f796451c99e30aaeeb4fb691683c55b8e",
+    "bytes": 785
+  },
+  "cases": {
+    "poly8": {
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/poly8.result.json",
+        "sha256": "6dc1fed3d3fc4e38812ab6637ddac0d5a2c0ea30f260122ea5c6db00f65eddad",
+        "bytes": 71241
+      },
+      "independent": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/poly8-independent-v19b.json",
+        "sha256": "8255d10ce1c1e0bc9e637d87ab681bb6823c1fd414650ec76ea4733c1ad3161e",
+        "bytes": 30119
+      },
+      "owners": [
+        {
+          "owner": 1,
+          "bounds": [
+            0.49999999999999994,
+            1,
+            0,
+            0.02944229043455092
+          ],
+          "current_root": 0.6376184917808428,
+          "exact_root": 0.637511786704092,
+          "root_difference": 0.00010670507675081264,
+          "points": 2880,
+          "area": 0.01472114521727546
+        },
+        {
+          "owner": 3,
+          "bounds": [
+            0.49999999999999994,
+            1,
+            0.02944229043455089,
+            0.15000000000000002
+          ],
+          "current_root": 0.6376184917808428,
+          "exact_root": 0.637511786704092,
+          "root_difference": 0.00010670507675081264,
+          "points": 8640,
+          "area": 0.060278854782724565
+        }
+      ],
+      "current_equations": "PASS_CURRENT_COUPLED_STEP_ONLY",
+      "direct_reference": "PASS_INDEPENDENT_DENSE_NONLINEAR_REFERENCE",
+      "current_residual": {
+        "momentum": 2.485066248345635e-15,
+        "k": 1.0327886359367788e-13,
+        "epsilon": 8.779198602715885e-14,
+        "continuity": 1.4875218772902634e-17,
+        "gauge": 1.2754866551626264e-18
+      }
+    },
+    "poly12": {
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/poly12.result.json",
+        "sha256": "57297e68dcd68cda629b8b9aceaf650029eda0ada890e38b745cd30e9ea4b0fc",
+        "bytes": 71279
+      },
+      "independent": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/poly12-independent-v19b.json",
+        "sha256": "88e7a7d161592773b4e702419a21209b8d04345bdb735667bf5fd74d5fcc484f",
+        "bytes": 17237
+      },
+      "owners": [
+        {
+          "owner": 1,
+          "bounds": [
+            0.49999999999999994,
+            1,
+            0,
+            0.02944229043455092
+          ],
+          "current_root": 0.6376184917808428,
+          "exact_root": 0.637511786704092,
+          "root_difference": 0.00010670507675081264,
+          "points": 2880,
+          "area": 0.01472114521727546
+        },
+        {
+          "owner": 3,
+          "bounds": [
+            0.49999999999999994,
+            1,
+            0.02944229043455089,
+            0.15000000000000002
+          ],
+          "current_root": 0.6376184917808428,
+          "exact_root": 0.637511786704092,
+          "root_difference": 0.00010670507675081264,
+          "points": 8640,
+          "area": 0.060278854782724565
+        }
+      ],
+      "current_equations": "PASS_CURRENT_COUPLED_STEP_ONLY",
+      "direct_reference": "NOT_PERFORMED",
+      "current_residual": {
+        "momentum": 3.785490637029905e-16,
+        "k": 9.911705147941009e-14,
+        "epsilon": 2.7040031849087787e-13,
+        "continuity": 2.354332135053346e-17,
+        "gauge": 1.4901141747259948e-19
+      }
+    },
+    "hist8": {
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/hist8.result.json",
+        "sha256": "666600da519f4a3ebae28eaa368830f7b2ccf2c17c55d2837511eac9700dd5f2",
+        "bytes": 71408
+      },
+      "independent": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/hist8-independent-v19b.json",
+        "sha256": "2f327595a223aceded89afe2af806c70f638e54a53db74620de1fe5231e72432",
+        "bytes": 30562
+      },
+      "owners": [
+        {
+          "owner": 1,
+          "bounds": [
+            0.49999999999999994,
+            1,
+            0,
+            0.02944229043455092
+          ],
+          "current_root": 0.6390020474889822,
+          "exact_root": 0.637511786704092,
+          "root_difference": 0.0014902607848901184,
+          "points": 2880,
+          "area": 0.01472114521727546
+        },
+        {
+          "owner": 3,
+          "bounds": [
+            0.49999999999999994,
+            1,
+            0.02944229043455089,
+            0.15000000000000002
+          ],
+          "current_root": 0.6390020474889822,
+          "exact_root": 0.637511786704092,
+          "root_difference": 0.0014902607848901184,
+          "points": 8640,
+          "area": 0.060278854782724565
+        }
+      ],
+      "current_equations": "PASS_CURRENT_COUPLED_STEP_ONLY",
+      "direct_reference": "PASS_INDEPENDENT_DENSE_NONLINEAR_REFERENCE",
+      "current_residual": {
+        "momentum": 2.3364914365035793e-12,
+        "k": 1.0819940018717721e-13,
+        "epsilon": 1.3531771322973137e-13,
+        "continuity": 2.2226876613418923e-17,
+        "gauge": 6.839129304588433e-19
+      }
+    },
+    "hist12": {
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/hist12.result.json",
+        "sha256": "cc4ee0f3e17a0d35718f043e0979a0aa59dbe0ee62311daa2105257ae7e5c148",
+        "bytes": 71426
+      },
+      "independent": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/hist12-independent-v19b.json",
+        "sha256": "1c9b158ed2ef6129bc33bf4ac01215b9ff17d97ca4c09e795893815bdac5d9e0",
+        "bytes": 17200
+      },
+      "owners": [
+        {
+          "owner": 1,
+          "bounds": [
+            0.49999999999999994,
+            1,
+            0,
+            0.02944229043455092
+          ],
+          "current_root": 0.6390020474888276,
+          "exact_root": 0.637511786704092,
+          "root_difference": 0.0014902607847355753,
+          "points": 2880,
+          "area": 0.01472114521727546
+        },
+        {
+          "owner": 3,
+          "bounds": [
+            0.49999999999999994,
+            1,
+            0.02944229043455089,
+            0.15000000000000002
+          ],
+          "current_root": 0.6390020474888276,
+          "exact_root": 0.637511786704092,
+          "root_difference": 0.0014902607847355753,
+          "points": 8640,
+          "area": 0.060278854782724565
+        }
+      ],
+      "current_equations": "PASS_CURRENT_COUPLED_STEP_ONLY",
+      "direct_reference": "NOT_PERFORMED",
+      "current_residual": {
+        "momentum": 1.9466458893513877e-15,
+        "k": 1.0163918154232136e-13,
+        "epsilon": 1.2116322090051392e-13,
+        "continuity": 1.886367565524872e-17,
+        "gauge": 2.1043474783349024e-19
+      }
+    }
+  },
+  "exact_crossing_movement": [
+    {
+      "time": 0.0,
+      "x": 0.6731819526212026,
+      "residual": 0.0
+    },
+    {
+      "time": 0.04,
+      "x": 0.6375117867040945,
+      "residual": 0.0
+    },
+    {
+      "time": 0.2,
+      "x": 0.5000000000000078,
+      "residual": 0.0
+    },
+    {
+      "time": 0.4,
+      "x": 0.33356110291387203,
+      "residual": 0.0
+    }
+  ],
+  "quadrature_coefficient_comparisons": {
+    "poly": {
+      "U": {
+        "scaled_MAX": 3.1543348666468126e-15,
+        "scaled_coefficient_RMS": 5.166372706726174e-16
+      },
+      "Pi": {
+        "scaled_MAX": 4.209111937112695e-12,
+        "scaled_coefficient_RMS": 8.37419497545217e-13
+      },
+      "k": {
+        "scaled_MAX": 1.4603848770220555e-14,
+        "scaled_coefficient_RMS": 2.425094840561134e-15
+      },
+      "epsilon": {
+        "scaled_MAX": 8.778685123322182e-15,
+        "scaled_coefficient_RMS": 2.5155685101583846e-15
+      }
+    },
+    "hist": {
+      "U": {
+        "scaled_MAX": 3.1511508873740174e-12,
+        "scaled_coefficient_RMS": 3.72133841242593e-13
+      },
+      "Pi": {
+        "scaled_MAX": 1.6299440974726015e-09,
+        "scaled_coefficient_RMS": 3.381222073947796e-10
+      },
+      "k": {
+        "scaled_MAX": 1.0802716600343945e-12,
+        "scaled_coefficient_RMS": 1.8948142391426792e-13
+      },
+      "epsilon": {
+        "scaled_MAX": 5.199478239650485e-13,
+        "scaled_coefficient_RMS": 1.2598405563177575e-13
+      }
+    }
+  },
+  "scope": "Two continuous MMS families on actual crossing owners, with separate current/exact surfaces. Not a temporal-order, physical-reference, long-pilot or Task3 certificate.",
+  "elapsed_seconds": 1.3820398240350187
+}

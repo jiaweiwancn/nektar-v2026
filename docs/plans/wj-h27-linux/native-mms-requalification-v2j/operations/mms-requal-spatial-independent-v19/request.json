@@ -1,0 +1,78 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-mms-requalification-v19/h27/steady_mms_spatial.py",
+    "--manifest",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/spatial/manifest.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/spatial/independent.json",
+    "--seconds",
+    "430"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 450.0,
+  "utc": "2026-11-17T23:27:31.208081+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 503061,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/mms-requalification-controller-v19.py"
+      },
+      {
+        "pid": 503483,
+        "parent": 503061,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label mms-requal-spatial-independent-v19 --phase analysis --seconds 450 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools-mms-requalification-v19/h27/steady_mms_spatial.py --manifest /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/spatial/manifest.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/spatial/independent.json --seconds 430"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-mms-requalification-v19/h27/steady_mms_spatial.py",
+      "bytes": 21605,
+      "sha256": "4c6f2439a9e6ec2b08461744c90f90c4cdecf7a689c128287e8c1a8497274a4b"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/spatial/manifest.json",
+      "bytes": 1030,
+      "sha256": "3d4165324590b0e741b0a13b8eaa0254df55b679f8cb6a0075dc1f38636c33e9"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ]
+}

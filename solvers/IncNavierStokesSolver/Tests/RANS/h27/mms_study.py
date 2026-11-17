@@ -152,7 +152,13 @@ def endpoint_errors(case, o, grid_size):
 def face_rule(o, e, side, state, order, when, include_exact=True):
     a, w = leggauss(order); xl, xr, rl, rr = e['bounds']
     if side >= 2:
-        return (xl+xr)/2+(xr-xl)*a/2, np.full(order, rl if side == 2 else rr, dtype=float), w*(xr-xl)/2
+        radius = rl if side == 2 else rr
+        panels = [xl,*o.cutoff_x_splits(e,state,when if include_exact else None,(xl,xr,radius,radius)),xr]
+        xs,weights = [],[]
+        for left,right in zip(panels,panels[1:]):
+            require(right > left,'nonpositive independent MMS horizontal panel')
+            xs.extend((left+right)/2+(right-left)*a/2);weights.extend(w*(right-left)/2)
+        return np.asarray(xs),np.full(len(xs),radius,dtype=float),np.asarray(weights)
     xf = xl if side == 0 else xr
     K = o.trace(e, 'k', np.array([xf], dtype=float), state)[0]
     cuts = [rl, rr, float(o.cutoff(K)), .4*o.m.H, .75*o.m.H, o.m.h, o.m.H]

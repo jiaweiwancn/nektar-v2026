@@ -1,0 +1,53 @@
+
+[36mWarning : [0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	     WJ coupled path: WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon
+	         Wall tensor: FiniteNuIsotropicWallFullWJCollarV2
+	         Integration: current coupled BDF2/EX2, BE startup, no clipping
+	      Pressure gauge: native restricted mean
+=======================================================================
+WJ-H27 step 1, t=0.02, coupled residual=5.08726e-14, nonlinear iterations=3
+WJ-H27 step 2, t=0.04, coupled residual=1.3903e-14, nonlinear iterations=3
+WJ-H27 step 3, t=0.06, coupled residual=1.33448e-14, nonlinear iterations=3
+WJ-H27 step 4, t=0.08, coupled residual=1.31432e-14, nonlinear iterations=3
+WJ-H27 step 5, t=0.1, coupled residual=1.37399e-14, nonlinear iterations=3
+WJ-H27 step 6, t=0.12, coupled residual=1.3088e-14, nonlinear iterations=3
+WJ-H27 step 7, t=0.14, coupled residual=1.35871e-14, nonlinear iterations=3
+WJ-H27 step 8, t=0.16, coupled residual=1.30144e-14, nonlinear iterations=3
+WJ-H27 step 9, t=0.18, coupled residual=1.2692e-14, nonlinear iterations=3
+WJ-H27 step 10, t=0.2, coupled residual=1.32431e-14, nonlinear iterations=3
+WJ-H27 step 11, t=0.22, coupled residual=1.24681e-14, nonlinear iterations=3
+WJ-H27 step 12, t=0.24, coupled residual=1.21187e-14, nonlinear iterations=3
+WJ-H27 step 13, t=0.26, coupled residual=1.18678e-14, nonlinear iterations=3
+WJ-H27 step 14, t=0.28, coupled residual=1.16817e-14, nonlinear iterations=3
+WJ-H27 step 15, t=0.3, coupled residual=1.16617e-14, nonlinear iterations=3
+WJ-H27 step 16, t=0.32, coupled residual=1.10504e-14, nonlinear iterations=3
+WJ-H27 step 17, t=0.34, coupled residual=1.09331e-14, nonlinear iterations=3
+WJ-H27 step 18, t=0.36, coupled residual=1.10129e-14, nonlinear iterations=3
+WJ-H27 step 19, t=0.38, coupled residual=1.0885e-14, nonlinear iterations=3
+WJ-H27 step 20, t=0.4, coupled residual=1.03156e-14, nonlinear iterations=3
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/temporal/tighter-u.fld" (0.000736986s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/temporal/tighter-v.fld" (0.000233321s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/temporal/tighter-k.fld" (0.000232841s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/temporal/tighter-epsilon.fld" (0.000171335s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/temporal/tighter-p.fld" (0.000172566s, XML)
+-------------------------------------------
+Total Computation Time = 15.2419s
+-------------------------------------------
+L 2 error (variable u) : 8.38662e-09
+L inf error (variable u) : 2.35824e-08
+L 2 error (variable v) : 3.38364e-09
+L inf error (variable v) : 1.50379e-08
+L 2 error (variable k) : 1.00511e-08
+L inf error (variable k) : 2.47873e-08
+L 2 error (variable epsilon) : 3.23681e-09
+L inf error (variable epsilon) : 9.45261e-09
+L 2 error (variable p) : 6.91863e-09
+L inf error (variable p) : 1.94561e-08
+-------------------------------------------
+                       Region  Elapsed time Avg (s)       Min (s)       Max (s)         Count      IO Level
+                      Execute               15.2794       15.2794       15.2794             1             0
+

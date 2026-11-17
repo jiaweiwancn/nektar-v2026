@@ -1,0 +1,56 @@
+{
+  "schema": "WJH27MMSStudyManifestV1",
+  "terminal_time": 0.4,
+  "runs": [
+    {
+      "label": "dt08",
+      "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/temporal/dt08.result.json",
+      "role": "temporal"
+    },
+    {
+      "label": "dt04",
+      "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/temporal/dt04.result.json",
+      "role": "temporal"
+    },
+    {
+      "label": "dt02",
+      "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/temporal/dt02.result.json",
+      "role": "temporal"
+    },
+    {
+      "label": "hfine",
+      "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/temporal/hfine.result.json",
+      "role": "control"
+    },
+    {
+      "label": "qfine",
+      "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/temporal/qfine.result.json",
+      "role": "control"
+    },
+    {
+      "label": "tighter",
+      "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/temporal/tighter.result.json",
+      "role": "control"
+    }
+  ],
+  "comparisons": [
+    {
+      "label": "mesh",
+      "coarse": "dt02",
+      "fine": "hfine",
+      "kind": "mesh"
+    },
+    {
+      "label": "quadrature",
+      "coarse": "dt02",
+      "fine": "qfine",
+      "kind": "quadrature"
+    },
+    {
+      "label": "tolerance",
+      "coarse": "dt02",
+      "fine": "tighter",
+      "kind": "tolerance"
+    }
+  ]
+}

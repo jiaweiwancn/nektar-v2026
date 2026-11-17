@@ -1,0 +1,81 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-mms-requalification-v19/h27/coupled_oracle.py",
+    "--native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/poly8.result.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/poly8-independent.json",
+    "--seconds",
+    "55",
+    "--direct",
+    "--direct-seconds",
+    "40"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 60.0,
+  "utc": "2026-11-17T23:32:13.968152+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 503061,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/mms-requalification-controller-v19.py"
+      },
+      {
+        "pid": 503681,
+        "parent": 503061,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label mms-cross-poly8-current-v19 --phase analysis --seconds 60 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools-mms-requalification-v19/h27/coupled_oracle.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/poly8.result.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/poly8-independent.json --seconds 55 --direct --direct-seconds 40"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-mms-requalification-v19/h27/coupled_oracle.py",
+      "bytes": 62217,
+      "sha256": "44891e974a4104313cd6f64764d01f6f7a207eb28498e3153635f00d0a041ff6"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/poly8.result.json",
+      "bytes": 71241,
+      "sha256": "6dc1fed3d3fc4e38812ab6637ddac0d5a2c0ea30f260122ea5c6db00f65eddad"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ]
+}

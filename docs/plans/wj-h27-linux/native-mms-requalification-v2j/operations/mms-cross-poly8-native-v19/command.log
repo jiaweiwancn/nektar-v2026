@@ -1,0 +1,35 @@
+
+[36mWarning : [0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	     WJ coupled path: WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon
+	         Wall tensor: FiniteNuIsotropicWallFullWJCollarV2
+	         Integration: current coupled BDF2/EX2, BE startup, no clipping
+	      Pressure gauge: native restricted mean
+=======================================================================
+WJ-H27 step 1, t=0.02, coupled residual=4.43732e-14, nonlinear iterations=3
+WJ-H27 step 2, t=0.04, coupled residual=9.96781e-15, nonlinear iterations=3
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/poly8-u.fld" (0.000496451s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/poly8-v.fld" (0.000148229s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/poly8-k.fld" (0.000143259s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/poly8-epsilon.fld" (0.000121868s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/poly8-p.fld" (0.000121388s, XML)
+-------------------------------------------
+Total Computation Time = 0.681738s
+-------------------------------------------
+L 2 error (variable u) : 1.99621e-08
+L inf error (variable u) : 7.5555e-08
+L 2 error (variable v) : 8.00169e-09
+L inf error (variable v) : 3.26636e-08
+L 2 error (variable k) : 9.69995e-09
+L inf error (variable k) : 2.41532e-08
+L 2 error (variable epsilon) : 3.15717e-09
+L inf error (variable epsilon) : 9.41033e-09
+L 2 error (variable p) : 9.90431e-09
+L inf error (variable p) : 3.59392e-08
+-------------------------------------------
+                       Region  Elapsed time Avg (s)       Min (s)       Max (s)         Count      IO Level
+                      Execute              0.708948      0.708948      0.708948             1             0
+

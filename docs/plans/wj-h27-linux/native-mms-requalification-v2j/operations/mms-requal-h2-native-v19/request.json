@@ -1,0 +1,71 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v19/IncNavierStokesSolver",
+    "--use-opt-file",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/spatial/h2.xml.opt",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/spatial/h2.xml"
+  ],
+  "phase": "science",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T23:26:12.520959+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 503061,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/mms-requalification-controller-v19.py"
+      },
+      {
+        "pid": 503371,
+        "parent": 503061,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label mms-requal-h2-native-v19 --phase science --seconds 30 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v19/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/spatial/h2.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/spatial/h2.xml"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v19/IncNavierStokesSolver",
+      "bytes": 380,
+      "sha256": "fa22c4ad5427840d2e83a5f89006a3f8fdcba4b2d23cd34ed5f804b2d5932194"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/spatial/h2.xml.opt",
+      "bytes": 55,
+      "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/spatial/h2.xml",
+      "bytes": 6071,
+      "sha256": "353a72a39f826a320f5833cd0510cd5d089d148b82e5d496e6e1081c6c44c46b"
+    }
+  ]
+}

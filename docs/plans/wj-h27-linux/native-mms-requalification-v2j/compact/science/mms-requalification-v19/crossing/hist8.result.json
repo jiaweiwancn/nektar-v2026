@@ -1,0 +1,292 @@
+{
+  "schema": "WJH27RegisteredCoupledRunV2",
+  "factory": "WJNativeCoupledV2",
+  "normal_main": true,
+  "qualification": "execution evidence; closure gates are assessed independently",
+  "construction_seconds": 0.029661899025086313,
+  "initialisation_seconds": 0.036126706982031465,
+  "restart": false,
+  "complete_advancing_seconds": 0.6490027770050801,
+  "final_export_seconds": 0.023270176025107503,
+  "complete_step_seconds": [
+    0.32579574501141906,
+    0.3232070319936611
+  ],
+  "recovery_seconds": [],
+  "rotated_recovery_count": 0,
+  "retained_recovery": [],
+  "scientific_index": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/hist8.science-index.json",
+  "scientific_frame_seconds": 0,
+  "scientific_index_seconds": 4.172197077423334e-05,
+  "scientific_timing_scope": "subsets of complete step/export totals; do not add twice",
+  "steady_mode": false,
+  "steady_solver": null,
+  "state": {
+    "schema": "WJH27NativeCoupledStateV2",
+    "model": "FiniteNuIsotropicWallFullWJCollarV2",
+    "signature": "1980ff853f419cf3c4cf6dc3c3a73f9ad996f6fe26189ba603807fb63166f435",
+    "source_identity": "56c35390fdf092180913f60c3ae348ca10cdcdf4e6b889c3afd589eddb511acf",
+    "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+    "manufactured": true,
+    "step": 2,
+    "time": 0.04,
+    "dt": 0.02,
+    "state_sha256": "5a9e98a5bfff31f34370a7fa5e1041ad6f80f9d349cd2a31b2e3a89198434c54",
+    "previous_sha256": "1a9d3be0c05a63e131acf27996a64c3baaf53fb26538edf07ebf94b55646116f",
+    "advection_sha256": "5c75b2300e5a505e852b41f4efd82754b58b1d5f9561aa5d2dd861cf1184f303",
+    "previous_advection_sha256": "3cced474b3ea81d36e89bb5ae7aca60be213ab4732beb35a78e267002f958281",
+    "sizes": [
+      91,
+      45,
+      91,
+      49
+    ],
+    "gauge": true,
+    "nonlinear_iterations": 3,
+    "linear_iterations": [
+      0,
+      0,
+      0
+    ],
+    "rebuilds": 3,
+    "retries": 0,
+    "seconds": 0.3226439399877563,
+    "coefficient_drift": 0.00021356128399653158,
+    "residuals": [
+      1.6711482340830242e-15,
+      5.5705310631691594e-18,
+      3.1068903807491734e-19,
+      3.658596128609157e-14,
+      7.629116354659004e-14,
+      0
+    ],
+    "minimum_k": 0.008813963713652312,
+    "minimum_epsilon": 0.0006953256461893997,
+    "minimum_covariance_over_k": 0.5395768105679598,
+    "minimum_principal_over_mu": 0.04932454984856486,
+    "disjoint_seconds": {
+      "constitutive": 0.03407821152359247,
+      "wall": 0.12032687489409,
+      "assembly": 0.07456526311580092,
+      "flow": 6.2623992562294e-05,
+      "scalar": 4.9573020078241825e-05,
+      "rebuild": 0.0006746470462530851,
+      "guards": 0.030500031367409974,
+      "forcing": 0.05674118496244773,
+      "residual": 0.0053261760622262955,
+      "nonlinear": 0.0003035719273611903,
+      "io": 0,
+      "other": 1.5782075934112072e-05
+    },
+    "quadratureX": 8,
+    "quadratureR": 12,
+    "linear_tolerance": 3e-13,
+    "nonlinear_tolerance": 3e-12,
+    "maximum_iterations": 60,
+    "mms_body_amplitude": 1,
+    "retry_reason": "",
+    "scalar_quadrature_policy": "CubicCutoffFacePanelsV1",
+    "cutoff_radius_range": [
+      0.028661026763011046,
+      0.03059290528812411
+    ],
+    "cutoff_log_slope_bounds": [
+      -42.545745694837876,
+      -31.70095688834545
+    ],
+    "mms_variant": "Historical",
+    "implicit_solver": "CoupledJFNKV1",
+    "coupled_newton": {
+      "krylov_iterations": 5,
+      "jacobian_actions": 8,
+      "residual_evaluations": 22,
+      "preconditioner_applications": 5,
+      "rejected_trials": 0,
+      "counts_complete": true,
+      "step_seconds_cap": 30,
+      "uncommitted_guard": "positivity/root/covariance",
+      "physical_acceptance_guard": "fresh full planar principal and complete current residual",
+      "preconditioner_policy": "CurrentDataDriftV1",
+      "drift_measure": "ScaledCurrentQuadratureDataL2V1",
+      "relative_drift_limit": 0.02,
+      "maximum_uses": 8,
+      "refreshes": 1,
+      "reuses": 2,
+      "maximum_used_age": 3,
+      "refresh_reasons": {
+        "cold": 0,
+        "alpha": 1,
+        "drift": 0,
+        "age": 0,
+        "control": 0,
+        "retry": 0,
+        "injected": 0
+      },
+      "preconditioner_events_recorded": true,
+      "preconditioner_events": [
+        {
+          "attempt": 0,
+          "base": 0,
+          "alpha": 75,
+          "drift": 0.00021356128399653158,
+          "age_before": 3,
+          "age_used": 1,
+          "reason": "alpha",
+          "refreshed": true
+        },
+        {
+          "attempt": 0,
+          "base": 1,
+          "alpha": 75,
+          "drift": 0.0001708684302506154,
+          "age_before": 1,
+          "age_used": 2,
+          "reason": "reuse",
+          "refreshed": false
+        },
+        {
+          "attempt": 0,
+          "base": 2,
+          "alpha": 75,
+          "drift": 0.00017006803755560318,
+          "age_before": 2,
+          "age_used": 3,
+          "reason": "reuse",
+          "refreshed": false
+        }
+      ]
+    },
+    "nonlinear_trace_scope": "Uncommitted Newton bases and Armijo candidates; FD excluded; records are not accepted updates; times are inclusive observations",
+    "steady_velocity_preconditioner": "FullGradientV1",
+    "stress_split": "PositiveShearV1",
+    "all_row_action_crosschecks": false,
+    "current_action_checks": {
+      "all_row_calls": 0,
+      "maximum_scaled_differences_flow_k_epsilon": [
+        0,
+        0,
+        0
+      ],
+      "augmented_calls": 0,
+      "maximum_augmented_scaled_difference": 0,
+      "maximum_weak_divergence_load_norm": 0,
+      "maximum_gauge_multiplier": 0
+    },
+    "basis": "Modified_A",
+    "anderson_depth": 0,
+    "acceleration": {
+      "proposals": 0,
+      "accepted": 0,
+      "inadmissible_trials": 0
+    },
+    "initial_field_transfer": {
+      "packet_sha256": "",
+      "source_state_sha256": "",
+      "projected": false,
+      "source_was_candidate": false
+    },
+    "nonlinear_trace": [
+      {
+        "residuals": [
+          6.273273487074707e-05,
+          4.022528330734048e-06,
+          1.124965633072118e-19,
+          0.018390451051027733,
+          0.02712850065961451,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 0.0016358409775421023
+      },
+      {
+        "residuals": [
+          5.867241833447752e-07,
+          1.1802231011517163e-08,
+          5.363439091793834e-19,
+          0.00014256291630428613,
+          7.627107897108e-05,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 0.0016468510148115456
+      },
+      {
+        "residuals": [
+          5.867241833447752e-07,
+          1.1802231011517163e-08,
+          5.363439091793834e-19,
+          0.00014256291630428613,
+          7.627107897108e-05,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 0.0016491810092702508
+      },
+      {
+        "residuals": [
+          4.451448409079454e-11,
+          7.050030768898275e-14,
+          6.588328142862358e-18,
+          7.174089335796875e-10,
+          1.931618298228175e-09,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 0.0016451209667138755
+      },
+      {
+        "residuals": [
+          4.451448409079454e-11,
+          7.050030768898275e-14,
+          6.588328142862358e-18,
+          7.174089335796875e-10,
+          1.931618298228175e-09,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 0.001653121958952397
+      },
+      {
+        "residuals": [
+          1.67116436487664e-15,
+          5.066318443856131e-18,
+          3.1068903807491734e-19,
+          3.658895297105654e-14,
+          7.628254945533084e-14,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 0.0016538609634153545
+      }
+    ],
+    "constitutive_backend": "FastFull3DV1",
+    "constitutive_calls": {
+      "values": 48672,
+      "directions": 6720,
+      "fallbacks": 0,
+      "root_iterations": 243993,
+      "maximum_normalized_root_residual": 4.676112469003709e-16
+    },
+    "mms_rms_errors_U_Pi_k_epsilon_gradU": [
+      3.4003117928246764e-07,
+      1.0544733020463033e-07,
+      5.480487774547451e-06,
+      0.001943604379783709,
+      1.8414617556001447e-05
+    ],
+    "geometry": {
+      "d0": 0.0875,
+      "H": 0.15,
+      "h": 0.10854503542535461,
+      "left": 0,
+      "right": 1,
+      "top": 0.5
+    }
+  },
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/hist8.result.json",
+    "bytes": 71408,
+    "sha256": "666600da519f4a3ebae28eaa368830f7b2ccf2c17c55d2837511eac9700dd5f2"
+  },
+  "publication_scope": "Compact native evidence; full signed coefficients/history remain on Linux."
+}

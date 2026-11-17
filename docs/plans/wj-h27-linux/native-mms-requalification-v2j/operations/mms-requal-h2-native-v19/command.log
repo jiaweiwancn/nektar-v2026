@@ -1,0 +1,33 @@
+
+[36mWarning : [0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	     WJ coupled path: WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon
+	         Wall tensor: FiniteNuIsotropicWallFullWJCollarV2
+	         Integration: current coupled BDF2/EX2, BE startup, no clipping
+	      Pressure gauge: native restricted mean
+=======================================================================
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/spatial/h2-u.fld" (0.000637397s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/spatial/h2-v.fld" (0.000161072s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/spatial/h2-k.fld" (0.000160732s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/spatial/h2-epsilon.fld" (0.000122659s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/spatial/h2-p.fld" (0.000123229s, XML)
+-------------------------------------------
+Total Computation Time = 2.25153s
+-------------------------------------------
+L 2 error (variable u) : 4.64529e-07
+L inf error (variable u) : 1.78339e-06
+L 2 error (variable v) : 1.28804e-07
+L inf error (variable v) : 7.96587e-07
+L 2 error (variable k) : 1.04988e-06
+L inf error (variable k) : 5.72587e-06
+L 2 error (variable epsilon) : 1.78242e-06
+L inf error (variable epsilon) : 7.25374e-06
+L 2 error (variable p) : 1.16569e-07
+L inf error (variable p) : 8.89311e-07
+-------------------------------------------
+                       Region  Elapsed time Avg (s)       Min (s)       Max (s)         Count      IO Level
+                      Execute               2.27984       2.27984       2.27984             1             0
+

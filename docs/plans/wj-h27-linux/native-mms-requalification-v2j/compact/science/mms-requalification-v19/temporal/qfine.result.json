@@ -1,0 +1,310 @@
+{
+  "schema": "WJH27RegisteredCoupledRunV2",
+  "factory": "WJNativeCoupledV2",
+  "normal_main": true,
+  "qualification": "execution evidence; closure gates are assessed independently",
+  "construction_seconds": 0.08554261102108285,
+  "initialisation_seconds": 0.21278681699186563,
+  "restart": false,
+  "complete_advancing_seconds": 25.279801538039465,
+  "final_export_seconds": 0.02972353098448366,
+  "complete_step_seconds": [
+    1.2901782299741171,
+    1.2788696810021065,
+    1.2336691620294005,
+    1.2816317119868472,
+    1.236403036979027,
+    1.230799476034008,
+    1.2780230920179747,
+    1.2557127209729515,
+    1.2504232950159349,
+    1.2872704439796507,
+    1.2444186190259643,
+    1.2920004629995674,
+    1.2437227530172095,
+    1.2495174430077896,
+    1.2885331910219975,
+    1.2850010370020755,
+    1.2396834070095792,
+    1.2873804830014706,
+    1.2396023499895819,
+    1.286960941972211
+  ],
+  "recovery_seconds": [],
+  "rotated_recovery_count": 0,
+  "retained_recovery": [],
+  "scientific_index": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/temporal/qfine.science-index.json",
+  "scientific_frame_seconds": 0,
+  "scientific_index_seconds": 6.0004997067153454e-05,
+  "scientific_timing_scope": "subsets of complete step/export totals; do not add twice",
+  "steady_mode": false,
+  "steady_solver": null,
+  "state": {
+    "schema": "WJH27NativeCoupledStateV2",
+    "model": "FiniteNuIsotropicWallFullWJCollarV2",
+    "signature": "d4e0a32195eddd3309bfe4c561f95f26bd88b511abc206757dfb9024bde5565c",
+    "source_identity": "56c35390fdf092180913f60c3ae348ca10cdcdf4e6b889c3afd589eddb511acf",
+    "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+    "manufactured": true,
+    "step": 20,
+    "time": 0.4,
+    "dt": 0.02,
+    "state_sha256": "2512f779557e1b7ae9ce696f8d79db3bf07bd1074262f7e102c3891808e72efc",
+    "previous_sha256": "5d873419a3f9af0f7247a08a12ec5b9861d3cfe2379ae6b918db94000c881725",
+    "advection_sha256": "7855c3b800aad5af56e03ad9355805ca985aed92a7ab81cd0161a0de972d9d03",
+    "previous_advection_sha256": "ac4b7b12c33b3e782bafcedf5ac4155c70d86740bfc7f429ddd8abff9fef8724",
+    "sizes": [
+      325,
+      153,
+      325,
+      169
+    ],
+    "gauge": true,
+    "nonlinear_iterations": 3,
+    "linear_iterations": [
+      0,
+      0,
+      0
+    ],
+    "rebuilds": 3,
+    "retries": 0,
+    "seconds": 1.2836412420147099,
+    "coefficient_drift": 0.0006334695333690994,
+    "residuals": [
+      2.6075521652169104e-16,
+      1.1956152397795292e-17,
+      1.2739647720825003e-19,
+      1.0275623417752206e-14,
+      6.663321582794612e-15,
+      0
+    ],
+    "minimum_k": 0.00885583516619254,
+    "minimum_epsilon": 0.001977029097320029,
+    "minimum_covariance_over_k": 0.624002115425157,
+    "minimum_principal_over_mu": 0.0490487336090636,
+    "disjoint_seconds": {
+      "constitutive": 0.14039236400276423,
+      "wall": 0.3674147342098877,
+      "assembly": 0.2083594601135701,
+      "flow": 0.0005731910350732505,
+      "scalar": 0.0002858178922906518,
+      "rebuild": 0.005265117040835321,
+      "guards": 0.1991710031288676,
+      "forcing": 0.33784214401384816,
+      "residual": 0.02362697117496282,
+      "nonlinear": 0.00064800342079252,
+      "io": 0,
+      "other": 6.24359818175435e-05
+    },
+    "quadratureX": 12,
+    "quadratureR": 18,
+    "linear_tolerance": 1e-12,
+    "nonlinear_tolerance": 3e-11,
+    "maximum_iterations": 60,
+    "mms_body_amplitude": 0,
+    "retry_reason": "",
+    "scalar_quadrature_policy": "CubicCutoffFacePanelsV1",
+    "cutoff_radius_range": [
+      0.028661026763011046,
+      0.03059290528812411
+    ],
+    "cutoff_log_slope_bounds": [
+      -42.545745694837876,
+      -31.70095688834545
+    ],
+    "mms_variant": "PolynomialScalarsV1",
+    "implicit_solver": "CoupledJFNKV1",
+    "coupled_newton": {
+      "krylov_iterations": 5,
+      "jacobian_actions": 8,
+      "residual_evaluations": 22,
+      "preconditioner_applications": 5,
+      "rejected_trials": 0,
+      "counts_complete": true,
+      "step_seconds_cap": 30,
+      "uncommitted_guard": "positivity/root/covariance",
+      "physical_acceptance_guard": "fresh full planar principal and complete current residual",
+      "preconditioner_policy": "CurrentDataDriftV1",
+      "drift_measure": "ScaledCurrentQuadratureDataL2V1",
+      "relative_drift_limit": 0.02,
+      "maximum_uses": 8,
+      "refreshes": 1,
+      "reuses": 2,
+      "maximum_used_age": 8,
+      "refresh_reasons": {
+        "cold": 0,
+        "alpha": 0,
+        "drift": 0,
+        "age": 1,
+        "control": 0,
+        "retry": 0,
+        "injected": 0
+      },
+      "preconditioner_events_recorded": true,
+      "preconditioner_events": [
+        {
+          "attempt": 0,
+          "base": 0,
+          "alpha": 75,
+          "drift": 0.0004512353567691061,
+          "age_before": 6,
+          "age_used": 7,
+          "reason": "reuse",
+          "refreshed": false
+        },
+        {
+          "attempt": 0,
+          "base": 1,
+          "alpha": 75,
+          "drift": 0.0006334695333690994,
+          "age_before": 7,
+          "age_used": 8,
+          "reason": "reuse",
+          "refreshed": false
+        },
+        {
+          "attempt": 0,
+          "base": 2,
+          "alpha": 75,
+          "drift": 0.0006331033651399363,
+          "age_before": 8,
+          "age_used": 1,
+          "reason": "age",
+          "refreshed": true
+        }
+      ]
+    },
+    "nonlinear_trace_scope": "Uncommitted Newton bases and Armijo candidates; FD excluded; records are not accepted updates; times are inclusive observations",
+    "steady_velocity_preconditioner": "FullGradientV1",
+    "stress_split": "PositiveShearV1",
+    "all_row_action_crosschecks": false,
+    "current_action_checks": {
+      "all_row_calls": 0,
+      "maximum_scaled_differences_flow_k_epsilon": [
+        0,
+        0,
+        0
+      ],
+      "augmented_calls": 0,
+      "maximum_augmented_scaled_difference": 0,
+      "maximum_weak_divergence_load_norm": 0,
+      "maximum_gauge_multiplier": 0
+    },
+    "basis": "Modified_A",
+    "anderson_depth": 0,
+    "acceleration": {
+      "proposals": 0,
+      "accepted": 0,
+      "inadmissible_trials": 0
+    },
+    "initial_field_transfer": {
+      "packet_sha256": "",
+      "source_state_sha256": "",
+      "projected": false,
+      "source_was_candidate": false
+    },
+    "nonlinear_trace": [
+      {
+        "residuals": [
+          0.00019118937119436203,
+          8.301080740739467e-06,
+          4.3743475678563544e-20,
+          0.016959290047231873,
+          0.05980717488602757,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 0.006163408048450947
+      },
+      {
+        "residuals": [
+          5.659005416106942e-07,
+          2.3169466250789217e-08,
+          1.5133481352468972e-19,
+          0.00014448702294078764,
+          4.45384837189937e-05,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 0.006175259011797607
+      },
+      {
+        "residuals": [
+          5.659005416106942e-07,
+          2.3169466250789217e-08,
+          1.5133481352468972e-19,
+          0.00014448702294078764,
+          4.45384837189937e-05,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 0.006189810985233635
+      },
+      {
+        "residuals": [
+          1.0514608895631763e-11,
+          1.377321370414607e-13,
+          1.4434983466820843e-18,
+          6.554059466404654e-10,
+          2.445153745471092e-10,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 0.0061632979777641594
+      },
+      {
+        "residuals": [
+          1.0514608895631763e-11,
+          1.377321370414607e-13,
+          1.4434983466820843e-18,
+          6.554059466404654e-10,
+          2.445153745471092e-10,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 0.006176120019517839
+      },
+      {
+        "residuals": [
+          2.6074312931536503e-16,
+          1.141045035742684e-17,
+          1.2739647720825003e-19,
+          1.0275221936336527e-14,
+          6.652215402956611e-15,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 0.0061443959712050855
+      }
+    ],
+    "constitutive_backend": "FastFull3DV1",
+    "constitutive_calls": {
+      "values": 207360,
+      "directions": 48384,
+      "fallbacks": 0,
+      "root_iterations": 1036800,
+      "maximum_normalized_root_residual": 4.3523817792332604e-17
+    },
+    "mms_rms_errors_U_Pi_k_epsilon_gradU": [
+      1.2789411171852486e-08,
+      9.78442668767198e-09,
+      1.6136231394289325e-06,
+      2.3036848013520352e-06,
+      2.1445771414274503e-07
+    ],
+    "geometry": {
+      "d0": 0.0875,
+      "H": 0.15,
+      "h": 0.10854503542535461,
+      "left": 0,
+      "right": 1,
+      "top": 0.5
+    }
+  },
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/temporal/qfine.result.json",
+    "bytes": 225781,
+    "sha256": "240a43c3fa56990b5930d89db179cad7929738423371a419d2e5d59a433874e8"
+  },
+  "publication_scope": "Compact native evidence; full signed coefficients/history remain on Linux."
+}

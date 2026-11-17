@@ -28,6 +28,7 @@ for variable in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS',
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'h26'))
 import numpy as np
 import scipy.linalg as la
+from scipy.optimize import brentq
 from numpy.polynomial.legendre import leggauss
 from numpy.polynomial.chebyshev import chebval
 from fixtures import modified
@@ -92,6 +93,11 @@ class Oracle:
                 'bounded oracle requires all-essential-velocity MMS with pressure gauge')
         for name, expected in dict(d0=mms.d0, H=mms.H, h=mms.h, left=0., right=1., top=.5).items():
             require(abs(self.g[name]-expected) <= 1e-12, 'MMS geometry mismatch: '+name)
+        derivative = np.polynomial.chebyshev.chebder(mms.coefficients)*2/(mms.hi-mms.lo)
+        reserve = 32*(len(derivative)+1)*np.finfo(float).eps*float(np.sum(abs(derivative)))
+        require(float(derivative[0]+np.sum(abs(derivative[1:]))+reserve) < 0,
+                'independent MMS cutoff lacks a strictly decreasing certificate')
+        self.cutoff_radius_range = tuple(self.cutoff(np.asarray([mms.hi,mms.lo])))
         self.owner, self.faces = {}, {'u': [], 'k': [], 'epsilon': []}
         visited = {key: set() for key in ('u', 'p', 'k', 'epsilon')}
         require(len({e['geometry'] for e in self.elements}) == len(self.elements), 'duplicate geometry')
@@ -163,20 +169,63 @@ class Oracle:
         values = s['flow'][2*self.nu+np.asarray(owner['p'])] if key == 'p' else s[key][owner[key]]
         return b@values
 
+    def cutoff_x_splits(self, e, s=None, when=None, bounds=None):
+        """Independent direct-cutoff roots for current and analytic surfaces.
+
+        Native inverse face levels and native cubic isolation are not used.
+        The exact surface is evaluated from the independent continuous MMS.
+        Collapsed radial bounds are permitted for a horizontal owner face.
+        """
+        if s is None and when is None: return []
+        xl,xr,rl,rr = bounds if bounds is not None else e['bounds']
+        require(xr > xl and rr >= rl,'invalid independent cutoff owner bounds')
+        if rr < self.cutoff_radius_range[0] or rl > self.cutoff_radius_range[1]: return []
+        functions = []
+        if s is not None:
+            functions.append(lambda x:self.trace(e,'k',np.asarray(x,float),s))
+        if when is not None:
+            functions.append(lambda x:np.broadcast_to(np.asarray(self.m.functions['K'](np.asarray(x,float),self.m.H,when)[0],float),np.asarray(x).shape))
+        nodes = np.asarray([-1.,-.5,.5,1.]);points = (xl+xr)/2+(xr-xl)*nodes/2
+        held = (xl+xr)/2+(xr-xl)*np.asarray([-.81,-.27,.19,.71])/2
+        roundoff = 64*np.finfo(float).eps*max(self.m.H,abs(rl),abs(rr));roots = []
+        for field in functions:
+            polynomial = np.polynomial.Chebyshev.fit(points,field(points),3,domain=[xl,xr])
+            require(float(np.max(abs(polynomial(held)-field(held)))) <= 1e-12*self.m.Kin,
+                    'current/exact MMS interface is not its declared polynomial')
+            critical = []
+            for value in polynomial.deriv().roots():
+                if abs(np.imag(value)) <= 64*np.finfo(float).eps*max(abs(xl),abs(xr),xr-xl):
+                    point = float(np.real(value))
+                    if xl < point < xr: critical.append(point)
+            panels = sorted(set([xl,xr,*critical]));cuts = self.cutoff(field(np.asarray(panels)))
+            if not any(float(np.min(cuts))-roundoff <= face <= float(np.max(cuts))+roundoff for face in (rl,rr)): continue
+            roots.extend(critical)
+            for face in set((rl,rr)):
+                def residual(point):return float(self.cutoff(field(np.asarray([point])))[0]-face)
+                for left,right in zip(panels,panels[1:]):
+                    a,b = residual(left),residual(right)
+                    if (a < 0 < b) or (b < 0 < a):
+                        roots.append(brentq(residual,left,right,xtol=8*np.finfo(float).eps*max(abs(left),abs(right),right-left),
+                                            rtol=4*np.finfo(float).eps))
+        return sorted(set(roots))
+
     def rule(self, e, s=None, when=None):
         ax, wx = leggauss(self.nx); ar, wr = leggauss(self.nr)
         xl, xr, rl, rr = e['bounds']; xs, rs, weights = [], [], []
-        for a, wa in zip(ax, wx):
-            x = (xl+xr)/2+(xr-xl)*a/2
-            cuts = [rl, rr, .4*self.m.H, .75*self.m.H, self.m.h, self.m.H]
-            if s is not None:
-                cuts.append(float(self.cutoff(self.trace(e, 'k', np.array([x]), s)[0])))
-            if when is not None:
-                cuts.append(float(self.cutoff(self.m.functions['K'](x, self.m.H, when)[0])))
-            cuts = sorted(set([rl, rr]+[v for v in cuts if rl < v < rr]))
-            for lo, hi in zip(cuts[:-1], cuts[1:]):
-                xs.extend(np.full(self.nr, x)); rs.extend((lo+hi)/2+(hi-lo)*ar/2)
-                weights.extend(wa*wr*(xr-xl)*(hi-lo)/4)
+        panels = [xl,*self.cutoff_x_splits(e,s,when),xr]
+        for left,right in zip(panels,panels[1:]):
+            require(right > left,'nonpositive independent MMS x panel')
+            for a, wa in zip(ax, wx):
+                x = (left+right)/2+(right-left)*a/2
+                cuts = [rl, rr, .4*self.m.H, .75*self.m.H, self.m.h, self.m.H]
+                if s is not None:
+                    cuts.append(float(self.cutoff(self.trace(e, 'k', np.array([x]), s)[0])))
+                if when is not None:
+                    cuts.append(float(self.cutoff(self.m.functions['K'](x, self.m.H, when)[0])))
+                cuts = sorted(set([rl, rr]+[v for v in cuts if rl < v < rr]))
+                for lo, hi in zip(cuts[:-1], cuts[1:]):
+                    xs.extend(np.full(self.nr, x)); rs.extend((lo+hi)/2+(hi-lo)*ar/2)
+                    weights.extend(wa*wr*(right-left)*(hi-lo)/4)
         return np.asarray(xs), np.asarray(rs), np.asarray(weights)
 
     def face(self, e, side):
