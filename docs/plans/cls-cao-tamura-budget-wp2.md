@@ -550,3 +550,18 @@ binds recovery h0 to its explicit predecessor seed report. Existing selected-mes
 paths retain their original fallback. The new controller checks seed/horizon/
 state identity and process outcomes before running final read-only assessments.
 A launch receipt is distinct from a recovery result; both-model WP2 remains OPEN.
+
+
+The confirmation seed passes its complete native h0 audit at T=0 with 11014
+coupled slots, native StandardKEpsilon readback, 4.049220322% maximum actual
+k departure, and zero governing callbacks. Its state SHA256 is
+8c3df6a346dd4a45d45e106ebc2d035805fc148fad5abad29094d775ab0d6018;
+its own reference SHA256 is
+0bb2af720f26013551b49068e94ccee47fcbdbf9c22674fbfdef32ba6d089df8.
+Both differ intentionally from the level4 coefficient identities. The physical
+control uses ordinary compatible restarts from this exact seed; the native
+process and supervisor are verified live after launch. Thirteen focused Linux
+protocol tests pass. See [fresh-seed receipt](cls-cao-tamura-budget-wp2-evidence/confirmation-recovery-seed.json)
+and [launch identity](cls-cao-tamura-budget-wp2-evidence/confirmation-recovery-launch.json).
+This is initialization/launch evidence only; no physical endpoint or recovery
+classification is inferred from it.

@@ -1,0 +1,58 @@
+{
+  "version": "WP2ConfirmationRecoverySeedV1",
+  "capture_Asia_Shanghai": "2026-11-17T08:46:39.366030+08:00",
+  "status": "native seed PASS; bounded physical control running; no recovery pass inferred",
+  "supervisor_pid": 457172,
+  "source_revision": "90387c3b",
+  "seed_state_sha256": "8c3df6a346dd4a45d45e106ebc2d035805fc148fad5abad29094d775ab0d6018",
+  "fixed_reference_sha256": "0bb2af720f26013551b49068e94ccee47fcbdbf9c22674fbfdef32ba6d089df8",
+  "fixed_defect_sha256": "0c5ddd1d12d40c27a150a717214b78d0464ac31c92b5539f72630cd91406edc4",
+  "coupled_slots": 11014,
+  "model_specification": {
+    "version": "CanonicalWallModelV1",
+    "name": "StandardKEpsilon",
+    "calibration": "StandardNeutralCalibratedV1",
+    "manifest_sha256": "cdf28866275f2fbbd872f293d2b736f4ced9b6915b2ba82f516d430c3c729887",
+    "coefficients": {
+      "Cmu": 0.09,
+      "Cepsilon1": 1.44,
+      "Cepsilon2": 1.92,
+      "sigmaK": 1,
+      "sigmaEpsilon": 1.3478315512167742,
+      "yapCoefficient": 0,
+      "yapLength": 2.5
+    },
+    "q": 3.3333333333333335,
+    "kappa": 0.4405539051866587,
+    "K0": 0.01838575534504143,
+    "quadratic_active": false,
+    "cubic_active": false,
+    "Yap_active": false,
+    "variant": "Original",
+    "beta": 1,
+    "gamma0": 0,
+    "Gamma": 0,
+    "physical_regularization_active": false
+  },
+  "physical_time": 0,
+  "seed_governing_callbacks": 0,
+  "hard_admissible": [
+    1
+  ],
+  "maximum_actual_relative_k_departure": 0.04049220322457701,
+  "checkpoint": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-seed-confirmation-standard/h0/checkpoint",
+  "checkpoint_sha256": "f3c35c8c4da3f0497e5f59082431cb5e5f4b5c6218c7cca53c0862bbbd6b3928",
+  "report": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/recovery-seed-confirmation-standard/h0/case.evolution.json",
+    "sha256": "3a0fd944aecb00b32b4b2392aefaf45d340b75e90b1048a903925653d279aeee"
+  },
+  "native_dimensions_distinct_from_selected": true,
+  "own_native_histories": true,
+  "predeclared_policy": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/resource-extension-24h.json",
+    "sha256": "daec74b95d8266b23639f945f7124ef9dfda02110c3920d0f8e8902aba318d77"
+  },
+  "target_steps": 120,
+  "target_time": 1.2,
+  "dt": 0.01
+}
