@@ -526,3 +526,27 @@ the exhausted envelope. Repeated smaller timesteps alone are not justified by
 the present evidence. A changed mesh or new resource envelope must be declared
 and costed before execution; neither a closure change nor weakened acceptance
 is proposed. The common-boundary hill requalification remains deferred.
+
+
+## Prospective confirmation recovery control
+
+After preserving the sixteen-hour result and its administrative overrun, a
+separately declared cumulative 24-hour ceiling retains the same original origin,
+all prior requests/attempts and every numerical acceptance threshold. It permits
+only one additional standard recovery control: the original continuum pulse on
+the already-qualified level5/11014-slot mesh, dt=.01, through T=1.2. It creates
+that mesh's own reference, perturbed seed and native histories, followed by
+ordinary compatible restarts; no state or history is transferred from level4.
+The original level4 dt=.01 trajectory is its immutable same-timestep control.
+The 58 recorded confirmation steps took 2932.23 seconds, giving a 6066.67-second
+forecast for 120 steps plus 600 seconds reserved for analysis. Peak measured
+confirmation RSS is 6186568 KiB. The first unexpected native rejection stops
+later physical jobs. No hill run, closure change, extra sweep or parameter fit
+is authorized by this amendment. See the
+[prospective resource policy](cls-cao-tamura-budget-wp2-evidence/resource-extension-24h.json).
+
+The readback path now selects the actual level4/level5 native row catalogue and
+binds recovery h0 to its explicit predecessor seed report. Existing selected-mesh
+paths retain their original fallback. The new controller checks seed/horizon/
+state identity and process outcomes before running final read-only assessments.
+A launch receipt is distinct from a recovery result; both-model WP2 remains OPEN.

@@ -80,6 +80,16 @@ class ContinuationOwnership(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'unsupported WP2 global-control amendment'):wall_limit(root)
             extension['additional_physical_attempt_limit']=180
             (root/'resource-extension-16h.json').write_text(json.dumps(extension))
+            confirmation=dict(version='WP2CumulativeResourceAmendmentV3',original_wall_seconds=43200,
+                previous_cumulative_wall_seconds=57600,cumulative_wall_seconds=86400,additional_physical_attempt_limit=120,
+                reserved_attempts_before=1646,predecessor_sha256=sha(root/'resource-extension-16h.json'),
+                origin_sha256=sha(root/'origin.json'),unchanged_acceptance_sha256=amendment['unchanged_acceptance_sha256'])
+            (root/'resource-extension-24h.json').write_text(json.dumps(confirmation));self.assertEqual(wall_limit(root),86400)
+            confirmation['additional_physical_attempt_limit']=121
+            (root/'resource-extension-24h.json').write_text(json.dumps(confirmation))
+            with self.assertRaisesRegex(ValueError,'unsupported WP2 confirmation-recovery amendment'):wall_limit(root)
+            confirmation['additional_physical_attempt_limit']=120
+            (root/'resource-extension-24h.json').write_text(json.dumps(confirmation))
             (root/'origin.json').write_text('{"reset":true}')
             with self.assertRaisesRegex(ValueError,'clock origin changed'):wall_limit(root)
     def test_execution_index_includes_nested_legacy_and_deduplicates(self):

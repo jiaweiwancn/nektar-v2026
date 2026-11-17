@@ -19,7 +19,8 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
     p.add_argument('--model',choices=['CLS','standard'],required=True);p.add_argument('--trajectory',type=Path)
     a=p.parse_args();a.output.mkdir(exist_ok=False);progress_path=a.trajectory or a.root/f'preservation-recovery-{a.model}/progress.json'
-    rows=Rows(a.root/'geometry-rows-selected/result.json')
+    level=load(progress_path)['case_definition']['level'];require(level in (4,5),'unsupported recovery row catalogue')
+    rows=Rows(a.root/f'geometry-rows-{"confirmation" if level==5 else "selected"}/result.json')
     assessment,end,_=assess(a.root,a.model,'recovery',rows,a.output/'all-states.json',progress_path)
     states,context=native_states(a.root,a.model,'recovery',progress_path);context.update(ustar=end['ustar'],developing_boundary=end['developing_boundary'])
     dense=[];reference=None;final_start=end['time']-.3

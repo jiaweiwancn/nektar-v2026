@@ -41,7 +41,8 @@ def main():
             require(progress['status']=='completed_bounded_trajectory','window trajectory incomplete')
             states,context=native_states(a.root,model,phase,progress_path);end=load(Path(progress['observations'][-1]['report']))
             context.update(ustar=end['ustar'],developing_boundary=end['developing_boundary'])
-            rows=Rows(a.root/f'geometry-rows-{"confirmation" if phase=="confirmation" else "selected"}/result.json')
+            level=progress['case_definition']['level'];require(level in (4,5),'unsupported window row catalogue')
+            rows=Rows(a.root/f'geometry-rows-{"confirmation" if level==5 else "selected"}/result.json')
             times=[];hashes=[];minimum=None;maximum=None;reference=None
             for _,(t,s) in sorted(states.items()):
                 if t<end['time']-.3-2e-14:continue

@@ -27,7 +27,7 @@ def _charge_locked(root,event,**work):
     atomic(p,d)
     for k,v in dict(spatial_cases=32,boundary_calls=24,physical_attempts=6000,stationary_iterations=120,timestep_trials=16).items():require(d['totals'].get(k,0)<=v,'WP2 aggregate '+k)
     require(time.time()-origin['started_epoch']<wall_limit(root),'WP2 cumulative wall envelope')
-    extension=root/'resource-extension-16h.json'
+    extension=root/('resource-extension-24h.json' if (root/'resource-extension-24h.json').exists() else 'resource-extension-16h.json')
     if extension.exists():
         budget=load(extension)
         require(d['totals'].get('physical_attempts',0)<=budget['reserved_attempts_before']+budget['additional_physical_attempt_limit'],

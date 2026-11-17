@@ -28,5 +28,17 @@ def wall_limit(root):
         require(extension['predecessor_sha256']==sha(path),'WP2 predecessor amendment changed')
         require(extension['origin_sha256']==sha(root/'origin.json'),'WP2 clock origin changed')
         require(extension['unchanged_acceptance_sha256']==expected,'WP2 acceptance criteria changed')
+        confirmation=root/'resource-extension-24h.json'
+        if confirmation.exists():
+            control=load(confirmation)
+            require(control['version']=='WP2CumulativeResourceAmendmentV3' and
+                    control['original_wall_seconds']==43200 and control['previous_cumulative_wall_seconds']==57600 and
+                    control['cumulative_wall_seconds']==86400 and control['additional_physical_attempt_limit']==120 and
+                    control['reserved_attempts_before']==1646,
+                    'unsupported WP2 confirmation-recovery amendment')
+            require(control['predecessor_sha256']==sha(successor),'WP2 predecessor amendment changed')
+            require(control['origin_sha256']==sha(root/'origin.json'),'WP2 clock origin changed')
+            require(control['unchanged_acceptance_sha256']==expected,'WP2 acceptance criteria changed')
+            return control['cumulative_wall_seconds']
         return extension['cumulative_wall_seconds']
     return amendment['cumulative_wall_seconds']

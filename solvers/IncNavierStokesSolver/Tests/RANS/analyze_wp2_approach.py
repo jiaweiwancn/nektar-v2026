@@ -61,7 +61,7 @@ def assess(root,model,phase,rows,output,progress_path=None):
         # A zero-step seed report omits transient endpoint-sampler output.
         # The first evolved report includes that exact seed as accepted state
         # zero, together with the complete native monitoring inventory.
-        seed_file=root/f'recovery-seed-{model}/h0/case.evolution.json'
+        seed_file=Path(p['prefix_observations'][0]['report']) if p.get('prefix_observations') and p['prefix_observations'][0]['time']==0. else root/f'recovery-seed-{model}/h0/case.evolution.json'
         seed=load(seed_file);first=load(paths(root,model,phase,p)[0])
         require(first['wp2_per_state_monitoring'][0]['time']==seed['time']==0.,'recovery initial physical time differs')
         require(state_hash(first['accepted_states'][0])==state_hash(seed['state']),'recovery initial coefficients differ from saved seed')

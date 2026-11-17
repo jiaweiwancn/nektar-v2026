@@ -1,0 +1,30 @@
+{
+  "version": "WP2CumulativeResourceAmendmentV3",
+  "capture_Asia_Shanghai": "2026-11-17T08:38:11.371605+08:00",
+  "original_wall_seconds": 43200,
+  "previous_cumulative_wall_seconds": 57600,
+  "cumulative_wall_seconds": 86400,
+  "additional_physical_attempt_limit": 120,
+  "reserved_attempts_before": 1646,
+  "predecessor_sha256": "0ba8b46514ae65098b5470f43c57b19d832ca1b0db19ec6d7ebc434ec311ee03",
+  "origin_sha256": "eac0a5911aeba5dc693af8788b1f4adff253d95fcc6accfd45b06ed0be68a23c",
+  "unchanged_acceptance_sha256": "193c9bb35edd9a6b89ceb531fc53824f1200edf79f6123ebaaebcf695ba40e84",
+  "scope": "One standard original-pulse recovery control on the already-qualified 11014-slot level5 confirmation mesh, dt=.01, 120 steps to T=1.2. Fresh reference/seed/histories for this mesh; no cross-mesh restart. Same calibrated physics, full-height reference, boundaries, source quadrature, pulse and frozen acceptance. One zero-step seed check and terminal readbacks. First numerical rejection is terminal. No further physical continuation or model/mesh sweep.",
+  "reason": "The global half-step run fails recovery and is more departed at T=1.2. A matched-timestep confirmation-mesh control is needed to separate radial representation from temporal sensitivity before choosing another method. Autonomous numerical adaptation is authorized by the WP2 prompt; the full both-model closure goal remains unchanged.",
+  "past_overrun": "The preceding sixteen-hour envelope and its approximately99-minute administrative overrun remain recorded. This amendment is prospective; it does not relabel that past compliance or reset any clock/count.",
+  "forecast": {
+    "measured_confirmation_seconds": 2932.22563377,
+    "measured_confirmation_steps": 58,
+    "seconds_per_step": 50.55561437534483,
+    "new_steps": 120,
+    "native_seconds": 6066.67372504138,
+    "analysis_reserve_seconds": 600,
+    "measured_peak_RSS_KiB": 6186568
+  },
+  "physical_attempt_limit_unchanged": 6000,
+  "rank": 1,
+  "numerical_threads": 1,
+  "build_workers_max": 4,
+  "concurrent_native_cases_max": 2,
+  "solver_sha256": "8f64823373d97b86880cc9b624b19886f9921a2e9a0d56a9def1f0528af485df"
+}
