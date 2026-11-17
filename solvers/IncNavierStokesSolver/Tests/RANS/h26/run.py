@@ -21,7 +21,12 @@ def run(root,label,argv,phase,seconds,evidence=False):
     workers=scientific_workers();reservation=16 if phase=='build'else 10 if phase=='science'else 2
     free=os.statvfs(root).f_bavail*os.statvfs(root).f_frsize
     d=root/'operations'/label;d.mkdir()
-    req=dict(argv=argv,phase=phase,seconds_cap=seconds,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),allocation=workers,reservation=reservation,free_bytes=free,threads=THREADS,runner=identity(__file__))
+    inputs=[]
+    for argument in argv:
+        try:
+            if '\n'not in argument and Path(argument).is_file():inputs.append(identity(Path(argument)))
+        except OSError:pass
+    req=dict(argv=argv,phase=phase,seconds_cap=seconds,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),allocation=workers,reservation=reservation,free_bytes=free,threads=THREADS,runner=identity(__file__),input_files=inputs)
     atomic(d/'request.json',req)
     if workers['workers']+reservation>72 or free<15*1024**3:
         event=dict(status='RESOURCE_NOT_ADMITTED',seconds=1.,phase=phase)
@@ -33,15 +38,16 @@ def run(root,label,argv,phase,seconds,evidence=False):
         assert used+seconds+(0 if evidence or phase=='evidence'else 1800)<=21600
         b['entries'][label]=dict(status='RESERVED',phase=phase,reserved_seconds=seconds)
     update_journal(book,reserve)
-    start=time.monotonic();peak=0;reason=None;groups=set()
-    env=dict(os.environ,**THREADS,TMPDIR=str(root/'tmp'),H26_ROOT=str(root),H26_OPERATION=str(d),PYTHONPATH=str(Path(__file__).resolve().parent)+':'+str(LEGACY))
+    start=time.monotonic();peak=0;peak_workers=workers['workers'];reason=None;groups=set()
+    env=dict(os.environ,**THREADS,TMPDIR=str(root/'tmp'),H26_ROOT=str(root),H26_OPERATION=str(d),PYTHONDONTWRITEBYTECODE='1',PYTHONPATH=str(Path(__file__).resolve().parent)+':'+str(LEGACY))
     with(d/'command.log').open('xb')as log:
         p=subprocess.Popen(argv,cwd=root,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
         while p.poll()is None:
             rss,_=tree_usage(os.getpid());peak=max(peak,rss);groups|=owned_groups(p.pid)
             if rss>(16 if phase=='build'else 8)*1024**3:reason='RSS_LIMIT'
             if time.monotonic()-start>seconds:reason='TIME_LIMIT'
-            if scientific_workers()['workers']>72:reason='HOST_WORKER_LIMIT'
+            current_workers=scientific_workers()['workers'];peak_workers=max(peak_workers,current_workers)
+            if current_workers>72:reason='HOST_WORKER_LIMIT'
             if os.statvfs(root).f_bavail*os.statvfs(root).f_frsize<15*1024**3:reason='FREE_LIMIT'
             if size(root/'science')>8*1024**3:reason='SCIENCE_STORAGE_LIMIT'
             if sum(size(v)for v in root.iterdir()if v.is_dir()and v.name.startswith(('source','build','runtime')))>8*1024**3:reason='CODE_STORAGE_LIMIT'
@@ -58,7 +64,7 @@ def run(root,label,argv,phase,seconds,evidence=False):
                 try:os.killpg(g,signal.SIGKILL)
                 except ProcessLookupError:pass
             code=p.wait()
-    event=dict(status='PASS'if code==0 and reason is None else'FAIL',phase=phase,seconds=time.monotonic()-start,exit=code,reason=reason,peak_tree_rss_bytes=peak,log=identity(d/'command.log'))
+    event=dict(status='PASS'if code==0 and reason is None else'FAIL',phase=phase,seconds=time.monotonic()-start,exit=code,reason=reason,peak_tree_rss_bytes=peak,peak_host_workers=peak_workers,log=identity(d/'command.log'))
     update_journal(book,lambda b:b['entries'].update({label:event}));atomic(d/'receipt.json',dict(req,**event));print(label,event['status'],event['seconds'],flush=True);return int(event['status']!='PASS')
 
 
