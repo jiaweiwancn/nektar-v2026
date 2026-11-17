@@ -138,7 +138,8 @@ class Rows:
         remain mandatory and complementary to this interior volume grid.
         """
         from wp2_common_quadrature import resample
-        require(order==28,'WP2 retrospective denser grid is frozen at GL28')
+        require(order==28 or (order==36 and self.meta['version']=='WP2AffineRowsV2'),
+                'WP2 denser grid must be archived GL28 or predeclared regional-pressure GL36')
         sample=dict(report['wp2_common_samples'],values=tuple_data['values'])
         # Every retained state has its own transported endpoint K.  A report
         # contains many accepted states but its transient sampler is terminal.
@@ -168,4 +169,4 @@ class Rows:
             positive_scalars=True,minimum_k=float(min(v['values'][:,2])),minimum_epsilon=float(min(E)),physical_volume=float(sum(v['weights'])),
             strong_divergence_RMS_over_ustar_H=strong,strong_divergence_accuracy_passed=strong_passed,
             covariance_margin_passed=True,polynomial_fit_error=v['fit_error'],passed=strong_passed,
-            scope='fixed GL28 on the common union partition; actual affine native polynomials reconstructed from validated native rows, selected tensors freshly recomputed; finite sampling, complements exact native sided inventories; no freshness/selection claim')
+            scope='fixed GL'+str(order)+' on the common union partition; actual affine native polynomials reconstructed from validated native rows, selected tensors freshly recomputed; finite sampling, complements exact native sided inventories; no freshness/selection claim')

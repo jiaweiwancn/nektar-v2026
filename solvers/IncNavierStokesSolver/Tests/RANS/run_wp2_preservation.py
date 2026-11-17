@@ -54,7 +54,7 @@ def main():
         reports=[load(Path(previous[0]['report']))]
     try:
         if a.mode=='transaction':
-            x.fixture();return
+            x.fixture(a.dt);return
         if a.mode=='seed':
             d=x.native('h0',0,a.dt,perturb=True);checks=verify_report(d,US,K0[a.model],allow_recovery=True)
             require(d['diagnostic_ivp']['maximum_actual_relative_k_departure']>=.02,'actual recovery seed is unresolved')

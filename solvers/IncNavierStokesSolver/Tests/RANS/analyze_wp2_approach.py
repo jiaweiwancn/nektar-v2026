@@ -44,6 +44,7 @@ def paths(root,model,phase,progress):
             'fine':[f'trial-dt010-{model}/step4/case.evolution.json'],
             'confirmation':[f'confirmation-trial-{model}/step2/case.evolution.json'],
             'recovery':[]}[phase]
+    if progress['case_definition'].get('pressure_space','baseline-v1')!='baseline-v1':prefix=[]
     reports=[root/p for p in prefix]
     for obs in progress['observations']:
         p=Path(obs['report'])
@@ -51,7 +52,7 @@ def paths(root,model,phase,progress):
     return reports
 
 
-def assess(root,model,phase,rows,output,progress_path=None):
+def assess(root,model,phase,rows,output,progress_path=None,independent_order=28):
     started=time.monotonic();progress_path=progress_path or root/f'preservation-{phase}-{model}/progress.json';progress_hash=sha(progress_path);p=load(progress_path)
     require(p['model']==model,'analysis trajectory model differs')
     require(p['status']=='completed_bounded_trajectory','trajectory is not complete: '+str(progress_path))
@@ -62,7 +63,11 @@ def assess(root,model,phase,rows,output,progress_path=None):
         # The first evolved report includes that exact seed as accepted state
         # zero, together with the complete native monitoring inventory.
         seed_file=Path(p['prefix_observations'][0]['report']) if p.get('prefix_observations') and p['prefix_observations'][0]['time']==0. else root/f'recovery-seed-{model}/h0/case.evolution.json'
-        seed=load(seed_file);first=load(paths(root,model,phase,p)[0])
+        first=load(paths(root,model,phase,p)[0])
+        if p['case_definition'].get('pressure_space','baseline-v1')!='baseline-v1':
+            require(first['wp2_per_state_monitoring'][0]['time']==0.,'pressure recovery must retain its fresh seed')
+            seed=dict(time=0.,state=first['accepted_states'][0],fixed_reference=first['fixed_reference'],fixed_defect=first['fixed_defect'])
+        else:seed=load(seed_file)
         require(first['wp2_per_state_monitoring'][0]['time']==seed['time']==0.,'recovery initial physical time differs')
         require(state_hash(first['accepted_states'][0])==state_hash(seed['state']),'recovery initial coefficients differ from saved seed')
         require(all(state_hash(first[k])==state_hash(seed[k]) for k in ['fixed_reference','fixed_defect']),'recovery seed reference/defect differs')
@@ -84,7 +89,7 @@ def assess(root,model,phase,rows,output,progress_path=None):
                 require(h==last_hash,'restart boundary changed accepted coefficients');continue
             require(t>last_time,'trajectory time order differs')
             v=rows.tuple(state,d);full=rows.full_errors(state,d,v)
-            denser=rows.volume_audit(d,v,allow_accuracy_failure=recovery)
+            denser=rows.volume_audit(d,v,order=independent_order,allow_accuracy_failure=recovery)
             horizontal=homogeneity(dict(d['wp2_common_samples'],values=v['values']),cold_samples,US,K0[model])
             tensor_horizontal=tensor_homogeneity(rows,v,cold)
             if initial_samples is None:initial_samples=dict(d['wp2_common_samples'],values=v['values'].tolist())
@@ -119,7 +124,7 @@ def assess(root,model,phase,rows,output,progress_path=None):
     sample=endpoint['wp2_common_samples'];zero=dict(sample,values=sample['reference_values']);moving=dict(sample,values=(np.asarray(sample['reference_values'])+TREQ*slope).tolist())
     trend=quarter_budget_differences(moving,zero,US,K0[model],.0065)
     result=dict(version='WP2AllStatePhysicalAssessmentV1',model=model,phase=phase,actual_time=last_time,Treq=TREQ,transit_units=last_time/TREQ,
-        analysis_source_identity=analysis_identity(),
+        analysis_source_identity=analysis_identity(),independent_order=independent_order,
         unique_retained_states=len(history),sources=sources,counts=counts,native_tuple_replays=replay,history=history,
         final_physical_and_full_tensor_passed=final_pass,final_state_sha256=last_hash,final_window=dict(start=min(times),end=max(times),
             duration=max(times)-min(times),required=TREQ/4,actual_states=len(times),transit_scaled_linear_trend=trend,

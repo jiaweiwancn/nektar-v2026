@@ -18,16 +18,19 @@ from run_cls_epawf_picard import require,sha,state_hash
 def main():
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
     p.add_argument('--model',choices=['CLS','standard'],required=True);p.add_argument('--trajectory',type=Path)
+    p.add_argument('--row-catalogue',type=Path);p.add_argument('--independent-order',type=int,choices=[28,36],default=28)
     a=p.parse_args();a.output.mkdir(exist_ok=False);progress_path=a.trajectory or a.root/f'preservation-recovery-{a.model}/progress.json'
     level=load(progress_path)['case_definition']['level'];require(level in (4,5),'unsupported recovery row catalogue')
-    rows=Rows(a.root/f'geometry-rows-{"confirmation" if level==5 else "selected"}/result.json')
-    assessment,end,_=assess(a.root,a.model,'recovery',rows,a.output/'all-states.json',progress_path)
+    require(a.row_catalogue or load(progress_path)['case_definition'].get('pressure_space','baseline-v1')=='baseline-v1',
+            'regional pressure requires its explicit native row catalogue')
+    rows=Rows(a.row_catalogue or a.root/f'geometry-rows-{"confirmation" if level==5 else "selected"}/result.json')
+    assessment,end,_=assess(a.root,a.model,'recovery',rows,a.output/'all-states.json',progress_path,independent_order=a.independent_order)
     states,context=native_states(a.root,a.model,'recovery',progress_path);context.update(ustar=end['ustar'],developing_boundary=end['developing_boundary'])
     dense=[];reference=None;final_start=end['time']-.3
     times=[];acc0=None;acc1=None;tensor0={};tensor1={};first=None
     for _,(t,s) in sorted(states.items()):
         v=rows.tuple(s,context);sample=dict(context['wp2_common_samples'],values=v['values'])
-        actual=resample(dict(context,wp2_common_samples=sample,physical_samples=dict(wall_K=v['endpoint_K'])),28)
+        actual=resample(dict(context,wp2_common_samples=sample,physical_samples=dict(wall_K=v['endpoint_K'])),a.independent_order)
         if reference is None:reference=evaluate(context,actual['physical'])
         dense.append(dict(actual_time=t,state_sha256=state_hash(s),**gates(actual,reference)))
         if t>=final_start-2e-14:
@@ -69,6 +72,11 @@ def main():
         accuracy_failure_reporting='failed recovery accuracy checks remain failed and are retained; scalar/covariance requirements are never bypassed',
         passed=assessment['final_physical_and_full_tensor_passed'] and dense[-1]['passed'] and window['passed'] and tensors['passed'] and assessment['final_window']['transit_scaled_linear_trend']['passed'] and dense_window_pass,
         scope='same complete recovery trajectory, no field or reference alteration; finite-time return and measured final-window sensitivity; zero PDE solves in this assessment')
+    if a.independent_order!=28:
+        for name in list(result):
+            if 'GL28' in name:result[name.replace('GL28','GL'+str(a.independent_order))]=result.pop(name)
+        result['version']='WP2RecoveryReturnV4'
+    result['independent_order']=a.independent_order;result['row_catalogue_sha256']=sha(rows.path)
     atomic(a.output/'result.json',result)
 
 

@@ -688,3 +688,62 @@ degree is adopted as the production default.
 See [case checks](cls-cao-tamura-budget-wp2-evidence/pressure-case-generation.json),
 [native row checks](cls-cao-tamura-budget-wp2-evidence/pressure-row-verification.json)
 and [isolated artifacts](cls-cao-tamura-budget-wp2-evidence/pressure-preparation-artifact-index.json).
+
+## Completed radial recovery confirmation and pressure control
+
+At 2026-11-17 10:16 Shanghai the finer standard recovery has completed **120/120
+accepted steps**, actual T=1.2000000000000008. It fails the return, final-window
+and trend criteria; zero bound supply and native covariance acceptance survive.
+The terminal k point error is 6.1516%, inner U L2 error .00147985 and normalized
+four-block maximum .00105595. This is a failed recovery experiment.
+
+The selected/confirmation radial meshes nevertheless pass **all 121 matched-time
+quarter-budget comparisons**, including full selected tensors. The largest final
+full-tensor mesh difference is .000284174 in units of u_tau^2. Thus the tested
+radial refinement does not explain or remove the recovery failure. It does not
+prove a continuum instability. The 120 steps cost 5310.22 seconds, peak RSS
+6192764 KiB. Immutable receipts and checkpoints are indexed in
+[terminal results](cls-cao-tamura-budget-wp2-evidence/confirmation-recovery-terminal-summary.json)
+and [artifacts](cls-cao-tamura-budget-wp2-evidence/confirmation-recovery-terminal-artifacts.json).
+
+The next prospective control uses the already implemented native inner-Q2 /
+outer-Q1 pressure space on the same level4/level5 velocity/scalar meshes. The
+reason is the localized Q1-unseen divergence modes, together with the measured
+radial agreement. All physics, physical boundaries, production quadrature,
+calibration, perturbation and acceptance criteria remain fixed. No grad-div
+source is added. Fresh case/reference/history identities are required.
+
+The [pressure scope](cls-cao-tamura-budget-wp2-evidence/pressure-control-scope.json)
+reserves at most eight further spatial cases and 742 physical attempts under the
+**same 24-hour cumulative deadline and original clock**. It does not reset past
+cost or reinterpret any failed gate. GL36 on the frozen common physical panels
+is declared before pressure-field tuning; GL28 is now a seen set. Cold-state,
+full pressure action, timestep and actual-dt restart/rollback gates precede any
+longer new-pressure legs. Four concurrent serial cases are permitted only after
+measured memory/resource checks. WP2 remains OPEN.
+
+The native cold checks pass both models on both pressure-control meshes. Primary
+sizes are [2413,2413,2413,1102,611,140,1] = 9093; confirmation sizes are
+[3097,3097,3097,1330,819,168,1] = 11609. Analytical free weak loads remain below
+2.9e-13 and represented block residuals retain the earlier spatial pass. The
+full nonconstant pressure/roughness/open-boundary fixture passes; constant
+pressure has nonzero action (.2), consistent with absolute traction anchoring.
+The unused gauge slot stays fixed zero. This is a tested native action and cold
+balance result, not proof of transient recovery or an inf-sup theorem.
+
+The first actual two-step trials at dt=.02 pass both models, with physical
+steps about 45--47 seconds and process peak RSS at most 4259660 KiB. A Python
+logging keyword collision stopped the driver after saving these successful
+trials. Both stop receipts are retained; the corrected driver revalidates and
+reuses those exact saved results without rerunning their PDE steps. A new positive
+driver regression exercises the full bookkeeping path; all seventeen focused
+Linux tests pass. The measured memory and available host memory permit four
+single-rank/thread cases under the same aggregate 72-worker ceiling.
+
+The balanced schedule groups the four 120-step legs first, then the four 60-step
+legs, rather than idling workers behind unequal waves. It still requires all
+initial timestep/transaction and production-quadrature gates and a measured
+whole-program forecast before launching those legs. No pass is inferred from
+that conditional schedule. See [cold checks](cls-cao-tamura-budget-wp2-evidence/pressure-cold-summary.json),
+[protocol tests](cls-cao-tamura-budget-wp2-evidence/pressure-protocol-tests-event-fix2.json)
+and [resource check](cls-cao-tamura-budget-wp2-evidence/pressure-concurrency-activation.json).

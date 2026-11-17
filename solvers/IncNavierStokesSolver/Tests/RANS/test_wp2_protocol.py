@@ -108,6 +108,56 @@ class ContinuationOwnership(unittest.TestCase):
             (root/'resource-extension-24h.json').write_text(json.dumps(confirmation))
             (root/'origin.json').write_text('{"reset":true}')
             with self.assertRaisesRegex(ValueError,'clock origin changed'):wall_limit(root)
+    def test_pressure_gate_positive_bookkeeping_and_requested_transaction_dt(self):
+        import qualify_wp2_pressure_control as driver
+        from continue_cls_epawf_pimple import atomic
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);solver=root/'solver';solver.write_text('fixture identity')
+            atomic(root/'origin.json',dict(started_epoch=__import__('time').time()))
+            for batch in ['pressure-cold-primary','pressure-cold-confirmation']:
+                folder=root/batch;folder.mkdir();atomic(folder/'progress.json',dict(status='completed_native_batch'))
+                for model in ['CLS','standard']:
+                    out=folder/(model+'-native');out.mkdir()
+                    atomic(out/'result.json',dict(boundary=dict(passed=True),spatial=dict(analytical_free_block_norms=[0]*4)))
+            requested=[]
+            class Native:
+                def __init__(self,*args):
+                    self.output=args[4];self.output.mkdir();self.result=dict(results={})
+                def save(self):atomic(self.output/'progress.json',self.result)
+                def native(self,label,n,dt):
+                    folder=self.output/label;folder.mkdir();report=dict(accepted_states=[[]],pimple_attempts=[dict(native_full_G_action_defect=0)],wp2_common_samples={})
+                    atomic(folder/'report.json',report);(folder/'timing.jsonl').write_text(json.dumps(dict(name='native.step',wall_seconds=3.)))
+                    self.result['results'][label]=dict(report=str(folder/'report.json'),usage='10 9 1 1000',seconds=10.)
+                    return report
+                def fixture(self,dt):requested.append(dt);self.save()
+            class Geometry:
+                def __init__(self,*args):pass
+                def check_native(self,*args):return dict(passed=True)
+                def tuple(self,*args):return {}
+                def volume_audit(self,*args,**kwargs):return dict(passed=True)
+            args=['pressure','--root',str(root),'--solver',str(solver),'--probe','/unused','--h1','/unused','--preflight','/unused','--model','standard']
+            with patch.object(sys,'argv',args),patch.object(driver,'Run',Native),patch.object(driver,'Rows',Geometry),patch.object(driver,'charge'),patch.object(driver,'verify_report'),patch.object(driver,'physical_gates',return_value=dict(passed=True)),patch.object(driver,'quarter_budget_differences',return_value=dict(passed=True)):
+                driver.main()
+            d=json.loads((root/'pressure-initial-gates-standard.json').read_text())
+            self.assertEqual(d['status'],'passed_initial_pressure_gates');self.assertEqual(requested,[.02])
+            self.assertEqual([e['name'] for e in d['events'] if e['event_type']=='trial_passed'],['coarse','fine'])
+
+    def test_fixture_honors_requested_production_timestep(self):
+        from wp2_native import Run
+        x=Run.__new__(Run);calls=[]
+        # Stop at the first actual invocation: this is a dataflow test, not a
+        # mocked numerical restart claim.
+        def native(*args,**kwargs):
+            calls.append((args,kwargs));raise RuntimeError('captured native dt')
+        x.native=native;x.result={};x.save=lambda:None
+        with self.assertRaisesRegex(RuntimeError,'captured native dt'):x.fixture(.02)
+        self.assertEqual(calls[0][1]['dt'],.02)
+
+    def test_new_pressure_assessment_does_not_mix_legacy_prefixes(self):
+        from analyze_wp2_approach import paths
+        root=Path('/immutable');progress=dict(case_definition=dict(pressure_space='inner-p2-v1'),observations=[dict(report='/immutable/new/report.json')])
+        self.assertEqual(paths(root,'standard','coarse',progress),[Path('/immutable/new/report.json')])
+
     def test_execution_index_includes_nested_legacy_and_deduplicates(self):
         from wp2_execution_index import executions
         from run_cls_epawf_picard import sha

@@ -1,0 +1,28 @@
+{
+  "version": "WP2PressureControlScopeV1",
+  "capture_Asia_Shanghai": "2026-11-17T10:29:35.043508+08:00",
+  "cumulative_wall_seconds": 86400,
+  "origin_sha256": "eac0a5911aeba5dc693af8788b1f4adff253d95fcc6accfd45b06ed0be68a23c",
+  "predecessor_sha256": "daec74b95d8266b23639f945f7124ef9dfda02110c3920d0f8e8902aba318d77",
+  "unchanged_acceptance_sha256": "193c9bb35edd9a6b89ceb531fc53824f1200edf79f6123ebaaebcf695ba40e84",
+  "reserved_attempts_before": 1766,
+  "additional_physical_attempt_limit": 742,
+  "spatial_case_limit": 40,
+  "physical_attempt_limit_unchanged": 6000,
+  "reason": "Radial refinement passes all 121 common-time quarter-budget comparisons but does not repair recovery. Native modal localization identifies Q1-unseen inner divergence. Test existing inner-P2/outer-P1 representation with unchanged physics.",
+  "scope": "Both-model primary and confirmation cold audits, two-step/half-step trials and same-dt transactions. Conditional full preservation dt=.02/.01, confirmation dt=.02 and recovery dt=.01 through 1.2 only after gates/cost pass. No wall reset. No model or threshold change.",
+  "fresh_independent_grid": "GL36 on frozen common union partition, before P2 field tuning; GL28 now seen",
+  "rank": 1,
+  "numerical_threads": 1,
+  "concurrent_native_cases_max": 2,
+  "conditional_concurrency_max": 4,
+  "concurrency_condition": "Only after measured new-case memory and server worker/memory check; each remains one rank/thread; total <=72.",
+  "forecast": "Measured 44-51 s/step on confirmation. New pressure cost measured in cold/trial before expensive jobs.",
+  "maximum_extra_breakdown": {
+    "preservation_coarse": 120,
+    "preservation_fine": 240,
+    "confirmation": 120,
+    "recovery": 240,
+    "trials_and_transactions": 22
+  }
+}

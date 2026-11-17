@@ -42,3 +42,20 @@ def wall_limit(root):
             return control['cumulative_wall_seconds']
         return extension['cumulative_wall_seconds']
     return amendment['cumulative_wall_seconds']
+
+
+def pressure_scope(root):
+    """Prospective numerical control under the unchanged cumulative deadline."""
+    path=root/'pressure-control-scope.json'
+    if not path.exists():return None
+    d=load(path);previous=root/'resource-extension-24h.json'
+    require(d['version']=='WP2PressureControlScopeV1' and
+            d['cumulative_wall_seconds']==wall_limit(root)==86400 and
+            d['reserved_attempts_before']==1766 and d['additional_physical_attempt_limit']==742 and
+            d['spatial_case_limit']==40 and d['physical_attempt_limit_unchanged']==6000,
+            'unsupported WP2 pressure-control scope')
+    require(d['predecessor_sha256']==sha(previous) and d['origin_sha256']==sha(root/'origin.json'),
+            'WP2 pressure-control origin or predecessor changed')
+    require(d['unchanged_acceptance_sha256']==load(previous)['unchanged_acceptance_sha256'],
+            'WP2 pressure-control acceptance changed')
+    return d

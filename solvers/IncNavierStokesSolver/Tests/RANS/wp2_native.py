@@ -79,16 +79,16 @@ class Run:
             require(row['solved_epsilon_retained_bitwise'],'solved epsilon overwritten')
         if not reject:require(all(x['accepted_awf_hard_admissible']==[1] for x in d['state_audits']),'native hard audit failed')
         return d
-    def fixture(self):
+    def fixture(self,dt=2e-6):
         try:
-            h0=self.native('h0');cp=Path(h0['checkpoint']);before=sha(cp/'State.bin')
-            direct=self.native('direct2',2,parent=cp)
-            one=self.native('split1',1,parent=cp)
-            two=self.native('split1-restart',1,parent=Path(one['checkpoint']))
+            h0=self.native('h0',dt=dt);cp=Path(h0['checkpoint']);before=sha(cp/'State.bin')
+            direct=self.native('direct2',2,dt,parent=cp)
+            one=self.native('split1',1,dt,parent=cp)
+            two=self.native('split1-restart',1,dt,parent=Path(one['checkpoint']))
             require(same_history(direct,two),'new-policy split histories differ')
-            bad=self.native('post-assignment-reject',1,parent=cp,reject=True)
+            bad=self.native('post-assignment-reject',1,dt,parent=cp,reject=True)
             verify_retained_rollback(h0,bad,cp,before)
-            self.native('changed-boundary-restart',0,parent=cp,pout=.001,mismatch=True)
+            self.native('changed-boundary-restart',0,dt,parent=cp,pout=.001,mismatch=True)
             require(sha(cp/'State.bin')==before,'negative restart changed checkpoint')
             self.result.update(status='passed_fixture',split_bitwise=True,post_assignment_rollback=True,
                 incompatible_boundary_restart_rejected=True,accepted_step_executions=4,deliberate_rejections=1,

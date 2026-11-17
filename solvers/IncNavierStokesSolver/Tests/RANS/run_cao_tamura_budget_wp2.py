@@ -10,7 +10,7 @@ from continue_cls_epawf_pimple import atomic
 from diagnose_cls_accepted_covariance import run_probe
 from run_cls_epawf_picard import require,THREADS,sha
 from wp2_neutral_cases import case
-from wp2_budget import wall_limit
+from wp2_budget import wall_limit,pressure_scope
 
 
 def charge(root,event,**work):
@@ -25,11 +25,12 @@ def _charge_locked(root,event,**work):
     for k,v in work.items():d['totals'][k]=d['totals'].get(k,0)+v
     d['events'].append(dict(event=event,time=datetime.now(ZoneInfo('Asia/Shanghai')).isoformat(),work=work))
     atomic(p,d)
-    for k,v in dict(spatial_cases=32,boundary_calls=24,physical_attempts=6000,stationary_iterations=120,timestep_trials=16).items():require(d['totals'].get(k,0)<=v,'WP2 aggregate '+k)
+    scope=pressure_scope(root)
+    for k,v in dict(spatial_cases=scope['spatial_case_limit'] if scope else 32,boundary_calls=24,physical_attempts=6000,stationary_iterations=120,timestep_trials=16).items():require(d['totals'].get(k,0)<=v,'WP2 aggregate '+k)
     require(time.time()-origin['started_epoch']<wall_limit(root),'WP2 cumulative wall envelope')
     extension=root/('resource-extension-24h.json' if (root/'resource-extension-24h.json').exists() else 'resource-extension-16h.json')
     if extension.exists():
-        budget=load(extension)
+        budget=scope or load(extension)
         require(d['totals'].get('physical_attempts',0)<=budget['reserved_attempts_before']+budget['additional_physical_attempt_limit'],
                 'WP2 global half-step follow-up attempt envelope')
     return d
@@ -41,6 +42,7 @@ def main():
     p.add_argument('--models',nargs='+',choices=('CLS','standard'),default=['CLS','standard'])
     p.add_argument('--level',type=int,default=0);p.add_argument('--order',type=int,default=16)
     p.add_argument('--audit-order',type=int,default=24);p.add_argument('--boundary',action='store_true');p.add_argument('--pout',type=float,default=0.)
+    p.add_argument('--pressure-space',choices=['baseline-v1','inner-p2-v1'],default='baseline-v1')
     p.add_argument('--projection',choices=('RadialL2V1','RadialEnergyV1'),default='RadialL2V1')
     a=p.parse_args();os.environ.update(THREADS);a.output.mkdir(exist_ok=False);pre=load(a.preflight)
     result=dict(version='WP2NativeBatchV1',status='running',probe=str(a.probe),probe_sha256=sha(a.probe),results={},governing_solves=0,physical_steps=0)
@@ -48,7 +50,7 @@ def main():
     try:
         for model in a.models:
             charge(a.root,'native '+model+' level'+str(a.level),spatial_cases=1,boundary_calls=int(a.boundary))
-            xml=case(a.output/(model+'-case'),a.h1,pre,model,a.level,a.order,pout=a.pout,projection=a.projection)
+            xml=case(a.output/(model+'-case'),a.h1,pre,model,a.level,a.order,pout=a.pout,projection=a.projection,pressure_space=a.pressure_space)
             packet=dict(operation='wp2_equilibrium',inner_stress_model='Linear',xml_sha256=sha(xml),
                         expected_model='CLSHighRe' if model=='CLS' else 'StandardKEpsilon',order=a.audit_order,boundary_checks=a.boundary)
             d,receipt=run_probe(a.probe,xml,packet,a.output/(model+'-native'))
