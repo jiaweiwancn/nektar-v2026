@@ -1,0 +1,39 @@
+
+[36mWarning : [0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	     WJ coupled path: WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon
+	         Wall tensor: FiniteNuIsotropicWallFullWJCollarV2
+	         Integration: current coupled BDF2/EX2, BE startup, no clipping
+	      Pressure gauge: fixed by total outlet traction
+=======================================================================
+WJ-H27 step 1, t=0.005, coupled residual=1.7054e-13, nonlinear iterations=4
+WJ-H27 step 2, t=0.01, coupled residual=6.92935e-13, nonlinear iterations=4
+WJ-H27 step 3, t=0.015, coupled residual=3.12483e-13, nonlinear iterations=4
+WJ-H27 step 4, t=0.02, coupled residual=1.35468e-13, nonlinear iterations=4
+WJ-H27 step 5, t=0.025, coupled residual=1.09901e-13, nonlinear iterations=4
+WJ-H27 step 6, t=0.03, coupled residual=7.22105e-14, nonlinear iterations=4
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/prefix-u.fld" (0.00313092s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/prefix-v.fld" (0.00274906s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/prefix-k.fld" (0.00286377s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/prefix-epsilon.fld" (0.00167271s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/prefix-p.fld" (0.00126919s, XML)
+-------------------------------------------
+Total Computation Time = 50.687s
+-------------------------------------------
+L 2 error (variable u) : 21.5483
+L inf error (variable u) : 1.09003
+L 2 error (variable v) : 5.43077e-05
+L inf error (variable v) : 0.000223912
+L 2 error (variable k) : 0.196819
+L inf error (variable k) : 0.017238
+L 2 error (variable epsilon) : 0.00446735
+L inf error (variable epsilon) : 0.00231582
+L 2 error (variable p) : 0.00319095
+L inf error (variable p) : 0.00237353
+-------------------------------------------
+                       Region  Elapsed time Avg (s)       Min (s)       Max (s)         Count      IO Level
+                      Execute               50.8441       50.8441       50.8441             1             0
+

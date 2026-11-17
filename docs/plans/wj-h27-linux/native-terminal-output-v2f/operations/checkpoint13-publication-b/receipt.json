@@ -1,0 +1,65 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/checkpoint13-publication-b.py"
+  ],
+  "phase": "evidence",
+  "seconds_cap": 90.0,
+  "utc": "2026-11-17T18:35:35.525787+00:00",
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 493664,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label checkpoint13-publication-b --phase evidence --seconds 90 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/checkpoint13-publication-b.py"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/checkpoint13-publication-b.py",
+      "bytes": 7447,
+      "sha256": "e709f0c479fedd721b8baf6afd85ddf650d93b4fa728febbc2cf1af0a5034f6c"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 7.296527883969247,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 89055232,
+  "peak_host_workers": 5,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/checkpoint13-publication-b/command.log",
+    "bytes": 668,
+    "sha256": "fe5b665600bee6ecb488289c1b62d03849557d7bac101516ed4712a50d734d09"
+  }
+}

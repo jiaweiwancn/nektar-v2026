@@ -1,0 +1,82 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v14/IncNavierStokesSolver",
+    "--use-opt-file",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/initial.xml.opt",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/initial.xml"
+  ],
+  "phase": "science",
+  "seconds_cap": 10.0,
+  "utc": "2026-11-17T18:57:39.626993+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 494421,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/terminal-controller-v14.py"
+      },
+      {
+        "pid": 494441,
+        "parent": 494421,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label terminal-initial-native-v14 --phase science --seconds 10 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v14/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/initial.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/initial.xml"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v14/IncNavierStokesSolver",
+      "bytes": 380,
+      "sha256": "ffe09f319bb81eefff103ca67e40ca290526b78cef0495670bf91d824517b200"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/initial.xml.opt",
+      "bytes": 55,
+      "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/initial.xml",
+      "bytes": 6222,
+      "sha256": "c483dcb2063f8d4768f2c636368dacfa037246da0459b28877b83bbb32a4935f"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 3.045186976029072,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 116424704,
+  "peak_host_workers": 12,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/terminal-initial-native-v14/command.log",
+    "bytes": 2216,
+    "sha256": "a698cfff83b1f6a40d3edebf336be9eec1ba917ea3885b0cbbc0596c6d1e4b4d"
+  }
+}

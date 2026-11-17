@@ -1,0 +1,45 @@
+
+[36mWarning : [0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	     WJ coupled path: WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon
+	         Wall tensor: FiniteNuIsotropicWallFullWJCollarV2
+	         Integration: current coupled BDF2/EX2, BE startup, no clipping
+	      Pressure gauge: fixed by total outlet traction
+=======================================================================
+WJ-H27 step 1, t=0.005, coupled residual=1.7054e-13, nonlinear iterations=4
+WJ-H27 step 2, t=0.01, coupled residual=6.92935e-13, nonlinear iterations=4
+WJ-H27 step 3, t=0.015, coupled residual=3.12483e-13, nonlinear iterations=4
+WJ-H27 step 4, t=0.02, coupled residual=1.35468e-13, nonlinear iterations=4
+WJ-H27 step 5, t=0.025, coupled residual=1.09901e-13, nonlinear iterations=4
+WJ-H27 step 6, t=0.03, coupled residual=7.22105e-14, nonlinear iterations=4
+WJ-H27 step 7, t=0.035, coupled residual=6.98891e-14, nonlinear iterations=4
+WJ-H27 step 8, t=0.04, coupled residual=3.79332e-14, nonlinear iterations=4
+WJ-H27 step 9, t=0.045, coupled residual=3.76002e-14, nonlinear iterations=4
+WJ-H27 step 10, t=0.05, coupled residual=3.68176e-14, nonlinear iterations=4
+WJ-H27 step 11, t=0.055, coupled residual=3.88256e-14, nonlinear iterations=4
+WJ-H27 step 12, t=0.06, coupled residual=3.29877e-14, nonlinear iterations=4
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-cadence2-v14/scheduled-u.fld" (0.00309737s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-cadence2-v14/scheduled-v.fld" (0.00270426s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-cadence2-v14/scheduled-k.fld" (0.0028263s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-cadence2-v14/scheduled-epsilon.fld" (0.00166742s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-cadence2-v14/scheduled-p.fld" (0.00127053s, XML)
+-------------------------------------------
+Total Computation Time = 95.4235s
+-------------------------------------------
+L 2 error (variable u) : 21.5483
+L inf error (variable u) : 1.09003
+L 2 error (variable v) : 6.9876e-05
+L inf error (variable v) : 0.000284262
+L 2 error (variable k) : 0.196819
+L inf error (variable k) : 0.017238
+L 2 error (variable epsilon) : 0.00446759
+L inf error (variable epsilon) : 0.00231616
+L 2 error (variable p) : 0.00319257
+L inf error (variable p) : 0.00237679
+-------------------------------------------
+                       Region  Elapsed time Avg (s)       Min (s)       Max (s)         Count      IO Level
+                      Execute               95.5798       95.5798       95.5798             1             0
+

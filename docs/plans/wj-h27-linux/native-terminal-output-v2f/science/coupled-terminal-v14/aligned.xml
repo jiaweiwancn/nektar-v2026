@@ -1,0 +1,178 @@
+<NEKTAR>
+  <GEOMETRY DIM="2" SPACE="2">
+    <VERTEX>
+      <V ID="0">0 0.087499999999999994 0</V>
+      <V ID="1">0.5 0.087499999999999994 0</V>
+      <V ID="2">1 0.087499999999999994 0</V>
+      <V ID="3">0 0.16249999999999998 0</V>
+      <V ID="4">0.5 0.16249999999999998 0</V>
+      <V ID="5">1 0.16249999999999998 0</V>
+      <V ID="6">0 0.23749999999999999 0</V>
+      <V ID="7">0.5 0.23749999999999999 0</V>
+      <V ID="8">1 0.23749999999999999 0</V>
+      <V ID="9">0 0.41249999999999998 0</V>
+      <V ID="10">0.5 0.41249999999999998 0</V>
+      <V ID="11">1 0.41249999999999998 0</V>
+      <V ID="12">0 0.58750000000000002 0</V>
+      <V ID="13">0.5 0.58750000000000002 0</V>
+      <V ID="14">1 0.58750000000000002 0</V>
+    </VERTEX>
+    <EDGE>
+      <E ID="0">0 1</E>
+      <E ID="1">1 2</E>
+      <E ID="2">3 4</E>
+      <E ID="3">4 5</E>
+      <E ID="4">6 7</E>
+      <E ID="5">7 8</E>
+      <E ID="6">9 10</E>
+      <E ID="7">10 11</E>
+      <E ID="8">12 13</E>
+      <E ID="9">13 14</E>
+      <E ID="10">0 3</E>
+      <E ID="11">1 4</E>
+      <E ID="12">2 5</E>
+      <E ID="13">3 6</E>
+      <E ID="14">4 7</E>
+      <E ID="15">5 8</E>
+      <E ID="16">6 9</E>
+      <E ID="17">7 10</E>
+      <E ID="18">8 11</E>
+      <E ID="19">9 12</E>
+      <E ID="20">10 13</E>
+      <E ID="21">11 14</E>
+    </EDGE>
+    <ELEMENT>
+      <Q ID="0">0 11 2 10</Q>
+      <Q ID="1">1 12 3 11</Q>
+      <Q ID="2">2 14 4 13</Q>
+      <Q ID="3">3 15 5 14</Q>
+      <Q ID="4">4 17 6 16</Q>
+      <Q ID="5">5 18 7 17</Q>
+      <Q ID="6">6 20 8 19</Q>
+      <Q ID="7">7 21 9 20</Q>
+    </ELEMENT>
+    <CURVED />
+    <COMPOSITE>
+      <C ID="0">Q[0-7]</C>
+      <C ID="1">E[10,13,16,19]</C>
+      <C ID="2">E[12,15,18,21]</C>
+      <C ID="3">E[0,1]</C>
+      <C ID="4">E[8,9]</C>
+      <C ID="5">E[10,13,16,19]</C>
+      <C ID="6">E[12,15,18,21]</C>
+      <C ID="7">E[0,1]</C>
+      <C ID="8">E[8,9]</C>
+    </COMPOSITE>
+    <DOMAIN>C[0]</DOMAIN>
+  </GEOMETRY>
+  <EXPANSIONS>
+    <E COMPOSITE="C[0]" NUMMODES="4,4" BASISTYPE="Modified_A,Modified_A" FIELDS="u,v,k,epsilon" NUMPOINTS="12,12" POINTSTYPE="GaussLobattoLegendre,GaussLobattoLegendre" />
+    <E COMPOSITE="C[0]" NUMMODES="3,3" BASISTYPE="Modified_A,Modified_A" FIELDS="p" NUMPOINTS="12,12" POINTSTYPE="GaussLobattoLegendre,GaussLobattoLegendre" />
+  </EXPANSIONS>
+  <CONDITIONS>
+    <SOLVERINFO>
+      <I PROPERTY="SolverType" VALUE="WJNativeCoupledV2" />
+      <I PROPERTY="EQTYPE" VALUE="UnsteadyNavierStokes" />
+      <I PROPERTY="Projection" VALUE="Continuous" />
+      <I PROPERTY="GlobalSysSoln" VALUE="DirectStaticCond" />
+      <I PROPERTY="AdvectionType" VALUE="Convective" />
+      <I PROPERTY="SpectralVanishingViscosity" VALUE="False" />
+      <I PROPERTY="Driver" VALUE="Standard" />
+      <I PROPERTY="WJNativeMode" VALUE="Manufactured" />
+      <I PROPERTY="WJReferenceTable" VALUE="/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json" />
+      <I PROPERTY="WJOutputPrefix" VALUE="/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/aligned" />
+      <I PROPERTY="WJOutputCoefficients" VALUE="True" />
+      <I PROPERTY="WJConstitutiveBackend" VALUE="FastFull3DV1" />
+      <I PROPERTY="WJMMSVariant" VALUE="PolynomialScalarsV1" />
+      <I PROPERTY="WJNativeSolve" VALUE="Advance" />
+      <I PROPERTY="WJNonlinearTrace" VALUE="True" />
+      <I PROPERTY="WJStressSplit" VALUE="PositiveShearV1" />
+      <I PROPERTY="WJCheckCurrentActions" VALUE="True" />
+      <I PROPERTY="WJImplicitSolver" VALUE="CoupledJFNKV1" />
+      <I PROPERTY="WJStepPreconditioner" VALUE="OperatorDriftV1" />
+    <I PROPERTY="WJTerminalOutput" VALUE="True" /></SOLVERINFO>
+    <TIMEINTEGRATIONSCHEME>
+      <METHOD>IMEX</METHOD>
+      <ORDER>2</ORDER>
+    </TIMEINTEGRATIONSCHEME>
+    <PARAMETERS>
+      <P>Time = 0</P>
+      <P>TimeStep = 0.02</P>
+      <P>NumSteps = 4</P>
+      <P>Kinvis = 6.423173803526447e-05</P>
+      <P>IO_CheckSteps = 0</P>
+      <P>IO_InfoSteps = 1</P>
+      <P>WJScientificSteps = 0</P>
+      <P>WJLinearTolerance = 3e-13</P>
+      <P>WJCoupledTolerance = 3e-12</P>
+      <P>WJMaximumIterations = 60</P>
+      <P>WJQuadratureX = 8</P>
+      <P>WJQuadratureR = 12</P>
+      <P>WJPhysicalDisplacement = 0.0875</P>
+      <P>WJInjectRetryStep = -1</P>
+      <P>NumQuadPointsError = 0</P>
+      <P>WJMMSBodyAmplitude = 1</P>
+      <P>WJSteadySeconds = 0</P>
+      <P>WJSteadyPreconditionerMass = 0</P>
+      <P>WJSteadySeed = 0</P>
+      <P>WJAndersonDepth = 0</P>
+      <P>WJStepNewtonSeconds = 5</P>
+      <P>WJStepNewtonIterations = 20</P>
+      <P>WJStepKrylovDimension = 40</P>
+      <P>WJStepLinearCycles = 8</P>
+      <P>WJStepFDStep = 1e-06</P>
+      <P>WJStepPCRelativeDrift = 0.02</P>
+      <P>WJStepPCMaximumUses = 3</P>
+    <P>WJTerminalBegin = 0.02</P><P>WJTerminalEnd = 0.06</P></PARAMETERS>
+    <BOUNDARYREGIONS>
+      <B ID="0">C[5]</B>
+      <B ID="1">C[6]</B>
+      <B ID="2">C[7]</B>
+      <B ID="3">C[8]</B>
+    </BOUNDARYREGIONS>
+    <BOUNDARYCONDITIONS>
+      <REGION REF="0">
+        <D VAR="u" VALUE="0" />
+        <D VAR="v" VALUE="0" />
+        <D VAR="k" VALUE="0" />
+        <D VAR="epsilon" VALUE="0" />
+        <N VAR="p" VALUE="0" />
+      </REGION>
+      <REGION REF="1">
+        <D VAR="u" VALUE="0" />
+        <D VAR="v" VALUE="0" />
+        <N VAR="k" VALUE="0" />
+        <N VAR="epsilon" VALUE="0" />
+        <N VAR="p" VALUE="0" />
+      </REGION>
+      <REGION REF="2">
+        <D VAR="u" VALUE="0" />
+        <D VAR="v" VALUE="0" />
+        <N VAR="k" VALUE="0" />
+        <N VAR="epsilon" VALUE="0" />
+        <N VAR="p" VALUE="0" />
+      </REGION>
+      <REGION REF="3">
+        <D VAR="u" VALUE="0" />
+        <D VAR="v" VALUE="0" />
+        <N VAR="k" VALUE="0" />
+        <N VAR="epsilon" VALUE="0" />
+        <N VAR="p" VALUE="0" />
+      </REGION>
+    </BOUNDARYCONDITIONS>
+    <VARIABLES>
+      <V ID="0">u</V>
+      <V ID="1">v</V>
+      <V ID="2">k</V>
+      <V ID="3">epsilon</V>
+      <V ID="4">p</V>
+    </VARIABLES>
+    <FUNCTION NAME="InitialConditions">
+      <E VAR="u" VALUE="0" />
+      <E VAR="v" VALUE="0" />
+      <E VAR="k" VALUE="0" />
+      <E VAR="epsilon" VALUE="0" />
+      <E VAR="p" VALUE="0" />
+    </FUNCTION>
+  </CONDITIONS>
+</NEKTAR>

@@ -4,6 +4,7 @@
 #include <SolverUtils/EquationSystem.h>
 #include <IncNavierStokesSolver/EquationSystems/WJNativeCoupling.h>
 #include <fstream>
+#include <cstdint>
 
 namespace Nektar
 {
@@ -38,6 +39,26 @@ private:
     std::vector<double>m_completeStepSeconds,m_recoverySeconds;
     std::vector<int>m_removedRecovery;
     std::ofstream m_stepsLog;
+    enum ScientificReason:unsigned
+    {
+        Periodic=1,BeginLeft=2,BeginRight=4,BeginExact=8,
+        EndLeft=16,EndRight=32,EndExact=64,Final=128
+    };
+    struct ScientificFrame
+    {
+        std::string path,sha256,origin;
+        std::uint64_t step=0,bytes=0;
+        double time=0,seconds=0;
+        unsigned reasons=0;
+    };
+    bool m_terminalOutput=false,m_currentProcessAccepted=false,m_solveCompleted=false;
+    double m_terminalBegin=0,m_terminalEnd=0,m_initialTime=0;
+    double m_scientificFrameSeconds=0,m_scientificIndexSeconds=0;
+    std::uint64_t m_initialStep=0;
+    std::vector<ScientificFrame>m_scientificFrames;
+    unsigned TerminalReasons(double left,double right,bool before)const;
+    void WriteScientificFrame(unsigned reasons);
+    void WriteScientificIndex();
     static std::string solverTypeLookupId;
 };
 }

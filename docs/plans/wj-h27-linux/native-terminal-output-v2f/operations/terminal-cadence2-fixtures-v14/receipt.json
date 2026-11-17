@@ -1,0 +1,71 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/terminal-cadence2-fixtures-v14.py"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 20.0,
+  "utc": "2026-11-17T19:08:28.697118+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 494818,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/terminal-cadence2-controller-v14.py"
+      },
+      {
+        "pid": 494819,
+        "parent": 494818,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label terminal-cadence2-fixtures-v14 --phase analysis --seconds 20 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/terminal-cadence2-fixtures-v14.py"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/terminal-cadence2-fixtures-v14.py",
+      "bytes": 2294,
+      "sha256": "2f8cbe21de32547901f80c7b3b4ba4685056a6787b8fcdf07e711001ded8a557"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 1.490571214002557,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 454656,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/terminal-cadence2-fixtures-v14/command.log",
+    "bytes": 33,
+    "sha256": "96efe365560b9fff58ad6951eeb73e4639fa951df882984a09c54b874163dc7e"
+  }
+}

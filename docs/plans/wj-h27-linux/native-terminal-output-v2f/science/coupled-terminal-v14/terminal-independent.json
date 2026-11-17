@@ -1,0 +1,1515 @@
+{
+  "schema": "WJH27TerminalOutputFoundationCheckV1",
+  "status": "FAIL",
+  "foundation_gate_pass": false,
+  "full_H27_qualification": false,
+  "H27_D_pass": false,
+  "TASK3_READY": false,
+  "workers": 1,
+  "prospective_limits": {
+    "U": 0.0001,
+    "k": 0.001,
+    "Pi": 0.001,
+    "R": 0.001,
+    "G": 0.01,
+    "epsilon": 0.01,
+    "Ew": 0.01,
+    "K": 0.001,
+    "Gamma": 0.001,
+    "cutoff": 0.001,
+    "traction": 0.001
+  },
+  "window": [
+    0.0173,
+    0.0537
+  ],
+  "manifest": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/terminal-manifest.json",
+    "sha256": "58d07be2a0da66cd44c2a4e600c3e584a82e8f506e51e43ad8267ff8e957bb6c",
+    "bytes": 5774
+  },
+  "table": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+    "bytes": 92259
+  },
+  "sources": {
+    "checker": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-terminal-validation-v14/h27/terminal_output_check.py",
+      "sha256": "a5a2e49a470533032b2e10334653af48e10efb6d3dcb912d9d6c9f54b06c08d5",
+      "bytes": 29873
+    },
+    "reference_stress_basis": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-terminal-validation-v14/h27/physical_oracle.py",
+      "sha256": "94fbd2c1fd7c458dfeaa13989a0eec1449dd5d6db854ff89695e705a59dc2358",
+      "bytes": 65735
+    },
+    "histories": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-terminal-validation-v14/h27/physical_cache_history_check.py",
+      "sha256": "4fc3ce8a66e911429b8ae2a139ccccb9b76a1d42317b0d4d9407a1755f493dac",
+      "bytes": 44873
+    },
+    "fields": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-terminal-validation-v14/h27/implicit_algorithm_check.py",
+      "sha256": "1297d729286a389d80663ae0632eee645f393fadd0eb29fa94b13191de123db4",
+      "bytes": 28384
+    },
+    "transient": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-terminal-validation-v14/h27/physical_transient_oracle.py",
+      "sha256": "a5acc31d47a09a2d94562a5052649b825292d1a76680b97fb67b9960fc6a1be3",
+      "bytes": 29987
+    },
+    "JSON_reader": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-terminal-validation-v14/h27/history_recovery_check.py",
+      "sha256": "a6321e307bf3d3f6567f88dbc5e1a5c6a13d9f623be4f8034dd7e3a6cc5da059",
+      "bytes": 23455
+    }
+  },
+  "memory_cap_bytes": 8589934592,
+  "runs": {
+    "aligned": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/aligned.result.json",
+        "sha256": "04e95f03172741fa12b1cdb9cc9c8a9a5b8bd6ce16ab5b426e568d11bcfeef5d",
+        "bytes": 71801
+      },
+      "index": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/aligned.science-index.json",
+        "sha256": "53b0383ad36c3939fde1efe59023e123d6f4bf0ee422c824689df20aed5c4385",
+        "bytes": 1633
+      },
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/aligned.xml",
+        "sha256": "0d9046adccdb22c1ba3f7f4239339fc42142d987c5aedf8b2132529443c9449a",
+        "bytes": 6223
+      },
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/aligned.steps.jsonl",
+        "sha256": "687fc3aefa1e007ae753e05d2f9ea9226e83a1b532ef95f34a2b34d846bca96c",
+        "bytes": 20407
+      },
+      "frames": [
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/aligned.science-1.json",
+          "sha256": "e0d961af7397544c8e73fc3db70d9b46959415a6e67dd03d7fe66041dca0ed81",
+          "bytes": 70069
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/aligned.science-3.json",
+          "sha256": "a301773f7922d8a4858049e4bb51b0a892e1601b7ee1b3fde0656f1f8610a642",
+          "bytes": 70698
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/aligned.science-4.json",
+          "sha256": "c4572eb94815e20252f4e7ee97fdb7ca4eeaf530dad53fee6414ed784f320248",
+          "bytes": 70902
+        }
+      ],
+      "checkpoint": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/aligned.final.bin",
+        "sha256": "647e36f8e44c0b394144788aed39c38717927053e31edc9cd07339d8915f127e",
+        "bytes": 12018,
+        "payload_sha256": "873ac001874a046b00b83390788253978e63991d7bf82bab607461e7ae77cf76",
+        "signature": "61cef7d6cbb95199f52b4600f9233c614ed1b97309c7b37cbcfb8f658862f247",
+        "step": 4,
+        "time": 0.08,
+        "dt": 0.02,
+        "hashes": {
+          "current": "1821638e596c6bdc3856e769ac8020a0af94abecce0f2d4590188292f238c92a",
+          "previous": "3f4e230543729dc1c9cc7df1bc90dcb06305b7c38a68d5c03bc36e752ad68288",
+          "advection": "08e46a5e57320dc581d1bc85441250bfebf08c78e11cf72a23ca879a4aec79ea",
+          "previous_advection": "b9849652be040a3c1ab5b30ec41900eff83c0a6f1e193e710587c69bf06914f9"
+        }
+      },
+      "expected_schedule": {
+        "1": 8,
+        "3": 64,
+        "4": 128
+      },
+      "complete_advancing_seconds": 1.2529223519959487,
+      "complete_step_seconds": [
+        0.31335806503193453,
+        0.3088804839644581,
+        0.31643545703263953,
+        0.31424834596691653
+      ],
+      "scientific_frame_seconds": 0.009434391104150563,
+      "scientific_index_seconds": 5.418102955445647e-05
+    },
+    "cold": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/cold.result.json",
+        "sha256": "496cbd8a2e49db08d1b927bb48562c5cf3e7b9661c331b2456f924a6b66592eb",
+        "bytes": 4709426
+      },
+      "index": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/cold.science-index.json",
+        "sha256": "24baece4359d6f73df7a9236231b3d42bda8a57574aa76030e923cf3e4c83923",
+        "bytes": 2012
+      },
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/cold.xml",
+        "sha256": "2f6b11b1971ae5fd7ee8744b81656c6967b19ff5db49512385a57e014dbc150e",
+        "bytes": 112247
+      },
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/cold.steps.jsonl",
+        "sha256": "6d687c6177775e05ff56d5ea1f993620efaaa0f7cb14d3c4dd42c7cab47324cd",
+        "bytes": 31090
+      },
+      "frames": [
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/cold.science-9.json",
+          "sha256": "d88a1ef376417d19f8c9ac97dd9509b3c113e9af429303967c890428ff8e141b",
+          "bytes": 4708450
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/cold.science-10.json",
+          "sha256": "d391f5d1270a2332d33dbdfc450b4817a3bafe85392d4b23573e0d322ba3d140",
+          "bytes": 4708353
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/cold.science-11.json",
+          "sha256": "e5d8b43c1c7420d4f6873a71796df557d388606464714ed190cc69eb3c9df68f",
+          "bytes": 4708360
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/cold.science-12.json",
+          "sha256": "0095539f41f7201bc2299c29e06903290aade9ab3f8b22ba9e01d03fff8436fd",
+          "bytes": 4708274
+        }
+      ],
+      "checkpoint": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/cold.final.bin",
+        "sha256": "e44d56cb29a1194e8aa9e549cb5c5ad9e2cc48dbd0c84ff8ec41a120b097ffb1",
+        "bytes": 859058,
+        "payload_sha256": "d9dd29875958500cd2273bd237da3f9700b04e888bc54d08f36cfb10ec6a7d5d",
+        "signature": "f52ffe49264e07cb95618ebb88ca804e55d35b454064511ecf113ea3a894f0db",
+        "step": 12,
+        "time": 0.06,
+        "dt": 0.005,
+        "hashes": {
+          "current": "11bb21d0348d4ebdad16180d9ce65b3a954586c781e474b014501369047668ba",
+          "previous": "a06b88b4d107a197ee26f76408ca1950ec050886a642ba698d48019d4e410550",
+          "advection": "079d50a410d70ed78aa45c5f612edc14e14919da100fa89fd22f75eb84634e4b",
+          "previous_advection": "c7883362659c2e54e562d9a04a26bcaeaf4612507c38d00c68a3dbc0f75c51d7"
+        }
+      },
+      "expected_schedule": {
+        "9": 1,
+        "12": 129,
+        "10": 16,
+        "11": 32
+      },
+      "complete_advancing_seconds": 45.79446237505181,
+      "complete_step_seconds": [
+        7.9178495880332775,
+        7.922230536991265,
+        6.977693832013756,
+        7.857566438964568,
+        7.065165303007234,
+        8.053956676041707
+      ],
+      "scientific_frame_seconds": 0.5262587199686095,
+      "scientific_index_seconds": 6.224197568371892e-05
+    },
+    "dense": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/dense.result.json",
+        "sha256": "1cbb2ad8cd42667ceb4c0e2f884762e279176388c731442e31eb55ab46b192f1",
+        "bytes": 4709808
+      },
+      "index": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/dense.science-index.json",
+        "sha256": "1688cf381475733ffb76d19a644d614649d2ba645bb46ac2d548908573a97c15",
+        "bytes": 4580
+      },
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/dense.xml",
+        "sha256": "92c7613e8b5f95d096b81f02be39e58a7c5a80212a048b57d9c48d406a2d6ef9",
+        "bytes": 112125
+      },
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/dense.steps.jsonl",
+        "sha256": "9784f9ed3e765c6497bf1b2e065c20083f9761b7a4d60c272624738ac060987c",
+        "bytes": 62089
+      },
+      "frames": [
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/dense.science-1.json",
+          "sha256": "9d1653201fedb3c3acac37cd0faef25d06960ed251fe9e857bd8b654aac4c0bc",
+          "bytes": 3727703
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/dense.science-2.json",
+          "sha256": "5bc69a4a767a4393105b5c3d54264772f847c0dd649d1d0197b196d59a771670",
+          "bytes": 4294290
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/dense.science-3.json",
+          "sha256": "08a09b42325e44e5804b6a0a8c88717ede35c944935859397800f14b6ac8e3fc",
+          "bytes": 4709138
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/dense.science-4.json",
+          "sha256": "fed1d83ad4a9c0a03fe097ccd1035339e7ec7e930ecdd0ec47943dcd3961f2a0",
+          "bytes": 4709038
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/dense.science-5.json",
+          "sha256": "fa5f170d80b2cc7ed3056a6b10b86f889fe06b38ec9cdc84671a9429c17f9df9",
+          "bytes": 4709347
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/dense.science-6.json",
+          "sha256": "6eed1bc6123704a89e66229c3b4a302eec9761ea40aa4f9ba711be03a27f7a47",
+          "bytes": 4709487
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/dense.science-7.json",
+          "sha256": "d29e921929fcbe0ff9cd28c242331c6047100b714d47d03f86a6b135e764c95c",
+          "bytes": 4709357
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/dense.science-8.json",
+          "sha256": "a368c0440c1da24e892d24c441aaa87dc99edbe02edf17fcb6ef7f31b082e8b4",
+          "bytes": 4709265
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/dense.science-9.json",
+          "sha256": "ccd9ce07b0a643b94769fe460a1faae1b41692a669733e4b1ab32fe1f001279f",
+          "bytes": 4708965
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/dense.science-10.json",
+          "sha256": "5f58555317e2683da1866173f0c4be717109d012c76ca69ac1dd1e712d8b45cb",
+          "bytes": 4708871
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/dense.science-11.json",
+          "sha256": "113cb10c7ecebe8c1842ef69d512a0d32f9f82f2ed1057e7e0883d61ca1668c9",
+          "bytes": 4708665
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/dense.science-12.json",
+          "sha256": "5d9110f4a18e01674a9331a60d8abf8c907daa0b925d681a732daf90d2bb23bd",
+          "bytes": 4708497
+        }
+      ],
+      "checkpoint": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/dense.final.bin",
+        "sha256": "6392f683ae854fda1ccb4669e809d9a8077fc3627214e9c93c08c375fefb4a00",
+        "bytes": 859058,
+        "payload_sha256": "b73a5e1150b4968b460f76de9160f1b53174f8f55cfbebb05a6b66a3e722aeb9",
+        "signature": "f52ffe49264e07cb95618ebb88ca804e55d35b454064511ecf113ea3a894f0db",
+        "step": 12,
+        "time": 0.06,
+        "dt": 0.005,
+        "hashes": {
+          "current": "e8f584738e779a5fea88bdeb8132ca6f95da624f19b9a0211f8cc3d1dac4f6d8",
+          "previous": "c203012266a1e5a020cbbf045b237fec0f1dba734f2daed0f606af93ba7b2a8d",
+          "advection": "de0ffccd34c95853bb44ab11b44ecd1c5ea38c51de727e4db87c2ee4ad9e3a98",
+          "previous_advection": "003219b93ae3cc86efe47c3491b1a505fc07b627273dfef55a8dd368bfe86730"
+        }
+      },
+      "expected_schedule": {
+        "1": 1,
+        "2": 1,
+        "3": 3,
+        "4": 5,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+        "8": 1,
+        "9": 1,
+        "10": 17,
+        "11": 33,
+        "12": 129
+      },
+      "complete_advancing_seconds": 93.37130181485554,
+      "complete_step_seconds": [
+        9.624784947023727,
+        9.088119451946113,
+        8.0000196119654,
+        6.917912848002743,
+        7.992640143958852,
+        6.948418124986347,
+        7.97789371595718,
+        6.904311545018572,
+        8.024482918030117,
+        6.916000664001331,
+        7.986203330976423,
+        6.990514512988739
+      ],
+      "scientific_frame_seconds": 1.5715321561438031,
+      "scientific_index_seconds": 9.897298878058791e-05
+    },
+    "initial": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/initial.result.json",
+        "sha256": "ae6c69dd010eeba63f59748aa9bd4ef9605618709067551025a1c1c7ed1773fd",
+        "bytes": 71799
+      },
+      "index": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/initial.science-index.json",
+        "sha256": "431d5d3f736eb97ac0290d71b94e28fae05cc9cba143856df27ff1b71ad32595",
+        "bytes": 1624
+      },
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/initial.xml",
+        "sha256": "c483dcb2063f8d4768f2c636368dacfa037246da0459b28877b83bbb32a4935f",
+        "bytes": 6222
+      },
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/initial.steps.jsonl",
+        "sha256": "4387846399115ee9b62fb6ab036ba1ae958b338e45e22ecbd6b54bbbf72a71ca",
+        "bytes": 20414
+      },
+      "frames": [
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/initial.science-0.json",
+          "sha256": "9676b225ccf0bd2ed3224e9c74a9002dd2cc1907c5859e700bc619421b561c73",
+          "bytes": 31866
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/initial.science-3.json",
+          "sha256": "ae1cbf30942b386d400563e90875f4a364660094ac94d1cf86a6318f08dba20f",
+          "bytes": 70701
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/initial.science-4.json",
+          "sha256": "d4aec94c5030d58e285e4d49c8efa63b0b4b7a5b5b49209c67b29813c31755dd",
+          "bytes": 70903
+        }
+      ],
+      "checkpoint": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/initial.final.bin",
+        "sha256": "647e36f8e44c0b394144788aed39c38717927053e31edc9cd07339d8915f127e",
+        "bytes": 12018,
+        "payload_sha256": "873ac001874a046b00b83390788253978e63991d7bf82bab607461e7ae77cf76",
+        "signature": "61cef7d6cbb95199f52b4600f9233c614ed1b97309c7b37cbcfb8f658862f247",
+        "step": 4,
+        "time": 0.08,
+        "dt": 0.02,
+        "hashes": {
+          "current": "1821638e596c6bdc3856e769ac8020a0af94abecce0f2d4590188292f238c92a",
+          "previous": "3f4e230543729dc1c9cc7df1bc90dcb06305b7c38a68d5c03bc36e752ad68288",
+          "advection": "08e46a5e57320dc581d1bc85441250bfebf08c78e11cf72a23ca879a4aec79ea",
+          "previous_advection": "b9849652be040a3c1ab5b30ec41900eff83c0a6f1e193e710587c69bf06914f9"
+        }
+      },
+      "expected_schedule": {
+        "0": 8,
+        "3": 64,
+        "4": 128
+      },
+      "complete_advancing_seconds": 1.264400887012016,
+      "complete_step_seconds": [
+        0.3150857980363071,
+        0.31169418297940865,
+        0.31864886899711564,
+        0.31897203699918464
+      ],
+      "scientific_frame_seconds": 0.008455790055450052,
+      "scientific_index_seconds": 4.874099977314472e-05
+    },
+    "prefix": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/prefix.result.json",
+        "sha256": "a0b68a2131a8231cc24d23e59c0668337b98843e2ce80f05d5844ef6449fa10a",
+        "bytes": 4710646
+      },
+      "index": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/prefix.science-index.json",
+        "sha256": "90fd435166eb7ebe6de26a4b8f0f67862d77afd7a084f4bda4f4dfe6d991840d",
+        "bytes": 1663
+      },
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/prefix.xml",
+        "sha256": "e908c18a33617788f8a1395c2a30f26c61662a8e322b38d4d1ad4596d173e6af",
+        "bytes": 112125
+      },
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/prefix.steps.jsonl",
+        "sha256": "0cd0c0e017bfb83e19fb98a51118605d72197e6bb4a072a45b3739d5a9154b2d",
+        "bytes": 31023
+      },
+      "frames": [
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/prefix.science-3.json",
+          "sha256": "908dc3ced3e0f92e4a78a4b617e83ab3adb1c93a884c3c71de6fcc7aafc36e67",
+          "bytes": 4709139
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/prefix.science-4.json",
+          "sha256": "90340da8fa057cbf3ab191dacd43c17dcdc98edb29e7409a5842e8eade023056",
+          "bytes": 4709035
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/prefix.science-6.json",
+          "sha256": "8f80d96cecf487111d3250b2d69269bb1eb27ddd17ddedea78a94061768afe12",
+          "bytes": 4709486
+        }
+      ],
+      "checkpoint": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/prefix.final.bin",
+        "sha256": "c96ad295b364e23e93949023aac2a5eb5ba8f5483eb037718864868e3ef9c923",
+        "bytes": 859058,
+        "payload_sha256": "ed3a2cfbd587975228eb5f50625b9dbaf3933842f139c95caa089059197519b4",
+        "signature": "f52ffe49264e07cb95618ebb88ca804e55d35b454064511ecf113ea3a894f0db",
+        "step": 6,
+        "time": 0.03,
+        "dt": 0.005,
+        "hashes": {
+          "current": "17efbabf6f82a8423d8bc0f02141ac263c9aa8b630fb0b127946d5496ac7bb21",
+          "previous": "1a1d5ba63e67f9451979b1b531571203c3c43dc8cff134b211cbc38e096695c7",
+          "advection": "2ca70a1755b83cec3370c89ba13bcfa2682830dfa164d50f4e61c4d5960cee55",
+          "previous_advection": "404d91ec0be4495dd9eee41d39d998fffa43113afc52607f7a58a6667a214d5e"
+        }
+      },
+      "expected_schedule": {
+        "3": 3,
+        "6": 129,
+        "4": 4
+      },
+      "complete_advancing_seconds": 48.252950222056825,
+      "complete_step_seconds": [
+        9.472663905005902,
+        8.980331819038838,
+        8.051111348031554,
+        6.9267424759455025,
+        7.877737727016211,
+        6.944362947018817
+      ],
+      "scientific_frame_seconds": 0.3949431770015508,
+      "scientific_index_seconds": 5.579105345532298e-05
+    },
+    "scheduled": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/scheduled.result.json",
+        "sha256": "677853bb9b4656e6fc8ef93fc17075337475c7910a8e5308b4df90e97a5a0d8f",
+        "bytes": 4709818
+      },
+      "index": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/scheduled.science-index.json",
+        "sha256": "9a5504b6832a149fb2f68c6f1bedcec3b0a719af978e355ff4d1787072b32f50",
+        "bytes": 2989
+      },
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/scheduled.xml",
+        "sha256": "e07ec57618c1ec86a75e458fff8e387543be6ff1e542d73f837e5f8af92716b3",
+        "bytes": 112129
+      },
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/scheduled.steps.jsonl",
+        "sha256": "9b171316f1b9019e64f8bacf16c0a9bbb577c4d667b70b3b80c9f054decb22e9",
+        "bytes": 62084
+      },
+      "frames": [
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/scheduled.science-3.json",
+          "sha256": "5e390789715463b0d92b9107cc220325b997c34caf9a68a6e0b3d4315baeac3c",
+          "bytes": 4709137
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/scheduled.science-4.json",
+          "sha256": "82f65d7bd566506102bfcb5f8348900d1304eb427d9afe05d177e9cbb291657c",
+          "bytes": 4709039
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/scheduled.science-6.json",
+          "sha256": "6e6a7f090ee5cb7d813a056830e01767823f5d3ffe7f6facbca780e111d4cc4d",
+          "bytes": 4709487
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/scheduled.science-9.json",
+          "sha256": "b3605f3eb3338646cf61cdcffa70a93e2c7803bc20d375e1d61f332fe3cb0aa0",
+          "bytes": 4708965
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/scheduled.science-10.json",
+          "sha256": "7b629cdeef82de7b6ddf18ececaea0eadd1dbb0ef81bc687629f3cfed5b36d43",
+          "bytes": 4708867
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/scheduled.science-11.json",
+          "sha256": "5bccd111621ab9ed1c4c4b241f49d34c8c1a15922736555780ea70fddabd133f",
+          "bytes": 4708667
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/scheduled.science-12.json",
+          "sha256": "d49db72d40ad82e6d3059c99d3d5e418c72c6b2c97a69e13191cb84eef85891d",
+          "bytes": 4708496
+        }
+      ],
+      "checkpoint": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/scheduled.final.bin",
+        "sha256": "6392f683ae854fda1ccb4669e809d9a8077fc3627214e9c93c08c375fefb4a00",
+        "bytes": 859058,
+        "payload_sha256": "b73a5e1150b4968b460f76de9160f1b53174f8f55cfbebb05a6b66a3e722aeb9",
+        "signature": "f52ffe49264e07cb95618ebb88ca804e55d35b454064511ecf113ea3a894f0db",
+        "step": 12,
+        "time": 0.06,
+        "dt": 0.005,
+        "hashes": {
+          "current": "e8f584738e779a5fea88bdeb8132ca6f95da624f19b9a0211f8cc3d1dac4f6d8",
+          "previous": "c203012266a1e5a020cbbf045b237fec0f1dba734f2daed0f606af93ba7b2a8d",
+          "advection": "de0ffccd34c95853bb44ab11b44ecd1c5ea38c51de727e4db87c2ee4ad9e3a98",
+          "previous_advection": "003219b93ae3cc86efe47c3491b1a505fc07b627273dfef55a8dd368bfe86730"
+        }
+      },
+      "expected_schedule": {
+        "3": 3,
+        "6": 1,
+        "9": 1,
+        "12": 129,
+        "4": 4,
+        "10": 16,
+        "11": 32
+      },
+      "complete_advancing_seconds": 92.75689532508841,
+      "complete_step_seconds": [
+        9.479545680980664,
+        8.943366652005352,
+        8.01654590095859,
+        6.9233859030064195,
+        7.848890758003108,
+        6.954786459042225,
+        7.887612589052878,
+        6.804617321002297,
+        8.017714415036608,
+        6.800936768995598,
+        8.136571258015465,
+        6.942921618989203
+      ],
+      "scientific_frame_seconds": 0.9184471600456163,
+      "scientific_index_seconds": 6.90920278429985e-05
+    }
+  },
+  "restart_boundary": {
+    "checkpoint": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/prefix.final.bin",
+      "sha256": "c96ad295b364e23e93949023aac2a5eb5ba8f5483eb037718864868e3ef9c923",
+      "bytes": 859058,
+      "payload_sha256": "ed3a2cfbd587975228eb5f50625b9dbaf3933842f139c95caa089059197519b4",
+      "signature": "f52ffe49264e07cb95618ebb88ca804e55d35b454064511ecf113ea3a894f0db",
+      "step": 6,
+      "time": 0.03,
+      "dt": 0.005,
+      "hashes": {
+        "current": "17efbabf6f82a8423d8bc0f02141ac263c9aa8b630fb0b127946d5496ac7bb21",
+        "previous": "1a1d5ba63e67f9451979b1b531571203c3c43dc8cff134b211cbc38e096695c7",
+        "advection": "2ca70a1755b83cec3370c89ba13bcfa2682830dfa164d50f4e61c4d5960cee55",
+        "previous_advection": "404d91ec0be4495dd9eee41d39d998fffa43113afc52607f7a58a6667a214d5e"
+      }
+    },
+    "endpoint_scaled_coefficients": {
+      "current": {
+        "U": {
+          "scaled_MAX": 5.7073810043129044e-15,
+          "scaled_coefficient_RMS": 3.1022914022266217e-16
+        },
+        "Pi": {
+          "scaled_MAX": 8.955326205686339e-10,
+          "scaled_coefficient_RMS": 5.356078750095303e-11
+        },
+        "k": {
+          "scaled_MAX": 4.1475853196078116e-15,
+          "scaled_coefficient_RMS": 3.602185565468578e-16
+        },
+        "epsilon": {
+          "scaled_MAX": 1.8103544046258373e-15,
+          "scaled_coefficient_RMS": 1.0071127873822092e-16
+        }
+      },
+      "previous": {
+        "U": {
+          "scaled_MAX": 8.66054501226812e-15,
+          "scaled_coefficient_RMS": 3.193158224218003e-16
+        },
+        "Pi": {
+          "scaled_MAX": 6.257388050216613e-10,
+          "scaled_coefficient_RMS": 5.487996780350639e-11
+        },
+        "k": {
+          "scaled_MAX": 3.589246984448298e-15,
+          "scaled_coefficient_RMS": 3.5820433743794617e-16
+        },
+        "epsilon": {
+          "scaled_MAX": 2.163716142166755e-15,
+          "scaled_coefficient_RMS": 9.781144094765761e-17
+        }
+      },
+      "advection": {
+        "U": {
+          "scaled_MAX": 3.8347249142861314e-16,
+          "scaled_coefficient_RMS": 1.6026411016183878e-17
+        },
+        "Pi": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "k": {
+          "scaled_MAX": 1.5754074182605824e-15,
+          "scaled_coefficient_RMS": 6.939229412859035e-17
+        },
+        "epsilon": {
+          "scaled_MAX": 1.4632246130178678e-17,
+          "scaled_coefficient_RMS": 1.259262191874044e-18
+        }
+      },
+      "previous_advection": {
+        "U": {
+          "scaled_MAX": 4.745938441308952e-16,
+          "scaled_coefficient_RMS": 1.6484276538078942e-17
+        },
+        "Pi": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "k": {
+          "scaled_MAX": 2.3631111273908738e-15,
+          "scaled_coefficient_RMS": 7.335112873543857e-17
+        },
+        "epsilon": {
+          "scaled_MAX": 1.7558695356214412e-17,
+          "scaled_coefficient_RMS": 1.1833429471141077e-18
+        }
+      },
+      "older": {
+        "U": {
+          "scaled_MAX": 6.186733688928231e-15,
+          "scaled_coefficient_RMS": 3.050436481568079e-16
+        },
+        "Pi": {
+          "scaled_MAX": 9.013827448332381e-10,
+          "scaled_coefficient_RMS": 4.907527971413858e-11
+        },
+        "k": {
+          "scaled_MAX": 4.518182162926929e-15,
+          "scaled_coefficient_RMS": 3.5219977211459444e-16
+        },
+        "epsilon": {
+          "scaled_MAX": 1.6625262540845308e-15,
+          "scaled_coefficient_RMS": 8.234486215806688e-17
+        }
+      },
+      "older_advection": {
+        "U": {
+          "scaled_MAX": 5.572530696835883e-16,
+          "scaled_coefficient_RMS": 1.549982265298843e-17
+        },
+        "Pi": {
+          "scaled_MAX": 0.0,
+          "scaled_coefficient_RMS": 0.0
+        },
+        "k": {
+          "scaled_MAX": 1.969259272825728e-15,
+          "scaled_coefficient_RMS": 6.410517610900398e-17
+        },
+        "epsilon": {
+          "scaled_MAX": 1.4632246130178678e-17,
+          "scaled_coefficient_RMS": 1.1819104631713876e-18
+        }
+      }
+    },
+    "duplicate_boundary_frames": [],
+    "ownership": [
+      {
+        "run": "prefix",
+        "first_step": 0,
+        "last_step": 6,
+        "interval": "[0,6]"
+      },
+      {
+        "run": "cold",
+        "first_step": 6,
+        "last_step": 12,
+        "interval": "(6,12]"
+      }
+    ],
+    "prefix_window_weight": 0.0127,
+    "cold_window_weight": 0.0237,
+    "both_processes_contribute": true,
+    "complete_history_link": true
+  },
+  "independent_current_equation_report": {
+    "file": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/cold-current-independent.json",
+      "sha256": "9bf589e5faf64a5672748195fd5e04b346840c380f1fb6f87d454a81d394bf3b",
+      "bytes": 25993250
+    },
+    "overall_status": "NOT_MET",
+    "current_equations": "MET",
+    "residuals": {
+      "momentum": 9.254962828521917e-15,
+      "continuity": 6.608546977611408e-16,
+      "k": 1.259091208035463e-13,
+      "epsilon": 1.1682048941218348e-14
+    },
+    "overall_NOT_MET_allowed": true,
+    "scope": "Full supplied transient oracle verifies these accepted equations; other physical/mesh/long-time gates remain open."
+  },
+  "failed_step": {
+    "index": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/failed.science-index.json",
+      "sha256": "21eff571ddbb8b583d51784a2ad93b78a49541ffcd6f8181440aed83b26af1e5",
+      "bytes": 928
+    },
+    "failure": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/failed.failure.json",
+      "sha256": "a021be3946a5f1af4490f126fb3482be56efa441e6935ee72b967e77f5a2b676",
+      "bytes": 68382
+    },
+    "frame": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/failed.science-0.json",
+      "sha256": "97491ac7d42f9e0b9260d40bed2a3bf14cb6f5ba7a37d0841dd87403a173bc57",
+      "bytes": 31849
+    },
+    "accepted_steps": 0
+  },
+  "incomplete_window_control": "REJECTED",
+  "reductions": {
+    "scheduled": {
+      "artifact": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/terminal-independent-scheduled.npz",
+        "sha256": "bbbb37d6bd367df25babe93d12b64921b03527111a0542011107daea75797f55",
+        "bytes": 8486334
+      },
+      "bytes": 8486334,
+      "interval": [
+        0.0173,
+        0.0537
+      ],
+      "window_measure": 0.0364,
+      "frames": [
+        {
+          "step": 3,
+          "time": 0.015
+        },
+        {
+          "step": 4,
+          "time": 0.02
+        },
+        {
+          "step": 6,
+          "time": 0.03
+        },
+        {
+          "step": 9,
+          "time": 0.045
+        },
+        {
+          "step": 10,
+          "time": 0.05
+        },
+        {
+          "step": 11,
+          "time": 0.055
+        },
+        {
+          "step": 12,
+          "time": 0.06
+        }
+      ],
+      "clipped_segments": [
+        {
+          "i": 0,
+          "left": 0.015,
+          "right": 0.02,
+          "lo": 0.0173,
+          "hi": 0.02,
+          "weight": 0.002700000000000001,
+          "lower_fraction": 0.4599999999999999,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 1,
+          "left": 0.02,
+          "right": 0.03,
+          "lo": 0.02,
+          "hi": 0.03,
+          "weight": 0.009999999999999998,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 2,
+          "left": 0.03,
+          "right": 0.045,
+          "lo": 0.03,
+          "hi": 0.045,
+          "weight": 0.015,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 3,
+          "left": 0.045,
+          "right": 0.05,
+          "lo": 0.045,
+          "hi": 0.05,
+          "weight": 0.0050000000000000044,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 4,
+          "left": 0.05,
+          "right": 0.055,
+          "lo": 0.05,
+          "hi": 0.0537,
+          "weight": 0.003699999999999995,
+          "lower_fraction": 0.0,
+          "upper_fraction": 0.7399999999999993
+        }
+      ],
+      "checks": {
+        "inner_U": {
+          "points": 10976,
+          "components": 2,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 6.938893903907228e-18,
+          "second_moment_time_Gauss_MAX": 3.469446951953614e-18,
+          "centered_second_identity_MAX": 1.3324401150092762e-16
+        },
+        "inner_k": {
+          "points": 10976,
+          "components": 1,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 4.163336342344337e-17,
+          "second_moment_time_Gauss_MAX": 8.326672684688674e-17,
+          "centered_second_identity_MAX": 2.4707341207685918e-15
+        },
+        "inner_Pi": {
+          "points": 10976,
+          "components": 1,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 1.734723475976807e-17,
+          "second_moment_time_Gauss_MAX": 1.3877787807814457e-17,
+          "centered_second_identity_MAX": 6.213078977330751e-16
+        },
+        "inner_R": {
+          "points": 10976,
+          "components": 9,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 8.326672684688674e-17,
+          "second_moment_time_Gauss_MAX": 4.440892098500626e-16,
+          "centered_second_identity_MAX": 1.5744783948834495e-14
+        },
+        "inner_G": {
+          "points": 10976,
+          "components": 9,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 9.097734376609161e-16
+        },
+        "inner_Ew": {
+          "points": 10976,
+          "components": 1,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 8.102019669926714e-16
+        },
+        "ground_traction": {
+          "points": 98,
+          "components": 2,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "centered_second_identity_MAX": 8.868675190130962e-16
+        },
+        "outer_U": {
+          "points": 23324,
+          "components": 2,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "centered_second_identity_MAX": 8.95375830546503e-16
+        },
+        "outer_k": {
+          "points": 23324,
+          "components": 1,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 8.954655700836022e-16
+        },
+        "outer_Pi": {
+          "points": 23324,
+          "components": 1,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 1.3010426069826053e-18,
+          "second_moment_time_Gauss_MAX": 1.0842021724855044e-19,
+          "centered_second_identity_MAX": 4.383858723184034e-18
+        },
+        "outer_R": {
+          "points": 23324,
+          "components": 9,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 5.551115123125783e-17,
+          "second_moment_time_Gauss_MAX": 2.220446049250313e-16,
+          "centered_second_identity_MAX": 8.606419757450542e-15
+        },
+        "outer_G": {
+          "points": 23324,
+          "components": 9,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 1.0790940947549143e-15
+        },
+        "outer_epsilon": {
+          "points": 23324,
+          "components": 1,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 1.1030627147282206e-15
+        },
+        "interface_K": {
+          "points": 98,
+          "components": 1,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 1.3877787807814457e-17,
+          "second_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "centered_second_identity_MAX": 6.426672690700454e-16
+        },
+        "interface_Gamma": {
+          "points": 98,
+          "components": 1,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 1.3877787807814457e-17,
+          "second_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "centered_second_identity_MAX": 6.807979792030248e-16
+        },
+        "interface_cutoff": {
+          "points": 98,
+          "components": 1,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 2.6020852139652106e-18,
+          "second_moment_time_Gauss_MAX": 8.673617379884035e-19,
+          "centered_second_identity_MAX": 1.8258659847974542e-17
+        }
+      },
+      "physical_arrays_recoverable": "mean_scaled*fixed_scale; sd_scaled*fixed_scale",
+      "raw_scientific_frames_retained": true,
+      "continuum_supremum_claim": false,
+      "spatial_quadrature_qualified": false
+    },
+    "dense": {
+      "artifact": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/terminal-independent-dense.npz",
+        "sha256": "528af7ac9b2620714acca5a635ba55ba858c48ad5a9966676dd624553674a4db",
+        "bytes": 8493087
+      },
+      "bytes": 8493087,
+      "interval": [
+        0.0173,
+        0.0537
+      ],
+      "window_measure": 0.0364,
+      "frames": [
+        {
+          "step": 1,
+          "time": 0.005
+        },
+        {
+          "step": 2,
+          "time": 0.01
+        },
+        {
+          "step": 3,
+          "time": 0.015
+        },
+        {
+          "step": 4,
+          "time": 0.02
+        },
+        {
+          "step": 5,
+          "time": 0.025
+        },
+        {
+          "step": 6,
+          "time": 0.03
+        },
+        {
+          "step": 7,
+          "time": 0.035
+        },
+        {
+          "step": 8,
+          "time": 0.04
+        },
+        {
+          "step": 9,
+          "time": 0.045
+        },
+        {
+          "step": 10,
+          "time": 0.05
+        },
+        {
+          "step": 11,
+          "time": 0.055
+        },
+        {
+          "step": 12,
+          "time": 0.06
+        }
+      ],
+      "clipped_segments": [
+        {
+          "i": 2,
+          "left": 0.015,
+          "right": 0.02,
+          "lo": 0.0173,
+          "hi": 0.02,
+          "weight": 0.002700000000000001,
+          "lower_fraction": 0.4599999999999999,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 3,
+          "left": 0.02,
+          "right": 0.025,
+          "lo": 0.02,
+          "hi": 0.025,
+          "weight": 0.005000000000000001,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 4,
+          "left": 0.025,
+          "right": 0.03,
+          "lo": 0.025,
+          "hi": 0.03,
+          "weight": 0.0049999999999999975,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 5,
+          "left": 0.03,
+          "right": 0.035,
+          "lo": 0.03,
+          "hi": 0.035,
+          "weight": 0.0050000000000000044,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 6,
+          "left": 0.035,
+          "right": 0.04,
+          "lo": 0.035,
+          "hi": 0.04,
+          "weight": 0.0049999999999999975,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 7,
+          "left": 0.04,
+          "right": 0.045,
+          "lo": 0.04,
+          "hi": 0.045,
+          "weight": 0.0049999999999999975,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 8,
+          "left": 0.045,
+          "right": 0.05,
+          "lo": 0.045,
+          "hi": 0.05,
+          "weight": 0.0050000000000000044,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 9,
+          "left": 0.05,
+          "right": 0.055,
+          "lo": 0.05,
+          "hi": 0.0537,
+          "weight": 0.003699999999999995,
+          "lower_fraction": 0.0,
+          "upper_fraction": 0.7399999999999993
+        }
+      ],
+      "checks": {
+        "inner_U": {
+          "points": 10976,
+          "components": 2,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 8.673617379884035e-18,
+          "second_moment_time_Gauss_MAX": 3.469446951953614e-18,
+          "centered_second_identity_MAX": 1.7069374893632257e-16
+        },
+        "inner_k": {
+          "points": 10976,
+          "components": 1,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 4.163336342344337e-17,
+          "second_moment_time_Gauss_MAX": 8.326672684688674e-17,
+          "centered_second_identity_MAX": 2.4017246524898894e-15
+        },
+        "inner_Pi": {
+          "points": 10976,
+          "components": 1,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "centered_second_identity_MAX": 5.726423360869897e-16
+        },
+        "inner_R": {
+          "points": 10976,
+          "components": 9,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 1.1102230246251565e-16,
+          "second_moment_time_Gauss_MAX": 3.3306690738754696e-16,
+          "centered_second_identity_MAX": 1.711391445224919e-14
+        },
+        "inner_G": {
+          "points": 10976,
+          "components": 9,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 1.1722797661271294e-15
+        },
+        "inner_Ew": {
+          "points": 10976,
+          "components": 1,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "centered_second_identity_MAX": 9.106347346861465e-16
+        },
+        "ground_traction": {
+          "points": 98,
+          "components": 2,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "centered_second_identity_MAX": 6.407179221199354e-16
+        },
+        "outer_U": {
+          "points": 23324,
+          "components": 2,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 1.0489019280983417e-15
+        },
+        "outer_k": {
+          "points": 23324,
+          "components": 1,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 1.0907250077010992e-15
+        },
+        "outer_Pi": {
+          "points": 23324,
+          "components": 1,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 1.3010426069826053e-18,
+          "second_moment_time_Gauss_MAX": 1.0842021724855044e-19,
+          "centered_second_identity_MAX": 3.47140571564414e-18
+        },
+        "outer_R": {
+          "points": 23324,
+          "components": 9,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 6.938893903907228e-17,
+          "second_moment_time_Gauss_MAX": 2.220446049250313e-16,
+          "centered_second_identity_MAX": 8.04161132928686e-15
+        },
+        "outer_G": {
+          "points": 23324,
+          "components": 9,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 1.0337369409072743e-15
+        },
+        "outer_epsilon": {
+          "points": 23324,
+          "components": 1,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 1.0320373233468676e-15
+        },
+        "interface_K": {
+          "points": 98,
+          "components": 1,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 1.3877787807814457e-17,
+          "centered_second_identity_MAX": 7.545336088452269e-16
+        },
+        "interface_Gamma": {
+          "points": 98,
+          "components": 1,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 1.3877787807814457e-17,
+          "centered_second_identity_MAX": 8.172341927190687e-16
+        },
+        "interface_cutoff": {
+          "points": 98,
+          "components": 1,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 2.6020852139652106e-18,
+          "second_moment_time_Gauss_MAX": 8.673617379884035e-19,
+          "centered_second_identity_MAX": 1.9699215895446316e-17
+        }
+      },
+      "physical_arrays_recoverable": "mean_scaled*fixed_scale; sd_scaled*fixed_scale",
+      "raw_scientific_frames_retained": true,
+      "continuum_supremum_claim": false,
+      "spatial_quadrature_qualified": false
+    },
+    "stitched": {
+      "artifact": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-terminal-v14/terminal-independent-stitched.npz",
+        "sha256": "6a1ec2b895c2137632f58fbd90aa9980a06348dac1dbf06a9d334287768c34e1",
+        "bytes": 8486398
+      },
+      "bytes": 8486398,
+      "interval": [
+        0.0173,
+        0.0537
+      ],
+      "window_measure": 0.0364,
+      "frames": [
+        {
+          "step": 3,
+          "time": 0.015
+        },
+        {
+          "step": 4,
+          "time": 0.02
+        },
+        {
+          "step": 6,
+          "time": 0.03
+        },
+        {
+          "step": 9,
+          "time": 0.045
+        },
+        {
+          "step": 10,
+          "time": 0.05
+        },
+        {
+          "step": 11,
+          "time": 0.055
+        },
+        {
+          "step": 12,
+          "time": 0.06
+        }
+      ],
+      "clipped_segments": [
+        {
+          "i": 0,
+          "left": 0.015,
+          "right": 0.02,
+          "lo": 0.0173,
+          "hi": 0.02,
+          "weight": 0.002700000000000001,
+          "lower_fraction": 0.4599999999999999,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 1,
+          "left": 0.02,
+          "right": 0.03,
+          "lo": 0.02,
+          "hi": 0.03,
+          "weight": 0.009999999999999998,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 2,
+          "left": 0.03,
+          "right": 0.045,
+          "lo": 0.03,
+          "hi": 0.045,
+          "weight": 0.015,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 3,
+          "left": 0.045,
+          "right": 0.05,
+          "lo": 0.045,
+          "hi": 0.05,
+          "weight": 0.0050000000000000044,
+          "lower_fraction": 0.0,
+          "upper_fraction": 1.0
+        },
+        {
+          "i": 4,
+          "left": 0.05,
+          "right": 0.055,
+          "lo": 0.05,
+          "hi": 0.0537,
+          "weight": 0.003699999999999995,
+          "lower_fraction": 0.0,
+          "upper_fraction": 0.7399999999999993
+        }
+      ],
+      "checks": {
+        "inner_U": {
+          "points": 10976,
+          "components": 2,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 8.673617379884035e-18,
+          "second_moment_time_Gauss_MAX": 3.469446951953614e-18,
+          "centered_second_identity_MAX": 1.3324401150092762e-16
+        },
+        "inner_k": {
+          "points": 10976,
+          "components": 1,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 4.163336342344337e-17,
+          "second_moment_time_Gauss_MAX": 8.326672684688674e-17,
+          "centered_second_identity_MAX": 2.256875242245826e-15
+        },
+        "inner_Pi": {
+          "points": 10976,
+          "components": 1,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 1.734723475976807e-17,
+          "centered_second_identity_MAX": 6.202363286764948e-16
+        },
+        "inner_R": {
+          "points": 10976,
+          "components": 9,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 8.326672684688674e-17,
+          "second_moment_time_Gauss_MAX": 4.440892098500626e-16,
+          "centered_second_identity_MAX": 1.3975799684207146e-14
+        },
+        "inner_G": {
+          "points": 10976,
+          "components": 9,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 9.920248707917393e-16
+        },
+        "inner_Ew": {
+          "points": 10976,
+          "components": 1,
+          "spatial_measure": 3.7500000000000124,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 8.102019669926714e-16
+        },
+        "ground_traction": {
+          "points": 98,
+          "components": 2,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "centered_second_identity_MAX": 6.648241128795676e-16
+        },
+        "outer_U": {
+          "points": 23324,
+          "components": 2,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "centered_second_identity_MAX": 8.879703432188087e-16
+        },
+        "outer_k": {
+          "points": 23324,
+          "components": 1,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 8.954655700836022e-16
+        },
+        "outer_Pi": {
+          "points": 23324,
+          "components": 1,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 1.734723475976807e-18,
+          "second_moment_time_Gauss_MAX": 1.0842021724855044e-19,
+          "centered_second_identity_MAX": 4.100592376776475e-18
+        },
+        "outer_R": {
+          "points": 23324,
+          "components": 9,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 5.551115123125783e-17,
+          "second_moment_time_Gauss_MAX": 2.220446049250313e-16,
+          "centered_second_identity_MAX": 8.305706003122745e-15
+        },
+        "outer_G": {
+          "points": 23324,
+          "components": 9,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 9.550192066351979e-16
+        },
+        "outer_epsilon": {
+          "points": 23324,
+          "components": 1,
+          "spatial_measure": 494.06250000000097,
+          "first_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "second_moment_time_Gauss_MAX": 2.7755575615628914e-17,
+          "centered_second_identity_MAX": 1.0359482680417902e-15
+        },
+        "interface_K": {
+          "points": 98,
+          "components": 1,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 1.3877787807814457e-17,
+          "second_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "centered_second_identity_MAX": 6.426672690700454e-16
+        },
+        "interface_Gamma": {
+          "points": 98,
+          "components": 1,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 1.3877787807814457e-17,
+          "second_moment_time_Gauss_MAX": 2.0816681711721685e-17,
+          "centered_second_identity_MAX": 6.807979792030248e-16
+        },
+        "interface_cutoff": {
+          "points": 98,
+          "components": 1,
+          "spatial_measure": 25.000000000000014,
+          "first_moment_time_Gauss_MAX": 2.6020852139652106e-18,
+          "second_moment_time_Gauss_MAX": 8.673617379884035e-19,
+          "centered_second_identity_MAX": 1.8258659847974542e-17
+        }
+      },
+      "physical_arrays_recoverable": "mean_scaled*fixed_scale; sd_scaled*fixed_scale",
+      "raw_scientific_frames_retained": true,
+      "continuum_supremum_claim": false,
+      "spatial_quadrature_qualified": false
+    }
+  },
+  "exception": "ValueError",
+  "reason": "scheduled/dense or restart terminal statistic exceeds prospective limit",
+  "elapsed_seconds": 30.687956403999124,
+  "maximum_resident_bytes": 753909760
+}

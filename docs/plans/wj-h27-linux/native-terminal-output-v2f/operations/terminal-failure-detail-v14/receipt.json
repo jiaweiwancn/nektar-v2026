@@ -1,0 +1,71 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/terminal-failure-detail-v14.py"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 20.0,
+  "utc": "2026-11-17T19:05:58.268494+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 494809,
+        "parent": 492173,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 494810,
+        "parent": 494809,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label terminal-failure-detail-v14 --phase analysis --seconds 20 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/terminal-failure-detail-v14.py"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/terminal-failure-detail-v14.py",
+      "bytes": 1720,
+      "sha256": "f8e383b157ad6f16995d4a3ad3769004a59e1940562645b9fd1d453369e47cbb"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 1.540674358024262,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 536576,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/terminal-failure-detail-v14/command.log",
+    "bytes": 525,
+    "sha256": "5ee0afe6b522a6bef3495c43e0baf1b6fbca461105c38390ec699a12c550d5df"
+  }
+}

@@ -3,6 +3,8 @@
 #include <IncNavierStokesSolver/EquationSystems/IncNavierStokes.h>
 #include <IncNavierStokesSolver/EquationSystems/WJNativeWallV2.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
+#include <array>
 #include <chrono>
 #include <cmath>
 #include <filesystem>
@@ -126,6 +128,9 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadParameter("IO_InfoSteps",m_infoStride,20);m_session->LoadParameter("IO_CheckSteps",m_recoveryStride,200);m_session->LoadParameter("WJScientificSteps",m_scienceStride,200);m_session->LoadParameter("WJInjectRetryStep",m_injectRetryStep,-1);
     Check(m_infoStride>0&&m_recoveryStride>=0&&m_scienceStride>=0&&m_steps>=0,"invalid coupled output/time interval");
     m_session->LoadSolverInfo("WJOutputPrefix",m_prefix,m_sessionName+"-wj-v2");m_session->LoadSolverInfo("WJRestart",m_restart,"");std::string coefficients;m_session->LoadSolverInfo("WJOutputCoefficients",coefficients,"False");Check(coefficients=="True"||coefficients=="False","WJOutputCoefficients must be True/False");m_coefficients=coefficients=="True";
+    std::string terminal;m_session->LoadSolverInfo("WJTerminalOutput",terminal,"False");Check(terminal=="True"||terminal=="False","WJTerminalOutput must be True/False");m_terminalOutput=terminal=="True";
+    m_session->LoadParameter("WJTerminalBegin",m_terminalBegin,0.);m_session->LoadParameter("WJTerminalEnd",m_terminalEnd,0.);
+    if(m_terminalOutput)Check(!m_steadyMode&&m_coefficients&&std::isfinite(m_terminalBegin)&&std::isfinite(m_terminalEnd)&&m_terminalBegin>=0&&m_terminalEnd>m_terminalBegin,"terminal output requires advancement, complete coefficients and a finite increasing nonnegative interval");
     m_session->LoadSolverInfo("WJInitialFields",m_initialFields,"");Check(m_initialFields.empty()||m_restart.empty(),"initial fields and cold restart are separate mutually exclusive inputs");
     std::vector<MultiRegions::ContFieldSharedPtr>fields(5);
     for(int i:{0,1,2,4}){fields[i]=MemoryManager<MultiRegions::ContField>::AllocateSharedPtr(m_session,m_graph,m_session->GetVariable(i),true,false);m_fields[i]=fields[i];}
@@ -143,7 +148,7 @@ void WJNativeCoupled::v_DoInitialise(bool dump)
 {
     (void)dump;const double start=Clock();
     try{
-        Check(!std::filesystem::exists(m_prefix+".steps.jsonl")&&!std::filesystem::exists(m_prefix+".result.json"),"coupled output prefix already exists");
+        Check(!std::filesystem::exists(m_prefix+".steps.jsonl")&&!std::filesystem::exists(m_prefix+".result.json")&&!std::filesystem::exists(m_prefix+".science-index.json"),"coupled output prefix already exists");
         if(!m_restart.empty())m_history=m_coupling->ReadHistory(m_restart);
         else if(!m_initialFields.empty())m_history=m_coupling->ReadInitialFields(m_initialFields,m_steadyMode);
         else m_history=m_coupling->Initialise();
@@ -152,9 +157,58 @@ void WJNativeCoupled::v_DoInitialise(bool dump)
             for(int id:m_coupling->EpsilonKernel().FreeIds())seed.epsilon[id]+=m_steadySeed*m_coupling->ReferenceModel().Amplitude(p.KIn)/p.H*std::cos(.9*(id+1));
             m_history=m_coupling->FreshHistory(seed);
         }
-        m_time=m_history.time;m_coupling->Store(m_history.current);m_stepsLog.open(m_prefix+".steps.jsonl");m_stepsLog<<std::setprecision(17);Check(bool(m_stepsLog),"cannot create coupled step log");
+        m_time=m_history.time;m_initialStep=m_history.step;m_initialTime=m_history.time;m_coupling->Store(m_history.current);m_stepsLog.open(m_prefix+".steps.jsonl");m_stepsLog<<std::setprecision(17);Check(bool(m_stepsLog),"cannot create coupled step log");
         m_initialisationSeconds=Clock()-start;
     }catch(const std::exception&e){std::cerr<<"WJ-H27 initialisation: "<<e.what()<<std::endl;throw std::runtime_error(e.what());}
+}
+unsigned WJNativeCoupled::TerminalReasons(double left,double right,bool before)const
+{
+    if(!m_terminalOutput)return 0;
+    unsigned reasons=0;
+    const std::array<double,2>boundary{{m_terminalBegin,m_terminalEnd}};
+    for(int i=0;i<2;++i)
+    {
+        const double t=boundary[i];
+        const unsigned lo=i?EndLeft:BeginLeft,hi=i?EndRight:BeginRight,exact=i?EndExact:BeginExact;
+        if(before){if(t==left)reasons|=exact;else if(left<t&&t<right)reasons|=lo;}
+        else{if(t==right)reasons|=exact;else if(left<t&&t<right)reasons|=hi;}
+    }
+    return reasons;
+}
+void WJNativeCoupled::WriteScientificFrame(unsigned reasons)
+{
+    if(!reasons)return;
+    if(!m_scientificFrames.empty())
+    {
+        auto&last=m_scientificFrames.back();
+        Check(last.step<=m_history.step,"scientific output clock moved backwards");
+        if(last.step==m_history.step){Check(last.time==m_history.time,"duplicate scientific step has a different time");last.reasons|=reasons;return;}
+    }
+    const double began=Clock();ScientificFrame frame;frame.step=m_history.step;frame.time=m_history.time;frame.reasons=reasons;
+    frame.path=m_prefix+".science-"+std::to_string(m_history.step)+".json";
+    frame.origin=m_currentProcessAccepted?"current_process_accepted_step":m_restart.empty()?"fresh_initial_observation":m_history.step?"imported_accepted_history":"imported_initial_history";
+    Check(!std::filesystem::exists(frame.path),"scientific output is immutable");
+    std::ofstream out(frame.path);Check(bool(out),"cannot create scientific output");m_coupling->Report(out,m_history,m_last,m_coefficients);out<<'\n'<<std::flush;
+    Check(bool(out),"scientific output write failed");out.close();Check(!out.fail(),"scientific output close failed");
+    std::ifstream in(frame.path,std::ios::binary);Check(bool(in),"cannot reopen scientific output for identity");
+    RANSWallR3::Sha256 digest;std::array<char,65536>buffer;
+    while(in){in.read(buffer.data(),buffer.size());const auto count=in.gcount();if(count){digest.Update(buffer.data(),count);frame.bytes+=std::uint64_t(count);}}
+    Check(in.eof()&&!in.bad(),"scientific output identity read failed");frame.sha256=digest.Finish();
+    frame.seconds=Clock()-began;m_scientificFrameSeconds+=frame.seconds;m_scientificFrames.push_back(std::move(frame));
+}
+void WJNativeCoupled::WriteScientificIndex()
+{
+    namespace J=RANSWallSolveJson;const double began=Clock();const std::string path=m_prefix+".science-index.json";
+    Check(!std::filesystem::exists(path),"scientific index is immutable");std::ofstream out(path);Check(bool(out),"cannot create scientific index");
+    out<<std::setprecision(17)<<"{\"schema\":\"WJH27NativeScientificIndexV1\",\"source_identity\":"<<J::Quote(m_coupling->Options().sourceIdentity)
+       <<",\"reference_identity\":"<<J::Quote(m_coupling->ReferenceModel().Identity())<<",\"signature\":"<<J::Quote(m_coupling->Signature())
+       <<",\"run_complete\":"<<(m_solveCompleted?"true":"false")<<",\"dt\":"<<m_history.dt<<",\"initial_step\":"<<m_initialStep<<",\"initial_time\":"<<m_initialTime<<",\"final_step\":"<<m_history.step<<",\"final_time\":"<<m_history.time
+       <<",\"coefficients_included\":"<<(m_coefficients?"true":"false")<<",\"terminal_output\":"<<(m_terminalOutput?"true":"false")<<",\"terminal_begin\":"<<m_terminalBegin<<",\"terminal_end\":"<<m_terminalEnd
+       <<",\"reason_bits\":{\"periodic\":1,\"begin_left\":2,\"begin_right\":4,\"begin_exact\":8,\"end_left\":16,\"end_right\":32,\"end_exact\":64,\"final\":128},\"frames\":[";
+    for(int i=0;i<int(m_scientificFrames.size());++i){const auto&f=m_scientificFrames[i];if(i)out<<',';
+        out<<"{\"path\":"<<J::Quote(f.path)<<",\"sha256\":"<<J::Quote(f.sha256)<<",\"bytes\":"<<f.bytes<<",\"step\":"<<f.step<<",\"time\":"<<f.time
+           <<",\"reason_mask\":"<<f.reasons<<",\"origin\":"<<J::Quote(f.origin)<<",\"write_seconds\":"<<f.seconds<<'}';}
+    out<<"]}\n"<<std::flush;Check(bool(out),"scientific index write failed");out.close();Check(!out.fail(),"scientific index close failed");m_scientificIndexSeconds=Clock()-began;
 }
 void WJNativeCoupled::v_DoSolve()
 {
@@ -171,19 +225,23 @@ void WJNativeCoupled::v_DoSolve()
                 out<<"{\"schema\":\"WJH27SteadyCandidateV1\",\"qualified_reference\":false,\"purpose\":\"replayable initial guess; no convergence or physical-time claim\",\"state\":";m_coupling->Report(out,candidate,diagnostic,true);out<<"}\n"<<std::flush;Check(bool(out),"steady candidate evidence write failed");out.close();Check(!out.fail(),"steady candidate evidence close failed");
             }
             Check(m_steadyResult.converged,"bounded native steady reference solve did not converge; original history preserved");
-            m_coupling->Store(m_history.current);m_time=m_history.time;return;
+            m_coupling->Store(m_history.current);m_time=m_history.time;m_solveCompleted=true;return;
         }
-        for(int n=0;n<m_steps;++n){const double start=Clock();m_last=m_coupling->Advance(m_history,int(m_history.step+1)==m_injectRetryStep);m_time=m_history.time;
+        for(int n=0;n<m_steps;++n){const double start=Clock(),left=m_history.time,right=(m_history.step+1)*m_history.dt;
+            WriteScientificFrame(TerminalReasons(left,right,true));
+            m_last=m_coupling->Advance(m_history,int(m_history.step+1)==m_injectRetryStep);m_time=m_history.time;m_currentProcessAccepted=true;
             if(m_history.step%std::uint64_t(m_infoStride)==0||n+1==m_steps){m_coupling->Report(m_stepsLog,m_history,m_last,false);m_stepsLog<<'\n'<<std::flush;Check(bool(m_stepsLog),"coupled step-log write failed");std::cout<<"WJ-H27 step "<<m_history.step<<", t="<<m_time<<", coupled residual="<<m_last.residual.Maximum()<<", nonlinear iterations="<<m_last.nonlinearIterations<<std::endl;}
             if(m_recoveryStride>0&&m_history.step%std::uint64_t(m_recoveryStride)==0){double io=Clock();std::filesystem::path file=m_prefix+".recovery-"+std::to_string(m_history.step)+".bin";m_coupling->WriteHistory(file,m_history);m_recovery.push_back(file);
                 while(m_recovery.size()>2){Check(std::filesystem::remove(m_recovery.front()),"owned coupled recovery rotation failed");m_removedRecovery.push_back(int(m_history.step));m_recovery.erase(m_recovery.begin());}m_recoverySeconds.push_back(Clock()-io);}
-            if(m_scienceStride>0&&m_history.step%std::uint64_t(m_scienceStride)==0){std::string path=m_prefix+".science-"+std::to_string(m_history.step)+".json";Check(!std::filesystem::exists(path),"scientific output is immutable");std::ofstream out(path);Check(bool(out),"cannot create scientific output");m_coupling->Report(out,m_history,m_last,m_coefficients);out<<'\n'<<std::flush;Check(bool(out),"scientific output write failed");out.close();Check(!out.fail(),"scientific output close failed");}
+            unsigned reasons=TerminalReasons(left,right,false);if(m_scienceStride>0&&m_history.step%std::uint64_t(m_scienceStride)==0)reasons|=Periodic;if(m_terminalOutput&&n+1==m_steps)reasons|=Final;WriteScientificFrame(reasons);
             const double elapsed=Clock()-start;m_completeStepSeconds.push_back(elapsed);m_completeAdvanceSeconds+=elapsed;
         }
-        m_coupling->Store(m_history.current);
+        if(m_terminalOutput&&m_steps==0)WriteScientificFrame(Final);
+        m_coupling->Store(m_history.current);m_solveCompleted=true;
     }catch(const std::exception&e){
         try{
             m_coupling->WriteHistory(m_prefix+".failed-accepted.bin",m_history);
+            WriteScientificIndex();
             auto diagnostic=m_history.step?m_last:m_coupling->AuditSteadyState(m_history.current,m_history.time);
             const std::string path=m_prefix+".failure.json";Check(!std::filesystem::exists(path),"coupled failure evidence is immutable");std::ofstream out(path);Check(bool(out),"cannot create coupled failure evidence");
             out<<std::setprecision(17)<<"{\"schema\":\"WJH27CoupledFailureV1\",\"status\":\"FAILED_WITH_ACCEPTED_HISTORY_PRESERVED\",\"reason\":"<<RANSWallSolveJson::Quote(e.what())<<",\"exception_type\":"<<RANSWallSolveJson::Quote(RANSWallSolveJson::ExceptionType(e))<<",\"elapsed_solve_seconds\":"<<Clock()-solveStart
@@ -197,8 +255,10 @@ void WJNativeCoupled::v_Output()
     try{
         double start=Clock();m_coupling->WriteHistory(m_prefix+".final.bin",m_history);
         for(int i=0;i<5;++i){std::vector<Array<OneD,NekDouble>>coefficients{m_fields[i]->UpdateCoeffs()};std::vector<std::string>variables{m_session->GetVariable(i)};WriteFld(m_prefix+"-"+variables[0]+".fld",m_fields[i],coefficients,variables);}
+        WriteScientificIndex();
         double exportSeconds=Clock()-start;std::ofstream report(m_prefix+".result.json");Check(bool(report),"cannot create coupled result");report<<std::setprecision(17)<<"{\"schema\":\"WJH27RegisteredCoupledRunV2\",\"factory\":\"WJNativeCoupledV2\",\"normal_main\":true,\"qualification\":\"execution evidence; closure gates are assessed independently\",\"construction_seconds\":"<<m_constructionSeconds<<",\"initialisation_seconds\":"<<m_initialisationSeconds<<",\"restart\":"<<(m_restart.empty()?"false":"true")<<",\"complete_advancing_seconds\":"<<m_completeAdvanceSeconds<<",\"final_export_seconds\":"<<exportSeconds<<",\"complete_step_seconds\":[";
-        for(int i=0;i<int(m_completeStepSeconds.size());++i){if(i)report<<',';report<<m_completeStepSeconds[i];}report<<"],\"recovery_seconds\":[";for(int i=0;i<int(m_recoverySeconds.size());++i){if(i)report<<',';report<<m_recoverySeconds[i];}report<<"],\"rotated_recovery_count\":"<<m_removedRecovery.size()<<",\"retained_recovery\":[";for(int i=0;i<int(m_recovery.size());++i){if(i)report<<',';report<<'\"'<<m_recovery[i].string()<<'\"';}report<<"],\"steady_mode\":"<<(m_steadyMode?"true":"false")<<",\"steady_solver\":";if(m_steadyMode)SteadyJSON(report,m_steadyResult,m_steadyPreconditionerMass);else report<<"null";report<<",\"state\":";m_coupling->Report(report,m_history,m_last,m_coefficients);report<<"}\n"<<std::flush;Check(bool(report),"coupled result write failed");report.close();Check(!report.fail(),"coupled result close failed");
+        for(int i=0;i<int(m_completeStepSeconds.size());++i){if(i)report<<',';report<<m_completeStepSeconds[i];}report<<"],\"recovery_seconds\":[";for(int i=0;i<int(m_recoverySeconds.size());++i){if(i)report<<',';report<<m_recoverySeconds[i];}report<<"],\"rotated_recovery_count\":"<<m_removedRecovery.size()<<",\"retained_recovery\":[";for(int i=0;i<int(m_recovery.size());++i){if(i)report<<',';report<<'\"'<<m_recovery[i].string()<<'\"';}
+        report<<"],\"scientific_index\":"<<RANSWallSolveJson::Quote(m_prefix+".science-index.json")<<",\"scientific_frame_seconds\":"<<m_scientificFrameSeconds<<",\"scientific_index_seconds\":"<<m_scientificIndexSeconds<<",\"scientific_timing_scope\":\"subsets of complete step/export totals; do not add twice\",\"steady_mode\":"<<(m_steadyMode?"true":"false")<<",\"steady_solver\":";if(m_steadyMode)SteadyJSON(report,m_steadyResult,m_steadyPreconditionerMass);else report<<"null";report<<",\"state\":";m_coupling->Report(report,m_history,m_last,m_coefficients);report<<"}\n"<<std::flush;Check(bool(report),"coupled result write failed");report.close();Check(!report.fail(),"coupled result close failed");
     }catch(const std::exception&e){std::cerr<<"WJ-H27 coupled output: "<<e.what()<<std::endl;throw std::runtime_error(e.what());}
 }
 void WJNativeCoupled::v_GenerateSummary(SolverUtils::SummaryList&summary)
