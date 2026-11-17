@@ -2,6 +2,7 @@
 // Exact native WJ directional action versus the actual native wall adapter.
 // Input rows: label k epsilon shear nu nuA r H. No PDE/production claims.
 #include <IncNavierStokesSolver/EquationSystems/WJNativeFlow.h>
+#include <IncNavierStokesSolver/EquationSystems/WJNativeWallV2.h>
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -16,15 +17,17 @@ using namespace Nektar;
 using namespace Nektar::WJNative;
 namespace
 {
+bool amended=false;
 struct State
 {
     std::string label;
     double k, e, shear, nu, nuA, r, H;
     Tensor G() const { Tensor g{}; g[0][2]=shear; return g; }
     WallStress Value(const Tensor& g) const
-    { return Adapt(k,e,g,{0,0,1},nu,nuA,r,H); }
+    { return amended?AdaptAmended(k,e,g,{0,0,1},nu,nuA,r,H):Adapt(k,e,g,{0,0,1},nu,nuA,r,H); }
     Tensor Action(const Tensor& h) const
     {
+        if(amended)return ApplyAmendedDirection(k,e,G(),{0,0,1},nu,nuA,r,H,0,0,h,0).V;
         const auto dw=SolverUtils::ApplyWJClosureDirection(k,e,G(),0,0,h,
             {},SolverUtils::WJGradientPolicy::DevStrainRawWorkV1,0);
         const double chi=Value(G()).chi;
@@ -73,10 +76,11 @@ int main(int argc,char** argv)
 {
     try
     {
-        if(argc!=2)throw std::runtime_error("usage: WJH27PrincipalProbe states.tsv");
+        if(argc!=2&&argc!=3)throw std::runtime_error("usage: WJH27PrincipalProbe states.tsv [--amended]");
+        if(argc==3){if(std::string(argv[2])!="--amended")throw std::runtime_error("unknown wall model flag");amended=true;}
         std::ifstream in(argv[1]);if(!in)throw std::runtime_error("missing state input");
         std::cout<<std::setprecision(17)
-            <<"{\"schema\":\"WJH27NativePrincipalV1\",\"scope\":\"constitutive feasibility only\",\"states\":[";
+            <<"{\"schema\":\"WJH27NativePrincipalV1\",\"amended\":"<<(amended?"true":"false")<<",\"scope\":\"constitutive feasibility only\",\"states\":[";
         bool first=true;State s;
         while(in>>s.label>>s.k>>s.e>>s.shear>>s.nu>>s.nuA>>s.r>>s.H)
         {

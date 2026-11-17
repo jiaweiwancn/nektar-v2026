@@ -1,0 +1,324 @@
+{
+  "schema": "WJH27InitialFieldsIndependentCheckV1",
+  "status": "PASS",
+  "trials": [
+    {
+      "name": "candidate",
+      "expected_accepted": true,
+      "returncode": 0,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/candidate.json",
+        "sha256": "95c46c3adfd1d1a5f00c33a0886f0e88b38da8c98c5d5c1346b763b0bc7049fa"
+      },
+      "stderr": "",
+      "output": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/candidate.probe.json",
+        "sha256": "16a3033f9b3633b5e1817d48886a16252790fae410b701da601ae71fe21341ea"
+      }
+    },
+    {
+      "name": "registered",
+      "expected_accepted": true,
+      "returncode": 0,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/registered.json",
+        "sha256": "b7842267abaad9d694f10b485030acaac230528afb98d28b1e35f067654c56e1"
+      },
+      "stderr": "",
+      "output": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/registered.probe.json",
+        "sha256": "287a6bf7d6578b4c74b59da0ed3733e738fd4d6bbc7f38ac6239e2141d50cac6"
+      }
+    },
+    {
+      "name": "reordered",
+      "expected_accepted": true,
+      "returncode": 0,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/reordered.json",
+        "sha256": "83c91eca37a9f3d5bb14681b04ee72214f4327291b013fd7955e1e6d8b572c29"
+      },
+      "stderr": "",
+      "output": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/reordered.probe.json",
+        "sha256": "b658dad329ad37169c8130ff933c2910048135b021aabcc49033dd685194b4f8"
+      }
+    },
+    {
+      "name": "missing_basis",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/missing_basis.json",
+        "sha256": "0d206d60fbd960c067f4424bfb978f3e5654ef5d04d63c04337c6c5889b4dfe4"
+      },
+      "stderr": "No such node (basis)\n"
+    },
+    {
+      "name": "wrong_basis",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/wrong_basis.json",
+        "sha256": "50c7455898d7dfd8c88329b681206d2883a33401fd289f888a099ba71f0957c1"
+      },
+      "stderr": "H27 initial fields: only native Modified_A Q3/Q2 initial fields are supported\n"
+    },
+    {
+      "name": "missing_identity",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/missing_identity.json",
+        "sha256": "1fe398ade89024e4451b66cfc98232275b328bdd759b9cbf99e3d503edee2e50"
+      },
+      "stderr": "No such node (source_identity)\n"
+    },
+    {
+      "name": "wrong_coefficient_hash",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/wrong_coefficient_hash.json",
+        "sha256": "a1beff96155b16322e66d082bf63d383caabe2e2a5cf8f52437c48ab155bff0f"
+      },
+      "stderr": "H27 initial fields: native coefficient state SHA256 differs\n"
+    },
+    {
+      "name": "old_time",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/old_time.json",
+        "sha256": "aa2e452d05c5de8bd6aaae7829204c889ed80eee33aa59d77ce9f7bde13a7746"
+      },
+      "stderr": "H27 initial fields: fresh initial fields require step=time=0; cold histories cannot be imported here\n"
+    },
+    {
+      "name": "old_step",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/old_step.json",
+        "sha256": "a47af43abf612ce09decca6e1d5c2a70f57e5d25d1cf7dd89f870e749a6bfade"
+      },
+      "stderr": "H27 initial fields: fresh initial fields require step=time=0; cold histories cannot be imported here\n"
+    },
+    {
+      "name": "wrong_coefficient_size",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/wrong_coefficient_size.json",
+        "sha256": "7a7326f08702903597836c05989e67935891e3a4c3e56005c1e791e3d3572a6b"
+      },
+      "stderr": "H27 initial fields: coefficient size differs: coefficients.k\n"
+    },
+    {
+      "name": "nonfinite_coefficient",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/nonfinite_coefficient.json",
+        "sha256": "83e665ee486f222dc6ed38df7d54c8774d67e75474d47f013a8938d13543a5b2"
+      },
+      "stderr": "<unspecified file>(635): expected value\n"
+    },
+    {
+      "name": "invalid_sign",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/invalid_sign.json",
+        "sha256": "4e45415e32466a1081179074b0cfc1535205179f9809c7868dda6e1468b8dc98"
+      },
+      "stderr": "H27 initial fields: signed map sign is not exactly +/-1\n"
+    },
+    {
+      "name": "repeated_local_id",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/repeated_local_id.json",
+        "sha256": "eab102ad5dce727720724ff0b2f96526515092007b8cb1d77012c169e773ef70"
+      },
+      "stderr": "H27 initial fields: local signed map has repeated/out-of-range coefficient ID\n"
+    },
+    {
+      "name": "out_of_range_id",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/out_of_range_id.json",
+        "sha256": "4366046ac00a876252ad60a4e0b3ee8d10030f84f51b653ca38441162850d173"
+      },
+      "stderr": "H27 initial fields: local signed map has repeated/out-of-range coefficient ID\n"
+    },
+    {
+      "name": "unused_global_id",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/unused_global_id.json",
+        "sha256": "5c80ac149c9991f0014c3413a81e1bd8be250de519ee43ce50865e401583f39d"
+      },
+      "stderr": "H27 initial fields: global coefficient inventory has unused/missing IDs\n"
+    },
+    {
+      "name": "duplicate_geometry",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/duplicate_geometry.json",
+        "sha256": "a67626a2ce102fac5f16923dba6a8295d370a071a78a4d19847202623dc871d6"
+      },
+      "stderr": "H27 initial fields: duplicate geometry ID\n"
+    },
+    {
+      "name": "overlap",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/overlap.json",
+        "sha256": "6de666a36a02b929f2c1f2e8010dbf757077dccb28f1e0c9e4d78df6ac7713dc"
+      },
+      "stderr": "H27 initial fields: rectangular cells overlap or leave a gap\n"
+    },
+    {
+      "name": "gap",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/gap.json",
+        "sha256": "8fba7521042c085094aac04d1afc382e524baa853639ccbaa79ce1e9e91bde53"
+      },
+      "stderr": "H27 initial fields: rectangular cells overlap or leave a gap\n"
+    },
+    {
+      "name": "curved_geometry",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/curved_geometry.json",
+        "sha256": "0f302ab90698492bdd57f8ce5ac63980f99d36b8d8776a969dd0e578042ee21d"
+      },
+      "stderr": "H27 initial fields: unsupported nonflat/invalid geometry\n"
+    },
+    {
+      "name": "missing_outer_epsilon",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/missing_outer_epsilon.json",
+        "sha256": "0245becd34ec1d61cc46de03ce44d54b0a19201bc9442aa0ed09f0a008d96a50"
+      },
+      "stderr": "H27 initial fields: epsilon inventory is not exactly the outer domain\n"
+    },
+    {
+      "name": "invented_inner_epsilon",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/invented_inner_epsilon.json",
+        "sha256": "83ce78501084fc66c9bf9c627485d75c55695ab4a2d23046ba12dfa1f3a3aa18"
+      },
+      "stderr": "H27 initial fields: epsilon inventory is not exactly the outer domain\n"
+    },
+    {
+      "name": "discontinuous_trace",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/discontinuous_trace.json",
+        "sha256": "737f9258130bfdb8a525dca099b64e5c349495031786c0f838f23dbec78275fd"
+      },
+      "stderr": "H27 initial fields: discontinuous signed coefficient trace between geometry 100 and 102 field 0\n"
+    },
+    {
+      "name": "candidate_claims_convergence",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/candidate_claims_convergence.json",
+        "sha256": "6312720957576e32414d1adb1db88cc2569dec5c7f5b8cdabf8c28b9602bf242"
+      },
+      "stderr": "H27 initial fields: candidate packet falsely claims reference qualification\n"
+    },
+    {
+      "name": "registered_not_steady",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/registered_not_steady.json",
+        "sha256": "c2ef88485cfe9eb06f0c1d7243560e5099d14633669941f5c10c80e52412e611"
+      },
+      "stderr": "H27 initial fields: registered initial reference has not converged in steady mode; use explicit candidate schema for a candidate\n"
+    },
+    {
+      "name": "registered_not_converged",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/registered_not_converged.json",
+        "sha256": "f6d25e9ef9df46968fbc2f13202f9b256285b6b6ba06a09185224fd43fe78ed2"
+      },
+      "stderr": "H27 initial fields: registered initial reference has not converged in steady mode; use explicit candidate schema for a candidate\n"
+    },
+    {
+      "name": "contradictory_registered_status",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/contradictory_registered_status.json",
+        "sha256": "ff4274de8d8c684c96ecb40dd92712d29ab7c41da005a7e927bb1325e2979e75"
+      },
+      "stderr": "H27 initial fields: contradictory registered steady status\n"
+    },
+    {
+      "name": "non_normal_factory",
+      "expected_accepted": false,
+      "returncode": 2,
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures/non_normal_factory.json",
+        "sha256": "9820c5915d5cadb0183f849a1298737392f12bf47acfb934ae8ff067ff676255"
+      },
+      "stderr": "H27 initial fields: registered packet is not from the declared normal-main factory\n"
+    }
+  ],
+  "source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v9/solvers/IncNavierStokesSolver/Tests/RANS/h27/initial_fields_check.py",
+    "sha256": "bc27a1cdfab7a94c587db43ace0aa180658b4841411ff38a165413d8f48e8a2a"
+  },
+  "coefficient_fixture_source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v9/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_oracle_test.py",
+    "sha256": "0b7943da7c74c371fdb7ea2293ade2af28105f3c6cf28fee88826bee440d8498"
+  },
+  "basis_source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v9/solvers/IncNavierStokesSolver/Tests/RANS/h26/fixtures.py",
+    "sha256": "632e5cbcdd7a40a993c90cde2aefc3785d73a5f4d1b9634594ea3bb3c9d48b69"
+  },
+  "fixture_directory": "/home/jay/build/wj-h27-coupling-r1-20261117/science/initial-fields-controls-v1.fixtures",
+  "scope": "Packet role/identity/inventory/value transfer only; no physical solution, time history, admissibility or H27 qualification",
+  "valid_packets": {
+    "candidate": {
+      "maximum_scaled_value_error": 3.96508223080413e-16,
+      "samples": 28,
+      "role": "Candidate",
+      "runtime_rejections": 13
+    },
+    "registered": {
+      "maximum_scaled_value_error": 3.96508223080413e-16,
+      "samples": 28,
+      "role": "QualifiedReference",
+      "runtime_rejections": 13
+    },
+    "reordered": {
+      "maximum_scaled_value_error": 3.96508223080413e-16,
+      "samples": 28,
+      "role": "Candidate",
+      "runtime_rejections": 13
+    }
+  },
+  "rejected_packet_count": 24,
+  "elapsed_seconds": 0.23718844098038971
+}

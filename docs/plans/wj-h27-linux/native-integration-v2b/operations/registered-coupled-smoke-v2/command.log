@@ -1,0 +1,32 @@
+
+[36mWarning : [0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	     WJ coupled path: WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon
+	         Wall tensor: FiniteNuIsotropicWallFullWJCollarV2
+	         Integration: current coupled BDF2/EX2, BE startup, no clipping
+	      Pressure gauge: native restricted mean
+=======================================================================
+WJ-H27 initialisation: H27 reference: dependent wall epsilon requested outside inner domain
+terminate called after throwing an instance of 'std::invalid_argument'
+  what():  H27 reference: dependent wall epsilon requested outside inner domain
+[jay-Super-Server:477724] *** Process received signal ***
+[jay-Super-Server:477724] Signal: Aborted (6)
+[jay-Super-Server:477724] Signal code:  (-6)
+[jay-Super-Server:477724] [ 0] /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/libc.so.6(+0x42520)[0x7961e5e42520]
+[jay-Super-Server:477724] [ 1] /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/libc.so.6(pthread_kill+0x12c)[0x7961e5e969bc]
+[jay-Super-Server:477724] [ 2] /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/libc.so.6(raise+0x16)[0x7961e5e42476]
+[jay-Super-Server:477724] [ 3] /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/libc.so.6(abort+0xd3)[0x7961e5e287f3]
+[jay-Super-Server:477724] [ 4] /lib/x86_64-linux-gnu/libstdc++.so.6(+0xa2b9e)[0x7961e62a2b9e]
+[jay-Super-Server:477724] [ 5] /lib/x86_64-linux-gnu/libstdc++.so.6(+0xae20c)[0x7961e62ae20c]
+[jay-Super-Server:477724] [ 6] /lib/x86_64-linux-gnu/libstdc++.so.6(+0xae277)[0x7961e62ae277]
+[jay-Super-Server:477724] [ 7] /lib/x86_64-linux-gnu/libstdc++.so.6(__cxa_rethrow+0x4b)[0x7961e62ae52b]
+[jay-Super-Server:477724] [ 8] /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v5/IncNavierStokesSolver.elf(+0x70e19)[0x7961e8e70e19]
+[jay-Super-Server:477724] [ 9] /home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0(_ZN6Nektar11SolverUtils14DriverStandard9v_ExecuteERSo+0x2d2)[0x7961e8a7a9b2]
+[jay-Super-Server:477724] [10] /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v5/IncNavierStokesSolver.elf(+0x114e45)[0x7961e8f14e45]
+[jay-Super-Server:477724] [11] /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/libc.so.6(+0x29d90)[0x7961e5e29d90]
+[jay-Super-Server:477724] [12] /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/libc.so.6(__libc_start_main+0x80)[0x7961e5e29e40]
+[jay-Super-Server:477724] [13] /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v5/IncNavierStokesSolver.elf(+0x18fea5)[0x7961e8f8fea5]
+[jay-Super-Server:477724] *** End of error message ***

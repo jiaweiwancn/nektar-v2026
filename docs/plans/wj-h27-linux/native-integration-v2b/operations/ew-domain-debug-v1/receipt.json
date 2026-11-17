@@ -1,0 +1,93 @@
+{
+  "argv": [
+    "gdb",
+    "-q",
+    "-batch",
+    "-x",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/ew-domain-v1.gdb",
+    "--args",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v5/IncNavierStokesSolver.elf",
+    "--use-opt-file",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v2/mms-smoke.xml.opt",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v2/mms-smoke.xml"
+  ],
+  "phase": "science",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T10:07:07.059674+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 477802,
+        "parent": 477801,
+        "threads": 1,
+        "args": "python3 -c from pathlib import Path import subprocess r=Path(\"/home/jay/build/wj-h27-coupling-r1-20261117\") gdb=r/\"inputs/ew-domain-v1.gdb\" gdb.write_text('''set pagination off set confirm off set exec-wrapper /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2 --library-path /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc:/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/geometry:/home/jay/.local/opt/nektar-v2026-mpi/lib64 break Nektar::WJNative::Reference::DependentEpsilon(double, double) const condition 1 $xmm1.v2_double[0] > 0.15 commands silent printf \"OUTSIDE Ew K=%.17g r=%.17g\\\\n\", $xmm0.v2_double[0], $xmm1.v2_double[0] bt 12 quit end run ''') case=r/\"science/coupled-fixtures-v2/mms-smoke.xml\" cmd=[\"gdb\",\"-q\",\"-batch\",\"-x\",str(gdb),\"--args\",str(r/\"runtime-v5/IncNavierStokesSolver.elf\"),\"--use-opt-file\",str(case)+\".opt\",str(case)] subprocess.run([\"python3\",\"-B\",str(r/\"tools/run.py\"),\"--root\",str(r),\"--label\",\"ew-domain-debug-v1\",\"--phase\",\"science\",\"--seconds\",\"30\",\"--\"]+cmd,check=False) print((r/\"operations/ew-domain-debug-v1/command.log\").read_text()[-7000:])"
+      },
+      {
+        "pid": 477803,
+        "parent": 477802,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label ew-domain-debug-v1 --phase science --seconds 30 -- gdb -q -batch -x /home/jay/build/wj-h27-coupling-r1-20261117/inputs/ew-domain-v1.gdb --args /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v5/IncNavierStokesSolver.elf --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v2/mms-smoke.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v2/mms-smoke.xml"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/ew-domain-v1.gdb",
+      "bytes": 555,
+      "sha256": "d3a0d17bc0e252d5ac4190d9d336d1706a64b623d004488aefecd6d642b9d68f"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v5/IncNavierStokesSolver.elf",
+      "bytes": 9319456,
+      "sha256": "5d062e50597808348ad6d270264f35d52de66772a4ca979bfe26f7f0904d0846"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v2/mms-smoke.xml.opt",
+      "bytes": 55,
+      "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v2/mms-smoke.xml",
+      "bytes": 5071,
+      "sha256": "208c20866c4204c20b156222bb9828ca9372c34096bcd20feb88e230ec08ab27"
+    }
+  ],
+  "status": "FAIL",
+  "seconds": 1.8214118350297213,
+  "exit": 1,
+  "reason": null,
+  "peak_tree_rss_bytes": 82120704,
+  "peak_host_workers": 5,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/ew-domain-debug-v1/command.log",
+    "bytes": 2978,
+    "sha256": "1c951e9a64cc2208ad95c97d1b7af25a18592413da81e58ccbb7c04df4c1e3de"
+  }
+}

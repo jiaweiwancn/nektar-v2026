@@ -1,0 +1,77 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v5/WJH27ScalarProbe",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v2/mms-smoke.xml",
+    "full",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-owned-rule-bounds-v1.json"
+  ],
+  "phase": "science",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T10:11:16.065826+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 477961,
+        "parent": 477801,
+        "threads": 1,
+        "args": "python3 -c from pathlib import Path import subprocess,json r=Path(\"/home/jay/build/wj-h27-coupling-r1-20261117\") cmd=[str(r/\"runtime-v5/WJH27ScalarProbe\"),str(r/\"science/coupled-fixtures-v2/mms-smoke.xml\"),\"full\",str(r/\"science/mms-owned-rule-bounds-v1.json\")] subprocess.run([\"python3\",\"-B\",str(r/\"tools/run.py\"),\"--root\",str(r),\"--label\",\"mms-owned-rule-bounds-v1\",\"--phase\",\"science\",\"--seconds\",\"30\",\"--\"]+cmd,check=False) p=r/\"science/mms-owned-rule-bounds-v1.json\" if p.exists():  x=json.loads(p.read_text());print(json.dumps(x.get(\"flow_elements\"),indent=2)) else:print((r/\"operations/mms-owned-rule-bounds-v1/command.log\").read_text()[-3000:])"
+      },
+      {
+        "pid": 477962,
+        "parent": 477961,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label mms-owned-rule-bounds-v1 --phase science --seconds 30 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v5/WJH27ScalarProbe /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v2/mms-smoke.xml full /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-owned-rule-bounds-v1.json"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v5/WJH27ScalarProbe",
+      "bytes": 374,
+      "sha256": "8f620938e1562ea10a4e4e01f392118d3db8ae9c79405adb7d891d1678120a73"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v2/mms-smoke.xml",
+      "bytes": 5071,
+      "sha256": "208c20866c4204c20b156222bb9828ca9372c34096bcd20feb88e230ec08ab27"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 0.9087111309636384,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 180224,
+  "peak_host_workers": 7,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/mms-owned-rule-bounds-v1/command.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

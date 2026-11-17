@@ -1,0 +1,126 @@
+{
+  "schema": "WJH27RegisteredCoupledRunV2",
+  "factory": "WJNativeCoupledV2",
+  "normal_main": true,
+  "qualification": "execution evidence; closure gates are assessed independently",
+  "construction_seconds": 0.02879626996582374,
+  "initialisation_seconds": 0.03850834700278938,
+  "restart": false,
+  "complete_advancing_seconds": 0,
+  "final_export_seconds": 0.022995254024863243,
+  "complete_step_seconds": [],
+  "recovery_seconds": [],
+  "rotated_recovery_count": 0,
+  "retained_recovery": [],
+  "steady_mode": false,
+  "steady_solver": null,
+  "state": {
+    "schema": "WJH27NativeCoupledStateV2",
+    "model": "FiniteNuIsotropicWallFullWJCollarV2",
+    "signature": "5544c639a7ad2a4769e10c1bd0aa9719fabff5d7cf9cf5442d0e7e0a6fa2d53c",
+    "source_identity": "402409a164db97ee5a5799623f79b27e84a2696f9fe817ff7dfa01b1a604dd37",
+    "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+    "manufactured": true,
+    "step": 0,
+    "time": 0,
+    "dt": 0.02,
+    "state_sha256": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+    "previous_sha256": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+    "advection_sha256": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b",
+    "previous_advection_sha256": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b",
+    "sizes": [
+      91,
+      45,
+      91,
+      49
+    ],
+    "gauge": true,
+    "nonlinear_iterations": 0,
+    "linear_iterations": [
+      0,
+      0,
+      0
+    ],
+    "rebuilds": 0,
+    "retries": 0,
+    "seconds": 0,
+    "coefficient_drift": 0,
+    "residuals": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "minimum_k": 0,
+    "minimum_epsilon": 0,
+    "minimum_covariance_over_k": 0,
+    "minimum_principal_over_mu": 0,
+    "disjoint_seconds": {
+      "constitutive": 0,
+      "wall": 0,
+      "assembly": 0,
+      "flow": 0,
+      "scalar": 0,
+      "rebuild": 0,
+      "guards": 0,
+      "forcing": 0,
+      "residual": 0,
+      "nonlinear": 0,
+      "io": 0,
+      "other": 0
+    },
+    "quadratureX": 8,
+    "quadratureR": 12,
+    "linear_tolerance": 1e-11,
+    "nonlinear_tolerance": 1e-10,
+    "maximum_iterations": 2,
+    "mms_body_amplitude": 0,
+    "retry_reason": "",
+    "mms_variant": "PolynomialScalarsV1",
+    "basis": "Modified_A",
+    "anderson_depth": 0,
+    "acceleration": {
+      "proposals": 0,
+      "accepted": 0,
+      "inadmissible_trials": 0
+    },
+    "initial_field_transfer": {
+      "packet_sha256": "",
+      "source_state_sha256": "",
+      "projected": false,
+      "source_was_candidate": false
+    },
+    "nonlinear_trace": [],
+    "constitutive_backend": "FastFull3DV1",
+    "constitutive_calls": {
+      "values": 0,
+      "directions": 0,
+      "fallbacks": 0,
+      "root_iterations": 0,
+      "maximum_normalized_root_residual": 0
+    },
+    "mms_rms_errors_U_Pi_k_epsilon_gradU": [
+      2.1212698256100473e-18,
+      5.058774748800464e-20,
+      3.051364342919071e-16,
+      2.548761483319213e-16,
+      4.951616522961838e-16
+    ],
+    "geometry": {
+      "d0": 0.0875,
+      "H": 0.15,
+      "h": 0.10854503542535461,
+      "left": 0,
+      "right": 1,
+      "top": 0.5
+    }
+  },
+  "raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v9/initial.result.json",
+    "bytes": 31207,
+    "sha256": "8acaca656b99da1bebb874eab2b656f4dfbf9343f5a58a9858d79f88db6c3c63"
+  },
+  "scope": "Compact derivation from preserved Linux raw output; complete coefficient/history data remain at raw_artifact path"
+}

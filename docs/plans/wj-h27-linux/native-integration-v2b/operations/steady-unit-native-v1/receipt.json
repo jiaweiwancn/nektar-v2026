@@ -1,0 +1,70 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/steady-unit-v1/WJH27SteadyKrylovProbe",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/steady-unit-native-v1.json"
+  ],
+  "phase": "science",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T12:37:22.694566+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 480662,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/steady-unit-controller-v1.py"
+      },
+      {
+        "pid": 480685,
+        "parent": 480662,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label steady-unit-native-v1 --phase science --seconds 30 -- /home/jay/build/wj-h27-coupling-r1-20261117/steady-unit-v1/WJH27SteadyKrylovProbe /home/jay/build/wj-h27-coupling-r1-20261117/science/steady-unit-native-v1.json"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/steady-unit-v1/WJH27SteadyKrylovProbe",
+      "bytes": 362968,
+      "sha256": "a808b90f2a74ea93519f728f3db8c74e811ffede6d13a7700165124b5a4c54f6"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 1.068863571039401,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 307200,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/steady-unit-native-v1/command.log",
+    "bytes": 57,
+    "sha256": "1c154c8229e093ab48a34e699b2eb186c037af9fd9db95412d6d60cdbdd3ed0b"
+  }
+}

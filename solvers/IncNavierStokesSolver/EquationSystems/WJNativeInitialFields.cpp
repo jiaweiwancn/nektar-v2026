@@ -1,0 +1,265 @@
+// SPDX-License-Identifier: MIT
+#include <IncNavierStokesSolver/EquationSystems/WJNativeInitialFields.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
+#include <boost/property_tree/json_parser.hpp>
+#include <algorithm>
+#include <cmath>
+#include <filesystem>
+#include <fstream>
+#include <limits>
+#include <set>
+#include <sstream>
+#include <stdexcept>
+
+namespace Nektar::WJNative
+{
+namespace
+{
+using Tree=boost::property_tree::ptree;
+void Require(bool value,const std::string&reason)
+{if(!value)throw std::invalid_argument("H27 initial fields: "+reason);}
+double Tolerance(double a,double b,double scale)
+{return 64*std::numeric_limits<double>::epsilon()*std::max({std::abs(a),std::abs(b),scale});}
+bool Same(double a,double b,double scale)
+{return std::isfinite(a)&&std::isfinite(b)&&std::abs(a-b)<=Tolerance(a,b,scale);}
+bool SHA(const std::string&s)
+{return s.size()==64&&std::all_of(s.begin(),s.end(),[](char c){return (c>='0'&&c<='9')||(c>='a'&&c<='f');});}
+double Number(const Tree&t,const std::string&path)
+{const double v=t.get<double>(path);Require(std::isfinite(v),"nonfinite "+path);return v;}
+void UniqueKeys(const Tree&t)
+{
+    std::set<std::string>keys;
+    for(const auto&item:t){if(!item.first.empty())Require(keys.insert(item.first).second,"duplicate JSON key "+item.first);UniqueKeys(item.second);}
+}
+template<class T>std::vector<T>Array(const Tree&t,const std::string&path)
+{
+    const auto&child=t.get_child(path);std::vector<T>out;out.reserve(child.size());
+    for(const auto&item:child){Require(item.first.empty()&&item.second.empty(),"non-array/non-scalar "+path);out.push_back(item.second.get_value<T>());}
+    return out;
+}
+Eigen::VectorXd Coefficients(const Tree&t,const std::string&path,Eigen::Index size)
+{
+    const auto values=Array<double>(t,path);
+    Require(values.size()==static_cast<std::size_t>(size),"coefficient size differs: "+path);
+    Eigen::VectorXd result(size);for(Eigen::Index i=0;i<size;++i)result[i]=values[i];
+    Require(result.allFinite(),"nonfinite coefficients: "+path);return result;
+}
+InitialFieldGeometry Geometry(const Tree&t)
+{
+    InitialFieldGeometry g;g.d0=Number(t,"d0");g.H=Number(t,"H");g.h=Number(t,"h");
+    g.left=Number(t,"left");g.right=Number(t,"right");g.top=Number(t,"top");
+    g.curve=t.get<double>("curve",0.);
+    Require(std::isfinite(g.curve)&&g.curve==0&&g.H>0&&g.h>=0&&g.h<g.H&&g.top>g.H&&g.right>g.left,
+            "unsupported nonflat/invalid geometry");return g;
+}
+bool SameGeometry(const InitialFieldGeometry&a,const InitialFieldGeometry&b)
+{
+    const double scale=std::max(a.H,b.H);
+    return scale>0&&Same(a.d0,b.d0,scale)&&Same(a.H,b.H,scale)&&Same(a.h,b.h,scale)&&
+        Same(a.left,b.left,scale)&&Same(a.right,b.right,scale)&&Same(a.top,b.top,scale)&&
+        std::isfinite(a.curve)&&std::isfinite(b.curve)&&a.curve==0&&b.curve==0;
+}
+std::array<double,4>Modified(double t)
+{
+    const double b=t*(1-t);
+    return {1-t,t,b,b*(4*t-2)};
+}
+const std::vector<int>&Ids(const InitialFieldElement&e,unsigned field)
+{return field<2?e.u:field==2?e.k:field==3?e.epsilon:e.p;}
+const std::vector<double>&Signs(const InitialFieldElement&e,unsigned field)
+{return field<2?e.us:field==2?e.ks:field==3?e.epsilonSigns:e.ps;}
+}
+
+InitialFields::InitialFields(const std::string&path)
+{
+    Require(std::filesystem::is_regular_file(path),"input is not a regular coefficient packet");
+    Require(std::filesystem::file_size(path)<=256ULL*1024*1024,"coefficient packet exceeds declared 256 MiB input allowance");
+    std::ifstream file(path,std::ios::binary);Require(bool(file),"cannot open coefficient packet");
+    const std::string bytes((std::istreambuf_iterator<char>(file)),{});
+    Require(file.eof()||bool(file),"coefficient packet read failed");
+    Tree root;std::istringstream input(bytes);boost::property_tree::read_json(input,root);UniqueKeys(root);
+    auto&m=m_metadata;m.packetSha256=RANSWallR3::Hash(bytes);m.schema=root.get<std::string>("schema");
+    if(m.schema=="WJH27RegisteredCoupledRunV2"){
+        Require(root.get<bool>("normal_main")&&root.get<std::string>("factory")=="WJNativeCoupledV2",
+                "registered packet is not from the declared normal-main factory");
+        Require(root.get<bool>("steady_mode")&&root.get<bool>("steady_solver.converged"),
+                "registered initial reference has not converged in steady mode; use explicit candidate schema for a candidate");
+        Require(root.get<std::string>("steady_solver.status")=="CONVERGED","contradictory registered steady status");
+        m.role=InitialFieldRole::QualifiedReference;m.qualifiedReference=true;
+    }else{
+        Require(m.schema=="WJH27SteadyCandidateV1","unsupported initial coefficient packet schema");
+        Require(!root.get<bool>("qualified_reference"),"candidate packet falsely claims reference qualification");
+        m.role=InitialFieldRole::Candidate;m.qualifiedReference=false;
+    }
+    const auto&state=root.get_child("state");m.stateSchema=state.get<std::string>("schema");
+    Require(m.stateSchema=="WJH27NativeCoupledStateV2","unsupported native state schema");
+    Require(state.get<unsigned long long>("step")==0&&Number(state,"time")==0,
+            "fresh initial fields require step=time=0; cold histories cannot be imported here");
+    m.basis=state.get<std::string>("basis");Require(m.basis=="Modified_A","only native Modified_A Q3/Q2 initial fields are supported");
+    m.model=state.get<std::string>("model");m.sourceIdentity=state.get<std::string>("source_identity");
+    m.referenceIdentity=state.get<std::string>("reference_identity");m.mmsVariant=state.get<std::string>("mms_variant");
+    m.manufactured=state.get<bool>("manufactured");m.gauge=state.get<bool>("gauge");
+    m.stateSha256=state.get<std::string>("state_sha256");
+    Require(!m.model.empty()&&!m.mmsVariant.empty()&&SHA(m.sourceIdentity)&&SHA(m.referenceIdentity)&&SHA(m.stateSha256),
+            "missing/invalid scientific metadata or identities");
+    m_geometry=Geometry(state.get_child("geometry"));
+    const auto sizes=Array<int>(state,"sizes");Require(sizes.size()==4&&std::all_of(sizes.begin(),sizes.end(),[](int n){return n>0;}),"invalid coefficient sizes");
+    std::copy(sizes.begin(),sizes.end(),m_sizes.begin());
+    const auto flowSize=2LL*m_sizes[0]+m_sizes[1];
+    Require(flowSize<=std::numeric_limits<Eigen::Index>::max(),"coefficient size overflows native vector index");
+    m_flow=Coefficients(state,"coefficients.flow",static_cast<Eigen::Index>(flowSize));
+    m_k=Coefficients(state,"coefficients.k",m_sizes[2]);m_epsilon=Coefficients(state,"coefficients.epsilon",m_sizes[3]);
+    RANSWallR3::Sha256 hash;for(const auto*v:{&m_flow,&m_k,&m_epsilon})hash.Update(v->data(),v->size()*sizeof(double));
+    Require(hash.Finish()==m.stateSha256,"native coefficient state SHA256 differs");
+    for(const auto&item:state.get_child("elements")){
+        Require(item.first.empty(),"elements is not an array");const auto&t=item.second;InitialFieldElement e;
+        e.geometry=t.get<int>("geometry");Require(e.geometry>=0,"negative geometry ID");
+        const auto bounds=Array<double>(t,"bounds");Require(bounds.size()==4,"invalid element bounds inventory");
+        e.xl=bounds[0];e.xr=bounds[1];e.rl=bounds[2];e.rr=bounds[3];
+        Require(std::all_of(bounds.begin(),bounds.end(),[](double v){return std::isfinite(v);}),"nonfinite element bounds");
+        if(auto basis=t.get_optional<std::string>("basis"))Require(*basis==m.basis,"element basis differs from declared native basis");
+        e.u=Array<int>(t,"u");e.us=Array<double>(t,"us");e.p=Array<int>(t,"p");e.ps=Array<double>(t,"ps");
+        e.k=Array<int>(t,"k");e.ks=Array<double>(t,"ks");e.epsilon=Array<int>(t,"epsilon");e.epsilonSigns=Array<double>(t,"epsilon_signs");
+        m_elements.push_back(std::move(e));
+    }
+    ValidateInventory();ValidateContinuity();
+}
+
+void InitialFields::ValidateInventory()
+{
+    Require(!m_elements.empty(),"empty element inventory");
+    std::sort(m_elements.begin(),m_elements.end(),[](const auto&a,const auto&b){return a.geometry<b.geometry;});
+    std::array<std::set<int>,4>visited;
+    const auto&g=m_geometry;
+    for(std::size_t j=0;j<m_elements.size();++j){const auto&e=m_elements[j];
+        Require(m_index.emplace(e.geometry,j).second,"duplicate geometry ID");
+        Require(e.xr-e.xl>Tolerance(e.xl,e.xr,g.H)&&e.rr-e.rl>Tolerance(e.rl,e.rr,g.H),"degenerate element bounds");
+        Require(e.xl>=g.left-Tolerance(e.xl,g.left,g.H)&&e.xr<=g.right+Tolerance(e.xr,g.right,g.H)&&
+                e.rl>=-Tolerance(e.rl,0,g.H)&&e.rr<=g.top+Tolerance(e.rr,g.top,g.H),"element outside declared rectangle");
+        const bool outer=e.rl>=g.H-Tolerance(e.rl,g.H,g.H);
+        Require(outer||e.rr<=g.H+Tolerance(e.rr,g.H,g.H),"element straddles dependent H interface");
+        Require(outer==!e.epsilon.empty(),"epsilon inventory is not exactly the outer domain");
+        for(unsigned f:{0U,4U,2U,3U}){
+            const auto&ids=Ids(e,f);const auto&signs=Signs(e,f);
+            const int slot=f==0?0:f==4?1:f==2?2:3;
+            const std::size_t expected=f==3&&!outer?0:f==4?9:16;
+            Require(ids.size()==expected&&signs.size()==expected,"local Q3/Q2 signed map dimension differs");
+            std::set<int>local;
+            for(std::size_t i=0;i<ids.size();++i){Require(ids[i]>=0&&ids[i]<m_sizes[slot]&&local.insert(ids[i]).second,
+                    "local signed map has repeated/out-of-range coefficient ID");
+                Require(signs[i]==1.||signs[i]==-1.,"signed map sign is not exactly +/-1");visited[slot].insert(ids[i]);}
+        }
+        m_xBreaks.push_back(e.xl);m_xBreaks.push_back(e.xr);
+    }
+    for(int f=0;f<4;++f)Require(visited[f].size()==static_cast<std::size_t>(m_sizes[f]),"global coefficient inventory has unused/missing IDs");
+    std::sort(m_xBreaks.begin(),m_xBreaks.end());std::vector<double>unique;
+    for(double x:m_xBreaks)if(unique.empty()||!Same(x,unique.back(),g.H))unique.push_back(x);
+    m_xBreaks=std::move(unique);
+    Require(m_xBreaks.size()>=2&&Same(m_xBreaks.front(),g.left,g.H)&&Same(m_xBreaks.back(),g.right,g.H),"x cover differs from declared rectangle");
+    for(std::size_t i=0;i+1<m_xBreaks.size();++i){
+        const double x=m_xBreaks[i]+(m_xBreaks[i+1]-m_xBreaks[i])/2;
+        std::vector<std::size_t>slab;
+        for(std::size_t j=0;j<m_elements.size();++j)if(x>m_elements[j].xl&&x<m_elements[j].xr)slab.push_back(j);
+        Require(!slab.empty(),"uncovered x slab");
+        std::sort(slab.begin(),slab.end(),[&](auto a,auto b){return m_elements[a].rl<m_elements[b].rl;});
+        Require(Same(m_elements[slab.front()].rl,0,g.H)&&Same(m_elements[slab.back()].rr,g.top,g.H),"radial slab does not cover full rectangle");
+        for(std::size_t j=1;j<slab.size();++j)Require(Same(m_elements[slab[j-1]].rr,m_elements[slab[j]].rl,g.H),"rectangular cells overlap or leave a gap");
+        m_slabs.push_back(std::move(slab));
+    }
+}
+
+bool InitialFields::Contains(const InitialFieldElement&e,double x,double r)const
+{
+    const double scale=m_geometry.H;
+    return x>=e.xl-Tolerance(x,e.xl,scale)&&x<=e.xr+Tolerance(x,e.xr,scale)&&
+           r>=e.rl-Tolerance(r,e.rl,scale)&&r<=e.rr+Tolerance(r,e.rr,scale);
+}
+
+double InitialFields::Value(const InitialFieldElement&e,unsigned field,double x,double r)const
+{
+    const auto&ids=Ids(e,field);const auto&signs=Signs(e,field);
+    Require(!ids.empty(),"requested owner has no transported epsilon field");
+    const auto bx=Modified((x-e.xl)/(e.xr-e.xl)),br=Modified((r-e.rl)/(e.rr-e.rl));
+    const int width=field==4?3:4;
+    const Eigen::VectorXd&coefficient=field==2?m_k:field==3?m_epsilon:m_flow;
+    const Eigen::Index offset=field==1?m_sizes[0]:field==4?2LL*m_sizes[0]:0;
+    double value=0;
+    for(int j=0;j<width;++j)for(int i=0;i<width;++i){const int local=i+width*j;value+=bx[i]*br[j]*signs[local]*coefficient[offset+ids[local]];}
+    Require(std::isfinite(value),"nonfinite evaluated coefficient field");return value;
+}
+
+double InitialFields::Evaluate(unsigned field,double x,double physicalZ,int ownerGeometry)const
+{
+    Require(field<5&&std::isfinite(x)&&std::isfinite(physicalZ),"invalid requested field or coordinate");
+    const auto&g=m_geometry;double r=physicalZ-g.d0;
+    Require(std::isfinite(r),"nonfinite physical radius");
+    for(double edge:{g.left,g.right})if(Same(x,edge,g.H))x=edge;
+    for(double edge:{0.,g.H,g.top})if(Same(r,edge,g.H))r=edge;
+    Require(x>=g.left&&x<=g.right&&r>=0&&r<=g.top,"requested point lies outside declared domain");
+    Require(field!=3||r>=g.H,"transported epsilon requested in the inner domain");
+    if(ownerGeometry>=0){auto owner=m_index.find(ownerGeometry);Require(owner!=m_index.end(),"requested geometry owner is absent");
+        const auto&e=m_elements[owner->second];Require(Contains(e,x,r),"requested point lies outside its explicit owner");return Value(e,field,x,r);}
+    Require(ownerGeometry==-1,"invalid optional owner ID");
+    const InitialFieldElement*selected=nullptr;
+    auto include=[&](std::size_t slab){for(auto index:m_slabs[slab]){const auto&e=m_elements[index];
+        if((field!=3||!e.epsilon.empty())&&Contains(e,x,r)&&(!selected||e.geometry<selected->geometry))selected=&e;}};
+    auto upper=std::upper_bound(m_xBreaks.begin(),m_xBreaks.end(),x);
+    std::size_t slab=upper==m_xBreaks.begin()?0:std::min<std::size_t>(upper-m_xBreaks.begin()-1,m_slabs.size()-1);
+    include(slab);
+    if(slab>0&&Same(x,m_xBreaks[slab],g.H))include(slab-1);
+    if(slab+1<m_slabs.size()&&Same(x,m_xBreaks[slab+1],g.H))include(slab+1);
+    Require(selected!=nullptr,"no native element owns the requested point/field");
+    return Value(*selected,field,x,r);
+}
+
+void InitialFields::ValidateContinuity()const
+{
+    const double eps=4096*std::numeric_limits<double>::epsilon();
+    std::array<double,5>scale{m_flow.head(m_sizes[0]).cwiseAbs().maxCoeff(),
+        m_flow.segment(m_sizes[0],m_sizes[0]).cwiseAbs().maxCoeff(),m_k.cwiseAbs().maxCoeff(),
+        m_epsilon.cwiseAbs().maxCoeff(),m_flow.tail(m_sizes[1]).cwiseAbs().maxCoeff()};
+    for(std::size_t ia=0;ia<m_elements.size();++ia)for(std::size_t ib=ia+1;ib<m_elements.size();++ib){
+        const auto&a=m_elements[ia];const auto&b=m_elements[ib];
+        bool vertical=false,horizontal=false;double af=0,bf=0,lo=0,hi=0;
+        if(Same(a.xr,b.xl,m_geometry.H)){vertical=true;af=a.xr;bf=b.xl;}
+        else if(Same(a.xl,b.xr,m_geometry.H)){vertical=true;af=a.xl;bf=b.xr;}
+        if(vertical){lo=std::max(a.rl,b.rl);hi=std::min(a.rr,b.rr);}
+        else{
+            if(Same(a.rr,b.rl,m_geometry.H)){horizontal=true;af=a.rr;bf=b.rl;}
+            else if(Same(a.rl,b.rr,m_geometry.H)){horizontal=true;af=a.rl;bf=b.rr;}
+            if(horizontal){lo=std::max(a.xl,b.xl);hi=std::min(a.xr,b.xr);}
+        }
+        if((!vertical&&!horizontal)||hi-lo<=Tolerance(lo,hi,m_geometry.H))continue;
+        for(unsigned field=0;field<5;++field){if(field==3&&(a.epsilon.empty()||b.epsilon.empty()))continue;
+            // Four distinct points determine equality of a Q3 face trace.
+            for(double t:{0.,1./3,2./3,1.}){const double q=lo+(hi-lo)*t;
+                const double av=Value(a,field,vertical?af:q,vertical?q:af),bv=Value(b,field,vertical?bf:q,vertical?q:bf);
+                Require(std::abs(av-bv)<=eps*std::max({scale[field],std::abs(av),std::abs(bv)}),
+                    "discontinuous signed coefficient trace between geometry "+std::to_string(a.geometry)+" and "+std::to_string(b.geometry)+" field "+std::to_string(field));}
+        }
+    }
+}
+
+void InitialFields::ValidateBindings(const std::string&source,const std::string&reference,const std::string&model,
+    bool manufactured,const std::string&variant,const InitialFieldGeometry&geometry)const
+{
+    Require(m_metadata.sourceIdentity==source,"source identity binding differs");
+    Require(m_metadata.referenceIdentity==reference,"reference identity binding differs");
+    Require(m_metadata.model==model,"model binding differs");
+    Require(m_metadata.manufactured==manufactured,"manufactured/physical binding differs");
+    Require(m_metadata.mmsVariant==variant,"MMS variant binding differs");
+    Require(SameGeometry(m_geometry,geometry),"physical geometry binding differs");
+}
+
+bool InitialFields::SameInventory(const std::vector<InitialFieldElement>&elements,const std::array<int,4>&sizes)const
+{
+    if(sizes!=m_sizes||elements.size()!=m_elements.size())return false;
+    std::set<int>seen;
+    for(const auto&a:elements){auto position=m_index.find(a.geometry);if(position==m_index.end()||!seen.insert(a.geometry).second)return false;
+        const auto&b=m_elements[position->second];
+        if(!Same(a.xl,b.xl,m_geometry.H)||!Same(a.xr,b.xr,m_geometry.H)||!Same(a.rl,b.rl,m_geometry.H)||!Same(a.rr,b.rr,m_geometry.H)||
+            a.u!=b.u||a.us!=b.us||a.p!=b.p||a.ps!=b.ps||a.k!=b.k||a.ks!=b.ks||a.epsilon!=b.epsilon||a.epsilonSigns!=b.epsilonSigns)return false;
+    }
+    return true;
+}
+}

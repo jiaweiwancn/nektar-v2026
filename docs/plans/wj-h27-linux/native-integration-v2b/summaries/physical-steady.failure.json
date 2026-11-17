@@ -1,0 +1,126 @@
+{
+  "schema": "WJH27CoupledFailureV1",
+  "status": "FAILED_WITH_ACCEPTED_HISTORY_PRESERVED",
+  "reason": "bounded native steady reference solve did not converge; original history preserved",
+  "exception_type": "std::runtime_error",
+  "elapsed_solve_seconds": 247.0046897069551,
+  "accepted_state_residual_kind": "steady diagnostic of fresh initial state",
+  "failed_attempt": {
+    "nonlinear_iterations": 0,
+    "seconds": 0,
+    "retries": 0,
+    "residuals": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "acceleration_proposals": 0,
+    "acceleration_accepted": 0,
+    "nonlinear_trace": []
+  },
+  "state": {
+    "schema": "WJH27NativeCoupledStateV2",
+    "model": "FiniteNuIsotropicWallFullWJCollarV2",
+    "signature": "5adaf08546f75c4acf873f5210c181e0d0602bd2ec409e971f3184cd69d2179a",
+    "source_identity": "402409a164db97ee5a5799623f79b27e84a2696f9fe817ff7dfa01b1a604dd37",
+    "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+    "manufactured": false,
+    "step": 0,
+    "time": 0,
+    "dt": 0.05,
+    "state_sha256": "cbaf0b31aaae4a0b82747c8f2e16ab3df4162e1a8c7974727a91a422bdd22771",
+    "previous_sha256": "cbaf0b31aaae4a0b82747c8f2e16ab3df4162e1a8c7974727a91a422bdd22771",
+    "advection_sha256": "d1fc2bd454304d96012d2674cf8560b067c51b8954e7862b5660f08a1ddaa0c4",
+    "previous_advection_sha256": "d1fc2bd454304d96012d2674cf8560b067c51b8954e7862b5660f08a1ddaa0c4",
+    "sizes": [
+      6493,
+      2929,
+      6493,
+      4429
+    ],
+    "gauge": false,
+    "nonlinear_iterations": 0,
+    "linear_iterations": [
+      0,
+      0,
+      0
+    ],
+    "rebuilds": 0,
+    "retries": 0,
+    "seconds": 1.8508740389952436,
+    "coefficient_drift": 0,
+    "residuals": [
+      0.00040169170267964513,
+      7.071199935888153e-16,
+      0,
+      0.23487173296984373,
+      0.0002866786370025095,
+      0
+    ],
+    "minimum_k": 0.008809015145515185,
+    "minimum_epsilon": 1.7442742409033924e-05,
+    "minimum_covariance_over_k": 0.2816168229605863,
+    "minimum_principal_over_mu": 0.004046700045997384,
+    "disjoint_seconds": {
+      "constitutive": 0.036425926140509546,
+      "wall": 0.0030679309857077897,
+      "assembly": 0.04431634349748492,
+      "flow": 0,
+      "scalar": 0,
+      "rebuild": 0,
+      "guards": 1.654695185367018,
+      "forcing": 0,
+      "residual": 0.09855245001381263,
+      "nonlinear": 0,
+      "io": 0,
+      "other": 0.013816202990710735
+    },
+    "quadratureX": 8,
+    "quadratureR": 12,
+    "linear_tolerance": 1e-11,
+    "nonlinear_tolerance": 1e-10,
+    "maximum_iterations": 60,
+    "mms_body_amplitude": 0,
+    "retry_reason": "",
+    "mms_variant": "Historical",
+    "basis": "Modified_A",
+    "anderson_depth": 4,
+    "acceleration": {
+      "proposals": 0,
+      "accepted": 0,
+      "inadmissible_trials": 0
+    },
+    "initial_field_transfer": {
+      "packet_sha256": "",
+      "source_state_sha256": "",
+      "projected": false,
+      "source_was_candidate": false
+    },
+    "nonlinear_trace": [],
+    "constitutive_backend": "FastFull3DV1",
+    "constitutive_calls": {
+      "values": 0,
+      "directions": 0,
+      "fallbacks": 0,
+      "root_iterations": 0,
+      "maximum_normalized_root_residual": 0
+    },
+    "geometry": {
+      "d0": 0.0875,
+      "H": 0.15,
+      "h": 0.10854503542535461,
+      "left": -10.000000000000002,
+      "right": 15,
+      "top": 19.912500000000005
+    }
+  },
+  "raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v9/physical-steady.failure.json",
+    "bytes": 3309521,
+    "sha256": "0e23bfb99940bede3b36a389c0001b31c069dcef33d116099d432916773b07d8"
+  },
+  "scope": "Compact derivation from preserved Linux raw output; complete coefficient/history data remain at raw_artifact path"
+}

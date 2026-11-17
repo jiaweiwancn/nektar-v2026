@@ -1,0 +1,71 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v2/WJH27MixedProbe",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-fixtures-v2/mixed-closed.xml",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-closed-native-v2.json"
+  ],
+  "phase": "science",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T09:03:14.683869+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 474791,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/scalar-oracle-controller-v1.py"
+      },
+      {
+        "pid": 474800,
+        "parent": 474791,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label mixed-closed-native-v2 --phase science --seconds 30 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v2/WJH27MixedProbe /home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-fixtures-v2/mixed-closed.xml /home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-closed-native-v2.json"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v2/WJH27MixedProbe",
+      "bytes": 373,
+      "sha256": "1dfcc57d5325c37c1594daaff064365c83173c73e2cca50ad2e9feadf1fe4b44"
+    }
+  ],
+  "status": "FAIL",
+  "seconds": 0.7156192169641145,
+  "exit": 1,
+  "reason": null,
+  "peak_tree_rss_bytes": 425984,
+  "peak_host_workers": 5,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/mixed-closed-native-v2/command.log",
+    "bytes": 76,
+    "sha256": "6e8d5d14c6655b39bb3bd3f2ec58488969f56b3e086805223990b51c761b0487"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "scope": "opt-in H27 native targets; qualification scope belongs to each test",
+  "source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v9.json",
+    "bytes": 1108682,
+    "sha256": "fb6e4eb63ed7c15ead310df3e1a384bdc455967de83b20de588b34780e0ae071"
+  },
+  "configure": [
+    "cmake",
+    "-S",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v9/solvers/IncNavierStokesSolver/Tests/RANS/h27",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/build-v9",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math",
+    "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+  ],
+  "build": [
+    "cmake",
+    "--build",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/build-v9",
+    "--target",
+    "IncNavierStokesSolver",
+    "WJH27InitialFieldsProbe",
+    "WJH27CoupledMMSProbe",
+    "--parallel",
+    "4"
+  ],
+  "executables": [
+    {
+      "executable": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v9/IncNavierStokesSolver.elf",
+        "bytes": 9716816,
+        "sha256": "ac224ef5c26dc4b9c46d7d89eca9a59a117534372865db2647c9f81127ce43b4"
+      },
+      "wrapper": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v9/IncNavierStokesSolver",
+        "bytes": 379,
+        "sha256": "cf61a221a3a9116543c4ffef5d25c9e6b81f8636d963d7607a59a2162483607b"
+      },
+      "link": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v9/CMakeFiles/IncNavierStokesSolver.dir/link.txt",
+        "bytes": 12586,
+        "sha256": "99a2625975472ce99e6198e916152ea730a0d32760c1ff9af5b2becd8d11b5f8"
+      }
+    },
+    {
+      "executable": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v9/WJH27InitialFieldsProbe.elf",
+        "bytes": 241936,
+        "sha256": "1882beca89ce7f5abd3eaa218094c78b0702705e92b4e13d3b668888baa16eaa"
+      },
+      "wrapper": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v9/WJH27InitialFieldsProbe",
+        "bytes": 381,
+        "sha256": "fa5fcb0486bfde1808548cdcefab8fa6eb5a6f518092293b96efdda7c4548d59"
+      },
+      "link": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v9/CMakeFiles/WJH27InitialFieldsProbe.dir/link.txt",
+        "bytes": 1734,
+        "sha256": "1e36d19ad0284058c598b0a1fdb924afc7b6e1e3b0e09a689e2c786863db58df"
+      }
+    },
+    {
+      "executable": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v9/WJH27CoupledMMSProbe.elf",
+        "bytes": 520608,
+        "sha256": "f4e638421e8310df71769009dae378bc1a6891e0f15d13639fed694ff62291a9"
+      },
+      "wrapper": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v9/WJH27CoupledMMSProbe",
+        "bytes": 378,
+        "sha256": "30a4af0f09e8e2ef68959bc33805c382d47e791eb83016df219987e8e86b8666"
+      },
+      "link": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v9/CMakeFiles/WJH27CoupledMMSProbe.dir/link.txt",
+        "bytes": 1725,
+        "sha256": "112b6e65361c14f63383064e4677d230fe493e24794dc234f3fde5ae4f5b185c"
+      }
+    }
+  ],
+  "loader": {
+    "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2",
+    "bytes": 240936,
+    "sha256": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+  },
+  "libraries": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc:/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/geometry:/home/jay/.local/opt/nektar-v2026-mpi/lib64",
+  "compiler": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0\nCopyright (C) 2021 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "compile_commands": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v9/compile_commands.json",
+    "bytes": 146731,
+    "sha256": "1292c576d7339e24d991036a571e2b78081752427ad64a1b53bb93549ba64c7b"
+  }
+}

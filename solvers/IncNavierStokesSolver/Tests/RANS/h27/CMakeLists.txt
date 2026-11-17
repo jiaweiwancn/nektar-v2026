@@ -11,7 +11,72 @@ include_directories(SYSTEM ${NEKTAR++_INCLUDE_DIRS} ${NEKTAR++_TP_INCLUDE_DIRS})
 # Build the exact historical adapter and pure WJ directional kernel afresh.
 # This probe is a constitutive diagnostic, not a coupled EquationSystem.
 add_subdirectory(../h26 h26-kernel EXCLUDE_FROM_ALL)
+add_library(WJNativeMixedFlow STATIC
+    ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.cpp
+    ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeWallV2.cpp
+    ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeRules.cpp
+    ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeScalar.cpp
+    ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeReference.cpp
+    ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeAdmissibility.cpp
+    ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupledMMS.cpp
+    ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp
+    ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeConstitutive.cpp
+    ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativePerturbation.cpp
+    ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeSteadyKrylov.cpp
+    ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeInitialFields.cpp
+    # The isolated prefix predates these legacy factory dependencies. Build
+    # their exact capsule sources rather than dropping historical factories.
+    ${H27_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSRobustVariant.cpp
+    ${H27_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallInnerStress.cpp
+    ${H27_SOURCE_ROOT}/library/SolverUtils/Turbulence/EquilibriumAWFProfiles.cpp
+    ${H27_SOURCE_ROOT}/library/SolverUtils/Turbulence/EquilibriumAWFTransition.cpp
+    ${H27_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallGeometry.cpp
+    ${H27_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallNormalMap.cpp)
+target_compile_definitions(WJNativeMixedFlow PRIVATE SOLVER_UTILS_EXPORTS)
+target_link_libraries(WJNativeMixedFlow PUBLIC WJNativeFlow)
+target_compile_options(WJNativeMixedFlow PRIVATE
+    -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra -Wno-sign-compare)
 add_executable(WJH27PrincipalProbe principal.cpp)
-target_link_libraries(WJH27PrincipalProbe PRIVATE WJNativeFlow)
+target_link_libraries(WJH27PrincipalProbe PRIVATE WJNativeMixedFlow)
 target_compile_options(WJH27PrincipalProbe PRIVATE
     -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra)
+add_executable(WJH27MixedProbe mixed_probe.cpp)
+target_link_libraries(WJH27MixedProbe PRIVATE WJNativeMixedFlow)
+target_compile_options(WJH27MixedProbe PRIVATE
+    -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra -Wno-sign-compare)
+add_executable(WJH27ScalarProbe scalar_probe.cpp)
+target_link_libraries(WJH27ScalarProbe PRIVATE WJNativeMixedFlow)
+target_compile_options(WJH27ScalarProbe PRIVATE
+    -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra -Wno-sign-compare)
+include(source_identity.cmake)
+wj_h27_source_identity("${H27_SOURCE_ROOT}" wj_source_identity)
+target_compile_definitions(WJNativeMixedFlow PUBLIC WJ_H27_SOURCE_ID="${wj_source_identity}")
+foreach(probe reference admissibility coupled_mms constitutive steady_krylov initial_fields)
+    if(probe STREQUAL "reference")
+        set(name WJH27ReferenceProbe)
+    elseif(probe STREQUAL "admissibility")
+        set(name WJH27AdmissibilityProbe)
+    elseif(probe STREQUAL "coupled_mms")
+        set(name WJH27CoupledMMSProbe)
+    elseif(probe STREQUAL "constitutive")
+        set(name WJH27ConstitutiveProbe)
+    elseif(probe STREQUAL "steady_krylov")
+        set(name WJH27SteadyKrylovProbe)
+    else()
+        set(name WJH27InitialFieldsProbe)
+    endif()
+    add_executable(${name} "${probe}_probe.cpp")
+    target_link_libraries(${name} PRIVATE WJNativeMixedFlow)
+    target_compile_options(${name} PRIVATE -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra)
+endforeach()
+# The real production main, Standard Driver and complete existing factory
+# source inventory. No probe is relabelled as the application executable.
+set(h27_solver_root "${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver")
+file(READ "${h27_solver_root}/CMakeLists.txt" h27_solver_cmake)
+string(REGEX MATCH "LIBRARY_SOURCES[^)]*" h27_library_block "${h27_solver_cmake}")
+string(REGEX MATCHALL "\\./[A-Za-z0-9_/]+\\.cpp" h27_solver_sources "${h27_library_block}")
+list(TRANSFORM h27_solver_sources PREPEND "${h27_solver_root}/")
+add_executable(IncNavierStokesSolver "${h27_solver_root}/IncNavierStokesSolver.cpp"
+    "${h27_solver_root}/EquationSystems/WJNativeCoupled.cpp" ${h27_solver_sources})
+target_link_libraries(IncNavierStokesSolver PRIVATE WJNativeMixedFlow)
+target_compile_options(IncNavierStokesSolver PRIVATE -O3 -ffp-contract=off -fno-fast-math -Wno-sign-compare)

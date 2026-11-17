@@ -1,0 +1,324 @@
+// SPDX-License-Identifier: MIT
+#include <IncNavierStokesSolver/EquationSystems/WJNativeReference.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/math/quadrature/gauss_kronrod.hpp>
+#include <cmath>
+#include <fstream>
+#include <iomanip>
+#include <iterator>
+#include <limits>
+#include <stdexcept>
+
+namespace Nektar::WJNative
+{
+namespace
+{
+using Tree = boost::property_tree::ptree;
+void Require(bool condition, const std::string &message)
+{
+    if (!condition) throw std::invalid_argument("H27 reference: "+message);
+}
+void Finite(double v, const std::string &name)
+{ Require(std::isfinite(v), "nonfinite "+name); }
+double Number(const Tree &tree, const std::string &path)
+{ double v=tree.get<double>(path); Finite(v,path); return v; }
+void Same(double a, double b, const std::string &name)
+{
+    Finite(a,name); Finite(b,name);
+    Require(std::abs(a-b)<=1e-13*std::max(std::abs(a),std::abs(b)),name+" differs");
+}
+std::vector<double> Numbers(const Tree &tree, const std::string &path)
+{
+    std::vector<double> values;
+    for (const auto &entry:tree.get_child(path))
+    {
+        Require(entry.first.empty(),path+" is not an array");
+        double value=entry.second.get_value<double>(); Finite(value,path);
+        values.push_back(value);
+    }
+    Require(!values.empty(),path+" is empty"); return values;
+}
+void HashSyntax(const std::string &hash)
+{
+    Require(hash.size()==64 && hash.find_first_not_of("0123456789abcdef")==std::string::npos,
+            "expected SHA256 identity is malformed");
+}
+long double HistoricalQ(long double r,long double A,long double cutoff,
+                       long double d,long double a,long double nu)
+{
+    const long double z=a*r/d;
+    const long double sink=r<=cutoff?r/cutoff:1+std::log(r/cutoff);
+    // Algebraically identical to log1p(z)+nu/(d+a*r)-nu/d, but avoids
+    // subtracting nearly equal molecular terms at the ground.
+    const long double production=std::log1p(z)-(nu/d)*z/(1+z);
+    return A*(sink-production);
+}
+}
+
+double Reference::Polynomial::Evaluate(double argument) const
+{
+    Finite(argument,"polynomial argument");
+    Require(argument>=lower && argument<=upper,"polynomial argument outside qualified interval");
+    const double x=(2*argument-lower-upper)/(upper-lower);
+    double b1=0,b2=0;
+    for (std::size_t j=coefficients.size()-1;j>0;--j)
+    {
+        const double b=2*x*b1-b2+coefficients[j]; b2=b1; b1=b;
+    }
+    const double value=x*b1-b2+coefficients[0]; Finite(value,"Clenshaw result"); return value;
+}
+
+Reference::Reference(const std::string &json, const std::string &expectedSha256)
+{
+    HashSyntax(expectedSha256);
+    std::ifstream input(json,std::ios::binary);
+    Require(input.good(),"cannot read table "+json);
+    const std::string bytes((std::istreambuf_iterator<char>(input)),std::istreambuf_iterator<char>());
+    Require(!input.bad() && !bytes.empty() && bytes.size()<1024*1024,"invalid table size/read");
+    m_identity=RANSWallR3::Hash(bytes);
+    Require(m_identity==expectedSha256,"immutable table SHA256 differs");
+    Tree table; std::istringstream stream(bytes); boost::property_tree::read_json(stream,table);
+    Require(table.get<std::string>("schema")=="WJH27V2ReferenceTablesV1","schema differs");
+    Require(table.get<std::string>("status")=="PASS","table is not qualified PASS");
+    Require(table.get<std::string>("model")=="IsotropicLowerWallFullWJCollarV2","model identity differs");
+    Require(table.get<std::string>("coefficient_convention")==
+        "Ascending Chebyshev T_j coefficients; x=(2*argument-lo-hi)/(hi-lo)","coefficient convention differs");
+    Require(table.get<std::string>("parameters.inner_diffusion")=="scalar","inner diffusion differs");
+    Require(table.get<std::string>("sources.generator.sha256")==
+        "65664ef400cfd90f5bb4d83e24b08e0f9ac52d1f6f4385b87012360accd526e0","generator identity differs");
+    Require(table.get<std::string>("sources.reference_oracle.sha256")==
+        "f5c97e5c1f5426df4ac363b8d8dd99b84d636514a0cb899dec1219ceda4b35e9","oracle identity differs");
+    Require(table.get<std::string>("sources.amended_model_contract.sha256")==
+        "727b59a125429f8ecd1cb865be627de59b489cdd20773589a74961bdd9ae1922","amended model identity differs");
+    Require(table.get<std::string>("inlet_binding.calibration.sha256")==
+        "00007be74f8689b09d6d295b21e458041918e21e2e5a7a081e2a8d0ccc75c454","historical calibration identity differs");
+
+    auto &p=m_p;
+    p.KIn=Number(table,"parameters.K"); p.H=Number(table,"parameters.H");
+    p.roughness=Number(table,"parameters.h"); p.nu=Number(table,"parameters.nu");
+    p.Cd=Number(table,"parameters.cd"); p.sigmaK=Number(table,"parameters.sigma_k");
+    p.sigmaE=Number(table,"guard.sigma_e"); p.qe=Number(table,"constants.q_e");
+    p.Ne=Number(table,"constants.N_e"); p.kappa=Number(table,"constants.kappa");
+    p.cLength=Number(table,"constants.c_length"); p.d0=Number(table,"inlet_binding.d0");
+    p.topRadius=Number(table,"inlet_binding.top_model_radius"); p.uTau=Number(table,"inlet_binding.u_tau");
+    Same(p.KIn,.008809015145515192,"fixed inlet K"); Same(p.H,.15,"fixed H");
+    Same(p.roughness,.10854503542535461,"fixed roughness"); Same(p.nu,6.423173803526447e-5,"physical nu");
+    Same(p.Cd,572./6561.,"independent Cd"); Same(p.sigmaK,1.,"sigma_k"); Same(p.sigmaE,1.3,"sigma_e");
+    Same(p.qe,1/std::sqrt(572./6561.),"q_e"); Same(p.Ne,81./20.,"N_e");
+    Same(p.kappa,std::sqrt(1.3*(1.82-1.44)*std::sqrt(572./6561.)),"kappa");
+    Same(p.cLength,p.kappa*std::pow(p.qe,1.5),"c_length"); Same(p.d0,.0875,"physical displacement");
+    Same(p.topRadius,20.-p.d0,"top model radius"); Same(p.uTau,.051,"fixed friction velocity");
+    Same(Number(table,"parameters.endpoint_flux_over_A"),0.,"reference endpoint flux");
+    Same(Number(table,"guard.reference_endpoint_flux_over_A"),0.,"reference endpoint flux guard");
+    Same(Number(table,"inlet_binding.K_in"),p.KIn,"bound inlet K");
+    Same(Number(table,"inlet_binding.roughness"),p.roughness,"bound roughness");
+    const auto interval=Numbers(table,"K_interval"), factors=Numbers(table,"K_factor_interval");
+    Require(interval.size()==2 && factors.size()==2,"K interval shape");
+    Same(factors[0],.9,"lower K factor"); Same(factors[1],1.1,"upper K factor");
+    p.KMinimum=interval[0]; p.KMaximum=interval[1];
+    Same(p.KMinimum,.9*p.KIn,"lower K bound"); Same(p.KMaximum,1.1*p.KIn,"upper K bound");
+
+    auto polynomial=[&](const Tree &node,const std::string &values)
+    {
+        const auto domain=Numbers(node,"domain"); Require(domain.size()==2 && domain[1]>domain[0],"polynomial domain");
+        Polynomial result{domain[0],domain[1],Numbers(node,values)};
+        Require(result.coefficients.size()==node.get<std::size_t>("degree")+1,"coefficient count differs");
+        return result;
+    };
+    const auto &cutoff=table.get_child("cutoff_table");
+    Require(cutoff.get<std::string>("argument")=="K" && cutoff.get<std::string>("value")=="log(c/H)","cutoff argument/value differs");
+    m_logCutoff=polynomial(cutoff,"coefficients");
+    Same(m_logCutoff.lower,p.KMinimum,"cutoff lower domain"); Same(m_logCutoff.upper,p.KMaximum,"cutoff upper domain");
+    m_logCutoffDerivative={p.KMinimum,p.KMaximum,Numbers(cutoff,"logcutoff_dK_coefficients")};
+    const auto &c=m_logCutoff.coefficients; const std::size_t n=c.size()-1;
+    Require(n>=1 && m_logCutoffDerivative.coefficients.size()==n,"cutoff derivative degree differs");
+    std::vector<double> derivative(n+2,0.);
+    for (std::size_t j=n;j>0;--j) derivative[j-1]=derivative[j+1]+2*j*c[j];
+    derivative[0]*=.5;
+    for (std::size_t j=0;j<n;++j)
+        Require(std::abs(derivative[j]*2/(p.KMaximum-p.KMinimum)-m_logCutoffDerivative.coefficients[j])
+                    <=1e-10*(1+std::abs(m_logCutoffDerivative.coefficients[j])),"analytic derivative coefficients differ");
+    Require(Number(cutoff,"maximum_budget_or_ground_flux_error")<=1e-10 &&
+            Number(cutoff,"maximum_K_in_times_derivative_error")<=1e-8,"cutoff qualification tolerance failed");
+    Require(cutoff.get<int>("heldout_K_count")>=33,"missing complete-IVP validation coverage");
+    for (const auto &entry:cutoff.get_child("validations"))
+    {
+        const auto &v=entry.second;
+        Require(std::abs(Number(v,"ground_flux_over_A"))<=1e-10 &&
+                std::abs(Number(v,"independent_budget_over_A"))<=1e-10 &&
+                Number(v,"min_k_over_K")>0 && Number(v,"minimum_shear")>0 &&
+                Number(v,"minimum_shear_tangent")>0,"reference validation witness is inadmissible");
+    }
+    p.tau0=p.KIn/p.qe; Same(p.tau0,p.uTau*p.uTau,"fixed total traction");
+    const auto &outlet=table.get_child("outlet_traction");
+    Same(Number(outlet,"lower_constant.tx"),p.KIn/p.Ne,"lower outlet tx");
+    Same(Number(outlet,"lower_constant.tz"),p.tau0,"lower outlet tz");
+    int index=0;
+    for (const auto &entry:outlet.get_child("segments"))
+    {
+        Require(index<3,"too many outlet segments"); const auto &segment=entry.second;
+        Require(segment.get<std::string>("argument")== (index==2?"log(r/H)":"r"),"outlet coordinate differs");
+        m_outlet[index]=polynomial(segment,"tx_coefficients");
+        Same(Number(segment,"tz_constant"),p.tau0,"outlet shear traction");
+        Require(Number(segment,"maximum_tx_error_over_tau")<=1e-10,"outlet interpolation qualification failed");
+        ++index;
+    }
+    Require(index==3,"missing outlet segments");
+    Same(m_outlet[0].lower,.4*p.H,"outlet lower interface"); Same(m_outlet[0].upper,.75*p.H,"outlet collar start");
+    Same(m_outlet[1].lower,.75*p.H,"outlet collar start"); Same(m_outlet[1].upper,p.H,"outlet H");
+    Same(m_outlet[2].lower,0.,"outer log origin"); Same(m_outlet[2].upper,std::log(p.topRadius/p.H),"outer log top");
+    for (const auto &entry:outlet.get_child("continuity"))
+        Require(std::isfinite(entry.second.get_value<double>()) && entry.second.get_value<double>()<=1e-10,
+                "outlet endpoint continuity failed");
+    Require(std::abs(m_outlet[0].Evaluate(.4*p.H)-p.KIn/p.Ne)<=1e-10*p.tau0 &&
+            std::abs(m_outlet[0].Evaluate(.75*p.H)-m_outlet[1].Evaluate(.75*p.H))<=1e-10*p.tau0 &&
+            std::abs(m_outlet[1].Evaluate(p.H)-m_outlet[2].Evaluate(0.))<=1e-10*p.tau0,
+            "native outlet endpoint continuity failed");
+
+    m_inletA=Amplitude(p.KIn); m_inletSlope=p.kappa*p.uTau;
+    m_inletD=p.nu+Aux(p.KIn,0.);
+    const double z=m_inletSlope*p.H/m_inletD;
+    const double budget=std::log1p(z)+p.nu/(m_inletD+m_inletSlope*p.H)-p.nu/m_inletD;
+    // This OLD cutoff appears ONLY in the fixed historical inlet k profile.
+    // The current dependent epsilon always uses m_logCutoff's NEW table.
+    m_inletCutoff=p.H*std::exp(1-budget);
+    Require(m_inletCutoff>0 && m_inletCutoff<p.H,"historical inlet cutoff is inadmissible");
+    p.z0=p.H/(1+z); Same(p.z0,.005676270321216798,"fixed fitted aerodynamic roughness");
+    Same(m_inletA,Number(table,"inlet_binding.A_in"),"inlet amplitude");
+    Same(m_inletA/p.H,Number(table,"inlet_binding.epsilon_in_H"),"epsilon inlet/H corner");
+    for (double K:{p.KMinimum,p.KIn,p.KMaximum}) { Cutoff(K); Auxiliary(K,0.); }
+}
+
+void Reference::CheckK(double K) const
+{ Finite(K,"K"); Require(K>=m_p.KMinimum && K<=m_p.KMaximum,"K outside qualified [.9,1.1] inlet interval"); }
+void Reference::CheckRadius(double r) const
+{ Finite(r,"radius"); Require(r>=0 && r<=m_p.topRadius,"radius outside fixed physical domain"); }
+double Reference::Cutoff(double K) const
+{
+    CheckK(K); const double c=m_p.H*std::exp(m_logCutoff.Evaluate(K));
+    Require(std::isfinite(c) && c>0 && c<.4*m_p.H,"cutoff outside selected 0<c<.4H branch"); return c;
+}
+double Reference::CutoffDerivative(double K) const
+{ const double v=Cutoff(K)*m_logCutoffDerivative.Evaluate(K); Finite(v,"cutoff derivative"); return v; }
+double Reference::Amplitude(double K) const
+{ CheckK(K); return K*std::sqrt(K)/m_p.cLength; }
+double Reference::AmplitudeDerivative(double K) const
+{ CheckK(K); return 1.5*std::sqrt(K)/m_p.cLength; }
+double Reference::AmplitudeSecondDerivative(double K) const
+{ CheckK(K); return .75/(std::sqrt(K)*m_p.cLength); }
+
+ReferenceValue Reference::Auxiliary(double K,double r) const
+{
+    CheckK(K); CheckRadius(r);
+    const double root=std::sqrt(K),x=m_p.roughness*root/(70*m_p.nu),logx=std::log(x);
+    const double power1=std::pow(x,.7),power2=std::pow(x,-.28);
+    const double m1=.5-.4*power1,m2=1-.79*power2;
+    Require(m1!=m2,"roughness correlation derivative at branch intersection");
+    const double exponent=m1>m2?m1:m2;
+    const double exponentK=(m1>m2?-.28*power1:.2212*power2)/(2*K);
+    const double b=-10.7*std::expm1(exponent*logx);
+    const double bK=-10.7*std::exp(exponent*logx)*(exponentK*logx+exponent/(2*K));
+    const double zv=m_p.nu*b/root,zvK=m_p.nu/root*(bK-b/(2*K));
+    Require(std::isfinite(zv) && zv<0,"outside selected negative-intercept roughness branch");
+    const double a=m_p.kappa*std::sqrt(K/m_p.qe);
+    ReferenceValue value{a*(r-zv),a*(r-zv)/(2*K)-a*zvK,a};
+    Require(std::isfinite(value.value) && value.value>0 && std::isfinite(value.dK),"invalid auxiliary viscosity");
+    return value;
+}
+
+ReferenceValue Reference::DependentEpsilon(double K,double r) const
+{
+    CheckRadius(r); Require(r<=m_p.H,"dependent wall epsilon requested outside inner domain");
+    const double A=Amplitude(K),Ap=AmplitudeDerivative(K),c=Cutoff(K);
+    // At the kink use the plateau-side derivative; MMS derivative evaluation
+    // must avoid r=c. This prescribed max law is not a positivity clamp.
+    if (r<=c) return {A/c,Ap/c-A*CutoffDerivative(K)/(c*c),0.};
+    return {A/r,Ap/r,-A/(r*r)};
+}
+
+double Reference::InletQ(double r) const
+{
+    return double(HistoricalQ(r,m_inletA,m_inletCutoff,m_inletD,m_inletSlope,m_p.nu));
+}
+double Reference::InletU(double r) const
+{
+    CheckRadius(r);
+    return r<=m_p.H?m_p.tau0/m_inletSlope*std::log1p(m_inletSlope*r/m_inletD)
+                     :m_p.uTau/m_p.kappa*std::log(r/m_p.z0);
+}
+double Reference::InletK(double r) const
+{
+    CheckRadius(r); if (r>=m_p.H) return m_p.KIn;
+    using Real=long double;
+    struct Panel { Real a,b,budget; };
+    const Real budget=2e-12L*m_p.KIn;
+    std::vector<Panel> pending;
+    if(r<m_inletCutoff)
+    {
+        const Real leftBudget=budget*(Real(m_inletCutoff)-r)/(Real(m_p.H)-r);
+        pending.push_back({r,m_inletCutoff,leftBudget});
+        pending.push_back({m_inletCutoff,m_p.H,budget-leftBudget});
+    }
+    else pending.push_back({r,m_p.H,budget});
+    Real correction=0,totalError=0;
+    while(!pending.empty())
+    {
+        const Panel panel=pending.back();pending.pop_back();
+        const Real half=(panel.b-panel.a)/2,mean=panel.a+half;
+        // Installed Boost's adaptive routine scales the estimate/L1 but not
+        // its returned local error. Own the mapping and subdivision here:
+        // integrate on [-1,1], with the physical Jacobian INSIDE f and no
+        // Boost recursion. Both estimates and errors now have k units.
+        const auto mapped=[&](Real t)
+        {
+            const Real x=mean+half*t;
+            return half*HistoricalQ(x,m_inletA,m_inletCutoff,m_inletD,m_inletSlope,m_p.nu)
+                       /(Real(m_inletD)+Real(m_inletSlope)*x);
+        };
+        Real error=0,l1=0,coarseError=0;
+        const Real value=boost::math::quadrature::gauss_kronrod<Real,61>::integrate(
+            mapped,Real(-1),Real(1),0,Real(2e-13L),&error,&l1);
+        const Real coarse=boost::math::quadrature::gauss_kronrod<Real,31>::integrate(
+            mapped,Real(-1),Real(1),0,Real(2e-13L),&coarseError);
+        error=std::max(error,std::abs(value-coarse));
+        auto failure=[&](const char *reason)
+        {
+            std::ostringstream message;message<<std::setprecision(21)<<reason
+                <<"; requested_r="<<r<<" panel_a="<<panel.a<<" panel_b="<<panel.b
+                <<" value="<<value<<" error="<<error<<" L1="<<l1
+                <<" GK31_error="<<coarseError<<" panel_budget="<<panel.budget;
+            throw std::runtime_error(message.str());
+        };
+        if(!std::isfinite(value)||!std::isfinite(coarse)||!std::isfinite(error)||
+           !std::isfinite(coarseError)||!std::isfinite(l1)||error<0||coarseError<0||l1<0)
+            failure("nonfinite/invalid historical inlet k quadrature");
+        if(error<=panel.budget){correction+=value;totalError+=error;continue;}
+        if(!(mean>panel.a&&mean<panel.b))
+            failure("historical inlet k quadrature exhausted representable interval progress");
+        pending.push_back({mean,panel.b,panel.budget/2});
+        pending.push_back({panel.a,mean,panel.budget/2});
+    }
+    Require(totalError<=budget,"historical inlet k quadrature exceeded global absolute error guard");
+    const double k=double(Real(m_p.KIn)-correction);
+    Require(std::isfinite(k) && k>0,"historical inlet k is nonpositive"); return k;
+}
+double Reference::InletE(double r) const
+{ CheckRadius(r); Require(r>=m_p.H,"no transported inner inlet epsilon"); return m_inletA/r; }
+double Reference::InletUGradient(double r) const
+{ CheckRadius(r); return r<=m_p.H?m_p.tau0/(m_inletD+m_inletSlope*r):m_p.uTau/(m_p.kappa*r); }
+double Reference::InletKGradient(double r) const
+{ CheckRadius(r); return r<m_p.H?InletQ(r)/(m_inletD+m_inletSlope*r):0.; }
+double Reference::InletEGradient(double r) const
+{ return -InletE(r)/r; }
+std::array<double,2> Reference::OutletTraction(double r) const
+{
+    CheckRadius(r); double tx=m_p.KIn/m_p.Ne;
+    if (r>.4*m_p.H && r<=.75*m_p.H) tx=m_outlet[0].Evaluate(r);
+    else if (r>.75*m_p.H && r<=m_p.H) tx=m_outlet[1].Evaluate(r);
+    else if (r>m_p.H) tx=m_outlet[2].Evaluate(r==m_p.topRadius?m_outlet[2].upper:std::log(r/m_p.H));
+    return {tx,m_p.tau0};
+}
+double Reference::TopEpsilonOutwardFlux() const
+{ return m_p.nu*m_inletA/(m_p.topRadius*m_p.topRadius)+m_p.Cd*m_p.KIn*m_p.KIn/(m_p.sigmaE*m_p.topRadius); }
+}

@@ -1,0 +1,98 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v4/h27/boundary_split_audit.py",
+    "--native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/qref-prefix-fixtures-v1/mms-q24.result.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--oracle",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-q24-independent-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/boundary-cutoff-causal-audit-v3.json",
+    "--compare-current",
+    "--seconds",
+    "180"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 210.0,
+  "utc": "2026-11-17T12:33:44.966851+00:00",
+  "allocation": {
+    "workers": 7,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 479531,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v7.py"
+      },
+      {
+        "pid": 480553,
+        "parent": 479531,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label coupled-historical-independent-v1 --phase analysis --seconds 300 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v7/solvers/IncNavierStokesSolver/Tests/RANS/h27/coupled_oracle.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v4/historical.result.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-historical-independent-v1.json --seconds 270 --direct --direct-seconds 150"
+      },
+      {
+        "pid": 480555,
+        "parent": 480553,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v7/solvers/IncNavierStokesSolver/Tests/RANS/h27/coupled_oracle.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v4/historical.result.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-historical-independent-v1.json --seconds 270 --direct --direct-seconds 150"
+      },
+      {
+        "pid": 480614,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label boundary-cutoff-causal-audit-v3 --phase analysis --seconds 210 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v4/h27/boundary_split_audit.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/qref-prefix-fixtures-v1/mms-q24.result.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --oracle /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-q24-independent-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/boundary-cutoff-causal-audit-v3.json --compare-current --seconds 180"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v4/h27/boundary_split_audit.py",
+      "bytes": 17947,
+      "sha256": "f016a0efd6b9ee142e3acf874a4e5abf93997d1209cb6f9057558e52ed9ec3dc"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/qref-prefix-fixtures-v1/mms-q24.result.json",
+      "bytes": 59992,
+      "sha256": "dfb1f50247f92d8a090bf6d8542a4c65d7fa8360b8f2fa73818e0721b9c285f0"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-q24-independent-v1.json",
+      "bytes": 20673,
+      "sha256": "0ae3af5b4d7e3bbd7af569fd3eb148e76d56f74878aa9986b05797c353dcb5eb"
+    }
+  ]
+}

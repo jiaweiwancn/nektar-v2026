@@ -1,0 +1,254 @@
+{
+  "schema": "WJH27IndependentCoupledSteadyOracleV1",
+  "status": "PASS_CURRENT_COUPLED_STEADY_ONLY",
+  "full_coupled_gate_pass": false,
+  "current_coupled_step_gate_pass": false,
+  "current_coupled_steady_gate_pass": true,
+  "direct_reference_gate_pass": false,
+  "platform": "linux",
+  "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v9/steady-poly-seed.result.json",
+  "table": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+  "source_sha256": "5154978921f4252608ab3b0f913423446b89dc3a9e3dd506bd2fa8522833d5d4",
+  "continuous_MMS_source_sha256": "dc0283398bfa0a41870134459c3e3d07ca016a4ca13ae643e8b83ffc1699dc6a",
+  "independent_WJ_source_sha256": "f5c97e5c1f5426df4ac363b8d8dd99b84d636514a0cb899dec1219ceda4b35e9",
+  "independent_basis_sha256": "632e5cbcdd7a40a993c90cde2aefc3785d73a5f4d1b9634594ea3bb3c9d48b69",
+  "scope": "Current true steady MMS residual and optional independent dense steady reference only. No advancing-time, temporal-order, physical steady-reference or full H27 claim.",
+  "forcing_route": "Continuous analytic t=0 MMS forcing integrated by parts, with analytic u_t,w_t,k_t,epsilon_t removed. No time-mass, EX2 load or projected A_h*target source.",
+  "steady_mode": true,
+  "native_sha256": "c03fdaa8baa36460be7ad110e3af6c27c1d353e8f09551055748dcc343f42532",
+  "table_sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+  "native_source_identity": "402409a164db97ee5a5799623f79b27e84a2696f9fe817ff7dfa01b1a604dd37",
+  "native_signature": "c22ca04917a1e2a641767889b919d0eaf86d8d39af1083fd1597a424ad8c7530",
+  "native_configuration": {
+    "quadratureX": 8,
+    "quadratureR": 12,
+    "linear_tolerance": 1e-11,
+    "nonlinear_tolerance": 1e-10,
+    "maximum_iterations": 60,
+    "mms_body_amplitude": 0,
+    "mms_variant": "PolynomialScalarsV1"
+  },
+  "mms_variant": "PolynomialScalarsV1",
+  "mms_body_amplitude": 0.0,
+  "physical_time_advanced": 0.0,
+  "alpha": 0.0,
+  "ex2_exercised": false,
+  "temporal_order_qualified": false,
+  "physical_reference_gate_pass": false,
+  "history_scheme": "STEADY_CURRENT_ADVECTION_NO_TIME_HISTORY",
+  "steady_seed_state_sha256": "be849d094faeb0c59a5c1e7e3fa34e145c4ca0c10897ff92f985825466361e04",
+  "seed_binding": "input_history.current is the original fresh seed; previous_sha256 binds the solved state, not this seed.",
+  "independent_assemblies": [
+    {
+      "quadrature": [
+        20,
+        24
+      ],
+      "current_residual": {
+        "momentum": 1.048991429824102e-11,
+        "k": 3.5372313642391314e-11,
+        "epsilon": 2.5461249312164055e-11,
+        "continuity": 8.706134945723505e-17,
+        "gauge": 2.207434758991317e-18
+      },
+      "stored_current_advection_error": {
+        "momentum": 1.4697837316303332e-19,
+        "k": 5.016512212038392e-17,
+        "epsilon": 2.0826474480332294e-16
+      },
+      "current_trace": {
+        "k": 5.896370987070791e-16,
+        "epsilon": 8.381647800865865e-16,
+        "velocity": 6.410124212343662e-18
+      },
+      "seed_trace": {
+        "k": 5.896370987070791e-16,
+        "epsilon": 6.072382144024151e-16,
+        "velocity": 6.410124212343662e-18
+      }
+    },
+    {
+      "quadrature": [
+        24,
+        32
+      ],
+      "current_residual": {
+        "momentum": 1.0489914120907665e-11,
+        "k": 3.537233241809339e-11,
+        "epsilon": 2.546223355015511e-11,
+        "continuity": 8.465453604101777e-17,
+        "gauge": 2.630951236878316e-18
+      },
+      "stored_current_advection_error": {
+        "momentum": 1.5407976697740442e-19,
+        "k": 1.8904692883541993e-16,
+        "epsilon": 5.735702705423323e-16
+      },
+      "current_trace": {
+        "k": 6.025010898808089e-16,
+        "epsilon": 5.195990620922472e-16,
+        "velocity": 6.613633252161577e-18
+      },
+      "seed_trace": {
+        "k": 6.025010898808089e-16,
+        "epsilon": 7.403916541870411e-16,
+        "velocity": 6.613633252161577e-18
+      }
+    }
+  ],
+  "quadrature_difference_dual": {
+    "momentum": 1.3854916234837014e-17,
+    "k": 1.2947059340718464e-15,
+    "epsilon": 5.0282331132592864e-15,
+    "continuity": 8.479263810002105e-18,
+    "gauge": 4.8977038856309144e-20
+  },
+  "current_residual_pass": true,
+  "independent_quadrature_pass": true,
+  "stored_current_advection_pass": true,
+  "essential_trace_pass": true,
+  "continuity_check": "Physical D*U and pressure mean are checked directly; no gauge multiplier can absorb a continuity defect.",
+  "negative_controls": {
+    "frozen_seed_scalar_and_source": {
+      "change_dual": {
+        "momentum": 1.0934584327012143e-05,
+        "k": 0.0019026290640179236,
+        "epsilon": 0.0031913431706608857
+      },
+      "status": "DETECTED"
+    },
+    "stale_seed_instead_of_current_advection": {
+      "change_dual": {
+        "momentum": 3.1255391977094105e-14,
+        "k": 4.18866278240907e-05,
+        "epsilon": 0.00016120956271361834
+      },
+      "status": "DETECTED"
+    },
+    "missing_current_advection": {
+      "change_dual": {
+        "momentum": 1.4299943376374997e-05,
+        "k": 9.904795670665265e-05,
+        "epsilon": 0.00044345810898522843
+      },
+      "status": "DETECTED"
+    },
+    "retaining_unsteady_MMS_time_derivatives": {
+      "change_dual": {
+        "momentum": 6.298287924473594e-05,
+        "k": 0.014702475523476926,
+        "epsilon": 0.051308464367063135
+      },
+      "status": "DETECTED"
+    },
+    "replace_actual_Q3_k_by_Q2_projection": {
+      "change_dual": {
+        "momentum": 4.780275215308941e-14,
+        "k": 0.0,
+        "epsilon": 0.0
+      },
+      "status": "NOT_EXERCISED_AT_THIS_STATE"
+    },
+    "missing_sampled_AWF_convection": {
+      "change_dual": {
+        "momentum": 4.275308008852807e-06,
+        "k": 0.0,
+        "epsilon": 0.0
+      },
+      "status": "DETECTED"
+    },
+    "missing_sampled_AWF_pressure": {
+      "change_dual": {
+        "momentum": 9.849042158188213e-05,
+        "k": 0.0,
+        "epsilon": 0.0
+      },
+      "status": "DETECTED"
+    },
+    "missing_sampled_AWF_Q3_k": {
+      "change_dual": {
+        "momentum": 4.099181148843315e-05,
+        "k": 0.0,
+        "epsilon": 0.0
+      },
+      "status": "DETECTED"
+    },
+    "replace_conservative_scalar_transport_by_advective_form": {
+      "change_dual": {
+        "momentum": 0.0,
+        "k": 2.1714655320806388e-11,
+        "epsilon": 4.431686785802616e-12
+      },
+      "status": "NOT_EXERCISED_AT_THIS_STATE"
+    },
+    "missing_bulk_physical_body": {
+      "change_dual": {
+        "momentum": 0.0,
+        "k": 0.0,
+        "epsilon": 0.0
+      },
+      "status": "NOT_EXERCISED_AT_THIS_STATE"
+    },
+    "missing_sampled_AWF_body": {
+      "change_dual": {
+        "momentum": 0.0,
+        "k": 0.0,
+        "epsilon": 0.0
+      },
+      "status": "NOT_EXERCISED_AT_THIS_STATE"
+    }
+  },
+  "nonzero_prescribed_body_mutation_coverage_pass": false,
+  "native_prescribed_body_action_comparison": {
+    "actions": {
+      "mms_bulk_body_rhs": {
+        "momentum_dual_error": 0.0,
+        "passed": true
+      },
+      "mms_sampled_body_rhs": {
+        "momentum_dual_error": 0.0,
+        "passed": true
+      }
+    },
+    "status": "PASS",
+    "momentum_dual_tolerance": 1e-10,
+    "limitation": "The net manufactured source cancels body additions; a solved state alone cannot verify separate body paths."
+  },
+  "nonzero_prescribed_body_coverage_pass": false,
+  "essential_reaction_diagnostics": {
+    "k": {
+      "constant_test_full_residual": 3.0208650793513148e-15,
+      "essential_coefficient_reaction_norm": 2.7585267659491887e-15,
+      "note": "Essential reactions are reported, not constrained to zero."
+    },
+    "epsilon": {
+      "constant_test_full_residual": -5.266139358351546e-16,
+      "essential_coefficient_reaction_norm": 7.251595272013968e-16,
+      "note": "Essential reactions are reported, not constrained to zero."
+    }
+  },
+  "direct_nonlinear": {
+    "status": "NOT_MET_DIRECT_REFERENCE",
+    "exception": "ValueError",
+    "reason": "current K outside qualified interval",
+    "iterations": []
+  },
+  "norm_limits": {
+    "momentum": 1e-09,
+    "continuity": 1e-09,
+    "gauge": 1e-09,
+    "k": 1e-08,
+    "epsilon": 1e-08
+  },
+  "quadrature_reserve_fraction": 0.2,
+  "native_reported_residuals": [
+    1.0489953463569473e-11,
+    9.551668267715032e-17,
+    4.411487186605813e-19,
+    3.537220270269166e-11,
+    2.5463015447618033e-11,
+    0
+  ],
+  "norms": "Same free-test reference-weighted mass duals and volume factors as the unsteady audit; alpha=0 and no mass normalization.",
+  "elapsed_seconds": 13.468642533000093
+}

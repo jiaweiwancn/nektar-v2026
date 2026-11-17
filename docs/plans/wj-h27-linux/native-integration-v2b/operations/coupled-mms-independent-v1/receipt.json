@@ -1,0 +1,87 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/h27/coupled_mms_check.py",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--probe",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-mms-native-v1.json",
+    "--output",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-mms-independent-v1.json"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 300.0,
+  "utc": "2026-11-17T09:38:33.395136+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 475942,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/v3-helpers-controller.py"
+      },
+      {
+        "pid": 475963,
+        "parent": 475942,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label coupled-mms-independent-v1 --phase analysis --seconds 300 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/h27/coupled_mms_check.py --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --probe /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-mms-native-v1.json --output /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-mms-independent-v1.json"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/h27/coupled_mms_check.py",
+      "bytes": 20341,
+      "sha256": "9adac0ae7c9ef893e2678990732f31b6efff181fcc41f0ef4e248d56a98404b9"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-mms-native-v1.json",
+      "bytes": 184178,
+      "sha256": "5410c762e3012bed0d11ec78c5eafce0028ee86fd6b4d5bd2e906601459adfdd"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 1.5435338689712808,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 90734592,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/coupled-mms-independent-v1/command.log",
+    "bytes": 143,
+    "sha256": "64ad11fd697a79a5596d4fd2359db405d5fdb39e625c7eef68f3b1aaaddd8aa1"
+  }
+}

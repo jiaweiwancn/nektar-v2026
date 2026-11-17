@@ -65,6 +65,7 @@ enum SolverType
     eRANSVelocityCorrectionScheme,
     eRANSEquilibriumWallSystem,
     eRANSEquilibriumWallEvolution,
+    eWJNativeCoupledV2,
 };
 
 enum EquationType

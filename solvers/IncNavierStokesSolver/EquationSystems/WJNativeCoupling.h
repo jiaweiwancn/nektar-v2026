@@ -1,0 +1,160 @@
+// SPDX-License-Identifier: MIT
+#ifndef NEKTAR_WJ_NATIVE_COUPLING_H
+#define NEKTAR_WJ_NATIVE_COUPLING_H
+#include <IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.h>
+#include <IncNavierStokesSolver/EquationSystems/WJNativeScalar.h>
+#include <IncNavierStokesSolver/EquationSystems/WJNativeReference.h>
+#include <IncNavierStokesSolver/EquationSystems/WJNativeCoupledMMS.h>
+#include <IncNavierStokesSolver/EquationSystems/WJNativeWallV2.h>
+#include <IncNavierStokesSolver/EquationSystems/WJNativeSteadyKrylov.h>
+#include <filesystem>
+#include <algorithm>
+#include <map>
+
+namespace Nektar::WJNative
+{
+struct CoupledState { Vec flow,k,epsilon; };
+struct CoupledHistory
+{
+    std::uint64_t step=0;
+    double time=0,dt=0;
+    CoupledState current,previous,advection,previousAdvection;
+};
+struct CoupledOptions
+{
+    double dt=.005,linearTolerance=1e-12,nonlinearTolerance=1e-10,mmsBodyAmplitude=0;
+    int maximumIterations=60,quadratureX=8,quadratureR=12,andersonDepth=0;
+    bool manufactured=false,recordNonlinearTrace=false;
+    ConstitutiveBackend backend=ConstitutiveBackend::Historical;
+    std::string sourceIdentity,mmsVariant="Historical",initialSourceIdentity;
+};
+struct CoupledResidual
+{
+    double momentum=0,continuity=0,gauge=0,k=0,epsilon=0,trace=0;
+    double Maximum()const{return std::max({momentum,continuity,gauge,k,epsilon,trace});}
+};
+struct CoupledTiming
+{
+    double constitutive=0,wall=0,assembly=0,flow=0,scalar=0,rebuild=0,
+           guards=0,forcing=0,residual=0,nonlinear=0,io=0,other=0;
+    double Sum()const{return constitutive+wall+assembly+flow+scalar+rebuild+guards+forcing+residual+nonlinear+io+other;}
+};
+struct CoupledStepInfo
+{
+    int nonlinearIterations=0,flowIterations=0,kIterations=0,epsilonIterations=0,rebuilds=0,retries=0;
+    std::string retryReason;
+    double seconds=0,coefficientDrift=0,minimumK=0,minimumEpsilon=0,
+           minimumCovarianceOverK=0,minimumPrincipalOverMu=0;
+    CoupledResidual residual;
+    CoupledTiming timing;
+    WallEvaluationStats constitutiveStats;
+    struct Iteration {CoupledResidual residual;bool accelerated=false;double seconds=0;};
+    std::vector<Iteration>nonlinearTrace;
+    int accelerationProposals=0,accelerationAccepted=0,accelerationInadmissible=0;
+};
+
+/** Supported flat serial, fully coupled BDF2/EX2 velocity/modified-pressure,
+ * full-domain k and outer-only epsilon. E_w and the reference cutoff are
+ * current dependent data. No artificial equilibrium source or scalar floor.
+ */
+class Coupling
+{
+public:
+    Coupling(std::vector<MultiRegions::ContFieldSharedPtr> fields,Geometry geometry,
+             std::shared_ptr<const Reference> reference,CoupledOptions options);
+    CoupledHistory Initialise()const;
+    CoupledHistory FreshHistory(const CoupledState&state)const;
+    CoupledHistory ReadInitialFields(const std::string&path,bool allowCandidate=false);
+    CoupledHistory SteadyCandidateHistory(const Vec&unknowns)const;
+    CoupledStepInfo AuditSteadyState(const CoupledState&state,double time=0);
+    CoupledStepInfo Advance(CoupledHistory&history,bool injectRetry=false);
+    const CoupledStepInfo&LastAttemptInfo()const{return m_lastAttempt;}
+    CoupledResidual SteadyResidual(const CoupledState&state,double time=0);
+    /** Native steady equations with dependent Gamma eliminated. A failed
+     * reference solve preserves the caller's complete history. On success a
+     * fresh step-zero history is constructed; Newton iterations are never
+     * interpreted as elapsed physical time. */
+    SteadyKrylovResult SolveSteady(CoupledHistory&history,const SteadyKrylovOptions&options,
+                                 CoupledStepInfo&final,double preconditionerMass=0);
+    const MixedFlow&FlowKernel()const{return m_flow;}
+    const Scalar&KKernel()const{return m_k;}
+    const Scalar&EpsilonKernel()const{return m_e;}
+    const RuleFactory&Factory()const{return m_rules;}
+    const Reference&ReferenceModel()const{return *m_reference;}
+    const CoupledOptions&Options()const{return m_options;}
+    const std::string&Signature()const{return m_signature;}
+    double TopRadius()const{return m_top;}
+    void Store(const CoupledState&state)const;
+    void WriteHistory(const std::filesystem::path&path,const CoupledHistory&history)const;
+    CoupledHistory ReadHistory(const std::filesystem::path&path)const;
+    void Report(std::ostream&out,const CoupledHistory&history,const CoupledStepInfo&info,
+                bool includeCoefficients=false)const;
+    std::array<double,5> MMSErrors(const CoupledState&state,double time)const;
+    void ResetPreconditioners();
+private:
+    struct Data
+    {
+        Rules kRules;
+        std::vector<Vec>mu,Dk,De,sourceK,sourceE,reactionE;
+        std::vector<std::vector<Tensor>>remainder;
+        Vec coefficients,kCoefficients,eCoefficients;
+        double minK=1e100,minE=1e100,minCovariance=1e100,minPrincipal=1e100,traceError=0;
+    };
+    struct Loads { Vec flow,k,epsilon; };
+    void BuildTopology();
+    const Element&Owner(int geometry)const;
+    const Element&HOwner(const Element&element)const;
+    NativeRule HRule(const NativeRule&rule)const;
+    double InterfaceK(const Element&element,double x,const CoupledState&state)const;
+    std::array<double,2> InterfaceVelocity(const Element&element,double x,const CoupledState&state)const;
+    void CheckTraceEvaluation()const;
+    double NativeRadius(double physicalZ)const;
+    double NativeX(double x)const;
+    CoupledState DirichletState(const CoupledState&state,double time)const;
+    Data Evaluate(const CoupledState&state,double time,bool principal,CoupledTiming&timing)const;
+    Loads Forcing(double time,CoupledTiming&timing,bool freezeManufactured=false)const;
+    Sparse Strain(const Data&data)const;
+    Vec RemainderLoad(const Data&data)const;
+    Vec MomentumAdvection(const CoupledState&state)const;
+    Sparse MomentumTransportJacobian(const CoupledState&state)const;
+    CoupledState Advection(const CoupledState&state,const Rules&kRules)const;
+    CoupledResidual Residual(const CoupledState&state,const Data&data,const Loads&base,
+                             double alpha,double time,CoupledTiming&timing)const;
+    Vec FlowLift(double time)const;
+    Vec PackFree(const CoupledState&state)const;
+    CoupledState FromFree(const Vec&free,double time)const;
+    Vec UnknownScales()const;
+    Vec KVolumeLoad(const CoupledState&state,const Data&data)const;
+    Vec EVolumeLoad(const CoupledState&state,const Data&data)const;
+    double Drift(const Vec&current,const Vec&previous)const;
+    void CheckHistory(const CoupledHistory&history)const;
+    std::vector<MultiRegions::ContFieldSharedPtr>m_fields;
+    Geometry m_geometry;
+    std::shared_ptr<const Reference>m_reference;
+    CoupledOptions m_options;
+    MixedFlow m_flow;
+    RuleFactory m_rules;
+    Scalar m_k,m_e;
+    std::unique_ptr<CoupledMMS>m_mms;
+    double m_left=0,m_right=0,m_top=0,m_volume=0;
+    std::map<int,int>m_geometryIndex,m_hOwner;
+    struct KTrace {std::array<int,4>ids;std::array<double,4>signs;};
+    std::map<int,KTrace>m_hKTrace;
+    std::vector<std::pair<int,int>>m_boundaryFaces;
+    std::string m_signature;
+    Vec m_preconditionerCoefficients;
+    Vec m_kPreconditionerCoefficients,m_ePreconditionerCoefficients;
+    double m_flowFactorAlpha=-1,m_kFactorAlpha=-1,m_eFactorAlpha=-1;
+    CoupledHistory m_lastInputHistory;
+    CoupledStepInfo m_lastAttempt;
+    bool m_hasInputHistory=false;
+    mutable Vec m_bulkBodyAction,m_sampledBodyAction;
+    mutable Vec m_physicalFlowLift,m_physicalKLift;
+    mutable bool m_hasPhysicalForcing=false;
+    mutable Loads m_physicalForcing;
+    std::string m_initialPacketSha,m_initialSourceStateSha;
+    bool m_initialProjected=false,m_initialCandidate=false;
+    mutable WallEvaluationStats m_constitutiveStats;
+};
+}
+#endif

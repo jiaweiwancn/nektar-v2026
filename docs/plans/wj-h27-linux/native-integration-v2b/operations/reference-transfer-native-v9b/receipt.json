@@ -1,0 +1,76 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v9/IncNavierStokesSolver",
+    "--use-opt-file",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v9/reference-transfer.xml.opt",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v9/reference-transfer.xml"
+  ],
+  "phase": "science",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T14:21:00.415009+00:00",
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 484155,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label reference-transfer-native-v9b --phase science --seconds 30 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v9/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v9/reference-transfer.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v9/reference-transfer.xml"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v9/IncNavierStokesSolver",
+      "bytes": 379,
+      "sha256": "cf61a221a3a9116543c4ffef5d25c9e6b81f8636d963d7607a59a2162483607b"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v9/reference-transfer.xml.opt",
+      "bytes": 55,
+      "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v9/reference-transfer.xml",
+      "bytes": 5765,
+      "sha256": "4f124e719fee00892e4f45919f2fd9bdaf73d96f4e2d314b744a6cb602bfe9ff"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 1.165389531000983,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 331776,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/reference-transfer-native-v9b/command.log",
+    "bytes": 1962,
+    "sha256": "4145950ed74a9e346c936aa8cee2f80851ebd8e6e3a907214ba04cb0a6911549"
+  }
+}

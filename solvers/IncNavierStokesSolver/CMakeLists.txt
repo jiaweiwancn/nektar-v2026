@@ -77,6 +77,26 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./BoundaryConditions/MovingFrameWall.cpp
         )
 
+    OPTION(NEKTAR_WJ_NATIVE_COUPLED "Build opt-in H27 flat serial coupled WJ/AWF solver" OFF)
+    IF(NEKTAR_WJ_NATIVE_COUPLED)
+        FIND_PACKAGE(Eigen3 REQUIRED NO_MODULE)
+        SET(wj_native_sources WJNativeFlow WJNativeMixedFlow WJNativeWallV2
+            WJNativeRules WJNativeScalar WJNativeReference WJNativeAdmissibility
+            WJNativeCoupledMMS WJNativeCoupling WJNativeCoupled WJNativeConstitutive
+            WJNativePerturbation WJNativeSteadyKrylov WJNativeInitialFields)
+        FOREACH(name IN LISTS wj_native_sources)
+            TARGET_SOURCES(IncNavierStokesSolver-obj PRIVATE EquationSystems/${name}.cpp)
+        ENDFOREACH()
+        TARGET_LINK_LIBRARIES(IncNavierStokesSolver-obj PUBLIC Eigen3::Eigen)
+        TARGET_LINK_LIBRARIES(IncNavierStokesSolver PRIVATE Eigen3::Eigen)
+        INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/Tests/RANS/h27/source_identity.cmake)
+        wj_h27_source_identity("${CMAKE_SOURCE_DIR}" wj_source_identity)
+        TARGET_COMPILE_DEFINITIONS(IncNavierStokesSolver-obj PRIVATE WJ_H27_SOURCE_ID="${wj_source_identity}")
+        IF(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+            TARGET_COMPILE_OPTIONS(IncNavierStokesSolver-obj PRIVATE -ffp-contract=off -fno-fast-math)
+        ENDIF()
+    ENDIF()
+
     IF(NEKTAR_BUILD_SOLVER_LIBS)
         SET(IncNavierStokesSolverHeaders
             AdvectionTerms/AdjointAdvection.h
@@ -131,6 +151,12 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
             BoundaryConditions/StaticWall.h
             BoundaryConditions/TransMovingWall.h
             BoundaryConditions/MovingFrameWall.h)
+        IF(NEKTAR_WJ_NATIVE_COUPLED)
+            FOREACH(name IN LISTS wj_native_sources)
+                LIST(APPEND IncNavierStokesSolverHeaders EquationSystems/${name}.h)
+            ENDFOREACH()
+            LIST(APPEND IncNavierStokesSolverHeaders EquationSystems/WJNativeFailures.h)
+        ENDIF()
         # Create separate library. No need to pass source files, as the executable's
         # LIBRARY_SOURCES objects will be reused
         ADD_SOLVER_LIBRARY(IncNavierStokesSolver HEADERS

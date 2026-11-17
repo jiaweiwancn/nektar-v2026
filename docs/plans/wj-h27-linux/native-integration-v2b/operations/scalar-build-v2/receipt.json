@@ -1,0 +1,83 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/build.py",
+    "--root",
+    "/home/jay/build/wj-h27-coupling-r1-20261117",
+    "--version",
+    "2",
+    "--targets",
+    "WJH27ScalarProbe,WJH27MixedProbe,WJH27PrincipalProbe,WJNativeFlowDriver"
+  ],
+  "phase": "build",
+  "seconds_cap": 300.0,
+  "utc": "2026-11-17T08:55:55.887455+00:00",
+  "allocation": {
+    "workers": 6,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 474310,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/scalar-controller-v2.py"
+      },
+      {
+        "pid": 474316,
+        "parent": 474310,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label reference-tables-v1 --phase analysis --seconds 300 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/fast_reference.py --output /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --diagnostic-seconds 280"
+      },
+      {
+        "pid": 474317,
+        "parent": 474310,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label scalar-build-v2 --phase build --seconds 300 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/build.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --version 2 --targets WJH27ScalarProbe,WJH27MixedProbe,WJH27PrincipalProbe,WJNativeFlowDriver"
+      }
+    ]
+  },
+  "reservation": 16,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/build.py",
+      "bytes": 2653,
+      "sha256": "4ce5d976a7c138f5c7009a77ed38791d735ed9fe2642dc2790d866d59c6d3da4"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 84.62459319602931,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 3568508928,
+  "peak_host_workers": 17,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/scalar-build-v2/command.log",
+    "bytes": 19029,
+    "sha256": "7183693455f94d877cddf0f190dd8407e4a1a00f995f31eaf69aad1324fd96a6"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "schema": "WJH27SteadyKrylovCheckV1",
+  "status": "PASS",
+  "input_sha256": "4faf31502d2cf22be070fd05de49cb35284a4294016814353d5d0941645453c9",
+  "checker_sha256": "e74f6d5565c412b94a6e16f2a9dda16e6f8039719a01a4145978a76cc2128a23",
+  "maximum_returned_residual_error": 2.485059451591309e-16,
+  "maximum_physical_preconditioner_error": 0.0,
+  "maximum_analytic_directional_error": 1.0723269951995462e-10,
+  "maximum_halving_diagnostic_error": 2.5849394142282115e-26,
+  "solve_cases": {
+    "validity_rejection": {
+      "status": "CONVERGED",
+      "reason": "current true steady residual meets caller acceptance norm",
+      "true_norm": 8.548717289613706e-16,
+      "has_evaluated_state": true,
+      "accepted_newton_steps": 6
+    },
+    "typed_residual_rejection": {
+      "status": "CONVERGED",
+      "reason": "current true steady residual meets caller acceptance norm",
+      "true_norm": 8.548717289613706e-16,
+      "has_evaluated_state": true,
+      "accepted_newton_steps": 6
+    },
+    "newton_bound": {
+      "status": "NOT_CONVERGED",
+      "reason": "NEWTON_NOT_CONVERGED: declared Newton iteration bound exhausted",
+      "true_norm": 2.0423274993197094,
+      "has_evaluated_state": true,
+      "accepted_newton_steps": 1
+    },
+    "linear_bound": {
+      "status": "NOT_CONVERGED",
+      "reason": "LINEAR_NOT_CONVERGED: declared Krylov cycles did not meet both current residual tests",
+      "true_norm": 2.5965067637299244,
+      "has_evaluated_state": true,
+      "accepted_newton_steps": 0
+    },
+    "line_search_bound": {
+      "status": "NOT_CONVERGED",
+      "reason": "LINE_SEARCH_NOT_CONVERGED: declared feasible Armijo trials exhausted",
+      "true_norm": 2.5965067637299244,
+      "has_evaluated_state": true,
+      "accepted_newton_steps": 0
+    },
+    "deadline_before_base": {
+      "status": "NOT_CONVERGED",
+      "reason": "DEADLINE: finite steady-solve wall budget exhausted",
+      "true_norm": 0,
+      "has_evaluated_state": false,
+      "accepted_newton_steps": 0
+    },
+    "deadline_after_base": {
+      "status": "NOT_CONVERGED",
+      "reason": "DEADLINE: finite steady-solve wall budget exhausted",
+      "true_norm": 2.5965067637299244,
+      "has_evaluated_state": true,
+      "accepted_newton_steps": 0
+    },
+    "best_unaccepted_state": {
+      "status": "NOT_CONVERGED",
+      "reason": "LINE_SEARCH_NOT_CONVERGED: declared feasible Armijo trials exhausted",
+      "true_norm": 0.9900000000044602,
+      "has_evaluated_state": true,
+      "accepted_newton_steps": 0
+    }
+  },
+  "derivative_cases": 6,
+  "fatal_controls": 8,
+  "scope": "Generic finite-dimensional solver only; no coupled PDE convergence, physical qualification or performance claim",
+  "wall_cap_scope": "Cooperative deadline; the intentionally sleeping callback cannot be interrupted"
+}

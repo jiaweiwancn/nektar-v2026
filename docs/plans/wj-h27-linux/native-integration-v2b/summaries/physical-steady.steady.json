@@ -1,0 +1,135 @@
+{
+  "algorithm": "WJH27SteadyJFNKV1",
+  "status": "NOT_CONVERGED",
+  "reason": "DEADLINE: finite steady-solve wall budget exhausted",
+  "converged": false,
+  "has_evaluated_state": true,
+  "true_norm": 0.0030378227451832653,
+  "last_accepted_norm": 0.0030378227451832653,
+  "preconditioner_mass_only": 0,
+  "physical_time_advanced": 0,
+  "residual_evaluations": 123,
+  "validity_evaluations": 125,
+  "preconditioner_applications": 47,
+  "preconditioner_preparations": 4,
+  "jacobian_actions": 58,
+  "fd_rejected_trials": 0,
+  "line_search_rejected_trials": 2,
+  "linear_iterations": 47,
+  "accepted_newton_steps": 3,
+  "total_seconds": 241.292322986,
+  "callback_seconds": {
+    "residual": 228.98775046700004,
+    "validity": 0.14182449900000002,
+    "norm": 0.049961906,
+    "precondition": 0.890679006,
+    "prepare": 11.125283597,
+    "arnoldi": 0.033856956
+  },
+  "newton": [
+    {
+      "iteration": 0,
+      "base_norm": 0.23487173296984373,
+      "forcing": 0.3,
+      "linear_true_norm": 0.028518418515691292,
+      "linear_converged": true,
+      "accepted": true,
+      "accepted_norm": 0.18058699117647228,
+      "accepted_step": 0.25
+    },
+    {
+      "iteration": 1,
+      "base_norm": 0.18058699117647228,
+      "forcing": 0.5,
+      "linear_true_norm": 0.012246988111250374,
+      "linear_converged": true,
+      "accepted": true,
+      "accepted_norm": 0.03592861025782098,
+      "accepted_step": 1
+    },
+    {
+      "iteration": 2,
+      "base_norm": 0.03592861025782098,
+      "forcing": 0.07986811679518603,
+      "linear_true_norm": 0.0021097413144079234,
+      "linear_converged": true,
+      "accepted": true,
+      "accepted_norm": 0.0030378227451832653,
+      "accepted_step": 1
+    },
+    {
+      "iteration": 3,
+      "base_norm": 0.0030378227451832653,
+      "forcing": 0.022127152324528238,
+      "linear_true_norm": 0,
+      "linear_converged": false,
+      "accepted": false,
+      "accepted_norm": 0,
+      "accepted_step": 0
+    }
+  ],
+  "line_search": [
+    {
+      "newton": 0,
+      "trial": 0,
+      "step": 1,
+      "admissible": false,
+      "evaluated": false,
+      "true_norm": 0,
+      "accepted": false,
+      "sufficient_decrease": false,
+      "reason": "current sampled interface K left the qualified reference interval"
+    },
+    {
+      "newton": 0,
+      "trial": 1,
+      "step": 0.5,
+      "admissible": false,
+      "evaluated": false,
+      "true_norm": 0,
+      "accepted": false,
+      "sufficient_decrease": false,
+      "reason": "current sampled interface K left the qualified reference interval"
+    },
+    {
+      "newton": 0,
+      "trial": 2,
+      "step": 0.25,
+      "admissible": true,
+      "evaluated": true,
+      "true_norm": 0.18058699117647228,
+      "accepted": true,
+      "sufficient_decrease": true,
+      "reason": ""
+    },
+    {
+      "newton": 1,
+      "trial": 0,
+      "step": 1,
+      "admissible": true,
+      "evaluated": true,
+      "true_norm": 0.03592861025782098,
+      "accepted": true,
+      "sufficient_decrease": true,
+      "reason": ""
+    },
+    {
+      "newton": 2,
+      "trial": 0,
+      "step": 1,
+      "admissible": true,
+      "evaluated": true,
+      "true_norm": 0.0030378227451832653,
+      "accepted": true,
+      "sufficient_decrease": true,
+      "reason": ""
+    }
+  ],
+  "best_from_accepted_iterate": true,
+  "raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v9/physical-steady.steady.json",
+    "bytes": 1253255,
+    "sha256": "3efba0056ec2e2a862b8a929349212cc73f69240c0bd7a200eb5ccb7214cc9ae"
+  },
+  "scope": "Compact derivation from preserved Linux raw output; complete coefficient/history data remain at raw_artifact path"
+}

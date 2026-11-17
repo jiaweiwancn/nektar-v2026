@@ -1,0 +1,149 @@
+{
+  "schema": "WJH27PhysicalOracleAnalyticControlsV1",
+  "status": "PASS",
+  "source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-verification-v8/h27/physical_oracle_test.py",
+    "sha256": "0b7943da7c74c371fdb7ea2293ade2af28105f3c6cf28fee88826bee440d8498"
+  },
+  "oracle_source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-verification-v8/h27/physical_oracle.py",
+    "sha256": "83ba96a2238c529f755419a216617a6b199bd5fe2ef583414cb60acfed56ec84"
+  },
+  "independent_scalar_WJ_source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-verification-v8/h27/reference_oracle.py",
+    "sha256": "f5c97e5c1f5426df4ac363b8d8dd99b84d636514a0cb899dec1219ceda4b35e9"
+  },
+  "scope": "Analytic coefficient assembly controls only; fixture is not a physical solution and carries no manufactured forcing",
+  "maximum_scaled_errors": {
+    "sampled_known_k_Q3_sign": 2.310927903254509e-16,
+    "sampled_pressure_sign": 1.9201270268323081e-16,
+    "sampled_convective_factor_two_sign": 7.930944661029687e-16,
+    "domain_convection_x": 3.8890045439480054e-16,
+    "domain_convection_r": 1.8024106858644207e-16,
+    "conservative_k_all_test_moments": 8.16062435874902e-15,
+    "conservative_epsilon_all_test_moments": 8.636855994666683e-15,
+    "positive_outward_top_epsilon_sign": 1.296149932823215e-16,
+    "negative_outlet_vertical_traction_load": 1.3397510501962484e-16,
+    "full_3D_WJ_independent_root_tensor": 3.938518545651456e-16,
+    "full_3D_WJ_covariance_trace": 3.938518545651456e-16,
+    "missing_known_k_negative_control": 2.310927903254509e-16
+  },
+  "mutation_sensitivities": {
+    "missing_domain_momentum_convection": {
+      "delta_dual": {
+        "momentum": 0.001782254144258876,
+        "continuity": 0.0,
+        "k": 0.0,
+        "epsilon": 0.0
+      },
+      "mutated_residual": {
+        "momentum": 0.0007470519791388685,
+        "continuity": 0.004883588861769977,
+        "k": 0.2160592859469805,
+        "epsilon": 15.49673037218276
+      },
+      "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+    },
+    "missing_sampled_AWF_convection": {
+      "delta_dual": {
+        "momentum": 0.00013884764466046037,
+        "continuity": 0.0,
+        "k": 0.0,
+        "epsilon": 0.0
+      },
+      "mutated_residual": {
+        "momentum": 0.001799947353613122,
+        "continuity": 0.004883588861769977,
+        "k": 0.2160592859469805,
+        "epsilon": 15.49673037218276
+      },
+      "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+    },
+    "missing_sampled_AWF_pressure": {
+      "delta_dual": {
+        "momentum": 1.76952561806343e-06,
+        "continuity": 0.0,
+        "k": 0.0,
+        "epsilon": 0.0
+      },
+      "mutated_residual": {
+        "momentum": 0.0018022962050357682,
+        "continuity": 0.004883588861769977,
+        "k": 0.2160592859469805,
+        "epsilon": 15.49673037218276
+      },
+      "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+    },
+    "missing_Q3_known_k_force": {
+      "delta_dual": {
+        "momentum": 3.716266406761651e-07,
+        "continuity": 0.0,
+        "k": 0.0,
+        "epsilon": 0.0
+      },
+      "mutated_residual": {
+        "momentum": 0.0018024139139674585,
+        "continuity": 0.004883588861769977,
+        "k": 0.2160592859469805,
+        "epsilon": 15.49673037218276
+      },
+      "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+    },
+    "wrong_known_k_sign": {
+      "delta_dual": {
+        "momentum": 7.432532813523302e-07,
+        "continuity": 0.0,
+        "k": 0.0,
+        "epsilon": 0.0
+      },
+      "mutated_residual": {
+        "momentum": 0.0018024349765694602,
+        "continuity": 0.004883588861769977,
+        "k": 0.2160592859469805,
+        "epsilon": 15.49673037218276
+      },
+      "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+    },
+    "nonconservative_scalar_advection": {
+      "delta_dual": {
+        "momentum": 0.0,
+        "continuity": 0.0,
+        "k": 0.004871100256293069,
+        "epsilon": 0.25126393227059723
+      },
+      "mutated_residual": {
+        "momentum": 0.0018023929277432137,
+        "continuity": 0.004883588861769977,
+        "k": 0.2115733948232415,
+        "epsilon": 15.252541419798922
+      },
+      "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+    },
+    "flipped_natural_boundary_sign": {
+      "delta_dual": {
+        "momentum": 0.0017746959656591407,
+        "continuity": 0.0,
+        "k": 0.0,
+        "epsilon": 0.004540791411096242
+      },
+      "mutated_residual": {
+        "momentum": 0.0021568815150652494,
+        "continuity": 0.004883588861769977,
+        "k": 0.2160592859469805,
+        "epsilon": 15.495253449810164
+      },
+      "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+    }
+  },
+  "accounting_identity_max_error": 1.7073787383700992e-15,
+  "non_solution_steady_residuals": {
+    "momentum": 0.0018023929277432137,
+    "continuity": 0.004883588861769977,
+    "k": 0.2160592859469805,
+    "epsilon": 15.49673037218276
+  },
+  "signed_basis": true,
+  "full_3D_constitutive_cases": 36,
+  "maximum_cubic_residual": 2.8393687004685972e-16,
+  "elapsed_seconds": 0.1850921729928814
+}

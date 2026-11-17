@@ -1,0 +1,18 @@
+/home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v3/h27/boundary_split_audit.py:136: RuntimeWarning: divide by zero encountered in true_divide
+  D = m.nu+m.cd*k*k/(m.sk*E)
+Traceback (most recent call last):
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v3/h27/boundary_split_audit.py", line 287, in <module>
+    main()
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v3/h27/boundary_split_audit.py", line 281, in main
+    raise failure
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v3/h27/boundary_split_audit.py", line 273, in main
+    audit(args, report, started+args.seconds)
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v3/h27/boundary_split_audit.py", line 204, in audit
+    old, old_faces = b.load(16, False)
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v3/h27/boundary_split_audit.py", line 146, in load
+    local = b.T@(w*self.rhs_integrand(x, r, coupled_oracle.NORMALS[side]))
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v3/h27/boundary_split_audit.py", line 137, in rhs_integrand
+    require(np.all(np.isfinite(D)) and np.all(D > 0), 'invalid independent MMS scalar diffusivity')
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v3/h27/boundary_split_audit.py", line 34, in require
+    raise ValueError(reason)
+ValueError: invalid independent MMS scalar diffusivity

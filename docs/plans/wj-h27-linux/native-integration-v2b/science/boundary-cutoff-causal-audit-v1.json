@@ -1,0 +1,37 @@
+{
+  "schema": "WJH27BoundarySplitAuditV1",
+  "status": "FAIL_BOUNDARY_SPLIT_AUDIT",
+  "full_coupled_gate_pass": false,
+  "gate_override": false,
+  "platform": "linux",
+  "source_sha256": "4d72673214c6f419847cc4c708ad376a86d1302dcc57864d60f27d60d0383b8e",
+  "independent_coupled_source_sha256": "6a3571238e2ef6e71fb726b53b5a87fbef183044d2474409c4662389fc0c6f9e",
+  "independent_MMS_source_sha256": "9adac0ae7c9ef893e2678990732f31b6efff181fcc41f0ef4e248d56a98404b9",
+  "independent_basis_source_sha256": "632e5cbcdd7a40a993c90cde2aefc3785d73a5f4d1b9634594ea3bb3c9d48b69",
+  "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/qref-prefix-fixtures-v1/mms-q24.result.json",
+  "table": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+  "scope": "Prescribed MMS k boundary-load quadrature diagnosis only. No corrected native state, new tolerance or gate pass.",
+  "native_sha256": "dfb1f50247f92d8a090bf6d8542a4c65d7fa8360b8f2fa73818e0721b9c285f0",
+  "table_sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+  "native_source_identity": "46eb7a607a3c4731c877feb0303b7e84399c0ad4dd880f8a25f806f1f0c59c5c",
+  "native_signature": "7ef73c68762228efb8212a14278621da1b089232512c8bd26c77a7b3896c2dea",
+  "time": 0.04,
+  "step": 2,
+  "native_reported_residuals": [
+    4.3806904425090907e-11,
+    2.127250381253395e-17,
+    3.2293131114070215e-19,
+    2.645679377941861e-13,
+    1.6669072331615626e-13,
+    0
+  ],
+  "original_oracle": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-q24-independent-v1.json",
+    "sha256": "0ae3af5b4d7e3bbd7af569fd3eb148e76d56f74878aa9986b05797c353dcb5eb",
+    "status": "NOT_MET_CURRENT_COUPLED_STEP"
+  },
+  "original_current_k_residual_norm": 2.2700272615350162e-08,
+  "exception": "TypeError",
+  "reason": "IndependentMMS.__init__() takes 2 positional arguments but 3 were given",
+  "elapsed_seconds": 0.002345415996387601
+}

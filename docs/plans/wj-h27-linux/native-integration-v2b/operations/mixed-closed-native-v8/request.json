@@ -1,0 +1,71 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v8/WJH27MixedProbe",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v8/closed.xml",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v8/closed.json",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-closed-native-v8.json"
+  ],
+  "phase": "science",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T12:58:21.392035+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 481020,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v8.py"
+      },
+      {
+        "pid": 481900,
+        "parent": 481020,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label mixed-closed-native-v8 --phase science --seconds 30 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v8/WJH27MixedProbe /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v8/closed.xml /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v8/closed.json /home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-closed-native-v8.json"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v8/WJH27MixedProbe",
+      "bytes": 373,
+      "sha256": "08e0c4777213a4116a8ba4bfe3b8d5991c3d8914dae94d25f0aac84cd8a52751"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v8/closed.xml",
+      "bytes": 3849,
+      "sha256": "d0075e2d0e573b3b20f525b5ebb7505e99015f82718db4a13885c9c3cc2bf211"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v8/closed.json",
+      "bytes": 98,
+      "sha256": "6d71014d975276ec53c003a07ec34e4a51e2fc73674b6b0931e4794b664cd61b"
+    }
+  ]
+}

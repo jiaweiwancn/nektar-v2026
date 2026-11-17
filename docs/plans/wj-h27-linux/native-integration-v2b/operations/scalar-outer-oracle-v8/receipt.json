@@ -1,0 +1,82 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/scalar_oracle.py",
+    "--native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/scalar-outer-native-v8.json",
+    "--case",
+    "outer",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/scalar-outer-oracle-v8.json"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T12:58:32.997628+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 481020,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v8.py"
+      },
+      {
+        "pid": 481981,
+        "parent": 481020,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label scalar-outer-oracle-v8 --phase analysis --seconds 30 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/scalar_oracle.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/scalar-outer-native-v8.json --case outer --out /home/jay/build/wj-h27-coupling-r1-20261117/science/scalar-outer-oracle-v8.json"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/scalar_oracle.py",
+      "bytes": 25771,
+      "sha256": "b31e801020e29d7089cd8e5d3005c075c9dc1f142a6343b64d6e42c3b2131d0b"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scalar-outer-native-v8.json",
+      "bytes": 119855,
+      "sha256": "3ff8ee648b2c54efbeabf243eb48fb621be9f31ac7a50e254c96ac515e6a24f9"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 1.1299127039965242,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 16384,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/scalar-outer-oracle-v8/command.log",
+    "bytes": 190,
+    "sha256": "12760c44e4262195e88504f33d8c22d1c2e615179063abca870ab0116d23b1b3"
+  }
+}

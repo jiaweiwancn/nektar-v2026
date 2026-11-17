@@ -1,0 +1,476 @@
+{
+  "schema": "WJH27PhysicalTransientOracleAnalyticControlsV1",
+  "status": "PASS",
+  "source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v9/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle_test.py",
+    "sha256": "144db25e07013e4d2f4f6cf7d102adbaa188e7dd36ace95e59543bb989fecb7f"
+  },
+  "transient_source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v9/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py",
+    "sha256": "a5acc31d47a09a2d94562a5052649b825292d1a76680b97fb67b9960fc6a1be3"
+  },
+  "steady_source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v9/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_oracle.py",
+    "sha256": "83ba96a2238c529f755419a216617a6b199bd5fe2ef583414cb60acfed56ec84"
+  },
+  "fixture_source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v9/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_oracle_test.py",
+    "sha256": "0b7943da7c74c371fdb7ea2293ade2af28105f3c6cf28fee88826bee440d8498"
+  },
+  "scope": "Non-solution analytic controls; no manufactured force and no physical qualification",
+  "analytic_cases": [
+    {
+      "scheme": {
+        "startup": true,
+        "dt": 0.04,
+        "alpha": 25.0,
+        "mass_coefficients": [
+          1.0,
+          -1.0,
+          0.0
+        ],
+        "explicit_coefficients": [
+          1.0,
+          0.0
+        ],
+        "name": "BE_EX1_STARTUP"
+      },
+      "analytic_relative_errors": {
+        "every_flow_BDF_mass_coefficient": 1.2619357450284502e-14,
+        "every_k_BDF_mass_coefficient": 3.0884379866330203e-13,
+        "every_epsilon_BDF_mass_coefficient": 1.938760051813074e-13,
+        "every_flow_EX_advection_coefficient": 9.333565719996248e-16,
+        "every_k_EX_advection_coefficient": 3.4352767659459486e-15,
+        "every_epsilon_EX_advection_coefficient": 4.978664312299034e-15,
+        "k_storage_inventory": 1.5287385756861128e-13,
+        "epsilon_storage_inventory": 1.9395623526828502e-13,
+        "current_velocity_times_BDF_storage": 1.1630355851428784e-15
+      },
+      "accounting_identity_max_error": 4.666780098481134e-14,
+      "cache_checks": {
+        "status": "MET",
+        "limit": 1e-10,
+        "comparisons": {
+          "input_current": {
+            "free_dual": {
+              "momentum": 4.51663249304045e-18,
+              "continuity": 0.0,
+              "k": 2.0359251246523947e-16,
+              "epsilon": 1.0146339408298284e-14
+            },
+            "all_coefficient_dual": {
+              "momentum": 4.83342880794482e-18,
+              "k": 2.265416468750305e-16,
+              "epsilon": 1.1956851770950471e-14,
+              "pressure_load_MAX": 0.0
+            }
+          },
+          "input_previous": {
+            "free_dual": {
+              "momentum": 4.51663249304045e-18,
+              "continuity": 0.0,
+              "k": 2.0359251246523947e-16,
+              "epsilon": 1.0146339408298284e-14
+            },
+            "all_coefficient_dual": {
+              "momentum": 4.83342880794482e-18,
+              "k": 2.265416468750305e-16,
+              "epsilon": 1.1956851770950471e-14,
+              "pressure_load_MAX": 0.0
+            }
+          },
+          "accepted_current": {
+            "free_dual": {
+              "momentum": 5.530275943057032e-18,
+              "continuity": 0.0,
+              "k": 1.8976281076410062e-16,
+              "epsilon": 1.4448173991454988e-14
+            },
+            "all_coefficient_dual": {
+              "momentum": 5.988642868028621e-18,
+              "k": 2.1281732355226964e-16,
+              "epsilon": 1.6492114885415554e-14,
+              "pressure_load_MAX": 0.0
+            }
+          }
+        },
+        "scope": "Every signed global coefficient, including constrained rows; independent reconstruction enters equations instead of caches"
+      },
+      "non_solution_residuals": {
+        "momentum": 0.01360626529170591,
+        "continuity": 0.004891011916839867,
+        "k": 0.21903336899683518,
+        "epsilon": 15.74009700839014
+      },
+      "mutations": {
+        "missing_time_mass": {
+          "delta_dual": {
+            "momentum": 0.011936363301115718,
+            "continuity": 0.0,
+            "k": 0.0030710970028228687,
+            "epsilon": 0.24164408337298793
+          },
+          "mutated_residual": {
+            "momentum": 0.0018023085519920054,
+            "continuity": 0.004891011916839867,
+            "k": 0.2161059043955436,
+            "epsilon": 15.501313672872945
+          },
+          "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+        },
+        "current_instead_of_explicit_advection": {
+          "delta_dual": {
+            "momentum": 5.418678617157009e-06,
+            "continuity": 0.0,
+            "k": 8.493991532106498e-06,
+            "epsilon": 0.00036529810710867394
+          },
+          "mutated_residual": {
+            "momentum": 0.013611615229423715,
+            "continuity": 0.004891011916839867,
+            "k": 0.2190412193424675,
+            "epsilon": 15.74045252967151
+          },
+          "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+        },
+        "missing_explicit_AWF_convection": {
+          "delta_dual": {
+            "momentum": 0.00013884764466046037,
+            "continuity": 0.0,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "mutated_residual": {
+            "momentum": 0.013613004845407969,
+            "continuity": 0.004891011916839867,
+            "k": 0.21903336899683518,
+            "epsilon": 15.74009700839014
+          },
+          "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+        },
+        "missing_explicit_domain_convection": {
+          "delta_dual": {
+            "momentum": 0.001782254144258876,
+            "continuity": 0.0,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "mutated_residual": {
+            "momentum": 0.011844383236735258,
+            "continuity": 0.004891011916839867,
+            "k": 0.21903336899683518,
+            "epsilon": 15.74009700839014
+          },
+          "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+        },
+        "nonconservative_explicit_scalar_advection": {
+          "delta_dual": {
+            "momentum": 0.0,
+            "continuity": 0.0,
+            "k": 0.004871100256293068,
+            "epsilon": 0.25126393227059723
+          },
+          "mutated_residual": {
+            "momentum": 0.01360626529170591,
+            "continuity": 0.004891011916839867,
+            "k": 0.21453943979958376,
+            "epsilon": 15.495765188902295
+          },
+          "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+        }
+      }
+    },
+    {
+      "scheme": {
+        "startup": false,
+        "dt": 0.04,
+        "alpha": 37.5,
+        "mass_coefficients": [
+          1.5,
+          -2.0,
+          0.5
+        ],
+        "explicit_coefficients": [
+          2.0,
+          -1.0
+        ],
+        "name": "BDF2_EX2"
+      },
+      "analytic_relative_errors": {
+        "every_flow_BDF_mass_coefficient": 2.400285031809032e-13,
+        "every_k_BDF_mass_coefficient": 5.031129107349057e-13,
+        "every_epsilon_BDF_mass_coefficient": 2.912799953120573e-13,
+        "every_flow_EX_advection_coefficient": 6.95783848125112e-16,
+        "every_k_EX_advection_coefficient": 3.281355159476047e-15,
+        "every_epsilon_EX_advection_coefficient": 1.059660510885291e-14,
+        "k_storage_inventory": 1.2030237002273872e-13,
+        "epsilon_storage_inventory": 2.9131917744755806e-13,
+        "current_velocity_times_BDF_storage": 2.2548026082008485e-13
+      },
+      "accounting_identity_max_error": 6.222373464641511e-14,
+      "cache_checks": {
+        "status": "MET",
+        "limit": 1e-10,
+        "comparisons": {
+          "input_current": {
+            "free_dual": {
+              "momentum": 5.530275943057034e-18,
+              "continuity": 0.0,
+              "k": 1.8976281076410023e-16,
+              "epsilon": 1.4448173991454988e-14
+            },
+            "all_coefficient_dual": {
+              "momentum": 5.988642868028634e-18,
+              "k": 2.1281732355226986e-16,
+              "epsilon": 1.6492114885415554e-14,
+              "pressure_load_MAX": 0.0
+            }
+          },
+          "input_previous": {
+            "free_dual": {
+              "momentum": 4.516632493040453e-18,
+              "continuity": 0.0,
+              "k": 2.0359251246523928e-16,
+              "epsilon": 1.0146339408298284e-14
+            },
+            "all_coefficient_dual": {
+              "momentum": 4.833428807944818e-18,
+              "k": 2.265416468750307e-16,
+              "epsilon": 1.1956851770950471e-14,
+              "pressure_load_MAX": 0.0
+            }
+          },
+          "accepted_current": {
+            "free_dual": {
+              "momentum": 8.174369193307471e-18,
+              "continuity": 0.0,
+              "k": 1.6988685391950364e-16,
+              "epsilon": 8.648666314792191e-15
+            },
+            "all_coefficient_dual": {
+              "momentum": 8.313437765509816e-18,
+              "k": 1.859104664327846e-16,
+              "epsilon": 9.924015323478793e-15,
+              "pressure_load_MAX": 0.0
+            }
+          }
+        },
+        "scope": "Every signed global coefficient, including constrained rows; independent reconstruction enters equations instead of caches"
+      },
+      "non_solution_residuals": {
+        "momentum": 0.02114868642769915,
+        "continuity": 0.004901560468781289,
+        "k": 0.2193265612648209,
+        "epsilon": 15.75121294661547
+      },
+      "mutations": {
+        "missing_time_mass": {
+          "delta_dual": {
+            "momentum": 0.01947511907023459,
+            "continuity": 0.0,
+            "k": 0.0033104032627842357,
+            "epsilon": 0.24739751392943418
+          },
+          "mutated_residual": {
+            "momentum": 0.0018120126528936456,
+            "continuity": 0.004901560468781289,
+            "k": 0.21617078423666528,
+            "epsilon": 15.50674264820461
+          },
+          "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+        },
+        "current_instead_of_explicit_advection": {
+          "delta_dual": {
+            "momentum": 2.2957065502281387e-06,
+            "continuity": 0.0,
+            "k": 3.343847797396305e-06,
+            "epsilon": 0.00013664051795882938
+          },
+          "mutated_residual": {
+            "momentum": 0.021150953349582165,
+            "continuity": 0.004901560468781289,
+            "k": 0.21932965217132086,
+            "epsilon": 15.751345932186457
+          },
+          "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+        },
+        "missing_explicit_AWF_convection": {
+          "delta_dual": {
+            "momentum": 0.0001396924799271923,
+            "continuity": 0.0,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "mutated_residual": {
+            "momentum": 0.02115593703142804,
+            "continuity": 0.004901560468781289,
+            "k": 0.2193265612648209,
+            "epsilon": 15.75121294661547
+          },
+          "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+        },
+        "missing_explicit_domain_convection": {
+          "delta_dual": {
+            "momentum": 0.0017930984848959209,
+            "continuity": 0.0,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "mutated_residual": {
+            "momentum": 0.019373973665695994,
+            "continuity": 0.004901560468781289,
+            "k": 0.2193265612648209,
+            "epsilon": 15.75121294661547
+          },
+          "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+        },
+        "nonconservative_explicit_scalar_advection": {
+          "delta_dual": {
+            "momentum": 0.0,
+            "continuity": 0.0,
+            "k": 0.00488711046453878,
+            "epsilon": 0.25212923823281147
+          },
+          "mutated_residual": {
+            "momentum": 0.02114868642769915,
+            "continuity": 0.004901560468781289,
+            "k": 0.2148172061281324,
+            "epsilon": 15.506035822180431
+          },
+          "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+        },
+        "EX1_instead_of_EX2": {
+          "delta_dual": {
+            "momentum": 5.418678617157009e-06,
+            "continuity": 0.0,
+            "k": 8.4939915321065e-06,
+            "epsilon": 0.00036529810710867394
+          },
+          "mutated_residual": {
+            "momentum": 0.021143335715701296,
+            "continuity": 0.004901560468781289,
+            "k": 0.21931870982431026,
+            "epsilon": 15.750857420040322
+          },
+          "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+        },
+        "BE_instead_of_BDF2_mass": {
+          "delta_dual": {
+            "momentum": 0.0025129185897062927,
+            "continuity": 0.0,
+            "k": 7.976875332045619e-05,
+            "epsilon": 0.0019178101854820811
+          },
+          "mutated_residual": {
+            "momentum": 0.018637438370011895,
+            "continuity": 0.004901560468781289,
+            "k": 0.21925046482579874,
+            "epsilon": 15.749317476428782
+          },
+          "status": "DETECTABLE_AT_DECLARED_TOLERANCE"
+        }
+      }
+    }
+  ],
+  "corrupted_cache_control": {
+    "status": "PASS",
+    "equation_change_dual": {
+      "momentum": 0.0,
+      "continuity": 0.0,
+      "k": 0.0,
+      "epsilon": 0.0
+    },
+    "cache_checks": {
+      "status": "NOT_MET",
+      "limit": 1e-10,
+      "comparisons": {
+        "input_current": {
+          "free_dual": {
+            "momentum": 0.00031610032493571325,
+            "continuity": 0.0,
+            "k": 1.8976281076410023e-16,
+            "epsilon": 1.4448173991454988e-14
+          },
+          "all_coefficient_dual": {
+            "momentum": 0.00032140615191462855,
+            "k": 2.1281732355226986e-16,
+            "epsilon": 1.6492114885415554e-14,
+            "pressure_load_MAX": 0.0
+          }
+        },
+        "input_previous": {
+          "free_dual": {
+            "momentum": 4.516632493040453e-18,
+            "continuity": 0.0,
+            "k": 2.0359251246523928e-16,
+            "epsilon": 1.0146339408298284e-14
+          },
+          "all_coefficient_dual": {
+            "momentum": 4.833428807944818e-18,
+            "k": 2.265416468750307e-16,
+            "epsilon": 1.1956851770950471e-14,
+            "pressure_load_MAX": 0.0
+          }
+        },
+        "accepted_current": {
+          "free_dual": {
+            "momentum": 8.174369193307471e-18,
+            "continuity": 0.0,
+            "k": 1.6988685391950364e-16,
+            "epsilon": 8.648666314792191e-15
+          },
+          "all_coefficient_dual": {
+            "momentum": 8.313437765509816e-18,
+            "k": 1.859104664327846e-16,
+            "epsilon": 9.924015323478793e-15,
+            "pressure_load_MAX": 0.0
+          }
+        }
+      },
+      "scope": "Every signed global coefficient, including constrained rows; independent reconstruction enters equations instead of caches"
+    }
+  },
+  "malformed_history_rejections": [
+    {
+      "name": "skipped_accepted_step",
+      "reason": "input history is not the immediately preceding accepted step"
+    },
+    {
+      "name": "changed_timestep",
+      "reason": "accepted timestep must be positive and unchanged within history"
+    },
+    {
+      "name": "wrong_scientific_time",
+      "reason": "accepted/input scientific time differs from integer step times dt"
+    },
+    {
+      "name": "nonfinite_timestep",
+      "reason": "accepted timestep must be positive and unchanged within history"
+    },
+    {
+      "name": "wrong_previous_hash",
+      "reason": "accepted state/advection byte identity or history shift differs"
+    },
+    {
+      "name": "wrong_new_cache_hash",
+      "reason": "accepted state/advection byte identity or history shift differs"
+    },
+    {
+      "name": "wrong_basis",
+      "reason": "explicit Modified_A basis identity required"
+    },
+    {
+      "name": "truncated_history",
+      "reason": "invalid accepted-history k coefficients"
+    },
+    {
+      "name": "pressure_advection_cache",
+      "reason": "explicit advection cache contains a pressure/continuity load"
+    },
+    {
+      "name": "startup_history_not_duplicated",
+      "reason": "BE startup did not preserve the fresh duplicated state/history"
+    }
+  ],
+  "elapsed_seconds": 0.9446696600061841
+}

@@ -1,0 +1,82 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/mixed_oracle.py",
+    "--native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-closed-native-v4.json",
+    "--case",
+    "closed",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-closed-oracle-v4.json"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T09:21:31.622882+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 474936,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/mixed-regression-controller-v2.py"
+      },
+      {
+        "pid": 474951,
+        "parent": 474936,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label mixed-closed-oracle-v4 --phase analysis --seconds 30 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/mixed_oracle.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-closed-native-v4.json --case closed --out /home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-closed-oracle-v4.json"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/mixed_oracle.py",
+      "bytes": 19200,
+      "sha256": "39cef1c3c03ada7c28c6a85a7be5ab5ea94bc8b08b4cad23e3d310cfa55df42a"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-closed-native-v4.json",
+      "bytes": 511899,
+      "sha256": "62f748ed50166a51647664c2c244726aba00e620e5e90a049ac1cc9787c60b47"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 0.7032119079958647,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 385024,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/mixed-closed-oracle-v4/command.log",
+    "bytes": 199,
+    "sha256": "a738379652c4f504a32ac13251a761ce667e2b88d3c29e362bdac09d7eb80530"
+  }
+}
