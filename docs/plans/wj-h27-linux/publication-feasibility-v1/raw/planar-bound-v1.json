@@ -1,0 +1,445 @@
+{
+  "schema": "WJH27PlanarPrincipalObstructionV1",
+  "source": "/home/jay/build/wj-h27-coupled-20261117/science/reference-kin-v1.json",
+  "parameters": {
+    "K": 0.008809015145515192,
+    "H": 0.15,
+    "h": 0.10854503542535461,
+    "nu": 6.423173803526447e-05,
+    "cd": 0.08718183203779911,
+    "sigma_k": 1.0,
+    "endpoint_flux_over_A": 0.0,
+    "inner_diffusion": "scalar",
+    "rtol": 2e-11
+  },
+  "auxiliary_nu_ground": 5.0677973257231984e-05,
+  "normalization_mu": 0.00011490971129249645,
+  "retained_inlet_ground_k": 0.01723802909156954,
+  "retained_inlet_ground_k_over_K": 1.956862237925166,
+  "retained_inlet_old_cutoff": 0.026419898309769346,
+  "states": [
+    {
+      "label": "selected_reference_ground",
+      "k": 0.014362547557221588,
+      "e": 0.011755971810747884,
+      "g": 22.635162605006414,
+      "q": 27.653911102664203,
+      "witnesses": [
+        {
+          "degrees": 15.0,
+          "analytic": {
+            "value": -3.8490516122300354e-05,
+            "q": 27.653911102664203,
+            "n": 19.33038912801674,
+            "cp_over_N": 0.09311762883195908,
+            "a0": 0.8182807722674315,
+            "a1": 0.7294897715091753,
+            "wj_viscosity": 0.0001787723449869902,
+            "positive_split_value": 0.00010224021797818847
+          },
+          "normalized": -0.33496312617412144,
+          "full_3d_tensor_FD": [
+            {
+              "relative_step": 0.0001,
+              "value": -3.849051611049984e-05,
+              "normalized_error": 1.0269376297885993e-10
+            },
+            {
+              "relative_step": 2e-05,
+              "value": -3.849051603270362e-05,
+              "normalized_error": 7.797141930211841e-10
+            },
+            {
+              "relative_step": 1e-05,
+              "value": -3.849051600597397e-05,
+              "normalized_error": 1.0123285561525614e-09
+            }
+          ]
+        },
+        {
+          "degrees": 20.0,
+          "analytic": {
+            "value": -5.855101731638376e-05,
+            "q": 27.653911102664203,
+            "n": 19.33038912801674,
+            "cp_over_N": 0.09311762883195908,
+            "a0": 0.8182807722674315,
+            "a1": 0.7294897715091753,
+            "wj_viscosity": 0.0001787723449869902,
+            "positive_split_value": 9.397079351586635e-05
+          },
+          "normalized": -0.5095393301210662,
+          "full_3d_tensor_FD": [
+            {
+              "relative_step": 0.0001,
+              "value": -5.855101730711301e-05,
+              "normalized_error": 8.067860561679923e-11
+            },
+            {
+              "relative_step": 2e-05,
+              "value": -5.855101728740182e-05,
+              "normalized_error": 2.5221492136734733e-10
+            },
+            {
+              "relative_step": 1e-05,
+              "value": -5.855101730606315e-05,
+              "normalized_error": 8.981499676131846e-11
+            }
+          ]
+        },
+        {
+          "degrees": 25.0,
+          "analytic": {
+            "value": -6.210231403280193e-05,
+            "q": 27.653911102664203,
+            "n": 19.33038912801674,
+            "cp_over_N": 0.09311762883195908,
+            "a0": 0.8182807722674315,
+            "a1": 0.7294897715091753,
+            "wj_viscosity": 0.0001787723449869902,
+            "positive_split_value": 8.517065581189458e-05
+          },
+          "normalized": -0.5404444353247381,
+          "full_3d_tensor_FD": [
+            {
+              "relative_step": 0.0001,
+              "value": -6.210231403932687e-05,
+              "normalized_error": -5.678323825776019e-11
+            },
+            {
+              "relative_step": 2e-05,
+              "value": -6.210231406498574e-05,
+              "normalized_error": -2.800791098660376e-10
+            },
+            {
+              "relative_step": 1e-05,
+              "value": -6.210231369298799e-05,
+              "normalized_error": 2.9572255846986484e-09
+            }
+          ]
+        },
+        {
+          "degrees": 30.0,
+          "analytic": {
+            "value": -5.104352565147652e-05,
+            "q": 27.653911102664203,
+            "n": 19.33038912801674,
+            "cp_over_N": 0.09311762883195908,
+            "a0": 0.8182807722674315,
+            "a1": 0.7294897715091753,
+            "wj_viscosity": 0.0001787723449869902,
+            "positive_split_value": 7.690123134957248e-05
+          },
+          "normalized": -0.44420549905958767,
+          "full_3d_tensor_FD": [
+            {
+              "relative_step": 0.0001,
+              "value": -5.104352562431317e-05,
+              "normalized_error": 2.3638864115284916e-10
+            },
+            {
+              "relative_step": 2e-05,
+              "value": -5.104352556810361e-05,
+              "normalized_error": 7.255514782813552e-10
+            },
+            {
+              "relative_step": 1e-05,
+              "value": -5.104352560825327e-05,
+              "normalized_error": 3.761496792179803e-10
+            }
+          ]
+        },
+        {
+          "degrees": 35.0,
+          "analytic": {
+            "value": -2.8596445246785224e-05,
+            "q": 27.653911102664203,
+            "n": 19.33038912801674,
+            "cp_over_N": 0.09311762883195908,
+            "a0": 0.8182807722674315,
+            "a1": 0.7294897715091753,
+            "wj_viscosity": 0.0001787723449869902,
+            "positive_split_value": 7.01599347627631e-05
+          },
+          "normalized": -0.24886012613846464,
+          "full_3d_tensor_FD": [
+            {
+              "relative_step": 0.0001,
+              "value": -2.859644527123431e-05,
+              "normalized_error": -2.1276781016443275e-10
+            },
+            {
+              "relative_step": 2e-05,
+              "value": -2.8596445363343015e-05,
+              "normalized_error": -1.0143423929169827e-09
+            },
+            {
+              "relative_step": 1e-05,
+              "value": -2.8596444899413044e-05,
+              "normalized_error": 3.0230010611296067e-09
+            }
+          ]
+        },
+        {
+          "degrees": 45.0,
+          "analytic": {
+            "value": 3.372845733599209e-05,
+            "q": 27.653911102664203,
+            "n": 19.33038912801674,
+            "cp_over_N": 0.09311762883195908,
+            "a0": 0.8182807722674315,
+            "a1": 0.7294897715091753,
+            "wj_viscosity": 0.0001787723449869902,
+            "positive_split_value": 6.423173803526447e-05
+          },
+          "normalized": 0.29352138262829786,
+          "full_3d_tensor_FD": [
+            {
+              "relative_step": 0.0001,
+              "value": 3.3728457344254766e-05,
+              "normalized_error": 7.190582552614303e-11
+            },
+            {
+              "relative_step": 2e-05,
+              "value": 3.372845741975671e-05,
+              "normalized_error": 7.289603171687386e-10
+            },
+            {
+              "relative_step": 1e-05,
+              "value": 3.372845753897028e-05,
+              "normalized_error": 1.7664145976423563e-09
+            }
+          ]
+        }
+      ],
+      "theta_min_degrees": 23.60908387016358,
+      "planar_minimum": -6.26899832346024e-05,
+      "planar_minimum_over_mu": -0.5455586175395432,
+      "rigorous_theta30_upper_bound": -3.6770639863030794e-05,
+      "bound_requires_q_at_least": 25.455844122715714,
+      "bound_condition_met": true,
+      "certified_negative_2d_witness": true
+    },
+    {
+      "label": "retained_inlet_with_new_dependent_E",
+      "k": 0.01723802909156954,
+      "e": 0.011755971810747884,
+      "g": 22.635162605006414,
+      "q": 33.19041571031846,
+      "witnesses": [
+        {
+          "degrees": 15.0,
+          "analytic": {
+            "value": -7.768839198167443e-05,
+            "q": 33.19041571031846,
+            "n": 22.668013020149402,
+            "cp_over_N": 0.0794070480901875,
+            "a0": 0.837157215172573,
+            "a1": 0.7611998233736605,
+            "wj_viscosity": 0.00021280894540263998,
+            "positive_split_value": 0.00010224021797818847
+          },
+          "normalized": -0.6760820396104106,
+          "full_3d_tensor_FD": [
+            {
+              "relative_step": 0.0001,
+              "value": -7.768839197748052e-05,
+              "normalized_error": 3.6497444788918276e-11
+            },
+            {
+              "relative_step": 2e-05,
+              "value": -7.768839183684131e-05,
+              "normalized_error": 1.2604080062280978e-09
+            },
+            {
+              "relative_step": 1e-05,
+              "value": -7.768839212300325e-05,
+              "normalized_error": -1.229911853967485e-09
+            }
+          ]
+        },
+        {
+          "degrees": 20.0,
+          "analytic": {
+            "value": -0.00010256584001047949,
+            "q": 33.19041571031846,
+            "n": 22.668013020149402,
+            "cp_over_N": 0.0794070480901875,
+            "a0": 0.837157215172573,
+            "a1": 0.7611998233736605,
+            "wj_viscosity": 0.00021280894540263998,
+            "positive_split_value": 9.397079351586635e-05
+          },
+          "normalized": -0.8925776495026055,
+          "full_3d_tensor_FD": [
+            {
+              "relative_step": 0.0001,
+              "value": -0.0001025658400176586,
+              "normalized_error": -6.247611596094351e-11
+            },
+            {
+              "relative_step": 2e-05,
+              "value": -0.00010256583993590688,
+              "normalized_error": 6.489669467848112e-10
+            },
+            {
+              "relative_step": 1e-05,
+              "value": -0.00010256584007897241,
+              "normalized_error": -5.96058648901579e-10
+            }
+          ]
+        },
+        {
+          "degrees": 25.0,
+          "analytic": {
+            "value": -0.00010656402964819857,
+            "q": 33.19041571031846,
+            "n": 22.668013020149402,
+            "cp_over_N": 0.0794070480901875,
+            "a0": 0.837157215172573,
+            "a1": 0.7611998233736605,
+            "wj_viscosity": 0.00021280894540263998,
+            "positive_split_value": 8.517065581189458e-05
+          },
+          "normalized": -0.927371833499308,
+          "full_3d_tensor_FD": [
+            {
+              "relative_step": 0.0001,
+              "value": -0.00010656402957680194,
+              "normalized_error": 6.213281428868127e-10
+            },
+            {
+              "relative_step": 2e-05,
+              "value": -0.00010656402982933062,
+              "normalized_error": -1.576298853887543e-09
+            },
+            {
+              "relative_step": 1e-05,
+              "value": -0.00010656402965883183,
+              "normalized_error": -9.253576983999704e-11
+            }
+          ]
+        },
+        {
+          "degrees": 30.0,
+          "analytic": {
+            "value": -9.210179804028753e-05,
+            "q": 33.19041571031846,
+            "n": 22.668013020149402,
+            "cp_over_N": 0.0794070480901875,
+            "a0": 0.837157215172573,
+            "a1": 0.7611998233736605,
+            "wj_viscosity": 0.00021280894540263998,
+            "positive_split_value": 7.690123134957248e-05
+          },
+          "normalized": -0.8015144847579277,
+          "full_3d_tensor_FD": [
+            {
+              "relative_step": 0.0001,
+              "value": -9.210179802725602e-05,
+              "normalized_error": 1.134065489809637e-10
+            },
+            {
+              "relative_step": 2e-05,
+              "value": -9.210179785536934e-05,
+              "normalized_error": 1.6092477001073303e-09
+            },
+            {
+              "relative_step": 1e-05,
+              "value": -9.210179840608824e-05,
+              "normalized_error": -3.1833750305684296e-09
+            }
+          ]
+        },
+        {
+          "degrees": 35.0,
+          "analytic": {
+            "value": -6.327674081322025e-05,
+            "q": 33.19041571031846,
+            "n": 22.668013020149402,
+            "cp_over_N": 0.0794070480901875,
+            "a0": 0.837157215172573,
+            "a1": 0.7611998233736605,
+            "wj_viscosity": 0.00021280894540263998,
+            "positive_split_value": 7.01599347627631e-05
+          },
+          "normalized": -0.5506648663675843,
+          "full_3d_tensor_FD": [
+            {
+              "relative_step": 0.0001,
+              "value": -6.327674077905822e-05,
+              "normalized_error": 2.972945541408425e-10
+            },
+            {
+              "relative_step": 2e-05,
+              "value": -6.327674110228706e-05,
+              "normalized_error": -2.515599497077551e-09
+            },
+            {
+              "relative_step": 1e-05,
+              "value": -6.32767405889194e-05,
+              "normalized_error": 1.951974765475498e-09
+            }
+          ]
+        },
+        {
+          "degrees": 45.0,
+          "analytic": {
+            "value": 1.618749908475814e-05,
+            "q": 33.19041571031846,
+            "n": 22.668013020149402,
+            "cp_over_N": 0.0794070480901875,
+            "a0": 0.837157215172573,
+            "a1": 0.7611998233736605,
+            "wj_viscosity": 0.00021280894540263998,
+            "positive_split_value": 6.423173803526447e-05
+          },
+          "normalized": 0.140871462495922,
+          "full_3d_tensor_FD": [
+            {
+              "relative_step": 0.0001,
+              "value": 1.6187499019007143e-05,
+              "normalized_error": -5.721970420563798e-10
+            },
+            {
+              "relative_step": 2e-05,
+              "value": 1.61874992733733e-05,
+              "normalized_error": 1.6414205557566047e-09
+            },
+            {
+              "relative_step": 1e-05,
+              "value": 1.6187498589764252e-05,
+              "normalized_error": -4.307676714409095e-09
+            }
+          ]
+        }
+      ],
+      "theta_min_degrees": 23.48303962969229,
+      "planar_minimum": -0.00010744978636101463,
+      "planar_minimum_over_mu": -0.9350801177065619,
+      "rigorous_theta30_upper_bound": -5.95285360749929e-05,
+      "bound_requires_q_at_least": 25.455844122715714,
+      "bound_condition_met": true,
+      "certified_negative_2d_witness": true
+    }
+  ],
+  "uniform_diffusion_bound": {
+    "production_upper_bound_over_A": 2.82061652707379,
+    "cutoff_lower_bound": 0.024288883268835264,
+    "cutoff_lower_bound_over_H": 0.16192588845890177,
+    "retained_inlet_q_lower_bound": 27.28589600825159,
+    "retained_inlet_theta30_upper_bound": -5.95285360749929e-05,
+    "normalized_upper_bound": -0.518046172124358,
+    "hypotheses": [
+      "same K,A,t,nu,h,H and geometry-only chi",
+      "positive inner k diffusivity, reference source P-E",
+      "zero reference endpoint k fluxes",
+      "selected increasing-shear branch where chi>0",
+      "negative viscosity intercept",
+      "retained inlet k and velocity profile"
+    ],
+    "bound_conditions_met": true,
+    "diffusion_change_cannot_repair_retained_inlet": true
+  },
+  "restrictions": "No changed stress, EP, floor, clipping, roughness or actual-flow budget constraint."
+}

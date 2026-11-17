@@ -1,0 +1,188 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/inlet_principal.py",
+    "--reference-json",
+    "/home/jay/build/wj-h27-coupled-20261117/science/reference-kin-v1.json",
+    "--output",
+    "/home/jay/build/wj-h27-coupled-20261117/science/fixed-inlet-v1.json"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 180.0,
+  "utc": "2026-11-17T07:16:55.619857+00:00",
+  "allocation": {
+    "workers": 33,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 462879,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-source-prospective/run_wp2_pressure_waves.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116 --solver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver --probe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-pressure-rows/RANSWallResolutionProbe --h1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json --parent-map /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-adoption-v2.json"
+      },
+      {
+        "pid": 471608,
+        "parent": 462879,
+        "threads": 1,
+        "args": "/usr/bin/python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-source-prospective/run_wp2_preservation.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116 --solver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver --h1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json --pressure-space inner-p2-v1 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-confirmation-CLS --model CLS --mode preserve --level 5 --dt 0.02 --endpoint 1.2 --block-steps 8"
+      },
+      {
+        "pid": 471609,
+        "parent": 462879,
+        "threads": 1,
+        "args": "/usr/bin/python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-source-prospective/run_wp2_preservation.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116 --solver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver --h1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json --pressure-space inner-p2-v1 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-confirmation-standard --model standard --mode preserve --level 5 --dt 0.02 --endpoint 1.2 --block-steps 8"
+      },
+      {
+        "pid": 472860,
+        "parent": 472859,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-confirmation-standard/step53/case.xml"
+      },
+      {
+        "pid": 472861,
+        "parent": 472860,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 10 --singleton-died-pipe 11 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 472868,
+        "parent": 472867,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-confirmation-CLS/step53/case.xml"
+      },
+      {
+        "pid": 472869,
+        "parent": 472868,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 10 --singleton-died-pipe 11 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 472921,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/run.py --root /home/jay/build/wj-h27-coupled-20261117 --label native-build-v2 --phase build --seconds 600 -- python3 -B /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/build.py --root /home/jay/build/wj-h27-coupled-20261117 --version 2"
+      },
+      {
+        "pid": 472922,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupled-20261117/inputs/feasibility-controller-v1.py"
+      },
+      {
+        "pid": 472926,
+        "parent": 472921,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/build.py --root /home/jay/build/wj-h27-coupled-20261117 --version 2"
+      },
+      {
+        "pid": 472954,
+        "parent": 472926,
+        "threads": 1,
+        "args": "cmake --build /home/jay/build/wj-h27-coupled-20261117/build-v2 --target WJH27PrincipalProbe --parallel 4"
+      },
+      {
+        "pid": 472974,
+        "parent": 472973,
+        "threads": 1,
+        "args": "/usr/bin/c++ -DENABLE_NEKTAR_EXCEPTIONS -DNEKTAR_MEMORY_POOL_ENABLED -DNEKTAR_MPI_TYPE=0 -DNEKTAR_USE_MPI -DNEKTAR_USE_SCOTCH -DSOLVER_UTILS_EXPORTS -DTIXML_USE_STL -I/home/jay/build/wj-h27-coupled-20261117/source-v2/library -I/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /usr/include/scotch -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include -isystem /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h26/include/nektar++ -isystem /usr/include/eigen3 -ffp-contract=off -fno-fast-math -O3 -DNDEBUG -DNEKTAR_USE_MPI -pthread -DNEKTAR_USE_MPI -pthread -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra -Wno-sign-compare -std=gnu++17 -MD -MT h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/RANSModels.cpp.o -MF CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/RANSModels.cpp.o.d -o CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/RANSModels.cpp.o -c /home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/RANSModels.cpp"
+      },
+      {
+        "pid": 472978,
+        "parent": 472975,
+        "threads": 1,
+        "args": "/usr/bin/c++ -DENABLE_NEKTAR_EXCEPTIONS -DNEKTAR_MEMORY_POOL_ENABLED -DNEKTAR_MPI_TYPE=0 -DNEKTAR_USE_MPI -DNEKTAR_USE_SCOTCH -DSOLVER_UTILS_EXPORTS -DTIXML_USE_STL -I/home/jay/build/wj-h27-coupled-20261117/source-v2/library -I/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /usr/include/scotch -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include -isystem /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h26/include/nektar++ -isystem /usr/include/eigen3 -ffp-contract=off -fno-fast-math -O3 -DNDEBUG -DNEKTAR_USE_MPI -pthread -DNEKTAR_USE_MPI -pthread -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra -Wno-sign-compare -std=gnu++17 -MD -MT h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp.o -MF CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp.o.d -o CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp.o -c /home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp"
+      },
+      {
+        "pid": 472979,
+        "parent": 472974,
+        "threads": 1,
+        "args": "/usr/lib/gcc/x86_64-linux-gnu/11/cc1plus -quiet -I /home/jay/build/wj-h27-coupled-20261117/source-v2/library -I /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers -imultiarch x86_64-linux-gnu -MD CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/RANSModels.cpp.d -MF CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/RANSModels.cpp.o.d -MT h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/RANSModels.cpp.o -D_GNU_SOURCE -D_REENTRANT -D ENABLE_NEKTAR_EXCEPTIONS -D NEKTAR_MEMORY_POOL_ENABLED -D NEKTAR_MPI_TYPE=0 -D NEKTAR_USE_MPI -D NEKTAR_USE_SCOTCH -D SOLVER_UTILS_EXPORTS -D TIXML_USE_STL -D NDEBUG -D NEKTAR_USE_MPI -D NEKTAR_USE_MPI -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /usr/include/scotch -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include -isystem /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h26/include/nektar++ -isystem /usr/include/eigen3 /home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/RANSModels.cpp -quiet -dumpdir CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/ -dumpbase RANSModels.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -O3 -O3 -Wall -Wextra -Wno-sign-compare -std=gnu++17 -ffp-contract=off -ffp-contract=off -fno-fast-math -fasynchronous-unwind-tables -fstack-protector-strong -Wformat-security -fstack-clash-protection -fcf-protection -o /home/jay/build/wj-h27-coupled-20261117/tmp/cc4YUOOW.s"
+      },
+      {
+        "pid": 472980,
+        "parent": 472976,
+        "threads": 1,
+        "args": "/usr/bin/c++ -DENABLE_NEKTAR_EXCEPTIONS -DNEKTAR_MEMORY_POOL_ENABLED -DNEKTAR_MPI_TYPE=0 -DNEKTAR_USE_MPI -DNEKTAR_USE_SCOTCH -DSOLVER_UTILS_EXPORTS -DTIXML_USE_STL -I/home/jay/build/wj-h27-coupled-20261117/source-v2/library -I/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /usr/include/scotch -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include -isystem /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h26/include/nektar++ -isystem /usr/include/eigen3 -ffp-contract=off -fno-fast-math -O3 -DNDEBUG -DNEKTAR_USE_MPI -pthread -DNEKTAR_USE_MPI -pthread -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra -Wno-sign-compare -std=gnu++17 -MD -MT h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp.o -MF CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp.o.d -o CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp.o -c /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp"
+      },
+      {
+        "pid": 472981,
+        "parent": 472977,
+        "threads": 1,
+        "args": "/usr/bin/c++ -DENABLE_NEKTAR_EXCEPTIONS -DNEKTAR_MEMORY_POOL_ENABLED -DNEKTAR_MPI_TYPE=0 -DNEKTAR_USE_MPI -DNEKTAR_USE_SCOTCH -DSOLVER_UTILS_EXPORTS -DTIXML_USE_STL -I/home/jay/build/wj-h27-coupled-20261117/source-v2/library -I/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /usr/include/scotch -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include -isystem /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h26/include/nektar++ -isystem /usr/include/eigen3 -ffp-contract=off -fno-fast-math -O3 -DNDEBUG -DNEKTAR_USE_MPI -pthread -DNEKTAR_USE_MPI -pthread -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra -Wno-sign-compare -std=gnu++17 -MD -MT h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/WJEARSM.cpp.o -MF CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/WJEARSM.cpp.o.d -o CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/WJEARSM.cpp.o -c /home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/WJEARSM.cpp"
+      },
+      {
+        "pid": 472982,
+        "parent": 472978,
+        "threads": 1,
+        "args": "/usr/lib/gcc/x86_64-linux-gnu/11/cc1plus -quiet -I /home/jay/build/wj-h27-coupled-20261117/source-v2/library -I /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers -imultiarch x86_64-linux-gnu -MD CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp.d -MF CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp.o.d -MT h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp.o -D_GNU_SOURCE -D_REENTRANT -D ENABLE_NEKTAR_EXCEPTIONS -D NEKTAR_MEMORY_POOL_ENABLED -D NEKTAR_MPI_TYPE=0 -D NEKTAR_USE_MPI -D NEKTAR_USE_SCOTCH -D SOLVER_UTILS_EXPORTS -D TIXML_USE_STL -D NDEBUG -D NEKTAR_USE_MPI -D NEKTAR_USE_MPI -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /usr/include/scotch -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include -isystem /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h26/include/nektar++ -isystem /usr/include/eigen3 /home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp -quiet -dumpdir CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/ -dumpbase AnalyticalWallFunction.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -O3 -O3 -Wall -Wextra -Wno-sign-compare -std=gnu++17 -ffp-contract=off -ffp-contract=off -fno-fast-math -fasynchronous-unwind-tables -fstack-protector-strong -Wformat-security -fstack-clash-protection -fcf-protection -o /home/jay/build/wj-h27-coupled-20261117/tmp/ccSCoRbf.s"
+      },
+      {
+        "pid": 472983,
+        "parent": 472980,
+        "threads": 1,
+        "args": "/usr/lib/gcc/x86_64-linux-gnu/11/cc1plus -quiet -I /home/jay/build/wj-h27-coupled-20261117/source-v2/library -I /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers -imultiarch x86_64-linux-gnu -MD CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp.d -MF CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp.o.d -MT h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp.o -D_GNU_SOURCE -D_REENTRANT -D ENABLE_NEKTAR_EXCEPTIONS -D NEKTAR_MEMORY_POOL_ENABLED -D NEKTAR_MPI_TYPE=0 -D NEKTAR_USE_MPI -D NEKTAR_USE_SCOTCH -D SOLVER_UTILS_EXPORTS -D TIXML_USE_STL -D NDEBUG -D NEKTAR_USE_MPI -D NEKTAR_USE_MPI -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /usr/include/scotch -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include -isystem /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h26/include/nektar++ -isystem /usr/include/eigen3 /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp -quiet -dumpdir CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/ -dumpbase WJNativeFlow.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -O3 -O3 -Wall -Wextra -Wno-sign-compare -std=gnu++17 -ffp-contract=off -ffp-contract=off -fno-fast-math -fasynchronous-unwind-tables -fstack-protector-strong -Wformat-security -fstack-clash-protection -fcf-protection -o /home/jay/build/wj-h27-coupled-20261117/tmp/cc7js5Ag.s"
+      },
+      {
+        "pid": 472984,
+        "parent": 472981,
+        "threads": 1,
+        "args": "/usr/lib/gcc/x86_64-linux-gnu/11/cc1plus -quiet -I /home/jay/build/wj-h27-coupled-20261117/source-v2/library -I /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers -imultiarch x86_64-linux-gnu -MD CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/WJEARSM.cpp.d -MF CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/WJEARSM.cpp.o.d -MT h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/WJEARSM.cpp.o -D_GNU_SOURCE -D_REENTRANT -D ENABLE_NEKTAR_EXCEPTIONS -D NEKTAR_MEMORY_POOL_ENABLED -D NEKTAR_MPI_TYPE=0 -D NEKTAR_USE_MPI -D NEKTAR_USE_SCOTCH -D SOLVER_UTILS_EXPORTS -D TIXML_USE_STL -D NDEBUG -D NEKTAR_USE_MPI -D NEKTAR_USE_MPI -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /usr/include/scotch -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include -isystem /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h26/include/nektar++ -isystem /usr/include/eigen3 /home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/WJEARSM.cpp -quiet -dumpdir CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/ -dumpbase WJEARSM.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -O3 -O3 -Wall -Wextra -Wno-sign-compare -std=gnu++17 -ffp-contract=off -ffp-contract=off -fno-fast-math -fasynchronous-unwind-tables -fstack-protector-strong -Wformat-security -fstack-clash-protection -fcf-protection -o /home/jay/build/wj-h27-coupled-20261117/tmp/ccCiKQuP.s"
+      },
+      {
+        "pid": 472986,
+        "parent": 472922,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/run.py --root /home/jay/build/wj-h27-coupled-20261117 --label fixed-inlet-v1 --phase analysis --seconds 180 -- python3 -B /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/inlet_principal.py --reference-json /home/jay/build/wj-h27-coupled-20261117/science/reference-kin-v1.json --output /home/jay/build/wj-h27-coupled-20261117/science/fixed-inlet-v1.json"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/inlet_principal.py",
+      "bytes": 13316,
+      "sha256": "14c6c29545b1178530a088bcb675451600aa963a27287048e07460cb92db14bc"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupled-20261117/science/reference-kin-v1.json",
+      "bytes": 74245,
+      "sha256": "854ad5235a6112a4c72088a2fa27f64f56ec28e3ba173fee0cc6ab20dcca995e"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 8.883049397030845,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 63676416,
+  "peak_host_workers": 33,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupled-20261117/operations/fixed-inlet-v1/command.log",
+    "bytes": 204,
+    "sha256": "af06378cba5e7f9ba3a2f2ef842bbdf0081017eced377e7a208513370f8e8c86"
+  }
+}

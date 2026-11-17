@@ -1,5 +1,9 @@
 # H27 independent reference and inlet audit
 
+This is the independent audit's preparation-time record. Authoritative Linux
+executions and the current rejected-candidate decision are in
+[the H27 feasibility report](wj-h27-feasibility-closure.md).
+
 Status: analytical derivation and an independent numerical oracle prepared;
 Linux numerical execution is pending. No numerical validation was performed on
 the Mac. Source inspected at `ec0b2f1ba0de65ffabfd41001cc0e0a423ddd9db` in the

@@ -1,0 +1,55 @@
+{
+  "scope": "constitutive feasibility, no coupled PDE",
+  "source": {
+    "path": "/home/jay/build/wj-h27-coupled-20261117/source-v3.json",
+    "bytes": 1055276,
+    "sha256": "4f5c9b6ce6841a7a620b77a8590d75e94cfb264aa531d9c1df42af8cf2608e18"
+  },
+  "configure": [
+    "cmake",
+    "-S",
+    "/home/jay/build/wj-h27-coupled-20261117/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/h27",
+    "-B",
+    "/home/jay/build/wj-h27-coupled-20261117/build-v3",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math",
+    "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+  ],
+  "build": [
+    "cmake",
+    "--build",
+    "/home/jay/build/wj-h27-coupled-20261117/build-v3",
+    "--target",
+    "WJH27PrincipalProbe",
+    "--parallel",
+    "4"
+  ],
+  "executable": {
+    "path": "/home/jay/build/wj-h27-coupled-20261117/runtime-v3/WJH27PrincipalProbe.elf",
+    "bytes": 572136,
+    "sha256": "85860a03bff3e42d077dfc853fc6f4c3e3c3c411a246591b16acd06a11d54b59"
+  },
+  "wrapper": {
+    "path": "/home/jay/build/wj-h27-coupled-20261117/runtime-v3/WJH27PrincipalProbe",
+    "bytes": 373,
+    "sha256": "1e7e8d0f5b7180ceee789fcddbe5aedce8918995eed4fb95b57b00a2463f051c"
+  },
+  "loader": {
+    "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2",
+    "bytes": 240936,
+    "sha256": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+  },
+  "libraries": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc:/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/geometry:/home/jay/.local/opt/nektar-v2026-mpi/lib64",
+  "compiler": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0\nCopyright (C) 2021 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "compile_commands": {
+    "path": "/home/jay/build/wj-h27-coupled-20261117/build-v3/compile_commands.json",
+    "bytes": 8569,
+    "sha256": "8c1c96d1e58591b29dffa176aece6a55c9aae94dbc1c9f93742448009da275e7"
+  },
+  "link": {
+    "path": "/home/jay/build/wj-h27-coupled-20261117/build-v3/CMakeFiles/WJH27PrincipalProbe.dir/link.txt",
+    "bytes": 1692,
+    "sha256": "a10175d88f3985e4f661a7bd945ba2134a57a9ae7c677fb643abd6d9191147f8"
+  }
+}

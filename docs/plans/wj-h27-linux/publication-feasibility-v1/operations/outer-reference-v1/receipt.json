@@ -1,0 +1,115 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupled-20261117/inputs/analysis-v2-outer_reference.py",
+    "--output",
+    "/home/jay/build/wj-h27-coupled-20261117/science/outer-reference-v1.json"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 180.0,
+  "utc": "2026-11-17T07:28:19.432794+00:00",
+  "allocation": {
+    "workers": 22,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 462879,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-source-prospective/run_wp2_pressure_waves.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116 --solver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver --probe /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-pressure-rows/RANSWallResolutionProbe --h1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json --parent-map /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-adoption-v2.json"
+      },
+      {
+        "pid": 471608,
+        "parent": 462879,
+        "threads": 1,
+        "args": "/usr/bin/python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-source-prospective/run_wp2_preservation.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116 --solver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver --h1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json --pressure-space inner-p2-v1 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-confirmation-CLS --model CLS --mode preserve --level 5 --dt 0.02 --endpoint 1.2 --block-steps 8"
+      },
+      {
+        "pid": 471609,
+        "parent": 462879,
+        "threads": 1,
+        "args": "/usr/bin/python3 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-source-prospective/run_wp2_preservation.py --root /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116 --solver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver --h1 /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h1-20261111/compatibility-resolved --preflight /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-h2g-20261113/comparison.json --pressure-space inner-p2-v1 --output /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-confirmation-standard --model standard --mode preserve --level 5 --dt 0.02 --endpoint 1.2 --block-steps 8"
+      },
+      {
+        "pid": 473530,
+        "parent": 473529,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-confirmation-standard/step60/case.xml"
+      },
+      {
+        "pid": 473531,
+        "parent": 473530,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 10 --singleton-died-pipe 11 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 473538,
+        "parent": 473537,
+        "threads": 3,
+        "args": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/runtime-v12/IncNavierStokesSolver /media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-confirmation-CLS/step60/case.xml"
+      },
+      {
+        "pid": 473539,
+        "parent": 473538,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 10 --singleton-died-pipe 11 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 473546,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupled-20261117/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/h27/run.py --root /home/jay/build/wj-h27-coupled-20261117 --label outer-reference-v1 --phase analysis --seconds 180 -- python3 -B /home/jay/build/wj-h27-coupled-20261117/inputs/analysis-v2-outer_reference.py --output /home/jay/build/wj-h27-coupled-20261117/science/outer-reference-v1.json"
+      },
+      {
+        "pid": 473547,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupled-20261117/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/h27/run.py --root /home/jay/build/wj-h27-coupled-20261117 --label native-comparison-v2 --phase analysis --seconds 120 -- python3 -B /home/jay/build/wj-h27-coupled-20261117/inputs/analysis-v2-native_assess.py --root /home/jay/build/wj-h27-coupled-20261117 --version 3 --tag v2 --output /home/jay/build/wj-h27-coupled-20261117/science/native-comparison-v2.json"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupled-20261117/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/h27/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupled-20261117/inputs/analysis-v2-outer_reference.py",
+      "bytes": 15129,
+      "sha256": "5ad539eb1626a83aebddc9c9d32e6b13f80d85466e25c3d99365807d16c301c1"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 14.512195668998174,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 65740800,
+  "peak_host_workers": 24,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupled-20261117/operations/outer-reference-v1/command.log",
+    "bytes": 211,
+    "sha256": "20582c8e5be3b9ed66352ea2b0409fe80849620b7408d78cd21c968a4f612f69"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "schema": "WJH27IndependentReferenceOracleV1",
+  "scope": "local counterfactual calibration column, not application steady flow",
+  "constants": {
+    "cp": 1.8,
+    "cd": 0.08718183203779911,
+    "qe": 3.386780140528718,
+    "kappa": 0.3819178635467331,
+    "c_length": 2.3804029452632984,
+    "q_peak": 5.538461538461538
+  },
+  "cases": [
+    {
+      "k_factor": 0.0,
+      "status": "REJECTED",
+      "reason": "invalid positive scientific input or roughness geometry"
+    },
+    {
+      "k_factor": -1.0,
+      "status": "REJECTED",
+      "reason": "invalid positive scientific input or roughness geometry"
+    }
+  ]
+}

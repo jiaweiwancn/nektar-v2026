@@ -1,0 +1,45 @@
+{
+  "schema": "WJH27Task3LaunchHoldV1",
+  "status": "NOT_READY_DO_NOT_LAUNCH",
+  "gates": {
+    "H27_MODEL_AND_REFERENCE": "NOT_MET",
+    "H27_COUPLED_NUMERICS": "NOT_MET",
+    "H27_PHYSICAL_PILOTS_AND_ACCURACY": "NOT_MET",
+    "H27_RESTART_MONITORING_STORAGE": "NOT_MET",
+    "H27_COMPLETE_COST": "TARGET_NOT_MET",
+    "TASK3_READY": "NO"
+  },
+  "horizon": 505.02466521278404,
+  "terminal_window": [
+    447.8483832973273,
+    505.02466521278404
+  ],
+  "model": "Specified H27 tensor/reference candidate1 inadmissible; amendment is proposal only",
+  "source": "529eb9337bde9eb1be3606160f0ee1617ca4b54a",
+  "diagnostic_executable": {
+    "path": "/home/jay/build/wj-h27-coupled-20261117/runtime-v3/WJH27PrincipalProbe.elf",
+    "bytes": 572136,
+    "sha256": "85860a03bff3e42d077dfc853fc6f4c3e3c3c411a246591b16acd06a11d54b59"
+  },
+  "coupled_solver_executable": null,
+  "initial_state": null,
+  "restart_state": null,
+  "qualified_mesh_p_q_dt": null,
+  "planned_case_classes": [
+    "developed_control",
+    "retained_inlet_startup",
+    "finite_perturbation",
+    "second_sign_or_shape"
+  ],
+  "per_trajectory_complete_forecasts": null,
+  "total_campaign_forecast": null,
+  "launch_commands": null,
+  "abort_before_launch": [
+    "scientific tensor decision required",
+    "coupled numerics not implemented/qualified",
+    "same-inlet steady reference and physical pilots missing",
+    "cold restart/rotation/retention missing",
+    "complete accuracy-qualified cost unmeasured"
+  ],
+  "next_review": "docs/plans/wj-h27-model-amendment-proposal.md"
+}

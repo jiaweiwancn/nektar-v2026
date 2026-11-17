@@ -1,0 +1,54 @@
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/jay/build/wj-h27-coupled-20261117/build-v3
+[ 14%] Building CXX object h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp.o
+[ 28%] Building CXX object h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v3/library/SolverUtils/Turbulence/RANSModels.cpp.o
+[ 42%] Building CXX object h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v3/library/SolverUtils/Turbulence/WJEARSM.cpp.o
+[ 57%] Building CXX object h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v3/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp.o
+/home/jay/build/wj-h27-coupled-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp: In member function ‘Nektar::WJNative::Vec Nektar::WJNative::Flow::ApplyFull(double, const Sparse&, double, const Vec&) const’:
+/home/jay/build/wj-h27-coupled-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:152:5: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+  152 |     for(int c=0;c<2;++c)r.segment(c*m_nu,m_nu)+=alpha*(m_mass*x.segment(c*m_nu,m_nu));r.tail(m_np)=m_div*x.head(2*m_nu);return r;
+      |     ^~~
+/home/jay/build/wj-h27-coupled-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:152:87: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+  152 |     for(int c=0;c<2;++c)r.segment(c*m_nu,m_nu)+=alpha*(m_mass*x.segment(c*m_nu,m_nu));r.tail(m_np)=m_div*x.head(2*m_nu);return r;
+      |                                                                                       ^
+/home/jay/build/wj-h27-coupled-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp: In member function ‘Nektar::WJNative::SolveInfo Nektar::WJNative::Flow::Solve(const Sparse&, const Vec&, Nektar::WJNative::Vec&, double, double)’:
+/home/jay/build/wj-h27-coupled-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:246:13: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+  246 |             for(int pass=0;pass<2;++pass)for(int i=0;i<=j;++i){double h=V.col(i).dot(v);H(i,j)+=h;v.noalias()-=h*V.col(i);}H(j+1,j)=v.norm();if(H(j+1,j)>0)V.col(j+1)=v/H(j+1,j);
+      |             ^~~
+/home/jay/build/wj-h27-coupled-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:246:124: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+  246 |             for(int pass=0;pass<2;++pass)for(int i=0;i<=j;++i){double h=V.col(i).dot(v);H(i,j)+=h;v.noalias()-=h*V.col(i);}H(j+1,j)=v.norm();if(H(j+1,j)>0)V.col(j+1)=v/H(j+1,j);
+      |                                                                                                                            ^
+/home/jay/build/wj-h27-coupled-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:255:5: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+  255 |     if(!m_initialIterations&&used)m_initialIterations=used;m_lastIterations=used;
+      |     ^~
+/home/jay/build/wj-h27-coupled-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:255:60: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  255 |     if(!m_initialIterations&&used)m_initialIterations=used;m_lastIterations=used;
+      |                                                            ^~~~~~~~~~~~~~~~
+[ 71%] Linking CXX static library libWJNativeFlow.a
+[ 71%] Built target WJNativeFlow
+[ 85%] Building CXX object CMakeFiles/WJH27PrincipalProbe.dir/principal.cpp.o
+In file included from /home/jay/build/wj-h27-coupled-20261117/source-v3/library/StdRegions/StdExpansion3D.h:40,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v3/library/SpatialDomains/Geometry3D.h:38,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v3/library/SpatialDomains/HexGeom.h:38,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v3/library/SpatialDomains/MeshGraph.h:45,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v3/library/SpatialDomains/Conditions.h:44,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.h:7,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/h27/principal.cpp:4:
+/home/jay/build/wj-h27-coupled-20261117/source-v3/library/StdRegions/StdExpansion.h: In instantiation of ‘Nektar::NekDouble Nektar::StdRegions::StdExpansion::BaryEvaluate(const NekDouble&, const NekDouble*, Nektar::NekDouble&, Nektar::NekDouble&) [with int DIR = 0; bool DERIV = true; bool DERIV2 = true; Nektar::NekDouble = double]’:
+/home/jay/build/wj-h27-coupled-20261117/source-v3/library/StdRegions/StdExpansion1D.h:70:57:   required from here
+/home/jay/build/wj-h27-coupled-20261117/source-v3/library/StdRegions/StdExpansion.h:1440:41: warning: comparison of integer expressions of different signedness: ‘int’ and ‘const size_t’ {aka ‘const long unsigned int’} [-Wsign-compare]
+ 1440 |                     for (int kk = 0; kk < nquad; kk++)
+      |                                      ~~~^~~~~~~
+[100%] Linking CXX executable WJH27PrincipalProbe
+[100%] Built target WJH27PrincipalProbe

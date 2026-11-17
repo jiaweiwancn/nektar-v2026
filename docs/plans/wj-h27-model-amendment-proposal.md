@@ -98,3 +98,16 @@ Before any active implementation, the user must decide whether to adopt this exa
 6. Cold restart, actual recovery rotation/scientific retention, current-state monitoring, storage and full coupled one-case/campaign cost qualification. Keep T=505.02466521278404 and its original terminal window; do not launch that full horizon in this review package.
 
 Until those gates pass on one executable recipe, the amended model remains unqualified and `TASK3_READY=NO`. If the collar screen fails, publish its exact witness and reassess this proposal rather than changing chi, coefficients, inlet, roughness or floors without a separately reviewed scientific basis.
+
+## Observed proposal-only Linux screen
+
+The frozen diagnostic was subsequently executed under the H27 account in
+4.830688584013842 seconds. It reports `POSITIVE_FINITE_COVERAGE_ONLY`:
+minimum sampled planar principal .004435791335539807, full-3D two-mode
+principal .00512317614873607, and covariance/k .2817664872069159. Both FD
+levels pass the declared step-sensitivity screen. The
+[raw output](wj-h27-linux/publication-feasibility-v1/raw/proposal-screen-v1.json)
+retains every point, direction witness and proposal-only flag; the
+[closure report](wj-h27-feasibility-closure.md) binds its receipt and identity.
+The active PDE/model remains unchanged and user scientific approval remains
+pending. These finite positive results do not close any coupled H27 gate.

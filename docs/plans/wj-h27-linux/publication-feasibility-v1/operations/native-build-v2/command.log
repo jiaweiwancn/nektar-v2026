@@ -1,0 +1,97 @@
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/jay/build/wj-h27-coupled-20261117/build-v2
+[ 14%] Building CXX object h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/RANSModels.cpp.o
+[ 28%] Building CXX object h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp.o
+[ 42%] Building CXX object h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp.o
+[ 57%] Building CXX object h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupled-20261117/source-v2/library/SolverUtils/Turbulence/WJEARSM.cpp.o
+/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp: In member function ‘Nektar::WJNative::Vec Nektar::WJNative::Flow::ApplyFull(double, const Sparse&, double, const Vec&) const’:
+/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:152:5: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+  152 |     for(int c=0;c<2;++c)r.segment(c*m_nu,m_nu)+=alpha*(m_mass*x.segment(c*m_nu,m_nu));r.tail(m_np)=m_div*x.head(2*m_nu);return r;
+      |     ^~~
+/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:152:87: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+  152 |     for(int c=0;c<2;++c)r.segment(c*m_nu,m_nu)+=alpha*(m_mass*x.segment(c*m_nu,m_nu));r.tail(m_np)=m_div*x.head(2*m_nu);return r;
+      |                                                                                       ^
+/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp: In member function ‘Nektar::WJNative::SolveInfo Nektar::WJNative::Flow::Solve(const Sparse&, const Vec&, Nektar::WJNative::Vec&, double, double)’:
+/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:246:13: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+  246 |             for(int pass=0;pass<2;++pass)for(int i=0;i<=j;++i){double h=V.col(i).dot(v);H(i,j)+=h;v.noalias()-=h*V.col(i);}H(j+1,j)=v.norm();if(H(j+1,j)>0)V.col(j+1)=v/H(j+1,j);
+      |             ^~~
+/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:246:124: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+  246 |             for(int pass=0;pass<2;++pass)for(int i=0;i<=j;++i){double h=V.col(i).dot(v);H(i,j)+=h;v.noalias()-=h*V.col(i);}H(j+1,j)=v.norm();if(H(j+1,j)>0)V.col(j+1)=v/H(j+1,j);
+      |                                                                                                                            ^
+/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:255:5: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+  255 |     if(!m_initialIterations&&used)m_initialIterations=used;m_lastIterations=used;
+      |     ^~
+/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:255:60: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  255 |     if(!m_initialIterations&&used)m_initialIterations=used;m_lastIterations=used;
+      |                                                            ^~~~~~~~~~~~~~~~
+[ 71%] Linking CXX static library libWJNativeFlow.a
+[ 71%] Built target WJNativeFlow
+[ 85%] Building CXX object CMakeFiles/WJH27PrincipalProbe.dir/principal.cpp.o
+/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/principal.cpp: In function ‘int main(int, char**)’:
+/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/principal.cpp:83:13: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   83 |             if(!first)std::cout<<',';first=false;
+      |             ^~
+/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/principal.cpp:83:38: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   83 |             if(!first)std::cout<<',';first=false;
+      |                                      ^~~~~
+/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/principal.cpp:101:13: error: reference to ‘Matrix’ is ambiguous
+  101 |             Matrix(value.R);
+      |             ^~~~~~
+/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/principal.cpp:63:6: note: candidates are: ‘void {anonymous}::Matrix(const Tensor&)’
+   63 | void Matrix(const Tensor& a)
+      |      ^~~~~~
+In file included from /home/jay/build/wj-h27-coupled-20261117/source-v2/library/LibUtilities/BasicUtils/SharedArray.hpp:41,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v2/library/LibUtilities/Communication/Comm.h:46,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v2/library/MultiRegions/AssemblyMap/AssemblyMap.h:38,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v2/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v2/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.h:7,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/principal.cpp:4:
+/home/jay/build/wj-h27-coupled-20261117/source-v2/library/LibUtilities/LinearAlgebra/NekMatrixFwd.hpp:49:36: note:                 ‘template<class DataType> class Nektar::Matrix’
+   49 | template <typename DataType> class Matrix;
+      |                                    ^~~~~~
+/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/principal.cpp:118:17: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+  118 |                 if(!fdFirst)std::cout<<',';fdFirst=false;
+      |                 ^~
+/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/principal.cpp:118:44: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  118 |                 if(!fdFirst)std::cout<<',';fdFirst=false;
+      |                                            ^~~~~~~
+In file included from /home/jay/build/wj-h27-coupled-20261117/source-v2/library/StdRegions/StdExpansion3D.h:40,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v2/library/SpatialDomains/Geometry3D.h:38,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v2/library/SpatialDomains/HexGeom.h:38,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v2/library/SpatialDomains/MeshGraph.h:45,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v2/library/SpatialDomains/Conditions.h:44,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v2/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v2/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v2/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v2/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.h:7,
+                 from /home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/principal.cpp:4:
+/home/jay/build/wj-h27-coupled-20261117/source-v2/library/StdRegions/StdExpansion.h: In instantiation of ‘Nektar::NekDouble Nektar::StdRegions::StdExpansion::BaryEvaluate(const NekDouble&, const NekDouble*, Nektar::NekDouble&, Nektar::NekDouble&) [with int DIR = 0; bool DERIV = true; bool DERIV2 = true; Nektar::NekDouble = double]’:
+/home/jay/build/wj-h27-coupled-20261117/source-v2/library/StdRegions/StdExpansion1D.h:70:57:   required from here
+/home/jay/build/wj-h27-coupled-20261117/source-v2/library/StdRegions/StdExpansion.h:1440:41: warning: comparison of integer expressions of different signedness: ‘int’ and ‘const size_t’ {aka ‘const long unsigned int’} [-Wsign-compare]
+ 1440 |                     for (int kk = 0; kk < nquad; kk++)
+      |                                      ~~~^~~~~~~
+/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/principal.cpp: At global scope:
+/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/principal.cpp:63:6: warning: ‘void {anonymous}::Matrix(const Tensor&)’ defined but not used [-Wunused-function]
+   63 | void Matrix(const Tensor& a)
+      |      ^~~~~~
+gmake[3]: *** [CMakeFiles/WJH27PrincipalProbe.dir/build.make:76: CMakeFiles/WJH27PrincipalProbe.dir/principal.cpp.o] Error 1
+gmake[2]: *** [CMakeFiles/Makefile2:101: CMakeFiles/WJH27PrincipalProbe.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:108: CMakeFiles/WJH27PrincipalProbe.dir/rule] Error 2
+gmake: *** [Makefile:124: WJH27PrincipalProbe] Error 2
+Traceback (most recent call last):
+  File "/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/build.py", line 40, in <module>
+    if __name__=='__main__':main()
+  File "/home/jay/build/wj-h27-coupled-20261117/source-v2/solvers/IncNavierStokesSolver/Tests/RANS/h27/build.py", line 22, in main
+    subprocess.run(command,check=True)
+  File "/usr/lib/python3.10/subprocess.py", line 526, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['cmake', '--build', '/home/jay/build/wj-h27-coupled-20261117/build-v2', '--target', 'WJH27PrincipalProbe', '--parallel', '4']' returned non-zero exit status 2.

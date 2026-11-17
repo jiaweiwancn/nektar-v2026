@@ -1,5 +1,9 @@
 # H27 retained inlet, finite-viscosity boundaries and prospective physical gates
 
+This independent audit preserves its preparation-time scope. Subsequent Linux
+outcomes and current readiness are in
+[the H27 feasibility report](wj-h27-feasibility-closure.md).
+
 ## Material Passport
 
 - Artifact: independent boundary/inlet audit for H27-A; source review and algebraic derivation, not solver validation.
