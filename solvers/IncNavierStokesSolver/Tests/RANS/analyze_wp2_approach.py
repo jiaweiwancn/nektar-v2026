@@ -5,7 +5,7 @@
 Actual native coefficient fields are evaluated on immutable CG geometry rows.
 This does not evolve, project, reset or repair any retained state.
 """
-import argparse,math,time,resource,shutil
+import argparse,math,time,resource,shutil,importlib.util
 from pathlib import Path
 import numpy as np
 from cao_tamura_h2d_state import load
@@ -19,9 +19,22 @@ TREQ=1.1942387693600194
 K0={'CLS':.017598891430879275,'standard':.01838575534504143}
 
 
+def source_identity(names,entry):
+    entry=Path(entry);result={}
+    for name in names:
+        if name==entry.name:path=entry
+        else:
+            spec=importlib.util.find_spec(Path(name).stem)
+            require(spec is not None and spec.origin is not None,'unresolved analysis dependency '+name)
+            path=Path(spec.origin)
+        require(path.is_file(),'analysis dependency has no source file: '+str(path))
+        result[name]=sha(path)
+    return result
+
+
 def analysis_identity():
     here=Path(__file__)
-    return {name:sha(here.with_name(name)) for name in [here.name,'wp2_all_state.py','wp2_common_quadrature.py','wp2_qualification.py','cao_tamura_h2g_constitutive.py']}
+    return source_identity([here.name,'wp2_all_state.py','wp2_common_quadrature.py','wp2_qualification.py','cao_tamura_h2g_constitutive.py'],here)
 
 
 def tensor_homogeneity(rows,current,cold):
@@ -46,7 +59,7 @@ def paths(root,model,phase,progress):
             'recovery':[]}[phase]
     if progress['case_definition'].get('pressure_space','baseline-v1')!='baseline-v1':prefix=[]
     reports=[root/p for p in prefix]
-    for obs in progress['observations']:
+    for obs in progress.get('prefix_observations',[])+progress['observations']:
         p=Path(obs['report'])
         if p not in reports:reports.append(p)
     return reports

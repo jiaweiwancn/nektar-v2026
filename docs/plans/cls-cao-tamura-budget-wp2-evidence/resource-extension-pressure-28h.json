@@ -1,0 +1,33 @@
+{
+  "version": "WP2CumulativeResourceAmendmentV4",
+  "capture_Asia_Shanghai": "2026-11-17T11:10:41.160584+08:00",
+  "original_wall_seconds": 43200,
+  "previous_cumulative_wall_seconds": 86400,
+  "cumulative_wall_seconds": 100800,
+  "reserved_attempts_before": 1766,
+  "additional_physical_attempt_limit": 1102,
+  "physical_attempt_limit_unchanged": 6000,
+  "predecessor_sha256": "daec74b95d8266b23639f945f7124ef9dfda02110c3920d0f8e8902aba318d77",
+  "origin_sha256": "eac0a5911aeba5dc693af8788b1f4adff253d95fcc6accfd45b06ed0be68a23c",
+  "pressure_scope_sha256": "ebb952ccd4dcf16dd4758a7756c05c0a53d42472ad119b5dd29c2cbb83c955b4",
+  "unchanged_acceptance_sha256": "193c9bb35edd9a6b89ceb531fc53824f1200edf79f6123ebaaebcf695ba40e84",
+  "reason": "The native inner-P2 cold balances and GL36/time trials pass both models. Actual measured step cost is 45-50 s, plus cold/report cost. Reserve the complete pressure-control comparison and, only after recovery passes, its paired perturbation timestep/confirmation-mesh sensitivity within one finite cumulative envelope.",
+  "scope": "Original pressure control 742 attempts plus at most 360 conditional attempts: recovery dt=.02 selected (60/model) and dt=.01 finer mesh (120/model), to T=1.2. Conditional extras require initial pressure recovery to pass complete physical/window gates. No physics/acceptance change; no reset or erased past overrun.",
+  "conditional_extra_attempts": 360,
+  "original_pressure_control_attempts": 742,
+  "rank": 1,
+  "numerical_threads": 1,
+  "concurrent_native_cases_max": 4,
+  "unchanged_origin_and_all_counters": true,
+  "forecast": {
+    "measured_continued_step_seconds": [
+      44.5,
+      49.9
+    ],
+    "first_control_critical_path_steps": 204,
+    "first_control_cold_output_analysis_reserve_seconds": 1200,
+    "conditional_followup_critical_path_steps": 168,
+    "conditional_analysis_reserve_seconds": 1200
+  },
+  "previous_administrative_overrun": "Previously recorded sixteen-hour administrative overrun remains historical and is not reclassified."
+}

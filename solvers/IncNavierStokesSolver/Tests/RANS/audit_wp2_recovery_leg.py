@@ -4,7 +4,7 @@
 import argparse
 from pathlib import Path
 import numpy as np
-from analyze_wp2_approach import assess,native_states,tensor_differences,K0
+from analyze_wp2_approach import assess,native_states,tensor_differences,K0,source_identity
 from wp2_all_state import Rows,US
 from wp2_common_quadrature import resample
 from wp2_independent_reference import evaluate
@@ -68,7 +68,7 @@ def main():
         native_progress=str(progress_path),native_progress_sha256=sha(progress_path),
         GL28_final_window=dense_window,GL28_transit_scaled_trend=dense_trend,GL28_full_tensor_window=tensor_window,GL28_full_tensor_trend=tensor_trend,
         GL28_window_passed=dense_window_pass,
-        source_sha256={n:sha(Path(__file__).with_name(n)) for n in [Path(__file__).name,'analyze_wp2_approach.py','wp2_all_state.py','wp2_common_quadrature.py','wp2_independent_reference.py','audit_wp2_dense_profiles.py']},
+        source_sha256=source_identity([Path(__file__).name,'analyze_wp2_approach.py','wp2_all_state.py','wp2_common_quadrature.py','wp2_independent_reference.py','audit_wp2_dense_profiles.py'],Path(__file__)),
         accuracy_failure_reporting='failed recovery accuracy checks remain failed and are retained; scalar/covariance requirements are never bypassed',
         passed=assessment['final_physical_and_full_tensor_passed'] and dense[-1]['passed'] and window['passed'] and tensors['passed'] and assessment['final_window']['transit_scaled_linear_trend']['passed'] and dense_window_pass,
         scope='same complete recovery trajectory, no field or reference alteration; finite-time return and measured final-window sensitivity; zero PDE solves in this assessment')

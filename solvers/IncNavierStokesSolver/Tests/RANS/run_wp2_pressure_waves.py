@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 """Gate-owned inner-P2 control, original cumulative ledger/deadline retained."""
 import argparse,os,subprocess,time
+import numpy as np
 from pathlib import Path
 from cao_tamura_h2d_state import load
 from continue_cls_epawf_pimple import atomic
@@ -15,9 +16,11 @@ from wp2_all_state import Rows
 def main():
     parser=argparse.ArgumentParser()
     for n in ['root','solver','probe','h1','preflight']:parser.add_argument('--'+n,type=Path,required=True)
-    a=parser.parse_args();r=a.root;record=r/'pressure-waves-v2.json';require(not record.exists(),'pressure waves already owned')
-    state=dict(version='WP2PressureWavesV2',status='waiting_initial_gates',pid=os.getpid(),source_sha256=sha(Path(__file__)),
-               solver_sha256=sha(a.solver),probe_sha256=sha(a.probe),scope_sha256=sha(r/'pressure-control-scope.json'),events=[])
+    parser.add_argument('--parent-map',type=Path)
+    a=parser.parse_args();r=a.root;record=r/'pressure-waves-v4.json';require(not record.exists(),'pressure waves already owned')
+    state=dict(version='WP2PressureWavesV4',status='waiting_initial_gates',pid=os.getpid(),source_sha256=sha(Path(__file__)),
+               solver_sha256=sha(a.solver),probe_sha256=sha(a.probe),scope_sha256=sha(r/'pressure-control-scope.json'),
+               resource_amendment_sha256=sha(r/'resource-extension-pressure-28h.json'),events=[])
     atomic(record,state);env=dict(os.environ,**THREADS)
     def event(kind,**v):state['events'].append(dict(event_type=kind,epoch=time.time(),**v));atomic(record,state)
     def remaining():return wall_limit(r)-(time.time()-load(r/'origin.json')['started_epoch'])
@@ -60,27 +63,52 @@ def main():
             from wp2_qualification import quarter_budget_differences
             base=reference['wp2_common_samples'];check=quarter_budget_differences(dict(base,values=l['values']),dict(base,values=rr['values']),.07426793792419734,reference['parameters'][5],.0065)
             require(check['passed'],'higher production quadrature changes the principal fields')
+            from wp2_qualification import physical_gates
+            require(physical_gates(data['spatial'],.07426793792419734,reference['parameters'][5],complete=True)['passed'],
+                    'higher production quadrature physical audit failed')
+            tensor_changes={}
+            for region in [0,1]:
+                mask=row.inner if region==0 else ~row.inner;w=row.weight[mask]
+                for name in ['R','T']:
+                    error=l[name][mask]-rr[name][mask]
+                    tensor_changes[str(region)+'_'+name]=float(np.sqrt(np.sum(w[:,None,None]*error**2)/sum(w))/.07426793792419734**2)
+            require(max(tensor_changes.values())<=.0025,'quadrature full-tensor change exceeds quarter budget')
             require(max(data['spatial']['unanchored_free_block_norms'][:4])<=1e-3,'higher-quadrature cold residual fails')
-            event('production_quadrature_passed',model=model,changes=check,progress_sha256=sha(qp))
+            event('production_quadrature_passed',model=model,changes=check,full_tensor_changes=tensor_changes,progress_sha256=sha(qp))
         # Freeze the finer native pressure row catalogue. No state is imported,
         # projected or advanced by this geometry-only export.
         xml=r/'pressure-cold-confirmation/standard-case/case.xml'
         common=load(r/'pressure-row-verification/mixed_p2/result.json')['physical_z_partition']
-        charge(r,'pressure confirmation row catalogue',geometry_context_builds=1)
         packet=dict(operation='wp2_geometry_rows',inner_stress_model='Linear',expected_model='StandardKEpsilon',xml_sha256=sha(xml),
                     z_partition=common,pressure_rows='RegionalP2V1')
-        data,receipt=run_probe(a.probe,xml,packet,r/'pressure-rows-confirmation')
+        if (r/'pressure-rows-confirmation').exists():
+            charge(r,'reuse exact pressure confirmation row catalogue',geometry_context_reuses=1)
+            require(load(r/'pressure-rows-confirmation/input.json')==packet,'retained pressure row request differs')
+            data=load(r/'pressure-rows-confirmation/result.json');receipt=load(r/'pressure-rows-confirmation/receipt.json')
+            require(receipt['output_sha256']==sha(r/'pressure-rows-confirmation/result.json'),'retained pressure rows changed')
+            Rows(r/'pressure-rows-confirmation/result.json')
+        else:
+            charge(r,'pressure confirmation row catalogue',geometry_context_builds=1)
+            data,receipt=run_probe(a.probe,xml,packet,r/'pressure-rows-confirmation')
         require(sum(data['sizes'])==11609,'unexpected confirmation native pressure dimensions')
         event('confirmation_rows_frozen',receipt=receipt,sizes=data['sizes'])
         common=['--root',str(r),'--solver',str(a.solver),'--h1',str(a.h1),'--preflight',str(a.preflight),'--pressure-space','inner-p2-v1']
+        parent_map=load(a.parent_map) if a.parent_map else None
+        if parent_map:require(parent_map['status']=='passed_complete_segment_revalidation','resource recovery prefixes are not fully qualified')
+        trajectories={}
         for wave in [[('recovery','recover',4,.01),('fine','preserve',4,.01)],
                      [('coarse','preserve',4,.02),('confirmation','preserve',5,.02)]]:
             jobs=[];state['status']='physical_wave';atomic(record,state)
             for phase,mode,level,dt in wave:
                 for model in ['CLS','standard']:
-                    name='pressure-'+phase+'-'+model;output=r/name;require(not output.exists(),'pressure output already exists')
+                    prefix=parent_map['prefixes'][model].get(phase) if parent_map else None
+                    name='pressure-'+phase+('-successor-' if prefix else '-')+model;output=r/name;require(not output.exists(),'pressure output already exists')
                     cmd=['/usr/bin/python3',str(Path(__file__).with_name('run_wp2_preservation.py')),*common,'--output',str(output),
-                         '--model',model,'--mode',mode,'--level',str(level),'--dt',str(dt),'--endpoint','1.2']
+                         '--model',model,'--mode',mode,'--level',str(level),'--dt',str(dt),'--endpoint','1.2','--block-steps',str(8 if level==5 else 16)]
+                    if prefix:
+                        require(sha(Path(prefix['path']))==prefix['sha256'],'revalidated prefix changed')
+                        cmd+=['--parent-progress',prefix['path'],'--handoff-reason','completed native segment revalidated after timing-wrapper interruption; exact native histories; no physical replay']
+                    trajectories.setdefault(model,{})[phase]=dict(path=str(output/'progress.json'))
                     jobs.append((name,launch(name,cmd),output,phase))
             while any(j.poll() is None for _,j,_,_ in jobs):time.sleep(5)
             failure=[]
@@ -93,12 +121,15 @@ def main():
                 if not good:failure.append(name+': '+str(d.get('failure')))
             require(not failure,'pressure wave stopped before successors: '+'; '.join(failure))
         state['status']='readback';atomic(record,state)
+        for cases in trajectories.values():
+            for v in cases.values():v['sha256']=sha(Path(v['path']))
+        map_path=r/'pressure-trajectory-map.json';atomic(map_path,dict(version='WP2PressureTrajectoryMapV1',models=trajectories))
         # Analyses remain read-only and cannot relaunch native evolution.
         jobs=[]
         for model in ['CLS','standard']:
             cmd=['/usr/bin/python3',str(Path(__file__).with_name('analyze_wp2_pressure_control.py')),'--root',str(r),
                  '--selected-rows',str(r/'pressure-row-verification/mixed_p2/result.json'),'--confirmation-rows',str(r/'pressure-rows-confirmation/result.json'),
-                 '--model',model,'--output',str(r/('pressure-assessment-'+model))]
+                 '--model',model,'--output',str(r/('pressure-assessment-'+model)),'--trajectory-map',str(map_path)]
             jobs.append((model,launch('pressure-analysis-'+model,cmd)))
         while any(j.poll() is None for _,j in jobs):time.sleep(5)
         results={}

@@ -52,6 +52,17 @@ class PhysicalComparison(unittest.TestCase):
         self.assertTrue(quarter_budget_differences(a,b,.1,.02,.0065)['passed'])
         b['values'][0][12]=.1
         self.assertFalse(quarter_budget_differences(a,b,.1,.02,.0065)['passed'])
+    def test_recovery_interface_accuracy_is_recorded_until_final_qualification(self):
+        import wp2_qualification as q
+        d=dict(wp2_per_state_monitoring=[dict(time=.05,physical_checks={})],accepted_states=[[]],
+            state_audits=[dict(accepted_awf_hard_admissible=[1],accepted_awf_covariance=[.005,.006],interface=[0,0,.00015,.00015,0,0])],pimple_attempts=[])
+        with patch.object(q,'physical_gates',side_effect=lambda *args,**kwargs:dict(passed=True,gates={})):
+            with self.assertRaisesRegex(ValueError,'native interface budget'):q.verify_report(d,.1,.02)
+            result=q.verify_report(d,.1,.02,allow_recovery=True)
+            self.assertFalse(result[-1]['passed']);self.assertAlmostEqual(result[-1]['gates']['interface_normal_full_RMS']['value'],.015)
+            d['state_audits'][0]['accepted_awf_covariance'][0]=-.001
+            with self.assertRaisesRegex(ValueError,'covariance margin'):q.verify_report(d,.1,.02,allow_recovery=True)
+
     def test_changed_grid_rejected(self):
         a=self.samples();b=copy.deepcopy(a);b['weights'][0]*=2
         with self.assertRaises(Exception):common_differences(a,b,.1,.02,.0065)
@@ -106,6 +117,23 @@ class ContinuationOwnership(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'unsupported WP2 confirmation-recovery amendment'):wall_limit(root)
             confirmation['additional_physical_attempt_limit']=120
             (root/'resource-extension-24h.json').write_text(json.dumps(confirmation))
+            from wp2_budget import pressure_scope
+            scoped=dict(version='WP2PressureControlScopeV1',cumulative_wall_seconds=86400,reserved_attempts_before=1766,
+                additional_physical_attempt_limit=742,spatial_case_limit=40,physical_attempt_limit_unchanged=6000,
+                predecessor_sha256=sha(root/'resource-extension-24h.json'),origin_sha256=sha(root/'origin.json'),
+                unchanged_acceptance_sha256=amendment['unchanged_acceptance_sha256'])
+            (root/'pressure-control-scope.json').write_text(json.dumps(scoped))
+            final=dict(version='WP2CumulativeResourceAmendmentV4',original_wall_seconds=43200,previous_cumulative_wall_seconds=86400,
+                cumulative_wall_seconds=100800,reserved_attempts_before=1766,additional_physical_attempt_limit=1102,
+                predecessor_sha256=sha(root/'resource-extension-24h.json'),origin_sha256=sha(root/'origin.json'),
+                unchanged_acceptance_sha256=amendment['unchanged_acceptance_sha256'],pressure_scope_sha256=sha(root/'pressure-control-scope.json'))
+            (root/'resource-extension-pressure-28h.json').write_text(json.dumps(final))
+            self.assertEqual(wall_limit(root),100800);self.assertEqual(pressure_scope(root)['additional_physical_attempt_limit'],1102)
+            final['additional_physical_attempt_limit']=1103
+            (root/'resource-extension-pressure-28h.json').write_text(json.dumps(final))
+            with self.assertRaisesRegex(ValueError,'unsupported WP2 pressure resource amendment'):wall_limit(root)
+            final['additional_physical_attempt_limit']=1102
+            (root/'resource-extension-pressure-28h.json').write_text(json.dumps(final))
             (root/'origin.json').write_text('{"reset":true}')
             with self.assertRaisesRegex(ValueError,'clock origin changed'):wall_limit(root)
     def test_pressure_gate_positive_bookkeeping_and_requested_transaction_dt(self):
@@ -142,6 +170,35 @@ class ContinuationOwnership(unittest.TestCase):
             self.assertEqual(d['status'],'passed_initial_pressure_gates');self.assertEqual(requested,[.02])
             self.assertEqual([e['name'] for e in d['events'] if e['event_type']=='trial_passed'],['coarse','fine'])
 
+    def test_readback_identity_resolves_actual_overlay_dependency(self):
+        import wp2_qualification
+        from analyze_wp2_approach import source_identity
+        from run_cls_epawf_picard import sha
+        with tempfile.TemporaryDirectory() as temp:
+            entry=Path(temp)/'isolated.py';entry.write_text('# isolated analysis entry')
+            self.assertFalse(entry.with_name('wp2_qualification.py').exists())
+            identity=source_identity(['isolated.py','wp2_qualification.py'],entry)
+            self.assertEqual(identity['isolated.py'],sha(entry))
+            self.assertEqual(identity['wp2_qualification.py'],sha(Path(wp2_qualification.__file__)))
+
+    @unittest.skipUnless(sys.platform.startswith('linux'),'Linux process-group ownership fixture')
+    def test_native_wrapper_timeout_leaves_no_executing_child(self):
+        import os,subprocess,time
+        from wp2_native import execute_owned
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);pidfile=root/'child.pid'
+            script="import subprocess,sys,time;from pathlib import Path;p=subprocess.Popen([sys.executable,'-c','import time;time.sleep(20)']);Path("+repr(str(pidfile))+").write_text(str(p.pid));time.sleep(20)"
+            with (root/'log').open('w') as log:
+                with self.assertRaises(subprocess.TimeoutExpired):
+                    execute_owned([sys.executable,'-c',script],root,dict(os.environ),log,.5)
+            self.assertTrue(pidfile.exists());pid=int(pidfile.read_text());status=Path('/proc')/str(pid)/'status'
+            for _ in range(20):
+                if not status.exists() or any(line.startswith('State:') and 'Z' in line for line in status.read_text().splitlines()):break
+                time.sleep(.03)
+            else:self.fail('native-like child survived the wrapper timeout')
+            with (root/'success').open('w') as log:
+                self.assertEqual(execute_owned([sys.executable,'-c','pass'],root,dict(os.environ),log,5).returncode,0)
+
     def test_fixture_honors_requested_production_timestep(self):
         from wp2_native import Run
         x=Run.__new__(Run);calls=[]
@@ -157,6 +214,8 @@ class ContinuationOwnership(unittest.TestCase):
         from analyze_wp2_approach import paths
         root=Path('/immutable');progress=dict(case_definition=dict(pressure_space='inner-p2-v1'),observations=[dict(report='/immutable/new/report.json')])
         self.assertEqual(paths(root,'standard','coarse',progress),[Path('/immutable/new/report.json')])
+        progress['prefix_observations']=[dict(report='/immutable/accepted-prefix/report.json')]
+        self.assertEqual(paths(root,'standard','fine',progress),[Path('/immutable/accepted-prefix/report.json'),Path('/immutable/new/report.json')])
 
     def test_execution_index_includes_nested_legacy_and_deduplicates(self):
         from wp2_execution_index import executions

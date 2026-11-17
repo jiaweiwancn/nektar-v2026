@@ -97,3 +97,16 @@ The extension covers at most 70 additional physical attempts: a same-dt exact
 late-import check and one 68-step dt=.005 standard local-window control from
 the saved T≈3.36 state. Original coarse data are reused. It does not authorize
 a full recovery rerun, hill continuation or an automatic later extension.
+
+2026-11-17 pressure-control amendment: matched radial recovery passes its mesh
+sensitivity gate but fails return, motivating existing inner-P2/outer-P1 native
+pressure on the unchanged common velocity/scalar meshes. All physical criteria
+remain frozen. Resource amendments retain the original cumulative clock; the
+latest finite limit is 28 hours, with no counter reset. GL36 is declared before
+this pressure control. Primary/confirmation sizes are natively 9093/11609.
+After a timing-wrapper ownership defect, the invocation cap remains 1800 seconds
+and administrative blocks become 16/8 with process-group cleanup. Completed
+native accepted segments are separately restart-revalidated; original unknown
+process exits remain unknown. Interim recovery accuracy excursions are retained,
+while all unperturbed and final recovered-state accuracy checks stay unchanged.
+Full both-model pressure/transit/recovery evidence remains required for closure.

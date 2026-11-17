@@ -1,0 +1,417 @@
+{
+  "version": "WP2OneSidedSurfaceReplayV1",
+  "passed": true,
+  "source_sha256": "5a68aebda3e993f232b71bf54ffac48bfcd05491fbc8c7eb12aa2dc17f1251a3",
+  "models": {
+    "CLS": {
+      "errors": {
+        "wall": 1.7140521319626526e-14,
+        "normal": 5.338345079354481e-11,
+        "full": 1.185753070779703e-10,
+        "flux": 3.829261128447356e-16
+      },
+      "summary": {
+        "order": 36,
+        "wall_mean_shear": 0.005515729496996039,
+        "wall_shear_RMS_error_over_ustar2": 8.24202705129001e-06,
+        "interface_normal_traction_jump_RMS": 6.300828478845091e-07,
+        "interface_full_traction_jump_RMS": 1.9642820798322225e-06,
+        "interface_k_flux_jump_RMS": 1.278975080027649e-08,
+        "minimum_actual_outer_trace_epsilon": 0.14305126111089742,
+        "actual_dependent_trace_epsilon_relative_max": 4.704992441726843e-07,
+        "covariance_minima": {
+          "ground": 0.019693218782607966,
+          "H_minus": 0.0063133632559640735,
+          "H_plus": 0.006128106111163915
+        },
+        "scope": "represented physical one-sided affine polynomials; immutable analytical reference is separate; sigmaK=1 in both selected models; finite surface sampling complements native sided hard audit",
+        "covariance_witnesses": {
+          "ground": {
+            "physical": [
+              0.5994576156210214,
+              0.0,
+              0.0
+            ],
+            "geometry": 5,
+            "element": 5,
+            "radial_side": 0,
+            "tangential_side": 0,
+            "k": 0.030080075550794175,
+            "epsilon": 1.1185504847090213,
+            "epsilon_semantics": "dependent E_C",
+            "gradient": [
+              [
+                -1.1811400198685148e-20,
+                0.0,
+                1353.3915268573878
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.897051542209407e-25,
+                0.0,
+                -6.1571973110253265e-06
+              ]
+            ],
+            "tensor": [
+              [
+                0.02005338370052945,
+                0.0,
+                -0.0003601649195600384
+              ],
+              [
+                0.0,
+                0.02005338370052945,
+                0.0
+              ],
+              [
+                -0.0003601649195600384,
+                0.0,
+                0.020053383703806563
+              ]
+            ],
+            "eigenvalues": [
+              0.019693218782607966,
+              0.020053383700529448,
+              0.020413548621728044
+            ],
+            "critical_eigenvector": [
+              -0.7071067827950226,
+              6.772360450213455e-15,
+              -0.7071067795780724
+            ]
+          },
+          "H_minus": {
+            "physical": [
+              -0.10010847687579572,
+              0.0,
+              0.0065
+            ],
+            "geometry": 132,
+            "element": 132,
+            "radial_side": -1,
+            "tangential_side": 0,
+            "k": 0.017598909846415614,
+            "epsilon": 0.14305148382504698,
+            "epsilon_semantics": "dependent E_C",
+            "gradient": [
+              [
+                1.2624894642114734e-05,
+                0.0,
+                25.449646743164287
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                -6.359761887204276e-06,
+                0.0,
+                -1.8532939905267262e-05
+              ]
+            ],
+            "tensor": [
+              [
+                0.011732601187588789,
+                0.0,
+                -0.005419244566367668
+              ],
+              [
+                0.0,
+                0.011732606564277076,
+                0.0
+              ],
+              [
+                -0.005419244566367668,
+                0.0,
+                0.011732614457082818
+              ]
+            ],
+            "eigenvalues": [
+              0.0063133632559640735,
+              0.011732606564277076,
+              0.017151852388707534
+            ],
+            "critical_eigenvector": [
+              -0.707107214039606,
+              0.0,
+              -0.7071063483332242
+            ]
+          },
+          "H_plus": {
+            "physical": [
+              -0.1998915231242043,
+              0.0,
+              0.0065
+            ],
+            "geometry": 138,
+            "element": 138,
+            "radial_side": 1,
+            "tangential_side": 0,
+            "k": 0.01759889153226051,
+            "epsilon": 0.14305126111089742,
+            "epsilon_semantics": "actual retained outer",
+            "gradient": [
+              [
+                2.620019710115931e-05,
+                0.0,
+                25.935115297671583
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                -3.887922901245815e-06,
+                0.0,
+                1.8326279124162757e-06
+              ]
+            ],
+            "tensor": [
+              [
+                0.016190957946401106,
+                0.0,
+                -0.005515718487594803
+              ],
+              [
+                0.0,
+                0.009855382192970222,
+                0.0
+              ],
+              [
+                -0.005515718487594803,
+                0.0,
+                0.009151419077758738
+              ]
+            ],
+            "eigenvalues": [
+              0.006128106111163915,
+              0.009855382192970222,
+              0.019214270912995927
+            ],
+            "critical_eigenvector": [
+              -0.48065709870964884,
+              0.0,
+              -0.8769086346136767
+            ]
+          }
+        },
+        "covariance_margin_passed": true,
+        "positive_scalars": true,
+        "passed": true
+      },
+      "report_sha256": "75b38ade60bfa09cfc3182ea45a314ff6350b91d2cd28e877be2361e779a2685"
+    },
+    "standard": {
+      "errors": {
+        "wall": 1.729777380879741e-14,
+        "normal": 1.970934976272055e-17,
+        "full": 4.953267976870518e-13,
+        "flux": 7.380855141008354e-16
+      },
+      "summary": {
+        "order": 36,
+        "wall_mean_shear": 0.005515720037892502,
+        "wall_shear_RMS_error_over_ustar2": 3.7261145954784875e-06,
+        "interface_normal_traction_jump_RMS": 2.5619161205786308e-08,
+        "interface_full_traction_jump_RMS": 1.806305809979846e-06,
+        "interface_k_flux_jump_RMS": 1.294096136379125e-08,
+        "minimum_actual_outer_trace_epsilon": 0.14305126006803182,
+        "actual_dependent_trace_epsilon_relative_max": 2.5873220471632914e-07,
+        "covariance_minima": {
+          "ground": 0.02021780893296979,
+          "H_minus": 0.006837938812530546,
+          "H_plus": 0.006741449266559502
+        },
+        "scope": "represented physical one-sided affine polynomials; immutable analytical reference is separate; sigmaK=1 in both selected models; finite surface sampling complements native sided hard audit",
+        "covariance_witnesses": {
+          "ground": {
+            "physical": [
+              -0.12346598570368775,
+              0.0,
+              0.0
+            ],
+            "geometry": 0,
+            "element": 0,
+            "radial_side": 0,
+            "tangential_side": 0,
+            "k": 0.030866942776319375,
+            "epsilon": 1.1185496443811473,
+            "epsilon_semantics": "dependent E_C",
+            "gradient": [
+              [
+                8.773258731357362e-19,
+                0.0,
+                1353.3490998295115
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                -1.4499674907509637e-25,
+                0.0,
+                -1.606865243340398e-07
+              ]
+            ],
+            "tensor": [
+              [
+                0.020577961850879584,
+                0.0,
+                -0.0003601529179525562
+              ],
+              [
+                0.0,
+                0.020577961850879584,
+                0.0
+              ],
+              [
+                -0.0003601529179525562,
+                0.0,
+                0.02057796185096511
+              ]
+            ],
+            "eigenvalues": [
+              0.02021780893296979,
+              0.02057796185087958,
+              0.020938114768874902
+            ],
+            "critical_eigenvector": [
+              -0.7071067812285248,
+              6.772360450213455e-15,
+              -0.7071067811445698
+            ]
+          },
+          "H_minus": {
+            "physical": [
+              -0.16067504461584328,
+              0.0,
+              0.0065
+            ],
+            "geometry": 132,
+            "element": 132,
+            "radial_side": -1,
+            "tangential_side": 0,
+            "k": 0.018385766132934394,
+            "epsilon": 0.14305138519464805,
+            "epsilon_semantics": "dependent E_C",
+            "gradient": [
+              [
+                -1.3556694133091424e-06,
+                0.0,
+                25.449624580240904
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                2.552588100959081e-06,
+                0.0,
+                -7.45203701002483e-06
+              ]
+            ],
+            "tensor": [
+              [
+                0.01225717799930842,
+                0.0,
+                -0.005419240484937487
+              ],
+              [
+                0.0,
+                0.012257177421956263,
+                0.0
+              ],
+              [
+                -0.005419240484937487,
+                0.0,
+                0.01225718059562796
+              ]
+            ],
+            "eigenvalues": [
+              0.006837938812530546,
+              0.012257177421956263,
+              0.017676419782405833
+            ],
+            "critical_eigenvector": [
+              -0.7071068658789987,
+              0.0,
+              -0.7071066964940861
+            ]
+          },
+          "H_plus": {
+            "physical": [
+              -0.1998915231242043,
+              0.0,
+              0.0065
+            ],
+            "geometry": 138,
+            "element": 138,
+            "radial_side": 1,
+            "tangential_side": 0,
+            "k": 0.018385755381722036,
+            "epsilon": 0.14305126006803182,
+            "epsilon_semantics": "actual retained outer",
+            "gradient": [
+              [
+                2.9506226127268953e-05,
+                0.0,
+                25.935108834886293
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                -5.477044702970448e-06,
+                0.0,
+                2.0943652197665754e-06
+              ]
+            ],
+            "tensor": [
+              [
+                0.012257157704085071,
+                0.0,
+                -0.005515714267304241
+              ],
+              [
+                0.0,
+                0.012257170254481357,
+                0.0
+              ],
+              [
+                -0.005515714267304241,
+                0.0,
+                0.012257169363648577
+              ]
+            ],
+            "eigenvalues": [
+              0.006741449266559502,
+              0.012257170254481356,
+              0.017772877801174144
+            ],
+            "critical_eigenvector": [
+              0.7071071548713435,
+              -2.220446049250313e-16,
+              0.707106407501554
+            ]
+          }
+        },
+        "covariance_margin_passed": true,
+        "positive_scalars": true,
+        "passed": true
+      },
+      "report_sha256": "b07dc418f5e4fcc3b8bd5003f11172f76450fd3320e7d1f63df9158694c77b38"
+    }
+  },
+  "governing_solves": 0,
+  "derived_columns_refreshed_without_changing_measured_surfaces": true
+}

@@ -89,9 +89,17 @@ def verify_report(d,us,K0,allow_recovery=False):
         ids=[int(i) for i in table['physical_essential_rows']];values=table['physical_essential_values']
         for state in d['accepted_states']:
             require(all(state[i]==v for i,v in zip(ids,values)),'physical essential coefficient changed')
-    for a in d['state_audits']:
+    require(len(d['state_audits'])==len(results),'native audit/monitor state inventory differs')
+    for index,a in enumerate(d['state_audits']):
         require(a['accepted_awf_hard_admissible']==[1] and min(a['accepted_awf_covariance'][:2])>=1e-4*K0,'native hard or positive covariance margin failed')
-        require(max(abs(a['interface'][i]) for i in [2,3])/(us*us)<=1e-2 and abs(a['interface'][5])/(us*K0)<=1e-2,'native interface budget failed')
+        interface=max(abs(a['interface'][i]) for i in [2,3])/(us*us);flux=abs(a['interface'][5])/(us*K0)
+        results[index]['gates']['interface_normal_full_RMS']=dict(value=interface,limit=1e-2,passed=interface<=1e-2)
+        results[index]['gates']['interface_k_flux']=dict(value=flux,limit=1e-2,passed=flux<=1e-2)
+        results[index]['passed']=results[index]['passed'] and interface<=1e-2 and flux<=1e-2
+        # WP2: physical accuracy holds throughout unperturbed preservation and
+        # at the final recovered state. Transient recovery departures remain
+        # failed accuracy entries; native admissibility is ALWAYS enforced.
+        if not allow_recovery:require(interface<=1e-2 and flux<=1e-2,'native interface budget failed')
     for row in d['pimple_attempts']:
         k=row['k_bound'];require(k['activations']==0 and k['integral_total']==0 and k['mass_norm_correction']==0,'equilibrium/recovery required artificial bound supply')
     return results

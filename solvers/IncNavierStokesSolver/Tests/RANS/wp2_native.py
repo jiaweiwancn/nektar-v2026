@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 """Fail-fast new-policy native transactions. No historical certificate reuse."""
-import os,subprocess,time
+import os,subprocess,time,signal
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from cao_tamura_h2d_state import load
@@ -12,6 +12,28 @@ from run_cao_tamura_budget_wp2 import charge
 from wp2_neutral_cases import case
 from run_cao_tamura_budget_h2f_startup import verify_retained_rollback
 from wp2_budget import wall_limit
+
+
+def execute_owned(command,cwd,env,log,timeout):
+    """Own the timing wrapper AND its native child in a private process group."""
+    p=subprocess.Popen(command,cwd=cwd,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+    def terminate_group():
+        try:os.killpg(p.pid,signal.SIGTERM)
+        except ProcessLookupError:return
+        deadline=time.monotonic()+3
+        while time.monotonic()<deadline:
+            p.poll()
+            try:os.killpg(p.pid,0)
+            except ProcessLookupError:return
+            time.sleep(.03)
+        try:os.killpg(p.pid,signal.SIGKILL)
+        except ProcessLookupError:pass
+    try:
+        code=p.wait(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        terminate_group();p.wait();raise
+    if code!=0:terminate_group()
+    return subprocess.CompletedProcess(command,code)
 
 
 class Run:
@@ -33,7 +55,7 @@ class Run:
             solver=str(solver),solver_sha256=sha(solver),results={},case_definition=definition)
         self.save()
     def save(self):atomic(self.output/'progress.json',self.result)
-    def native(self,label,steps=0,dt=2e-6,parent=None,reject=False,pout=0.,mismatch=False,perturb=False,ivp_parent=None):
+    def native(self,label,steps=0,dt=2e-6,parent=None,reject=False,pout=0.,mismatch=False,perturb=False,ivp_parent=None,mismatch_reason='signature'):
         require(not (parent and ivp_parent),'diagnostic import is distinct from ordinary restart')
         charge(self.root,label,physical_attempts=steps)
         xml=case(self.output/label,self.h1,self.pre,self.model,self.level,self.order,steps,dt,parent,pout,self.projection,pressure_space=self.pressure_space)
@@ -54,7 +76,7 @@ class Run:
         remaining=wall_limit(self.root)-(time.time()-load(self.root/'origin.json')['started_epoch'])
         require(remaining>0,'WP2 aggregate wall envelope exhausted')
         with (xml.parent/'solver.log').open('w') as log:
-            p=subprocess.run(['/usr/bin/time','-f','%e %U %S %M','-o',str(xml.parent/'usage.txt'),str(self.solver),str(xml)],cwd=xml.parent,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=min(1800,remaining))
+            p=execute_owned(['/usr/bin/time','-f','%e %U %S %M','-o',str(xml.parent/'usage.txt'),str(self.solver),str(xml)],cwd=xml.parent,env=env,log=log,timeout=min(1800,remaining))
         report=xml.with_suffix('.evolution.json');d=load(report) if report.exists() else {}
         self.result['results'][label]=dict(code=p.returncode,seconds=time.monotonic()-started,xml_sha256=sha(xml),
             report=str(report),report_sha256=sha(report) if report.exists() else None,failure=d.get('failure'),usage=(xml.parent/'usage.txt').read_text(),
@@ -62,7 +84,8 @@ class Run:
             accepted_step_executions=max(0,d.get('steps',0)-(checkpoint(parent)['steps'] if parent else 0)));self.save()
         require(int(self.result['results'][label]['usage'].split()[-1])<=24*1024*1024,'WP2 per-process 24GiB RSS envelope exceeded')
         if mismatch:
-            require(p.returncode!=0 and 'signature' in (xml.parent/'solver.log').read_text().lower(),'incompatible boundary restart was not rejected')
+            require(mismatch_reason in ('signature','invalid checkpoint payload size'),'unsupported mismatch expectation')
+            require(p.returncode==1 and mismatch_reason in (xml.parent/'solver.log').read_text().lower(),'incompatible restart did not produce its required rejection')
             return d
         require(p.returncode==(1 if reject else 0),'unexpected native process exit '+label)
         require(d and d.get('failure')==('deliberate post-assignment explicit rejection' if reject else ''),'unexpected native failure '+label+': '+str(d.get('failure')))

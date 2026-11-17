@@ -22,11 +22,14 @@ def main():
     p.add_argument('--model',choices=['CLS','standard'],required=True)
     p.add_argument('--mode',choices=['trial','recovery-trial','preserve','recover','transaction','seed'],required=True)
     p.add_argument('--level',type=int,default=4);p.add_argument('--dt',type=float,required=True)
+    p.add_argument('--block-steps',type=int,choices=[8,16,32])
+    p.add_argument('--handoff-reason')
     p.add_argument('--endpoint',type=float,default=1.2);p.add_argument('--expected-seed')
     p.add_argument('--resume',action='store_true')
     p.add_argument('--parent-progress',type=Path)
     p.add_argument('--pressure-space',choices=['baseline-v1','inner-p2-v1'],default='baseline-v1')
     a=p.parse_args();require(a.dt>0,'positive timestep')
+    block_steps=a.block_steps or (16 if a.pressure_space=='inner-p2-v1' else 32)
     recovery=a.mode in ['recover','recovery-trial']
     x=Run(a.root,a.solver,a.h1,a.preflight,a.output,a.model,a.level,16,'RadialEnergyV1',a.resume,a.pressure_space)
     previous=[]
@@ -38,7 +41,7 @@ def main():
                 prefix['case_definition']==x.result['case_definition'],'successor parent configuration differs')
         previous=prefix['observations'];x.result['prefix_observations']=previous
         x.result['predecessor']=dict(progress=str(a.parent_progress),progress_sha256=sha(a.parent_progress),
-            solver=prefix['solver'],solver_sha256=prefix['solver_sha256'],reason='explicit exact-checkpoint successor after diagnostic-only runtime revalidation')
+            solver=prefix['solver'],solver_sha256=prefix['solver_sha256'],reason=a.handoff_reason or 'explicit exact-checkpoint successor after diagnostic-only runtime revalidation')
     if a.resume:
         require(a.mode in ['preserve','recover'] and x.result['dt']==a.dt,'incompatible continuation phase/dt')
         previous=x.result['observations']
@@ -46,7 +49,7 @@ def main():
         old=a.output/('phase-before-'+str(x.result['accepted_steps'])+'.json')
         require(not old.exists(),'phase record already exists');atomic(old,x.result)
         x.result.setdefault('phase_history',[]).append(dict(path=str(old),sha256=sha(old),resumed_epoch=time.time()))
-    x.result.update(mode=a.mode,dt=a.dt,Treq=TREQ,physical_endpoint=a.endpoint,qualification='running; no pass inferred from launch')
+    x.result.update(mode=a.mode,dt=a.dt,block_steps=block_steps,Treq=TREQ,physical_endpoint=a.endpoint,qualification='running; no pass inferred from launch')
     x.result['status']='running';x.save();reports=[];parent=None;accepted=0
     if previous:
         accepted=previous[-1]['accepted'];parent=Path(previous[-1]['checkpoint'])
@@ -73,7 +76,7 @@ def main():
         for target in targets:
             total=round(target/a.dt);require(abs(total*a.dt-target)<1e-13,'requested observation is not a native time')
             while accepted<total:
-                count=min(32,total-accepted);label='step'+str(accepted+count)
+                count=min(block_steps,total-accepted);label='step'+str(accepted+count)
                 d=x.native(label,count,a.dt,parent,perturb=(recovery and parent is None))
                 checks=verify_report(d,US,K0[a.model],allow_recovery=recovery)
                 if previous and 'prefix_essential_absolute_error' not in x.result:

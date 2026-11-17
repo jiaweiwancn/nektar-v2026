@@ -747,3 +747,73 @@ whole-program forecast before launching those legs. No pass is inferred from
 that conditional schedule. See [cold checks](cls-cao-tamura-budget-wp2-evidence/pressure-cold-summary.json),
 [protocol tests](cls-cao-tamura-budget-wp2-evidence/pressure-protocol-tests-event-fix2.json)
 and [resource check](cls-cao-tamura-budget-wp2-evidence/pressure-concurrency-activation.json).
+
+## Pressure-epoch execution repair, 2026-11-17
+
+The [prospective cumulative amendment](cls-cao-tamura-budget-wp2-evidence/resource-extension-pressure-28h.json)
+sets **28 hours from the original 2026-11-16 14:15:47 Shanghai origin**. It
+retains every prior cost, counter, failure and numerical acceptance threshold.
+Its additional 360 conditional attempts cover selected dt=.02 and confirmation
+mesh dt=.01 recovery controls only after the first pressure recovery passes.
+No physical equation, calibration, timestep acceptance criterion or bound-work
+limit changes. The original 96-GiB storage envelope remains; a live check gives
+20912456192 bytes, about 19.5 GiB.
+
+Both pressure-model initial gates now pass dt=.02/.01 adjacent comparisons,
+actual dt=.02 direct/split history and post-assignment rollback, and strict
+native incompatible-timestep/pressure restart tests. A different pressure size
+correctly fails the native payload-size guard before signature comparison;
+it is not evidence of a missing rejection. The parents remain byte-identical.
+See [CLS gates](cls-cao-tamura-budget-wp2-evidence/pressure-initial-gates-CLS.json),
+[standard gates](cls-cao-tamura-budget-wp2-evidence/pressure-initial-gates-standard.json),
+and [native incompatibility checks](cls-cao-tamura-budget-wp2-evidence/pressure-negative-guards-standard.json).
+
+The first four 30-step blocks exceeded the Python timing wrapper's 1800-second
+limit at four-case concurrency. Killing that wrapper left its native child
+running. The controller stopped every successor. All four original native
+children subsequently completed their bounded 30 steps, actual T=.3000000000000001,
+with complete accepted-state reports, histories and checkpoints. Their original
+process exit codes were **not observed** and are not relabelled zero. The wrapper
+failures and completed native timing records remain separate immutable evidence.
+
+The driver now owns a private process group and terminates both wrapper and
+native child on timeout. A Linux fault-injection test proves that no executing
+child survives. The same 1800-second invocation limit stays in force; primary
+blocks shrink to 16 and confirmation blocks to 8. Timestep, hard-check frequency,
+per-step checkpoint durability and the one-sweep equations are unchanged.
+
+The completed native segments receive exact zero-step ordinary-restart
+revalidation before any separately recorded successor. Coupled coefficients,
+reference, defect, history slots and labels are bitwise preserved. This is
+ordinary restart setup, with temporary reference initialization accounted for;
+it is not presented as a zero-Lift strict readback. No original physical step is
+replayed. The prefix ledger explicitly retains the unknown original exit status.
+This establishes usable accepted-state data; it does not erase the failed
+administrative execution or by itself close WP2.
+
+A second reporting issue was found during that revalidation. The harness applied
+the final 1% interface-accuracy limit to every perturbed intermediate state.
+The supplied contract requires physical accuracy throughout unperturbed runs and
+**at the final qualified perturbed state**. CLS recovery peaks at .0138744 in
+normalized traction-jump RMS and returns to .00442066 by T=.3. These excursions
+remain failed accuracy entries. Scalar/covariance admissibility and zero bound
+supply stay hard throughout; unperturbed and final-recovery limits stay unchanged.
+The new test explicitly rejects an intermediate negative covariance even when
+recovery-accuracy departures are allowed. Twenty focused Linux tests pass.
+
+Independent ground/H-minus/H-plus GL36 polynomial evaluation replays native
+wall shear, full/normal traction and k-flux metrics. Largest normalized replay
+error is 1.19e-10; the declared comparison tolerance is 1e-8, separate from the
+unchanged physical limits. Stresses are recomputed from one-sided gradients,
+with actual retained outer epsilon and dependent inner epsilon kept distinct.
+Both covariance witnesses and scalar traces are retained. The full trajectory
+assessment additionally compares surface fields, signed net flux and actual
+strong-divergence differences between dt and mesh controls. It resolves source
+hashes from the modules actually imported, including the isolated source overlay.
+
+See [execution repair](cls-cao-tamura-budget-wp2-evidence/pressure-driver-repair-summary.json),
+[exact prefix revalidation](cls-cao-tamura-budget-wp2-evidence/pressure-adoption-v2.json),
+[surface replay](cls-cao-tamura-budget-wp2-evidence/pressure-surface-replay-refreshed.json)
+and [focused tests](cls-cao-tamura-budget-wp2-evidence/pressure-recovery-scope-tests.json).
+The accepted frontier and terminal qualification remain separately observed;
+no continuation launch is a closure receipt.

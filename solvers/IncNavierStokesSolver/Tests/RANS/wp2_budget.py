@@ -39,6 +39,20 @@ def wall_limit(root):
             require(control['predecessor_sha256']==sha(successor),'WP2 predecessor amendment changed')
             require(control['origin_sha256']==sha(root/'origin.json'),'WP2 clock origin changed')
             require(control['unchanged_acceptance_sha256']==expected,'WP2 acceptance criteria changed')
+            pressure=root/'resource-extension-pressure-28h.json'
+            if pressure.exists():
+                last=load(pressure)
+                require(last['version']=='WP2CumulativeResourceAmendmentV4' and
+                        last['original_wall_seconds']==43200 and last['previous_cumulative_wall_seconds']==86400 and
+                        last['cumulative_wall_seconds']==100800 and last['reserved_attempts_before']==1766 and
+                        last['additional_physical_attempt_limit']==1102,
+                        'unsupported WP2 pressure resource amendment')
+                require(last['predecessor_sha256']==sha(confirmation) and last['origin_sha256']==sha(root/'origin.json'),
+                        'WP2 pressure resource predecessor or clock changed')
+                require(last['unchanged_acceptance_sha256']==expected and
+                        last['pressure_scope_sha256']==sha(root/'pressure-control-scope.json'),
+                        'WP2 pressure resource acceptance or numerical scope changed')
+                return last['cumulative_wall_seconds']
             return control['cumulative_wall_seconds']
         return extension['cumulative_wall_seconds']
     return amendment['cumulative_wall_seconds']
@@ -50,7 +64,7 @@ def pressure_scope(root):
     if not path.exists():return None
     d=load(path);previous=root/'resource-extension-24h.json'
     require(d['version']=='WP2PressureControlScopeV1' and
-            d['cumulative_wall_seconds']==wall_limit(root)==86400 and
+            d['cumulative_wall_seconds']==86400 and wall_limit(root) in (86400,100800) and
             d['reserved_attempts_before']==1766 and d['additional_physical_attempt_limit']==742 and
             d['spatial_case_limit']==40 and d['physical_attempt_limit_unchanged']==6000,
             'unsupported WP2 pressure-control scope')
@@ -58,4 +72,8 @@ def pressure_scope(root):
             'WP2 pressure-control origin or predecessor changed')
     require(d['unchanged_acceptance_sha256']==load(previous)['unchanged_acceptance_sha256'],
             'WP2 pressure-control acceptance changed')
+    if (root/'resource-extension-pressure-28h.json').exists():
+        last=load(root/'resource-extension-pressure-28h.json')
+        d=dict(d,additional_physical_attempt_limit=last['additional_physical_attempt_limit'],
+               effective_cumulative_wall_seconds=last['cumulative_wall_seconds'])
     return d
