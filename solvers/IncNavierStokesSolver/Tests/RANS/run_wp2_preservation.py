@@ -25,16 +25,17 @@ def main():
     p.add_argument('--endpoint',type=float,default=1.2);p.add_argument('--expected-seed')
     p.add_argument('--resume',action='store_true')
     p.add_argument('--parent-progress',type=Path)
+    p.add_argument('--pressure-space',choices=['baseline-v1','inner-p2-v1'],default='baseline-v1')
     a=p.parse_args();require(a.dt>0,'positive timestep')
     recovery=a.mode in ['recover','recovery-trial']
-    x=Run(a.root,a.solver,a.h1,a.preflight,a.output,a.model,a.level,16,'RadialEnergyV1',a.resume)
+    x=Run(a.root,a.solver,a.h1,a.preflight,a.output,a.model,a.level,16,'RadialEnergyV1',a.resume,a.pressure_space)
     previous=[]
     require(not(a.resume and a.parent_progress),'choose same-runtime resume or an explicit successor, not both')
     if a.parent_progress:
         require(a.mode in ['preserve','recover'],'successor phase must be bounded preservation/recovery')
         prefix=load(a.parent_progress)
         require(prefix['status']=='completed_bounded_trajectory' and prefix['dt']==a.dt and prefix['model']==a.model and
-                prefix['case_definition']==dict(level=a.level,order=16,projection='RadialEnergyV1'),'successor parent configuration differs')
+                prefix['case_definition']==x.result['case_definition'],'successor parent configuration differs')
         previous=prefix['observations'];x.result['prefix_observations']=previous
         x.result['predecessor']=dict(progress=str(a.parent_progress),progress_sha256=sha(a.parent_progress),
             solver=prefix['solver'],solver_sha256=prefix['solver_sha256'],reason='explicit exact-checkpoint successor after diagnostic-only runtime revalidation')

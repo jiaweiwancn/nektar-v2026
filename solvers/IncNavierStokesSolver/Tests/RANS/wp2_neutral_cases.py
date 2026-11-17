@@ -39,11 +39,26 @@ def radial_mesh(pre, level):
     return z
 
 
-def case(folder,h1,pre,model,level=0,order=16,steps=0,dt=.001,restart=None,pout=0.,projection='RadialL2V1'):
+def case(folder,h1,pre,model,level=0,order=16,steps=0,dt=.001,restart=None,pout=0.,projection='RadialL2V1',pressure_space='baseline-v1'):
     require(model in ('CLS','standard') and 0<=level<=5 and order in (16,24,32),'WP2 declared case space')
+    require(pressure_space in ('baseline-v1','inner-p2-v1') and
+            (pressure_space=='baseline-v1' or level in (4,5)), 'unsupported WP2 pressure representation')
     mesh=dict(pre['common_mesh']);mesh.update(z=radial_mesh(pre,level),degree=3,regional_pressure_degree=1,points=[order,order])
     xml=historical_case(folder,h1,pre,flat=True,model=model,shared_mesh=mesh)
     t=ET.parse(xml).getroot();tensor_mesh(t,mesh['z'],3,2,.8,1.,points=[order,order],xknots=mesh['x'])
+    nx=len(mesh['x'])-1;ni=sum(z<=pre['H'] for z in mesh['z'][1:]);no=len(mesh['z'])-1-ni
+    if pressure_space=='inner-p2-v1':
+        from copy import deepcopy
+        composites=t.find('./GEOMETRY/COMPOSITE')
+        require(all(composites.find(f'C[@ID="{i}"]') is None for i in (1,2)), 'regional pressure composite collision')
+        ET.SubElement(composites,'C',{'ID':'1'}).text=f'Q[0-{nx*ni-1}]'
+        ET.SubElement(composites,'C',{'ID':'2'}).text=f'Q[{nx*ni}-{nx*(ni+no)-1}]'
+        t.find('./GEOMETRY/DOMAIN').text='C[1,2]'
+        t.find('./EXPANSIONS/E').set('COMPOSITE','C[1,2]')
+        pressure=t.find('./EXPANSIONS/E[@FIELDS="p"]');pressure.set('COMPOSITE','C[1]')
+        outer=deepcopy(pressure);outer.set('COMPOSITE','C[2]');pressure.set('NUMMODES','3,3')
+        t.find('EXPANSIONS').append(outer)
+        mesh['regional_pressure_degree']=dict(inner=2,outer=1)
     manifest=dict(pre['model_manifest_standard' if model=='standard' else 'model_manifest_CLS'])
     manifest.update(boundary_policy='NeutralEquilibriumOpenV1',upper_boundary='W essential; driving full traction and prescribed epsilon conormal flux; no inlet tail')
     mf=folder/'model-manifest.json';mf.write_bytes(canonical_bytes(manifest)+b'\n')
@@ -61,9 +76,9 @@ def case(folder,h1,pre,model,level=0,order=16,steps=0,dt=.001,restart=None,pout=
                     RANSWallNormalOrder=order,RANSWallTangentialOrder=order).items():set_parameter(t,k,v)
     if restart:set_info(t,'RANSWallRestart',str(restart))
     write(t,xml)
-    nx=len(mesh['x'])-1;ni=sum(z<=pre['H'] for z in mesh['z'][1:]);no=len(mesh['z'])-1-ni
     sizes=[(3*nx+1)*(3*(ni+no)+1)]*3+[(3*nx+1)*(3*no+1),(nx+1)*(ni+1),(nx+1)*(no+1),1]
-    atomic(folder/'wp2-definition.json',dict(version='WP2CommonNeutralCaseV1',model=model,level=level,
+    if pressure_space=='inner-p2-v1':sizes[-3]=(2*nx+1)*(2*ni+1)
+    definition=dict(version='WP2CommonNeutralCaseV1',model=model,level=level,
         mesh=mesh,estimated_sizes=sizes,estimated_slots=sum(sizes),native_dimensions_required=True,
         common_mesh_sha256=hashlib.sha256(canonical_bytes(mesh)).hexdigest(),model_manifest_sha256=sha(mf),
         physical_calibration='unchanged H2g full-precision model-specific roots and deployed CLS roughness',
@@ -71,5 +86,7 @@ def case(folder,h1,pre,model,level=0,order=16,steps=0,dt=.001,restart=None,pout=
         inlet='same immutable analytical log/AWF composite over 0<=z<=.8; no tail; native trace converges',
         pressure='pi=p/rho+2k/3; streamwise outer total-normal-pressure Pout; no pressure Dirichlet or closed gauge',
         projected_initial_fields='U,nonconstant inner k,complete outer epsilon and model-correct regional pi; W=0',
-        initial_projection=projection,old_hill_certificates_inapplicable=True,xml_sha256=sha(xml)))
+        initial_projection=projection,old_hill_certificates_inapplicable=True,xml_sha256=sha(xml))
+    if pressure_space!='baseline-v1':definition.update(version='WP2CommonNeutralCaseV2',pressure_space=pressure_space)
+    atomic(folder/'wp2-definition.json',definition)
     return xml

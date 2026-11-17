@@ -31,12 +31,18 @@ def wall(K,r,nu,H,hs,q,kap):
 class Rows:
     def __init__(self,metadata):
         self.path=Path(metadata);self.meta=load(self.path);self.a={}
-        require(self.meta['version']=='WP2AffineRowsV1','row schema')
+        require(self.meta['version'] in ('WP2AffineRowsV1','WP2AffineRowsV2'),'row schema')
         for name,d in self.meta['arrays'].items():
             f=self.path.parent/d['file'];require(sha(f)==d['sha256'],'row binary changed')
             self.a[name]=np.memmap(f,dtype=d['dtype'],mode='r',shape=tuple(int(x) for x in d['shape']))
         self.size=int(sum(self.meta['sizes']));self.offset=[int(x) for x in self.meta['offsets']]
         self.inner=self.a['regions'][:,0]==0;self.weight=np.asarray(self.a['weights'][:,0]);self.physical=np.asarray(self.a['coordinates'])
+        if self.meta['version']=='WP2AffineRowsV2':
+            count=self.a['p_counts'][:,0];width=self.a['p_ids'].shape[1]
+            require(len(count)==len(self.weight) and np.all(np.isin(count,[4,9])) and np.all(count<=width),'regional pressure row widths')
+            padding=np.arange(width)[None,:]>=count[:,None]
+            require(all(np.all(self.a['p_'+name][padding]==0) for name in ['phi','constant','dx','dz']),
+                    'nonzero pressure-row padding')
     def evaluate(self,s,family,kind='phi',offset=0,mask=None):
         require(len(s)==self.size,'state/geometry dimensions differ')
         ids=self.a[family+'_ids'] if mask is None else self.a[family+'_ids'][mask]
@@ -44,7 +50,12 @@ class Rows:
         phi=self.a[family+'_'+kind] if mask is None else self.a[family+'_'+kind][mask]
         centre=s[ids[:,0]+offset]/constant[:,0];delta=s[ids+offset]-centre[:,None]*constant
         value=centre.astype(np.longdouble) if kind=='phi' else np.zeros(len(ids),dtype=np.longdouble)
-        for j in range(ids.shape[1]):value+=phi[:,j].astype(np.longdouble)*delta[:,j].astype(np.longdouble)
+        count=self.a['p_counts'][:,0] if family=='p' and 'p_counts' in self.a else None
+        if count is not None and mask is not None:count=count[mask]
+        for j in range(ids.shape[1]):
+            if count is None:value+=phi[:,j].astype(np.longdouble)*delta[:,j].astype(np.longdouble)
+            else:
+                active=count>j;value[active]+=phi[active,j].astype(np.longdouble)*delta[active,j].astype(np.longdouble)
         return np.asarray(value,dtype=np.float64)
     def tuple(self,state,report):
         s=np.asarray(state,dtype=np.float64);o=self.offset;U=self.evaluate(s,'v',offset=o[0]);W=self.evaluate(s,'v',offset=o[1]);k=self.evaluate(s,'v',offset=o[2])

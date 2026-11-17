@@ -1,0 +1,134 @@
+{
+  "version": "WP2RegionalPressureRowsChecksV1",
+  "passed": true,
+  "default_arrays_bitwise_archived": true,
+  "zero_enrichment_fields_and_tensors_bitwise": true,
+  "native_tuple_replay": {
+    "maximum_absolute_by_column": [
+      0.0,
+      0.0,
+      0.0,
+      1.7763568394002505e-15,
+      0.0,
+      0.0,
+      3.469446951953614e-18,
+      2.6020852139652106e-18,
+      3.469446951953614e-18,
+      1.3322676295501878e-15,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scalar_gradient_polynomial_replay_errors": [
+      1.074140776324839e-14,
+      1.743549749022577e-10,
+      6.070838276528434e-14,
+      5.831779503751022e-12
+    ],
+    "passed": true
+  },
+  "native_mixed_dimensions": [
+    2413.0,
+    2413.0,
+    2413.0,
+    1102.0,
+    611.0,
+    140.0,
+    1.0
+  ],
+  "native_slots": 9093,
+  "actual_pressure_widths": [
+    9,
+    4
+  ],
+  "independent_polynomial_errors": [
+    1.734723475976807e-18,
+    3.937822290467352e-16,
+    2.7294819182621666e-11
+  ],
+  "native_polynomial_errors": [
+    {
+      "block": 4.0,
+      "offset": 8341.0,
+      "maximum_value_error": 1.734723475976807e-18,
+      "maximum_gradient_error": 2.7294805304833858e-11
+    },
+    {
+      "block": 5.0,
+      "offset": 8952.0,
+      "maximum_value_error": 8.673617379884035e-19,
+      "maximum_gradient_error": 8.124935186454296e-14
+    }
+  ],
+  "auxiliary_pressure_mass_projections": 2,
+  "governing_solves": 0,
+  "physical_candidates": 0,
+  "exports": {
+    "default": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-row-verification/default/result.json",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-pressure-rows/RANSWallResolutionProbe",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-coarse-standard/step60/case.xml",
+          "input.json",
+          "result.json"
+        ],
+        "exit_code": 0,
+        "seconds": 3.0730153559707105,
+        "input_sha256": "41b3842ee97d729666af751e9f7b4f1cf863ca942dec9c1e1afc221c827b0119",
+        "log_sha256": "26318bf3f4bc98d5333cfc908ed33e3df7fb19d1c726d27d3d7b345934b10737",
+        "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-row-verification/default/result.json",
+        "output_sha256": "9445db73a22ebb19dd30a98f344827f63a3df4d4e1d754df4f60833faaaf9abb"
+      }
+    },
+    "p1_v2": {
+      "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-row-verification/p1_v2/result.json",
+      "receipt": {
+        "command": [
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-pressure-rows/RANSWallResolutionProbe",
+          "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/preservation-coarse-standard/step60/case.xml",
+          "input.json",
+          "result.json"
+        ],
+        "exit_code": 0,
+        "seconds": 2.922156109008938,
+        "input_sha256": "fbb79e79b21f208f6bade4d744a4fc019aafd98f5f3ed781ea21ccc4b73e1c74",
+        "log_sha256": "58dcaf0f1f2962f19b3ea7b0851c54af0a641542af5386f568854351bd430385",
+        "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-row-verification/p1_v2/result.json",
+        "output_sha256": "d57c90d501e35d378370f9acb8d1e03f47b40502b4dc7e03937f25e1baf120ac"
+      }
+    }
+  },
+  "mixed_receipt": {
+    "command": [
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-pressure-rows/RANSWallResolutionProbe",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-case-generation-checks/standard/inner-p2/case.xml",
+      "input.json",
+      "result.json"
+    ],
+    "exit_code": 0,
+    "seconds": 7.28133352502482,
+    "input_sha256": "6ae9f4f91b8532df86aa73634d7ce458892308e51ed0f611c302d2e99b494acd",
+    "log_sha256": "4a495cd3ccf7b163897fd905256882eb3c6b9df8554fb1808e7c92bc29a72850",
+    "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-row-verification/mixed_p2/result.json",
+    "output_sha256": "c64fb5b5d181901b2365e59d1c8bcff59e9217124c60fbf9a3feae9ce05a69c0"
+  },
+  "mislabelled_schema_rejected": {
+    "command": [
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/probe-runtime-pressure-rows/RANSWallResolutionProbe",
+      "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-case-generation-checks/standard/inner-p2/case.xml",
+      "input.json",
+      "result.json"
+    ],
+    "exit_code": 1,
+    "seconds": 2.4715553040150553,
+    "input_sha256": "d0139d57e879c7ce4401fddb3b9ae567011582acfd2d0e7fc8d358c84a231c3d",
+    "log_sha256": "6ce91cae4fcaab62973c5b9bd0083e6618e84f069014ac7df1b3e6364d886073",
+    "output": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026-runs/cls-cao-tamura-budget-wp2-20261116/pressure-row-verification/reject_mislabelled_p2/result.json",
+    "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "source_sha256": "74f925047508c2034b2eb9ad2c9c47bc8e3f15a6e20a549f38faeafddf63c1a5",
+  "probe_sha256": "1ead5a2c5ee974c064f499a9b34279e5ec59a1a661aa10a70fa2c63672b74594",
+  "scope": "Pressure-only synthetic projection/row verification. Native cold-state audit, complete pressure action, rank/nullspace, startup and recovery are UNEXECUTED for the new pressure representation."
+}

@@ -36,7 +36,8 @@ namespace
 Vector Read(const Tree &packet,const std::string &name)
 {Vector r;for(const auto &entry:packet.get_child(name)){r.push_back(entry.second.get_value<double>());}return r;}
 // Immutable geometry rows for retrospective, all-state physical diagnostics.
-// No field, constitutive, inventory or governing-equation evaluation is made.
+// No constitutive, inventory or governing-equation evaluation is made. An
+// explicit optional fixture projects/evaluates only synthetic pressure fields.
 std::string WP2GeometryRows(const RANSWallEvolutionPatch &patch,const Tree &packet)
 {
     Require(patch.EquilibriumOpen() && !patch.Mapped(),"WP2 row catalog is affine only");
@@ -45,16 +46,49 @@ std::string WP2GeometryRows(const RANSWallEvolutionPatch &patch,const Tree &pack
     for(const auto &el:patch.fields[0]->Elements())
     {xs.insert({el.lower[0],el.upper[0]});for(double z:{el.lower[2],el.upper[2]})Require(std::find(knots.begin(),knots.end(),z)!=knots.end(),"row partition omits native interface");}
     const auto rule=LibUtilities::PointsManager()[LibUtilities::PointsKey(8,LibUtilities::eGaussGaussLegendre)];
-    struct Catalog {explicit Catalog(int n):width(n){} int width;std::vector<std::int32_t> ids;Vector phi,constant,dx,dz;};
-    Catalog v{16},e{16},p{4},h{16};Vector coordinates,weights,wallCoordinates;std::vector<std::int32_t> regions,geometry,elements;
+    const auto pressureRows=packet.get<std::string>("pressure_rows","P1V1");
+    Require(pressureRows=="P1V1" || pressureRows=="RegionalP2V1","unsupported WP2 pressure-row interpretation");
+    const bool flexiblePressure=pressureRows=="RegionalP2V1";int pressureWidth=4;std::map<int,int> pressureDegree;
+    const bool polynomialFixture=packet.get<bool>("pressure_polynomial_fixture",false);
+    Require(!polynomialFixture || flexiblePressure,"pressure polynomial fixture requires V2 rows");
+    for(int block:{patch.InnerPressure(),patch.OuterPressure()})for(const auto &element:patch.fields[block]->Elements())
+    {Require(element.degree==1 || (flexiblePressure && element.degree==2),"unsupported native pressure degree in WP2 rows");
+     Require(!pressureDegree.count(block) || pressureDegree.at(block)==element.degree,"pressure rows require uniform degree within each region");
+     pressureDegree[block]=element.degree;
+     pressureWidth=std::max(pressureWidth,(element.degree+1)*(element.degree+1));}
+    struct Catalog {explicit Catalog(int n,bool f=false):width(n),flexible(f){} int width;bool flexible;
+        std::vector<std::int32_t> ids,counts;Vector phi,constant,dx,dz;};
+    Catalog v{16},e{16},p{pressureWidth,flexiblePressure},h{16};Vector coordinates,weights,wallCoordinates;std::vector<std::int32_t> regions,geometry,elements;
+    std::map<int,Vector> pressureCoefficients;std::map<int,double> valueError,gradientError;
+    auto polynomial=[&](int block,const RANSWallCoordinate &point)
+    {
+        const bool inner=block==patch.InnerPressure();const double L=patch.upper[0]-patch.lower[0];
+        const double bottom=inner?0.:patch.Parameters().geometry.height;
+        const double height=inner?patch.Parameters().geometry.height:patch.upper[2]-bottom;
+        const double x=(point[0]-patch.lower[0])/L,z=(point[2]-bottom)/height;
+        double value=.003+.001*x+.0004*z+.0002*x*z;
+        RANSVector gradient{(.001+.0002*z)/L,0.,(.0004+.0002*x)/height};
+        if(pressureDegree.at(block)==2){value+=.0007*x*x+.0003*z*z;gradient[0]+=.0014*x/L;gradient[2]+=.0006*z/height;}
+        return std::make_pair(value,gradient);
+    };
+    if(polynomialFixture)for(int block:{patch.InnerPressure(),patch.OuterPressure()})
+        pressureCoefficients[block]=patch.fields[block]->Project([&](const RANSWallCoordinate &point){return polynomial(block,point).first;});
     auto append=[](Catalog &a,const RANSWallGlobalPoint &q,int offset)
-    {Require(q.ids.size()==a.width,"row catalog requires the qualified cubic/P1 basis");for(int j=0;j<a.width;++j)
-     {a.ids.push_back(offset+q.ids[j]);a.phi.push_back(q.phi[j]);a.constant.push_back(q.constant[j]);a.dx.push_back(q.derivative[0][j]);a.dz.push_back(q.derivative[2][j]);}};
+    {Require(q.ids.size()==a.width || (a.flexible && a.width==9 && q.ids.size()==4),"row catalog requires qualified cubic/P1/P2 bases");
+     a.counts.push_back(static_cast<std::int32_t>(q.ids.size()));for(int j=0;j<a.width;++j)
+     {const bool active=j<static_cast<int>(q.ids.size());a.ids.push_back(offset+q.ids[active?j:0]);a.phi.push_back(active?q.phi[j]:0.);
+      a.constant.push_back(active?q.constant[j]:0.);a.dx.push_back(active?q.derivative[0][j]:0.);a.dz.push_back(active?q.derivative[2][j]:0.);}};
     for(const auto &[lo,hi]:xs)for(int ix=0;ix<8;++ix)for(int panel=1;panel<knots.size();++panel)for(int iz=0;iz<8;++iz)
     {
         const double x=lo+(rule->GetZ()[ix]+1)*(hi-lo)/2,z=knots[panel-1]+(rule->GetZ()[iz]+1)*(knots[panel]-knots[panel-1])/2;
         const auto q=patch.Point(0,{x,0,z});const bool inner=z<patch.Parameters().geometry.height;
-        append(v,q,0);const int block=inner?patch.InnerPressure():patch.OuterPressure();append(p,patch.GeometryPoint(block,q.geometry,q.coordinate),patch.offset[block]);
+        append(v,q,0);const int block=inner?patch.InnerPressure():patch.OuterPressure();const auto qp=patch.GeometryPoint(block,q.geometry,q.coordinate);append(p,qp,patch.offset[block]);
+        if(polynomialFixture)
+        {
+            const auto exact=polynomial(block,q.coordinate);const auto gradient=qp.Gradient(pressureCoefficients.at(block));
+            valueError[block]=std::max(valueError[block],std::abs(qp.Value(pressureCoefficients.at(block))-exact.first));
+            for(int a=0;a<3;++a)gradientError[block]=std::max(gradientError[block],std::abs(gradient[a]-exact.second[a]));
+        }
         if(!inner)append(e,patch.GeometryPoint(patch.Epsilon(),q.geometry,q.coordinate),patch.offset[patch.Epsilon()]);
         else for(int j=0;j<e.width;++j){e.ids.push_back(0);e.phi.push_back(0);e.constant.push_back(j==0?1.:0.);e.dx.push_back(0);e.dz.push_back(0);}
         coordinates.insert(coordinates.end(),q.coordinate.begin(),q.coordinate.end());regions.push_back(inner?0:1);geometry.push_back(q.geometry);elements.push_back(q.element);
@@ -74,11 +108,26 @@ std::string WP2GeometryRows(const RANSWallEvolutionPatch &patch,const Tree &pack
     write("coordinates",coordinates,3,"<f8");write("weights",weights,1,"<f8");write("regions",regions,1,"<i4");write("geometry",geometry,1,"<i4");write("elements",elements,1,"<i4");write("wall_coordinates",wallCoordinates,3,"<f8");
     for(auto [name,a]:std::vector<std::pair<std::string,Catalog*>>{{"v",&v},{"e",&e},{"p",&p},{"h",&h}})
     {write(name+"_ids",a->ids,a->width,"<i4");write(name+"_phi",a->phi,a->width,"<f8");write(name+"_constant",a->constant,a->width,"<f8");write(name+"_dx",a->dx,a->width,"<f8");write(name+"_dz",a->dz,a->width,"<f8");}
-    return J::Object({{"version",J::Quote("WP2AffineRowsV1")},{"arrays",J::Object(arrays)},{"sizes",J::Numbers(patch.size)},{"offsets",J::Numbers(patch.offset)},
+    if(flexiblePressure)write("p_counts",p.counts,1,"<i4");
+    std::vector<std::pair<std::string,std::string>> result{{"version",J::Quote(flexiblePressure?"WP2AffineRowsV2":"WP2AffineRowsV1")},{"arrays",J::Object(arrays)},{"sizes",J::Numbers(patch.size)},{"offsets",J::Numbers(patch.offset)},
         {"point_count",J::Number(count)},{"wall_point_count",J::Number(wallCoordinates.size()/3)},{"physical_z_partition",J::Numbers(knots)},{"geometry_identity",J::Quote(patch.GeometrySignature())},
         {"source_XML_sha256",J::Quote(packet.get<std::string>("xml_sha256"))},{"endianness",J::Quote("little; binary64 values and signed CG constants preserved")},
         {"sides",J::Quote("volume interior only; h rows explicitly H-minus, tangential Gauss interior; complements full native sided acceptance inventories")},
-        {"scope",J::Quote("geometry-only common-panel CG rows; epsilon rows valid only where region=1; cross-model reuse requires exact native tuple replay; no governing solves or candidate audit")}});
+        {"scope",J::Quote("geometry-only common-panel CG rows; epsilon rows valid only where region=1; cross-model reuse requires exact native tuple replay; no governing solves or candidate audit")}};
+    if(polynomialFixture)
+    {
+        std::vector<std::string> fixtures;
+        for(int block:{patch.InnerPressure(),patch.OuterPressure()})
+        {
+            Require(valueError[block]<2e-12 && gradientError[block]<2e-9,"native pressure polynomial projection/gradient mismatch");
+            fixtures.push_back(J::Object({{"block",J::Number(block)},{"offset",J::Number(patch.offset[block])},
+                {"coefficients",J::Numbers(pressureCoefficients.at(block))},{"maximum_value_error",J::Number(valueError[block])},
+                {"maximum_gradient_error",J::Number(gradientError[block])}}));
+        }
+        result.push_back({"pressure_polynomial_fixture",J::Object({{"regions",J::List(fixtures)},
+            {"auxiliary_mass_projections","2"},{"governing_solves","0"},{"candidate_state","false"}})});
+    }
+    return J::Object(result);
 }
 
 std::string Maps(const RANSWallEvolutionPatch::Diagnostic &values)

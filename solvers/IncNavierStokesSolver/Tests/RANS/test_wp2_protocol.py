@@ -176,6 +176,9 @@ class ContinuationOwnership(unittest.TestCase):
             (out/'progress.json').write_text(json.dumps(d))
             Run(r,s,r,pre,out,'standard',4,16,'RadialEnergyV1',True)
             with self.assertRaises(Exception):Run(r,s,r,pre,out,'standard',5,16,'RadialEnergyV1',True)
+            unchanged=sha(out/'progress.json')
+            with self.assertRaises(Exception):Run(r,s,r,pre,out,'standard',4,16,'RadialEnergyV1',True,'inner-p2-v1')
+            self.assertEqual(sha(out/'progress.json'),unchanged)
             s.write_text('different runtime')
             with self.assertRaises(Exception):Run(r,s,r,pre,out,'standard',4,16,'RadialEnergyV1',True)
     def test_unexpected_failure_stops_all_later_blocks(self):

@@ -650,3 +650,41 @@ See [modal summary](cls-cao-tamura-budget-wp2-evidence/recovery-mode-localizatio
 and [reproducible command](cls-cao-tamura-budget-wp2-evidence/recovery-mode-localization-command.json).
 The twelve-state localization takes 20.76 seconds, Python peak RSS 406404 KiB,
 with zero governing solves. Full modal tensors stay in the indexed Linux artifact.
+
+
+## Prepared inner-pressure representation control
+
+An explicit opt-in inner-P2/outer-P1 factory is implemented on the unchanged
+level4/level5 meshes. Both-model code-generation checks preserve default XML
+and definition bytes, physical mesh vertices/edges/elements, all physical and
+temporal parameters, solver policy and model manifest. The new numerical choice
+has its own case definition; Python continuation rejects cross-pressure reuse
+before invoking native code. No checkpoint identity is edited.
+
+The isolated native geometry probe confirms level4 dimensions
+[2413,2413,2413,1102,611,140,1], **9093 coupled slots**. Level5 remains an
+estimate of 11609 until native construction is checked. Both fit the existing
+12000-slot WP2 policy; the historical 3000 default is unchanged. No pressure
+candidate, governing solve or pressure-Q2 evolution has been performed.
+
+WP2AffineRowsV2 records each pressure row's actual width (nine inner, four outer)
+and explicit zero padding. The reader ignores padding numerically and preserves
+all native element/region identities. Archived V1 arrays and zero-enrichment
+field/gradient/tensor replay remain bitwise identical. V1 correctly rejects a
+P2 XML instead of silently treating it as P1. Synthetic pressure-only native
+mass projections reproduce an independently evaluated quadratic inner / bilinear
+outer polynomial: maximum value error 1.73e-18, x-gradient error 3.94e-16 and
+z-gradient error 2.73e-11. Those two setup projections are not physical pressure
+solves or an admissible coupled seed.
+
+The prospective Python source overlay is separate from the active recovery
+sources; the probe is separately frozen. Fourteen focused protocol tests pass,
+including cross-pressure continuation rejection. **Complete pressure action,
+rank/nullspace, native cold-state accuracy, timestep and recovery remain
+UNEXECUTED** for this representation. The radial confirmation result must be
+read before declaring its next numerical-control budget. No higher pressure
+degree is adopted as the production default.
+
+See [case checks](cls-cao-tamura-budget-wp2-evidence/pressure-case-generation.json),
+[native row checks](cls-cao-tamura-budget-wp2-evidence/pressure-row-verification.json)
+and [isolated artifacts](cls-cao-tamura-budget-wp2-evidence/pressure-preparation-artifact-index.json).

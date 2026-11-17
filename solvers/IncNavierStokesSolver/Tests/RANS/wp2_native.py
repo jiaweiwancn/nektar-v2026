@@ -15,23 +15,28 @@ from wp2_budget import wall_limit
 
 
 class Run:
-    def __init__(self,root,solver,h1,preflight,output,model,level=0,order=16,projection='RadialL2V1',resume=False):
+    def __init__(self,root,solver,h1,preflight,output,model,level=0,order=16,projection='RadialL2V1',resume=False,pressure_space='baseline-v1'):
         self.root,self.solver,self.h1,self.pre,self.output=root,solver,h1,load(preflight),output
         self.model,self.level,self.order,self.projection=model,level,order,projection
+        require(pressure_space in ('baseline-v1','inner-p2-v1') and
+                (pressure_space=='baseline-v1' or level in (4,5)), 'unsupported WP2 pressure representation')
+        self.pressure_space=pressure_space
+        definition=dict(level=level,order=order,projection=projection)
+        if pressure_space!='baseline-v1':definition['pressure_space']=pressure_space
         if resume:
             self.result=load(output/'progress.json')
             require(self.result['status']=='completed_bounded_trajectory' and self.result['model']==model and
-                    self.result['solver_sha256']==sha(solver) and self.result['case_definition']==dict(level=level,order=order,projection=projection),
+                    self.result['solver_sha256']==sha(solver) and self.result['case_definition']==definition,
                     'resume requires the same completed bounded trajectory, case and immutable runtime')
             return
         output.mkdir(exist_ok=False);self.result=dict(version='WP2NativeProtocolV1',status='running',model=model,
-            solver=str(solver),solver_sha256=sha(solver),results={},case_definition=dict(level=level,order=order,projection=projection))
+            solver=str(solver),solver_sha256=sha(solver),results={},case_definition=definition)
         self.save()
     def save(self):atomic(self.output/'progress.json',self.result)
     def native(self,label,steps=0,dt=2e-6,parent=None,reject=False,pout=0.,mismatch=False,perturb=False,ivp_parent=None):
         require(not (parent and ivp_parent),'diagnostic import is distinct from ordinary restart')
         charge(self.root,label,physical_attempts=steps)
-        xml=case(self.output/label,self.h1,self.pre,self.model,self.level,self.order,steps,dt,parent,pout,self.projection)
+        xml=case(self.output/label,self.h1,self.pre,self.model,self.level,self.order,steps,dt,parent,pout,self.projection,pressure_space=self.pressure_space)
         if ivp_parent:
             from run_cls_epawf_picard import set_info
             t=ET.parse(xml).getroot();source=checkpoint(ivp_parent)
