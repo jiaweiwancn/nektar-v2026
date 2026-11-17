@@ -463,3 +463,66 @@ with audit_wp2_k_witness_balance.py followed by verify_wp2_k_balance_contract.py
 using the isolated probe and unused output directories. Full load vectors remain
 outside Git. See [signed result](cls-cao-tamura-budget-wp2-evidence/rejected-k-witness-balance.json)
 and [negative checks](cls-cao-tamura-budget-wp2-evidence/rejected-k-witness-contracts.json).
+
+
+## Global half-step terminal result, 2026-11-17
+
+The standard original-pulse dt=.005 trajectory completes **240/240 accepted
+physical attempts**, actual T=1.1999999999999964 s (1.00482419 minimum transits).
+Its six resumed blocks add 180 accepted steps. Each has one U, pressure,
+outer-epsilon and k solve and one logical bound call; solved epsilon remains
+bitwise retained and no bound correction activates. The original T=.3 parent
+checkpoint and frozen v12 executable/library closure remain unchanged. The
+terminal checkpoint is step240/checkpoint.28, SHA256
+d49341a3735b7f175ee4650e222730f93f0cc19e5972d67adfb97bbad18bd348.
+
+**Recovery fails.** At T=1.2 the maximum native free-block residual is
+.00176608 (limit .001), inner velocity L2 error .00158487 (limit .001),
+inner W RMS/u_tau .00137881 (limit .001), inner k L2 error .0132106
+(limit .01), pointwise inner k error .0644920 (limit .01), and inner mechanical
+pressure RMS/u_tau² .0431218 (limit .01). The coefficient-derived analytical-reference profile
+comparison and the actual endpoint/final-window change and trend checks also
+fail. No covariance rejection occurs on this global half-step interval.
+The finer timestep therefore does not remove the observed recovery departure.
+
+All **121 exact common times** through T=1.2 are compared on the seen GL28
+physical panels without time interpolation or pressure realignment. At the last
+common time, dt=.01/.005 differences divided by the fine response from the
+original seed are U=.326310, W=.271823, k=.104333, epsilon=.302567,
+pi=.230040 and mechanical pressure=.180476. The quarter-budget test and full
+stress-tensor difference test fail. The corresponding GL28 inner/outer covariance
+minima are (.00678803,.00669283) coarse and (.00678567,.00669021) fine.
+These two levels establish sensitivity, not an observed temporal order or a
+continuum-model instability certificate. The finer global experiment is distinct
+from the previously rejected common-late-state experiment.
+
+The added native work takes 5416.24 seconds (90.27 minutes), peak RSS
+4317860 KiB (4.12 GiB). Native continuation finishes at 05:13:31 Shanghai;
+all terminal numerical analyses finish at 05:57:01, within the cumulative
+sixteen-hour boundary of 06:15:47. Administrative capture and archiving occur
+later, at approximately 07:54, producing an explicitly recorded wall-envelope
+overrun of about 99 minutes. The original clock is not moved. No further
+numerical job is running or launched under this envelope.
+
+Combined execution totals are **1621 attempts / 1611 accepted executions**,
+with eight deliberate rollback rejections and two genuine covariance rejections
+from the earlier controls. Requested-work reservations remain distinct from
+actual attempts. Boundary consistency, common spatial accuracy, unperturbed
+physical-duration preservation, confirmation-mesh preservation and restart/rollback
+retain their recorded passes for both models. **Perturbation recovery remains
+FAIL for both; WP2 remains OPEN.** Perturbed temporal and spatial qualification
+also remain open. The successful unperturbed programme is not substituted for
+those missing gates.
+
+See [terminal receipt](cls-cao-tamura-budget-wp2-evidence/global-half-step-terminal.json),
+[recovery checks](cls-cao-tamura-budget-wp2-evidence/global-half-step-recovery.json)
+and [complete artifact index](cls-cao-tamura-budget-wp2-evidence/global-half-step-artifact-index.json).
+
+The smallest next experiment is one same-dt standard original-pulse recovery on
+the already-qualified 11014-slot confirmation mesh through T=1.2. It separates
+radial-representation sensitivity from the measured timestep sensitivity while
+reusing the archived selected-mesh dt=.01 control. It was **not launched** within
+the exhausted envelope. Repeated smaller timesteps alone are not justified by
+the present evidence. A changed mesh or new resource envelope must be declared
+and costed before execution; neither a closure change nor weakened acceptance
+is proposed. The common-boundary hill requalification remains deferred.

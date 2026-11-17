@@ -1,0 +1,39 @@
+{
+  "version": "WP2ClosureStatusAfterGlobalHalfStepV1",
+  "WP2_closed": false,
+  "models": {
+    "CLS": {
+      "boundary_consistency": "PASS",
+      "common_spatial_accuracy": "PASS",
+      "unperturbed_dt_halfdt_preservation_through_Treq": "PASS",
+      "confirmation_mesh_preservation_through_Treq": "PASS",
+      "restart_and_post_assignment_rollback": "PASS",
+      "perturbation_recovery": "FAIL",
+      "perturbed_temporal_accuracy": "OPEN",
+      "perturbed_confirmation_mesh_sensitivity": "UNEXECUTED"
+    },
+    "standard": {
+      "boundary_consistency": "PASS",
+      "common_spatial_accuracy": "PASS",
+      "unperturbed_dt_halfdt_preservation_through_Treq": "PASS",
+      "confirmation_mesh_preservation_through_Treq": "PASS",
+      "restart_and_post_assignment_rollback": "PASS",
+      "perturbation_recovery": "FAIL",
+      "perturbed_temporal_accuracy": "FAIL",
+      "perturbed_confirmation_mesh_sensitivity": "UNEXECUTED"
+    }
+  },
+  "new_evidence": "global-half-step-terminal.json",
+  "source_revision": "7b8ff7f3c135dc0feca569c7b6ed07ff9f7be897",
+  "native_jobs_running": false,
+  "scope": "Finite-state/profile recovery failures leave the full both-model objective open. Historical original and late-state rejection packets remain immutable.",
+  "combined_counts": {
+    "attempts": 1621,
+    "accepted_executions": 1611,
+    "deliberate_rollback_rejections": 8,
+    "genuine_covariance_rejections": 2,
+    "basis": "Original closed numerical ledger 1441/1431 plus exactly 180/180 verified continuation executions."
+  },
+  "resource_status": "Numerical continuation and terminal analyses completed within the cumulative 57600-second boundary; administrative archiving overrun retained explicitly.",
+  "next_experiment": "One original-pulse same-dt standard confirmation-mesh recovery control, requiring a separately predeclared finite cumulative resource amendment; not launched."
+}
