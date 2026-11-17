@@ -1,0 +1,3191 @@
+{
+  "schema": "WJH26FiniteCampaignV1",
+  "closed": true,
+  "ceiling_seconds": 21600,
+  "evidence_protected_seconds": 1800,
+  "entries": {
+    "bootstrap": {
+      "status": "FULLY_CHARGED",
+      "phase": "evidence",
+      "seconds": 60.0,
+      "scope": "conservative control setup/inventory charge; no numerical advance"
+    },
+    "source-v1-materialize": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 0.6933457169798203
+    },
+    "build-v1": {
+      "status": "FAILED_BEFORE_CHILD",
+      "phase": "analysis",
+      "seconds": 2.0,
+      "reason": "immutable journal writer; no build/numerical child launched; conservatively fully charged2s"
+    },
+    "fixtures-v1": {
+      "status": "FAILED_BEFORE_CHILD",
+      "phase": "analysis",
+      "seconds": 2.0,
+      "reason": "immutable journal writer; no build/numerical child launched; conservatively fully charged2s"
+    },
+    "fixtures-v1-r2": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 2.105678144027479,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 149323776,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/fixtures-v1-r2/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "build-v1-r2": {
+      "status": "PASS",
+      "phase": "build",
+      "seconds": 34.360567397030536,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1798139904,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/build-v1-r2/command.log",
+        "bytes": 5853,
+        "sha256": "2567517776e4d09f0723a0e6287fb543d9d0257346f62cccd3a7dbc1ca3af2f8"
+      }
+    },
+    "algebra-flat-dir-v1": {
+      "status": "FAIL",
+      "phase": "science",
+      "seconds": 0.8546691769734025,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 172277760,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-flat-dir-v1/command.log",
+        "bytes": 43,
+        "sha256": "1c3da1bd67bad7ac5b9805d107803e39e5c2da1657bd0a983a1dde63a6c846b8"
+      }
+    },
+    "fixtures-v2": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 2.1132288739900105,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 149118976,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/fixtures-v2/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "algebra-flat-dir-v2": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8527917530154809,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 172302336,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-flat-dir-v2/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-flat-dir-v1": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 0.8458418559748679,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 178475008,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-flat-dir-v1/command.log",
+        "bytes": 398,
+        "sha256": "1272cbc9e28b1c0bf13e922dbf16dd228e45c15b4b4e41c73da30b21f37df734"
+      }
+    },
+    "algebra-curved-natural-v1": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8426232609781437,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 173023232,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-curved-natural-v1/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-curved-natural-v1": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 0.8318298840313219,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 178188288,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-curved-natural-v1/command.log",
+        "bytes": 399,
+        "sha256": "93ee44274c055b03fbb1b50fe142b761ebb8a5708dcb707cb1faff843eabdb5e"
+      }
+    },
+    "source-v2-materialize": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.5443341140053235,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 117829632,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/source-v2-materialize/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "build-v2": {
+      "status": "PASS",
+      "phase": "build",
+      "seconds": 62.51154889794998,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1816621056,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/build-v2/command.log",
+        "bytes": 6559,
+        "sha256": "c6be0b8c0e45b69931d287527ef82aeb1656503dcfdde13e74e81c1011b99481"
+      }
+    },
+    "temporal-poly-v2-0": {
+      "status": "FAIL",
+      "phase": "science",
+      "seconds": 0.4763923119753599,
+      "exit": -11,
+      "reason": null,
+      "peak_tree_rss_bytes": 92807168,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/temporal-poly-v2-0/command.log",
+        "bytes": 2609,
+        "sha256": "e8b963b86527903324cdef3b7385a5d636ab36c96d29430fcc4b955a45bce03e"
+      }
+    },
+    "source-v3-materialize": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.0185371810221113,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 110903296,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/source-v3-materialize/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "build-v3": {
+      "status": "PASS",
+      "phase": "build",
+      "seconds": 43.836432938987855,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1802190848,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/build-v3/command.log",
+        "bytes": 6559,
+        "sha256": "0227ef92c9b8b0117f045d2c0c9972da097526c05a4684710ec9e644f311ec14"
+      }
+    },
+    "temporal-poly-v3-0": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.0688359530176967,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 176603136,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/temporal-poly-v3-0/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "temporal-poly-v3-1": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.0466638570069335,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 176824320,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/temporal-poly-v3-1/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "temporal-poly-v3-2": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.0521761900163256,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 176996352,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/temporal-poly-v3-2/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "adapter-v3": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.0535656970459968,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 179671040,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/adapter-v3/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "nonlinear-v3": {
+      "status": "FAIL",
+      "phase": "science",
+      "seconds": 1.0538355680182576,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 179785728,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/nonlinear-v3/command.log",
+        "bytes": 58,
+        "sha256": "f108a237e52c289243079abbb9b6f314d1aa70726f74789cf1bc7477ed36c1e7"
+      }
+    },
+    "algebra-curved-natural-v3": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.2375984779791906,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 177082368,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-curved-natural-v3/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-curved-natural-v3": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.8212251939694397,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 191447040,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-curved-natural-v3/command.log",
+        "bytes": 398,
+        "sha256": "596904a4c162f326b051bc487ec9a636637fd1f4b5019b44ee2b916bda603b23"
+      }
+    },
+    "profile-700-v3": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 19.52114296297077,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 714551296,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/profile-700-v3/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "source-v4-materialize": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.3222712830174714,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 110956544,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/source-v4-materialize/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "build-v4": {
+      "status": "PASS",
+      "phase": "build",
+      "seconds": 64.59460552799283,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1795280896,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/build-v4/command.log",
+        "bytes": 6559,
+        "sha256": "01255357d2e13fad7eb5033d584f704f2d4bb4541acbc086b38c5a1c306d6b80"
+      }
+    },
+    "adapter-v4": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.3642610569950193,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 177655808,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/adapter-v4/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "nonlinear-v4": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.3316944770049304,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 177614848,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/nonlinear-v4/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "algebra-c0.0-n0-v4": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.3645565219921991,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 177086464,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-c0.0-n0-v4/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-c0.0-n0-v4": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 2.0085404089768417,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 194076672,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-c0.0-n0-v4/command.log",
+        "bytes": 400,
+        "sha256": "c7e533ad3446344ae2746608f7ad0c69a89cccc5dc072f83dcebecc5b08b947c"
+      }
+    },
+    "algebra-c0.0-n1-v4": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.3464704629732296,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 179564544,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-c0.0-n1-v4/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-c0.0-n1-v4": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 2.0211539620067924,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 195571712,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-c0.0-n1-v4/command.log",
+        "bytes": 400,
+        "sha256": "005489519fa552e67db279ddfb79c34cd2b71e5e20f61ec952375050ea03eaf1"
+      }
+    },
+    "algebra-c0.1-n0-v4": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.3290237110340968,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 179978240,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-c0.1-n0-v4/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-c0.1-n0-v4": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 2.029435116040986,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 193933312,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-c0.1-n0-v4/command.log",
+        "bytes": 400,
+        "sha256": "6677e30fc4042f706ea4f39291bb14ff9a922c7b2cf08be9b2ecefeb33d40975"
+      }
+    },
+    "algebra-c0.1-n1-v4": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.2732500029960647,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 179970048,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-c0.1-n1-v4/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-c0.1-n1-v4": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.8423423730419017,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 195424256,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-c0.1-n1-v4/command.log",
+        "bytes": 398,
+        "sha256": "596904a4c162f326b051bc487ec9a636637fd1f4b5019b44ee2b916bda603b23"
+      }
+    },
+    "temporal-poly-v4-0": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.28331203997368,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 179449856,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/temporal-poly-v4-0/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "temporal-poly-v4-1": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.2293224969762377,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 184881152,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/temporal-poly-v4-1/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "temporal-poly-v4-2": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.2111483910121024,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 184586240,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/temporal-poly-v4-2/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "profile-700-v4": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 4.618181743018795,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 492929024,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/profile-700-v4/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "restart-whole-v4": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.2081396940047853,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 177545216,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/restart-whole-v4/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "restart-first-v4": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.1695090559660457,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 177553408,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/restart-first-v4/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "restart-resumed-v4": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.1665931890020147,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 177213440,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/restart-resumed-v4/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "tolerance-tight-v4": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.1696713020210154,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 179949568,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/tolerance-tight-v4/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.0-n2-v4": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.1680189949693158,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 179884032,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.0-n2-v4/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.0-n4-v4": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.1618580889771692,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 182525952,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.0-n4-v4/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.0-n8-v4": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.165561876958236,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 182751232,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.0-n8-v4/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.1-n2-v4": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.1671782899647951,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 182714368,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.1-n2-v4/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.1-n4-v4": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.1622568229795434,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 182665216,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.1-n4-v4/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.1-n8-v4": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.151106592034921,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 182767616,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.1-n8-v4/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "source-v5-materialize": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.2044678530073725,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 113803264,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/source-v5-materialize/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "build-v5": {
+      "status": "FAIL",
+      "phase": "build",
+      "seconds": 54.09491716598859,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 2322849792,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/build-v5/command.log",
+        "bytes": 14222,
+        "sha256": "608fd7fcccca9f2c72b821be72aa938011678286abef654df5e1ed7acd55b5d3"
+      }
+    },
+    "source-v6-materialize": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.3722792160115205,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 117243904,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/source-v6-materialize/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "build-v6": {
+      "status": "PASS",
+      "phase": "build",
+      "seconds": 64.01195021596504,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 2579685376,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/build-v6/command.log",
+        "bytes": 8962,
+        "sha256": "82b12d2d135b6b02ac43c09e8cfb5b1fc8a549e9a7cfcad51a5278c306470f58"
+      }
+    },
+    "control-through-v6": {
+      "status": "FULLY_CHARGED",
+      "phase": "analysis",
+      "seconds": 300.0,
+      "scope": "bounded SSH metadata, input setup, failed shell/bootstrap attempts, and controller bookkeeping outside individually timed child operations"
+    },
+    "prepare-matrix-v6": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.382772083976306,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 190722048,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/prepare-matrix-v6/command.log",
+        "bytes": 293,
+        "sha256": "aefc7b2efb7af3d0a0c37e880a50e06358df096376148e341ad4f00332215ec1"
+      }
+    },
+    "algebra-c0.0-n0-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7287778400350362,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 94310400,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-c0.0-n0-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-c0.0-n0-v6": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.442618303000927,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 195891200,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-c0.0-n0-v6/command.log",
+        "bytes": 400,
+        "sha256": "c7e533ad3446344ae2746608f7ad0c69a89cccc5dc072f83dcebecc5b08b947c"
+      }
+    },
+    "algebra-c0.0-n1-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7372692519566044,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101335040,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-c0.0-n1-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-c0.0-n1-v6": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.455226942023728,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 199569408,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-c0.0-n1-v6/command.log",
+        "bytes": 400,
+        "sha256": "005489519fa552e67db279ddfb79c34cd2b71e5e20f61ec952375050ea03eaf1"
+      }
+    },
+    "algebra-c0.1-n0-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.470553829043638,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 180555776,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-c0.1-n0-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-c0.1-n0-v6": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.438379192026332,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 197828608,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-c0.1-n0-v6/command.log",
+        "bytes": 400,
+        "sha256": "6677e30fc4042f706ea4f39291bb14ff9a922c7b2cf08be9b2ecefeb33d40975"
+      }
+    },
+    "algebra-c0.1-n1-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.4429611039813608,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 182960128,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-c0.1-n1-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-c0.1-n1-v6": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.439465306000784,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 198529024,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-c0.1-n1-v6/command.log",
+        "bytes": 398,
+        "sha256": "596904a4c162f326b051bc487ec9a636637fd1f4b5019b44ee2b916bda603b23"
+      }
+    },
+    "adapter-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.4585014290059917,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 132055040,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/adapter-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "nonlinear-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.4009497690130956,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 189517824,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/nonlinear-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "formula-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7076880279928446,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101429248,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/formula-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-continuous-formulas-v6": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.3781109999981709,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 166510592,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-continuous-formulas-v6/command.log",
+        "bytes": 79,
+        "sha256": "c65c77e3d2dd6b04a7fcf826e4ca9c5c155ec3b0f495f66e3271a4b1b146026c"
+      }
+    },
+    "temporal-poly-0-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.4018284030025825,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 189145088,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/temporal-poly-0-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "temporal-poly-1-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.400314991013147,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 189124608,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/temporal-poly-1-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "temporal-poly-2-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.369857055018656,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 181063680,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/temporal-poly-2-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "tolerance-tight-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.384809151000809,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 183107584,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/tolerance-tight-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "restart-whole-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.3750308189773932,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 189112320,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/restart-whole-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "restart-first-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.3749511929927394,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 189042688,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/restart-first-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "restart-resumed-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.3786829610471614,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 189059072,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/restart-resumed-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.0-n2-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.3859267359948717,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 189517824,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.0-n2-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.0-n4-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.433436026039999,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 194424832,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.0-n4-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.0-n8-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.4528206869727,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 197853184,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.0-n8-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.1-n2-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.4517209280165844,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 189693952,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.1-n2-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.1-n4-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.431251605041325,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 194834432,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.1-n4-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.1-n8-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.46071941498667,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 198586368,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.1-n8-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "pilot-0-Snu-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 3.628742091008462,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 346902528,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/pilot-0-Snu-v6/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "pilot-0-Nnu-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 6.555196999979671,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 493969408,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/pilot-0-Nnu-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "pilot-0-Smu-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 3.6313155940151773,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 346984448,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/pilot-0-Smu-v6/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "pilot-0-Nmu-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 5.60132708895253,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 492408832,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/pilot-0-Nmu-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "pilot-0-Nspace-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 6.592406815034337,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 493551616,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/pilot-0-Nspace-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "pilot-0-Ntime-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 8.726167721033562,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 493842432,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/pilot-0-Ntime-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-0-Snu-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 15.55641762498999,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 338939904,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-0-Snu-v6/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "block-0-Nnu-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 26.590938473993447,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 496021504,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-0-Nnu-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-0-Smu-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 13.552195537020452,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 342544384,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-0-Smu-v6/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "block-0-Nmu-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 35.59402154298732,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 499994624,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-0-Nmu-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-0-Nspace-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 25.808868070016615,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 501268480,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-0-Nspace-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-0-Ntime-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 56.46368067199364,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 501456896,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-0-Ntime-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-1-Snu-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 11.923068744014017,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 349474816,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-1-Snu-v6/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "block-1-Nnu-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 27.449278665008023,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 509018112,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-1-Nnu-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-1-Smu-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 20.493597291992046,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 337313792,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-1-Smu-v6/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "block-1-Nmu-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 25.110565609007608,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 494993408,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-1-Nmu-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-1-Nspace-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 26.712047331035137,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 496156672,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-1-Nspace-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-1-Ntime-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 44.27524618100142,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 499843072,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-1-Ntime-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-2-Snu-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 10.90132053999696,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 337289216,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-2-Snu-v6/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "block-2-Nnu-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 23.50879186403472,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 496480256,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-2-Nnu-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-2-Smu-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 10.268784676038194,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 337510400,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-2-Smu-v6/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "block-2-Nmu-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 18.569162264000624,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 507584512,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-2-Nmu-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-2-Nspace-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 17.89336133399047,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 506314752,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-2-Nspace-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-2-Ntime-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 30.222376696998253,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 506183680,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-2-Ntime-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "restart-700-v6": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 4.262447073007934,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 497057792,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/restart-700-v6/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "source-v7-materialize": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.5183103940216824,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 117649408,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/source-v7-materialize/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "build-v7": {
+      "status": "PASS",
+      "phase": "build",
+      "seconds": 69.23107446200447,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 2638409728,
+      "peak_host_workers": 42,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/build-v7/command.log",
+        "bytes": 8962,
+        "sha256": "c6a5d9172d07b1e9d0417cdad5b0fd91547dcae585a3818745d6044d8d347ffa"
+      }
+    },
+    "prepare-matrix-v7": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.5595357440179214,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 191512576,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/prepare-matrix-v7/command.log",
+        "bytes": 293,
+        "sha256": "aefc7b2efb7af3d0a0c37e880a50e06358df096376148e341ad4f00332215ec1"
+      }
+    },
+    "algebra-c0.0-n0-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7558257129858248,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 94064640,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-c0.0-n0-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-c0.0-n0-v7": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 0.7578217819682322,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 97939456,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-c0.0-n0-v7/command.log",
+        "bytes": 400,
+        "sha256": "c7e533ad3446344ae2746608f7ad0c69a89cccc5dc072f83dcebecc5b08b947c"
+      }
+    },
+    "algebra-c0.0-n1-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7539583029574715,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 100352000,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-c0.0-n1-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-c0.0-n1-v7": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 0.7524986279895529,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101425152,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-c0.0-n1-v7/command.log",
+        "bytes": 400,
+        "sha256": "005489519fa552e67db279ddfb79c34cd2b71e5e20f61ec952375050ea03eaf1"
+      }
+    },
+    "algebra-c0.1-n0-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7478652209974825,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101199872,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-c0.1-n0-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-c0.1-n0-v7": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 0.7586845780024305,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101601280,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-c0.1-n0-v7/command.log",
+        "bytes": 400,
+        "sha256": "6677e30fc4042f706ea4f39291bb14ff9a922c7b2cf08be9b2ecefeb33d40975"
+      }
+    },
+    "algebra-c0.1-n1-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7600251249969006,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101388288,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-c0.1-n1-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-c0.1-n1-v7": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 0.762710815994069,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101609472,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-c0.1-n1-v7/command.log",
+        "bytes": 398,
+        "sha256": "596904a4c162f326b051bc487ec9a636637fd1f4b5019b44ee2b916bda603b23"
+      }
+    },
+    "adapter-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7518795669893734,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101392384,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/adapter-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "nonlinear-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.772109929996077,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101552128,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/nonlinear-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "formula-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7660904279910028,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101392384,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/formula-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-continuous-formulas-v7": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 0.7561998729943298,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101605376,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-continuous-formulas-v7/command.log",
+        "bytes": 79,
+        "sha256": "c65c77e3d2dd6b04a7fcf826e4ca9c5c155ec3b0f495f66e3271a4b1b146026c"
+      }
+    },
+    "temporal-poly-0-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7519217929802835,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101392384,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/temporal-poly-0-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "temporal-poly-1-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.758737479976844,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101392384,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/temporal-poly-1-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "temporal-poly-2-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7534697739756666,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101392384,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/temporal-poly-2-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "tolerance-tight-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7589884609915316,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101400576,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/tolerance-tight-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "restart-whole-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7495944880065508,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101396480,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/restart-whole-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "restart-first-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7474592800135724,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101396480,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/restart-first-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "restart-resumed-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.756525524018798,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101257216,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/restart-resumed-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "restart-reject-height-v7": {
+      "status": "FAIL",
+      "phase": "science",
+      "seconds": 0.7458349690423347,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 101400576,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/restart-reject-height-v7/command.log",
+        "bytes": 65,
+        "sha256": "49581f96ee5b588c457252b1477ff9febae7be53b995e6a26b92b88cecabf43a"
+      }
+    },
+    "spatial-c0.0-n2-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.754896673024632,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101392384,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.0-n2-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wall-trace-c0.0-n2-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7693893359974027,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101588992,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/wall-trace-c0.0-n2-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.0-n4-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.5285004950128496,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 194330624,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.0-n4-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wall-trace-c0.0-n4-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7716110830078833,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101392384,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/wall-trace-c0.0-n4-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.0-n8-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.5765337579650804,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 213323776,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.0-n8-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wall-trace-c0.0-n8-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.5789112269994803,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 189513728,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/wall-trace-c0.0-n8-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.1-n2-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7941858840058558,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101584896,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.1-n2-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wall-trace-c0.1-n2-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7945676759700291,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101502976,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/wall-trace-c0.1-n2-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.1-n4-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.57629525300581,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 194916352,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.1-n4-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wall-trace-c0.1-n4-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7725278389989398,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101384192,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/wall-trace-c0.1-n4-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.1-n8-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.601976628007833,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 216174592,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.1-n8-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wall-trace-c0.1-n8-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.574863483023364,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 198520832,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/wall-trace-c0.1-n8-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "tools-v8-materialize": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 0.8210007569869049,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 92991488,
+      "peak_host_workers": 37,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/tools-v8-materialize/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wall-trace-c0.0-n16-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.5358454029774293,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 210632704,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/wall-trace-c0.0-n16-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wall-trace-c0.1-n16-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.5181414440157823,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 195842048,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/wall-trace-c0.1-n16-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "constant-nu-dt0-S-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7705974719719961,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 95109120,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-nu-dt0-S-v7/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "constant-nu-dt0-N-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.774533714982681,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 96477184,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-nu-dt0-N-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "constant-nu-dt1-S-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7615711800171994,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 95678464,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-nu-dt1-S-v7/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "constant-nu-dt1-N-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7854356280295178,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 98586624,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-nu-dt1-N-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "constant-nu-dt2-S-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7620215759961866,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101060608,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-nu-dt2-S-v7/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "constant-nu-dt2-N-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7733201760565862,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101253120,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-nu-dt2-N-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "constant-constant-dt0-S-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7538165039732121,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101064704,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-constant-dt0-S-v7/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "constant-constant-dt0-N-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7467465840163641,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101064704,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-constant-dt0-N-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "constant-constant-dt1-S-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7524550029775128,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101068800,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-constant-dt1-S-v7/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "constant-constant-dt1-N-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7596645450103097,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101089280,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-constant-dt1-N-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "constant-constant-dt2-S-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7639600460533984,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101089280,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-constant-dt2-S-v7/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "constant-constant-dt2-N-v7": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7595584549708292,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101117952,
+      "peak_host_workers": 40,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-constant-dt2-N-v7/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "evidence-B-v7": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 1.5155483579728752,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 211922944,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/evidence-B-v7/command.log",
+        "bytes": 575,
+        "sha256": "a640e06907ca373b57dbd2428502904c172a0f1a25ee8bc3afe78a410b904884"
+      }
+    },
+    "evidence-B-profile-v6": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 1.497100431995932,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 190754816,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/evidence-B-profile-v6/command.log",
+        "bytes": 293,
+        "sha256": "aefc7b2efb7af3d0a0c37e880a50e06358df096376148e341ad4f00332215ec1"
+      }
+    },
+    "source-v8-materialize": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 0.8224566240096465,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 92876800,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/source-v8-materialize/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "build-v8": {
+      "status": "PASS",
+      "phase": "build",
+      "seconds": 70.96521554497303,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 2539565056,
+      "peak_host_workers": 42,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/build-v8/command.log",
+        "bytes": 8962,
+        "sha256": "654f54c9c612ce7bf2f34974dce4efa5a3b364ffc070d8aa3da0da7a4cedf254"
+      }
+    },
+    "prepare-matrix-v8": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 0.7947449890198186,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 92942336,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/prepare-matrix-v8/command.log",
+        "bytes": 293,
+        "sha256": "aefc7b2efb7af3d0a0c37e880a50e06358df096376148e341ad4f00332215ec1"
+      }
+    },
+    "algebra-c0.0-n0-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8118222799967043,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 94375936,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-c0.0-n0-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-c0.0-n0-v8": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 0.7843983349739574,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 98185216,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-c0.0-n0-v8/command.log",
+        "bytes": 400,
+        "sha256": "c7e533ad3446344ae2746608f7ad0c69a89cccc5dc072f83dcebecc5b08b947c"
+      }
+    },
+    "algebra-c0.0-n1-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7959886940079741,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 98676736,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-c0.0-n1-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-c0.0-n1-v8": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 0.7897906660218723,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 99168256,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-c0.0-n1-v8/command.log",
+        "bytes": 400,
+        "sha256": "005489519fa552e67db279ddfb79c34cd2b71e5e20f61ec952375050ea03eaf1"
+      }
+    },
+    "algebra-c0.1-n0-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8073931040125899,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 98983936,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-c0.1-n0-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-c0.1-n0-v8": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 0.816835155012086,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101883904,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-c0.1-n0-v8/command.log",
+        "bytes": 400,
+        "sha256": "6677e30fc4042f706ea4f39291bb14ff9a922c7b2cf08be9b2ecefeb33d40975"
+      }
+    },
+    "algebra-c0.1-n1-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8288466340163723,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101621760,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/algebra-c0.1-n1-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-c0.1-n1-v8": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.581802939006593,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 198737920,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-c0.1-n1-v8/command.log",
+        "bytes": 398,
+        "sha256": "596904a4c162f326b051bc487ec9a636637fd1f4b5019b44ee2b916bda603b23"
+      }
+    },
+    "adapter-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8496459730085917,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101986304,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/adapter-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "nonlinear-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.615244890039321,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101470208,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/nonlinear-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "formula-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8463496110052802,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 102039552,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/formula-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "independent-continuous-formulas-v8": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.5949806150165386,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 166846464,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/independent-continuous-formulas-v8/command.log",
+        "bytes": 79,
+        "sha256": "c65c77e3d2dd6b04a7fcf826e4ca9c5c155ec3b0f495f66e3271a4b1b146026c"
+      }
+    },
+    "temporal-poly-0-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8553048599860631,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101744640,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/temporal-poly-0-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "temporal-poly-1-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8150293140206486,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101482496,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/temporal-poly-1-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "temporal-poly-2-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8567315620020963,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101855232,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/temporal-poly-2-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "tolerance-tight-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8480452109943144,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101646336,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/tolerance-tight-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "restart-whole-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8579214839846827,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101679104,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/restart-whole-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "restart-first-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8446940459543839,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101851136,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/restart-first-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "restart-resumed-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8540022499510087,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101650432,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/restart-resumed-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "restart-reject-height-v8": {
+      "status": "FAIL",
+      "phase": "science",
+      "seconds": 0.8644983140402474,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 101646336,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/restart-reject-height-v8/command.log",
+        "bytes": 65,
+        "sha256": "49581f96ee5b588c457252b1477ff9febae7be53b995e6a26b92b88cecabf43a"
+      }
+    },
+    "spatial-c0.0-n2-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8576890859985724,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101781504,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.0-n2-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wall-trace-c0.0-n2-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8700664140051231,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101650432,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/wall-trace-c0.0-n2-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.0-n4-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.7922745000105351,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 194600960,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.0-n4-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wall-trace-c0.0-n4-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8447056720033288,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101650432,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/wall-trace-c0.0-n4-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.0-n8-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.6590924460324459,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 216027136,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.0-n8-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wall-trace-c0.0-n8-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8171264000120573,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101650432,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/wall-trace-c0.0-n8-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wall-trace-c0.0-n16-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.6510266700061038,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 226418688,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/wall-trace-c0.0-n16-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.1-n2-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8398827270139009,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101650432,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.1-n2-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wall-trace-c0.1-n2-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8695034940028563,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101650432,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/wall-trace-c0.1-n2-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.1-n4-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.7078530490398407,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 194228224,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.1-n4-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wall-trace-c0.1-n4-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8598163040005602,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101842944,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/wall-trace-c0.1-n4-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "spatial-c0.1-n8-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.686849806981627,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 217595904,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/spatial-c0.1-n8-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wall-trace-c0.1-n8-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8619907149695791,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101851136,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/wall-trace-c0.1-n8-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wall-trace-c0.1-n16-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.6734038309659809,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 205668352,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/wall-trace-c0.1-n16-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "constant-nu-dt0-S-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8624532810063101,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101724160,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-nu-dt0-S-v8/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "constant-nu-dt0-N-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8230749780195765,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101728256,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-nu-dt0-N-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "constant-nu-dt1-S-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8627971889800392,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101720064,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-nu-dt1-S-v8/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "constant-nu-dt1-N-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8293833039933816,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101720064,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-nu-dt1-N-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "constant-nu-dt2-S-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8465112089761533,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101720064,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-nu-dt2-S-v8/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "constant-nu-dt2-N-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.7989629689836875,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101715968,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-nu-dt2-N-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "constant-constant-dt0-S-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.822745006007608,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101908480,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-constant-dt0-S-v8/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "constant-constant-dt0-N-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8091462290030904,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101720064,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-constant-dt0-N-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "constant-constant-dt1-S-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8131561490008608,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101871616,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-constant-dt1-S-v8/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "constant-constant-dt1-N-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8023893040372059,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101720064,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-constant-dt1-N-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "constant-constant-dt2-S-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.8247410280164331,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101916672,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-constant-dt2-S-v8/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "constant-constant-dt2-N-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.803523741022218,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 101720064,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/constant-constant-dt2-N-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "evidence-B-v8": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 1.5768362380331382,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 214577152,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/evidence-B-v8/command.log",
+        "bytes": 639,
+        "sha256": "bc81c89163efe2758d585efbf66539c2661080fba7fae42f720d6566ecece857"
+      }
+    },
+    "block-0-Snu-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 19.03915424400475,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 337203200,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-0-Snu-v8/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "block-0-Nnu-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 21.17029437702149,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 509046784,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-0-Nnu-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-0-Smu-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 16.156633887032513,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 340144128,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-0-Smu-v8/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "block-0-Nmu-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 35.43070894200355,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 510050304,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-0-Nmu-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-0-Nspace-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 24.842369150021113,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 498806784,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-0-Nspace-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-0-Ntime-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 53.550392771023326,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 502743040,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-0-Ntime-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-1-Snu-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 13.293344844016246,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 340254720,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-1-Snu-v8/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "block-1-Nnu-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 19.881735106988344,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 499314688,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-1-Nnu-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-1-Smu-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 13.656165616994258,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 340369408,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-1-Smu-v8/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "block-1-Nmu-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 22.24179823504528,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 510521344,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-1-Nmu-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-1-Nspace-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 19.06260188797023,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 498909184,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-1-Nspace-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-1-Ntime-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 33.969428529031575,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 511471616,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-1-Ntime-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-2-Snu-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 11.090397830004804,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 340332544,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-2-Snu-v8/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "block-2-Nnu-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 19.712308313988615,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 499355648,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-2-Nnu-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-2-Smu-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 11.018702005967498,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 340242432,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-2-Smu-v8/command.log",
+        "bytes": 159,
+        "sha256": "0351d0dabe9ded46b3f94ff188064c93b5b91fa11f5537354ff105ab4ea4b712"
+      }
+    },
+    "block-2-Nmu-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 23.96943747199839,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 497905664,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-2-Nmu-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-2-Nspace-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 21.51618477999,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 511561728,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-2-Nspace-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "block-2-Ntime-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 41.714616290002596,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 502800384,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/block-2-Ntime-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "restart-700-v8": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 4.797208562027663,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 500146176,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/restart-700-v8/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "tools-v10-materialize": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 0.8097689319984056,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 93331456,
+      "peak_host_workers": 37,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/tools-v10-materialize/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "control-after-v6": {
+      "status": "FULLY_CHARGED",
+      "phase": "analysis",
+      "seconds": 300.0,
+      "scope": "all short read/input/transport/control bookkeeping outside individually timed operations since v6; conservative full charge"
+    },
+    "evidence-C-v8": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 1.592804237967357,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 245309440,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/evidence-C-v8/command.log",
+        "bytes": 1299,
+        "sha256": "c91467daf0b103bd4647cbfd94abee90d60bef7b46906681f427c7ac2bcd26ba"
+      }
+    },
+    "closure-audit-v8": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 3.25118449999718,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 281546752,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/operations/closure-audit-v8/command.log",
+        "bytes": 356,
+        "sha256": "8532169dbaf12047e7558dac52bf4f50b973eccedf1a5b1be71fcb3670d75d47"
+      }
+    },
+    "final-publication-epilogue": {
+      "status": "FULLY_CHARGED",
+      "phase": "evidence",
+      "seconds": 120.0,
+      "scope": "final ledger close, manifest/transport checks and read-only publication verification; conservatively prepaid"
+    }
+  },
+  "old_accounts": [
+    {
+      "path": "/home/jay/build/wj-h25-production-20261116/accounting.json",
+      "sha256": "1d11e9cfb1871c3ca2dd723578d26479ba7b0871e555e009bb4324208565ef1a",
+      "closed": true
+    },
+    {
+      "path": "/home/jay/build/wj-h25-production-20261116/resumption-r1/accounting.json",
+      "sha256": "c5903152bb6521ebc45dd9636f3878622d378ff959623274264239529d0b24a7",
+      "closed": true
+    }
+  ],
+  "closed_utc": "2026-11-17T05:48:50.347106+00:00",
+  "closure": {
+    "status": "ALL_H26_GATES_PASSED",
+    "tested_source": "8aeb00a2f37437cd17e043a9ba6f86a6f208e1d6",
+    "used_seconds": 2371.2705781853874,
+    "remaining_seconds": 19228.729421814613,
+    "summary": {
+      "path": "/home/jay/build/wj-h26-native-flow-20261117/publication-c-v8/summary.json",
+      "bytes": 72673,
+      "sha256": "4c6f27a406c02b7e4ee7a80da18eb9a654de39c15dc1a3b1396b3a0c0378dc76"
+    },
+    "runtime_resource_audit": {
+      "path": "/home/jay/build/wj-h26-native-flow-20261117/publication-c-v8/runtime-resource-audit.json",
+      "bytes": 153035,
+      "sha256": "5df198999ae6c2a618c27d2f4525343836dfe39ec7426f137338d4d73b28f373"
+    }
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "source_manifest": {
+    "path": "/home/jay/build/wj-h26-native-flow-20261117/source-v8.json",
+    "bytes": 1069401,
+    "sha256": "22967935da87f4ce85ea0d34e39f62fce7595406cd37d71f1cfe572d2123ad41"
+  },
+  "source_revision": "8aeb00a2f37437cd17e043a9ba6f86a6f208e1d6",
+  "runtime_manifest": {
+    "path": "/home/jay/build/wj-h26-native-flow-20261117/science/runtime-v8.json",
+    "bytes": 15065589,
+    "sha256": "6db8eaf348921cad60e2398f9969e0542be44f31649537c4d91ee6799860c5d6"
+  },
+  "compiler": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0\nCopyright (C) 2021 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "configure": [
+    "cmake",
+    "-S",
+    "/home/jay/build/wj-h26-native-flow-20261117/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/h26",
+    "-B",
+    "/home/jay/build/wj-h26-native-flow-20261117/build-v8",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math",
+    "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+    "-DH26_STOCK_BUILD=/home/jay/build/wj-h25-production-20261116/resumption-r1/build-memo-v1"
+  ],
+  "build": [
+    "cmake",
+    "--build",
+    "/home/jay/build/wj-h26-native-flow-20261117/build-v8",
+    "--parallel",
+    "4"
+  ],
+  "executables": [
+    {
+      "executable": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/runtime-v8/WJNativeFlowDriver.elf",
+        "bytes": 870520,
+        "sha256": "651b0213293d87a545efb62c052c02ad9801cfe096db4633b29d44d29577d8cc"
+      },
+      "wrapper": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/runtime-v8/WJNativeFlowDriver",
+        "bytes": 376,
+        "sha256": "38fbf02f5335480f9d86ec832915b102dfebc6cbec314672f0c4e64d016bb231"
+      },
+      "link": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/build-v8/CMakeFiles/WJNativeFlowDriver.dir/link.txt",
+        "bytes": 1676,
+        "sha256": "28dd422df665621acac9fbb90df320377bdc41b0b7c8fb41bff60284cf8ed6e5"
+      }
+    },
+    {
+      "executable": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/runtime-v8/WJStockFlowDriver.elf",
+        "bytes": 3391096,
+        "sha256": "43058070188ee29d9216722dcaf08c098ea9e261a965a5602e2dc46d6cbfed4f"
+      },
+      "wrapper": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/runtime-v8/WJStockFlowDriver",
+        "bytes": 375,
+        "sha256": "c9b80839f306d6a332a50180ecd348c45175256150f7065a0d812a62bc8a3dee"
+      },
+      "link": {
+        "path": "/home/jay/build/wj-h26-native-flow-20261117/build-v8/CMakeFiles/WJStockFlowDriver.dir/link.txt",
+        "bytes": 10760,
+        "sha256": "718a18a05ddcbddaa7c140023d17faa3ce010bc260cc296953d9e33ea5657524"
+      }
+    }
+  ],
+  "loader": {
+    "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2",
+    "bytes": 240936,
+    "sha256": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+  },
+  "library_path": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc:/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/geometry:/home/jay/.local/opt/nektar-v2026-mpi/lib64",
+  "stock_object_count": 37
+}
