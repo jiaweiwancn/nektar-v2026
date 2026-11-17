@@ -5,7 +5,7 @@
 Actual native coefficient fields are evaluated on immutable CG geometry rows.
 This does not evolve, project, reset or repair any retained state.
 """
-import argparse,math,time,resource,shutil,importlib.util
+import argparse,math,time,resource,shutil,importlib.util,json
 from pathlib import Path
 import numpy as np
 from cao_tamura_h2d_state import load
@@ -71,6 +71,9 @@ def assess(root,model,phase,rows,output,progress_path=None,independent_order=28)
     require(p['status']=='completed_bounded_trajectory','trajectory is not complete: '+str(progress_path))
     require(p['actual_time']>=TREQ,'actual physical duration too short')
     recovery=phase=='recovery';history=[];last_hash=None;last_time=-1.;sources=[];replay=[];counts={};previous_values=None
+    equation_counts={k:0 for k in ['outer_sweeps','momentum_predictor_solves','pressure_system_solves','epsilon_transport_solves','k_transport_solves','bound_calls']}
+    split_trace_max={k:0. for k in ['momentum_splitting_identity_defect','frozen_momentum_defect','native_full_G_action_defect','epsilon_same_state_source_storage_defect','k_same_state_source_storage_defect','imposed_trace_defect','refreshed_trace_defect']}
+    correction=dict(activations=0,signed_supply=0.,absolute_supply=0.);process_costs=[];exclusive={}
     if recovery:
         # A zero-step seed report omits transient endpoint-sampler output.
         # The first evolved report includes that exact seed as accepted state
@@ -96,6 +99,30 @@ def assess(root,model,phase,rows,output,progress_path=None,independent_order=28)
         sources.append(dict(path=str(file),sha256=sha(file),checkpoint=d['checkpoint'],checkpoint_sha256=sha(Path(d['checkpoint'])/'State.bin')))
         replay.append(dict(report=str(file),**rows.check_native(d)))
         counts[str(file)]=dict(attempts=d['implicit_callback_count'],accepted_executions=len(d['accepted_states'])-1)
+        for attempt in d['pimple_attempts']:
+            for name in equation_counts:
+                require(attempt[name]==1,'one-sweep equation count differs during assessment: '+name)
+                equation_counts[name]+=int(attempt[name])
+            for name in split_trace_max:split_trace_max[name]=max(split_trace_max[name],abs(attempt[name]))
+            bound=attempt['k_bound'];correction['activations']+=int(bound['activations']);correction['signed_supply']+=bound['integral_total']
+            supply=bound['integrals_inner_outer_near_positive_negative'];correction['absolute_supply']+=supply[3]-supply[4]
+        timing=file.parent/'timing.jsonl'
+        if timing.exists():
+            recorded=[json.loads(line) for line in timing.read_text().splitlines()]
+            process=[row for row in recorded if row['name']=='process'];require(len(process)==1,'incomplete or duplicate native process timing')
+            usage=file.parent/'usage.txt';rss=None
+            if usage.exists() and usage.read_text().splitlines():
+                tokens=usage.read_text().splitlines()[-1].split()
+                if len(tokens)==4:
+                    try:rss=int(tokens[-1])
+                    except ValueError:pass
+            process_costs.append(dict(report=str(file),native_process_wall_seconds=process[0]['wall_seconds'],native_process_CPU_seconds=process[0]['process_cpu_seconds'],
+                observed_GNU_time_peak_RSS_KiB=rss,RSS_status='observed' if rss is not None else 'unavailable after timing-wrapper interruption',timing_sha256=sha(timing),
+                process_exit_status='not inferred from timing; retain the owning execution receipt'))
+            for row in recorded:
+                item=exclusive.setdefault(row['name'],dict(wall_seconds=0.,process_CPU_seconds=0.))
+                item['wall_seconds']+=row['exclusive_wall_seconds'];item['process_CPU_seconds']+=row['exclusive_process_cpu_seconds']
+
         for index,(state,monitor,check) in enumerate(zip(d['accepted_states'],d['wp2_per_state_monitoring'],checks)):
             t=monitor['time'];h=state_hash(state)
             if abs(t-last_time)<2e-14:
@@ -144,7 +171,10 @@ def assess(root,model,phase,rows,output,progress_path=None,independent_order=28)
             interpretation='least-squares slope of actual values on the final executed window; no infinite-time or future-state claim'),
         final_budgets=endpoint['wp2_final_turbulence_budget'],seconds=time.monotonic()-started,
         peak_RSS_KiB=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
-        context_sha256=sha(rows.path),progress_sha256=progress_hash,governing_solves_in_this_analysis=0)
+        context_sha256=sha(rows.path),progress_sha256=progress_hash,governing_solves_in_this_analysis=0,
+        equation_counts=equation_counts,logical_bound_and_correction=correction,splitting_and_trace_maxima=split_trace_max,
+        splitting_interpretation='frozen_momentum_defect is the actual coefficient-row defect of the frozen momentum system after one pressure correction; splitting_identity_defect is its separate roundoff identity check. Full unforced nonlinear block mass-dual residuals are reported independently.',
+        process_costs=process_costs,exclusive_named_scope_costs=exclusive)
     require(sha(progress_path)==progress_hash,'trajectory changed during all-state assessment')
     require(result['final_window']['duration']>=TREQ/4-2e-14,'final observation window too short')
     atomic(output,result);return result,endpoint,cold_samples

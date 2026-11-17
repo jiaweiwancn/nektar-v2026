@@ -1,13 +1,22 @@
 # WP2: full-height neutral open approach flow
 
-2026-11-16–17, Asia/Shanghai. **WP2 remains OPEN.** Both models pass the
-new boundary implementation, common deployable spatial qualification and
-unperturbed transit tests. The bounded perturbation tests fail recovery:
-regularized CLS remains admissible but misses the final accuracy budgets at
-T=4.2 s; calibrated standard loses inner covariance at attempted T=3.69 s.
-No hill run or automatic global recovery retry is launched. The bounded
-common-state time-sensitivity control also ends in rejection; it does not
-promote the failed global recovery gate.
+2026-11-16–17, Asia/Shanghai. **WP2 remains OPEN.** The archived inner/outer
+P1 epoch passes boundary, spatial and unperturbed transit qualification but fails
+perturbation recovery: CLS misses the T=4.2 accuracy budgets; standard rejects on
+inner covariance at attempted T=3.69. Those failures remain valid.
+
+The explicitly scoped inner-P2/outer-P1 control passes both-model cold spatial,
+production-quadrature, dt/half-dt trial, restart and rollback gates. Its full
+transit and recovery trajectories are in progress; the last completed report
+frontier verified at 13:47 Shanghai on 2026-11-17 is T=1.06 for all four
+fine/recovery successors. Unperturbed endpoint checks pass. Recovery still
+fails the 1e-3 unforced residual-block limit for both models at that frontier.
+The first completed T=.3 segments required timing-wrapper recovery, recorded
+below with unknown original process exits and exact zero-step revalidation.
+No launch, partial frontier or recovered checkpoint closes the physical gate.
+No hill run is authorized here.
+
+The table below records the **archived P1 epoch**, not a completed P2 result.
 
 | Gate | Regularized CLS | Calibrated standard |
 |---|---|---|
@@ -817,3 +826,34 @@ See [execution repair](cls-cao-tamura-budget-wp2-evidence/pressure-driver-repair
 and [focused tests](cls-cao-tamura-budget-wp2-evidence/pressure-recovery-scope-tests.json).
 The accepted frontier and terminal qualification remain separately observed;
 no continuation launch is a closure receipt.
+
+## Matched pressure-space diagnosis, 2026-11-17
+
+The read-only [T=.3 comparison](cls-cao-tamura-budget-wp2-evidence/pressure-P1-P2-recovery-T03.json)
+uses the same executable, dt=.01, physical geometry, velocity/scalar spaces and
+bitwise initial nonpressure coefficients. Only inner pressure changes P1 to P2.
+CLS normalized strong-divergence RMS changes .0001018481 to .0000396621
+(ratio .389424); standard changes .0000814890 to .0000963826 (ratio 1.182768).
+P2 therefore does not uniformly reduce pointwise divergence. Both values remain
+below the unchanged 1e-3 budget. These are transient observations, not recovery
+or stability certificates.
+
+An independently assembled, observer-only physical pressure-mass contraction
+projects the retained divergence onto the actual signed, conforming regional
+pressure test space. The [projection receipt](cls-cao-tamura-budget-wp2-evidence/pressure-P1-P2-recovery-T03-global-projection.json)
+checks constant reproduction, physical volume, native pressure action,
+orthogonality and the squared-norm identity. Solve relative residuals are
+1.4e-16--5.8e-16. Projected squared-divergence fractions are below 6e-21, a
+numerical-floor result. The remaining strong divergence is outside these weak
+test spaces; it is not evidence of an unconverged pressure linear solve.
+This does not establish inf-sup stability or nonexistence of a smooth solution.
+The diagnostic CSR mass has 2432/10167 nonzeros for P1/P2 and changes no production
+operator or retained state.
+
+The all-state readback now aggregates actual one-sweep equation counts, logical
+bound calls and signed/absolute supply, physical frozen-momentum defects and
+their separate splitting-identity checks. It also reports native wall/CPU costs
+and named exclusive scopes. Unobserved RSS after a timing-wrapper interruption
+is explicitly unavailable; timing records do not invent a process exit status.
+Successor lineage retains every earlier accepted prefix, including a successor
+of a successor. The frozen executable and linked libraries are unchanged.

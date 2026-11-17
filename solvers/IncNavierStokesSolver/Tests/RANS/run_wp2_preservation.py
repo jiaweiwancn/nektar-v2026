@@ -39,7 +39,9 @@ def main():
         prefix=load(a.parent_progress)
         require(prefix['status']=='completed_bounded_trajectory' and prefix['dt']==a.dt and prefix['model']==a.model and
                 prefix['case_definition']==x.result['case_definition'],'successor parent configuration differs')
-        previous=prefix['observations'];x.result['prefix_observations']=previous
+        # A successor may itself follow an exact-checkpoint successor. Preserve
+        # the full accepted lineage, rather than dropping its earlier reports.
+        previous=prefix.get('prefix_observations',[])+prefix['observations'];x.result['prefix_observations']=previous
         x.result['predecessor']=dict(progress=str(a.parent_progress),progress_sha256=sha(a.parent_progress),
             solver=prefix['solver'],solver_sha256=prefix['solver_sha256'],reason=a.handoff_reason or 'explicit exact-checkpoint successor after diagnostic-only runtime revalidation')
     if a.resume:
