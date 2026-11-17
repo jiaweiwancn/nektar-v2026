@@ -1,0 +1,60 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/reference-candidate-observation-v1.py"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 60.0,
+  "utc": "2026-11-17T14:58:56.717224+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 485859,
+        "parent": 484265,
+        "threads": 1,
+        "args": "python3 -c from pathlib import Path import subprocess r=Path('/home/jay/build/wj-h27-coupling-r1-20261117');p=r/'inputs/reference-candidate-observation-v1.py' with p.open('x')as f:f.write(\"import sys,json,time,hashlib\\nfrom pathlib import Path\\nimport numpy as np\\nr=Path('/home/jay/build/wj-h27-coupling-r1-20261117');t=r/'source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27';sys.path.insert(0,str(t))\\nfrom physical_oracle import PhysicalOracle,Reference,basis\\np=r/'science/coupled-fixtures-v9/physical-steady.steady-candidate.json';j=json.loads(p.read_text());s=j['state'];ref=Reference(json.loads((r/'science/reference-tables-v1.json').read_text()));o=PhysicalOracle(s,ref,20,time.monotonic()+40)\\nrows=[]\\nfor x in [-10.,-5.,0.,5.,10.,15.]:\\n for rr in [0.,.025,.05,.0875,.15,.25,.5,1.]:\\n  owners=[e for e in o.elements if e['bounds'][0]-1e-13<=x<=e['bounds'][1]+1e-13 and e['bounds'][2]-1e-13<=rr<=e['bounds'][3]+1e-13]\\n  assert owners\\n  values=[]\\n  for e in owners:\\n   b=basis(e,'k',np.array([x]),np.array([rr]))[0];values.append(float(b@o.s['k'][e['k']]))\\n  old=float(ref.inlet(np.array([rr]))[1][0]);rows.append(dict(x=x,r=rr,k=values[0],retained_inlet_k=old,departure_scaled_Kin=(values[0]-old)/ref.Kin,owner_spread=max(values)-min(values)))\\nout=dict(schema='WJH27UnconvergedCandidateObservationV1',scope='Unconverged candidate only; no reference, envelope, or closure decision',candidate_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),candidate_residuals=s['residuals'],rows=rows,reference_gate_pass=False)\\np=r/'science/reference-candidate-observation-v1.json'\\nwith p.open('x')as f:json.dump(out,f,indent=2)\\nprint(json.dumps(dict(ground_rows=[x for x in rows if x['r']==0],at_7mm=[x for x in rows if x['r']==.0875]),indent=2))\\n\") raise SystemExit(subprocess.call(['python3','-B',str(r/'tools/run.py'),'--root',str(r),'--label','reference-candidate-observation-v1','--phase','analysis','--seconds','60','--','python3','-B',str(p)]))"
+      },
+      {
+        "pid": 485860,
+        "parent": 485859,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label reference-candidate-observation-v1 --phase analysis --seconds 60 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/reference-candidate-observation-v1.py"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/reference-candidate-observation-v1.py",
+      "bytes": 1549,
+      "sha256": "bd2347eed3cf166cf1b1f0d1afba8880a9fabf8a91c1523df2dc8da7c95bf356"
+    }
+  ]
+}

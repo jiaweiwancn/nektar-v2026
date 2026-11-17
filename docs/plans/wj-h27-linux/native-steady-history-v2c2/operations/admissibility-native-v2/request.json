@@ -1,0 +1,59 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v7/WJH27AdmissibilityProbe",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/admissibility-native-v2.json"
+  ],
+  "phase": "science",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T12:32:38.513732+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 479531,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v7.py"
+      },
+      {
+        "pid": 480509,
+        "parent": 479531,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label admissibility-native-v2 --phase science --seconds 30 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v7/WJH27AdmissibilityProbe /home/jay/build/wj-h27-coupling-r1-20261117/science/admissibility-native-v2.json"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v7/WJH27AdmissibilityProbe",
+      "bytes": 381,
+      "sha256": "65727487565f8ab60172ea4a898cf7f6ef2d655a103a84ce9a46146cc7e2d6ff"
+    }
+  ]
+}

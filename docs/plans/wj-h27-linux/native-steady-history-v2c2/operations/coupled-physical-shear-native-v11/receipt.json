@@ -1,0 +1,106 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver",
+    "--use-opt-file",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-shear.xml.opt",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-shear.xml"
+  ],
+  "phase": "science",
+  "seconds_cap": 180.0,
+  "utc": "2026-11-17T15:29:18.952444+00:00",
+  "allocation": {
+    "workers": 14,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 486725,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v11b.py"
+      },
+      {
+        "pid": 486959,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/mms-v3-controller-v11.py"
+      },
+      {
+        "pid": 487038,
+        "parent": 486959,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label mms-v3-hfine-native-v11 --phase science --seconds 120 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/hfine.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/hfine.xml"
+      },
+      {
+        "pid": 487040,
+        "parent": 487038,
+        "threads": 3,
+        "args": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2 --library-path /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc:/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/geometry:/home/jay/.local/opt/nektar-v2026-mpi/lib64 /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver.elf --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/hfine.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/hfine.xml"
+      },
+      {
+        "pid": 487042,
+        "parent": 487040,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 487082,
+        "parent": 486725,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label coupled-physical-shear-native-v11 --phase science --seconds 180 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-shear.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-shear.xml"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver",
+      "bytes": 380,
+      "sha256": "65c262a35d19df3e0d83caab0058098b7bebccb308a9171c379c19431069391e"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-shear.xml.opt",
+      "bytes": 55,
+      "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-shear.xml",
+      "bytes": 111629,
+      "sha256": "9a662772d4a7ce34d817202173fa4a6734cfe067e4b572e44cefcc3e84f03a38"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 41.320543040987104,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 620703744,
+  "peak_host_workers": 21,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/coupled-physical-shear-native-v11/command.log",
+    "bytes": 2009,
+    "sha256": "be4f1db30f48c4ae5d529a46f7eac6759b1827c6de0bf8be68cd47bf4c4cc369"
+  }
+}

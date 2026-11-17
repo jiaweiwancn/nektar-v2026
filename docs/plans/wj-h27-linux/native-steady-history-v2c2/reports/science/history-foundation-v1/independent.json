@@ -1,0 +1,62 @@
+{
+  "schema": "WJH27IndependentHistoryFoundationCheckV1",
+  "status": "FAIL",
+  "foundation_gate_pass": false,
+  "full_coupled_gate_pass": false,
+  "H27_D_pass": false,
+  "physical_cold_restart_qualified": false,
+  "terminal_handling_qualified": false,
+  "production_monitoring_storage_qualified": false,
+  "scope": "Tiny PolynomialScalarsV1 body1 MMS/history/retry/recovery-rotation FOUNDATION only.",
+  "script": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-history-foundation-v1/history_recovery_check.py",
+    "sha256": "32e62426cee105965ab3a8e1c5103d28a35e6eb1aa0523e6869898567e6f55c9",
+    "bytes": 22623
+  },
+  "manifest": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/manifest.json",
+    "sha256": "0e59e8ffc8d484d7270e94f1209f73ab16b25a8c36ff2398dacc3c1f6f4ed6b9",
+    "bytes": 2140
+  },
+  "prospective": {
+    "dt": 0.02,
+    "final_step": 7,
+    "final_time": 0.14,
+    "coefficient_comparison_limit": 1e-08,
+    "native_fixed_residual_limit": 3e-12,
+    "expected_retry_step": 2,
+    "recovery_writes": [
+      2,
+      4,
+      6
+    ],
+    "retained_recovery": [
+      4,
+      6
+    ]
+  },
+  "root": "/home/jay/build/wj-h27-coupling-r1-20261117",
+  "source_identity": "dfdd5d8fb2384d08a5a54e5fd8d76f0ec7e37334fbebeb3b16e439553d8c080b",
+  "reference": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+    "bytes": 92259
+  },
+  "signature": "35dfdf82efefd5bfdce1acec07dab7b4abe409b9b8f84da13f35c7c3107af823",
+  "scales": {
+    "U": 1.0,
+    "Pi": 0.002600999999999999,
+    "k": 0.008809015145515192,
+    "epsilon": 0.000694657216439776
+  },
+  "runs": {},
+  "exception": "ValueError",
+  "reason": "unexpected tiny mesh layers",
+  "elapsed_seconds": 0.009044056991115212,
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/independent.json",
+    "bytes": 1874,
+    "sha256": "a0cfaaf254a5276e1f4f170582b621656bec080c9ddf274ff5033167b8fa5f09"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

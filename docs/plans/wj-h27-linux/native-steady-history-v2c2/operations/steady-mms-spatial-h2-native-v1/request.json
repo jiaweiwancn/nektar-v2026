@@ -1,0 +1,77 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver",
+    "--use-opt-file",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/steady-mms-spatial-v1/h2.xml.opt",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/steady-mms-spatial-v1/h2.xml"
+  ],
+  "phase": "science",
+  "seconds_cap": 180.0,
+  "utc": "2026-11-17T16:17:38.250656+00:00",
+  "allocation": {
+    "workers": 6,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 489031,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/steady-mms-spatial-controller-v1.py"
+      },
+      {
+        "pid": 489053,
+        "parent": 489039,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/lib/update-notifier/apt-check --human-readable"
+      },
+      {
+        "pid": 489062,
+        "parent": 489031,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label steady-mms-spatial-h2-native-v1 --phase science --seconds 180 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/steady-mms-spatial-v1/h2.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/steady-mms-spatial-v1/h2.xml"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver",
+      "bytes": 380,
+      "sha256": "65c262a35d19df3e0d83caab0058098b7bebccb308a9171c379c19431069391e"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/steady-mms-spatial-v1/h2.xml.opt",
+      "bytes": 55,
+      "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/steady-mms-spatial-v1/h2.xml",
+      "bytes": 5725,
+      "sha256": "7be86f589d60c9abbf2095f1b7e2f0eb8e11c7ef4a22be79b77ba24f74bdc933"
+    }
+  ]
+}

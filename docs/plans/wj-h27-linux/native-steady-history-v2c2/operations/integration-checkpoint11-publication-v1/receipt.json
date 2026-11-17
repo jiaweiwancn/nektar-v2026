@@ -1,0 +1,71 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/checkpoint11-publication.py"
+  ],
+  "phase": "evidence",
+  "seconds_cap": 90.0,
+  "utc": "2026-11-17T16:33:37.707267+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 489579,
+        "parent": 484265,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 489580,
+        "parent": 489579,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label integration-checkpoint11-publication-v1 --phase evidence --seconds 90 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/checkpoint11-publication.py"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/checkpoint11-publication.py",
+      "bytes": 5269,
+      "sha256": "3331b80a6be3af2e4bf2e3681442ae91120c5eb0132f55fa62a333465f31f6a5"
+    }
+  ],
+  "status": "FAIL",
+  "seconds": 1.2950113809783943,
+  "exit": 1,
+  "reason": null,
+  "peak_tree_rss_bytes": 516096,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/integration-checkpoint11-publication-v1/command.log",
+    "bytes": 389,
+    "sha256": "971637ae301a8ccad4ca016f78f163037e5fd85878b0269a85fe5483ce298ed0"
+  }
+}

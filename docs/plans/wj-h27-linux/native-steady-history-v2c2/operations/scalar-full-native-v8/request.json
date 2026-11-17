@@ -1,0 +1,66 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v8/WJH27ScalarProbe",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v8/scalar-shifted.xml",
+    "full",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/scalar-full-native-v8.json"
+  ],
+  "phase": "science",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T12:58:29.156408+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 481020,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v8.py"
+      },
+      {
+        "pid": 481951,
+        "parent": 481020,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label scalar-full-native-v8 --phase science --seconds 30 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v8/WJH27ScalarProbe /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v8/scalar-shifted.xml full /home/jay/build/wj-h27-coupling-r1-20261117/science/scalar-full-native-v8.json"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v8/WJH27ScalarProbe",
+      "bytes": 374,
+      "sha256": "1c91231646eb4855cb58ba5b22cfdb9613a4fa859d8771694a3bd2bbee4494b2"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v8/scalar-shifted.xml",
+      "bytes": 4004,
+      "sha256": "094dc4a0e44d65c52a624d4a69cebba9f5f959cc2f9e536054cd510af00fbbbd"
+    }
+  ]
+}

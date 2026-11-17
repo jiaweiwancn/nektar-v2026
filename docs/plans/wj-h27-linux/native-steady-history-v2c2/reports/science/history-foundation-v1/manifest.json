@@ -1,0 +1,48 @@
+{
+  "schema": "WJH27HistoryFoundationManifestV1",
+  "root": "/home/jay/build/wj-h27-coupling-r1-20261117",
+  "control_prefix": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/control",
+  "runs": {
+    "control": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/control.result.json",
+    "prefix": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/prefix.result.json",
+    "retry": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/retry.result.json",
+    "cold": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/cold.result.json",
+    "recovery4": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/recovery4.result.json",
+    "recovery6": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/recovery6.result.json"
+  },
+  "input_checkpoints": {
+    "cold": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/prefix.final.bin",
+      "sha256": "c46f7d35f5ed1f5a11100dd7f0a60d4b53f3bfed50646582516f3ef05fb725fe"
+    },
+    "recovery4": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/control.recovery-4.bin",
+      "sha256": "0cd724debb0c0d58b7d343625927232222bb9b3f41ed520e7f8768a3fc3251f0"
+    },
+    "recovery6": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/control.recovery-6.bin",
+      "sha256": "1cb0bb6dd670232eab29876b3dceedcd7dbb50f1bf52e7f5c9656835c1356172"
+    }
+  },
+  "negative_controls": [
+    {
+      "name": "bad-dt",
+      "exit": 1,
+      "log": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/history-bad-dt-native-v1/command.log",
+      "expected_marker": "scientific identity differs"
+    },
+    {
+      "name": "bad-checksum",
+      "exit": 1,
+      "log": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/history-bad-checksum-native-v1/command.log",
+      "expected_marker": "checksum mismatch"
+    }
+  ],
+  "table": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/manifest.json",
+    "bytes": 2140,
+    "sha256": "0e59e8ffc8d484d7270e94f1209f73ab16b25a8c36ff2398dacc3c1f6f4ed6b9"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

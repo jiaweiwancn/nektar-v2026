@@ -12,7 +12,8 @@ def generate(path,table,prefix,mode='Manufactured',nx=2,nr=2,dt=.02,steps=1,
              linear=1e-12,nonlinear=1e-10,retry=-1,coefficients=True,template=None,
              backend='Historical',mms_body_amplitude=0,mms_variant='Historical',
              solve='Advance',steady_seconds=0,steady_pc_mass=0,steady_seed=0,
-             anderson_depth=0,nonlinear_trace=False,maximum_iterations=60,initial_fields='',initial_source_identity=''):
+             anderson_depth=0,nonlinear_trace=False,maximum_iterations=60,initial_fields='',initial_source_identity='',
+             stress_split='PositiveShearV1',check_current_actions=False):
     path=Path(path);assert not path.exists() and mode in ('Manufactured','Physical')
     if template:
         import shutil
@@ -36,7 +37,8 @@ def generate(path,table,prefix,mode='Manufactured',nx=2,nr=2,dt=.02,steps=1,
                   WJNativeMode=mode,WJReferenceTable=str(table),WJOutputPrefix=str(prefix),
                   WJOutputCoefficients='True'if coefficients else'False',Projection='Continuous',
                   WJConstitutiveBackend=backend,WJMMSVariant=mms_variant,WJNativeSolve=solve,
-                  WJNonlinearTrace='True'if nonlinear_trace else'False')
+                  WJNonlinearTrace='True'if nonlinear_trace else'False',WJStressSplit=stress_split,
+                  WJCheckCurrentActions='True'if check_current_actions else'False')
     if restart:settings['WJRestart']=str(restart)
     if initial_fields:settings['WJInitialFields']=str(initial_fields)
     if initial_source_identity:settings['WJInitialSourceIdentity']=str(initial_source_identity)

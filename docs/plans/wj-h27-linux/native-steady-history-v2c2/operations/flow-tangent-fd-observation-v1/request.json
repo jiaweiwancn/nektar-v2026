@@ -1,0 +1,60 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/flow-tangent-fd-observation-v1.py"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T15:20:08.916900+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 486713,
+        "parent": 484265,
+        "threads": 1,
+        "args": "python3 -c from pathlib import Path import subprocess r=Path('/home/jay/build/wj-h27-coupling-r1-20261117');p=r/'inputs/flow-tangent-fd-observation-v1.py' with p.open('x')as f:f.write(\"from pathlib import Path\\nimport json,sys\\nimport numpy as np\\nr=Path('/home/jay/build/wj-h27-coupling-r1-20261117');p=r/'science/coupled-fixtures-v11/flow-tangent-native.json';j=json.loads(p.read_text());a=np.array(j['assembled_action']);rows=[]\\nfor row in j['finite_differences']:\\n v=np.array(row['action']);rows.append(dict(step=row['step'],relative_MAX=float(np.max(abs(v-a))/np.max(abs(a))),action_MAX=float(np.max(abs(a))),difference_MAX=float(np.max(abs(v-a)))))\\nout=dict(schema='WJH27TangentFDObservationV1',rows=rows,scope='Diagnostic of failed FD check only')\\np=r/'science/flow-tangent-fd-observation-v1.json'\\nwith p.open('x')as f:json.dump(out,f,indent=2)\\nprint(json.dumps(out))\\n\") code=subprocess.call(['python3','-B',str(r/'tools/run.py'),'--root',str(r),'--label','flow-tangent-fd-observation-v1','--phase','analysis','--seconds','30','--','python3','-B',str(p)]) print((r/'operations/flow-tangent-fd-observation-v1/command.log').read_text());raise SystemExit(code)"
+      },
+      {
+        "pid": 486714,
+        "parent": 486713,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label flow-tangent-fd-observation-v1 --phase analysis --seconds 30 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/flow-tangent-fd-observation-v1.py"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/flow-tangent-fd-observation-v1.py",
+      "bytes": 687,
+      "sha256": "6359fe16ab2267327365262eed4335dacdde7172bd6ad1f352d491d25f4edebb"
+    }
+  ]
+}

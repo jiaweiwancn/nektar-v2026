@@ -1,0 +1,154 @@
+{
+  "schema": "WJH27FrozenPlanarFlowTangentCheckV1",
+  "status": "PASS",
+  "input": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/flow-tangent-native-v2.json",
+    "sha256": "c9e4f0145ef4be05e6117ef187283d94230f4af8397137031ffbfd97ff0cae79"
+  },
+  "checker": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-tangent-serialization-v2/h27/flow_tangent_check.py",
+    "sha256": "0747e5a160d677adc3eb7f3a60163fc6c20108af3442e6b832f2aed69d813baa"
+  },
+  "independent_basis": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-tangent-serialization-v2/h26/fixtures.py",
+    "sha256": "632e5cbcdd7a40a993c90cde2aefc3785d73a5f4d1b9634594ea3bb3c9d48b69"
+  },
+  "independent_full_WJ": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-tangent-serialization-v2/h27/physical_oracle.py",
+    "sha256": "83ba96a2238c529f755419a216617a6b199bd5fe2ef583414cb60acfed56ec84"
+  },
+  "workers": 1,
+  "wall_cap_seconds": 100.0,
+  "finite_difference_serialization": [
+    {
+      "step": 2e-05,
+      "exact_scalar_vector_round_trip": true,
+      "native_in_memory_max_abs_error": 1.1754775958486806e-14,
+      "native_in_memory_relative_error": 1.8781014391536459e-10,
+      "decoded_relative_error": 1.8781014391536459e-10,
+      "round_trip_relative_error_discrepancy": 0.0,
+      "legacy_precision6_relative_error": 7.730061301937067e-07,
+      "legacy_precision6_gate": "FAIL",
+      "unchanged_FD_gate": 2e-08
+    },
+    {
+      "step": 1e-05,
+      "exact_scalar_vector_round_trip": true,
+      "native_in_memory_max_abs_error": 2.3481794647292088e-14,
+      "native_in_memory_relative_error": 3.7517680027877626e-10,
+      "decoded_relative_error": 3.7517680027877626e-10,
+      "round_trip_relative_error_discrepancy": 0.0,
+      "legacy_precision6_relative_error": 7.730061301937067e-07,
+      "legacy_precision6_gate": "FAIL",
+      "unchanged_FD_gate": 2e-08
+    }
+  ],
+  "errors": {
+    "native_matrix_action": 8.661337602986783e-16,
+    "native_combined_direction": 1.6781341605786876e-15,
+    "backend_matrix": 1.1375091452812595e-16,
+    "signed_basis_covariance": 0.0,
+    "native_velocity_FD_2e-05": 1.8781014391536459e-10,
+    "native_velocity_FD_1e-05": 3.7517680027877626e-10,
+    "independent_full_matrix_2e-05": 2.11699711261285e-09,
+    "independent_coefficient_direction_2e-05": 3.362206158667801e-11,
+    "independent_vs_native_value_FD_2e-05": 1.7692874306953154e-10,
+    "independent_full_matrix_1e-05": 5.288088914876168e-10,
+    "independent_coefficient_direction_1e-05": 1.1948439730048309e-10,
+    "independent_vs_native_value_FD_1e-05": 4.496241908452064e-10,
+    "independent_FD_halving_matrix_change": 1.588188221965081e-09
+  },
+  "point_checks": [
+    {
+      "name": "weak_div_0",
+      "errors": [
+        1.5889087091052897e-11,
+        7.482405031412713e-11
+      ],
+      "exact_lower_wall_error_over_mu": 0.0
+    },
+    {
+      "name": "weak_div_0.40000000000000002",
+      "errors": [
+        1.3661289662799021e-11,
+        6.43330242466059e-11
+      ],
+      "exact_lower_wall_error_over_mu": 0.0
+    },
+    {
+      "name": "weak_div_0.400001",
+      "errors": [
+        1.3658181231546423e-11,
+        6.432989805374115e-11
+      ]
+    },
+    {
+      "name": "weak_div_0.55000000000000004",
+      "errors": [
+        1.7269319847494238e-09,
+        4.3139543694239954e-10
+      ]
+    },
+    {
+      "name": "weak_div_0.74999899999999997",
+      "errors": [
+        2.2011035514979534e-09,
+        5.56615797428086e-10
+      ]
+    },
+    {
+      "name": "weak_div_0.75",
+      "errors": [
+        2.1869335630033776e-09,
+        5.424458168171225e-10
+      ]
+    },
+    {
+      "name": "weak_div_1",
+      "errors": [
+        2.178228210787484e-09,
+        5.357082551439788e-10
+      ]
+    },
+    {
+      "name": "weak_div_2",
+      "errors": [
+        2.127463024376344e-09,
+        5.445307674938838e-10
+      ]
+    },
+    {
+      "name": "negative_shear_unit_control",
+      "errors": [
+        8.185840821686923e-10,
+        1.9523475806253666e-10
+      ],
+      "negative_shear_retained": -4.032309561942527e-05
+    }
+  ],
+  "basis_representation_MAX": 1.1102230246251565e-16,
+  "physical_quadrature_moment_MAX": 1.1102230246251563e-15,
+  "native_rule_owners": 6,
+  "native_points": 672,
+  "negative_signed_map_entries": 0,
+  "independent_signed_basis_transformation": "EXERCISED_FROM_ACTUAL_NATIVE_RULES",
+  "negative_sign_coverage": "NOT_EXERCISED_BY_THIS_NATIVE_FIXTURE",
+  "matrix_asymmetry_over_MAX": 0.47344727098399586,
+  "invalid_input_controls": {
+    "owner_mismatch": "planar tangent owner/point inventory differs",
+    "point_count": "planar tangent owner/point inventory differs",
+    "nonfinite_tangent": "nonfinite planar velocity tangent",
+    "negative_weight": "invalid planar tangent integration rule",
+    "duplicate_global_id": "planar tangent requires a native Q3 signed velocity map",
+    "spanwise_gradient": "planar velocity tangent requires zero spanwise gradient entries",
+    "nonpositive_k": "invalid v2 wall inputs"
+  },
+  "scope": "Frozen-scalar full-row stress Jacobian only; no pressure/transport/time/Gamma block, nonlinear convergence, or speed qualification",
+  "elapsed_seconds": 0.11410310998326167,
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/flow-tangent-independent-v2.json",
+    "bytes": 5254,
+    "sha256": "6e3252703e2964039cf5a65ff9c9177539fa042895549c29a525dd73639c529a"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

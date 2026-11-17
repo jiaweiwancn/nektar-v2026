@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/current_split_check.py", line 111, in <module>
+    main()
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/current_split_check.py", line 106, in main
+    raise error
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/current_split_check.py", line 99, in main
+    report.update(check([args.old, args.new]))
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/current_split_check.py", line 75, in check
+    assert all(value <= 1e-8 for value in bounds.values()), bounds
+AssertionError: {'U': 1.872903415745954e-10, 'Pi': 2.8879065152048384e-08, 'k': 2.3514758820560872e-11, 'epsilon': 2.6602857660605405e-12}

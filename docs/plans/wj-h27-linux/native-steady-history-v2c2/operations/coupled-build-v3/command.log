@@ -1,0 +1,980 @@
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/jay/build/wj-h27-coupling-r1-20261117/build-v3
+[  6%] Building CXX object h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp.o
+[ 12%] Building CXX object h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SolverUtils/Turbulence/WJEARSM.cpp.o
+[ 25%] Building CXX object h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp.o
+[ 25%] Building CXX object h26-kernel/CMakeFiles/WJNativeFlow.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SolverUtils/Turbulence/RANSModels.cpp.o
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp: In member function ‘Nektar::WJNative::Vec Nektar::WJNative::Flow::ApplyFull(double, const Sparse&, double, const Vec&) const’:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:152:5: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+  152 |     for(int c=0;c<2;++c)r.segment(c*m_nu,m_nu)+=alpha*(m_mass*x.segment(c*m_nu,m_nu));r.tail(m_np)=m_div*x.head(2*m_nu);return r;
+      |     ^~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:152:87: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+  152 |     for(int c=0;c<2;++c)r.segment(c*m_nu,m_nu)+=alpha*(m_mass*x.segment(c*m_nu,m_nu));r.tail(m_np)=m_div*x.head(2*m_nu);return r;
+      |                                                                                       ^
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp: In member function ‘Nektar::WJNative::SolveInfo Nektar::WJNative::Flow::Solve(const Sparse&, const Vec&, Nektar::WJNative::Vec&, double, double)’:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:246:13: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+  246 |             for(int pass=0;pass<2;++pass)for(int i=0;i<=j;++i){double h=V.col(i).dot(v);H(i,j)+=h;v.noalias()-=h*V.col(i);}H(j+1,j)=v.norm();if(H(j+1,j)>0)V.col(j+1)=v/H(j+1,j);
+      |             ^~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:246:124: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+  246 |             for(int pass=0;pass<2;++pass)for(int i=0;i<=j;++i){double h=V.col(i).dot(v);H(i,j)+=h;v.noalias()-=h*V.col(i);}H(j+1,j)=v.norm();if(H(j+1,j)>0)V.col(j+1)=v/H(j+1,j);
+      |                                                                                                                            ^
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:255:5: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+  255 |     if(!m_initialIterations&&used)m_initialIterations=used;m_lastIterations=used;
+      |     ^~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp:255:60: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  255 |     if(!m_initialIterations&&used)m_initialIterations=used;m_lastIterations=used;
+      |                                                            ^~~~~~~~~~~~~~~~
+[ 31%] Linking CXX static library libWJNativeFlow.a
+[ 31%] Built target WJNativeFlow
+[ 37%] Building CXX object CMakeFiles/WJNativeMixedFlow.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeRules.cpp.o
+[ 43%] Building CXX object CMakeFiles/WJNativeMixedFlow.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.cpp.o
+[ 50%] Building CXX object CMakeFiles/WJNativeMixedFlow.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeWallV2.cpp.o
+[ 56%] Building CXX object CMakeFiles/WJNativeMixedFlow.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeScalar.cpp.o
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeWallV2.cpp: In function ‘Nektar::WJNative::WallStress Nektar::WJNative::AdaptAmended(double, double, const Tensor&, const Vector&, double, double, double, double)’:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeWallV2.cpp:30:5: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+   30 |     for(int i=0;i<3;++i)for(int j=0;j<3;++j){out.R[i][j]=(1-d.chi)*d.iso[i][j]+d.chi*w.reynoldsStress[i][j];out.V[i][j]=nu*d.strain[i][j]-out.R[i][j]+(i==j?2*k/3:0);out.remainder[i][j]=out.V[i][j]-out.mu*d.strain[i][j];out.production-=out.R[i][j]*g[i][j];}return out;
+      |     ^~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeWallV2.cpp:30:257: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+   30 |     for(int i=0;i<3;++i)for(int j=0;j<3;++j){out.R[i][j]=(1-d.chi)*d.iso[i][j]+d.chi*w.reynoldsStress[i][j];out.V[i][j]=nu*d.strain[i][j]-out.R[i][j]+(i==j?2*k/3:0);out.remainder[i][j]=out.V[i][j]-out.mu*d.strain[i][j];out.production-=out.R[i][j]*g[i][j];}return out;
+      |                                                                                                                                                                                                                                                                 ^~~~~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeWallV2.cpp: In function ‘Nektar::WJNative::WallStress Nektar::WJNative::ApplyAmendedDirection(double, double, const Tensor&, const Vector&, double, double, double, double, double, double, const Tensor&, double, double)’:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeWallV2.cpp:41:5: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+   41 |     for(int i=0;i<3;++i)for(int j=0;j<3;++j){double di=(i==j?2*dk/3:0)+db[i]*n[j]+n[i]*db[j];out.R[i][j]=(1-d.chi)*di+d.chi*dw.reynoldsStress[i][j]+dc*(w.reynoldsStress[i][j]-d.iso[i][j]);out.V[i][j]=nu*dm[i][j]-out.R[i][j]+(i==j?2*dk/3:0);out.remainder[i][j]=out.V[i][j]-out.mu*d.strain[i][j]-value.mu*dm[i][j];out.production-=out.R[i][j]*g[i][j]+value.R[i][j]*dg[i][j];}return out;
+      |     ^~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeWallV2.cpp:41:373: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+   41 |     for(int i=0;i<3;++i)for(int j=0;j<3;++j){double di=(i==j?2*dk/3:0)+db[i]*n[j]+n[i]*db[j];out.R[i][j]=(1-d.chi)*di+d.chi*dw.reynoldsStress[i][j]+dc*(w.reynoldsStress[i][j]-d.iso[i][j]);out.V[i][j]=nu*dm[i][j]-out.R[i][j]+(i==j?2*dk/3:0);out.remainder[i][j]=out.V[i][j]-out.mu*d.strain[i][j]-value.mu*dm[i][j];out.production-=out.R[i][j]*g[i][j]+value.R[i][j]*dg[i][j];}return out;
+      |                                                                                                                                                                                                                                                                                                                                                                                     ^~~~~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.cpp: In member function ‘Nektar::WJNative::Vec Nektar::WJNative::MixedFlow::NativeVelocity(const Vec&, int) const’:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.cpp:125:5: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+  125 |     for(int j=0;j<int(m_vToU.size());++j)result[j]=m_vSign[j]*full[VelocitySize()+m_vToU[j]];return result;
+      |     ^~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.cpp:125:94: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+  125 |     for(int j=0;j<int(m_vToU.size());++j)result[j]=m_vSign[j]*full[VelocitySize()+m_vToU[j]];return result;
+      |                                                                                              ^~~~~~
+[ 62%] Building CXX object CMakeFiles/WJNativeMixedFlow.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeReference.cpp.o
+[ 68%] Building CXX object CMakeFiles/WJNativeMixedFlow.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeAdmissibility.cpp.o
+In file included from /usr/include/boost/bind.hpp:30,
+                 from /usr/include/boost/property_tree/json_parser/detail/parser.hpp:7,
+                 from /usr/include/boost/property_tree/json_parser/detail/read.hpp:13,
+                 from /usr/include/boost/property_tree/json_parser.hpp:16,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeReference.cpp:4:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[ 75%] Building CXX object CMakeFiles/WJNativeMixedFlow.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupledMMS.cpp.o
+[ 81%] Building CXX object CMakeFiles/WJNativeMixedFlow.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp.o
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp: In constructor ‘Nektar::WJNative::Coupling::Coupling(std::vector<std::shared_ptr<Nektar::MultiRegions::ContField> >, Nektar::WJNative::Geometry, std::shared_ptr<const Nektar::WJNative::Reference>, Nektar::WJNative::CoupledOptions)’:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp:62:9: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+   62 |         for(int a:e.u)signature<<','<<a;for(double a:e.us)signature<<','<<a;
+      |         ^~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp:62:41: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+   62 |         for(int a:e.u)signature<<','<<a;for(double a:e.us)signature<<','<<a;
+      |                                         ^~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp:63:9: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+   63 |         for(int a:e.p)signature<<','<<a;for(double a:e.ps)signature<<','<<a;
+      |         ^~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp:63:41: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+   63 |         for(int a:e.p)signature<<','<<a;for(double a:e.ps)signature<<','<<a;
+      |                                         ^~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp: In member function ‘Nektar::WJNative::CoupledHistory Nektar::WJNative::Coupling::ReadHistory(const std::filesystem::__cxx11::path&) const’:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp:391:20: warning: loop variable ‘pair’ creates a copy from type ‘const std::pair<Eigen::Matrix<double, -1, 1>*, Eigen::Matrix<double, -1, 1>*>’ [-Wrange-loop-construct]
+  391 |     for(const auto pair:{std::make_pair(&adv.flow,&h.advection.flow),std::make_pair(&adv.k,&h.advection.k),std::make_pair(&adv.epsilon,&h.advection.epsilon)})Require((*pair.first-*pair.second).norm()<=1e-12*std::max(pair.first->norm(),1e-30),"restored explicit history differs from current state");
+      |                    ^~~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp:391:20: note: use reference type to prevent copying
+  391 |     for(const auto pair:{std::make_pair(&adv.flow,&h.advection.flow),std::make_pair(&adv.k,&h.advection.k),std::make_pair(&adv.epsilon,&h.advection.epsilon)})Require((*pair.first-*pair.second).norm()<=1e-12*std::max(pair.first->norm(),1e-30),"restored explicit history differs from current state");
+      |                    ^~~~
+      |                    &
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp:393:20: warning: loop variable ‘pair’ creates a copy from type ‘const std::pair<Eigen::Matrix<double, -1, 1>*, Eigen::Matrix<double, -1, 1>*>’ [-Wrange-loop-construct]
+  393 |     for(const auto pair:{std::make_pair(&oldAdv.flow,&h.previousAdvection.flow),std::make_pair(&oldAdv.k,&h.previousAdvection.k),std::make_pair(&oldAdv.epsilon,&h.previousAdvection.epsilon)})Require((*pair.first-*pair.second).norm()<=1e-12*std::max(pair.first->norm(),1e-30),"restored previous explicit history differs");
+      |                    ^~~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp:393:20: note: use reference type to prevent copying
+  393 |     for(const auto pair:{std::make_pair(&oldAdv.flow,&h.previousAdvection.flow),std::make_pair(&oldAdv.k,&h.previousAdvection.k),std::make_pair(&oldAdv.epsilon,&h.previousAdvection.epsilon)})Require((*pair.first-*pair.second).norm()<=1e-12*std::max(pair.first->norm(),1e-30),"restored previous explicit history differs");
+      |                    ^~~~
+      |                    &
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp: In member function ‘std::array<double, 5> Nektar::WJNative::Coupling::MMSErrors(const Nektar::WJNative::CoupledState&, double) const’:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp:409:5: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+  409 |     for(int i=0;i<5;++i)error[i]=std::sqrt(error[i]/(i==3?outerVolume:m_volume));return error;
+      |     ^~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp:409:82: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+  409 |     for(int i=0;i<5;++i)error[i]=std::sqrt(error[i]/(i==3?outerVolume:m_volume));return error;
+      |                                                                                  ^~~~~~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp: In member function ‘void Nektar::WJNative::Coupling::Report(std::ostream&, const Nektar::WJNative::CoupledHistory&, const Nektar::WJNative::CoupledStepInfo&, bool) const’:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp:424:13: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+  424 |             if(count++)out<<',';out<<"{\"geometry\":"<<e.geometry<<",\"bounds\":["<<e.xl<<','<<e.xr<<','<<e.rl<<','<<e.rr<<"],\"u\":";integers(e.u);out<<",\"us\":";numbers(e.us);out<<",\"p\":";integers(e.p);out<<",\"ps\":";numbers(e.ps);
+      |             ^~
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp:424:33: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  424 |             if(count++)out<<',';out<<"{\"geometry\":"<<e.geometry<<",\"bounds\":["<<e.xl<<','<<e.xr<<','<<e.rl<<','<<e.rr<<"],\"u\":";integers(e.u);out<<",\"us\":";numbers(e.us);out<<",\"p\":";integers(e.p);out<<",\"ps\":";numbers(e.ps);
+      |                                 ^~~
+[ 87%] Linking CXX static library libWJNativeMixedFlow.a
+[ 87%] Built target WJNativeMixedFlow
+[ 93%] Building CXX object CMakeFiles/WJH27ReferenceProbe.dir/reference_probe.cpp.o
+[100%] Linking CXX executable WJH27ReferenceProbe
+[100%] Built target WJH27ReferenceProbe
+Consolidate compiler generated dependencies of target WJNativeFlow
+[ 31%] Built target WJNativeFlow
+Consolidate compiler generated dependencies of target WJNativeMixedFlow
+[ 87%] Built target WJNativeMixedFlow
+[ 93%] Building CXX object CMakeFiles/WJH27AdmissibilityProbe.dir/admissibility_probe.cpp.o
+In file included from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/StdRegions/StdExpansion3D.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Geometry3D.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/HexGeom.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/MeshGraph.h:45,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:44,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeWallV2.h:4,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeAdmissibility.h:4,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/h27/admissibility_probe.cpp:2:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/StdRegions/StdExpansion.h: In instantiation of ‘Nektar::NekDouble Nektar::StdRegions::StdExpansion::BaryEvaluate(const NekDouble&, const NekDouble*, Nektar::NekDouble&, Nektar::NekDouble&) [with int DIR = 0; bool DERIV = true; bool DERIV2 = true; Nektar::NekDouble = double]’:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/StdRegions/StdExpansion1D.h:70:57:   required from here
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/StdRegions/StdExpansion.h:1440:41: warning: comparison of integer expressions of different signedness: ‘int’ and ‘const size_t’ {aka ‘const long unsigned int’} [-Wsign-compare]
+ 1440 |                     for (int kk = 0; kk < nquad; kk++)
+      |                                      ~~~^~~~~~~
+[100%] Linking CXX executable WJH27AdmissibilityProbe
+[100%] Built target WJH27AdmissibilityProbe
+[ 31%] Built target WJNativeFlow
+[ 87%] Built target WJNativeMixedFlow
+[ 93%] Building CXX object CMakeFiles/WJH27CoupledMMSProbe.dir/coupled_mms_probe.cpp.o
+In file included from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/StdRegions/StdExpansion3D.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Geometry3D.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/HexGeom.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/MeshGraph.h:45,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:44,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupledMMS.h:5,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/h27/coupled_mms_probe.cpp:3:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/StdRegions/StdExpansion.h: In instantiation of ‘Nektar::NekDouble Nektar::StdRegions::StdExpansion::BaryEvaluate(const NekDouble&, const NekDouble*, Nektar::NekDouble&, Nektar::NekDouble&) [with int DIR = 0; bool DERIV = true; bool DERIV2 = true; Nektar::NekDouble = double]’:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/StdRegions/StdExpansion1D.h:70:57:   required from here
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/StdRegions/StdExpansion.h:1440:41: warning: comparison of integer expressions of different signedness: ‘int’ and ‘const size_t’ {aka ‘const long unsigned int’} [-Wsign-compare]
+ 1440 |                     for (int kk = 0; kk < nquad; kk++)
+      |                                      ~~~^~~~~~~
+[100%] Linking CXX executable WJH27CoupledMMSProbe
+[100%] Built target WJH27CoupledMMSProbe
+[  6%] Built target WJNativeFlow
+[ 17%] Built target WJNativeMixedFlow
+[ 18%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/IncNavierStokesSolver.cpp.o
+[ 19%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupled.cpp.o
+[ 20%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/CoupledLinearNS.cpp.o
+[ 21%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/CoupledLocalToGlobalC0ContMap.cpp.o
+[ 23%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/IncNavierStokes.cpp.o
+[ 24%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/VelocityCorrectionScheme.cpp.o
+[ 25%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/VelocityCorrectionSchemeImplicit.cpp.o
+[ 26%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/VelocityCorrectionSchemeWeakPressure.cpp.o
+[ 28%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSVelocityCorrectionScheme.cpp.o
+[ 29%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSAnalyticalWallStrip.cpp.o
+[ 30%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSTerrainWall.cpp.o
+[ 31%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSMatrixFree.cpp.o
+[ 32%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSHistory.cpp.o
+[ 34%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.cpp.o
+[ 35%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallPatch.cpp.o
+[ 36%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallInterface.cpp.o
+[ 37%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallSystem.cpp.o
+[ 39%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp.o
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.cpp:5:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[ 40%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o
+[ 41%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionBoundary.cpp.o
+[ 42%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionEvaluation.cpp.o
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp:6:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionBoundary.cpp:3:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionEvaluation.cpp:2:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[ 43%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp.o
+[ 45%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp.o
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp:6:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[ 46%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionRobust.cpp.o
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp:5:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionRobust.cpp:5:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[ 47%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionActions.cpp.o
+[ 48%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionNonpressure.cpp.o
+[ 50%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.cpp.o
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionActions.cpp:5:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[ 51%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp.o
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionNonpressure.cpp:5:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[ 52%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPicard.cpp.o
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.cpp:5:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp:6:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[ 53%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp.o
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPicard.cpp:7:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[ 54%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionKBound.cpp.o
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp:6:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionKBound.cpp:3:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[ 56%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionContact.cpp.o
+[ 57%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionSource.cpp.o
+[ 58%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionReduced.cpp.o
+[ 59%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallTimeIntegration.cpp.o
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionContact.cpp:3:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionSource.cpp:2:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallFieldLayout.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallGlobalField.h:8,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionReduced.cpp:6:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[ 60%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp.o
+[ 62%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/SmoothedProfileMethod.cpp.o
+[ 63%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/VCSMapping.cpp.o
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/LibUtilities/BasicUtils/FieldIO.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/library/SolverUtils/EquationSystem.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp:6:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[ 64%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/Extrapolate.cpp.o
+[ 65%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/StandardExtrapolate.cpp.o
+[ 67%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/MappingExtrapolate.cpp.o
+[ 68%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/SubSteppingExtrapolate.cpp.o
+[ 69%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/SubSteppingExtrapolateWeakPressure.cpp.o
+[ 70%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/WeakPressureExtrapolate.cpp.o
+[ 71%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/ImplicitExtrapolate.cpp.o
+[ 73%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/AdvectionTerms/AdjointAdvection.cpp.o
+[ 74%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/AdvectionTerms/LinearisedAdvection.cpp.o
+[ 75%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/AdvectionTerms/NavierStokesAdvection.cpp.o
+[ 76%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/AdvectionTerms/SkewSymmetricAdvection.cpp.o
+[ 78%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/AdvectionTerms/AlternateSkewAdvection.cpp.o
+[ 79%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/AdvectionTerms/NoAdvection.cpp.o
+[ 80%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/Filters/FilterReynoldsStresses.cpp.o
+[ 81%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/Filters/FilterMovingBody.cpp.o
+[ 82%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/Filters/FilterAeroForcesSPM.cpp.o
+[ 84%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/Forcing/ForcingIncNSSyntheticEddy.cpp.o
+[ 85%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/Forcing/ForcingMovingBody.cpp.o
+[ 86%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/Forcing/ForcingStabilityCoupledLNS.cpp.o
+[ 87%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/BoundaryConditions/IncBoundaryConditions.cpp.o
+[ 89%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/BoundaryConditions/IncBaseCondition.cpp.o
+[ 90%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/BoundaryConditions/HITInflow.cpp.o
+[ 91%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/BoundaryConditions/HITInflowConfig.cpp.o
+[ 92%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/BoundaryConditions/HITInflowGeometry.cpp.o
+[ 93%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/BoundaryConditions/HITInflowRestart.cpp.o
+[ 95%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/BoundaryConditions/MovingFrameFar.cpp.o
+[ 96%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/BoundaryConditions/StaticWall.cpp.o
+[ 97%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/BoundaryConditions/TransMovingWall.cpp.o
+[ 98%] Building CXX object CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/BoundaryConditions/MovingFrameWall.cpp.o
+[100%] Linking CXX executable IncNavierStokesSolver
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSVelocityCorrectionScheme.cpp.o: in function `Nektar::RANSVelocityCorrectionScheme::v_InitObject(bool)':
+RANSVelocityCorrectionScheme.cpp:(.text+0x1a859): undefined reference to `Nektar::SolverUtils::RANSWallGeometry::Closest(double, double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSVelocityCorrectionScheme.cpp.o: in function `Nektar::ReadRANSWallGeometry(std::shared_ptr<Nektar::LibUtilities::SessionReader> const&, double)':
+RANSVelocityCorrectionScheme.cpp:(.text._ZN6Nektar20ReadRANSWallGeometryERKSt10shared_ptrINS_12LibUtilities13SessionReaderEEd[_ZN6Nektar20ReadRANSWallGeometryERKSt10shared_ptrINS_12LibUtilities13SessionReaderEEd]+0x2ca): undefined reference to `Nektar::SolverUtils::RANSWallGeometry::Validate() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSAnalyticalWallStrip.cpp.o: in function `Nektar::RANSAnalyticalWallStrip::RANSAnalyticalWallStrip(std::shared_ptr<Nektar::LibUtilities::SessionReader> const&, Nektar::Array<Nektar::OneD, std::shared_ptr<Nektar::MultiRegions::ExpList> > const&, int, double, Nektar::SolverUtils::RANSNeutralReference const&)':
+RANSAnalyticalWallStrip.cpp:(.text+0xbb68): undefined reference to `Nektar::SolverUtils::AWFSpatialTransition::Weight(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSAnalyticalWallStrip.cpp.o: in function `Nektar::ReadRANSWallTransition(std::shared_ptr<Nektar::LibUtilities::SessionReader> const&, Nektar::SolverUtils::RANSWallGeometry const&)':
+RANSAnalyticalWallStrip.cpp:(.text._ZN6Nektar22ReadRANSWallTransitionERKSt10shared_ptrINS_12LibUtilities13SessionReaderEERKNS_11SolverUtils16RANSWallGeometryE[_ZN6Nektar22ReadRANSWallTransitionERKSt10shared_ptrINS_12LibUtilities13SessionReaderEERKNS_11SolverUtils16RANSWallGeometryE]+0x1f2): undefined reference to `Nektar::SolverUtils::AWFSpatialTransition::Validate() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSTerrainWall.cpp.o: in function `Nektar::RANSTerrainWall::WritePointDiagnostics(double, int)':
+RANSTerrainWall.cpp:(.text+0x18b7): undefined reference to `Nektar::SolverUtils::RANSWallFrame::Jacobian(double) const'
+/usr/bin/ld: RANSTerrainWall.cpp:(.text+0x18f4): undefined reference to `Nektar::SolverUtils::RANSWallFrame::Volume(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSTerrainWall.cpp.o: in function `Nektar::RANSTerrainWall::UpdateContinuity(Nektar::Array<Nektar::OneD, Nektar::Array<Nektar::OneD, double> > const&, Nektar::Array<Nektar::OneD, Nektar::Array<Nektar::OneD, double> > const&)':
+RANSTerrainWall.cpp:(.text+0x5507): undefined reference to `Nektar::SolverUtils::RANSWallFrame::Jacobian(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSTerrainWall.cpp.o: in function `Nektar::RANSTerrainWall::IterationMetric() const':
+RANSTerrainWall.cpp:(.text+0x928d): undefined reference to `Nektar::SolverUtils::RANSWallFrame::Volume(double) const'
+/usr/bin/ld: RANSTerrainWall.cpp:(.text+0x92aa): undefined reference to `Nektar::SolverUtils::RANSWallFrame::Jacobian(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSTerrainWall.cpp.o: in function `Nektar::RANSTerrainWall::WriteDiagnostics(double, Nektar::Array<Nektar::OneD, Nektar::Array<Nektar::OneD, double> > const&, Nektar::Array<Nektar::OneD, Nektar::Array<Nektar::OneD, double> > const&, Nektar::Array<Nektar::OneD, Nektar::Array<Nektar::OneD, double> > const&, Nektar::Array<Nektar::OneD, double> const&)':
+RANSTerrainWall.cpp:(.text+0xd68b): undefined reference to `Nektar::SolverUtils::RANSWallFrame::Jacobian(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSTerrainWall.cpp.o: in function `Nektar::RANSTerrainWall::Update(Nektar::Array<Nektar::OneD, Nektar::Array<Nektar::OneD, double> > const&, Nektar::Array<Nektar::OneD, Nektar::Array<Nektar::OneD, double> > const&, Nektar::Array<Nektar::OneD, Nektar::Array<Nektar::OneD, Nektar::Array<Nektar::OneD, double> > > const&, Nektar::Array<Nektar::OneD, Nektar::Array<Nektar::OneD, double> > const&, Nektar::Array<Nektar::OneD, Nektar::Array<Nektar::OneD, double> > const&, Nektar::Array<Nektar::OneD, Nektar::Array<Nektar::OneD, double> > const&, double)':
+RANSTerrainWall.cpp:(.text+0x100a8): undefined reference to `Nektar::SolverUtils::RANSWallFrame::Jacobian(double) const'
+/usr/bin/ld: RANSTerrainWall.cpp:(.text+0x100bf): undefined reference to `Nektar::SolverUtils::RANSWallFrame::Volume(double) const'
+/usr/bin/ld: RANSTerrainWall.cpp:(.text+0x1047d): undefined reference to `Nektar::SolverUtils::RANSWallFrame::Volume(double) const'
+/usr/bin/ld: RANSTerrainWall.cpp:(.text+0x104b7): undefined reference to `Nektar::SolverUtils::RANSWallFrame::Jacobian(double) const'
+/usr/bin/ld: RANSTerrainWall.cpp:(.text+0x1112b): undefined reference to `Nektar::SolverUtils::IntegrateAWFMetric(Nektar::SolverUtils::AnalyticalWallFunction const&, std::array<double, 2ul> const&, std::array<double, 2ul> const&, double, double, double, double)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSTerrainWall.cpp.o: in function `Nektar::RANSTerrainWall::RANSTerrainWall(std::shared_ptr<Nektar::LibUtilities::SessionReader> const&, Nektar::Array<Nektar::OneD, std::shared_ptr<Nektar::MultiRegions::ExpList> > const&, int, Nektar::SolverUtils::RANSWallGeometry const&, Nektar::SolverUtils::RANSNeutralReference const&, bool)':
+RANSTerrainWall.cpp:(.text+0x153f1): undefined reference to `Nektar::SolverUtils::RANSWallGeometry::Closest(double, double) const'
+/usr/bin/ld: RANSTerrainWall.cpp:(.text+0x15418): undefined reference to `Nektar::SolverUtils::RANSWallGeometry::CheckStrip(Nektar::SolverUtils::RANSWallFrame const&, double, double, double) const'
+/usr/bin/ld: RANSTerrainWall.cpp:(.text+0x155ee): undefined reference to `Nektar::SolverUtils::AWFSpatialTransition::Weight(double) const'
+/usr/bin/ld: RANSTerrainWall.cpp:(.text+0x156b2): undefined reference to `Nektar::SolverUtils::RANSWallGeometry::Point(double, double, double) const'
+/usr/bin/ld: RANSTerrainWall.cpp:(.text+0x15dd5): undefined reference to `Nektar::SolverUtils::RANSWallGeometry::At(double) const'
+/usr/bin/ld: RANSTerrainWall.cpp:(.text+0x1645c): undefined reference to `Nektar::SolverUtils::RANSWallGeometry::CheckStrip(Nektar::SolverUtils::RANSWallFrame const&, double, double, double) const'
+/usr/bin/ld: RANSTerrainWall.cpp:(.text+0x16e85): undefined reference to `Nektar::SolverUtils::RANSWallGeometry::Closest(double, double) const'
+/usr/bin/ld: RANSTerrainWall.cpp:(.text+0x18fc3): undefined reference to `Nektar::SolverUtils::RANSWallFrame::Volume(double) const'
+/usr/bin/ld: RANSTerrainWall.cpp:(.text+0x18fe6): undefined reference to `Nektar::SolverUtils::RANSWallFrame::Jacobian(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallPatch.cpp.o: in function `Nektar::RANSWallPatch::Profile(double) const':
+RANSWallPatch.cpp:(.text+0x206a): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::EquilibriumAWFProfiles(Nektar::SolverUtils::AWFProfileGeometry const&, double, Nektar::SolverUtils::RANSNeutralReference const&, Nektar::SolverUtils::AWFNormalMetric const&, Nektar::SolverUtils::AWFProfileOptions const&, Nektar::SolverUtils::AWFParameters const&)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallPatch.cpp.o: in function `Nektar::RANSWallPatch::SampleK(std::vector<double, std::allocator<double> > const&, double) const':
+RANSWallPatch.cpp:(.text+0x2147): undefined reference to `Nektar::SolverUtils::AWFProfileGeometry::SampleK(std::function<double (double)> const&) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallPatch.cpp.o: in function `std::_Function_handler<double (double, double), Nektar::RANSWallPatch::Lift(std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallPatchData const&, std::map<int, double, std::less<int>, std::allocator<std::pair<int const, double> > >&) const::{lambda(double, double)#1}>::_M_invoke(std::_Any_data const&, double&&, double&&)':
+RANSWallPatch.cpp:(.text+0x2fe8): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::EquilibriumAWFProfiles(Nektar::SolverUtils::AWFProfileGeometry const&, double, Nektar::SolverUtils::RANSNeutralReference const&, Nektar::SolverUtils::AWFNormalMetric const&, Nektar::SolverUtils::AWFProfileOptions const&, Nektar::SolverUtils::AWFParameters const&)'
+/usr/bin/ld: RANSWallPatch.cpp:(.text+0x2fff): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallPatch.cpp.o: in function `Nektar::RANSWallPatch::Residual(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, double, Nektar::RANSWallPatchData const&) const':
+RANSWallPatch.cpp:(.text+0x456a): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::EquilibriumAWFProfiles(Nektar::SolverUtils::AWFProfileGeometry const&, double, Nektar::SolverUtils::RANSNeutralReference const&, Nektar::SolverUtils::AWFNormalMetric const&, Nektar::SolverUtils::AWFProfileOptions const&, Nektar::SolverUtils::AWFParameters const&)'
+/usr/bin/ld: RANSWallPatch.cpp:(.text+0x55ac): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::AtProduction(double, double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallPatch.cpp.o: in function `Nektar::RANSWallPatch::RANSWallPatch(std::shared_ptr<Nektar::RANSWallFieldLayout>, Nektar::RANSWallPatchParameters const&, bool)':
+RANSWallPatch.cpp:(.text+0x9150): undefined reference to `Nektar::SolverUtils::AWFProfileGeometry::Validate() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::Physical(std::array<double, 3ul> const&) const':
+RANSWallEvolutionPatch.cpp:(.text+0x38f4): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x3947): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::Distance(std::array<double, 3ul> const&) const':
+RANSWallEvolutionPatch.cpp:(.text+0x3a63): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::Residual(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, double, Nektar::RANSWallEvolutionData const&, bool, bool, int) const::{lambda(Nektar::RANSWallEvolutionPatch::VolumePoint const&, bool, Nektar::SolverUtils::EquilibriumAWFProfiles const*, std::array<double, 3ul> const&, Nektar::SolverUtils::RANSCappedDestructionValues const*)#1}::operator()(Nektar::RANSWallEvolutionPatch::VolumePoint const&, bool, Nektar::SolverUtils::EquilibriumAWFProfiles const*, std::array<double, 3ul> const&, Nektar::SolverUtils::RANSCappedDestructionValues const*) const':
+RANSWallEvolutionPatch.cpp:(.text+0x3eb0): undefined reference to `Nektar::SolverUtils::RANSWallInnerMeanStress(Nektar::SolverUtils::RANSWallInnerStressValues const&, double, double)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::OwnedBodyLoad(double, Nektar::RANSWallEvolutionData const&, int) const::{lambda(Nektar::RANSWallEvolutionPatch::VolumePoint const&, bool)#1}::operator()(Nektar::RANSWallEvolutionPatch::VolumePoint const&, bool) const [clone .constprop.1]':
+RANSWallEvolutionPatch.cpp:(.text+0x4b30): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::Residual(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, double, Nektar::RANSWallEvolutionData const&, bool, bool, int) const::{lambda(Nektar::RANSWallEvolutionPatch::VolumePoint const&, bool, Nektar::SolverUtils::EquilibriumAWFProfiles const*, std::array<double, 3ul> const&, Nektar::SolverUtils::RANSCappedDestructionValues const*)#1}::operator()(Nektar::RANSWallEvolutionPatch::VolumePoint const&, bool, Nektar::SolverUtils::EquilibriumAWFProfiles const*, std::array<double, 3ul> const&, Nektar::SolverUtils::RANSCappedDestructionValues const*) const [clone .constprop.0]':
+RANSWallEvolutionPatch.cpp:(.text+0x4fe8): undefined reference to `Nektar::SolverUtils::RANSWallInnerMeanStress(Nektar::SolverUtils::RANSWallInnerStressValues const&, double, double)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::Transform(Nektar::RANSWallGlobalPoint) const':
+RANSWallEvolutionPatch.cpp:(.text+0x5a5c): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x5aaa): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::DenseEvolutionCapacity(bool) const':
+RANSWallEvolutionPatch.cpp:(.text+0x6c28): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::CheckDenseEvolutionCapacity(bool) const':
+RANSWallEvolutionPatch.cpp:(.text+0x6ef8): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::Quadrature(int, int) const':
+RANSWallEvolutionPatch.cpp:(.text+0x7b0b): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::Signature[abi:cxx11]() const':
+RANSWallEvolutionPatch.cpp:(.text+0x8305): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x8333): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Signature[abi:cxx11]() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::CartesianForcing(std::vector<double, std::allocator<double> > const&, std::array<double, 3ul> const&, double, Nektar::RANSWallEvolutionData const&, bool) const':
+RANSWallEvolutionPatch.cpp:(.text+0x98ce): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::Forcing(std::vector<double, std::allocator<double> > const&, std::array<double, 3ul> const&, double, Nektar::RANSWallEvolutionData const&, bool) const':
+RANSWallEvolutionPatch.cpp:(.text+0xa5e6): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::Profile(double, std::array<double, 3ul> const&, double) const::{lambda()#1}::operator()() const':
+RANSWallEvolutionPatch.cpp:(.text+0xf0fb): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::EquilibriumAWFProfiles(Nektar::SolverUtils::AWFProfileGeometry const&, double, Nektar::SolverUtils::RANSNeutralReference const&, Nektar::SolverUtils::AWFNormalMetric const&, Nektar::SolverUtils::AWFProfileOptions const&, Nektar::SolverUtils::AWFParameters const&)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::PhysicalMass(int, int) const':
+RANSWallEvolutionPatch.cpp:(.text+0xf610): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::Profile(double, std::array<double, 3ul> const&, double) const':
+RANSWallEvolutionPatch.cpp:(.text+0xfee4): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::Refresh(std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const*) const':
+RANSWallEvolutionPatch.cpp:(.text+0x10795): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::FlatReference(double, std::array<double, 2ul> const&) const':
+RANSWallEvolutionPatch.cpp:(.text+0x11d0a): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::EquilibriumAWFProfiles(Nektar::SolverUtils::AWFProfileGeometry const&, double, Nektar::SolverUtils::RANSNeutralReference const&, Nektar::SolverUtils::AWFNormalMetric const&, Nektar::SolverUtils::AWFProfileOptions const&, Nektar::SolverUtils::AWFParameters const&)'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x11e18): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x12174): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::PlanarConstantHeight() const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x121ba): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x1270b): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x13198): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::ReferenceK(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::NeutralReference(double, std::array<double, 2ul> const&) const':
+RANSWallEvolutionPatch.cpp:(.text+0x1353d): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::PlanarConstantHeight() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::Surface(int, int, double, int, int) const':
+RANSWallEvolutionPatch.cpp:(.text+0x15084): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Cofactor(std::array<double, 3ul> const&, int, int, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::ExternalConstraints(double, Nektar::RANSWallEvolutionData const&) const':
+RANSWallEvolutionPatch.cpp:(.text+0x15c23): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::RoughnessBudget(std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&) const':
+RANSWallEvolutionPatch.cpp:(.text+0x1813a): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::EnergyBudget(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, double, Nektar::RANSWallEvolutionData const&) const':
+RANSWallEvolutionPatch.cpp:(.text+0x1f1df): undefined reference to `Nektar::SolverUtils::RANSWallInnerMeanStress(Nektar::SolverUtils::RANSWallInnerStressValues const&, double, double)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::SampleKRow(std::array<double, 3ul> const&) const':
+RANSWallEvolutionPatch.cpp:(.text+0x21636): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::SampleK(std::vector<double, std::allocator<double> > const&, std::array<double, 3ul> const&) const':
+RANSWallEvolutionPatch.cpp:(.text+0x21cf6): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::RANSWallEvolutionPatch(std::shared_ptr<Nektar::LibUtilities::SessionReader> const&, std::shared_ptr<Nektar::SpatialDomains::MeshGraph> const&, std::shared_ptr<Nektar::LibUtilities::Comm> const&, Nektar::RANSWallPatchParameters const&, Nektar::SolverUtils::RANSWallNormalMap const&)':
+RANSWallEvolutionPatch.cpp:(.text+0x22f25): undefined reference to `Nektar::SolverUtils::AWFProfileGeometry::Validate() const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x2900e): undefined reference to `Nektar::SolverUtils::CalibratedAWFParameters(Nektar::SolverUtils::RANSNeutralReference const&)'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x2932a): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Validate(std::array<double, 3ul> const&, std::array<double, 3ul> const&, double) const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x29597): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::PlanarConstantHeight() const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x296ea): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x29f72): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x2a6ad): undefined reference to `Nektar::SolverUtils::WJCalibratedAWFParameters(Nektar::SolverUtils::RANSNeutralReference const&)'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x2b3ca): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x2b482): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x2b6c1): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x2b74a): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x2b790): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x2c2f9): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x2c323): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x2de3e): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x2de5b): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x2e8b8): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x2ebde): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x2ec26): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionPatch.cpp:(.text+0x2ed48): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::Solve(std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&, double, double, Nektar::RANSWallEvolutionData const&, bool, int&, double, int) const':
+RANSWallEvolutionPatch.cpp:(.text+0x34d23): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o:RANSWallEvolutionPatch.cpp:(.text+0x35650): more undefined references to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const' follow
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `Nektar::RANSWallEvolutionPatch::PhysicalProject(int, std::function<double (std::array<double, 3ul> const&, double)> const&, double) const':
+RANSWallEvolutionPatch.cpp:(.text+0x35e41): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::PlanarConstantHeight() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPatch.cpp.o: in function `std::_Function_handler<double (double), Nektar::RANSWallEvolutionPatch::FlatReference(double, std::array<double, 2ul> const&) const::{lambda(double)#2}>::_M_invoke(std::_Any_data const&, double&&)':
+RANSWallEvolutionPatch.cpp:(.text+0x5a0): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::ReferenceK(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionBoundary.cpp.o: in function `Nektar::(anonymous namespace)::At(Nektar::RANSWallEvolutionPatch const&, Nektar::RANSWallEvolutionPatch::ExteriorPoint const&, std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&)':
+RANSWallEvolutionBoundary.cpp:(.text+0x205d): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: RANSWallEvolutionBoundary.cpp:(.text+0x2149): undefined reference to `Nektar::SolverUtils::RANSWallInnerMeanStress(Nektar::SolverUtils::RANSWallInnerStressValues const&, double, double)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionBoundary.cpp.o: in function `Nektar::RANSWallEvolutionPatch::OpenBoundaryDiagnostic[abi:cxx11](std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, double, Nektar::RANSWallEvolutionData const&, std::vector<std::array<double, 3ul>, std::allocator<std::array<double, 3ul> > > const&) const':
+RANSWallEvolutionBoundary.cpp:(.text+0x8ccf): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Inverse(std::array<double, 3ul> const&) const'
+/usr/bin/ld: RANSWallEvolutionBoundary.cpp:(.text+0x8fb3): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: RANSWallEvolutionBoundary.cpp:(.text+0x907b): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::ReferenceProduction(double) const'
+/usr/bin/ld: RANSWallEvolutionBoundary.cpp:(.text+0xab1c): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionBoundary.cpp:(.text+0xae94): undefined reference to `Nektar::SolverUtils::RANSWallInnerMeanStress(Nektar::SolverUtils::RANSWallInnerStressValues const&, double, double)'
+/usr/bin/ld: RANSWallEvolutionBoundary.cpp:(.text+0xbb8c): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionEvaluation.cpp.o: in function `Nektar::RANSWallEvolutionPatch::CachedNormalization(std::vector<double, std::allocator<double> > const&, std::array<double, 3ul> const&, Nektar::SolverUtils::EquilibriumAWFProfiles const&) const':
+RANSWallEvolutionEvaluation.cpp:(.text+0x7008): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionEvaluation.cpp:(.text+0x710b): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionEvaluation.cpp:(.text+0x724f): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionEvaluation.cpp.o: in function `Nektar::RANSWallEvolutionPatch::EvaluationProfile(std::shared_ptr<Nektar::SolverUtils::EquilibriumAWFProfiles> const&, double) const':
+RANSWallEvolutionEvaluation.cpp:(.text+0x1053c): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Reweighted(double) const'
+/usr/bin/ld: RANSWallEvolutionEvaluation.cpp:(.text+0x107a4): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Reweighted(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionEvaluation.cpp.o: in function `Nektar::RANSWallEvolutionPatch::StoreNormalization(std::vector<double, std::allocator<double> > const&, std::array<double, 3ul> const&, Nektar::SolverUtils::EquilibriumAWFProfiles const&, Nektar::SolverUtils::RANSCappedDestructionValues const&) const':
+RANSWallEvolutionEvaluation.cpp:(.text+0x10a80): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionEvaluation.cpp:(.text+0x10c2e): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp.o: in function `std::_Function_handler<double (std::array<double, 3ul> const&), Nektar::RANSWallEvolutionPatch::WJMeasurements[abi:cxx11](std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, double, Nektar::RANSWallEvolutionData const&, std::vector<std::array<double, 8ul>, std::allocator<std::array<double, 8ul> > > const&, bool) const::{lambda(std::array<double, 3ul> const&)#4}>::_M_invoke(std::_Any_data const&, std::array<double, 3ul> const&)':
+RANSWallEvolutionDiagnostics.cpp:(.text+0x39ca): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp.o: in function `Nektar::RANSWallEvolutionPatch::InterfaceProvenanceChecks[abi:cxx11]() const':
+RANSWallEvolutionDiagnostics.cpp:(.text+0x7730): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp.o: in function `Nektar::RANSWallEvolutionPatch::WJWeakLoads[abi:cxx11](std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, double, Nektar::RANSWallEvolutionData const&) const':
+RANSWallEvolutionDiagnostics.cpp:(.text+0x145ca): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionDiagnostics.cpp:(.text+0x148bd): undefined reference to `Nektar::SolverUtils::RANSWallInnerMeanStress(Nektar::SolverUtils::RANSWallInnerStressValues const&, double, double)'
+/usr/bin/ld: RANSWallEvolutionDiagnostics.cpp:(.text+0x14c4d): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionDiagnostics.cpp:(.text+0x1504b): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp.o: in function `Nektar::RANSWallEvolutionPatch::WJPassiveDiagnostics[abi:cxx11](std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, double, Nektar::RANSWallEvolutionData const&) const':
+RANSWallEvolutionDiagnostics.cpp:(.text+0x17d9e): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp.o: in function `Nektar::RANSWallEvolutionPatch::Audit[abi:cxx11](std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, double, Nektar::RANSWallEvolutionData const&, double, bool) const':
+RANSWallEvolutionDiagnostics.cpp:(.text+0x1e51d): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionDiagnostics.cpp:(.text+0x1f68c): undefined reference to `Nektar::SolverUtils::RANSWallInnerMeanStress(Nektar::SolverUtils::RANSWallInnerStressValues const&, double, double)'
+/usr/bin/ld: RANSWallEvolutionDiagnostics.cpp:(.text+0x2049c): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::AtProduction(double, double) const'
+/usr/bin/ld: RANSWallEvolutionDiagnostics.cpp:(.text+0x2089a): undefined reference to `Nektar::SolverUtils::EvaluateRANSCappedDestructionPoint(double, double, double, double, double, double, Nektar::SolverUtils::RANSCappedDestructionControls const&)'
+/usr/bin/ld: RANSWallEvolutionDiagnostics.cpp:(.text+0x20cd9): undefined reference to `Nektar::SolverUtils::EvaluateRANSWallInnerStress(double, double, std::array<std::array<double, 3ul>, 3ul> const&, Nektar::SolverUtils::RANSWallInnerStressModel)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp.o: in function `Nektar::RANSWallEvolutionPatch::WJMeasurements[abi:cxx11](std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, double, Nektar::RANSWallEvolutionData const&, std::vector<std::array<double, 8ul>, std::allocator<std::array<double, 8ul> > > const&, bool) const':
+RANSWallEvolutionDiagnostics.cpp:(.text+0x29468): undefined reference to `Nektar::SolverUtils::RANSWallInnerMeanStress(Nektar::SolverUtils::RANSWallInnerStressValues const&, double, double)'
+/usr/bin/ld: RANSWallEvolutionDiagnostics.cpp:(.text+0x2a631): undefined reference to `Nektar::SolverUtils::RANSWallInnerMeanStress(Nektar::SolverUtils::RANSWallInnerStressValues const&, double, double)'
+/usr/bin/ld: RANSWallEvolutionDiagnostics.cpp:(.text+0x2a9c9): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp.o: in function `Nektar::RANSWallEvolutionPatch::ConstitutiveStateDiagnostic[abi:cxx11](std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&, std::vector<std::array<double, 3ul>, std::allocator<std::array<double, 3ul> > > const&) const::{lambda(Nektar::RANSWallGlobalPoint const&, bool, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool, double)#1}::operator()(Nektar::RANSWallGlobalPoint const&, bool, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool, double) const':
+RANSWallEvolutionDiagnostics.cpp:(.text+0x328bb): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: RANSWallEvolutionDiagnostics.cpp:(.text+0x32f2b): undefined reference to `Nektar::SolverUtils::EvaluateRANSRobustClosure(Nektar::SolverUtils::RANSModel, double, double, std::array<std::array<double, 3ul>, 3ul> const&, double, Nektar::SolverUtils::RANSParameters const&, double, Nektar::SolverUtils::RANSRobustVariant const&)'
+/usr/bin/ld: RANSWallEvolutionDiagnostics.cpp:(.text+0x33f3d): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionDiagnostics.cpp.o: in function `Nektar::RANSWallEvolutionPatch::ConstitutiveStateDiagnostic[abi:cxx11](std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&, std::vector<std::array<double, 3ul>, std::allocator<std::array<double, 3ul> > > const&) const':
+RANSWallEvolutionDiagnostics.cpp:(.text+0x35381): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp.o: in function `std::_Function_handler<bool (int, int, Nektar::RANSWallGlobalField::Element const&), Nektar::RANSWallEvolutionPatch::InitialiseTransition(std::shared_ptr<Nektar::LibUtilities::SessionReader> const&)::{lambda(int, int, Nektar::RANSWallGlobalField::Element const&)#3}>::_M_invoke(std::_Any_data const&, int&&, int&&, Nektar::RANSWallGlobalField::Element const&)':
+RANSWallEvolutionTransition.cpp:(.text+0x323): undefined reference to `Nektar::SolverUtils::EquilibriumAWFWallCoordinate(Nektar::SolverUtils::RANSWallNormalMap const&, std::array<double, 3ul> const&)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp.o: in function `Nektar::RANSWallEvolutionPatch::ForcingParts(std::vector<double, std::allocator<double> > const&, std::array<double, 3ul> const&, double, Nektar::RANSWallEvolutionData const&) const':
+RANSWallEvolutionTransition.cpp:(.text+0xe79): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp.o: in function `Nektar::RANSWallEvolutionPatch::TransitionInput(std::vector<double, std::allocator<double> > const&, std::array<double, 3ul> const&, double, Nektar::RANSWallEvolutionData const&) const':
+RANSWallEvolutionTransition.cpp:(.text+0x2836): undefined reference to `Nektar::SolverUtils::EquilibriumAWFWallCoordinate(Nektar::SolverUtils::RANSWallNormalMap const&, std::array<double, 3ul> const&)'
+/usr/bin/ld: RANSWallEvolutionTransition.cpp:(.text+0x292f): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionTransition.cpp:(.text+0x2da5): undefined reference to `Nektar::SolverUtils::EvaluateEquilibriumAWFTransitionSensors(Nektar::SolverUtils::AWFTransitionPhysicalInput const&, Nektar::SolverUtils::AWFTransitionPhysicalInput const&)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp.o: in function `Nektar::RANSWallEvolutionPatch::Transition(std::vector<double, std::allocator<double> > const&, std::array<double, 3ul> const&, double, Nektar::RANSWallEvolutionData const&) const':
+RANSWallEvolutionTransition.cpp:(.text+0x3180): undefined reference to `Nektar::SolverUtils::EvaluateEquilibriumAWFTransition(Nektar::SolverUtils::AWFTransitionInput const&, Nektar::SolverUtils::AWFTransitionControls const&, Nektar::SolverUtils::AWFTransitionInput const&, Nektar::SolverUtils::AWFTransitionControlDirection const&)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp.o: in function `Nektar::RANSWallEvolutionPatch::StateProfile(std::vector<double, std::allocator<double> > const&, std::array<double, 3ul> const&, double, Nektar::RANSWallEvolutionData const&) const':
+RANSWallEvolutionTransition.cpp:(.text+0x3309): undefined reference to `Nektar::SolverUtils::EquilibriumAWFWallCoordinate(Nektar::SolverUtils::RANSWallNormalMap const&, std::array<double, 3ul> const&)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp.o: in function `std::_Function_handler<double (std::array<double, 3ul> const&), Nektar::RANSWallEvolutionPatch::DissipationTrace(std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&) const::{lambda(std::array<double, 3ul> const&)#2}>::_M_invoke(std::_Any_data const&, std::array<double, 3ul> const&)':
+RANSWallEvolutionTransition.cpp:(.text+0x36c7): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp.o: in function `Nektar::RANSWallEvolutionPatch::InitialiseTransition(std::shared_ptr<Nektar::LibUtilities::SessionReader> const&)':
+RANSWallEvolutionTransition.cpp:(.text+0x455c): undefined reference to `Nektar::SolverUtils::AWFTransitionControls::Validate() const'
+/usr/bin/ld: RANSWallEvolutionTransition.cpp:(.text+0x45c5): undefined reference to `Nektar::SolverUtils::ValidateEquilibriumAWFTransitionSupport(Nektar::SolverUtils::RANSWallNormalMap const&, Nektar::SolverUtils::AWFTransitionControls const&)'
+/usr/bin/ld: RANSWallEvolutionTransition.cpp:(.text+0x48f8): undefined reference to `Nektar::SolverUtils::EquilibriumAWFWallCoordinate(Nektar::SolverUtils::RANSWallNormalMap const&, std::array<double, 3ul> const&)'
+/usr/bin/ld: RANSWallEvolutionTransition.cpp:(.text+0x490a): undefined reference to `Nektar::SolverUtils::EquilibriumAWFWallCoordinate(Nektar::SolverUtils::RANSWallNormalMap const&, std::array<double, 3ul> const&)'
+/usr/bin/ld: RANSWallEvolutionTransition.cpp:(.text+0x4cf7): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionTransition.cpp:(.text+0x4f3f): undefined reference to `Nektar::SolverUtils::EquilibriumAWFWallCoordinate(Nektar::SolverUtils::RANSWallNormalMap const&, std::array<double, 3ul> const&)'
+/usr/bin/ld: RANSWallEvolutionTransition.cpp:(.text+0x53ad): undefined reference to `Nektar::SolverUtils::EquilibriumAWFWallCoordinate(Nektar::SolverUtils::RANSWallNormalMap const&, std::array<double, 3ul> const&)'
+/usr/bin/ld: RANSWallEvolutionTransition.cpp:(.text+0x5778): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp.o: in function `Nektar::RANSWallEvolutionPatch::ProspectiveActiveProfile(std::vector<double, std::allocator<double> > const&, std::array<double, 3ul> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&) const':
+RANSWallEvolutionTransition.cpp:(.text+0x6411): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionTransition.cpp:(.text+0x65af): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::EquilibriumAWFProfiles(Nektar::SolverUtils::AWFProfileGeometry const&, double, Nektar::SolverUtils::RANSNeutralReference const&, Nektar::SolverUtils::AWFNormalMetric const&, Nektar::SolverUtils::AWFProfileOptions const&, Nektar::SolverUtils::AWFParameters const&)'
+/usr/bin/ld: RANSWallEvolutionTransition.cpp:(.text+0x67b6): undefined reference to `Nektar::SolverUtils::EquilibriumAWFWallCoordinate(Nektar::SolverUtils::RANSWallNormalMap const&, std::array<double, 3ul> const&)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionTransition.cpp.o: in function `Nektar::RANSWallEvolutionPatch::WallCoordinate(std::array<double, 3ul> const&) const':
+RANSWallEvolutionTransition.cpp:(.text+0xdec): undefined reference to `Nektar::SolverUtils::EquilibriumAWFWallCoordinate(Nektar::SolverUtils::RANSWallNormalMap const&, std::array<double, 3ul> const&)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionRobust.cpp.o: in function `Nektar::RANSWallEvolutionPatch::InitialiseRobust(std::shared_ptr<Nektar::LibUtilities::SessionReader> const&)':
+RANSWallEvolutionRobust.cpp:(.text+0x15f9): undefined reference to `Nektar::SolverUtils::ParseRANSWallInnerStress(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)'
+/usr/bin/ld: RANSWallEvolutionRobust.cpp:(.text+0x19d0): undefined reference to `Nektar::SolverUtils::RANSRobustVariant::Validate() const'
+/usr/bin/ld: RANSWallEvolutionRobust.cpp:(.text+0x1d79): undefined reference to `Nektar::SolverUtils::RANSCappedDestructionControls::Validate() const'
+/usr/bin/ld: RANSWallEvolutionRobust.cpp:(.text+0x1f64): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionRobust.cpp.o: in function `Nektar::RANSWallEvolutionPatch::InnerStressName[abi:cxx11]() const':
+RANSWallEvolutionRobust.cpp:(.text+0x23be): undefined reference to `Nektar::SolverUtils::RANSWallInnerStressName(Nektar::SolverUtils::RANSWallInnerStressModel)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionRobust.cpp.o: in function `Nektar::RANSWallEvolutionPatch::InnerStress(double, double, std::array<std::array<double, 3ul>, 3ul> const&) const':
+RANSWallEvolutionRobust.cpp:(.text+0x24ab): undefined reference to `Nektar::SolverUtils::EvaluateRANSWallInnerStress(double, double, std::array<std::array<double, 3ul>, 3ul> const&, Nektar::SolverUtils::RANSWallInnerStressModel)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionRobust.cpp.o: in function `Nektar::RANSWallEvolutionPatch::OuterClosure(double, double, std::array<std::array<double, 3ul>, 3ul> const&, std::array<double, 3ul> const&) const':
+RANSWallEvolutionRobust.cpp:(.text+0x27d2): undefined reference to `Nektar::SolverUtils::EvaluateRANSRobustClosure(Nektar::SolverUtils::RANSModel, double, double, std::array<std::array<double, 3ul>, 3ul> const&, double, Nektar::SolverUtils::RANSParameters const&, double, Nektar::SolverUtils::RANSRobustVariant const&)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionRobust.cpp.o: in function `Nektar::RANSWallEvolutionPatch::WallNormalization(std::vector<double, std::allocator<double> > const&, std::array<double, 3ul> const&, Nektar::SolverUtils::EquilibriumAWFProfiles const&) const':
+RANSWallEvolutionRobust.cpp:(.text+0x2f2d): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionRobust.cpp:(.text+0x328e): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::AtProduction(double, double) const'
+/usr/bin/ld: RANSWallEvolutionRobust.cpp:(.text+0x4237): undefined reference to `Nektar::SolverUtils::EvaluateRANSCappedDestruction(Nektar::SolverUtils::RANSCappedDestructionInput const&, Nektar::SolverUtils::RANSCappedDestructionControls const&)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionRobust.cpp.o: in function `Nektar::RANSWallEvolutionPatch::WallDissipation(std::vector<double, std::allocator<double> > const&, std::array<double, 3ul> const&, Nektar::SolverUtils::EquilibriumAWFProfiles const&) const':
+RANSWallEvolutionRobust.cpp:(.text+0x4874): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionRobust.cpp.o: in function `Nektar::RANSWallEvolutionPatch::WallSource(std::vector<double, std::allocator<double> > const&, std::array<double, 3ul> const&, double, Nektar::SolverUtils::EquilibriumAWFProfiles const&, Nektar::SolverUtils::RANSCappedDestructionValues const*, double*) const':
+RANSWallEvolutionRobust.cpp:(.text+0x49de): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::AtProduction(double, double) const'
+/usr/bin/ld: RANSWallEvolutionRobust.cpp:(.text+0x4be6): undefined reference to `Nektar::SolverUtils::EvaluateRANSCappedDestructionPoint(double, double, double, double, double, double, Nektar::SolverUtils::RANSCappedDestructionControls const&)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionRobust.cpp.o: in function `Nektar::RANSWallEvolutionPatch::WallDissipation(std::vector<double, std::allocator<double> > const&, std::array<double, 3ul> const&, Nektar::SolverUtils::EquilibriumAWFProfiles const&) const':
+RANSWallEvolutionRobust.cpp:(.text+0x4838): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionActions.cpp.o: in function `Nektar::RANSWallEvolutionPatch::PressureDirectionalAction(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&, bool, int) const::{lambda(std::array<double, 3ul> const&)#2}::operator()(std::array<double, 3ul> const&) const':
+RANSWallEvolutionActions.cpp:(.text+0x1916): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionActions.cpp:(.text+0x1b4c): undefined reference to `Nektar::SolverUtils::EvaluateEquilibriumAWFTransition(Nektar::SolverUtils::AWFTransitionInput const&, Nektar::SolverUtils::AWFTransitionControls const&, Nektar::SolverUtils::AWFTransitionInput const&, Nektar::SolverUtils::AWFTransitionControlDirection const&)'
+/usr/bin/ld: RANSWallEvolutionActions.cpp:(.text+0x1d72): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionActions.cpp:(.text+0x1e68): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::AtProduction(double, double) const'
+/usr/bin/ld: RANSWallEvolutionActions.cpp:(.text+0x2313): undefined reference to `Nektar::SolverUtils::EvaluateRANSCappedDestruction(Nektar::SolverUtils::RANSCappedDestructionInput const&, Nektar::SolverUtils::RANSCappedDestructionControls const&)'
+/usr/bin/ld: RANSWallEvolutionActions.cpp:(.text+0x2350): undefined reference to `Nektar::SolverUtils::RANSCappedDestructionDirectional(Nektar::SolverUtils::RANSCappedDestructionInput const&, Nektar::SolverUtils::RANSCappedDestructionDirection const&, Nektar::SolverUtils::RANSCappedDestructionControls const&)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionActions.cpp.o: in function `std::_Function_handler<double (std::array<double, 3ul> const&), Nektar::RANSWallEvolutionPatch::PressureDirectionalAction(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&, bool, int) const::{lambda(std::array<double, 3ul> const&)#4}>::_M_invoke(std::_Any_data const&, std::array<double, 3ul> const&)':
+RANSWallEvolutionActions.cpp:(.text+0x2591): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionActions.cpp.o: in function `Nektar::RANSWallEvolutionPatch::AffinePressureAction(std::vector<double, std::allocator<double> > const&, std::map<int, double, std::less<int>, std::allocator<std::pair<int const, double> > > const&, int) const':
+RANSWallEvolutionActions.cpp:(.text+0x2ea4): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionActions.cpp.o: in function `Nektar::RANSWallEvolutionPatch::PressureDirectionalAction(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&, bool, int) const':
+RANSWallEvolutionActions.cpp:(.text+0x3972): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionNonpressure.cpp.o: in function `Nektar::(anonymous namespace)::ProfileDerivative::At(double, double) const':
+RANSWallEvolutionNonpressure.cpp:(.text+0x336c): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::AtProduction(double, double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionNonpressure.cpp.o: in function `Nektar::RANSWallEvolutionPatch::AssembleNonpressureR3(std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&, bool, int, std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >*, std::vector<int, std::allocator<int> > const*) const::{lambda(std::array<double, 3ul> const&, bool)#7}::operator()(std::array<double, 3ul> const&, bool) const':
+RANSWallEvolutionNonpressure.cpp:(.text+0xc6da): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::AtProduction(double, double) const'
+/usr/bin/ld: RANSWallEvolutionNonpressure.cpp:(.text+0xcc6d): undefined reference to `Nektar::SolverUtils::EvaluateRANSCappedDestruction(Nektar::SolverUtils::RANSCappedDestructionInput const&, Nektar::SolverUtils::RANSCappedDestructionControls const&)'
+/usr/bin/ld: RANSWallEvolutionNonpressure.cpp:(.text+0xf245): undefined reference to `Nektar::SolverUtils::EvaluateEquilibriumAWFTransitionSensors(Nektar::SolverUtils::AWFTransitionPhysicalInput const&, Nektar::SolverUtils::AWFTransitionPhysicalInput const&)'
+/usr/bin/ld: RANSWallEvolutionNonpressure.cpp:(.text+0xf298): undefined reference to `Nektar::SolverUtils::EvaluateEquilibriumAWFTransition(Nektar::SolverUtils::AWFTransitionInput const&, Nektar::SolverUtils::AWFTransitionControls const&, Nektar::SolverUtils::AWFTransitionInput const&, Nektar::SolverUtils::AWFTransitionControlDirection const&)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionNonpressure.cpp.o: in function `Nektar::RANSWallEvolutionPatch::AssembleNonpressureR3(std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&, bool, int, std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >*, std::vector<int, std::allocator<int> > const*) const':
+RANSWallEvolutionNonpressure.cpp:(.text+0xfbc9): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionNonpressure.cpp:(.text+0x114e7): undefined reference to `Nektar::SolverUtils::RANSWallInnerMeanStress(Nektar::SolverUtils::RANSWallInnerStressValues const&, double, double)'
+/usr/bin/ld: RANSWallEvolutionNonpressure.cpp:(.text+0x115a7): undefined reference to `Nektar::SolverUtils::EvaluateRANSCappedDestructionPoint(double, double, double, double, double, double, Nektar::SolverUtils::RANSCappedDestructionControls const&)'
+/usr/bin/ld: RANSWallEvolutionNonpressure.cpp:(.text+0x1164c): undefined reference to `Nektar::SolverUtils::RANSWallInnerStressDirectional(double, double, std::array<std::array<double, 3ul>, 3ul> const&, double, double, std::array<std::array<double, 3ul>, 3ul> const&, Nektar::SolverUtils::RANSWallInnerStressModel)'
+/usr/bin/ld: RANSWallEvolutionNonpressure.cpp:(.text+0x11761): undefined reference to `Nektar::SolverUtils::RANSWallInnerStressDirectional(double, double, std::array<std::array<double, 3ul>, 3ul> const&, double, double, std::array<std::array<double, 3ul>, 3ul> const&, Nektar::SolverUtils::RANSWallInnerStressModel)'
+/usr/bin/ld: RANSWallEvolutionNonpressure.cpp:(.text+0x11945): undefined reference to `Nektar::SolverUtils::RANSWallInnerStressDirectional(double, double, std::array<std::array<double, 3ul>, 3ul> const&, double, double, std::array<std::array<double, 3ul>, 3ul> const&, Nektar::SolverUtils::RANSWallInnerStressModel)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.cpp.o: in function `Nektar::RANSWallEvolutionPatch::ResidualResolutionComponents(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, double, Nektar::RANSWallEvolutionData const&, bool, bool) const::{lambda(Nektar::RANSWallEvolutionPatch::VolumePoint const&, bool, Nektar::SolverUtils::EquilibriumAWFProfiles const*, std::array<double, 3ul> const&, Nektar::SolverUtils::RANSCappedDestructionValues const*)#2}::operator()(Nektar::RANSWallEvolutionPatch::VolumePoint const&, bool, Nektar::SolverUtils::EquilibriumAWFProfiles const*, std::array<double, 3ul> const&, Nektar::SolverUtils::RANSCappedDestructionValues const*) const [clone .constprop.0]':
+RANSWallEvolutionResolution.cpp:(.text+0x26cc): undefined reference to `Nektar::SolverUtils::RANSWallInnerMeanStress(Nektar::SolverUtils::RANSWallInnerStressValues const&, double, double)'
+/usr/bin/ld: RANSWallEvolutionResolution.cpp:(.text+0x330c): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::AtProduction(double, double) const'
+/usr/bin/ld: RANSWallEvolutionResolution.cpp:(.text+0x3357): undefined reference to `Nektar::SolverUtils::EvaluateRANSCappedDestructionPoint(double, double, double, double, double, double, Nektar::SolverUtils::RANSCappedDestructionControls const&)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.cpp.o: in function `Nektar::RANSWallEvolutionPatch::ResidualResolutionComponents(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, double, Nektar::RANSWallEvolutionData const&, bool, bool) const::{lambda(Nektar::RANSWallEvolutionPatch::VolumePoint const&, bool, Nektar::SolverUtils::EquilibriumAWFProfiles const*, std::array<double, 3ul> const&, Nektar::SolverUtils::RANSCappedDestructionValues const*)#2}::operator()(Nektar::RANSWallEvolutionPatch::VolumePoint const&, bool, Nektar::SolverUtils::EquilibriumAWFProfiles const*, std::array<double, 3ul> const&, Nektar::SolverUtils::RANSCappedDestructionValues const*) const':
+RANSWallEvolutionResolution.cpp:(.text+0x36e3): undefined reference to `Nektar::SolverUtils::RANSWallInnerMeanStress(Nektar::SolverUtils::RANSWallInnerStressValues const&, double, double)'
+/usr/bin/ld: RANSWallEvolutionResolution.cpp:(.text+0x5376): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::AtProduction(double, double) const'
+/usr/bin/ld: RANSWallEvolutionResolution.cpp:(.text+0x53c4): undefined reference to `Nektar::SolverUtils::EvaluateRANSCappedDestructionPoint(double, double, double, double, double, double, Nektar::SolverUtils::RANSCappedDestructionControls const&)'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionResolution.cpp.o: in function `Nektar::RANSWallEvolutionPatch::ResidualResolutionComponents(std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, double, Nektar::RANSWallEvolutionData const&, bool, bool) const':
+RANSWallEvolutionResolution.cpp:(.text+0xa43d): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp.o: in function `Nektar::RANSWallEvolutionPatch::NormalizationRows(std::array<double, 3ul> const&, Nektar::SolverUtils::EquilibriumAWFProfiles const&) const':
+RANSWallEvolutionFeasible.cpp:(.text+0x66ec): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp.o: in function `Nektar::RANSWallEvolutionPatch::BranchCoverageDiagnostic[abi:cxx11](std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&, std::vector<std::array<double, 3ul>, std::allocator<std::array<double, 3ul> > > const&) const':
+RANSWallEvolutionFeasible.cpp:(.text+0x109c9): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Reweighted(double) const'
+/usr/bin/ld: RANSWallEvolutionFeasible.cpp:(.text+0x11499): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp.o: in function `Nektar::RANSWallEvolutionPatch::WallTraceR4(std::vector<double, std::allocator<double> > const&) const':
+RANSWallEvolutionFeasible.cpp:(.text+0x168c3): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp.o: in function `Nektar::RANSWallEvolutionPatch::OuterBoundsR5(Nektar::RANSWallEvolutionPatch::ScalarDomainResult const&) const':
+RANSWallEvolutionFeasible.cpp:(.text+0x185af): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp.o: in function `Nektar::RANSWallEvolutionPatch::SolveScalarFeasible(std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&, double, double, Nektar::RANSWallEvolutionData const&, bool, int&, double, int, bool) const':
+RANSWallEvolutionFeasible.cpp:(.text+0x1d607): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp.o: in function `Nektar::RANSWallEvolutionPatch::EvaluateScalarDomain(std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&, bool, bool, std::vector<std::array<double, 3ul>, std::allocator<std::array<double, 3ul> > > const&) const::{lambda(std::array<double, 3ul> const&, std::shared_ptr<Nektar::SolverUtils::EquilibriumAWFProfiles> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool, double)#3}::operator()(std::array<double, 3ul> const&, std::shared_ptr<Nektar::SolverUtils::EquilibriumAWFProfiles> const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool, double) const':
+RANSWallEvolutionFeasible.cpp:(.text+0x29e13): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionFeasible.cpp:(.text+0x2a4ff): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::IntegrationQuadrature(double, std::vector<double, std::allocator<double> > const&) const'
+/usr/bin/ld: RANSWallEvolutionFeasible.cpp:(.text+0x2a57b): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp.o: in function `Nektar::RANSWallEvolutionPatch::InitialiseScalarLocations() const':
+RANSWallEvolutionFeasible.cpp:(.text+0x2edba): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp.o: in function `Nektar::RANSWallEvolutionPatch::EvaluateScalarDomain(std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&, bool, bool, std::vector<std::array<double, 3ul>, std::allocator<std::array<double, 3ul> > > const&) const':
+RANSWallEvolutionFeasible.cpp:(.text+0x33213): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionFeasible.cpp:(.text+0x33b59): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionFeasible.cpp.o: in function `Nektar::RANSWallEvolutionPatch::SolveScalarFeasibleR3(std::vector<double, std::allocator<double> >, std::vector<double, std::allocator<double> > const&, double, double, Nektar::RANSWallEvolutionData const&, int&, double, int, bool, bool, bool, std::vector<std::vector<double, std::allocator<double> >, std::allocator<std::vector<double, std::allocator<double> > > > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const':
+RANSWallEvolutionFeasible.cpp:(.text+0x4dfd6): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPicard.cpp.o: in function `Nektar::RANSWallEvolutionPatch::AssemblePicardBlock(int, std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, double, Nektar::RANSWallEvolutionData const&, std::map<int, double, std::less<int>, std::allocator<std::pair<int const, double> > > const&, bool) const::{lambda(Nektar::RANSWallEvolutionPatch::VolumePoint const&, Nektar::RANSWallEvolutionPatch::Ray const*, std::array<double, 3ul> const&, Nektar::RANSWallGlobalPoint const*)#3}::operator()(Nektar::RANSWallEvolutionPatch::VolumePoint const&, Nektar::RANSWallEvolutionPatch::Ray const*, std::array<double, 3ul> const&, Nektar::RANSWallGlobalPoint const*) const':
+RANSWallEvolutionPicard.cpp:(.text+0xcdf0): undefined reference to `Nektar::SolverUtils::RANSWallInnerMeanStress(Nektar::SolverUtils::RANSWallInnerStressValues const&, double, double)'
+/usr/bin/ld: RANSWallEvolutionPicard.cpp:(.text+0xdb6e): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPicard.cpp.o: in function `Nektar::RANSWallEvolutionPatch::WJNativeChecks[abi:cxx11](std::vector<double, std::allocator<double> > const&, Nektar::RANSWallEvolutionData const&, double, std::vector<double, std::allocator<double> > const&, double) const':
+RANSWallEvolutionPicard.cpp:(.text+0x1d43d): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: RANSWallEvolutionPicard.cpp:(.text+0x1d4fd): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::ReferenceProduction(double) const'
+/usr/bin/ld: RANSWallEvolutionPicard.cpp:(.text+0x1df11): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::EquilibriumAWFProfiles(Nektar::SolverUtils::AWFProfileGeometry const&, double, Nektar::SolverUtils::RANSNeutralReference const&, Nektar::SolverUtils::AWFNormalMetric const&, Nektar::SolverUtils::AWFProfileOptions const&, Nektar::SolverUtils::AWFParameters const&)'
+/usr/bin/ld: RANSWallEvolutionPicard.cpp:(.text+0x1e1e1): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: RANSWallEvolutionPicard.cpp:(.text+0x20489): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionPicard.cpp:(.text+0x22f8d): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: RANSWallEvolutionPicard.cpp:(.text+0x22fa6): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: RANSWallEvolutionPicard.cpp:(.text+0x23003): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: RANSWallEvolutionPicard.cpp:(.text+0x23499): undefined reference to `Nektar::SolverUtils::RANSWallInnerMeanStress(Nektar::SolverUtils::RANSWallInnerStressValues const&, double, double)'
+/usr/bin/ld: RANSWallEvolutionPicard.cpp:(.text+0x23a1c): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionPimple.cpp.o: in function `Nektar::RANSWallEvolutionPatch::PhysicalSamples[abi:cxx11](std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&) const':
+RANSWallEvolutionPimple.cpp:(.text+0x14927): undefined reference to `Nektar::SolverUtils::RANSWallInnerMeanStress(Nektar::SolverUtils::RANSWallInnerStressValues const&, double, double)'
+/usr/bin/ld: RANSWallEvolutionPimple.cpp:(.text+0x14940): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionContact.cpp.o: in function `Nektar::RANSWallEvolutionPatch::PhysicalKBands[abi:cxx11](std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&, std::vector<double, std::allocator<double> > const*, bool) const':
+RANSWallEvolutionContact.cpp:(.text+0x5974): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0x599b): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0x7108): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::IntegrationQuadrature(double, std::vector<double, std::allocator<double> > const&) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0x7a8c): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0x84fe): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0x8528): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionContact.cpp.o: in function `Nektar::RANSWallEvolutionPatch::PhysicalKBands[abi:cxx11](std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&, std::vector<double, std::allocator<double> > const*, bool) const [clone .constprop.0]':
+RANSWallEvolutionContact.cpp:(.text+0x9599): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0x95c3): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0x9968): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::IntegrationQuadrature(double, std::vector<double, std::allocator<double> > const&) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0xbe58): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0xbe79): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::At(std::array<double, 3ul> const&, int, int) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0xc34f): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionContact.cpp.o: in function `Nektar::RANSWallEvolutionPatch::HeightComparison[abi:cxx11](std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&, std::vector<double, std::allocator<double> > const&) const':
+RANSWallEvolutionContact.cpp:(.text+0xf52b): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::ReferenceProduction(double) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0xfc6d): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::ReferenceK(double) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0xfd19): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::ReferenceKGradient(double) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0xfe36): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0x11600): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::ReferenceKGradient(double) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0x11628): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::ReferenceK(double) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0x12767): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0x131d7): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0x13208): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::ReferenceProduction(double) const'
+/usr/bin/ld: RANSWallEvolutionContact.cpp:(.text+0x140ac): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::ReferenceK(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSWallEvolutionSource.cpp.o: in function `Nektar::RANSWallEvolutionPatch::SourceBalanceDiagnostic[abi:cxx11](std::vector<double, std::allocator<double> > const&, double, Nektar::RANSWallEvolutionData const&, std::vector<double, std::allocator<double> > const&, std::vector<double, std::allocator<double> > const&) const':
+RANSWallEvolutionSource.cpp:(.text+0x2d21): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::AtProduction(double, double) const'
+/usr/bin/ld: RANSWallEvolutionSource.cpp:(.text+0x2d74): undefined reference to `Nektar::SolverUtils::EvaluateRANSCappedDestructionPoint(double, double, double, double, double, double, Nektar::SolverUtils::RANSCappedDestructionControls const&)'
+/usr/bin/ld: RANSWallEvolutionSource.cpp:(.text+0x5251): undefined reference to `Nektar::SolverUtils::EvaluateRANSWallInnerStress(double, double, std::array<std::array<double, 3ul>, 3ul> const&, Nektar::SolverUtils::RANSWallInnerStressModel)'
+/usr/bin/ld: RANSWallEvolutionSource.cpp:(.text+0x5279): undefined reference to `Nektar::SolverUtils::EvaluateRANSWallInnerStress(double, double, std::array<std::array<double, 3ul>, 3ul> const&, Nektar::SolverUtils::RANSWallInnerStressModel)'
+/usr/bin/ld: RANSWallEvolutionSource.cpp:(.text+0x52ba): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::AtProduction(double, double) const'
+/usr/bin/ld: RANSWallEvolutionSource.cpp:(.text+0x530d): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::ReferenceProduction(double) const'
+/usr/bin/ld: RANSWallEvolutionSource.cpp:(.text+0x536c): undefined reference to `Nektar::SolverUtils::EvaluateRANSCappedDestructionPoint(double, double, double, double, double, double, Nektar::SolverUtils::RANSCappedDestructionControls const&)'
+/usr/bin/ld: RANSWallEvolutionSource.cpp:(.text+0x55d8): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionSource.cpp:(.text+0x8eb5): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSWallEvolutionSource.cpp:(.text+0x9896): undefined reference to `Nektar::SolverUtils::EquilibriumAWFProfiles::Dissipation(double) const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp.o: in function `Nektar::RANSEquilibriumWallEvolution::WriteReport() const':
+RANSEquilibriumWallEvolution.cpp:(.text+0xe073): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSEquilibriumWallEvolution.cpp:(.text+0xe119): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Signature[abi:cxx11]() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp.o: in function `Nektar::RANSEquilibriumWallEvolution::v_Output()::{lambda(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::shared_ptr<Nektar::RANSWallGlobalField> const&, std::vector<double, std::allocator<double> > const&)#1}::operator()(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::shared_ptr<Nektar::RANSWallGlobalField> const&, std::vector<double, std::allocator<double> > const&) const':
+RANSEquilibriumWallEvolution.cpp:(.text+0x16b08): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSEquilibriumWallEvolution.cpp:(.text+0x16cc5): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Signature[abi:cxx11]() const'
+/usr/bin/ld: RANSEquilibriumWallEvolution.cpp:(.text+0x16e63): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: RANSEquilibriumWallEvolution.cpp:(.text+0x16fb6): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp.o: in function `Nektar::RANSEquilibriumWallEvolution::InitialiseMonitoring()':
+RANSEquilibriumWallEvolution.cpp:(.text+0x1e496): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Signature[abi:cxx11]() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp.o: in function `Nektar::RANSEquilibriumWallEvolution::v_DoInitialise(bool)':
+RANSEquilibriumWallEvolution.cpp:(.text+0x22640): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp.o: in function `Nektar::RANSEquilibriumWallEvolution::v_DoSolve()':
+RANSEquilibriumWallEvolution.cpp:(.text+0x313dd): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp.o: in function `Nektar::RANSEquilibriumWallEvolution::v_InitObject(bool)':
+RANSEquilibriumWallEvolution.cpp:(.text+0x38604): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::PlanarConstantHeight() const'
+/usr/bin/ld: CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/EquationSystems/RANSEquilibriumWallEvolution.cpp.o: in function `Nektar::RANSWallPhysicsSignature[abi:cxx11](Nektar::RANSWallEvolutionPatch const&, std::shared_ptr<Nektar::LibUtilities::SessionReader> const&, double, bool, double, std::array<double, 2ul> const&, bool)':
+RANSEquilibriumWallEvolution.cpp:(.text._ZN6Nektar24RANSWallPhysicsSignatureB5cxx11ERKNS_22RANSWallEvolutionPatchERKSt10shared_ptrINS_12LibUtilities13SessionReaderEEdbdRKSt5arrayIdLm2EEb[_ZN6Nektar24RANSWallPhysicsSignatureB5cxx11ERKNS_22RANSWallEvolutionPatchERKSt10shared_ptrINS_12LibUtilities13SessionReaderEEdbdRKSt5arrayIdLm2EEb]+0xa99): undefined reference to `Nektar::SolverUtils::RANSWallNormalMap::Identity() const'
+collect2: error: ld returned 1 exit status
+gmake[3]: *** [CMakeFiles/IncNavierStokesSolver.dir/build.make:1178: IncNavierStokesSolver] Error 1
+gmake[2]: *** [CMakeFiles/Makefile2:304: CMakeFiles/IncNavierStokesSolver.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:311: CMakeFiles/IncNavierStokesSolver.dir/rule] Error 2
+gmake: *** [Makefile:215: IncNavierStokesSolver] Error 2
+Traceback (most recent call last):
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/h27/build.py", line 46, in <module>
+    if __name__=='__main__':main()
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/h27/build.py", line 24, in main
+    subprocess.run(command,check=True)
+  File "/usr/lib/python3.10/subprocess.py", line 526, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['cmake', '--build', '/home/jay/build/wj-h27-coupling-r1-20261117/build-v3', '--target', 'WJH27ReferenceProbe', 'WJH27AdmissibilityProbe', 'WJH27CoupledMMSProbe', 'IncNavierStokesSolver', '--parallel', '4']' returned non-zero exit status 2.

@@ -1,0 +1,68 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/steady-unit-v1/steady_krylov_check.py",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/steady-unit-native-v1.json",
+    "--output",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/steady-unit-independent-v1.json"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T12:37:23.947063+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 480662,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/steady-unit-controller-v1.py"
+      },
+      {
+        "pid": 480689,
+        "parent": 480662,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label steady-unit-independent-v1 --phase analysis --seconds 30 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/steady-unit-v1/steady_krylov_check.py /home/jay/build/wj-h27-coupling-r1-20261117/science/steady-unit-native-v1.json --output /home/jay/build/wj-h27-coupling-r1-20261117/science/steady-unit-independent-v1.json"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/steady-unit-v1/steady_krylov_check.py",
+      "bytes": 17813,
+      "sha256": "e74f6d5565c412b94a6e16f2a9dda16e6f8039719a01a4145978a76cc2128a23"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/steady-unit-native-v1.json",
+      "bytes": 102763,
+      "sha256": "4faf31502d2cf22be070fd05de49cb35284a4294016814353d5d0941645453c9"
+    }
+  ]
+}

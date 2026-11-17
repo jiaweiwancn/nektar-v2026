@@ -1,0 +1,113 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_oracle.py",
+    "--native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-steady.result.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/physical-steady-independent-v11.json",
+    "--seconds",
+    "600"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 630.0,
+  "utc": "2026-11-17T15:28:56.249184+00:00",
+  "allocation": {
+    "workers": 14,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 486725,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v11b.py"
+      },
+      {
+        "pid": 486959,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/mms-v3-controller-v11.py"
+      },
+      {
+        "pid": 487006,
+        "parent": 486959,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label mms-v3-dt02-native-v11 --phase science --seconds 120 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/dt02.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/dt02.xml"
+      },
+      {
+        "pid": 487008,
+        "parent": 487006,
+        "threads": 3,
+        "args": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2 --library-path /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc:/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/geometry:/home/jay/.local/opt/nektar-v2026-mpi/lib64 /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver.elf --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/dt02.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/dt02.xml"
+      },
+      {
+        "pid": 487010,
+        "parent": 487008,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 487032,
+        "parent": 486725,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label physical-steady-independent-v11 --phase analysis --seconds 630 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_oracle.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-steady.result.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/physical-steady-independent-v11.json --seconds 600"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_oracle.py",
+      "bytes": 65573,
+      "sha256": "83ba96a2238c529f755419a216617a6b199bd5fe2ef583414cb60acfed56ec84"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-steady.result.json",
+      "bytes": 6285071,
+      "sha256": "bef169409494cf5701fd5a781980bd357b2b3710d050f09b13c78551e40328b1"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 22.514866654004436,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 198209536,
+  "peak_host_workers": 15,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/physical-steady-independent-v11/command.log",
+    "bytes": 370,
+    "sha256": "a2ec9bcc8b2cfd65e9cb3b6e664fa2ba0b683ed55390375b74230735c1ea8b40"
+  }
+}

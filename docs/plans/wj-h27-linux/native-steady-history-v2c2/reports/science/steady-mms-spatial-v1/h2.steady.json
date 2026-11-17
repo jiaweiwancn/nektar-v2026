@@ -1,0 +1,159 @@
+{
+  "algorithm": "WJH27SteadyJFNKV1",
+  "status": "CONVERGED",
+  "reason": "current true steady residual meets caller acceptance norm",
+  "converged": true,
+  "has_evaluated_state": true,
+  "true_norm": 2.0908736225170663e-15,
+  "last_accepted_norm": 2.0908736225170663e-15,
+  "preconditioner_mass_only": 0,
+  "physical_time_advanced": 0,
+  "residual_evaluations": 102,
+  "validity_evaluations": 102,
+  "nonlinear_validation_enabled": true,
+  "nonlinear_validation_evaluations": 10,
+  "nonlinear_validation_rejected_trials": 0,
+  "nonlinear_validation_seconds": 0.7872029939999999,
+  "preconditioner_applications": 37,
+  "preconditioner_preparations": 5,
+  "jacobian_actions": 46,
+  "fd_rejected_trials": 0,
+  "line_search_rejected_trials": 0,
+  "linear_iterations": 37,
+  "accepted_newton_steps": 5,
+  "total_seconds": 1.958755292,
+  "callback_seconds": {
+    "residual": 0.9293733359999999,
+    "validity": 0.132025474,
+    "norm": 0.00029066499999999996,
+    "precondition": 0.007426686000000001,
+    "prepare": 0.101772628,
+    "arnoldi": 7.3765e-05
+  },
+  "newton": [
+    {
+      "iteration": 0,
+      "base_norm": 0.002555116132031797,
+      "forcing": 0.3,
+      "linear_true_norm": 0.00039965617151999734,
+      "linear_converged": true,
+      "accepted": true,
+      "accepted_norm": 0.0003992350243370034,
+      "accepted_step": 1
+    },
+    {
+      "iteration": 1,
+      "base_norm": 0.0003992350243370034,
+      "forcing": 0.05558652117727723,
+      "linear_true_norm": 6.966595172045937e-06,
+      "linear_converged": true,
+      "accepted": true,
+      "accepted_norm": 6.961201332430726e-06,
+      "accepted_step": 1
+    },
+    {
+      "iteration": 2,
+      "base_norm": 6.961201332430726e-06,
+      "forcing": 0.0020721722330419834,
+      "linear_true_norm": 1.115689584615593e-08,
+      "linear_converged": true,
+      "accepted": true,
+      "accepted_norm": 1.1165754996758268e-08,
+      "accepted_step": 1
+    },
+    {
+      "iteration": 3,
+      "base_norm": 1.1165754996758268e-08,
+      "forcing": 0.001,
+      "linear_true_norm": 7.532860809086399e-12,
+      "linear_converged": true,
+      "accepted": true,
+      "accepted_norm": 7.532810341202723e-12,
+      "accepted_step": 1
+    },
+    {
+      "iteration": 4,
+      "base_norm": 7.532810341202723e-12,
+      "forcing": 0.001,
+      "linear_true_norm": 1.6992067207745694e-15,
+      "linear_converged": true,
+      "accepted": true,
+      "accepted_norm": 2.0908736225170663e-15,
+      "accepted_step": 1
+    }
+  ],
+  "line_search": [
+    {
+      "newton": 0,
+      "trial": 0,
+      "step": 1,
+      "nonlinear_validation_attempted": true,
+      "nonlinear_validated": true,
+      "admissible": true,
+      "evaluated": true,
+      "true_norm": 0.0003992350243370034,
+      "accepted": true,
+      "sufficient_decrease": true,
+      "reason": ""
+    },
+    {
+      "newton": 1,
+      "trial": 0,
+      "step": 1,
+      "nonlinear_validation_attempted": true,
+      "nonlinear_validated": true,
+      "admissible": true,
+      "evaluated": true,
+      "true_norm": 6.961201332430726e-06,
+      "accepted": true,
+      "sufficient_decrease": true,
+      "reason": ""
+    },
+    {
+      "newton": 2,
+      "trial": 0,
+      "step": 1,
+      "nonlinear_validation_attempted": true,
+      "nonlinear_validated": true,
+      "admissible": true,
+      "evaluated": true,
+      "true_norm": 1.1165754996758268e-08,
+      "accepted": true,
+      "sufficient_decrease": true,
+      "reason": ""
+    },
+    {
+      "newton": 3,
+      "trial": 0,
+      "step": 1,
+      "nonlinear_validation_attempted": true,
+      "nonlinear_validated": true,
+      "admissible": true,
+      "evaluated": true,
+      "true_norm": 7.532810341202723e-12,
+      "accepted": true,
+      "sufficient_decrease": true,
+      "reason": ""
+    },
+    {
+      "newton": 4,
+      "trial": 0,
+      "step": 1,
+      "nonlinear_validation_attempted": true,
+      "nonlinear_validated": true,
+      "admissible": true,
+      "evaluated": true,
+      "true_norm": 2.0908736225170663e-15,
+      "accepted": true,
+      "sufficient_decrease": true,
+      "reason": ""
+    }
+  ],
+  "best_from_accepted_iterate": true,
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/steady-mms-spatial-v1/h2.steady.json",
+    "bytes": 49126,
+    "sha256": "b0c8ff5e63b3138f57072e5c529c3dcdbd9bec758e3dcaad733e513a8c9ba169"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

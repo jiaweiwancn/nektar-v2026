@@ -1,0 +1,107 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/inspect-retained-700-v1.py"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T09:51:58.303151+00:00",
+  "allocation": {
+    "workers": 11,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 476843,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v5.py"
+      },
+      {
+        "pid": 476849,
+        "parent": 476843,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label coupled-build-v5 --phase build --seconds 600 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/h27/build.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --version 5 --targets IncNavierStokesSolver,WJH27ReferenceProbe,WJH27MixedProbe,WJH27ScalarProbe"
+      },
+      {
+        "pid": 476851,
+        "parent": 476849,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/h27/build.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --version 5 --targets IncNavierStokesSolver,WJH27ReferenceProbe,WJH27MixedProbe,WJH27ScalarProbe"
+      },
+      {
+        "pid": 476877,
+        "parent": 476851,
+        "threads": 1,
+        "args": "cmake --build /home/jay/build/wj-h27-coupling-r1-20261117/build-v5 --target IncNavierStokesSolver WJH27ReferenceProbe WJH27MixedProbe WJH27ScalarProbe --parallel 4"
+      },
+      {
+        "pid": 477556,
+        "parent": 477064,
+        "threads": 1,
+        "args": "/usr/bin/c++ -DENABLE_NEKTAR_EXCEPTIONS -DNEKTAR_MEMORY_POOL_ENABLED -DNEKTAR_MPI_TYPE=0 -DNEKTAR_USE_MPI -DNEKTAR_USE_SCOTCH -DTIXML_USE_STL -DWJ_H27_SOURCE_ID=\"eaff92f583a24256ee365a1713489bdbf73bb0642180786c07928b2b61494a3e\" -I/home/jay/build/wj-h27-coupling-r1-20261117/source-v5/library -I/home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/h27/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /usr/include/scotch -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include -isystem /usr/include/eigen3 -ffp-contract=off -fno-fast-math -O3 -DNDEBUG -DNEKTAR_USE_MPI -pthread -O3 -ffp-contract=off -fno-fast-math -Wno-sign-compare -std=gnu++17 -MD -MT CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers/IncNavierStokesSolver/BoundaryConditions/MovingFrameWall.cpp.o -MF CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers/IncNavierStokesSolver/BoundaryConditions/MovingFrameWall.cpp.o.d -o CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers/IncNavierStokesSolver/BoundaryConditions/MovingFrameWall.cpp.o -c /home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers/IncNavierStokesSolver/BoundaryConditions/MovingFrameWall.cpp"
+      },
+      {
+        "pid": 477557,
+        "parent": 477556,
+        "threads": 1,
+        "args": "/usr/lib/gcc/x86_64-linux-gnu/11/cc1plus -quiet -I /home/jay/build/wj-h27-coupling-r1-20261117/source-v5/library -I /home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers -imultiarch x86_64-linux-gnu -MD CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers/IncNavierStokesSolver/BoundaryConditions/MovingFrameWall.cpp.d -MF CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers/IncNavierStokesSolver/BoundaryConditions/MovingFrameWall.cpp.o.d -MT CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers/IncNavierStokesSolver/BoundaryConditions/MovingFrameWall.cpp.o -D_GNU_SOURCE -D_REENTRANT -D ENABLE_NEKTAR_EXCEPTIONS -D NEKTAR_MEMORY_POOL_ENABLED -D NEKTAR_MPI_TYPE=0 -D NEKTAR_USE_MPI -D NEKTAR_USE_SCOTCH -D TIXML_USE_STL -D WJ_H27_SOURCE_ID=\"eaff92f583a24256ee365a1713489bdbf73bb0642180786c07928b2b61494a3e\" -D NDEBUG -D NEKTAR_USE_MPI -isystem /home/jay/.local/opt/nektar-v2026-mpi/include/nektar++ -isystem /home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/h27/include/nektar++ -isystem /usr/lib/x86_64-linux-gnu/openmpi/include -isystem /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi -isystem /usr/include/scotch -isystem /media/jay/\u65b0\u52a0\u5377/nektar-v2026-runs/hit-inflow/milestone-4/dependencies/fftw3-dev/usr/include -isystem /usr/include/eigen3 /home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers/IncNavierStokesSolver/BoundaryConditions/MovingFrameWall.cpp -quiet -dumpdir CMakeFiles/IncNavierStokesSolver.dir/home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers/IncNavierStokesSolver/BoundaryConditions/ -dumpbase MovingFrameWall.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -O3 -O3 -Wno-sign-compare -std=gnu++17 -ffp-contract=off -ffp-contract=off -fno-fast-math -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -fcf-protection -o /home/jay/build/wj-h27-coupling-r1-20261117/tmp/ccIJ3s5b.s"
+      },
+      {
+        "pid": 477568,
+        "parent": 474930,
+        "threads": 1,
+        "args": "python3 -c from pathlib import Path import subprocess r=Path(\"/home/jay/build/wj-h27-coupling-r1-20261117\") s=r/\"inputs/inspect-retained-700-v1.py\" s.write_text('''from pathlib import Path import hashlib,json,xml.etree.ElementTree as E p=Path(\"/home/jay/build/wj-h26-native-flow-20261117/science/profile-v3/case.xml\") data=p.read_bytes();root=E.fromstring(data);vertices=[tuple(map(float,v.text.split()))for v in root.find(\"GEOMETRY/VERTEX\")] x=sorted(set(v[0]for v in vertices));r=sorted(set(v[1]-.0875 for v in vertices)) print(json.dumps(dict(path=str(p),sha256=hashlib.sha256(data).hexdigest(),cells=len(root.find(\"GEOMETRY/ELEMENT\")),x=x,r=r),indent=2)) ''') command=[\"python3\",\"-B\",str(r/\"tools/run.py\"),\"--root\",str(r),\"--label\",\"inspect-retained-700-v1\",\"--phase\",\"analysis\",\"--seconds\",\"30\",\"--\",\"python3\",\"-B\",str(s)] subprocess.run(command,check=True);print((r/\"operations/inspect-retained-700-v1/command.log\").read_text())"
+      },
+      {
+        "pid": 477569,
+        "parent": 477568,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label inspect-retained-700-v1 --phase analysis --seconds 30 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/inspect-retained-700-v1.py"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/inspect-retained-700-v1.py",
+      "bytes": 495,
+      "sha256": "175a706fbf70f53f9cee85c391dcd69b149452ce3647ff8d6d4d336d0bb35c7f"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 0.9017304390436038,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 565248,
+  "peak_host_workers": 11,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/inspect-retained-700-v1/command.log",
+    "bytes": 1532,
+    "sha256": "523159f81b9dffd6643328ced6e9b10432601ccc0adf67ef78a9879560a1461d"
+  }
+}

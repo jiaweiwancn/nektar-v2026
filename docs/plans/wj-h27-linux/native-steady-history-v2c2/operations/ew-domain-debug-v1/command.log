@@ -1,0 +1,35 @@
+Breakpoint 1 at 0x5e9540
+
+[36mWarning : [0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	     WJ coupled path: WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon
+	         Wall tensor: FiniteNuIsotropicWallFullWJCollarV2
+	         Integration: current coupled BDF2/EX2, BE startup, no clipping
+	      Pressure gauge: native restricted mean
+=======================================================================
+WJ-H27 initialisation: H27 reference: dependent wall epsilon requested outside inner domain
+terminate called after throwing an instance of 'std::invalid_argument'
+  what():  H27 reference: dependent wall epsilon requested outside inner domain
+[jay-Super-Server:477936] *** Process received signal ***
+[jay-Super-Server:477936] Signal: Aborted (6)
+[jay-Super-Server:477936] Signal code:  (-6)
+[jay-Super-Server:477936] [ 0] /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/libc.so.6(+0x42520)[0x7ffff4642520]
+[jay-Super-Server:477936] [ 1] /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/libc.so.6(pthread_kill+0x12c)[0x7ffff46969bc]
+[jay-Super-Server:477936] [ 2] /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/libc.so.6(raise+0x16)[0x7ffff4642476]
+[jay-Super-Server:477936] [ 3] /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/libc.so.6(abort+0xd3)[0x7ffff46287f3]
+[jay-Super-Server:477936] [ 4] /lib/x86_64-linux-gnu/libstdc++.so.6(+0xa2b9e)[0x7ffff4aa2b9e]
+[jay-Super-Server:477936] [ 5] /lib/x86_64-linux-gnu/libstdc++.so.6(+0xae20c)[0x7ffff4aae20c]
+[jay-Super-Server:477936] [ 6] /lib/x86_64-linux-gnu/libstdc++.so.6(+0xae277)[0x7ffff4aae277]
+[jay-Super-Server:477936] [ 7] /lib/x86_64-linux-gnu/libstdc++.so.6(__cxa_rethrow+0x4b)[0x7ffff4aae52b]
+[jay-Super-Server:477936] [ 8] /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v5/IncNavierStokesSolver.elf(+0x70e19)[0x7ffff7670e19]
+[jay-Super-Server:477936] [ 9] /home/jay/.local/opt/nektar-v2026-mpi/lib64/libSolverUtils.so.5.9.0(_ZN6Nektar11SolverUtils14DriverStandard9v_ExecuteERSo+0x2d2)[0x7ffff727a9b2]
+[jay-Super-Server:477936] [10] /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v5/IncNavierStokesSolver.elf(+0x114e45)[0x7ffff7714e45]
+[jay-Super-Server:477936] [11] /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/libc.so.6(+0x29d90)[0x7ffff4629d90]
+[jay-Super-Server:477936] [12] /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/libc.so.6(__libc_start_main+0x80)[0x7ffff4629e40]
+[jay-Super-Server:477936] [13] /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v5/IncNavierStokesSolver.elf(+0x18fea5)[0x7ffff778fea5]
+[jay-Super-Server:477936] *** End of error message ***
+/home/jay/build/wj-h27-coupling-r1-20261117/inputs/ew-domain-v1.gdb:12: Error in sourced command file:
+During startup program terminated with signal SIGABRT, Aborted.

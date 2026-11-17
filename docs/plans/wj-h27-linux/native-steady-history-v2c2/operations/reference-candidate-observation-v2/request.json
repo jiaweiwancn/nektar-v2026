@@ -1,0 +1,60 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/reference-candidate-observation-v2.py"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 60.0,
+  "utc": "2026-11-17T15:03:08.243493+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 485879,
+        "parent": 484265,
+        "threads": 1,
+        "args": "python3 -c from pathlib import Path import subprocess r=Path('/home/jay/build/wj-h27-coupling-r1-20261117') s=(r/'inputs/reference-candidate-observation-v1.py').read_text().replace(\"coupled-fixtures-v9/physical-steady.steady-candidate.json\",\"coupled-fixtures-v10/physical-steady.steady-candidate.json\").replace(\"ref.inlet(np.array([rr]))[1][0]\",\"ref.inlet(np.array([rr]))['k'][0]\").replace(\"reference-candidate-observation-v1.json\",\"reference-candidate-observation-v2.json\") p=r/'inputs/reference-candidate-observation-v2.py' with p.open('x')as f:f.write(s) code=subprocess.call(['python3','-B',str(r/'tools/run.py'),'--root',str(r),'--label','reference-candidate-observation-v2','--phase','analysis','--seconds','60','--','python3','-B',str(p)]) log=r/'operations/reference-candidate-observation-v2/command.log';print(log.read_text()[-4000:]);raise SystemExit(code)"
+      },
+      {
+        "pid": 485880,
+        "parent": 485879,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label reference-candidate-observation-v2 --phase analysis --seconds 60 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/reference-candidate-observation-v2.py"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/reference-candidate-observation-v2.py",
+      "bytes": 1552,
+      "sha256": "2194fa7e180c322a5fc4f6d009cbb149d45d342d5276e3e132e2e8d105a78219"
+    }
+  ]
+}

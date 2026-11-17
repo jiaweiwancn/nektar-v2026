@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v2/h27/boundary_split_audit.py", line 273, in <module>
+    main()
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v2/h27/boundary_split_audit.py", line 267, in main
+    raise failure
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v2/h27/boundary_split_audit.py", line 259, in main
+    audit(args, report, started+args.seconds)
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v2/h27/boundary_split_audit.py", line 189, in audit
+    b = BoundaryAudit(data, table, deadline)
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v2/h27/boundary_split_audit.py", line 43, in __init__
+    self.m = coupled_mms_check.IndependentMMS(table, data.get('mms_body_amplitude', 0.))
+TypeError: IndependentMMS.__init__() takes 2 positional arguments but 3 were given

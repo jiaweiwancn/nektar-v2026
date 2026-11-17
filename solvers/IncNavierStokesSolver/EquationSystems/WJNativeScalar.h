@@ -64,6 +64,12 @@ public:
                   const Vec &lift) const;
     Sparse Diffusion(const Rules &rules, const std::vector<Vec> &diffusion,
                      const std::vector<Vec> &reaction = {}) const;
+    /** Full-row current diffusion/reaction action with this scalar's signed
+     * assembly map. It equals Diffusion(rules,D,reaction)*state without
+     * constructing the sparse matrix; essential reactions are retained. */
+    Vec DiffusionAction(const Rules &rules, const std::vector<Vec> &diffusion,
+                        const Vec &state,
+                        const std::vector<Vec> &reaction = {}) const;
     Vec Source(const Rules &rules, const std::vector<Vec> &source) const;
     /** Full-row conservative LHS load: -int grad(phi).U q + int_boundary phi Un q.
      * Velocity uses canonical [u,v] coefficients (an optional p tail is ignored).

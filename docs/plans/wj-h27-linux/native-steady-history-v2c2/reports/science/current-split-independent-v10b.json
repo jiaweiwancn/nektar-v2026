@@ -1,0 +1,26 @@
+{
+  "schema": "WJH27CurrentSplitComparisonV1",
+  "status": "FAIL",
+  "inputs": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/physical-old-b.result.json",
+      "sha256": "259a819432cddd75641b90bb47bd58d7ac078212676d43ec93e8d37f228bccc6"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/physical-shear.result.json",
+      "sha256": "a656206045583dbb3b734272844c68d03e2cf0b0858a80098e03d310448a69f6"
+    }
+  ],
+  "helper": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/current_split_check.py",
+    "sha256": "f5490aeb3f7dbaae757f7610e622fe7e50f2af10d06af7e0e48f22b41e5d890b"
+  },
+  "reason": "{'U': 1.872903415745954e-10, 'Pi': 2.8879065152048384e-08, 'k': 2.3514758820560872e-11, 'epsilon': 2.6602857660605405e-12}",
+  "exception": "AssertionError",
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/current-split-independent-v10b.json",
+    "bytes": 921,
+    "sha256": "c36a1e2b35cca2e536c826e6fc2cb303f3c76e2fb4181d119315f852617f8f53"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

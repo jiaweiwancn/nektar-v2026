@@ -1,0 +1,139 @@
+{
+  "schema": "WJH27CoupledFailureV1",
+  "status": "FAILED_WITH_ACCEPTED_HISTORY_PRESERVED",
+  "reason": "bounded native steady reference solve did not converge; original history preserved",
+  "exception_type": "std::runtime_error",
+  "elapsed_solve_seconds": 116.36128451902186,
+  "accepted_state_residual_kind": "steady diagnostic of fresh initial state",
+  "failed_attempt": {
+    "nonlinear_iterations": 0,
+    "seconds": 0,
+    "retries": 0,
+    "residuals": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "acceleration_proposals": 0,
+    "acceleration_accepted": 0,
+    "nonlinear_trace": []
+  },
+  "state": {
+    "schema": "WJH27NativeCoupledStateV2",
+    "model": "FiniteNuIsotropicWallFullWJCollarV2",
+    "signature": "1c6f5ff2eba04c85de0c028c3e7b084546c21f5ffd89f5c25be54078a97dd541",
+    "source_identity": "46b263b364d700ece0fb0e5105a428fec24f11b3cfb841c78a2f532d9c376305",
+    "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+    "manufactured": false,
+    "step": 0,
+    "time": 0,
+    "dt": 0.05,
+    "state_sha256": "9e2517ffc6f890b9d7dec131b6c94013b5f72e5128666e96c2ae564e5bbd91de",
+    "previous_sha256": "9e2517ffc6f890b9d7dec131b6c94013b5f72e5128666e96c2ae564e5bbd91de",
+    "advection_sha256": "79f670d15310daaa6a4cbf4dd5939598494385d44bedb5ed51ee4e08bd66a915",
+    "previous_advection_sha256": "79f670d15310daaa6a4cbf4dd5939598494385d44bedb5ed51ee4e08bd66a915",
+    "sizes": [
+      6493,
+      2929,
+      6493,
+      4429
+    ],
+    "gauge": false,
+    "nonlinear_iterations": 0,
+    "linear_iterations": [
+      0,
+      0,
+      0
+    ],
+    "rebuilds": 0,
+    "retries": 0,
+    "seconds": 1.8031112930038944,
+    "coefficient_drift": 0,
+    "residuals": [
+      0.0003224235445069548,
+      4.7251982211090184e-11,
+      0,
+      0.003037822745188795,
+      0.0011580444778390945,
+      0
+    ],
+    "minimum_k": 0.00878983893837017,
+    "minimum_epsilon": 1.7442742409033924e-05,
+    "minimum_covariance_over_k": 0.2804917200647538,
+    "minimum_principal_over_mu": 0.004009277860909312,
+    "disjoint_seconds": {
+      "constitutive": 0.037300508993212134,
+      "wall": 0.0030855750082992017,
+      "assembly": 0.04636447585653514,
+      "flow": 0,
+      "scalar": 0,
+      "rebuild": 0,
+      "guards": 1.6884225821704604,
+      "forcing": 0,
+      "residual": 0.014373686979524791,
+      "nonlinear": 0,
+      "io": 0,
+      "other": 0.013564463995862752
+    },
+    "quadratureX": 8,
+    "quadratureR": 12,
+    "linear_tolerance": 1e-12,
+    "nonlinear_tolerance": 1e-10,
+    "maximum_iterations": 60,
+    "mms_body_amplitude": 0,
+    "retry_reason": "",
+    "mms_variant": "Historical",
+    "stress_split": "PositiveShearV1",
+    "all_row_action_crosschecks": false,
+    "current_action_checks": {
+      "all_row_calls": 0,
+      "maximum_scaled_differences_flow_k_epsilon": [
+        0,
+        0,
+        0
+      ],
+      "augmented_calls": 0,
+      "maximum_augmented_scaled_difference": 0,
+      "maximum_weak_divergence_load_norm": 0,
+      "maximum_gauge_multiplier": 0
+    },
+    "basis": "Modified_A",
+    "anderson_depth": 0,
+    "acceleration": {
+      "proposals": 0,
+      "accepted": 0,
+      "inadmissible_trials": 0
+    },
+    "initial_field_transfer": {
+      "packet_sha256": "6e961404b560e0e51b87cbcc94fb2d13d5e24277da804b8fdbe341b34d81af95",
+      "source_state_sha256": "9e2517ffc6f890b9d7dec131b6c94013b5f72e5128666e96c2ae564e5bbd91de",
+      "projected": false,
+      "source_was_candidate": true
+    },
+    "constitutive_backend": "FastFull3DV1",
+    "constitutive_calls": {
+      "values": 0,
+      "directions": 0,
+      "fallbacks": 0,
+      "root_iterations": 0,
+      "maximum_normalized_root_residual": 0
+    },
+    "geometry": {
+      "d0": 0.0875,
+      "H": 0.15,
+      "h": 0.10854503542535461,
+      "left": -10.000000000000002,
+      "right": 15,
+      "top": 19.912500000000005
+    }
+  },
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/physical-steady.failure.json",
+    "bytes": 4698073,
+    "sha256": "dbf65ae4a50f5ece8e57557af416d6616c142160a08c76ed04a9e4706450f416"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

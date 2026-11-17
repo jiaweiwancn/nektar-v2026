@@ -39,6 +39,8 @@ void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mas
        <<",\"has_evaluated_state\":"<<(r.hasEvaluatedState?"true":"false")<<",\"true_norm\":"<<r.trueNorm
        <<",\"last_accepted_norm\":"<<r.lastAcceptedNorm<<",\"preconditioner_mass_only\":"<<mass
        <<",\"physical_time_advanced\":0,\"residual_evaluations\":"<<s.residualEvaluations<<",\"validity_evaluations\":"<<s.validityEvaluations
+       <<",\"nonlinear_validation_enabled\":"<<(r.nonlinearValidationEnabled?"true":"false")<<",\"nonlinear_validation_evaluations\":"<<s.nonlinearValidationEvaluations<<",\"nonlinear_validation_rejected_trials\":"<<s.nonlinearValidationRejectedTrials
+       <<",\"nonlinear_validation_seconds\":"<<s.nonlinearValidationSeconds
        <<",\"preconditioner_applications\":"<<s.preconditionerApplications<<",\"preconditioner_preparations\":"<<s.preconditionerPreparations
        <<",\"jacobian_actions\":"<<s.jacobianActions<<",\"fd_rejected_trials\":"<<s.fdRejectedTrials
        <<",\"line_search_rejected_trials\":"<<s.lineSearchRejectedTrials<<",\"linear_iterations\":"<<s.linearIterations
@@ -49,12 +51,14 @@ void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mas
         <<",\"forcing\":"<<n.forcing<<",\"linear_true_norm\":"<<n.linearTrueNorm<<",\"linear_converged\":"<<(n.linearConverged?"true":"false")
         <<",\"accepted\":"<<(n.accepted?"true":"false")<<",\"accepted_norm\":"<<n.acceptedNorm<<",\"accepted_step\":"<<n.acceptedStep<<'}';}
     out<<"],\"line_search\":[";for(int i=0;i<int(r.lineSearch.size());++i){const auto&l=r.lineSearch[i];if(i)out<<',';out<<"{\"newton\":"<<l.newton<<",\"trial\":"<<l.trial<<",\"step\":"<<l.step
+        <<",\"nonlinear_validation_attempted\":"<<(l.nonlinearValidationAttempted?"true":"false")<<",\"nonlinear_validated\":"<<(l.nonlinearValidated?"true":"false")
         <<",\"admissible\":"<<(l.admissible?"true":"false")<<",\"evaluated\":"<<(l.evaluated?"true":"false")<<",\"true_norm\":"<<l.trueNorm
         <<",\"accepted\":"<<(l.accepted?"true":"false")<<",\"sufficient_decrease\":"<<(l.sufficientDecrease?"true":"false")<<",\"reason\":"<<J::Quote(l.reason)<<'}';}
     out<<"],\"best_from_accepted_iterate\":"<<(r.bestFromAcceptedIterate?"true":"false")<<",\"best_unknowns\":";VecJSON(out,r.x);out<<",\"best_raw_residual\":";VecJSON(out,r.residual);
     out<<",\"finite_differences\":[";for(int i=0;i<int(r.finiteDifferences.size());++i){const auto&f=r.finiteDifferences[i];if(i)out<<',';
         out<<"{\"newton\":"<<f.newton<<",\"cycle\":"<<f.cycle<<",\"iteration\":"<<f.iteration<<",\"reduction\":"<<f.reduction<<",\"purpose\":"<<J::Quote(f.purpose)<<",\"method\":"<<J::Quote(f.method)
            <<",\"relative_step\":"<<f.relativeStep<<",\"parameter_step\":"<<f.parameterStep<<",\"scaled_coordinate_step\":"<<f.scaledCoordinateStep<<",\"scaled_direction_infinity_norm\":"<<f.scaledDirectionInfinityNorm
+           <<",\"nonlinear_validation_enabled\":"<<(r.nonlinearValidationEnabled?"true":"false")<<",\"admissibility_scope\":\"domain/root/covariance; uncommitted derivative probes\""
            <<",\"plus_admissible\":"<<(f.plusAdmissible?"true":"false")<<",\"minus_admissible\":"<<(f.minusAdmissible?"true":"false")<<",\"half_admissible\":"<<(f.halfAdmissible?"true":"false")
            <<",\"plus_reason\":"<<J::Quote(f.plusReason)<<",\"minus_reason\":"<<J::Quote(f.minusReason)<<",\"half_reason\":"<<J::Quote(f.halfReason)<<",\"seconds\":"<<f.seconds<<'}';}
     out<<"],\"linear_checks\":[";for(int i=0;i<int(r.linear.size());++i){const auto&l=r.linear[i];if(i)out<<',';
@@ -81,6 +85,9 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     std::string backend;m_session->LoadSolverInfo("WJConstitutiveBackend",backend,"Historical");Check(backend=="Historical"||backend=="FastFull3DV1","unknown WJ constitutive backend");options.backend=backend=="Historical"?WJNative::ConstitutiveBackend::Historical:WJNative::ConstitutiveBackend::FastFull3DV1;
     m_session->LoadParameter("WJLinearTolerance",options.linearTolerance,1e-12);m_session->LoadParameter("WJCoupledTolerance",options.nonlinearTolerance,1e-10);m_session->LoadParameter("WJMaximumIterations",options.maximumIterations,60);
     m_session->LoadParameter("WJQuadratureX",options.quadratureX,8);m_session->LoadParameter("WJQuadratureR",options.quadratureR,12);
+    m_session->LoadSolverInfo("WJStressSplit",options.stressSplit,"PositiveShearV1");
+    m_session->LoadSolverInfo("WJSteadyVelocityPC",options.steadyVelocityPC,"FullGradientV1");
+    std::string currentActions;m_session->LoadSolverInfo("WJCheckCurrentActions",currentActions,"False");Check(currentActions=="True"||currentActions=="False","invalid current action check switch");options.checkCurrentActions=currentActions=="True";
     m_session->LoadParameter("WJAndersonDepth",options.andersonDepth,0);std::string trace;m_session->LoadSolverInfo("WJNonlinearTrace",trace,"False");Check(trace=="True"||trace=="False","WJNonlinearTrace must be True/False");options.recordNonlinearTrace=trace=="True";
     m_session->LoadParameter("WJMMSBodyAmplitude",options.mmsBodyAmplitude,0.);
     m_session->LoadSolverInfo("WJMMSVariant",options.mmsVariant,"Historical");

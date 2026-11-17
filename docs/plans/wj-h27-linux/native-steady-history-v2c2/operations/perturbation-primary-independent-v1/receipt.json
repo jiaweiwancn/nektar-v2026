@@ -1,0 +1,96 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_check.py",
+    "--native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v1/primary-native.json",
+    "--certificate",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v1/primary-certificate.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v1/primary-independent.json",
+    "--seconds",
+    "160"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 180.0,
+  "utc": "2026-11-17T14:57:51.296021+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 485788,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/perturbation-foundation-v1.py"
+      },
+      {
+        "pid": 485823,
+        "parent": 485788,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label perturbation-primary-independent-v1 --phase analysis --seconds 180 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_check.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v1/primary-native.json --certificate /home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v1/primary-certificate.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v1/primary-independent.json --seconds 160"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_check.py",
+      "bytes": 26519,
+      "sha256": "a38d673018691fc27161826a6a464c50b9ee9a5eaf91da0c68b21c7b2913055e"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v1/primary-native.json",
+      "bytes": 748451,
+      "sha256": "76cefc85436b9dbacdc3cc60f112ecb08d1988ff8cbe93d00ea96367eb837cc3"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v1/primary-certificate.json",
+      "bytes": 10463,
+      "sha256": "2bd77e9762a7d7aac596cf3389eb903fe8e62f9525d64ce4f3b6b4a6e88b9bb8"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 39.13069658103632,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 111136768,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/perturbation-primary-independent-v1/command.log",
+    "bytes": 122,
+    "sha256": "c7171184541ec4826c291d536ee5d0b8ed4e97cdc80a8193f9dc1e3e7da30e21"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver",
+    "--use-opt-file",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/retry.xml.opt",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/retry.xml"
+  ],
+  "phase": "science",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T15:53:26.715815+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 488213,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/history-foundation-v1.py"
+      },
+      {
+        "pid": 488241,
+        "parent": 488213,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label history-retry-native-v1 --phase science --seconds 30 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/retry.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/retry.xml"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver",
+      "bytes": 380,
+      "sha256": "65c262a35d19df3e0d83caab0058098b7bebccb308a9171c379c19431069391e"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/retry.xml.opt",
+      "bytes": 55,
+      "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/retry.xml",
+      "bytes": 5725,
+      "sha256": "7d58e64a723783e8584e2d1635e05fff544c275eefa9d45330f60e1b88632afe"
+    }
+  ]
+}

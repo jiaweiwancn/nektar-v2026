@@ -1,0 +1,82 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/scalar_oracle.py",
+    "--native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/scalar-full-native.json",
+    "--case",
+    "full",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/scalar-full-independent.json"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T14:48:05.185497+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 484269,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v10.py"
+      },
+      {
+        "pid": 485213,
+        "parent": 484269,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label scalar-full-oracle-v10 --phase analysis --seconds 30 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/scalar_oracle.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/scalar-full-native.json --case full --out /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/scalar-full-independent.json"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/scalar_oracle.py",
+      "bytes": 25932,
+      "sha256": "660e64342e8af80e02775befc18c35ff080f909a341c2e005c6e232fc1e1ebdb"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/scalar-full-native.json",
+      "bytes": 185084,
+      "sha256": "9c8272669c4c99354f36f9a24998d44b51af53d9e76034c313d527c7ecfd7967"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 1.2568314759992063,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 528384,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/scalar-full-oracle-v10/command.log",
+    "bytes": 189,
+    "sha256": "a667d14f9058cdd0f15f9d4f5c5c5f5ae91200d2ff567cdc220681801d93c6b3"
+  }
+}

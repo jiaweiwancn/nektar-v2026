@@ -1,0 +1,52 @@
+{
+  "schema": "WJH27MMSStudyManifestV1",
+  "terminal_time": 0.02,
+  "runs": [
+    {
+      "label": "h2",
+      "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-spatial-v11-v4/h2.result.json",
+      "role": "control"
+    },
+    {
+      "label": "h4",
+      "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-spatial-v11-v4/h4.result.json",
+      "role": "control"
+    },
+    {
+      "label": "h8",
+      "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-spatial-v11-v4/h8.result.json",
+      "role": "control"
+    },
+    {
+      "label": "h8-halfdt",
+      "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-spatial-v11-v4/h8-halfdt.result.json",
+      "role": "control"
+    }
+  ],
+  "comparisons": [
+    {
+      "label": "h2-h4",
+      "coarse": "h2",
+      "fine": "h4",
+      "kind": "mesh"
+    },
+    {
+      "label": "h4-h8",
+      "coarse": "h4",
+      "fine": "h8",
+      "kind": "mesh"
+    },
+    {
+      "label": "time",
+      "coarse": "h8",
+      "fine": "h8-halfdt",
+      "kind": "time"
+    }
+  ],
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-spatial-v11-v4/manifest.json",
+    "bytes": 1078,
+    "sha256": "47a21acccd94d1d1733f8940900800ba0cb6cc29f4cdcdf451073d19ec66b933"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

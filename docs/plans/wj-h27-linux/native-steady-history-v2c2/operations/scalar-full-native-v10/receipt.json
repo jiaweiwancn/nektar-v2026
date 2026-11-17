@@ -1,0 +1,77 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/WJH27ScalarProbe",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/scalar-shifted.xml",
+    "full",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/scalar-full-native.json"
+  ],
+  "phase": "science",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T14:48:03.755661+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 484269,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v10.py"
+      },
+      {
+        "pid": 485200,
+        "parent": 484269,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label scalar-full-native-v10 --phase science --seconds 30 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/WJH27ScalarProbe /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/scalar-shifted.xml full /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/scalar-full-native.json"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/WJH27ScalarProbe",
+      "bytes": 375,
+      "sha256": "78d027c18a81f268ae74ac3284794f4d9d28cbc51f91db5772bf08da79c27bf0"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/scalar-shifted.xml",
+      "bytes": 4004,
+      "sha256": "094dc4a0e44d65c52a624d4a69cebba9f5f959cc2f9e536054cd510af00fbbbd"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 1.2491833239910193,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 409600,
+  "peak_host_workers": 7,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/scalar-full-native-v10/command.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

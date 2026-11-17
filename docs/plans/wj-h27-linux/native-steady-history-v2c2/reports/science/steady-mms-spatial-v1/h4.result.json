@@ -1,0 +1,269 @@
+{
+  "schema": "WJH27RegisteredCoupledRunV2",
+  "factory": "WJNativeCoupledV2",
+  "normal_main": true,
+  "qualification": "execution evidence; closure gates are assessed independently",
+  "construction_seconds": 0.08487962698563933,
+  "initialisation_seconds": 0.2145757320104167,
+  "restart": false,
+  "complete_advancing_seconds": 0,
+  "final_export_seconds": 0.014912087994161993,
+  "complete_step_seconds": [],
+  "recovery_seconds": [],
+  "rotated_recovery_count": 0,
+  "retained_recovery": [],
+  "steady_mode": true,
+  "steady_solver": {
+    "algorithm": "WJH27SteadyJFNKV1",
+    "status": "CONVERGED",
+    "reason": "current true steady residual meets caller acceptance norm",
+    "converged": true,
+    "has_evaluated_state": true,
+    "true_norm": 4.3429288624338776e-13,
+    "last_accepted_norm": 4.3429288624338776e-13,
+    "preconditioner_mass_only": 0,
+    "physical_time_advanced": 0,
+    "residual_evaluations": 78,
+    "validity_evaluations": 78,
+    "nonlinear_validation_enabled": true,
+    "nonlinear_validation_evaluations": 8,
+    "nonlinear_validation_rejected_trials": 0,
+    "nonlinear_validation_seconds": 1.635959866,
+    "preconditioner_applications": 28,
+    "preconditioner_preparations": 4,
+    "jacobian_actions": 35,
+    "fd_rejected_trials": 0,
+    "line_search_rejected_trials": 0,
+    "linear_iterations": 28,
+    "accepted_newton_steps": 4,
+    "total_seconds": 3.956459294,
+    "callback_seconds": {
+      "residual": 1.715928562,
+      "validity": 0.34804844100000004,
+      "norm": 0.0008483129999999997,
+      "precondition": 0.013769252000000003,
+      "prepare": 0.240510575,
+      "arnoldi": 0.00018081899999999995
+    },
+    "newton": [
+      {
+        "iteration": 0,
+        "base_norm": 0.0006454260950203009,
+        "forcing": 0.3,
+        "linear_true_norm": 6.481232469867199e-05,
+        "linear_converged": true,
+        "accepted": true,
+        "accepted_norm": 6.47892485408603e-05,
+        "accepted_step": 1
+      },
+      {
+        "iteration": 1,
+        "base_norm": 6.47892485408603e-05,
+        "forcing": 0.028623790412820718,
+        "linear_true_norm": 1.037442568241271e-06,
+        "linear_converged": true,
+        "accepted": true,
+        "accepted_norm": 1.0376219547601177e-06,
+        "accepted_step": 1
+      },
+      {
+        "iteration": 2,
+        "base_norm": 1.0376219547601177e-06,
+        "forcing": 0.0018240923571301187,
+        "linear_true_norm": 1.4772408427873918e-09,
+        "linear_converged": true,
+        "accepted": true,
+        "accepted_norm": 1.4773705357302665e-09,
+        "accepted_step": 1
+      },
+      {
+        "iteration": 3,
+        "base_norm": 1.4773705357302665e-09,
+        "forcing": 0.001,
+        "linear_true_norm": 4.34403920506372e-13,
+        "linear_converged": true,
+        "accepted": true,
+        "accepted_norm": 4.3429288624338776e-13,
+        "accepted_step": 1
+      }
+    ],
+    "line_search": [
+      {
+        "newton": 0,
+        "trial": 0,
+        "step": 1,
+        "nonlinear_validation_attempted": true,
+        "nonlinear_validated": true,
+        "admissible": true,
+        "evaluated": true,
+        "true_norm": 6.47892485408603e-05,
+        "accepted": true,
+        "sufficient_decrease": true,
+        "reason": ""
+      },
+      {
+        "newton": 1,
+        "trial": 0,
+        "step": 1,
+        "nonlinear_validation_attempted": true,
+        "nonlinear_validated": true,
+        "admissible": true,
+        "evaluated": true,
+        "true_norm": 1.0376219547601177e-06,
+        "accepted": true,
+        "sufficient_decrease": true,
+        "reason": ""
+      },
+      {
+        "newton": 2,
+        "trial": 0,
+        "step": 1,
+        "nonlinear_validation_attempted": true,
+        "nonlinear_validated": true,
+        "admissible": true,
+        "evaluated": true,
+        "true_norm": 1.4773705357302665e-09,
+        "accepted": true,
+        "sufficient_decrease": true,
+        "reason": ""
+      },
+      {
+        "newton": 3,
+        "trial": 0,
+        "step": 1,
+        "nonlinear_validation_attempted": true,
+        "nonlinear_validated": true,
+        "admissible": true,
+        "evaluated": true,
+        "true_norm": 4.3429288624338776e-13,
+        "accepted": true,
+        "sufficient_decrease": true,
+        "reason": ""
+      }
+    ],
+    "best_from_accepted_iterate": true
+  },
+  "state": {
+    "schema": "WJH27NativeCoupledStateV2",
+    "model": "FiniteNuIsotropicWallFullWJCollarV2",
+    "signature": "701b3afc26ddd151a43bf5a11d2e01f1ffae2ce451d9a1c1164660c73731b9a9",
+    "source_identity": "dfdd5d8fb2384d08a5a54e5fd8d76f0ec7e37334fbebeb3b16e439553d8c080b",
+    "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+    "manufactured": true,
+    "step": 0,
+    "time": 0,
+    "dt": 0.02,
+    "state_sha256": "92d5dd5d61684fe4e174dfdc2444271275ae38e104d68fb03de60dd6f6ad990b",
+    "previous_sha256": "92d5dd5d61684fe4e174dfdc2444271275ae38e104d68fb03de60dd6f6ad990b",
+    "advection_sha256": "523b65799e6658932e9cf278ce9391a56eb6852e27388d8672cbef1f2e0c5fb2",
+    "previous_advection_sha256": "523b65799e6658932e9cf278ce9391a56eb6852e27388d8672cbef1f2e0c5fb2",
+    "sizes": [
+      325,
+      153,
+      325,
+      169
+    ],
+    "gauge": true,
+    "nonlinear_iterations": 4,
+    "linear_iterations": [
+      0,
+      0,
+      0
+    ],
+    "rebuilds": 12,
+    "retries": 0,
+    "seconds": 4.4997382030123845,
+    "coefficient_drift": 0,
+    "residuals": [
+      9.405763638037521e-15,
+      1.4173662371760264e-17,
+      1.9312082363698978e-19,
+      2.2736548518738793e-13,
+      4.3429288624338776e-13,
+      0
+    ],
+    "minimum_k": 0.008809015145515192,
+    "minimum_epsilon": 0.000694657216439776,
+    "minimum_covariance_over_k": 0.5354537721586381,
+    "minimum_principal_over_mu": 0.04916621946598775,
+    "disjoint_seconds": {
+      "constitutive": 0.49835289892507717,
+      "wall": 0.27241737919393927,
+      "assembly": 0.6978470016620122,
+      "flow": 0,
+      "scalar": 0,
+      "rebuild": 0,
+      "guards": 1.7039035144844092,
+      "forcing": 0.3375597409904003,
+      "residual": 0.1586845480487682,
+      "nonlinear": 0,
+      "io": 0,
+      "other": 0.8309731197077781
+    },
+    "quadratureX": 12,
+    "quadratureR": 18,
+    "linear_tolerance": 1e-12,
+    "nonlinear_tolerance": 3e-12,
+    "maximum_iterations": 60,
+    "mms_body_amplitude": 0,
+    "retry_reason": "",
+    "mms_variant": "Historical",
+    "steady_velocity_preconditioner": "FullGradientV1",
+    "stress_split": "PositiveShearV1",
+    "all_row_action_crosschecks": false,
+    "current_action_checks": {
+      "all_row_calls": 0,
+      "maximum_scaled_differences_flow_k_epsilon": [
+        0,
+        0,
+        0
+      ],
+      "augmented_calls": 0,
+      "maximum_augmented_scaled_difference": 0,
+      "maximum_weak_divergence_load_norm": 0,
+      "maximum_gauge_multiplier": 0
+    },
+    "basis": "Modified_A",
+    "anderson_depth": 0,
+    "acceleration": {
+      "proposals": 0,
+      "accepted": 0,
+      "inadmissible_trials": 0
+    },
+    "initial_field_transfer": {
+      "packet_sha256": "",
+      "source_state_sha256": "",
+      "projected": false,
+      "source_was_candidate": false
+    },
+    "constitutive_backend": "FastFull3DV1",
+    "constitutive_calls": {
+      "values": 843264,
+      "directions": 297216,
+      "fallbacks": 0,
+      "root_iterations": 4233613,
+      "maximum_normalized_root_residual": 4.693601380068491e-16
+    },
+    "mms_rms_errors_U_Pi_k_epsilon_gradU": [
+      4.538199876322345e-08,
+      1.4071596482186883e-08,
+      7.738966226474706e-06,
+      0.00017837741962722933,
+      2.8167164994203997e-06
+    ],
+    "geometry": {
+      "d0": 0.0875,
+      "H": 0.15,
+      "h": 0.10854503542535461,
+      "left": 0,
+      "right": 1,
+      "top": 0.5
+    }
+  },
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/steady-mms-spatial-v1/h4.result.json",
+    "bytes": 302147,
+    "sha256": "b71b018ee4a62ceecc5e066d4d10442a5a78bf16a1ed6ffe4f68ff133aad3a30"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

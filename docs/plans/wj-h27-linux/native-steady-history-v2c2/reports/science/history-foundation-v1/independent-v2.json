@@ -1,0 +1,889 @@
+{
+  "schema": "WJH27IndependentHistoryFoundationCheckV1",
+  "status": "PASS_MMS_HISTORY_RECOVERY_FOUNDATION_ONLY",
+  "foundation_gate_pass": true,
+  "full_coupled_gate_pass": false,
+  "H27_D_pass": false,
+  "physical_cold_restart_qualified": false,
+  "terminal_handling_qualified": false,
+  "production_monitoring_storage_qualified": false,
+  "scope": "Tiny PolynomialScalarsV1 body1 MMS/history/retry/recovery-rotation FOUNDATION only.",
+  "script": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-history-foundation-v2/history_recovery_check.py",
+    "sha256": "a6321e307bf3d3f6567f88dbc5e1a5c6a13d9f623be4f8034dd7e3a6cc5da059",
+    "bytes": 23455
+  },
+  "manifest": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/manifest.json",
+    "sha256": "0e59e8ffc8d484d7270e94f1209f73ab16b25a8c36ff2398dacc3c1f6f4ed6b9",
+    "bytes": 2140
+  },
+  "prospective": {
+    "dt": 0.02,
+    "final_step": 7,
+    "final_time": 0.14,
+    "coefficient_comparison_limit": 1e-08,
+    "native_fixed_residual_limit": 3e-12,
+    "expected_retry_step": 2,
+    "recovery_writes": [
+      2,
+      4,
+      6
+    ],
+    "retained_recovery": [
+      4,
+      6
+    ]
+  },
+  "root": "/home/jay/build/wj-h27-coupling-r1-20261117",
+  "source_identity": "dfdd5d8fb2384d08a5a54e5fd8d76f0ec7e37334fbebeb3b16e439553d8c080b",
+  "reference": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+    "bytes": 92259
+  },
+  "signature": "35dfdf82efefd5bfdce1acec07dab7b4abe409b9b8f84da13f35c7c3107af823",
+  "scales": {
+    "U": 1.0,
+    "Pi": 0.002600999999999999,
+    "k": 0.008809015145515192,
+    "epsilon": 0.000694657216439776
+  },
+  "runs": {
+    "control": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/control.result.json",
+        "sha256": "7b9520ccc4e50bb7e67bae37eed4b9ea8ef3f06662100a78f4acf1dca51e11ad",
+        "bytes": 69277
+      },
+      "endpoint_step": 7,
+      "history_labels": {
+        "current": {
+          "step": 7,
+          "time": 0.14
+        },
+        "previous": {
+          "step": 6,
+          "time": 0.12
+        },
+        "older": {
+          "step": 5,
+          "time": 0.1
+        },
+        "advection": {
+          "step": 7,
+          "time": 0.14
+        },
+        "older_advection": {
+          "step": 5,
+          "time": 0.1
+        },
+        "final_equation": "BDF2_EX2",
+        "final_EX_coefficients": [
+          2.0,
+          -1.0
+        ]
+      },
+      "exact_history_hashes": {
+        "current": "7f50d095c97c6f91bbdd077ae6885122c36bc74869f25522bef3b171818e50eb",
+        "previous": "2d815e86fee4b6aeb0462199c8cb02d8b2169e86404cfc5411c625aad913a7d8",
+        "advection": "8de3ab84efdaae75e64f1460f145c8e4128ad11c341a4025cfc7289b896ab9d2",
+        "older": "d629035fecf18cbb181862686d688a674f2cd4a03a5d54a5fdac330b04aabd29",
+        "older_advection": "a6ae817d7f508b2ad1d039826d1631c779cc4073034c83b79c2766d4078f4031"
+      },
+      "accepted_log": {
+        "file": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/control.steps.jsonl",
+          "sha256": "bb2545eabe5edbffa0d9ccc3f8702e0aed17e538ff6d035ff2a305d3ed4ffb7a",
+          "bytes": 18962
+        },
+        "accepted_steps": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "retry_steps": [],
+        "maximum_native_reported_residual": 2.04658439244324e-12,
+        "minimum_native_reported_guards": {
+          "minimum_k": 0.00880823867971808,
+          "minimum_epsilon": 0.001977029097320029,
+          "minimum_covariance_over_k": 0.6261855913578213,
+          "minimum_principal_over_mu": 0.04915330770486076
+        }
+      }
+    },
+    "prefix": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/prefix.result.json",
+        "sha256": "4bfe3113f1ac1989eba41bb1505d16aeb19e2ed66e8b3ee781ac0745aab469c1",
+        "bytes": 68202
+      },
+      "endpoint_step": 1,
+      "history_labels": {
+        "current": {
+          "step": 1,
+          "time": 0.02
+        },
+        "previous": {
+          "step": 0,
+          "time": 0.0
+        },
+        "older": {
+          "step": 0,
+          "time": 0.0
+        },
+        "advection": {
+          "step": 1,
+          "time": 0.02
+        },
+        "older_advection": {
+          "step": 0,
+          "time": 0.0
+        },
+        "final_equation": "BE_STARTUP",
+        "final_EX_coefficients": [
+          1.0,
+          0.0
+        ]
+      },
+      "exact_history_hashes": {
+        "current": "3939a94c3d22732d7c27d1dd40e763d5443e72db055114f712ba7a1572445130",
+        "previous": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+        "advection": "eb6b3d582cec21b379e3a4e37686fdea4f9180b0776ae66321f42032e613ae1f",
+        "older": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+        "older_advection": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b"
+      },
+      "accepted_log": {
+        "file": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/prefix.steps.jsonl",
+          "sha256": "b0a300cff6a8e23d395000f4ed8205b54755f50b05a659bc3dd983a3844a0f51",
+          "bytes": 2698
+        },
+        "accepted_steps": [
+          1
+        ],
+        "retry_steps": [],
+        "maximum_native_reported_residual": 2.04658439244324e-12,
+        "minimum_native_reported_guards": {
+          "minimum_k": 0.00880823867971808,
+          "minimum_epsilon": 0.001977029097320029,
+          "minimum_covariance_over_k": 0.6264968692567645,
+          "minimum_principal_over_mu": 0.04919245793181879
+        }
+      }
+    },
+    "retry": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/retry.result.json",
+        "sha256": "533482cf5e451ee77aefb9226996bed9ed84bcbd8b7d7f29521af303ab261d8d",
+        "bytes": 69019
+      },
+      "endpoint_step": 7,
+      "history_labels": {
+        "current": {
+          "step": 7,
+          "time": 0.14
+        },
+        "previous": {
+          "step": 6,
+          "time": 0.12
+        },
+        "older": {
+          "step": 5,
+          "time": 0.1
+        },
+        "advection": {
+          "step": 7,
+          "time": 0.14
+        },
+        "older_advection": {
+          "step": 5,
+          "time": 0.1
+        },
+        "final_equation": "BDF2_EX2",
+        "final_EX_coefficients": [
+          2.0,
+          -1.0
+        ]
+      },
+      "exact_history_hashes": {
+        "current": "7f50d095c97c6f91bbdd077ae6885122c36bc74869f25522bef3b171818e50eb",
+        "previous": "2d815e86fee4b6aeb0462199c8cb02d8b2169e86404cfc5411c625aad913a7d8",
+        "advection": "8de3ab84efdaae75e64f1460f145c8e4128ad11c341a4025cfc7289b896ab9d2",
+        "older": "d629035fecf18cbb181862686d688a674f2cd4a03a5d54a5fdac330b04aabd29",
+        "older_advection": "a6ae817d7f508b2ad1d039826d1631c779cc4073034c83b79c2766d4078f4031"
+      },
+      "accepted_log": {
+        "file": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/retry.steps.jsonl",
+          "sha256": "bd72ee3154b177f0ee91bd1e16705ce7cc87c89c6f17a86688c658744e0a20a2",
+          "bytes": 19010
+        },
+        "accepted_steps": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "retry_steps": [
+          2
+        ],
+        "maximum_native_reported_residual": 2.04658439244324e-12,
+        "minimum_native_reported_guards": {
+          "minimum_k": 0.00880823867971808,
+          "minimum_epsilon": 0.001977029097320029,
+          "minimum_covariance_over_k": 0.6261855913578213,
+          "minimum_principal_over_mu": 0.04915330770486076
+        }
+      }
+    },
+    "cold": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/cold.result.json",
+        "sha256": "16e6fbc4d1c279e60539317e15cdd74df9cab55db311abf45fa7c9ac5f191bb0",
+        "bytes": 69001
+      },
+      "endpoint_step": 7,
+      "history_labels": {
+        "current": {
+          "step": 7,
+          "time": 0.14
+        },
+        "previous": {
+          "step": 6,
+          "time": 0.12
+        },
+        "older": {
+          "step": 5,
+          "time": 0.1
+        },
+        "advection": {
+          "step": 7,
+          "time": 0.14
+        },
+        "older_advection": {
+          "step": 5,
+          "time": 0.1
+        },
+        "final_equation": "BDF2_EX2",
+        "final_EX_coefficients": [
+          2.0,
+          -1.0
+        ]
+      },
+      "exact_history_hashes": {
+        "current": "7f50d095c97c6f91bbdd077ae6885122c36bc74869f25522bef3b171818e50eb",
+        "previous": "2d815e86fee4b6aeb0462199c8cb02d8b2169e86404cfc5411c625aad913a7d8",
+        "advection": "8de3ab84efdaae75e64f1460f145c8e4128ad11c341a4025cfc7289b896ab9d2",
+        "older": "d629035fecf18cbb181862686d688a674f2cd4a03a5d54a5fdac330b04aabd29",
+        "older_advection": "a6ae817d7f508b2ad1d039826d1631c779cc4073034c83b79c2766d4078f4031"
+      },
+      "accepted_log": {
+        "file": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/cold.steps.jsonl",
+          "sha256": "2d499db92df5e72963b2ccbbf9d9da0a32564e7aded8558c91e5dc1025f61d1a",
+          "bytes": 16268
+        },
+        "accepted_steps": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "retry_steps": [],
+        "maximum_native_reported_residual": 1.3241389456047878e-12,
+        "minimum_native_reported_guards": {
+          "minimum_k": 0.008810765590977078,
+          "minimum_epsilon": 0.001977029097320029,
+          "minimum_covariance_over_k": 0.6261855913578213,
+          "minimum_principal_over_mu": 0.04915330770486076
+        }
+      }
+    },
+    "recovery4": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/recovery4.result.json",
+        "sha256": "687f6d8f436ebe867c2e3a5b312682e1c30ee3de944cc9e1600bd7705a2e350c",
+        "bytes": 68915
+      },
+      "endpoint_step": 7,
+      "history_labels": {
+        "current": {
+          "step": 7,
+          "time": 0.14
+        },
+        "previous": {
+          "step": 6,
+          "time": 0.12
+        },
+        "older": {
+          "step": 5,
+          "time": 0.1
+        },
+        "advection": {
+          "step": 7,
+          "time": 0.14
+        },
+        "older_advection": {
+          "step": 5,
+          "time": 0.1
+        },
+        "final_equation": "BDF2_EX2",
+        "final_EX_coefficients": [
+          2.0,
+          -1.0
+        ]
+      },
+      "exact_history_hashes": {
+        "current": "625060e2dfb2aa455e67084bf1934ab8e2de79443cfc9efd2aa59d1a9a2a6f65",
+        "previous": "c4d4a6c633f6f2492a6a5bea7cc82e43d155b63b43617f77e0d4aae5974ac062",
+        "advection": "26336567b7df67f675abc95fd4337b0c9c7c24d175cb25e1deb402c27b6aafb5",
+        "older": "29934fd035321ccd18aff318de6cdba6e923eccbd55f47b6c566ce980797f730",
+        "older_advection": "d7fc2855ac4a2b3864b7f592eecd1d7bcbf24d34e63af0324714130de8db4739"
+      },
+      "accepted_log": {
+        "file": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/recovery4.steps.jsonl",
+          "sha256": "1fea336bc7a7981a87b438f0b8dcc5bd56e77b1f761c33458fb6832f08abe488",
+          "bytes": 8159
+        },
+        "accepted_steps": [
+          5,
+          6,
+          7
+        ],
+        "retry_steps": [],
+        "maximum_native_reported_residual": 1.3232853496209356e-12,
+        "minimum_native_reported_guards": {
+          "minimum_k": 0.008818342666321219,
+          "minimum_epsilon": 0.001977029097320029,
+          "minimum_covariance_over_k": 0.6261855913578191,
+          "minimum_principal_over_mu": 0.04915330770485919
+        }
+      }
+    },
+    "recovery6": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/recovery6.result.json",
+        "sha256": "02b4bf8bcc1e52baefaa954d8a53ddef622dd272c82af10db7341e60d3fc6477",
+        "bytes": 68901
+      },
+      "endpoint_step": 7,
+      "history_labels": {
+        "current": {
+          "step": 7,
+          "time": 0.14
+        },
+        "previous": {
+          "step": 6,
+          "time": 0.12
+        },
+        "older": {
+          "step": 5,
+          "time": 0.1
+        },
+        "advection": {
+          "step": 7,
+          "time": 0.14
+        },
+        "older_advection": {
+          "step": 5,
+          "time": 0.1
+        },
+        "final_equation": "BDF2_EX2",
+        "final_EX_coefficients": [
+          2.0,
+          -1.0
+        ]
+      },
+      "exact_history_hashes": {
+        "current": "6c753ba112d9c582c38c584cb9964471cc2202d182626f624a25596274a4853f",
+        "previous": "2d815e86fee4b6aeb0462199c8cb02d8b2169e86404cfc5411c625aad913a7d8",
+        "advection": "63d77314372b4ec709df1b2e0026b8f9952548094ebe81cb86983c6faec7b16f",
+        "older": "d629035fecf18cbb181862686d688a674f2cd4a03a5d54a5fdac330b04aabd29",
+        "older_advection": "a6ae817d7f508b2ad1d039826d1631c779cc4073034c83b79c2766d4078f4031"
+      },
+      "accepted_log": {
+        "file": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/recovery6.steps.jsonl",
+          "sha256": "668475b7b9c44bd7904b8faf82309d46181f46164b244819525eb10e62a72d47",
+          "bytes": 2712
+        },
+        "accepted_steps": [
+          7
+        ],
+        "retry_steps": [],
+        "maximum_native_reported_residual": 1.3237950508605298e-12,
+        "minimum_native_reported_guards": {
+          "minimum_k": 0.008823387363632178,
+          "minimum_epsilon": 0.001977029097320029,
+          "minimum_covariance_over_k": 0.6261855913578215,
+          "minimum_principal_over_mu": 0.049153307704860205
+        }
+      }
+    }
+  },
+  "input_checkpoints": {
+    "cold": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/prefix.final.bin",
+      "sha256": "c46f7d35f5ed1f5a11100dd7f0a60d4b53f3bfed50646582516f3ef05fb725fe",
+      "bytes": 12018,
+      "payload_sha256": "9e40125eb5474b28b27e67d61a6d754bb81338ab0f2fc0796cfb7d480beb2240",
+      "signature": "35dfdf82efefd5bfdce1acec07dab7b4abe409b9b8f84da13f35c7c3107af823",
+      "step": 1,
+      "time": 0.02,
+      "dt": 0.02,
+      "history_hashes": {
+        "current": "3939a94c3d22732d7c27d1dd40e763d5443e72db055114f712ba7a1572445130",
+        "previous": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+        "advection": "eb6b3d582cec21b379e3a4e37686fdea4f9180b0776ae66321f42032e613ae1f"
+      }
+    },
+    "recovery4": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/control.recovery-4.bin",
+      "sha256": "0cd724debb0c0d58b7d343625927232222bb9b3f41ed520e7f8768a3fc3251f0",
+      "bytes": 12018,
+      "payload_sha256": "0e2e2781ce97d25c5399d092bc2844379e6fc091d0f4e0315e5bcc202da135c0",
+      "signature": "35dfdf82efefd5bfdce1acec07dab7b4abe409b9b8f84da13f35c7c3107af823",
+      "step": 4,
+      "time": 0.08,
+      "dt": 0.02,
+      "history_hashes": {
+        "current": "8f16a341aa23a03b188c9952675b2104e057d119e7fa75e7b9dd3e09cbff6c79",
+        "previous": "b55fe07b2ef4bb5b73ab0d2cce3f727e6edc3c85af9125c4e1dad39a8732e084",
+        "advection": "d28522c0257750d68a866f27352420c949e46e4c755d96e5e002445fa8d92dec"
+      }
+    },
+    "recovery6": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/control.recovery-6.bin",
+      "sha256": "1cb0bb6dd670232eab29876b3dceedcd7dbb50f1bf52e7f5c9656835c1356172",
+      "bytes": 12018,
+      "payload_sha256": "657cb456ab5ac0b227e7dfe68de8a678b77019570b9b9483997673155c3ec0ca",
+      "signature": "35dfdf82efefd5bfdce1acec07dab7b4abe409b9b8f84da13f35c7c3107af823",
+      "step": 6,
+      "time": 0.12,
+      "dt": 0.02,
+      "history_hashes": {
+        "current": "2d815e86fee4b6aeb0462199c8cb02d8b2169e86404cfc5411c625aad913a7d8",
+        "previous": "d629035fecf18cbb181862686d688a674f2cd4a03a5d54a5fdac330b04aabd29",
+        "advection": "79088481cdda56ff0d1fe822609ec2829114507ef74530ebf00a39499ae6b652"
+      }
+    }
+  },
+  "final_comparisons": {
+    "cold": {
+      "current": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "7f50d095c97c6f91bbdd077ae6885122c36bc74869f25522bef3b171818e50eb",
+        "second_sha256": "7f50d095c97c6f91bbdd077ae6885122c36bc74869f25522bef3b171818e50eb"
+      },
+      "previous": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "2d815e86fee4b6aeb0462199c8cb02d8b2169e86404cfc5411c625aad913a7d8",
+        "second_sha256": "2d815e86fee4b6aeb0462199c8cb02d8b2169e86404cfc5411c625aad913a7d8"
+      },
+      "advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "8de3ab84efdaae75e64f1460f145c8e4128ad11c341a4025cfc7289b896ab9d2",
+        "second_sha256": "8de3ab84efdaae75e64f1460f145c8e4128ad11c341a4025cfc7289b896ab9d2"
+      },
+      "older": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "d629035fecf18cbb181862686d688a674f2cd4a03a5d54a5fdac330b04aabd29",
+        "second_sha256": "d629035fecf18cbb181862686d688a674f2cd4a03a5d54a5fdac330b04aabd29"
+      },
+      "older_advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "a6ae817d7f508b2ad1d039826d1631c779cc4073034c83b79c2766d4078f4031",
+        "second_sha256": "a6ae817d7f508b2ad1d039826d1631c779cc4073034c83b79c2766d4078f4031"
+      }
+    },
+    "retry": {
+      "current": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "7f50d095c97c6f91bbdd077ae6885122c36bc74869f25522bef3b171818e50eb",
+        "second_sha256": "7f50d095c97c6f91bbdd077ae6885122c36bc74869f25522bef3b171818e50eb"
+      },
+      "previous": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "2d815e86fee4b6aeb0462199c8cb02d8b2169e86404cfc5411c625aad913a7d8",
+        "second_sha256": "2d815e86fee4b6aeb0462199c8cb02d8b2169e86404cfc5411c625aad913a7d8"
+      },
+      "advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "8de3ab84efdaae75e64f1460f145c8e4128ad11c341a4025cfc7289b896ab9d2",
+        "second_sha256": "8de3ab84efdaae75e64f1460f145c8e4128ad11c341a4025cfc7289b896ab9d2"
+      },
+      "older": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "d629035fecf18cbb181862686d688a674f2cd4a03a5d54a5fdac330b04aabd29",
+        "second_sha256": "d629035fecf18cbb181862686d688a674f2cd4a03a5d54a5fdac330b04aabd29"
+      },
+      "older_advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "a6ae817d7f508b2ad1d039826d1631c779cc4073034c83b79c2766d4078f4031",
+        "second_sha256": "a6ae817d7f508b2ad1d039826d1631c779cc4073034c83b79c2766d4078f4031"
+      }
+    },
+    "recovery4": {
+      "current": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 4.963206495095518e-16,
+          "Pi": 4.509953817737546e-13,
+          "k": 7.002543499618844e-13,
+          "epsilon": 2.3162469198995343e-12
+        },
+        "exact_hash_equal": false,
+        "first_sha256": "7f50d095c97c6f91bbdd077ae6885122c36bc74869f25522bef3b171818e50eb",
+        "second_sha256": "625060e2dfb2aa455e67084bf1934ab8e2de79443cfc9efd2aa59d1a9a2a6f65"
+      },
+      "previous": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 1.160530005428484e-15,
+          "Pi": 3.069326954705757e-13,
+          "k": 5.996963408666633e-13,
+          "epsilon": 1.303560675821499e-12
+        },
+        "exact_hash_equal": false,
+        "first_sha256": "2d815e86fee4b6aeb0462199c8cb02d8b2169e86404cfc5411c625aad913a7d8",
+        "second_sha256": "c4d4a6c633f6f2492a6a5bea7cc82e43d155b63b43617f77e0d4aae5974ac062"
+      },
+      "advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 8.629148150153185e-21,
+          "Pi": 0.0,
+          "k": 5.9616247517185125e-18,
+          "epsilon": 2.0026457960395913e-17
+        },
+        "exact_hash_equal": false,
+        "first_sha256": "8de3ab84efdaae75e64f1460f145c8e4128ad11c341a4025cfc7289b896ab9d2",
+        "second_sha256": "26336567b7df67f675abc95fd4337b0c9c7c24d175cb25e1deb402c27b6aafb5"
+      },
+      "older": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 6.596286017401809e-16,
+          "Pi": 1.5145350675443955e-13,
+          "k": 3.58928848939202e-13,
+          "epsilon": 7.659993985260003e-13
+        },
+        "exact_hash_equal": false,
+        "first_sha256": "d629035fecf18cbb181862686d688a674f2cd4a03a5d54a5fdac330b04aabd29",
+        "second_sha256": "29934fd035321ccd18aff318de6cdba6e923eccbd55f47b6c566ce980797f730"
+      },
+      "older_advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 1.5749518863009647e-21,
+          "Pi": 0.0,
+          "k": 2.719390322734503e-18,
+          "epsilon": 3.4120473682791326e-17
+        },
+        "exact_hash_equal": false,
+        "first_sha256": "a6ae817d7f508b2ad1d039826d1631c779cc4073034c83b79c2766d4078f4031",
+        "second_sha256": "d7fc2855ac4a2b3864b7f592eecd1d7bcbf24d34e63af0324714130de8db4739"
+      }
+    },
+    "recovery6": {
+      "current": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 2.848741208205663e-16,
+          "Pi": 6.406317623370474e-14,
+          "k": 3.959873087530996e-13,
+          "epsilon": 7.401453746287442e-13
+        },
+        "exact_hash_equal": false,
+        "first_sha256": "7f50d095c97c6f91bbdd077ae6885122c36bc74869f25522bef3b171818e50eb",
+        "second_sha256": "6c753ba112d9c582c38c584cb9964471cc2202d182626f624a25596274a4853f"
+      },
+      "previous": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "2d815e86fee4b6aeb0462199c8cb02d8b2169e86404cfc5411c625aad913a7d8",
+        "second_sha256": "2d815e86fee4b6aeb0462199c8cb02d8b2169e86404cfc5411c625aad913a7d8"
+      },
+      "advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 1.852884572118782e-21,
+          "Pi": 0.0,
+          "k": 6.538556179304175e-18,
+          "epsilon": 1.8109309826477645e-17
+        },
+        "exact_hash_equal": false,
+        "first_sha256": "8de3ab84efdaae75e64f1460f145c8e4128ad11c341a4025cfc7289b896ab9d2",
+        "second_sha256": "63d77314372b4ec709df1b2e0026b8f9952548094ebe81cb86983c6faec7b16f"
+      },
+      "older": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "d629035fecf18cbb181862686d688a674f2cd4a03a5d54a5fdac330b04aabd29",
+        "second_sha256": "d629035fecf18cbb181862686d688a674f2cd4a03a5d54a5fdac330b04aabd29"
+      },
+      "older_advection": {
+        "coefficient_MAX_reference_scaled": {
+          "U": 0.0,
+          "Pi": 0.0,
+          "k": 0.0,
+          "epsilon": 0.0
+        },
+        "exact_hash_equal": true,
+        "first_sha256": "a6ae817d7f508b2ad1d039826d1631c779cc4073034c83b79c2766d4078f4031",
+        "second_sha256": "a6ae817d7f508b2ad1d039826d1631c779cc4073034c83b79c2766d4078f4031"
+      }
+    }
+  },
+  "rotation": {
+    "native_reported_write_count": 3,
+    "native_reported_rotated_count": 1,
+    "removed_path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/control.recovery-2.bin",
+    "removed_path_absent": true,
+    "retained": [
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/control.recovery-4.bin",
+        "sha256": "0cd724debb0c0d58b7d343625927232222bb9b3f41ed520e7f8768a3fc3251f0",
+        "bytes": 12018
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/control.recovery-6.bin",
+        "sha256": "1cb0bb6dd670232eab29876b3dceedcd7dbb50f1bf52e7f5c9656835c1356172",
+        "bytes": 12018
+      }
+    ],
+    "science": [
+      {
+        "file": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/control.science-2.json",
+          "sha256": "a46b78aad36cdbe159b143527decf54207c93a4dfd179c29d8caa64f1bd6ea17",
+          "bytes": 67789
+        },
+        "history_labels": {
+          "current": {
+            "step": 2,
+            "time": 0.04
+          },
+          "previous": {
+            "step": 1,
+            "time": 0.02
+          },
+          "older": {
+            "step": 0,
+            "time": 0.0
+          },
+          "advection": {
+            "step": 2,
+            "time": 0.04
+          },
+          "older_advection": {
+            "step": 0,
+            "time": 0.0
+          },
+          "final_equation": "BDF2_EX2",
+          "final_EX_coefficients": [
+            2.0,
+            -1.0
+          ]
+        },
+        "hashes": {
+          "state_sha256": "e79c1a858efbfce878390e682720c899bb27def0889baa31a495849fc6ce6c10",
+          "previous_sha256": "3939a94c3d22732d7c27d1dd40e763d5443e72db055114f712ba7a1572445130",
+          "advection_sha256": "ce000b07fa661c8fea374937ae04937b2763f44775475b74b913670d670bf1aa",
+          "previous_advection_sha256": "eb6b3d582cec21b379e3a4e37686fdea4f9180b0776ae66321f42032e613ae1f"
+        }
+      },
+      {
+        "file": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/control.science-4.json",
+          "sha256": "ae54aa84fa35b629f498afdd3c8b7fa136ea302bbc898b1fbdddecf9a98b1c38",
+          "bytes": 68485
+        },
+        "history_labels": {
+          "current": {
+            "step": 4,
+            "time": 0.08
+          },
+          "previous": {
+            "step": 3,
+            "time": 0.06
+          },
+          "older": {
+            "step": 2,
+            "time": 0.04
+          },
+          "advection": {
+            "step": 4,
+            "time": 0.08
+          },
+          "older_advection": {
+            "step": 2,
+            "time": 0.04
+          },
+          "final_equation": "BDF2_EX2",
+          "final_EX_coefficients": [
+            2.0,
+            -1.0
+          ]
+        },
+        "hashes": {
+          "state_sha256": "8f16a341aa23a03b188c9952675b2104e057d119e7fa75e7b9dd3e09cbff6c79",
+          "previous_sha256": "b55fe07b2ef4bb5b73ab0d2cce3f727e6edc3c85af9125c4e1dad39a8732e084",
+          "advection_sha256": "d28522c0257750d68a866f27352420c949e46e4c755d96e5e002445fa8d92dec",
+          "previous_advection_sha256": "576ed72e0fdba4b276aca07d078ad4fbbb9d9f102addb66c5c987b567325670c"
+        },
+        "checkpoint_history_binding": "EXACT"
+      },
+      {
+        "file": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/control.science-6.json",
+          "sha256": "c17e9e5d4634b2bffd9ff208f2f2dbaf8a6166b16b2fc00632a4f5b063178add",
+          "bytes": 68171
+        },
+        "history_labels": {
+          "current": {
+            "step": 6,
+            "time": 0.12
+          },
+          "previous": {
+            "step": 5,
+            "time": 0.1
+          },
+          "older": {
+            "step": 4,
+            "time": 0.08
+          },
+          "advection": {
+            "step": 6,
+            "time": 0.12
+          },
+          "older_advection": {
+            "step": 4,
+            "time": 0.08
+          },
+          "final_equation": "BDF2_EX2",
+          "final_EX_coefficients": [
+            2.0,
+            -1.0
+          ]
+        },
+        "hashes": {
+          "state_sha256": "2d815e86fee4b6aeb0462199c8cb02d8b2169e86404cfc5411c625aad913a7d8",
+          "previous_sha256": "d629035fecf18cbb181862686d688a674f2cd4a03a5d54a5fdac330b04aabd29",
+          "advection_sha256": "79088481cdda56ff0d1fe822609ec2829114507ef74530ebf00a39499ae6b652",
+          "previous_advection_sha256": "a6ae817d7f508b2ad1d039826d1631c779cc4073034c83b79c2766d4078f4031"
+        },
+        "checkpoint_history_binding": "EXACT"
+      }
+    ]
+  },
+  "negative_controls": [
+    {
+      "name": "bad-dt",
+      "category": "dt_incompatible",
+      "exit": 1,
+      "expected_marker": "scientific identity differs",
+      "marker_found": true,
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/history-bad-dt-native-v1/command.log",
+        "sha256": "966d6f9af680543dc74dcb29c35f9a3d8b41bfedc64776c244f28ef570901be7",
+        "bytes": 611
+      }
+    },
+    {
+      "name": "bad-checksum",
+      "category": "checksum_corrupted",
+      "exit": 1,
+      "expected_marker": "checksum mismatch",
+      "marker_found": true,
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/history-bad-checksum-native-v1/command.log",
+        "sha256": "b9ffb1aa1b304ced8672c5e4c729ad7ee2e33fa1dfb79f94ea88e67f76875537",
+        "bytes": 601
+      }
+    }
+  ],
+  "comparison_norm": "MAX over identical signed native coefficient inventories; fixed physical/reference scales, no RHS normalization",
+  "residual_evidence": "Every accepted-step native fixed-normalized residual/guard record checked; this checker does not recompute the nonlinear PDE.",
+  "elapsed_seconds": 0.033186347980517894,
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/independent-v2.json",
+    "bytes": 34213,
+    "sha256": "2bda81d03279165d0d09473d9b1805d8277ce5b224cb07a8d5811a1e7aa0b662"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

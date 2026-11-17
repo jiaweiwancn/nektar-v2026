@@ -1,0 +1,99 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-c",
+    "import runpy,sys;sys.path.insert(0,sys.argv[1]);sys.argv=sys.argv[2:];runpy.run_path(sys.argv[0],run_name='__main__')",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-inactive-inner-diffusion-v3-v1/proposal_inner_diffusion_reference.py",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--proposal",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-inactive-inner-diffusion-v3-v1/proposal-v3.md",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/inactive-inner-diffusion-reference-control-v1.json",
+    "--seconds",
+    "160"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 180.0,
+  "utc": "2026-11-17T16:22:43.239349+00:00",
+  "allocation": {
+    "workers": 8,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 489031,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/steady-mms-spatial-controller-v1.py"
+      },
+      {
+        "pid": 489258,
+        "parent": 489031,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label steady-mms-spatial-independent-v1 --phase analysis --seconds 600 -- python3 -B -c import runpy,sys;sys.path.insert(0,sys.argv[1]);sys.argv=sys.argv[2:];runpy.run_path(sys.argv[0],run_name='__main__') /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27 /home/jay/build/wj-h27-coupling-r1-20261117/tools-steady-mms-spatial-v1/steady_mms_spatial.py --manifest /home/jay/build/wj-h27-coupling-r1-20261117/science/steady-mms-spatial-v1/manifest.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/steady-mms-spatial-v1/independent.json --seconds 570"
+      },
+      {
+        "pid": 489260,
+        "parent": 489258,
+        "threads": 1,
+        "args": "python3 -B -c import runpy,sys;sys.path.insert(0,sys.argv[1]);sys.argv=sys.argv[2:];runpy.run_path(sys.argv[0],run_name='__main__') /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27 /home/jay/build/wj-h27-coupling-r1-20261117/tools-steady-mms-spatial-v1/steady_mms_spatial.py --manifest /home/jay/build/wj-h27-coupling-r1-20261117/science/steady-mms-spatial-v1/manifest.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/steady-mms-spatial-v1/independent.json --seconds 570"
+      },
+      {
+        "pid": 489501,
+        "parent": 484265,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 489503,
+        "parent": 489501,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label inactive-inner-diffusion-reference-control-v1 --phase analysis --seconds 180 -- python3 -B -c import runpy,sys;sys.path.insert(0,sys.argv[1]);sys.argv=sys.argv[2:];runpy.run_path(sys.argv[0],run_name='__main__') /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27 /home/jay/build/wj-h27-coupling-r1-20261117/tools-inactive-inner-diffusion-v3-v1/proposal_inner_diffusion_reference.py --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --proposal /home/jay/build/wj-h27-coupling-r1-20261117/tools-inactive-inner-diffusion-v3-v1/proposal-v3.md --out /home/jay/build/wj-h27-coupling-r1-20261117/science/inactive-inner-diffusion-reference-control-v1.json --seconds 160"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-inactive-inner-diffusion-v3-v1/proposal_inner_diffusion_reference.py",
+      "bytes": 5425,
+      "sha256": "d62a9699c3f69b4a98cf3a5f3f756b80a3be0696f7cedd06d99194cd9396a543"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-inactive-inner-diffusion-v3-v1/proposal-v3.md",
+      "bytes": 12462,
+      "sha256": "93d04bf083e60df21ceceff15a8f41c27e189f1164f197c839340f2fdd2ae184"
+    }
+  ]
+}

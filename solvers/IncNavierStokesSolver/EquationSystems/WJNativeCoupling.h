@@ -24,7 +24,9 @@ struct CoupledOptions
 {
     double dt=.005,linearTolerance=1e-12,nonlinearTolerance=1e-10,mmsBodyAmplitude=0;
     int maximumIterations=60,quadratureX=8,quadratureR=12,andersonDepth=0;
-    bool manufactured=false,recordNonlinearTrace=false;
+    bool manufactured=false,recordNonlinearTrace=false,checkCurrentActions=false;
+    // Numerical split only; the complete current V is identical in both.
+    std::string stressSplit="PositiveShearV1",steadyVelocityPC="FullGradientV1";
     ConstitutiveBackend backend=ConstitutiveBackend::Historical;
     std::string sourceIdentity,mmsVariant="Historical",initialSourceIdentity;
 };
@@ -94,9 +96,11 @@ public:
 private:
     struct Data
     {
+        struct VelocityInput {double k,E,aux,r;Tensor gradient;};
+        std::vector<std::vector<VelocityInput>>velocityInputs;
         Rules kRules;
-        std::vector<Vec>mu,Dk,De,sourceK,sourceE,reactionE;
-        std::vector<std::vector<Tensor>>remainder;
+        std::vector<Vec>mu,bulk,shear,Dk,De,sourceK,sourceE,reactionE;
+        std::vector<std::vector<Tensor>>remainder,viscousStress;
         Vec coefficients,kCoefficients,eCoefficients;
         double minK=1e100,minE=1e100,minCovariance=1e100,minPrincipal=1e100,traceError=0;
     };
@@ -114,12 +118,15 @@ private:
     Data Evaluate(const CoupledState&state,double time,bool principal,CoupledTiming&timing)const;
     Loads Forcing(double time,CoupledTiming&timing,bool freezeManufactured=false)const;
     Sparse Strain(const Data&data)const;
+    Sparse VelocityTangent(const Data&data,CoupledTiming&timing)const;
     Vec RemainderLoad(const Data&data)const;
+    Loads CurrentActions(const CoupledState&state,const Data&data)const;
     Vec MomentumAdvection(const CoupledState&state)const;
     Sparse MomentumTransportJacobian(const CoupledState&state)const;
     CoupledState Advection(const CoupledState&state,const Rules&kRules)const;
     CoupledResidual Residual(const CoupledState&state,const Data&data,const Loads&base,
-                             double alpha,double time,CoupledTiming&timing)const;
+                             double alpha,double time,CoupledTiming&timing,
+                             const CoupledHistory*history=nullptr)const;
     Vec FlowLift(double time)const;
     Vec PackFree(const CoupledState&state)const;
     CoupledState FromFree(const Vec&free,double time)const;
@@ -155,6 +162,9 @@ private:
     std::string m_initialPacketSha,m_initialSourceStateSha;
     bool m_initialProjected=false,m_initialCandidate=false;
     mutable WallEvaluationStats m_constitutiveStats;
+    mutable std::uint64_t m_actionChecks=0,m_augmentedChecks=0;
+    mutable std::array<double,3>m_actionDifference{};
+    mutable double m_augmentedDifference=0,m_checkedWeakDivergence=0,m_checkedGaugeMultiplier=0;
 };
 }
 #endif

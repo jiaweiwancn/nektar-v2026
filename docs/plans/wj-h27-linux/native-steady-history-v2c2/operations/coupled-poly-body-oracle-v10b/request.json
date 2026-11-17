@@ -1,0 +1,80 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/coupled_oracle.py",
+    "--native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/poly-body.result.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-poly-body-oracle-v10b.json",
+    "--seconds",
+    "75",
+    "--direct-seconds",
+    "60"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 90.0,
+  "utc": "2026-11-17T14:50:02.975593+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 485260,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v10b.py"
+      },
+      {
+        "pid": 485290,
+        "parent": 485260,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label coupled-poly-body-oracle-v10b --phase analysis --seconds 90 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/coupled_oracle.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/poly-body.result.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-poly-body-oracle-v10b.json --seconds 75 --direct-seconds 60"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/coupled_oracle.py",
+      "bytes": 58689,
+      "sha256": "5154978921f4252608ab3b0f913423446b89dc3a9e3dd506bd2fa8522833d5d4"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/poly-body.result.json",
+      "bytes": 69987,
+      "sha256": "34910b9e80d1eed0d4b9a571008a50a493d7cfdb6468d3b29fdf8646d5c95ab4"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ]
+}

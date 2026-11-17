@@ -1,0 +1,82 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v1/h27/scalar_oracle.py",
+    "--native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/scalar-full-native-v1.json",
+    "--case",
+    "full",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/scalar-full-oracle-v1.json"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 60.0,
+  "utc": "2026-11-17T09:03:12.924685+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 474791,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/scalar-oracle-controller-v1.py"
+      },
+      {
+        "pid": 474792,
+        "parent": 474791,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label scalar-full-oracle-v1 --phase analysis --seconds 60 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v1/h27/scalar_oracle.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/scalar-full-native-v1.json --case full --out /home/jay/build/wj-h27-coupling-r1-20261117/science/scalar-full-oracle-v1.json"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-overlay-v1/h27/scalar_oracle.py",
+      "bytes": 25288,
+      "sha256": "d6aab613f88bc4a78cd9f1eadc15d0d80f9e417939275674b851cef81007dbcd"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/scalar-full-native-v1.json",
+      "bytes": 139386,
+      "sha256": "3dd7a4b943567742fb1359f258053205b4a339388c1a20ed0e0074eceb53f35d"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 0.69672761001857,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 565248,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/scalar-full-oracle-v1/command.log",
+    "bytes": 190,
+    "sha256": "168798c9a6dc7507ce5b65cbbb24e7e38789f0b2ed7a2cb9435208c283fb7419"
+  }
+}

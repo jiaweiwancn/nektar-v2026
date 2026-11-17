@@ -1,0 +1,127 @@
+{
+  "schema": "WJH27IndependentMixedQ3OracleV1",
+  "status": "PASS_TINY_MIXED_BC_Q3_FOUNDATION_ONLY",
+  "full_coupled_gate_pass": false,
+  "case": "physicaloutlet",
+  "quadrature": [
+    20,
+    20
+  ],
+  "input": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/physicaloutlet-native.json",
+  "input_sha256": "9cc6f9b6d1cc37642e0e2523a0f075084441a5576d44aac30a167aaf31b554b7",
+  "source_sha256": "39cef1c3c03ada7c28c6a85a7be5ab5ea94bc8b08b4cad23e3d310cfa55df42a",
+  "checks": {
+    "mass": {
+      "relative_error": 1.0197323028663236e-15
+    },
+    "pressure_mass": {
+      "relative_error": 1.0230976246908192e-15
+    },
+    "D": {
+      "relative_error": 1.3583681959379656e-15
+    },
+    "G": {
+      "relative_error": 1.3583681959379656e-15
+    },
+    "C": {
+      "relative_error": 1.0198508538022441e-15
+    },
+    "K": {
+      "relative_error": 1.839833934942529e-15
+    },
+    "known_scalar_action": {
+      "relative_error": 1.5274484517660218e-15
+    },
+    "system": {
+      "relative_error": 1.590764871175384e-15
+    },
+    "rhs": {
+      "relative_error": 1.2992906464136233e-15
+    }
+  },
+  "native_v_map": {
+    "relative_target_error": 0.0,
+    "permuted_ids": 13,
+    "negative_signs": 0
+  },
+  "component_free_counts": [
+    54,
+    48
+  ],
+  "gauge": false,
+  "unaugmented_null_modes": 0,
+  "smallest_singular_values": [
+    0.00015214159392987352,
+    0.0001425732662691399,
+    8.27345148229646e-05,
+    6.625167360272411e-05,
+    3.4770748401960156e-05
+  ],
+  "constant_pressure_C_action": 0.0,
+  "restricted_constant_pressure_action": 0.5626697274798265,
+  "direct_solution_relative_error": 7.209246186869224e-14,
+  "momentum_dual_residual": 3.993733664912513e-15,
+  "weak_continuity_dual_norm": 7.831187591309759e-16,
+  "norm_scales": "Fixed Uref=Lref=force_ref=1 on tiny dimensionless fixture; no alpha/rhs normalization.",
+  "polynomial_target_max_errors": [
+    8.326672684688674e-17,
+    8.326672684688674e-17,
+    3.469446951953614e-18
+  ],
+  "full_strain_work": {
+    "target_discrete": 0.005396825396825397,
+    "independent_integral": 0.005396825396825405,
+    "relative_error": 1.4464532512924236e-15,
+    "solution_work": 0.005396825396825404
+  },
+  "known_scalar": {
+    "relative_force_error": 6.031855382790057e-15,
+    "independent_Q2_L2_projection_loss": 0.012520736440811501,
+    "native_oldQ2_negative_control_loss": 0.0033200616160253896,
+    "maximum_cubic_trace_Legendre_coefficient": 1.65912294631395e-05,
+    "outer_trace_owners": [
+      {
+        "test_geometry": 0,
+        "trace_geometry": 2,
+        "x_interval": [
+          0,
+          0.5
+        ],
+        "trace_bounds": [
+          0,
+          0.5,
+          0.15,
+          0.5
+        ],
+        "height": 0.15
+      },
+      {
+        "test_geometry": 1,
+        "trace_geometry": 3,
+        "x_interval": [
+          0.49999999999999994,
+          1
+        ],
+        "trace_bounds": [
+          0.49999999999999994,
+          1,
+          0.15,
+          0.5
+        ],
+        "height": 0.15
+      }
+    ]
+  },
+  "mutations": {
+    "missing_transpose": 0.450947788906366,
+    "flipped_awf": 0.15096126762166698,
+    "flipped_scalar_sign": 2.0
+  },
+  "scope": "Independent tiny algebraic/direct foundation only; no continuous MMS, evolving scalars, physical pilot or Task3 qualification.",
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/physicaloutlet-independent.json",
+    "bytes": 3336,
+    "sha256": "253db6cea612141440ec4a2511ecace5a7181978c3c4dbe355a006dde8ce8ce6"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

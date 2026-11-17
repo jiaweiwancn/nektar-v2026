@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-history-foundation-v1/history_recovery_check.py", line 326, in <module>
+    if __name__ == '__main__': main()
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-history-foundation-v1/history_recovery_check.py", line 322, in main
+    if failure is not None: raise failure
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-history-foundation-v1/history_recovery_check.py", line 317, in main
+    run_check(manifest, args.manifest.resolve().parent, start+args.seconds, out)
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-history-foundation-v1/history_recovery_check.py", line 231, in run_check
+    record = packet['state']; configuration(record, control); inventory(record, control); guards(record)
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-history-foundation-v1/history_recovery_check.py", line 105, in inventory
+    require(len(x) == 3 and len(r) == 5 and all(abs(a-b) <= 1e-12 for a, b in zip(x, (0., .5, 1.))) and
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-history-foundation-v1/history_recovery_check.py", line 35, in require
+    if not condition: raise ValueError(message)
+ValueError: unexpected tiny mesh layers

@@ -106,6 +106,11 @@ def check(data):
             require(name == "deadline_before_base" and not r["residual"],
                     name + ": missing evaluated state without pre-base deadline")
         stats = r["statistics"]
+        require(not r["nonlinear_validation_enabled"] and stats["nonlinear_validation_evaluations"] == 0 and
+                stats["nonlinear_validation_rejections"] == 0,
+                name + ": absent optional callback changed legacy validation behavior")
+        require(all(not ls["nonlinear_validation_attempted"] and not ls["nonlinear_validated"]
+                    for ls in r["line_search"]), name + ": absent callback manufactured full validation")
         require(all(value >= 0 for value in stats.values()), name + ": negative statistic")
         require(stats["accepted_newton_steps"] == sum(n["accepted"] for n in r["newton"]),
                 name + ": accepted history count disagrees")
@@ -188,6 +193,9 @@ def check(data):
             and len(probes) == len(data["derivative_probes"]), "incorrect derivative probe inventory")
     maximum_directional_error = maximum_change_error = 0.
     for name, probe in probes.items():
+        require(not probe["nonlinear_validation_enabled"] and
+                probe["statistics"]["nonlinear_validation_evaluations"] == 0,
+                name + ": legacy derivative probe acquired optional full validation")
         exact = action(probe["base"], probe["direction"])
         require(relative_error(probe["analytic_action"], exact, B) <= 2e-14,
                 name + ": probe's analytic action is incorrect")
@@ -247,11 +255,124 @@ def check(data):
             require(any(fd["method"] == "infeasible-reduction" for fd in entries),
                     name + ": derivative reduction was not exercised")
 
+    validation = {case["name"]: case for case in data["nonlinear_validation_controls"]}
+    require(set(validation) == {"rejected_candidate_not_best", "guarded_linesearch_progress",
+                "fd_outside_full_margin", "fd_domain_guard", "fd_typed_domain_guard", "noop_full_guard_equivalence",
+                "guarded_best_unaccepted_state"}
+            and len(validation) == len(data["nonlinear_validation_controls"]),
+            "full nonlinear validation control inventory mismatch")
+    validation_summary = {}
+    for name in ("rejected_candidate_not_best", "guarded_linesearch_progress"):
+        case = validation[name]; r = case["result"]; stats = r["statistics"]
+        progress = name == "guarded_linesearch_progress"
+        expected_x, expected_norm = (.5, .5) if progress else (0., 1.)
+        require(r["nonlinear_validation_enabled"] and not r["converged"] and r["has_evaluated_state"] and
+                r["best_from_accepted"], name + ": rejected full state contaminated best-state provenance")
+        require(abs(r["x"][0]-expected_x) < 1e-8 and abs(r["residual"][0]-(expected_x-1)) < 1e-8 and
+                abs(r["true_norm"]-expected_norm) < 1e-8 and abs(r["last_accepted_norm"]-expected_norm) < 1e-8,
+                name + ": wrong independently checked scalar state/residual")
+        reason = "NEWTON_NOT_CONVERGED:" if progress else "LINE_SEARCH_NOT_CONVERGED:"
+        require(r["status"] == "NOT_CONVERGED" and r["reason"].startswith(reason),
+                name + ": incorrect bounded failure classification")
+        require(stats["nonlinear_validation_evaluations"] == (3 if progress else 2) and
+                stats["nonlinear_validation_rejections"] == 1 and stats["fd_rejections"] == 0 and
+                stats["accepted_newton_steps"] == int(progress) and
+                case["forbidden_candidate_residual_evaluations"] == 0,
+                name + ": full rejection was missed, entered FD, or reached Residual")
+        require(len(r["line_search"]) == (2 if progress else 1), name + ": wrong line-search evidence")
+        rejected = r["line_search"][0]
+        require(rejected["nonlinear_validation_attempted"] and not rejected["nonlinear_validated"] and
+                not rejected["admissible"] and not rejected["evaluated"] and not rejected["accepted"] and
+                not rejected["sufficient_decrease"] and "full-principal-candidate-marker" in rejected["reason"],
+                name + ": failed full validation was observed, norm-tested, or accepted")
+        states = case["full_validation_inputs"]
+        require(states[0] == 0 and abs(states[1]-1) < 1e-8,
+                name + ": low-residual forbidden Newton candidate was not exercised")
+        if progress:
+            accepted = r["line_search"][1]
+            require(abs(states[2]-.5) < 1e-8 and accepted["nonlinear_validation_attempted"] and
+                    accepted["nonlinear_validated"] and accepted["accepted"] and accepted["step"] == .5,
+                    name + ": feasible half step was not fully validated before acceptance")
+        validation_summary[name] = {"returned_x": r["x"][0], "full_evaluations": stats["nonlinear_validation_evaluations"],
+                                    "full_rejections": stats["nonlinear_validation_rejections"]}
+
+    for name in ("fd_outside_full_margin", "fd_domain_guard", "fd_typed_domain_guard"):
+        case = validation[name]; probe = case["probe"]; stats = probe["statistics"]
+        central = name == "fd_outside_full_margin"
+        require(probe["completed"] and probe["nonlinear_validation_enabled"] and
+                case["full_validation_inputs"] == [0] and stats["nonlinear_validation_evaluations"] == 1 and
+                stats["nonlinear_validation_rejections"] == 0,
+                name + ": FD point received full validation or probe base was unvalidated")
+        require(probe["base"] == [0] and probe["direction"] == [1] and probe["analytic_action"] == [1] and
+                probe["multipliers"] == [1, .5, .25] and len(probe["actions"]) == 3,
+                name + ": changed independent cubic derivative problem")
+        expected_method = "central" if central else "forward-second-order"
+        require(len(probe["finite_differences"]) == 3 and
+                all(row["method"] == expected_method for row in probe["finite_differences"]),
+                name + ": domain-only FD rule differs")
+        require(stats["fd_rejections"] == (0 if central else 3), name + ": constitutive domain guard was bypassed")
+        for index, (value, row) in enumerate(zip(probe["actions"], probe["finite_differences"])):
+            h = 1e-5*.5**index
+            expected = 1+h*h if central else 1-.5*h*h
+            require(abs(value[0]-expected) < 1e-12 and abs(value[0]-1) < 2e-8,
+                    name + ": derivative disagrees with the analytic cubic stencil/Jacobian")
+            require(abs(row["parameter_step"]/h-1) <= 2e-14 and row["plus_admissible"] and
+                    row["minus_admissible"] == central,
+                    name + ": changed prospective FD step or domain admissibility")
+            if not central:
+                marker = "typed-FD-domain-marker" if name == "fd_typed_domain_guard" else "FD-domain-boundary-marker"
+                require(row["half_admissible"] and marker in row["minus_reason"],
+                        name + ": missing actual domain rejection provenance")
+        inputs = case["residual_inputs"]
+        require(inputs[0] == 0 and len(inputs) == (10 if name == "fd_typed_domain_guard" else 7) and
+                all(abs(x) > 1e-12 for x in inputs[1:]),
+                name + ": no residual-evaluated FD point outside the nonlinear full-margin guard")
+        if name == "fd_domain_guard": require(all(x >= 0 for x in inputs), "domain-rejected point reached Residual")
+        validation_summary[name] = {"method": expected_method, "full_evaluations": 1,
+                                    "domain_rejections": stats["fd_rejections"], "residual_evaluations": len(inputs)}
+
+    case = validation["noop_full_guard_equivalence"]; a, b = case["baseline"], case["guarded"]
+    require(a["converged"] and b["converged"] and a["x"] == b["x"] and a["residual"] == b["residual"] and
+            a["true_norm"] == b["true_norm"] and not a["nonlinear_validation_enabled"] and
+            b["nonlinear_validation_enabled"], "no-op full guard changed the established solution")
+    require(relative_error(b["residual"], residual(b["x"]), B) <= 2e-13 and
+            b["true_norm"] <= data["acceptance_norm"], "guarded solve failed independent nonlinear equations")
+    for key in ("residual_evaluations", "validity_evaluations", "norm_evaluations", "jacobian_actions",
+                "fd_rejections", "line_search_rejections", "linear_iterations", "linear_cycles", "accepted_newton_steps"):
+        require(a["statistics"][key] == b["statistics"][key], "no-op callback changed algorithm count: "+key)
+    require(b["statistics"]["nonlinear_validation_evaluations"] == len(case["full_validation_inputs"]) ==
+            len(b["newton"])+sum(row["nonlinear_validation_attempted"] for row in b["line_search"]) and
+            b["statistics"]["nonlinear_validation_rejections"] == 0 and
+            all(not row["admissible"] or row["nonlinear_validation_attempted"] and row["nonlinear_validated"]
+                for row in b["line_search"]), "nonlinear base/trial full-validation provenance is incomplete")
+    validation_summary["noop_full_guard_equivalence"] = dict(bitwise_same_state_and_residual=True,
+        full_evaluations=b["statistics"]["nonlinear_validation_evaluations"],
+        residual_evaluations=b["statistics"]["residual_evaluations"])
+    case = validation["guarded_best_unaccepted_state"]; r = case["result"]
+    require(r["nonlinear_validation_enabled"] and not r["converged"] and r["has_evaluated_state"] and
+            not r["best_from_accepted"] and abs(r["x"][0]-1) < 1e-8 and abs(r["true_norm"]-.99) < 1e-8 and
+            r["last_accepted_norm"] == 1 and r["statistics"]["accepted_newton_steps"] == 0,
+            "fully validated best unaccepted candidate lost its honest provenance")
+    require(r["statistics"]["nonlinear_validation_evaluations"] == 2 and
+            case["full_validation_inputs"][0] == 0 and len(r["line_search"]) == 1 and
+            r["line_search"][0]["nonlinear_validated"] and not r["line_search"][0]["accepted"],
+            "best unaccepted candidate lacked complete nonlinear validation")
+    require(abs(r["residual"][0]-(1-r["x"][0]+.99*r["x"][0]**2)) < 2e-13,
+            "guarded best candidate residual is stale")
+    validation_summary["guarded_best_unaccepted_state"] = dict(fully_validated=True, accepted=False,
+                                                             best_norm=r["true_norm"])
+    require(data["full_initial_guard_residual_calls"] == 0 and data["revalidated_full_base_calls"] == 3,
+            "initial/re-evaluated base guard was skipped or a rejected initial state reached Residual")
+
     fatal = {case["name"]: case["reason"] for case in data["fatal_exceptions"]}
     markers = {"fatal_trial_residual": "fatal-residual-marker", "fatal_trial_validity": "fatal-validity-marker",
                "fatal_preconditioner": "fatal-preconditioner-marker", "typed_base_is_fatal": "inadmissible steady base",
                "malformed_residual": "incorrect size", "invalid_true_norm": "TrueNorm returned",
-               "missing_wall_cap": "explicit finite wall budget", "invalid_unknown_scale": "positive finite vectors"}
+               "missing_wall_cap": "explicit finite wall budget", "invalid_unknown_scale": "positive finite vectors",
+               "typed_full_initial_is_fatal": "inadmissible steady base: full-initial-marker",
+               "typed_full_probe_base_is_fatal": "inadmissible steady base: full-probe-base-marker",
+               "fatal_full_candidate": "fatal-full-candidate-marker",
+               "typed_full_revalidated_base_is_fatal": "inadmissible steady base: full-revalidated-base-marker"}
     require(set(fatal) == set(markers) and len(fatal) == len(data["fatal_exceptions"]), "fatal control inventory mismatch")
     for name, marker in markers.items():
         require(marker in fatal[name], name + ": fatal programming/input error was swallowed or misclassified")
@@ -260,6 +381,7 @@ def check(data):
             "maximum_analytic_directional_error": maximum_directional_error,
             "maximum_halving_diagnostic_error": maximum_change_error,
             "solve_cases": solve_summary, "derivative_cases": len(probes), "fatal_controls": len(fatal),
+            "nonlinear_validation_controls": validation_summary,
             "scope": "Generic finite-dimensional solver only; no coupled PDE convergence, physical qualification or performance claim",
             "wall_cap_scope": "Cooperative deadline; the intentionally sleeping callback cannot be interrupted"}
 

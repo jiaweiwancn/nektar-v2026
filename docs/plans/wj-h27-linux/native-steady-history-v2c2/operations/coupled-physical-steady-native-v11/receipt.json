@@ -1,0 +1,82 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver",
+    "--use-opt-file",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-steady.xml.opt",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-steady.xml"
+  ],
+  "phase": "science",
+  "seconds_cap": 1100.0,
+  "utc": "2026-11-17T15:25:51.141354+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 486725,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v11b.py"
+      },
+      {
+        "pid": 486819,
+        "parent": 486725,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label coupled-physical-steady-native-v11 --phase science --seconds 1100 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-steady.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-steady.xml"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver",
+      "bytes": 380,
+      "sha256": "65c262a35d19df3e0d83caab0058098b7bebccb308a9171c379c19431069391e"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-steady.xml.opt",
+      "bytes": 55,
+      "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-steady.xml",
+      "bytes": 111960,
+      "sha256": "5ba30fd633a72d169380f94b1628fc5c0f36fb204d82aebcff07057850168668"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 184.91479091899237,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 654663680,
+  "peak_host_workers": 21,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/coupled-physical-steady-native-v11/command.log",
+    "bytes": 1933,
+    "sha256": "4487c6da0382eae62703619e1ea752ed775a3cfcb6c933da5ea8b768f5373d8d"
+  }
+}

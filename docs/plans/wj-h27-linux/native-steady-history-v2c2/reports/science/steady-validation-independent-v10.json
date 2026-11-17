@@ -1,0 +1,118 @@
+{
+  "schema": "WJH27SteadyKrylovCheckV1",
+  "status": "PASS",
+  "input_sha256": "1be026f97ab167ae0c230aec60d39ce526fb3a5c19904c265ef4136122a4accc",
+  "checker_sha256": "7b23c0a7f7f44d433105a47e3ad7d122856db341cd2ecb876acf78e496c31a9b",
+  "maximum_returned_residual_error": 2.485059451591309e-16,
+  "maximum_physical_preconditioner_error": 0.0,
+  "maximum_analytic_directional_error": 1.0723269951995462e-10,
+  "maximum_halving_diagnostic_error": 2.5849394142282115e-26,
+  "solve_cases": {
+    "validity_rejection": {
+      "status": "CONVERGED",
+      "reason": "current true steady residual meets caller acceptance norm",
+      "true_norm": 8.548717289613706e-16,
+      "has_evaluated_state": true,
+      "accepted_newton_steps": 6
+    },
+    "typed_residual_rejection": {
+      "status": "CONVERGED",
+      "reason": "current true steady residual meets caller acceptance norm",
+      "true_norm": 8.548717289613706e-16,
+      "has_evaluated_state": true,
+      "accepted_newton_steps": 6
+    },
+    "newton_bound": {
+      "status": "NOT_CONVERGED",
+      "reason": "NEWTON_NOT_CONVERGED: declared Newton iteration bound exhausted",
+      "true_norm": 2.0423274993197094,
+      "has_evaluated_state": true,
+      "accepted_newton_steps": 1
+    },
+    "linear_bound": {
+      "status": "NOT_CONVERGED",
+      "reason": "LINEAR_NOT_CONVERGED: declared Krylov cycles did not meet both current residual tests",
+      "true_norm": 2.5965067637299244,
+      "has_evaluated_state": true,
+      "accepted_newton_steps": 0
+    },
+    "line_search_bound": {
+      "status": "NOT_CONVERGED",
+      "reason": "LINE_SEARCH_NOT_CONVERGED: declared feasible Armijo trials exhausted",
+      "true_norm": 2.5965067637299244,
+      "has_evaluated_state": true,
+      "accepted_newton_steps": 0
+    },
+    "deadline_before_base": {
+      "status": "NOT_CONVERGED",
+      "reason": "DEADLINE: finite steady-solve wall budget exhausted",
+      "true_norm": 0,
+      "has_evaluated_state": false,
+      "accepted_newton_steps": 0
+    },
+    "deadline_after_base": {
+      "status": "NOT_CONVERGED",
+      "reason": "DEADLINE: finite steady-solve wall budget exhausted",
+      "true_norm": 2.5965067637299244,
+      "has_evaluated_state": true,
+      "accepted_newton_steps": 0
+    },
+    "best_unaccepted_state": {
+      "status": "NOT_CONVERGED",
+      "reason": "LINE_SEARCH_NOT_CONVERGED: declared feasible Armijo trials exhausted",
+      "true_norm": 0.9900000000044602,
+      "has_evaluated_state": true,
+      "accepted_newton_steps": 0
+    }
+  },
+  "derivative_cases": 6,
+  "fatal_controls": 12,
+  "nonlinear_validation_controls": {
+    "rejected_candidate_not_best": {
+      "returned_x": 0,
+      "full_evaluations": 2,
+      "full_rejections": 1
+    },
+    "guarded_linesearch_progress": {
+      "returned_x": 0.49999999999949996,
+      "full_evaluations": 3,
+      "full_rejections": 1
+    },
+    "fd_outside_full_margin": {
+      "method": "central",
+      "full_evaluations": 1,
+      "domain_rejections": 0,
+      "residual_evaluations": 7
+    },
+    "fd_domain_guard": {
+      "method": "forward-second-order",
+      "full_evaluations": 1,
+      "domain_rejections": 3,
+      "residual_evaluations": 7
+    },
+    "fd_typed_domain_guard": {
+      "method": "forward-second-order",
+      "full_evaluations": 1,
+      "domain_rejections": 3,
+      "residual_evaluations": 10
+    },
+    "noop_full_guard_equivalence": {
+      "bitwise_same_state_and_residual": true,
+      "full_evaluations": 12,
+      "residual_evaluations": 108
+    },
+    "guarded_best_unaccepted_state": {
+      "fully_validated": true,
+      "accepted": false,
+      "best_norm": 0.9900000000044602
+    }
+  },
+  "scope": "Generic finite-dimensional solver only; no coupled PDE convergence, physical qualification or performance claim",
+  "wall_cap_scope": "Cooperative deadline; the intentionally sleeping callback cannot be interrupted",
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/steady-validation-independent-v10.json",
+    "bytes": 3903,
+    "sha256": "6c9aa4366cbf0ee467b146ec0d6f34b88bc4e8d3fe652f3020736ce7d6077e2a"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

@@ -1,0 +1,82 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/IncNavierStokesSolver",
+    "--use-opt-file",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v10-v2/qfine.xml.opt",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v10-v2/qfine.xml"
+  ],
+  "phase": "science",
+  "seconds_cap": 120.0,
+  "utc": "2026-11-17T14:55:10.055638+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 485539,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/mms-v2-controller-v10.py"
+      },
+      {
+        "pid": 485669,
+        "parent": 485539,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label mms-v2-qfine-native-v10 --phase science --seconds 120 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v10-v2/qfine.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v10-v2/qfine.xml"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/IncNavierStokesSolver",
+      "bytes": 380,
+      "sha256": "957e1fbdb5eca9e78c7647473f6c14806241201ec43825b34cf95e6e1e7c1bb8"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v10-v2/qfine.xml.opt",
+      "bytes": 55,
+      "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v10-v2/qfine.xml",
+      "bytes": 9307,
+      "sha256": "456e0576aeea294920bbe5de5363b544bacdda4bbd499ed267dc0da4066b82f2"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 23.894835156970657,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 208842752,
+  "peak_host_workers": 12,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/mms-v2-qfine-native-v10/command.log",
+    "bytes": 3408,
+    "sha256": "c696835d8e4e511dafa5441508b1a1db0d98e0b5f746712a4e85df8e95f4716a"
+  }
+}

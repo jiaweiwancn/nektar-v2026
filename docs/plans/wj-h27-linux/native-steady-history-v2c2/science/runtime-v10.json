@@ -1,0 +1,131 @@
+{
+  "scope": "opt-in H27 native targets; qualification scope belongs to each test",
+  "source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10.json",
+    "bytes": 1117166,
+    "sha256": "c1849c77ef41ae80cbbc26984e382868e7b7497568a9cb80def10b1ae98816be"
+  },
+  "configure": [
+    "cmake",
+    "-S",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/build-v10",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math",
+    "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+  ],
+  "build": [
+    "cmake",
+    "--build",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/build-v10",
+    "--target",
+    "IncNavierStokesSolver",
+    "WJH27SteadyKrylovProbe",
+    "WJH27ScalarProbe",
+    "WJH27MixedProbe",
+    "WJH27PerturbationProbe",
+    "--parallel",
+    "4"
+  ],
+  "executables": [
+    {
+      "executable": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/IncNavierStokesSolver.elf",
+        "bytes": 9753656,
+        "sha256": "a607abcab04720a88b69deff0f77c314caf29f3d4d62b646d385579c65c2548b"
+      },
+      "wrapper": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/IncNavierStokesSolver",
+        "bytes": 380,
+        "sha256": "957e1fbdb5eca9e78c7647473f6c14806241201ec43825b34cf95e6e1e7c1bb8"
+      },
+      "link": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v10/CMakeFiles/IncNavierStokesSolver.dir/link.txt",
+        "bytes": 12653,
+        "sha256": "7cbcc22462667f7a21216d91cdfbacf36a00d8dd4d137753d8a41d890a5dfa44"
+      }
+    },
+    {
+      "executable": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/WJH27SteadyKrylovProbe.elf",
+        "bytes": 342760,
+        "sha256": "ac737df77843a8eb5ad5058cea20a4213fd3820e7320e6413e7fdee72f22c7e0"
+      },
+      "wrapper": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/WJH27SteadyKrylovProbe",
+        "bytes": 381,
+        "sha256": "bbdf682991193489b553a48592d3df9d9aff52d2a0810c34119f28b2e3789aba"
+      },
+      "link": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v10/CMakeFiles/WJH27SteadyKrylovProbe.dir/link.txt",
+        "bytes": 1731,
+        "sha256": "7f9e5c3bbe665ae71aa034772ca8b2075b44b9475b6e455b0ce7d4840edfb2ba"
+      }
+    },
+    {
+      "executable": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/WJH27ScalarProbe.elf",
+        "bytes": 1016464,
+        "sha256": "879887fe37c35162cfd58fa1a350e189649a584a4b8c025dd41e53d509e18dcc"
+      },
+      "wrapper": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/WJH27ScalarProbe",
+        "bytes": 375,
+        "sha256": "78d027c18a81f268ae74ac3284794f4d9d28cbc51f91db5772bf08da79c27bf0"
+      },
+      "link": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v10/CMakeFiles/WJH27ScalarProbe.dir/link.txt",
+        "bytes": 1712,
+        "sha256": "38d0194549e827bf78c19f5c7bac8ac7e464de66441dda1c2957eb3f49fa1c34"
+      }
+    },
+    {
+      "executable": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/WJH27MixedProbe.elf",
+        "bytes": 800008,
+        "sha256": "59aa777d210b61344ab85e28f317d3368d7ee1f361252d930b653c7a5aaecb6f"
+      },
+      "wrapper": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/WJH27MixedProbe",
+        "bytes": 374,
+        "sha256": "d55bd691c43bfa34eafac4fbc4ff0e16c7f7005d775ff09ee241332da14171d7"
+      },
+      "link": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v10/CMakeFiles/WJH27MixedProbe.dir/link.txt",
+        "bytes": 1709,
+        "sha256": "c628edbade7051233b041eda6721526a2687b42a72e78eb103271446c57c894f"
+      }
+    },
+    {
+      "executable": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/WJH27PerturbationProbe.elf",
+        "bytes": 1236432,
+        "sha256": "30783080a0ccafe037e1ac036fb9981460ff8e378c367072ec4cdc8af1379217"
+      },
+      "wrapper": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/WJH27PerturbationProbe",
+        "bytes": 381,
+        "sha256": "2a348ca19dc0969f12c1b169ff34d7d515b6dae5545c7b3980c6c2348b2ca20e"
+      },
+      "link": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v10/CMakeFiles/WJH27PerturbationProbe.dir/link.txt",
+        "bytes": 1730,
+        "sha256": "f7e556f4cc7f2f1a14a71723281d65f5f18f19781b6c1b446df00de4c1a667b3"
+      }
+    }
+  ],
+  "loader": {
+    "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2",
+    "bytes": 240936,
+    "sha256": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+  },
+  "libraries": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc:/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/geometry:/home/jay/.local/opt/nektar-v2026-mpi/lib64",
+  "compiler": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0\nCopyright (C) 2021 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "compile_commands": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v10/compile_commands.json",
+    "bytes": 148805,
+    "sha256": "e18cabfda0349975ee3439b28b5a3660d600bbeda5f21f70375adda6d3871036"
+  }
+}

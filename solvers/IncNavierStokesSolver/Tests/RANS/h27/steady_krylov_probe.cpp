@@ -32,6 +32,9 @@ std::string Statistics(const SteadyKrylovStatistics&s)
         {"line_search_rejections",J::Number(s.lineSearchRejectedTrials)},
         {"linear_iterations",J::Number(s.linearIterations)},{"linear_cycles",J::Number(s.linearCycles)},
         {"accepted_newton_steps",J::Number(s.acceptedNewtonSteps)},
+        {"nonlinear_validation_evaluations",J::Number(s.nonlinearValidationEvaluations)},
+        {"nonlinear_validation_rejections",J::Number(s.nonlinearValidationRejectedTrials)},
+        {"nonlinear_validation_seconds",J::Number(s.nonlinearValidationSeconds)},
         {"residual_seconds",J::Number(s.residualSeconds)},{"validity_seconds",J::Number(s.validitySeconds)},
         {"norm_seconds",J::Number(s.normSeconds)},{"preconditioner_seconds",J::Number(s.preconditionerSeconds)},
         {"preparation_seconds",J::Number(s.preparationSeconds)},{"arnoldi_seconds",J::Number(s.arnoldiSeconds)},
@@ -61,6 +64,8 @@ std::string Result(const SteadyKrylovResult&r)
     for(const auto&a:r.lineSearch)lineSearch.push_back(J::Object({{"newton",J::Number(a.newton)},
         {"trial",J::Number(a.trial)},{"step",J::Number(a.step)},{"true_norm",J::Number(a.trueNorm)},
         {"admissible",J::Boolean(a.admissible)},{"evaluated",J::Boolean(a.evaluated)},
+        {"nonlinear_validation_attempted",J::Boolean(a.nonlinearValidationAttempted)},
+        {"nonlinear_validated",J::Boolean(a.nonlinearValidated)},
         {"sufficient_decrease",J::Boolean(a.sufficientDecrease)},{"accepted",J::Boolean(a.accepted)},
         {"reason",J::Quote(a.reason)}}));
     for(const auto&a:r.newton)newton.push_back(J::Object({{"iteration",J::Number(a.iteration)},
@@ -70,6 +75,7 @@ std::string Result(const SteadyKrylovResult&r)
         {"accepted",J::Boolean(a.accepted)}}));
     return J::Object({{"status",J::Quote(r.status)},{"reason",J::Quote(r.reason)},
         {"converged",J::Boolean(r.converged)},{"has_evaluated_state",J::Boolean(r.hasEvaluatedState)},
+        {"nonlinear_validation_enabled",J::Boolean(r.nonlinearValidationEnabled)},
         {"best_from_accepted",J::Boolean(r.bestFromAcceptedIterate)},{"x",V(r.x)},{"residual",V(r.residual)},
         {"true_norm",J::Number(r.trueNorm)},{"last_accepted_norm",J::Number(r.lastAcceptedNorm)},
         {"statistics",Statistics(r.statistics)},{"finite_differences",FD(r.finiteDifferences)},
@@ -131,10 +137,20 @@ std::string Probe(const std::string&name,const SteadyDerivativeProbe&p,const Vec
 {
     std::vector<std::string>actions;for(const auto&v:p.actions)actions.push_back(V(v));
     return J::Object({{"name",J::Quote(name)},{"completed",J::Boolean(p.completed)},{"reason",J::Quote(p.reason)},
+        {"nonlinear_validation_enabled",J::Boolean(p.nonlinearValidationEnabled)},
         {"base",V(base)},{"direction",V(direction)},{"analytic_action",V(exact)},
         {"multipliers",J::Numbers(p.stepMultipliers)},{"actions",J::List(actions)},
         {"successive_scaled_changes",J::Numbers(p.successiveRelativeScaledChanges)},
         {"finite_differences",FD(p.finiteDifferences)},{"statistics",Statistics(p.statistics)}});
+}
+SteadyKrylovCallbacks ScalarCallbacks()
+{
+    SteadyKrylovCallbacks cb;
+    cb.Residual=[](const Vec&x){return Vector({x[0]-1});};
+    cb.TrueNorm=[](const Vec&f){return std::abs(f[0]);};
+    cb.Precondition=[](const Vec&rhs){return Vec(rhs);};
+    cb.ValidTrial=[](const Vec&x){return SteadyTrialValidity{std::abs(x[0])<=2,"scalar constitutive domain"};};
+    return cb;
 }
 }
 int main(int argc,char**argv)
@@ -143,7 +159,7 @@ int main(int argc,char**argv)
     {
         if(argc!=2)throw std::invalid_argument("usage: steady_krylov_probe new-output.json");
         if(std::filesystem::exists(argv[1]))throw std::invalid_argument("immutable probe output exists");
-        std::vector<std::string>solves,probes,exceptions;
+        std::vector<std::string>solves,probes,exceptions,validationControls;
         const Vec initialY=Vector({.3,4.,.4,1.8});
         for(bool typed:{false,true})
         {
@@ -216,6 +232,67 @@ int main(int argc,char**argv)
             solves.push_back(J::Object({{"name",J::Quote("best_unaccepted_state")},{"system",J::Quote("no_real_root")},
                 {"initial",V(initial)},{"maximum_seconds",J::Number(options.maximumSeconds)},{"result",Result(result)}}));
         }
+        for(const std::string name:{"rejected_candidate_not_best","guarded_linesearch_progress"})
+        {
+            auto cb=ScalarCallbacks();auto options=Options();options.maximumNewtonIterations=1;
+            options.maximumLineSearchTrials=name=="rejected_candidate_not_best"?1:2;
+            int forbiddenResiduals=0;std::vector<double>validated;
+            cb.Residual=[&](const Vec&x){if(x[0]>.75)++forbiddenResiduals;return Vector({x[0]-1});};
+            cb.ValidateNonlinearState=[&](const Vec&x)
+            {validated.push_back(x[0]);if(x[0]>.75)throw SteadyInadmissibleTrial("full-principal-candidate-marker");};
+            const auto result=SteadyKrylov(cb,Vector({1}),Vector({2}),options).Solve(Vector({0}));
+            Check(!result.converged&&result.hasEvaluatedState&&result.bestFromAcceptedIterate,
+                  "full-guard rejection contaminated returned-state provenance");
+            Check(forbiddenResiduals==0&&result.statistics.nonlinearValidationRejectedTrials==1,
+                  "full-guard-rejected candidate was residual-evaluated or not counted");
+            Check(std::abs(result.x[0]-(name=="rejected_candidate_not_best"?0.:.5))<1e-8,
+                  "full-guard rejected point became best or accepted state");
+            validationControls.push_back(J::Object({{"name",J::Quote(name)},{"result",Result(result)},
+                {"full_validation_inputs",J::Numbers(validated)},
+                {"forbidden_candidate_residual_evaluations",J::Number(forbiddenResiduals)}}));
+        }
+        for(const std::string name:{"fd_outside_full_margin","fd_domain_guard","fd_typed_domain_guard"})
+        {
+            auto cb=ScalarCallbacks();std::vector<double>validated,residualInputs;
+            cb.ValidTrial=[&](const Vec&x){const bool ok=name!="fd_domain_guard"||x[0]>=0;
+                return SteadyTrialValidity{ok,ok?"":"FD-domain-boundary-marker"};};
+            cb.Residual=[&](const Vec&x){residualInputs.push_back(x[0]);
+                if(name=="fd_typed_domain_guard"&&x[0]<0)throw SteadyInadmissibleTrial("typed-FD-domain-marker");
+                return Vector({x[0]+x[0]*x[0]*x[0]});};
+            cb.ValidateNonlinearState=[&](const Vec&x){validated.push_back(x[0]);
+                if(std::abs(x[0])>1e-12)throw SteadyInadmissibleTrial("nonlinear-full-margin-marker");};
+            const auto result=SteadyKrylov(cb,Vector({1}),Vector({2}),Options()).ProbeDirection(Vector({0}),Vector({1}));
+            Check(result.completed&&validated.size()==1&&validated[0]==0,
+                  "full nonlinear guard leaked into FD probes or did not guard the probe base");
+            Check(result.statistics.nonlinearValidationEvaluations==1&&result.statistics.nonlinearValidationRejectedTrials==0,
+                  "wrong full-validation provenance on FD probe");
+            validationControls.push_back(J::Object({{"name",J::Quote(name)},
+                {"probe",Probe(name,result,Vector({0}),Vector({1}),Vector({1}))},
+                {"full_validation_inputs",J::Numbers(validated)},{"residual_inputs",J::Numbers(residualInputs)}}));
+        }
+        {
+            auto cb=ScalarCallbacks();std::vector<double>validated;
+            cb.Residual=[](const Vec&x){return Vector({1-x[0]+.99*x[0]*x[0]});};
+            cb.Precondition=[](const Vec&rhs){return Vec(-rhs);};
+            cb.ValidateNonlinearState=[&](const Vec&x){validated.push_back(x[0]);};
+            auto options=Options();options.armijo=.4;options.maximumLineSearchTrials=1;
+            const auto result=SteadyKrylov(cb,Vector({1}),Vector({2}),options).Solve(Vector({0}));
+            Check(!result.converged&&result.hasEvaluatedState&&!result.bestFromAcceptedIterate&&
+                  result.trueNorm<result.lastAcceptedNorm&&validated.size()==2,
+                  "fully validated best unaccepted candidate was lost");
+            validationControls.push_back(J::Object({{"name",J::Quote("guarded_best_unaccepted_state")},
+                {"result",Result(result)},{"full_validation_inputs",J::Numbers(validated)}}));
+        }
+        {
+            Problem baseline,guarded;auto options=Options();std::vector<std::string>validated;
+            auto cb=guarded.Callbacks();cb.ValidateNonlinearState=[&](const Vec&x){validated.push_back(V(x));};
+            const auto a=SteadyKrylov(baseline.Callbacks(),baseline.sx,baseline.RowScale(),options).Solve(baseline.X(initialY));
+            const auto b=SteadyKrylov(cb,guarded.sx,guarded.RowScale(),options).Solve(guarded.X(initialY));
+            Check(a.converged&&b.converged&&(a.x.array()==b.x.array()).all()&&(a.residual.array()==b.residual.array()).all(),
+                  "no-op full validation changed the established nonlinear algorithm");
+            validationControls.push_back(J::Object({{"name",J::Quote("noop_full_guard_equivalence")},
+                {"baseline",Result(a)},{"guarded",Result(b)},{"full_validation_inputs",J::List(validated)}}));
+        }
         auto mustThrow=[&](const std::string&name,const std::string&marker,const auto&operation)
         {
             try{operation();}catch(const std::exception&error)
@@ -254,12 +331,44 @@ int main(int argc,char**argv)
         {auto options=Options();options.maximumSeconds=0;SteadyKrylov(problem.Callbacks(),problem.sx,problem.RowScale(),options);});
         mustThrow("invalid_unknown_scale","positive finite vectors",[&]
         {Vec bad=problem.sx;bad[0]=-1;SteadyKrylov(problem.Callbacks(),bad,problem.RowScale(),Options());});
+        int initialGuardResiduals=0;
+        mustThrow("typed_full_initial_is_fatal","inadmissible steady base: full-initial-marker",[&]
+        {
+            auto cb=ScalarCallbacks();cb.Residual=[&](const Vec&x){++initialGuardResiduals;return Vector({x[0]-1});};
+            cb.ValidateNonlinearState=[](const Vec&){throw SteadyInadmissibleTrial("full-initial-marker");};
+            SteadyKrylov(cb,Vector({1}),Vector({2}),Options()).Solve(Vector({0}));
+        });
+        Check(initialGuardResiduals==0,"failed full initial guard reached Residual/Observe");
+        mustThrow("typed_full_probe_base_is_fatal","inadmissible steady base: full-probe-base-marker",[&]
+        {
+            auto cb=ScalarCallbacks();cb.ValidateNonlinearState=[](const Vec&){throw SteadyInadmissibleTrial("full-probe-base-marker");};
+            SteadyKrylov(cb,Vector({1}),Vector({2}),Options()).ProbeDirection(Vector({0}),Vector({1}));
+        });
+        mustThrow("fatal_full_candidate","fatal-full-candidate-marker",[&]
+        {
+            auto cb=ScalarCallbacks();cb.ValidateNonlinearState=[](const Vec&x){
+                if(x[0]>.75)throw std::logic_error("fatal-full-candidate-marker");};
+            SteadyKrylov(cb,Vector({1}),Vector({2}),Options()).Solve(Vector({0}));
+        });
+        int fullBaseCalls=0;
+        mustThrow("typed_full_revalidated_base_is_fatal","inadmissible steady base: full-revalidated-base-marker",[&]
+        {
+            auto cb=ScalarCallbacks();double previous=std::numeric_limits<double>::quiet_NaN();
+            cb.Residual=[](const Vec&x){return Vector({std::exp(x[0])-2});};
+            cb.ValidateNonlinearState=[&](const Vec&x){++fullBaseCalls;
+                if(x[0]==previous)throw SteadyInadmissibleTrial("full-revalidated-base-marker");previous=x[0];};
+            SteadyKrylov(cb,Vector({1}),Vector({2}),Options()).Solve(Vector({0}));
+        });
+        Check(fullBaseCalls==3,"accepted nonlinear base was not fully revalidated without a generic cache");
         const auto result=J::Object({{"schema",J::Quote("WJH27SteadyKrylovProbeV1")},{"status",J::Quote("RECORDED")},
             {"solver_identity",J::Quote(SteadyKrylov::Identity)},{"unknown_scale",V(problem.sx)},
             {"physical_residual_scale",V(problem.b)},{"residual_row_scale",V(problem.RowScale())},
             {"acceptance_norm",J::Number(Options().acceptanceNorm)},
             {"scope",J::Quote("Standalone generic solver verification; no native coupled/PDE convergence or cost qualification")},
-            {"solves",J::List(solves)},{"derivative_probes",J::List(probes)},{"fatal_exceptions",J::List(exceptions)}});
+            {"solves",J::List(solves)},{"derivative_probes",J::List(probes)},{"fatal_exceptions",J::List(exceptions)},
+            {"nonlinear_validation_controls",J::List(validationControls)},
+            {"full_initial_guard_residual_calls",J::Number(initialGuardResiduals)},
+            {"revalidated_full_base_calls",J::Number(fullBaseCalls)}});
         std::ofstream output(argv[1]);output<<result<<'\n';Check(output.good(),"probe output write failed");
         std::cout<<"Recorded "<<solves.size()<<" solves, "<<probes.size()<<" derivative probes, "<<exceptions.size()<<" fatal controls\n";
     }

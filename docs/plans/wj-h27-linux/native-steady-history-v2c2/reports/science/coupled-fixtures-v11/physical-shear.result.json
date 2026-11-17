@@ -1,0 +1,509 @@
+{
+  "schema": "WJH27RegisteredCoupledRunV2",
+  "factory": "WJNativeCoupledV2",
+  "normal_main": true,
+  "qualification": "execution evidence; closure gates are assessed independently",
+  "construction_seconds": 1.092221000988502,
+  "initialisation_seconds": 2.4320917949662544,
+  "restart": false,
+  "complete_advancing_seconds": 36.43672467197757,
+  "final_export_seconds": 0.03970340295927599,
+  "complete_step_seconds": [
+    36.43672467197757
+  ],
+  "recovery_seconds": [],
+  "rotated_recovery_count": 0,
+  "retained_recovery": [],
+  "steady_mode": false,
+  "steady_solver": null,
+  "state": {
+    "schema": "WJH27NativeCoupledStateV2",
+    "model": "FiniteNuIsotropicWallFullWJCollarV2",
+    "signature": "d2c00b6863a5f004857bb8987e8dcc57417961c3c0e02f77fb32ce5d1d47653f",
+    "source_identity": "dfdd5d8fb2384d08a5a54e5fd8d76f0ec7e37334fbebeb3b16e439553d8c080b",
+    "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+    "manufactured": false,
+    "step": 1,
+    "time": 0.005,
+    "dt": 0.005,
+    "state_sha256": "7fe499260d4d58980840c20318ca508103d397f1749533d6bbbfc735f1d15edb",
+    "previous_sha256": "cbaf0b31aaae4a0b82747c8f2e16ab3df4162e1a8c7974727a91a422bdd22771",
+    "advection_sha256": "5bacdc9ef67fe3eab7f837d065f7de10d8354365721950a068c5901a12dc5667",
+    "previous_advection_sha256": "d1fc2bd454304d96012d2674cf8560b067c51b8954e7862b5660f08a1ddaa0c4",
+    "sizes": [
+      6493,
+      2929,
+      6493,
+      4429
+    ],
+    "gauge": false,
+    "nonlinear_iterations": 31,
+    "linear_iterations": [
+      47,
+      44,
+      34
+    ],
+    "rebuilds": 7,
+    "retries": 0,
+    "seconds": 36.43250912200892,
+    "coefficient_drift": 1,
+    "residuals": [
+      2.9740094273539616e-12,
+      3.4632231304822293e-16,
+      0,
+      7.934506732981554e-13,
+      6.610487857853853e-13,
+      0
+    ],
+    "minimum_k": 0.008808977772856717,
+    "minimum_epsilon": 1.7442742409033924e-05,
+    "minimum_covariance_over_k": 0.2813968793942173,
+    "minimum_principal_over_mu": 0.0040461236434735865,
+    "disjoint_seconds": {
+      "constitutive": 6.309489597508218,
+      "wall": 0.6744333208771423,
+      "assembly": 11.80856573447818,
+      "flow": 0.908837910334114,
+      "scalar": 0.2574928270187229,
+      "rebuild": 3.9482524569611996,
+      "guards": 2.735645164444577,
+      "forcing": 0.0026496369973756373,
+      "residual": 9.63177116017323,
+      "nonlinear": 0.02253725496120751,
+      "io": 0,
+      "other": 0.1328340582549572
+    },
+    "quadratureX": 8,
+    "quadratureR": 12,
+    "linear_tolerance": 1e-12,
+    "nonlinear_tolerance": 3e-12,
+    "maximum_iterations": 180,
+    "mms_body_amplitude": 0,
+    "retry_reason": "",
+    "mms_variant": "Historical",
+    "steady_velocity_preconditioner": "FullGradientV1",
+    "stress_split": "PositiveShearV1",
+    "all_row_action_crosschecks": true,
+    "current_action_checks": {
+      "all_row_calls": 110,
+      "maximum_scaled_differences_flow_k_epsilon": [
+        1.7247826973078306e-15,
+        1.7452560305418014e-14,
+        6.467452789538974e-16
+      ],
+      "augmented_calls": 0,
+      "maximum_augmented_scaled_difference": 0,
+      "maximum_weak_divergence_load_norm": 0,
+      "maximum_gauge_multiplier": 0
+    },
+    "basis": "Modified_A",
+    "anderson_depth": 4,
+    "acceleration": {
+      "proposals": 29,
+      "accepted": 17,
+      "inadmissible_trials": 0
+    },
+    "initial_field_transfer": {
+      "packet_sha256": "",
+      "source_state_sha256": "",
+      "projected": false,
+      "source_was_candidate": false
+    },
+    "nonlinear_trace": [
+      {
+        "residuals": [
+          0.00017884750482851028,
+          2.739116391724994e-16,
+          0,
+          0.00769834497311895,
+          8.261454450198759e-07,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 1.5843114969902672
+      },
+      {
+        "residuals": [
+          0.00016154936282818265,
+          3.4125652011809956e-16,
+          0,
+          0.00023022162549541609,
+          3.557346338174393e-08,
+          0
+        ],
+        "accelerated": true,
+        "seconds": 0.7340302270022221
+      },
+      {
+        "residuals": [
+          0.00012572241896606254,
+          3.210345468718562e-16,
+          0,
+          9.442700431624893e-06,
+          5.684664747033942e-08,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 2.2836233959533274
+      },
+      {
+        "residuals": [
+          8.221390385855452e-05,
+          2.982447348943841e-16,
+          0,
+          4.2042539584588155e-07,
+          4.709760436629016e-08,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 1.26233618700644
+      },
+      {
+        "residuals": [
+          1.3168296018592081e-05,
+          1.790056376606031e-15,
+          0,
+          2.1647256975918604e-05,
+          1.5144374219171565e-08,
+          0
+        ],
+        "accelerated": true,
+        "seconds": 1.6485976650146767
+      },
+      {
+        "residuals": [
+          5.789717006489541e-06,
+          4.615243661040344e-16,
+          0,
+          3.598736033443233e-06,
+          4.923201369433221e-09,
+          0
+        ],
+        "accelerated": true,
+        "seconds": 1.1001689140102826
+      },
+      {
+        "residuals": [
+          4.522644902216294e-06,
+          5.802339521735949e-16,
+          0,
+          1.328964815983803e-06,
+          1.6038943614341011e-09,
+          0
+        ],
+        "accelerated": true,
+        "seconds": 1.8395453909761272
+      },
+      {
+        "residuals": [
+          1.649275031624414e-06,
+          1.0368652940054626e-15,
+          0,
+          1.2509380375958622e-06,
+          2.4315096127709347e-10,
+          0
+        ],
+        "accelerated": true,
+        "seconds": 0.7083465339965187
+      },
+      {
+        "residuals": [
+          1.2241964422801569e-06,
+          5.24467598577825e-16,
+          0,
+          3.671060523566667e-07,
+          4.757067708687997e-10,
+          0
+        ],
+        "accelerated": true,
+        "seconds": 0.7140033930190839
+      },
+      {
+        "residuals": [
+          4.4655781315282354e-07,
+          3.858661446296891e-16,
+          0,
+          5.373960381689937e-08,
+          1.7923694876467537e-10,
+          0
+        ],
+        "accelerated": true,
+        "seconds": 0.8967360790120438
+      },
+      {
+        "residuals": [
+          1.827541681422973e-07,
+          5.262393586468494e-16,
+          0,
+          3.4225087746184015e-08,
+          4.3608941874467453e-11,
+          0
+        ],
+        "accelerated": true,
+        "seconds": 0.8867976190522313
+      },
+      {
+        "residuals": [
+          1.1936582785636655e-07,
+          3.8475573931211407e-16,
+          0,
+          4.995573928788349e-09,
+          4.3404132560952527e-11,
+          0
+        ],
+        "accelerated": true,
+        "seconds": 1.0690827729995362
+      },
+      {
+        "residuals": [
+          4.2065214554727444e-08,
+          6.31674220608772e-16,
+          0,
+          3.951618334985079e-09,
+          2.4569770414519284e-11,
+          0
+        ],
+        "accelerated": true,
+        "seconds": 0.7038248690078035
+      },
+      {
+        "residuals": [
+          1.7629701970783455e-08,
+          5.078157751612638e-16,
+          0,
+          3.0710764162587145e-09,
+          5.99149187846687e-12,
+          0
+        ],
+        "accelerated": true,
+        "seconds": 0.9226032570004463
+      },
+      {
+        "residuals": [
+          1.1611600460952986e-08,
+          3.2447946328049173e-16,
+          0,
+          2.1307889934800928e-10,
+          3.6795918888967764e-12,
+          0
+        ],
+        "accelerated": true,
+        "seconds": 1.080444663995877
+      },
+      {
+        "residuals": [
+          6.717981541694032e-09,
+          5.988543983264177e-16,
+          0,
+          1.6557918051092778e-10,
+          5.016284781970291e-12,
+          0
+        ],
+        "accelerated": true,
+        "seconds": 0.8910451990086585
+      },
+      {
+        "residuals": [
+          1.8042188002897167e-09,
+          5.467138209341916e-16,
+          0,
+          9.294704701213444e-11,
+          1.142227845259632e-12,
+          0
+        ],
+        "accelerated": true,
+        "seconds": 0.7135554670239799
+      },
+      {
+        "residuals": [
+          1.0757294164389687e-09,
+          3.1393431620095703e-16,
+          0,
+          4.069663841960451e-12,
+          1.1451931011177755e-12,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 1.2349284929805435
+      },
+      {
+        "residuals": [
+          6.977305470981949e-10,
+          3.020336881499837e-16,
+          0,
+          9.627727142059204e-13,
+          9.512727928196684e-13,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 1.2342585229780525
+      },
+      {
+        "residuals": [
+          4.423323876511127e-10,
+          3.2389151293327677e-16,
+          0,
+          8.092689863770495e-13,
+          7.007994171285804e-13,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 1.248744553013239
+      },
+      {
+        "residuals": [
+          1.9491088721621972e-10,
+          5.298496983464742e-16,
+          0,
+          2.9992998203989818e-12,
+          9.732136073293268e-13,
+          0
+        ],
+        "accelerated": true,
+        "seconds": 0.684717935975641
+      },
+      {
+        "residuals": [
+          6.88241015778206e-11,
+          4.179551393865316e-16,
+          0,
+          1.5953570717823592e-12,
+          6.884804866610923e-13,
+          0
+        ],
+        "accelerated": true,
+        "seconds": 0.7056618480128236
+      },
+      {
+        "residuals": [
+          4.30849442235985e-11,
+          3.0726017349790713e-16,
+          0,
+          5.64186787138349e-13,
+          5.108180252827785e-13,
+          0
+        ],
+        "accelerated": true,
+        "seconds": 1.0815065510105342
+      },
+      {
+        "residuals": [
+          2.8330180892702824e-11,
+          3.005821202446799e-16,
+          0,
+          6.430070322317072e-13,
+          5.046690512753259e-13,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 1.2411625040112995
+      },
+      {
+        "residuals": [
+          1.8471430571112634e-11,
+          3.1701821676513667e-16,
+          0,
+          5.504492677041658e-13,
+          5.188932009970899e-13,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 1.2470744570018724
+      },
+      {
+        "residuals": [
+          1.2220924323444134e-11,
+          3.280675780361205e-16,
+          0,
+          5.728324257445629e-13,
+          5.848236795621968e-13,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 1.2465664419578388
+      },
+      {
+        "residuals": [
+          8.475866941750437e-12,
+          3.124956122260589e-16,
+          0,
+          5.915784968549441e-13,
+          5.539501001868813e-13,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 1.2389773750328459
+      },
+      {
+        "residuals": [
+          6.184590801819936e-12,
+          3.2254276470640895e-16,
+          0,
+          6.186418606343638e-13,
+          8.144142590265115e-13,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 1.2522717349929735
+      },
+      {
+        "residuals": [
+          4.713889059398518e-12,
+          3.048280083125821e-16,
+          0,
+          6.922423683025947e-13,
+          4.657106277611029e-13,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 1.2568780240253545
+      },
+      {
+        "residuals": [
+          3.713725743492136e-12,
+          3.463483850180651e-16,
+          0,
+          6.786726806228432e-13,
+          5.459633344673771e-13,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 1.2450996679835953
+      },
+      {
+        "residuals": [
+          2.9740094273539616e-12,
+          3.4632231304822293e-16,
+          0,
+          7.934506732981554e-13,
+          6.610487857853853e-13,
+          0
+        ],
+        "accelerated": false,
+        "seconds": 0.5163902030326426
+      }
+    ],
+    "constitutive_backend": "FastFull3DV1",
+    "constitutive_calls": {
+      "values": 9698304,
+      "directions": 165312,
+      "fallbacks": 0,
+      "root_iterations": 58189824,
+      "maximum_normalized_root_residual": 1.4292258310599345e-16
+    },
+    "geometry": {
+      "d0": 0.0875,
+      "H": 0.15,
+      "h": 0.10854503542535461,
+      "left": -10.000000000000002,
+      "right": 15,
+      "top": 19.912500000000005
+    }
+  },
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-shear.result.json",
+    "bytes": 3730674,
+    "sha256": "c1f849e923b8c5e7f2ebb0995fbad5161561daad742e9c45e36670223bcb3987"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

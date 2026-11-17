@@ -1,0 +1,73 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v1/solvers/IncNavierStokesSolver/Tests/RANS/h27/mixed_fixtures.py",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-fixtures-v1"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T08:18:53.902131+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 473818,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/foundation-controller-v1.py"
+      },
+      {
+        "pid": 474118,
+        "parent": 473818,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label mixed-fixtures-v1 --phase analysis --seconds 30 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v1/solvers/IncNavierStokesSolver/Tests/RANS/h27/mixed_fixtures.py --out /home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-fixtures-v1"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v1/solvers/IncNavierStokesSolver/Tests/RANS/h27/mixed_fixtures.py",
+      "bytes": 1672,
+      "sha256": "9e2268e1c6e09a6b60bb831ec275c20a888d8737fc145b58026566d754173d95"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 0.646196883986704,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 548864,
+  "peak_host_workers": 5,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/mixed-fixtures-v1/command.log",
+    "bytes": 70,
+    "sha256": "ae89434194593b0d4bc130b321cca531f0f19f3fae89f53f7d6af30d9494b407"
+  }
+}

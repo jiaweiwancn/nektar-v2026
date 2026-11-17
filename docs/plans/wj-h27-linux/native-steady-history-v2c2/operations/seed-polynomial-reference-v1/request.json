@@ -1,0 +1,78 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-polynomial-reference-v1/h27/polynomial_steady_reference_check.py",
+    "--native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v9/steady-poly-seed.result.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/seed-polynomial-reference-v1.json",
+    "--seconds",
+    "180"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 210.0,
+  "utc": "2026-11-17T14:07:53.375603+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 483880,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/seed-polynomial-reference-controller-v1.py"
+      },
+      {
+        "pid": 483881,
+        "parent": 483880,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label seed-polynomial-reference-v1 --phase analysis --seconds 210 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools-polynomial-reference-v1/h27/polynomial_steady_reference_check.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v9/steady-poly-seed.result.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/seed-polynomial-reference-v1.json --seconds 180"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-polynomial-reference-v1/h27/polynomial_steady_reference_check.py",
+      "bytes": 19320,
+      "sha256": "d21a9893d753d0c6d3be1028bd3c24875a407bc1bf31520c0b63acb2808e3037"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v9/steady-poly-seed.result.json",
+      "bytes": 106447,
+      "sha256": "c03fdaa8baa36460be7ad110e3af6c27c1d353e8f09551055748dcc343f42532"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ]
+}

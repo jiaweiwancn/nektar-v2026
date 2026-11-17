@@ -1,0 +1,82 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/amended-native-check-v1.py",
+    "--native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/amended-native-v1.json",
+    "--source-dir",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v1/solvers/IncNavierStokesSolver/Tests/RANS/h27",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/amended-native-independent-v1.json"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T08:21:59.635432+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 474126,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/foundation-validation-v1.py"
+      },
+      {
+        "pid": 474186,
+        "parent": 474126,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label amended-native-independent-v1 --phase analysis --seconds 30 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/amended-native-check-v1.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/amended-native-v1.json --source-dir /home/jay/build/wj-h27-coupling-r1-20261117/source-v1/solvers/IncNavierStokesSolver/Tests/RANS/h27 --out /home/jay/build/wj-h27-coupling-r1-20261117/science/amended-native-independent-v1.json"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/amended-native-check-v1.py",
+      "bytes": 2730,
+      "sha256": "1199ed82ed9c844bc28b74ae9eca572a150ad6a1b78d68af95a30daef51deb5e"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/amended-native-v1.json",
+      "bytes": 23659,
+      "sha256": "162576aa57d4eb2d3e6ccef515584e1ec9336f3b7f7362ffee80c8991c138c6e"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 0.6390618110308424,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 114688,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/amended-native-independent-v1/command.log",
+    "bytes": 58,
+    "sha256": "e4ac2eb66aab5240c453a778743d13a4775eb58ef44967dbcea1abb6fb6fe584"
+  }
+}

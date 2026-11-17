@@ -1,0 +1,77 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v1/solvers/IncNavierStokesSolver/Tests/RANS/h27/build.py",
+    "--root",
+    "/home/jay/build/wj-h27-coupling-r1-20261117",
+    "--version",
+    "1",
+    "--targets",
+    "WJH27PrincipalProbe,WJH27MixedProbe,WJNativeFlowDriver"
+  ],
+  "phase": "build",
+  "seconds_cap": 300.0,
+  "utc": "2026-11-17T08:17:41.297294+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 473818,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/foundation-controller-v1.py"
+      },
+      {
+        "pid": 473824,
+        "parent": 473818,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label foundation-build-v1 --phase build --seconds 300 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v1/solvers/IncNavierStokesSolver/Tests/RANS/h27/build.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --version 1 --targets WJH27PrincipalProbe,WJH27MixedProbe,WJNativeFlowDriver"
+      }
+    ]
+  },
+  "reservation": 16,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v1/solvers/IncNavierStokesSolver/Tests/RANS/h27/build.py",
+      "bytes": 2634,
+      "sha256": "2644a0f5a4f287a2853252d208ffc0c072f5e34a671f4b5f1cdd34e2845c40fd"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 72.42536101001315,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 1890050048,
+  "peak_host_workers": 15,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/foundation-build-v1/command.log",
+    "bytes": 16311,
+    "sha256": "57adbe6d7b4430df3b9a395dc455013bbb14c9411b28c8b853d2167345223daa"
+  }
+}

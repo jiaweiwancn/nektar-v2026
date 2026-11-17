@@ -1,0 +1,79 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/steady_krylov_check.py",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/steady-validation-native-v10.json",
+    "--output",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/steady-validation-independent-v10.json"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T14:47:52.155011+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 484269,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v10.py"
+      },
+      {
+        "pid": 485141,
+        "parent": 484269,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label steady-validation-independent-v10 --phase analysis --seconds 30 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/steady_krylov_check.py /home/jay/build/wj-h27-coupling-r1-20261117/science/steady-validation-native-v10.json --output /home/jay/build/wj-h27-coupling-r1-20261117/science/steady-validation-independent-v10.json"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/steady_krylov_check.py",
+      "bytes": 27970,
+      "sha256": "7b23c0a7f7f44d433105a47e3ad7d122856db341cd2ecb876acf78e496c31a9b"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/steady-validation-native-v10.json",
+      "bytes": 182441,
+      "sha256": "1be026f97ab167ae0c230aec60d39ce526fb3a5c19904c265ef4136122a4accc"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 1.2742466239724308,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 12288,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/steady-validation-independent-v10/command.log",
+    "bytes": 3331,
+    "sha256": "bdc6500133eb625ea25ad654bb59b18fb6401332c6db49bf50ec2bc0b008ccc4"
+  }
+}

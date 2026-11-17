@@ -1,0 +1,66 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/h27/build.py",
+    "--root",
+    "/home/jay/build/wj-h27-coupling-r1-20261117",
+    "--version",
+    "4",
+    "--targets",
+    "IncNavierStokesSolver,WJH27MixedProbe,WJH27ScalarProbe"
+  ],
+  "phase": "build",
+  "seconds_cap": 600.0,
+  "utc": "2026-11-17T09:40:32.422591+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 475977,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v4.py"
+      },
+      {
+        "pid": 475983,
+        "parent": 475977,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label coupled-build-v4 --phase build --seconds 600 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/h27/build.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --version 4 --targets IncNavierStokesSolver,WJH27MixedProbe,WJH27ScalarProbe"
+      }
+    ]
+  },
+  "reservation": 16,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v4/solvers/IncNavierStokesSolver/Tests/RANS/h27/build.py",
+      "bytes": 2748,
+      "sha256": "e0975ac0800200418e8f0bb0804bb1afa510118a834ce426d77215268c6a5a85"
+    }
+  ]
+}

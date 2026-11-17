@@ -1,0 +1,70 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/WJH27SteadyKrylovProbe",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/steady-validation-native-v10.json"
+  ],
+  "phase": "science",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T14:47:50.696964+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 484269,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v10.py"
+      },
+      {
+        "pid": 485137,
+        "parent": 484269,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label steady-validation-native-v10 --phase science --seconds 30 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/WJH27SteadyKrylovProbe /home/jay/build/wj-h27-coupling-r1-20261117/science/steady-validation-native-v10.json"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v10/WJH27SteadyKrylovProbe",
+      "bytes": 381,
+      "sha256": "bbdf682991193489b553a48592d3df9d9aff52d2a0810c34119f28b2e3789aba"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 1.2694397809682414,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 425984,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/steady-validation-native-v10/command.log",
+    "bytes": 58,
+    "sha256": "bfb87eadeefbe1a5082d738e6dace8c8a50a54d2337d7da3ed6a1d99ec7ce673"
+  }
+}

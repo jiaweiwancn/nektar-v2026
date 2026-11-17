@@ -1,0 +1,124 @@
+<NEKTAR>
+  <GEOMETRY DIM="2" SPACE="2">
+    <VERTEX>
+      <V ID="0">0 0 0</V>
+      <V ID="1">0.5 0 0</V>
+      <V ID="2">1 0 0</V>
+      <V ID="3">0 0.14999999999999999 0</V>
+      <V ID="4">0.5 0.14999999999999999 0</V>
+      <V ID="5">1 0.14999999999999999 0</V>
+      <V ID="6">0 0.5 0</V>
+      <V ID="7">0.5 0.5 0</V>
+      <V ID="8">1 0.5 0</V>
+      <V ID="9">0 1 0</V>
+      <V ID="10">0.5 1 0</V>
+      <V ID="11">1 1 0</V>
+    </VERTEX>
+    <EDGE>
+      <E ID="0">0 1</E>
+      <E ID="1">1 2</E>
+      <E ID="2">3 4</E>
+      <E ID="3">4 5</E>
+      <E ID="4">6 7</E>
+      <E ID="5">7 8</E>
+      <E ID="6">9 10</E>
+      <E ID="7">10 11</E>
+      <E ID="8">0 3</E>
+      <E ID="9">1 4</E>
+      <E ID="10">2 5</E>
+      <E ID="11">3 6</E>
+      <E ID="12">4 7</E>
+      <E ID="13">5 8</E>
+      <E ID="14">6 9</E>
+      <E ID="15">7 10</E>
+      <E ID="16">8 11</E>
+    </EDGE>
+    <ELEMENT>
+      <Q ID="0">0 9 2 8</Q>
+      <Q ID="1">1 10 3 9</Q>
+      <Q ID="2">2 12 4 11</Q>
+      <Q ID="3">3 13 5 12</Q>
+      <Q ID="4">4 15 6 14</Q>
+      <Q ID="5">5 16 7 15</Q>
+    </ELEMENT>
+    <CURVED />
+    <COMPOSITE>
+      <C ID="0">Q[0-5]</C>
+      <C ID="1">E[8,11,14]</C>
+      <C ID="2">E[10,13,16]</C>
+      <C ID="3">E[0,1]</C>
+      <C ID="4">E[6,7]</C>
+    </COMPOSITE>
+    <DOMAIN>C[0]</DOMAIN>
+  </GEOMETRY>
+  <EXPANSIONS>
+    <E COMPOSITE="C[0]" NUMMODES="4,4" BASISTYPE="Modified_A,Modified_A" FIELDS="u,v" NUMPOINTS="12,12" POINTSTYPE="GaussLobattoLegendre,GaussLobattoLegendre" />
+    <E COMPOSITE="C[0]" NUMMODES="3,3" BASISTYPE="Modified_A,Modified_A" FIELDS="p" NUMPOINTS="12,12" POINTSTYPE="GaussLobattoLegendre,GaussLobattoLegendre" />
+    <E COMPOSITE="C[0]" NUMMODES="4,4" BASISTYPE="Modified_A,Modified_A" FIELDS="k" NUMPOINTS="12,12" POINTSTYPE="GaussLobattoLegendre,GaussLobattoLegendre" />
+  </EXPANSIONS>
+  <CONDITIONS>
+    <SOLVERINFO>
+      <I PROPERTY="SolverType" VALUE="VelocityCorrectionScheme" />
+      <I PROPERTY="EQTYPE" VALUE="UnsteadyNavierStokes" />
+      <I PROPERTY="Projection" VALUE="Continuous" />
+      <I PROPERTY="GlobalSysSoln" VALUE="DirectStaticCond" />
+      <I PROPERTY="AdvectionType" VALUE="Convective" />
+      <I PROPERTY="SpectralVanishingViscosity" VALUE="False" />
+    </SOLVERINFO>
+    <TIMEINTEGRATIONSCHEME>
+      <METHOD>IMEX</METHOD>
+      <ORDER>2</ORDER>
+    </TIMEINTEGRATIONSCHEME>
+    <PARAMETERS>
+      <P>TimeStep = 0.005</P>
+      <P>NumSteps = 420</P>
+      <P>Kinvis = 6.423173803526447e-05</P>
+      <P>IO_CheckSteps = 200</P>
+      <P>IO_InfoSteps = 20</P>
+    </PARAMETERS>
+    <BOUNDARYREGIONS>
+      <B ID="0">C[1]</B>
+      <B ID="1">C[2]</B>
+      <B ID="2">C[3]</B>
+      <B ID="3">C[4]</B>
+    </BOUNDARYREGIONS>
+    <BOUNDARYCONDITIONS>
+      <REGION REF="0">
+        <D VAR="u" VALUE="0" />
+        <D VAR="v" VALUE="0" />
+        <N VAR="p" VALUE="0" USERDEFINEDTYPE="H" />
+        <D VAR="k" VALUE="0" />
+      </REGION>
+      <REGION REF="1">
+        <D VAR="u" VALUE="0" />
+        <D VAR="v" VALUE="0" />
+        <N VAR="p" VALUE="0" USERDEFINEDTYPE="H" />
+        <N VAR="k" VALUE="0" />
+      </REGION>
+      <REGION REF="2">
+        <D VAR="u" VALUE="0" />
+        <D VAR="v" VALUE="0" />
+        <N VAR="p" VALUE="0" USERDEFINEDTYPE="H" />
+        <N VAR="k" VALUE="0" />
+      </REGION>
+      <REGION REF="3">
+        <D VAR="u" VALUE="0" />
+        <D VAR="v" VALUE="0" />
+        <N VAR="p" VALUE="0" USERDEFINEDTYPE="H" />
+        <N VAR="k" VALUE="0" />
+      </REGION>
+    </BOUNDARYCONDITIONS>
+    <VARIABLES>
+      <V ID="0">u</V>
+      <V ID="1">v</V>
+      <V ID="2">p</V>
+      <V ID="3">k</V>
+    </VARIABLES>
+    <FUNCTION NAME="InitialConditions">
+      <E VAR="u" VALUE="0" />
+      <E VAR="v" VALUE="0" />
+      <E VAR="p" VALUE="0" />
+      <E VAR="k" VALUE="0.008809015145515192" />
+    </FUNCTION>
+  </CONDITIONS>
+</NEKTAR>

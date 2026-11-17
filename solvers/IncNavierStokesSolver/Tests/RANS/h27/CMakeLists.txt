@@ -20,6 +20,7 @@ add_library(WJNativeMixedFlow STATIC
     ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeAdmissibility.cpp
     ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupledMMS.cpp
     ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp
+    ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlowTangent.cpp
     ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeConstitutive.cpp
     ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativePerturbation.cpp
     ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeSteadyKrylov.cpp
@@ -51,7 +52,7 @@ target_compile_options(WJH27ScalarProbe PRIVATE
 include(source_identity.cmake)
 wj_h27_source_identity("${H27_SOURCE_ROOT}" wj_source_identity)
 target_compile_definitions(WJNativeMixedFlow PUBLIC WJ_H27_SOURCE_ID="${wj_source_identity}")
-foreach(probe reference admissibility coupled_mms constitutive steady_krylov initial_fields)
+foreach(probe reference admissibility coupled_mms constitutive steady_krylov initial_fields perturbation flow_tangent)
     if(probe STREQUAL "reference")
         set(name WJH27ReferenceProbe)
     elseif(probe STREQUAL "admissibility")
@@ -62,8 +63,12 @@ foreach(probe reference admissibility coupled_mms constitutive steady_krylov ini
         set(name WJH27ConstitutiveProbe)
     elseif(probe STREQUAL "steady_krylov")
         set(name WJH27SteadyKrylovProbe)
-    else()
+    elseif(probe STREQUAL "initial_fields")
         set(name WJH27InitialFieldsProbe)
+    elseif(probe STREQUAL "perturbation")
+        set(name WJH27PerturbationProbe)
+    else()
+        set(name WJH27FlowTangentProbe)
     endif()
     add_executable(${name} "${probe}_probe.cpp")
     target_link_libraries(${name} PRIVATE WJNativeMixedFlow)

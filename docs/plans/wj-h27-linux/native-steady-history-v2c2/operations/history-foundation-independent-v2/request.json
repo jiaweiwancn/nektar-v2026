@@ -1,0 +1,71 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-history-foundation-v2/history_recovery_check.py",
+    "--manifest",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/manifest.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/independent-v2.json",
+    "--seconds",
+    "45"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 60.0,
+  "utc": "2026-11-17T16:08:54.459103+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 488501,
+        "parent": 484265,
+        "threads": 1,
+        "args": "python3 -"
+      },
+      {
+        "pid": 488502,
+        "parent": 488501,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label history-foundation-independent-v2 --phase analysis --seconds 60 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools-history-foundation-v2/history_recovery_check.py --manifest /home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/manifest.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/independent-v2.json --seconds 45"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-history-foundation-v2/history_recovery_check.py",
+      "bytes": 23455,
+      "sha256": "a6321e307bf3d3f6567f88dbc5e1a5c6a13d9f623be4f8034dd7e3a6cc5da059"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/manifest.json",
+      "bytes": 2140,
+      "sha256": "0e59e8ffc8d484d7270e94f1209f73ab16b25a8c36ff2398dacc3c1f6f4ed6b9"
+    }
+  ]
+}

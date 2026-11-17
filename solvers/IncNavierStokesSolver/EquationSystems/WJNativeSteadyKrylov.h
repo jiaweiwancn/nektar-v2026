@@ -46,6 +46,15 @@ struct SteadyKrylovCallbacks
     // Optional explicit rebuild/refresh at each Newton base. Residual trials
     // must not silently redefine the prepared base operator or norm weights.
     std::function<void(const SteadyVector &,const SteadyVector &)> PreparePreconditioner;
+    // Optional complete scientific guard for actual nonlinear states. Called
+    // after ValidTrial and before Residual/Observe at every initial/re-evaluated
+    // base and nonlinear line-search candidate. NEVER called on FD samples:
+    // ValidTrial and Residual still enforce their constitutive/domain guards.
+    // Throw SteadyInadmissibleTrial to reject a candidate (fatal at a base);
+    // all unrelated exceptions propagate. No generic validation cache exists.
+    // A caller cache must match the complete x exactly and must not be replaced
+    // by a merely domain-admissible FD evaluation. Absence preserves V1 behavior.
+    std::function<void(const SteadyVector &)> ValidateNonlinearState;
 };
 
 struct SteadyKrylovOptions
@@ -72,8 +81,10 @@ struct SteadyKrylovStatistics
     long long preconditionerApplications=0, preconditionerPreparations=0;
     long long jacobianActions=0, fdRejectedTrials=0, lineSearchRejectedTrials=0;
     long long linearIterations=0, linearCycles=0, acceptedNewtonSteps=0;
+    long long nonlinearValidationEvaluations=0, nonlinearValidationRejectedTrials=0;
     double residualSeconds=0, validitySeconds=0, normSeconds=0;
     double preconditionerSeconds=0, preparationSeconds=0, arnoldiSeconds=0;
+    double nonlinearValidationSeconds=0;
     // Inclusive timings: linear/line-search/total must not be summed together
     // with callback timings to infer elapsed time or cost.
     double linearSeconds=0, lineSearchSeconds=0, totalSeconds=0;
@@ -85,6 +96,8 @@ struct SteadyFDRecord
     std::string purpose, method, plusReason, minusReason, halfReason;
     double relativeStep=0, parameterStep=0, scaledCoordinateStep=0;
     double scaledDirectionInfinityNorm=0, seconds=0;
+    // Admissible means ValidTrial + Residual domain checks only. These flags
+    // do not certify optional full nonlinear-state/principal validation.
     bool plusAdmissible=false, minusAdmissible=false, halfAdmissible=false;
 };
 
@@ -100,6 +113,7 @@ struct SteadyLineSearchRecord
     int newton=0, trial=0;
     double step=0, trueNorm=0;
     bool admissible=false, evaluated=false, sufficientDecrease=false, accepted=false;
+    bool nonlinearValidationAttempted=false, nonlinearValidated=false;
     std::string reason;
 };
 
@@ -113,8 +127,10 @@ struct SteadyNewtonRecord
 struct SteadyKrylovResult
 {
     bool converged=false, hasEvaluatedState=false, bestFromAcceptedIterate=true;
+    bool nonlinearValidationEnabled=false;
     std::string status="NOT_CONVERGED", reason;
-    // Best evaluated admissible state, not necessarily an Armijo-accepted
+    // Best evaluated admissible state, with optional full nonlinear validation
+    // passed, not necessarily an Armijo-accepted
     // iterate on failure. The caller must explicitly install any returned x.
     // If the deadline expires before an initial norm can be evaluated,
     // hasEvaluatedState=false and trueNorm/residual are not evidence.
@@ -130,6 +146,7 @@ struct SteadyKrylovResult
 struct SteadyDerivativeProbe
 {
     bool completed=false;
+    bool nonlinearValidationEnabled=false;
     std::string reason;
     // Raw physical J(x)*direction at fixed, prospectively supplied FD scales.
     // Defaults 1,1/2,1/4 provide two successive halvings. Comparisons are
@@ -156,6 +173,8 @@ struct SteadyDerivativeProbe
  * correction checks the linear residual, independently of its Hessenberg
  * estimate. Newton accepts the current steady TrueNorm by feasible norm-Armijo
  * decrease, or direct satisfaction of acceptanceNorm. There is no clipping.
+ * Optional full nonlinear validation precedes any candidate observation or
+ * acceptance. FD points are uncommitted domain evaluations, never best states.
  *
  * The finite wall deadline is cooperative between operations/callbacks; it
  * cannot interrupt a blocking user callback. All algorithm cycle bounds are

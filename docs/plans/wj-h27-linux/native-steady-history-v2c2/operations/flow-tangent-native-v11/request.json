@@ -1,0 +1,65 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/WJH27FlowTangentProbe",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/scalar-shifted.xml",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/flow-tangent-native.json"
+  ],
+  "phase": "science",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T15:12:55.874532+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 485898,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v11.py"
+      },
+      {
+        "pid": 486678,
+        "parent": 485898,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label flow-tangent-native-v11 --phase science --seconds 30 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/WJH27FlowTangentProbe /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/scalar-shifted.xml /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/flow-tangent-native.json"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/WJH27FlowTangentProbe",
+      "bytes": 380,
+      "sha256": "92cb91966ddb6762934b13ca53533673112fab524427658a4bb146139bed2403"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/scalar-shifted.xml",
+      "bytes": 4004,
+      "sha256": "094dc4a0e44d65c52a624d4a69cebba9f5f959cc2f9e536054cd510af00fbbbd"
+    }
+  ]
+}

@@ -589,6 +589,43 @@ Sparse Scalar::Diffusion(const Rules &rules, const std::vector<Vec> &diffusion,
     return result;
 }
 
+Vec Scalar::DiffusionAction(const Rules &rules,
+                            const std::vector<Vec> &diffusion,
+                            const Vec &state,
+                            const std::vector<Vec> &reaction) const
+{
+    Check(state.size() == Size() && state.allFinite() &&
+              diffusion.size() == rules.size() &&
+              (reaction.empty() || reaction.size() == rules.size()),
+          "invalid scalar diffusion action inventory");
+    Vec result = Vec::Zero(Size());
+    for (int e = 0; e < int(rules.size()); ++e)
+    {
+        Check(bool(rules[e]), "null scalar diffusion action rule");
+        const auto &rule = *rules[e];
+        const Cell *cell = Find(rule);
+        if (!cell) { continue; }
+        Check(diffusion[e].size() == rule.w.size() && diffusion[e].allFinite() &&
+                  (diffusion[e].array() > 0).all(),
+              "scalar diffusion action requires positive finite samples");
+        const Vec local = Local(state, cell->ids);
+        const Mat dx = Basis(rule, *cell, 0), dz = Basis(rule, *cell, 2);
+        const Vec weights = rule.w.cwiseProduct(diffusion[e]);
+        Vec action = dx.transpose() * weights.cwiseProduct(dx * local) +
+                     dz.transpose() * weights.cwiseProduct(dz * local);
+        if (!reaction.empty())
+        {
+            Check(reaction[e].size() == rule.w.size() && reaction[e].allFinite(),
+                  "invalid scalar diffusion action reaction samples");
+            const Mat b = Basis(rule, *cell, -1);
+            action.noalias() += b.transpose() *
+                rule.w.cwiseProduct(reaction[e]).cwiseProduct(b * local);
+        }
+        Add(result, action, *cell);
+    }
+    return result;
+}
+
 Vec Scalar::Source(const Rules &rules, const std::vector<Vec> &source) const
 {
     Check(source.size() == rules.size(), "scalar source rule count differs");
@@ -728,7 +765,9 @@ ScalarSolveInfo Scalar::Residual(const Sparse &current, const Vec &rhs,
           "native scalar residual state dimension/data differ");
     ScalarSolveInfo info;
     const double began = Clock();
-    info.residual = FreeDual(current * free - rhs);
+    Vec raw = current * free;
+    raw -= rhs;
+    info.residual = FreeDual(raw);
     info.residualSeconds = Clock() - began;
     return info;
 }
@@ -774,10 +813,15 @@ ScalarSolveInfo Scalar::Solve(const Sparse &current, const Vec &rhs, Vec &free,
     }
     constexpr int maximumIterations = 400, restart = 30;
     int used = 0;
-    double trueResidual = FreeDual(rhs - current * free);
+    double trueResidual = Residual(current, rhs, free).residual;
     while (trueResidual > tolerance && used < maximumIterations)
     {
-        const Vec residual = (rhs - current * free).cwiseProduct(m_scale);
+        // Form the SAME explicit current-matrix residual used by the final
+        // acceptance. Fused rhs-A*x and A*x-rhs expressions can round
+        // differently at a tight physical tolerance.
+        Vec raw = current * free;
+        raw -= rhs;
+        const Vec residual = -raw.cwiseProduct(m_scale);
         const double beta = residual.norm();
         RequireLinear(std::isfinite(beta) && beta > 0, "invalid scalar Krylov residual");
         const int dimension = std::min(restart, maximumIterations - used);
@@ -828,7 +872,7 @@ ScalarSolveInfo Scalar::Solve(const Sparse &current, const Vec &rhs, Vec &free,
             }
         }
         free.noalias() += preconditioned.leftCols(done) * best;
-        trueResidual = FreeDual(rhs - current * free);
+        trueResidual = Residual(current, rhs, free).residual;
     }
     const auto final = Residual(current, rhs, free);
     info.residual = final.residual;

@@ -1,0 +1,113 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/mms_study.py",
+    "--manifest",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-spatial-v11-v4/manifest.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-spatial-v11-v4/independent.json",
+    "--seconds",
+    "380"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 400.0,
+  "utc": "2026-11-17T15:47:00.336875+00:00",
+  "allocation": {
+    "workers": 14,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 487504,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/physical-reference-h2-controller-v1.py"
+      },
+      {
+        "pid": 487509,
+        "parent": 487504,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label physical-reference-h2-native-v1 --phase science --seconds 2200 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-h2-v1/reference-h2.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-h2-v1/reference-h2.xml"
+      },
+      {
+        "pid": 487511,
+        "parent": 487509,
+        "threads": 3,
+        "args": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2 --library-path /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc:/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/geometry:/home/jay/.local/opt/nektar-v2026-mpi/lib64 /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver.elf --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-h2-v1/reference-h2.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-h2-v1/reference-h2.xml"
+      },
+      {
+        "pid": 487513,
+        "parent": 487511,
+        "threads": 4,
+        "args": "orted --hnp --set-sid --report-uri 8 --singleton-died-pipe 9 -mca state_novm_select 1 -mca ess hnp -mca pmix ^s1,s2,cray,isolated"
+      },
+      {
+        "pid": 487742,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/mms-spatial-v11-v4.py"
+      },
+      {
+        "pid": 487872,
+        "parent": 487742,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label mms-spatial-v4-independent-v11 --phase analysis --seconds 400 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/mms_study.py --manifest /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-spatial-v11-v4/manifest.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-spatial-v11-v4/independent.json --seconds 380"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/mms_study.py",
+      "bytes": 48777,
+      "sha256": "2ad0978c45a6eca897d77db10ea34fc9f7fefff1cc2d45f5e4e3f7a04ad256a6"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-spatial-v11-v4/manifest.json",
+      "bytes": 1078,
+      "sha256": "47a21acccd94d1d1733f8940900800ba0cb6cc29f4cdcdf451073d19ec66b933"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 212.627417192969,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 651796480,
+  "peak_host_workers": 15,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/mms-spatial-v4-independent-v11/command.log",
+    "bytes": 160,
+    "sha256": "a154d9f574f89badf7ce44b44ab514e54e8a7ab7f8506f505a4c807a033786a0"
+  }
+}

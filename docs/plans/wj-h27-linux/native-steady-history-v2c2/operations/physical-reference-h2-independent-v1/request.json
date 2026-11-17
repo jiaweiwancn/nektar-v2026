@@ -1,0 +1,96 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_oracle.py",
+    "--native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-h2-v1/reference-h2.result.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-h2-v1/independent-h2.json",
+    "--seconds",
+    "420"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 450.0,
+  "utc": "2026-11-17T15:48:18.312861+00:00",
+  "allocation": {
+    "workers": 8,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 487504,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/physical-reference-h2-controller-v1.py"
+      },
+      {
+        "pid": 487742,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/mms-spatial-v11-v4.py"
+      },
+      {
+        "pid": 487872,
+        "parent": 487742,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label mms-spatial-v4-independent-v11 --phase analysis --seconds 400 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/mms_study.py --manifest /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-spatial-v11-v4/manifest.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-spatial-v11-v4/independent.json --seconds 380"
+      },
+      {
+        "pid": 487874,
+        "parent": 487872,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/mms_study.py --manifest /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-spatial-v11-v4/manifest.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-spatial-v11-v4/independent.json --seconds 380"
+      },
+      {
+        "pid": 487991,
+        "parent": 487504,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label physical-reference-h2-independent-v1 --phase analysis --seconds 450 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_oracle.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-h2-v1/reference-h2.result.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-h2-v1/independent-h2.json --seconds 420"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_oracle.py",
+      "bytes": 65573,
+      "sha256": "83ba96a2238c529f755419a216617a6b199bd5fe2ef583414cb60acfed56ec84"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/physical-reference-h2-v1/reference-h2.result.json",
+      "bytes": 23684828,
+      "sha256": "686bd303c511a504559ec646a37a92671695f824dffc25897d028ad40585b7c6"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ]
+}

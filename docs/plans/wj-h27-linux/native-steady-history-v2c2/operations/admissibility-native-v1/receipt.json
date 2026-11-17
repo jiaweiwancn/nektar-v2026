@@ -1,0 +1,70 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v3-helpers/WJH27AdmissibilityProbe",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/admissibility-native-v1.json"
+  ],
+  "phase": "science",
+  "seconds_cap": 60.0,
+  "utc": "2026-11-17T09:38:30.513497+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 475942,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/v3-helpers-controller.py"
+      },
+      {
+        "pid": 475951,
+        "parent": 475942,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label admissibility-native-v1 --phase science --seconds 60 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v3-helpers/WJH27AdmissibilityProbe /home/jay/build/wj-h27-coupling-r1-20261117/science/admissibility-native-v1.json"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v3-helpers/WJH27AdmissibilityProbe",
+      "bytes": 389,
+      "sha256": "5c8e06b9e26782ae9b625d42e4f1c50643bfd2d3d0a4ba40c93776f84f29103e"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 0.7759649039944634,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 217088,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/admissibility-native-v1/command.log",
+    "bytes": 41,
+    "sha256": "99770e4fe8a7acfcf5360993c3132963ebce54cd2edf26baa1b60453816560f4"
+  }
+}

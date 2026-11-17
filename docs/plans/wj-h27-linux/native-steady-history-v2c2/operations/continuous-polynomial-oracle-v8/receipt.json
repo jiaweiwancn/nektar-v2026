@@ -1,0 +1,87 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/coupled_mms_check.py",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--probe",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/continuous-polynomial-native-v8.json",
+    "--output",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/continuous-polynomial-oracle-v8.json"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 60.0,
+  "utc": "2026-11-17T12:58:39.309855+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 481020,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v8.py"
+      },
+      {
+        "pid": 482000,
+        "parent": 481020,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label continuous-polynomial-oracle-v8 --phase analysis --seconds 60 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/coupled_mms_check.py --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --probe /home/jay/build/wj-h27-coupling-r1-20261117/science/continuous-polynomial-native-v8.json --output /home/jay/build/wj-h27-coupling-r1-20261117/science/continuous-polynomial-oracle-v8.json"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/coupled_mms_check.py",
+      "bytes": 25085,
+      "sha256": "dc0283398bfa0a41870134459c3e3d07ca016a4ca13ae643e8b83ffc1699dc6a"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/continuous-polynomial-native-v8.json",
+      "bytes": 191183,
+      "sha256": "a363a7c414bf00a07194221e0d51c661cbd7bd502470fc6bd54924eec2b3c455"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 2.2399456159910187,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 92352512,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/continuous-polynomial-oracle-v8/command.log",
+    "bytes": 143,
+    "sha256": "07c3928030855bbab31f770d3c588e812c1dbdab94de701ae301adabff2b9e09"
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "schema": "WJH27IndependentScalarOracleV1",
+  "status": "PASS_TINY_SCALAR_FOUNDATION_ONLY",
+  "foundation_only": true,
+  "full_coupled_gate_pass": false,
+  "case": "full",
+  "input": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/scalar-full-native.json",
+  "quadrature": [
+    20,
+    24
+  ],
+  "source_sha256": "660e64342e8af80e02775befc18c35ff080f909a341c2e005c6e232fc1e1ebdb",
+  "independent_basis_sha256": "632e5cbcdd7a40a993c90cde2aefc3785d73a5f4d1b9634594ea3bb3c9d48b69",
+  "platform": "linux",
+  "scope": "Independent tiny scalar algebra only; no evolving coupled MMS, physical pilot or Task3 qualification.",
+  "input_sha256": "9c8272669c4c99354f36f9a24998d44b51af53d9e76034c313d527c7ecfd7967",
+  "checks": {
+    "one": {
+      "relative_error": 1.5477563125572261e-16,
+      "tolerance": 1e-10
+    },
+    "mass": {
+      "relative_error": 6.851670180602934e-16,
+      "tolerance": 1e-10
+    },
+    "K": {
+      "relative_error": 9.160929999803032e-16,
+      "tolerance": 1e-10
+    },
+    "transport_matrix": {
+      "relative_error": 9.639690308858495e-16,
+      "tolerance": 1e-10
+    },
+    "transport_matrix_current_action": {
+      "relative_error": 2.2191048112962354e-15,
+      "tolerance": 1e-10
+    },
+    "advection": {
+      "relative_error": 2.1855570342213687e-15,
+      "tolerance": 1e-10
+    },
+    "source_load": {
+      "relative_error": 2.3377056118668684e-13,
+      "tolerance": 1e-10
+    },
+    "natural_flux_rhs": {
+      "relative_error": 2.2274634392316e-16,
+      "tolerance": 1e-10
+    },
+    "direct_all_row_diffusion_reaction_action": {
+      "relative_error": 8.759970474593133e-16,
+      "tolerance": 1e-10
+    },
+    "conservative_weak_vs_strong": {
+      "relative_error": 4.700769081562676e-15,
+      "tolerance": 1e-10
+    },
+    "system": {
+      "relative_error": 6.19408333659494e-16,
+      "tolerance": 1e-10
+    },
+    "rhs": {
+      "relative_error": 6.407894782786193e-16,
+      "tolerance": 1e-10
+    },
+    "rhs_current": {
+      "relative_error": 6.407894782786193e-16,
+      "tolerance": 1e-10
+    },
+    "direct_solution": {
+      "relative_error": 5.26575356287496e-13,
+      "tolerance": 1e-08
+    },
+    "changed_rhs_current": {
+      "relative_error": 6.411510407471303e-16,
+      "tolerance": 1e-10
+    },
+    "changed_direct_solution": {
+      "relative_error": 2.411043806480086e-11,
+      "tolerance": 1e-08
+    },
+    "initial_target": {
+      "relative_error": 4.772861106281202e-13,
+      "tolerance": 1e-08
+    }
+  },
+  "polynomial_reference_scaled_pointwise_errors": {
+    "q": 1.0408340855860843e-15,
+    "qx": 8.933825901280557e-15,
+    "qr": 2.654126918244515e-14,
+    "u": 1.6653345369377348e-16,
+    "w": 2.0816681711721685e-17,
+    "divergence": 1.9290125052862095e-15
+  },
+  "solves": {
+    "initial": {
+      "independent_current_dual_residual": 1.6456689495858584e-14,
+      "native_reported_residual": 1.2964355154937986e-14,
+      "direct_solution_relative_error": 5.26575356287496e-13,
+      "iterations": 1,
+      "rebuilds": 1
+    },
+    "changed": {
+      "independent_current_dual_residual": 4.124148368578419e-12,
+      "native_reported_residual": 4.121251410742504e-12,
+      "direct_solution_relative_error": 2.411043806480086e-11,
+      "iterations": 7,
+      "rebuilds": 0
+    }
+  },
+  "identities": {
+    "constant_test_advection": {
+      "native": 0.002956750000000001,
+      "exterior_integral": 0.002956750000000002,
+      "relative_error": 2.9334970423214777e-16
+    },
+    "diffusion_reaction_work": {
+      "native": 5.010194407764488e-06,
+      "independent_integral": 5.010194407764486e-06,
+      "relative_error": 5.071856768321934e-16
+    },
+    "source_work": {
+      "native": 0.07430260395657133,
+      "independent_integral": 0.07430260395657448,
+      "relative_error": 4.2397677397888e-14
+    },
+    "outward_natural_work": {
+      "native": -0.00018480333333333341,
+      "independent_integral": -0.0001848033333333334,
+      "relative_error": 1.4666972626109343e-16
+    }
+  },
+  "mutations": {
+    "missing_q_divergence_relative_error": 0.49064372248064286,
+    "omitted_boundary_advection_relative_error": 3.0001118940559803,
+    "flipped_natural_flux_relative_error": 2.0,
+    "frozen_original_operator_changed_current_dual_residual": 0.016059785719385558
+  },
+  "changed_solution_relative_change": 0.01201574623849747,
+  "dependent_gamma": {
+    "applicable": false,
+    "compatible_single_side_not_rejected": true
+  },
+  "geometry": {
+    "d0": 0.0875,
+    "H": 0.15,
+    "h": 0.10854503542535461,
+    "volume": 1.0000000000000004,
+    "scalar_geometries": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "boundary_face_count": 10
+  },
+  "native_dirichlet_count": 10,
+  "essential_count": 10,
+  "free_count": 60,
+  "scalar_size": 70,
+  "residual_norm": "sqrt(r_free.T @ inverse(integral(reference_scale^2 phi_free phi_free.T)) @ r_free / volume)",
+  "residual_reference_scale": "Kin",
+  "alpha_normalisation": false,
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/scalar-full-independent.json",
+    "bytes": 4979,
+    "sha256": "afd81ea700b5bd8e20f4aa11966d072230908f5c00ed0ddbfa5f1f56a365789e"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

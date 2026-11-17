@@ -1,0 +1,73 @@
+{
+  "schema": "WJH27CurrentSplitComparisonV1",
+  "status": "PASS_SAME_TIME_CURRENT_SPLITS_ONLY",
+  "inputs": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-old.result.json",
+      "sha256": "6ba95a5520a21680fb4430f42ce65eb79116ca65645367dfc024c05d45e5c38d"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/physical-shear.result.json",
+      "sha256": "c1f849e923b8c5e7f2ebb0995fbad5161561daad742e9c45e36670223bcb3987"
+    }
+  ],
+  "helper": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/current_split_check.py",
+    "sha256": "f5490aeb3f7dbaae757f7610e622fe7e50f2af10d06af7e0e48f22b41e5d890b"
+  },
+  "full_coupled_gate_pass": false,
+  "sampled_maxima": {
+    "U": 3.97500183053101e-13,
+    "Pi": 3.1360426550720943e-10,
+    "k": 1.476944454619296e-13,
+    "epsilon": 1.1396362903440925e-13
+  },
+  "rigorous_modified_basis_sum_bounds": {
+    "U": 1.4929520802670464e-11,
+    "Pi": 4.690162134184538e-09,
+    "k": 2.0848563027853578e-12,
+    "epsilon": 3.3072164546958834e-12
+  },
+  "tolerance": 1e-08,
+  "scales": {
+    "U": 1,
+    "Pi": 0.002601,
+    "k": 0.008809015145515192,
+    "epsilon": "Ain/r"
+  },
+  "steps": 1,
+  "physical_time": 0.005,
+  "complete_seconds": [
+    79.84601868601749,
+    36.43672467197757
+  ],
+  "nonlinear_iterations": [
+    70,
+    31
+  ],
+  "residuals": [
+    [
+      2.719161426519733e-12,
+      3.528413515565989e-16,
+      0,
+      6.630391795935646e-13,
+      8.421120018040806e-13,
+      0
+    ],
+    [
+      2.9740094273539616e-12,
+      3.4632231304822293e-16,
+      0,
+      7.934506732981554e-13,
+      6.610487857853853e-13,
+      0
+    ]
+  ],
+  "scope": "Numerical split equivalence on this actual advancing state; no long-time accuracy or cost claim",
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/current-split-independent-v11.json",
+    "bytes": 1873,
+    "sha256": "d0c845df7996565a13b14eb086f87ce127f5f825cb287452ae3caa9a1c0c470a"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

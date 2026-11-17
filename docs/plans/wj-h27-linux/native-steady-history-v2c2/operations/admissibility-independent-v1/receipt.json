@@ -1,0 +1,80 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/h27/admissibility_check.py",
+    "--native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/admissibility-native-v1.json",
+    "--output",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/admissibility-independent-v1.json"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 300.0,
+  "utc": "2026-11-17T09:38:31.477271+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 475942,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/v3-helpers-controller.py"
+      },
+      {
+        "pid": 475955,
+        "parent": 475942,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label admissibility-independent-v1 --phase analysis --seconds 300 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/h27/admissibility_check.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/admissibility-native-v1.json --output /home/jay/build/wj-h27-coupling-r1-20261117/science/admissibility-independent-v1.json"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v3/solvers/IncNavierStokesSolver/Tests/RANS/h27/admissibility_check.py",
+      "bytes": 5716,
+      "sha256": "2d038756de992a3d397ef176008a76052b16ce02497f4159bb9cf204c70c336e"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/admissibility-native-v1.json",
+      "bytes": 336596,
+      "sha256": "ca8120c71db4ea2ca6df15b937be40b52efb01a34a35170edfbe048373d87623"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 0.7730910190148279,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 577536,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/admissibility-independent-v1/command.log",
+    "bytes": 22,
+    "sha256": "621dd91ee1cf898894ea49876860502bdd97d18a8d35e215e49d9c835c521e6f"
+  }
+}

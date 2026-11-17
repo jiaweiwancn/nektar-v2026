@@ -1,0 +1,95 @@
+{
+  "scope": "opt-in H27 native targets; qualification scope belongs to each test",
+  "source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v11.json",
+    "bytes": 1119787,
+    "sha256": "6451b2f367688a1280890486bc7e0ff85690da73370a27ecfeb55a2956f71b1f"
+  },
+  "configure": [
+    "cmake",
+    "-S",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/build-v11",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math",
+    "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+  ],
+  "build": [
+    "cmake",
+    "--build",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/build-v11",
+    "--target",
+    "IncNavierStokesSolver",
+    "WJH27ScalarProbe",
+    "WJH27FlowTangentProbe",
+    "--parallel",
+    "4"
+  ],
+  "executables": [
+    {
+      "executable": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver.elf",
+        "bytes": 9802096,
+        "sha256": "ae235efbe9c5fd3a0e91dae06195e5cec357f68caf41ed6a2e9ba690df0bd365"
+      },
+      "wrapper": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver",
+        "bytes": 380,
+        "sha256": "65c262a35d19df3e0d83caab0058098b7bebccb308a9171c379c19431069391e"
+      },
+      "link": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v11/CMakeFiles/IncNavierStokesSolver.dir/link.txt",
+        "bytes": 12653,
+        "sha256": "961ba5d7f804d70ab8c01131f70391f1e0e46a3529e799f11686fd1e6231197a"
+      }
+    },
+    {
+      "executable": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/WJH27ScalarProbe.elf",
+        "bytes": 1016512,
+        "sha256": "b4eca397a86575b4cba2a22b08e5f81102a31edfccf50204276a2112eb36eebb"
+      },
+      "wrapper": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/WJH27ScalarProbe",
+        "bytes": 375,
+        "sha256": "3eb79f147cff4d368469c0b415bd284b50b848abd8d4718db1a85d53902b0317"
+      },
+      "link": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v11/CMakeFiles/WJH27ScalarProbe.dir/link.txt",
+        "bytes": 1712,
+        "sha256": "38d0194549e827bf78c19f5c7bac8ac7e464de66441dda1c2957eb3f49fa1c34"
+      }
+    },
+    {
+      "executable": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/WJH27FlowTangentProbe.elf",
+        "bytes": 944112,
+        "sha256": "ed86c6d3c389b8e0e9c7e9be5bafb9d49f31d14aa22c045355c7cbb58699698b"
+      },
+      "wrapper": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/WJH27FlowTangentProbe",
+        "bytes": 380,
+        "sha256": "92cb91966ddb6762934b13ca53533673112fab524427658a4bb146139bed2403"
+      },
+      "link": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v11/CMakeFiles/WJH27FlowTangentProbe.dir/link.txt",
+        "bytes": 1728,
+        "sha256": "05fee596b8fa6842649fa82f2d006b6236d059ef66a159102d3af019260509cd"
+      }
+    }
+  ],
+  "loader": {
+    "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2",
+    "bytes": 240936,
+    "sha256": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+  },
+  "libraries": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc:/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/geometry:/home/jay/.local/opt/nektar-v2026-mpi/lib64",
+  "compiler": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0\nCopyright (C) 2021 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "compile_commands": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v11/compile_commands.json",
+    "bytes": 151717,
+    "sha256": "09d3ad9fc9895099b7a9137c7065be95448bca1b3bf69188d33a1e0c2cc96a29"
+  }
+}

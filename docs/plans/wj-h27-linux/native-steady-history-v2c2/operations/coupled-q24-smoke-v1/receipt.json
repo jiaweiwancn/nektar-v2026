@@ -1,0 +1,82 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v6/IncNavierStokesSolver",
+    "--use-opt-file",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/qref-prefix-fixtures-v1/mms-q24.xml.opt",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/qref-prefix-fixtures-v1/mms-q24.xml"
+  ],
+  "phase": "science",
+  "seconds_cap": 90.0,
+  "utc": "2026-11-17T11:17:10.000294+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 479115,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/qref-prefix-controller-v1.py"
+      },
+      {
+        "pid": 479120,
+        "parent": 479115,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label coupled-q24-smoke-v1 --phase science --seconds 90 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v6/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/qref-prefix-fixtures-v1/mms-q24.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/qref-prefix-fixtures-v1/mms-q24.xml"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v6/IncNavierStokesSolver",
+      "bytes": 379,
+      "sha256": "4288c200bf2e777236f1f6a40861c2b540da776bf55f3a7258a80a2071b5da6e"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/qref-prefix-fixtures-v1/mms-q24.xml.opt",
+      "bytes": 55,
+      "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/qref-prefix-fixtures-v1/mms-q24.xml",
+      "bytes": 5074,
+      "sha256": "d8d7523bb566c0cdf447d9ff972e90b19b5368a06ae0bb4d0bd84ac1af2c9a18"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 9.75973732303828,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 114823168,
+  "peak_host_workers": 12,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/coupled-q24-smoke-v1/command.log",
+    "bytes": 2078,
+    "sha256": "cf94bf57ecdb54c45e0b570ce567605372893f7a95cd5852e170eb95424c3b92"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver",
+    "--use-opt-file",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/space2.xml.opt",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/space2.xml"
+  ],
+  "phase": "science",
+  "seconds_cap": 120.0,
+  "utc": "2026-11-17T15:34:10.250271+00:00",
+  "allocation": {
+    "workers": 6,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 486959,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/mms-v3-controller-v11.py"
+      },
+      {
+        "pid": 487457,
+        "parent": 484265,
+        "threads": 1,
+        "args": "python3 -c from pathlib import Path import json r=Path('/home/jay/build/wj-h27-coupling-r1-20261117') p=r/'science/physical-steady-independent-v11.json';j=json.loads(p.read_text()) print('KEYS',list(j));print('STATUSES',{k:v for k,v in j.items()if k.endswith('status')or k in ['reason','exception']}) for k in ['current_residuals','residuals','development_envelope','physical_development_envelope','profiles','core']:  if k in j:   v=j[k];print(k,json.dumps(v)[:8500]) p=r/'science/coupled-fixtures-v11/physical-steady.result.json';s=json.loads(p.read_text())['state'];print('NATIVE_MARGINS',{k:s.get(k)for k in ['minimum_k','minimum_epsilon','minimum_covariance_over_k','minimum_principal_over_mu','source_identity']})"
+      },
+      {
+        "pid": 487458,
+        "parent": 486959,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label mms-v3-space2-native-v11 --phase science --seconds 120 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/space2.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/space2.xml"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v11/IncNavierStokesSolver",
+      "bytes": 380,
+      "sha256": "65c262a35d19df3e0d83caab0058098b7bebccb308a9171c379c19431069391e"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/space2.xml.opt",
+      "bytes": 55,
+      "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/space2.xml",
+      "bytes": 5715,
+      "sha256": "63fd53e61a383562321467597aa50feabfd7d78aed7234012115945e9864c9d0"
+    }
+  ]
+}

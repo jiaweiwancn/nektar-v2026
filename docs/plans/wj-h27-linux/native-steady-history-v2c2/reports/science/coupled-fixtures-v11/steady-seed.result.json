@@ -1,0 +1,292 @@
+{
+  "schema": "WJH27RegisteredCoupledRunV2",
+  "factory": "WJNativeCoupledV2",
+  "normal_main": true,
+  "qualification": "execution evidence; closure gates are assessed independently",
+  "construction_seconds": 0.028657072980422527,
+  "initialisation_seconds": 0.07439616101328284,
+  "restart": false,
+  "complete_advancing_seconds": 0,
+  "final_export_seconds": 0.023655516968574375,
+  "complete_step_seconds": [],
+  "recovery_seconds": [],
+  "rotated_recovery_count": 0,
+  "retained_recovery": [],
+  "steady_mode": true,
+  "steady_solver": {
+    "algorithm": "WJH27SteadyJFNKV1",
+    "status": "CONVERGED",
+    "reason": "current true steady residual meets caller acceptance norm",
+    "converged": true,
+    "has_evaluated_state": true,
+    "true_norm": 1.0428738030328315e-13,
+    "last_accepted_norm": 1.0428738030328315e-13,
+    "preconditioner_mass_only": 0,
+    "physical_time_advanced": 0,
+    "residual_evaluations": 124,
+    "validity_evaluations": 124,
+    "nonlinear_validation_enabled": true,
+    "nonlinear_validation_evaluations": 10,
+    "nonlinear_validation_rejected_trials": 0,
+    "nonlinear_validation_seconds": 0.35952111800000003,
+    "preconditioner_applications": 45,
+    "preconditioner_preparations": 5,
+    "jacobian_actions": 57,
+    "fd_rejected_trials": 0,
+    "line_search_rejected_trials": 0,
+    "linear_iterations": 45,
+    "accepted_newton_steps": 5,
+    "total_seconds": 1.511780069,
+    "callback_seconds": {
+      "residual": 0.9259350049999996,
+      "validity": 0.16414070400000005,
+      "norm": 0.00034192700000000006,
+      "precondition": 0.009227315999999998,
+      "prepare": 0.051671802999999995,
+      "arnoldi": 0.00010176800000000002
+    },
+    "newton": [
+      {
+        "iteration": 0,
+        "base_norm": 0.008450656287683505,
+        "forcing": 0.3,
+        "linear_true_norm": 0.0018481102380705455,
+        "linear_converged": true,
+        "accepted": true,
+        "accepted_norm": 0.0018655550117613183,
+        "accepted_step": 1
+      },
+      {
+        "iteration": 1,
+        "base_norm": 0.0018655550117613183,
+        "forcing": 0.09335099310241061,
+        "linear_true_norm": 5.443794888219903e-05,
+        "linear_converged": true,
+        "accepted": true,
+        "accepted_norm": 5.8653346580756663e-05,
+        "accepted_step": 1
+      },
+      {
+        "iteration": 2,
+        "base_norm": 5.8653346580756663e-05,
+        "forcing": 0.00501729473967269,
+        "linear_true_norm": 1.3001449428289504e-07,
+        "linear_converged": true,
+        "accepted": true,
+        "accepted_norm": 1.3538021645684553e-07,
+        "accepted_step": 1
+      },
+      {
+        "iteration": 3,
+        "base_norm": 1.3538021645684553e-07,
+        "forcing": 0.001,
+        "linear_true_norm": 1.286143255053124e-10,
+        "linear_converged": true,
+        "accepted": true,
+        "accepted_norm": 1.2859973021107758e-10,
+        "accepted_step": 1
+      },
+      {
+        "iteration": 4,
+        "base_norm": 1.2859973021107758e-10,
+        "forcing": 0.001,
+        "linear_true_norm": 1.0433600181904508e-13,
+        "linear_converged": true,
+        "accepted": true,
+        "accepted_norm": 1.0428738030328315e-13,
+        "accepted_step": 1
+      }
+    ],
+    "line_search": [
+      {
+        "newton": 0,
+        "trial": 0,
+        "step": 1,
+        "nonlinear_validation_attempted": true,
+        "nonlinear_validated": true,
+        "admissible": true,
+        "evaluated": true,
+        "true_norm": 0.0018655550117613183,
+        "accepted": true,
+        "sufficient_decrease": true,
+        "reason": ""
+      },
+      {
+        "newton": 1,
+        "trial": 0,
+        "step": 1,
+        "nonlinear_validation_attempted": true,
+        "nonlinear_validated": true,
+        "admissible": true,
+        "evaluated": true,
+        "true_norm": 5.8653346580756663e-05,
+        "accepted": true,
+        "sufficient_decrease": true,
+        "reason": ""
+      },
+      {
+        "newton": 2,
+        "trial": 0,
+        "step": 1,
+        "nonlinear_validation_attempted": true,
+        "nonlinear_validated": true,
+        "admissible": true,
+        "evaluated": true,
+        "true_norm": 1.3538021645684553e-07,
+        "accepted": true,
+        "sufficient_decrease": true,
+        "reason": ""
+      },
+      {
+        "newton": 3,
+        "trial": 0,
+        "step": 1,
+        "nonlinear_validation_attempted": true,
+        "nonlinear_validated": true,
+        "admissible": true,
+        "evaluated": true,
+        "true_norm": 1.2859973021107758e-10,
+        "accepted": true,
+        "sufficient_decrease": true,
+        "reason": ""
+      },
+      {
+        "newton": 4,
+        "trial": 0,
+        "step": 1,
+        "nonlinear_validation_attempted": true,
+        "nonlinear_validated": true,
+        "admissible": true,
+        "evaluated": true,
+        "true_norm": 1.0428738030328315e-13,
+        "accepted": true,
+        "sufficient_decrease": true,
+        "reason": ""
+      }
+    ],
+    "best_from_accepted_iterate": true
+  },
+  "state": {
+    "schema": "WJH27NativeCoupledStateV2",
+    "model": "FiniteNuIsotropicWallFullWJCollarV2",
+    "signature": "82f3bf9998c3443a713c9808e9f8dd2dc8bf9f044370615dc79e22310df73815",
+    "source_identity": "dfdd5d8fb2384d08a5a54e5fd8d76f0ec7e37334fbebeb3b16e439553d8c080b",
+    "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+    "manufactured": true,
+    "step": 0,
+    "time": 0,
+    "dt": 0.02,
+    "state_sha256": "65c1d6f194f91b9c3a49255b720c3baf6a2ad27d194607d664d3b7ada1c13e38",
+    "previous_sha256": "65c1d6f194f91b9c3a49255b720c3baf6a2ad27d194607d664d3b7ada1c13e38",
+    "advection_sha256": "60afb727b7d9219a41f0e472d47904e98f60f5d8b724a52013c4902037808f08",
+    "previous_advection_sha256": "60afb727b7d9219a41f0e472d47904e98f60f5d8b724a52013c4902037808f08",
+    "sizes": [
+      91,
+      45,
+      91,
+      49
+    ],
+    "gauge": true,
+    "nonlinear_iterations": 5,
+    "linear_iterations": [
+      0,
+      0,
+      0
+    ],
+    "rebuilds": 15,
+    "retries": 0,
+    "seconds": 1.613537929020822,
+    "coefficient_drift": 0,
+    "residuals": [
+      2.2216435290672407e-15,
+      3.757448638137668e-18,
+      2.407843133149346e-19,
+      1.0428738030328315e-13,
+      9.368961153446484e-14,
+      0
+    ],
+    "minimum_k": 0.008805711764835623,
+    "minimum_epsilon": 0.001977029097320029,
+    "minimum_covariance_over_k": 0.6265503663403145,
+    "minimum_principal_over_mu": 0.04919929524097491,
+    "disjoint_seconds": {
+      "constitutive": 0.14045682561118156,
+      "wall": 0.1333522167406045,
+      "assembly": 0.23118970153154805,
+      "flow": 0,
+      "scalar": 0,
+      "rebuild": 0,
+      "guards": 0.3577889210428111,
+      "forcing": 0.05655575596028939,
+      "residual": 0.3252051415038295,
+      "nonlinear": 0,
+      "io": 0,
+      "other": 0.3689893666305579
+    },
+    "quadratureX": 8,
+    "quadratureR": 12,
+    "linear_tolerance": 1e-12,
+    "nonlinear_tolerance": 3e-12,
+    "maximum_iterations": 60,
+    "mms_body_amplitude": 0,
+    "retry_reason": "",
+    "mms_variant": "PolynomialScalarsV1",
+    "steady_velocity_preconditioner": "FullGradientV1",
+    "stress_split": "PositiveShearV1",
+    "all_row_action_crosschecks": true,
+    "current_action_checks": {
+      "all_row_calls": 126,
+      "maximum_scaled_differences_flow_k_epsilon": [
+        2.642742795433417e-19,
+        1.23078704551608e-17,
+        2.9264492260357355e-17
+      ],
+      "augmented_calls": 125,
+      "maximum_augmented_scaled_difference": 4.0970289164500295e-17,
+      "maximum_weak_divergence_load_norm": 1.5975241260831003e-09,
+      "maximum_gauge_multiplier": 0.003
+    },
+    "basis": "Modified_A",
+    "anderson_depth": 0,
+    "acceleration": {
+      "proposals": 0,
+      "accepted": 0,
+      "inadmissible_trials": 0
+    },
+    "initial_field_transfer": {
+      "packet_sha256": "",
+      "source_state_sha256": "",
+      "projected": false,
+      "source_was_candidate": false
+    },
+    "constitutive_backend": "FastFull3DV1",
+    "constitutive_calls": {
+      "values": 230400,
+      "directions": 61056,
+      "fallbacks": 0,
+      "root_iterations": 1152000,
+      "maximum_normalized_root_residual": 4.3425195035223323e-17
+    },
+    "mms_rms_errors_U_Pi_k_epsilon_gradU": [
+      7.066879023119367e-16,
+      2.1914834333700499e-16,
+      1.40991834731327e-13,
+      4.3514539280411456e-14,
+      1.7980324203915247e-14
+    ],
+    "geometry": {
+      "d0": 0.0875,
+      "H": 0.15,
+      "h": 0.10854503542535461,
+      "left": 0,
+      "right": 1,
+      "top": 0.5
+    }
+  },
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/steady-seed.result.json",
+    "bytes": 120365,
+    "sha256": "39cbf6c9937c5abcd9454cea95d4c1741057fd96e71ba7d8e20a312280dfc7d4"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

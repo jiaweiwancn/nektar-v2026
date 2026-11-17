@@ -1,0 +1,31 @@
+{
+  "schema": "WJH27FrozenPlanarFlowTangentCheckV1",
+  "status": "FAIL",
+  "input": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/flow-tangent-native.json",
+    "sha256": "a4a581478717513f95fdfff88497374f796fe8e38f8a5bd5d83c05b002fa857e"
+  },
+  "checker": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/flow_tangent_check.py",
+    "sha256": "3539d03b0b825ad0044e584045bb431f3f6072fda09d881ac5c50b2479cf8417"
+  },
+  "independent_basis": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h26/fixtures.py",
+    "sha256": "632e5cbcdd7a40a993c90cde2aefc3785d73a5f4d1b9634594ea3bb3c9d48b69"
+  },
+  "independent_full_WJ": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_oracle.py",
+    "sha256": "83ba96a2238c529f755419a216617a6b199bd5fe2ef583414cb60acfed56ec84"
+  },
+  "workers": 1,
+  "wall_cap_seconds": 100.0,
+  "exception": "ValueError",
+  "reason": "native full-row velocity FD disagrees",
+  "elapsed_seconds": 0.015663771016988903,
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/flow-tangent-independent.json",
+    "bytes": 1179,
+    "sha256": "705e1da466f18e0ce6def7f853ddd938eda5a1f0cabe0bbd83517406619ad759"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

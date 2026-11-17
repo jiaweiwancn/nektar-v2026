@@ -1,0 +1,71 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v2/WJNativeFlowDriver",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-fixtures-v2/closed.xml",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/h26-algebra-v1.json",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/legacy-algebra-v1.json"
+  ],
+  "phase": "science",
+  "seconds_cap": 45.0,
+  "utc": "2026-11-17T09:21:37.450724+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 474936,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/mixed-regression-controller-v2.py"
+      },
+      {
+        "pid": 474992,
+        "parent": 474936,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label legacy-algebra-v1 --phase science --seconds 45 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v2/WJNativeFlowDriver /home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-fixtures-v2/closed.xml /home/jay/build/wj-h27-coupling-r1-20261117/inputs/h26-algebra-v1.json /home/jay/build/wj-h27-coupling-r1-20261117/science/legacy-algebra-v1.json"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v2/WJNativeFlowDriver",
+      "bytes": 376,
+      "sha256": "8c6f7de2a1a2d3d93573aff089471f9860ff6be9c752ddf119795b483da099bb"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-fixtures-v2/closed.xml",
+      "bytes": 3849,
+      "sha256": "d0075e2d0e573b3b20f525b5ebb7505e99015f82718db4a13885c9c3cc2bf211"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/h26-algebra-v1.json",
+      "bytes": 30,
+      "sha256": "2e15daffce62d8b6d9423813482518f441c66142be2a096bedba8a4bc0851484"
+    }
+  ]
+}

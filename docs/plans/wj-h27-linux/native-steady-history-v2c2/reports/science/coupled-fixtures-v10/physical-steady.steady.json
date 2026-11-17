@@ -1,0 +1,77 @@
+{
+  "algorithm": "WJH27SteadyJFNKV1",
+  "status": "NOT_CONVERGED",
+  "reason": "LINEAR_NOT_CONVERGED: declared Krylov cycles did not meet both current residual tests",
+  "converged": false,
+  "has_evaluated_state": true,
+  "true_norm": 0.000836441294342366,
+  "last_accepted_norm": 0.000836441294342366,
+  "preconditioner_mass_only": 0,
+  "physical_time_advanced": 0,
+  "residual_evaluations": 807,
+  "validity_evaluations": 807,
+  "nonlinear_validation_enabled": true,
+  "nonlinear_validation_evaluations": 3,
+  "nonlinear_validation_rejected_trials": 0,
+  "nonlinear_validation_seconds": 5.2722795510000005,
+  "preconditioner_applications": 328,
+  "preconditioner_preparations": 2,
+  "jacobian_actions": 402,
+  "fd_rejected_trials": 0,
+  "line_search_rejected_trials": 0,
+  "linear_iterations": 328,
+  "accepted_newton_steps": 1,
+  "total_seconds": 110.730706106,
+  "callback_seconds": {
+    "residual": 95.87255565800004,
+    "validity": 0.9020592360000013,
+    "norm": 0.15160644799999998,
+    "precondition": 5.9345810320000005,
+    "prepare": 2.095299006,
+    "arnoldi": 0.2889682199999998
+  },
+  "newton": [
+    {
+      "iteration": 0,
+      "base_norm": 0.003037822745188795,
+      "forcing": 0.3,
+      "linear_true_norm": 0.0008533221239720959,
+      "linear_converged": true,
+      "accepted": true,
+      "accepted_norm": 0.000836441294342366,
+      "accepted_step": 1
+    },
+    {
+      "iteration": 1,
+      "base_norm": 0.000836441294342366,
+      "forcing": 0.13003254519358334,
+      "linear_true_norm": 0.0002743540685597726,
+      "linear_converged": false,
+      "accepted": false,
+      "accepted_norm": 0,
+      "accepted_step": 0
+    }
+  ],
+  "line_search": [
+    {
+      "newton": 0,
+      "trial": 0,
+      "step": 1,
+      "nonlinear_validation_attempted": true,
+      "nonlinear_validated": true,
+      "admissible": true,
+      "evaluated": true,
+      "true_norm": 0.000836441294342366,
+      "accepted": true,
+      "sufficient_decrease": true,
+      "reason": ""
+    }
+  ],
+  "best_from_accepted_iterate": true,
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/physical-steady.steady.json",
+    "bytes": 1500447,
+    "sha256": "04978a51a02cb2b09dabc8526cd3a89895310b051d93d63c22f88e750dfba343"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

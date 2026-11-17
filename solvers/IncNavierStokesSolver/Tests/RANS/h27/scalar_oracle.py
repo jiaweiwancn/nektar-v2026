@@ -332,6 +332,8 @@ def analyze(path, case, nx, nz, report):
         comparison(checks, 'transport_matrix_current_action', matrix(data['transport'], ns)@target, ref['advection'])
     for name in ('advection', 'source_load', 'natural_flux_rhs'):
         comparison(checks, name, vector(data, name, ns), ref[name])
+    if 'diffusion_action' in data:
+        comparison(checks, 'direct_all_row_diffusion_reaction_action', vector(data, 'diffusion_action', ns), ref['K']@target)
     comparison(checks, 'conservative_weak_vs_strong', ref['advection'], ref['conservative_strong'])
     require(np.max(abs(lift[free]), initial=0.) == 0. and
             np.max(abs(lift[essential]-target[essential]), initial=0.) <= 1e-12,

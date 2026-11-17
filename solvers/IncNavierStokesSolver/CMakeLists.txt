@@ -82,7 +82,7 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         FIND_PACKAGE(Eigen3 REQUIRED NO_MODULE)
         SET(wj_native_sources WJNativeFlow WJNativeMixedFlow WJNativeWallV2
             WJNativeRules WJNativeScalar WJNativeReference WJNativeAdmissibility
-            WJNativeCoupledMMS WJNativeCoupling WJNativeCoupled WJNativeConstitutive
+            WJNativeCoupledMMS WJNativeCoupling WJNativeFlowTangent WJNativeCoupled WJNativeConstitutive
             WJNativePerturbation WJNativeSteadyKrylov WJNativeInitialFields)
         FOREACH(name IN LISTS wj_native_sources)
             TARGET_SOURCES(IncNavierStokesSolver-obj PRIVATE EquationSystems/${name}.cpp)

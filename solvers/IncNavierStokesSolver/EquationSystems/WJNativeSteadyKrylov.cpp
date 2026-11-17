@@ -44,6 +44,7 @@ void CheckVector(const Vec &v,Eigen::Index size,const char *description)
 struct Evaluation
 {
     bool admissible=false;
+    bool nonlinearValidationAttempted=false, nonlinearValidated=false;
     Vec residual;
     std::string reason;
 };
@@ -60,7 +61,8 @@ class Runner
 public:
     Runner(const SteadyKrylovCallbacks &callbacks,const Vec &unknownScale,
            const Vec &rowScale,const SteadyKrylovOptions &options)
-        :cb(callbacks),sx(unknownScale),sr(rowScale),o(options),start(Clock::now()){}
+        :cb(callbacks),sx(unknownScale),sr(rowScale),o(options),start(Clock::now())
+    {out.nonlinearValidationEnabled=bool(cb.ValidateNonlinearState);}
 
     SteadyKrylovResult Solve(const Vec &initial)
     {
@@ -123,6 +125,8 @@ public:
                             throw Stop("NEWTON_ROUNDOFF: line-search correction no longer changes the state");
                         auto evaluation=Trial(candidate,false);
                         ls.admissible=evaluation.admissible;ls.reason=evaluation.reason;
+                        ls.nonlinearValidationAttempted=evaluation.nonlinearValidationAttempted;
+                        ls.nonlinearValidated=evaluation.nonlinearValidated;
                         if(evaluation.admissible)
                         {
                             ls.trueNorm=Norm(evaluation.residual);ls.evaluated=true;
@@ -169,6 +173,7 @@ public:
                     o.fdRelativeStep*multiplier>=o.fdMinimumRelativeStep,
                     "invalid derivative probe step multiplier");
         SteadyDerivativeProbe result;result.stepMultipliers=multipliers;
+        result.nonlinearValidationEnabled=bool(cb.ValidateNonlinearState);
         try
         {
             const Vec f=Base(base);
@@ -216,6 +221,14 @@ private:
         Vec f=cb.Residual(x);CheckVector(f,sx.size(),"steady residual callback");return f;
     }
 
+    void ValidateNonlinear(const Vec &x)
+    {
+        if(!cb.ValidateNonlinearState)return;
+        Deadline();++out.statistics.nonlinearValidationEvaluations;
+        Timer timer(out.statistics.nonlinearValidationSeconds);
+        cb.ValidateNonlinearState(x);
+    }
+
     Vec Base(const Vec &x)
     {
         try
@@ -223,6 +236,7 @@ private:
             const auto validity=Valid(x);
             if(!validity.admissible)
                 throw std::runtime_error("inadmissible steady base: "+validity.reason);
+            ValidateNonlinear(x);
             return Residual(x);
         }
         catch(const SteadyInadmissibleTrial &error)
@@ -236,12 +250,23 @@ private:
         {
             const auto validity=Valid(x);
             result.admissible=validity.admissible;result.reason=validity.reason;
-            if(result.admissible)result.residual=Residual(x);
+            if(result.admissible)
+            {
+                if(!finiteDifference&&cb.ValidateNonlinearState)
+                {
+                    result.nonlinearValidationAttempted=true;
+                    ValidateNonlinear(x);
+                    result.nonlinearValidated=true;
+                }
+                result.residual=Residual(x);
+            }
         }
         catch(const SteadyInadmissibleTrial &error)
         {
             result.admissible=false;result.reason=error.what();
             if(result.reason.empty())throw std::runtime_error("empty inadmissible-trial reason");
+            if(result.nonlinearValidationAttempted&&!result.nonlinearValidated)
+                ++out.statistics.nonlinearValidationRejectedTrials;
         }
         if(!result.admissible)
         {

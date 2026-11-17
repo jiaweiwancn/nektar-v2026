@@ -1,0 +1,76 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/current_split_check.py",
+    "--old",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/physical-old-b.result.json",
+    "--new",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/physical-shear.result.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/current-split-independent-v10b.json"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 90.0,
+  "utc": "2026-11-17T14:56:39.587815+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 485716,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/old-split-v10b.py"
+      },
+      {
+        "pid": 485777,
+        "parent": 485716,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label current-split-independent-v10b --phase analysis --seconds 90 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/current_split_check.py --old /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/physical-old-b.result.json --new /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/physical-shear.result.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/current-split-independent-v10b.json"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/current_split_check.py",
+      "bytes": 5314,
+      "sha256": "f5490aeb3f7dbaae757f7610e622fe7e50f2af10d06af7e0e48f22b41e5d890b"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/physical-old-b.result.json",
+      "bytes": 3739560,
+      "sha256": "259a819432cddd75641b90bb47bd58d7ac078212676d43ec93e8d37f228bccc6"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v10/physical-shear.result.json",
+      "bytes": 3735657,
+      "sha256": "a656206045583dbb3b734272844c68d03e2cf0b0858a80098e03d310448a69f6"
+    }
+  ]
+}

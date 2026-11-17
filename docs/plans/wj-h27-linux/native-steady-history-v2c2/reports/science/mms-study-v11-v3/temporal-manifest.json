@@ -1,0 +1,62 @@
+{
+  "schema": "WJH27MMSStudyManifestV1",
+  "terminal_time": 0.4,
+  "runs": [
+    {
+      "label": "dt08",
+      "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/dt08.result.json",
+      "role": "temporal"
+    },
+    {
+      "label": "dt04",
+      "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/dt04.result.json",
+      "role": "temporal"
+    },
+    {
+      "label": "dt02",
+      "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/dt02.result.json",
+      "role": "temporal"
+    },
+    {
+      "label": "hfine",
+      "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/hfine.result.json",
+      "role": "control"
+    },
+    {
+      "label": "qfine",
+      "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/qfine.result.json",
+      "role": "control"
+    },
+    {
+      "label": "tighter",
+      "native": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/tighter.result.json",
+      "role": "control"
+    }
+  ],
+  "comparisons": [
+    {
+      "label": "mesh",
+      "coarse": "dt02",
+      "fine": "hfine",
+      "kind": "mesh"
+    },
+    {
+      "label": "quadrature",
+      "coarse": "dt02",
+      "fine": "qfine",
+      "kind": "quadrature"
+    },
+    {
+      "label": "tolerance",
+      "coarse": "dt02",
+      "fine": "tighter",
+      "kind": "tolerance"
+    }
+  ],
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-study-v11-v3/temporal-manifest.json",
+    "bytes": 1444,
+    "sha256": "d5ac17cd1d4d6b2c3cc94817c8ad929d89ef0e1d1c9dc2e9dbf2f9b6484f4416"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

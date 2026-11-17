@@ -1,0 +1,142 @@
+{
+  "schema": "WJH27RegisteredCoupledRunV2",
+  "factory": "WJNativeCoupledV2",
+  "normal_main": true,
+  "qualification": "execution evidence; closure gates are assessed independently",
+  "construction_seconds": 0.028754379018209875,
+  "initialisation_seconds": 0.038856817001942545,
+  "restart": false,
+  "complete_advancing_seconds": 0.21227423596428707,
+  "final_export_seconds": 0.02317619399400428,
+  "complete_step_seconds": [
+    0.21227423596428707
+  ],
+  "recovery_seconds": [],
+  "rotated_recovery_count": 0,
+  "retained_recovery": [],
+  "steady_mode": false,
+  "steady_solver": null,
+  "state": {
+    "schema": "WJH27NativeCoupledStateV2",
+    "model": "FiniteNuIsotropicWallFullWJCollarV2",
+    "signature": "35dfdf82efefd5bfdce1acec07dab7b4abe409b9b8f84da13f35c7c3107af823",
+    "source_identity": "dfdd5d8fb2384d08a5a54e5fd8d76f0ec7e37334fbebeb3b16e439553d8c080b",
+    "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+    "manufactured": true,
+    "step": 1,
+    "time": 0.02,
+    "dt": 0.02,
+    "state_sha256": "3939a94c3d22732d7c27d1dd40e763d5443e72db055114f712ba7a1572445130",
+    "previous_sha256": "b34ad1e9bd1a597993ec19e5b990109c52cb921a751d9fa1b458fe57e31989a1",
+    "advection_sha256": "eb6b3d582cec21b379e3a4e37686fdea4f9180b0776ae66321f42032e613ae1f",
+    "previous_advection_sha256": "7c0df71507f9e6c47435e8dd36a165db1915aebab9981d56e3cf481805b3111b",
+    "sizes": [
+      91,
+      45,
+      91,
+      49
+    ],
+    "gauge": true,
+    "nonlinear_iterations": 8,
+    "linear_iterations": [
+      10,
+      10,
+      13
+    ],
+    "rebuilds": 4,
+    "retries": 0,
+    "seconds": 0.21172581001883373,
+    "coefficient_drift": 1,
+    "residuals": [
+      2.04658439244324e-12,
+      1.0550981675626098e-17,
+      7.239277925910964e-19,
+      1.0576291216882043e-13,
+      3.6006424752663007e-13,
+      0
+    ],
+    "minimum_k": 0.00880823867971808,
+    "minimum_epsilon": 0.001977029097320029,
+    "minimum_covariance_over_k": 0.6264968692567645,
+    "minimum_principal_over_mu": 0.04919245793181879,
+    "disjoint_seconds": {
+      "constitutive": 0.02333136781817302,
+      "wall": 0.03712481481488794,
+      "assembly": 0.056320430245250463,
+      "flow": 0.0004502820083871484,
+      "scalar": 0.00035141909029334784,
+      "rebuild": 0.0006845309981144965,
+      "guards": 0.03460837312741205,
+      "forcing": 0.057043653971049935,
+      "residual": 0.0015822291024960577,
+      "nonlinear": 0,
+      "io": 0,
+      "other": 0.00022870884276926517
+    },
+    "quadratureX": 8,
+    "quadratureR": 12,
+    "linear_tolerance": 3e-13,
+    "nonlinear_tolerance": 3e-12,
+    "maximum_iterations": 60,
+    "mms_body_amplitude": 1,
+    "retry_reason": "",
+    "mms_variant": "PolynomialScalarsV1",
+    "steady_velocity_preconditioner": "FullGradientV1",
+    "stress_split": "PositiveShearV1",
+    "all_row_action_crosschecks": false,
+    "current_action_checks": {
+      "all_row_calls": 0,
+      "maximum_scaled_differences_flow_k_epsilon": [
+        0,
+        0,
+        0
+      ],
+      "augmented_calls": 0,
+      "maximum_augmented_scaled_difference": 0,
+      "maximum_weak_divergence_load_norm": 0,
+      "maximum_gauge_multiplier": 0
+    },
+    "basis": "Modified_A",
+    "anderson_depth": 0,
+    "acceleration": {
+      "proposals": 0,
+      "accepted": 0,
+      "inadmissible_trials": 0
+    },
+    "initial_field_transfer": {
+      "packet_sha256": "",
+      "source_state_sha256": "",
+      "projected": false,
+      "source_was_candidate": false
+    },
+    "constitutive_backend": "FastFull3DV1",
+    "constitutive_calls": {
+      "values": 38400,
+      "directions": 3456,
+      "fallbacks": 0,
+      "root_iterations": 192000,
+      "maximum_normalized_root_residual": 4.3366562969752216e-17
+    },
+    "mms_rms_errors_U_Pi_k_epsilon_gradU": [
+      2.4176722858317745e-08,
+      1.4416563778888888e-06,
+      1.1711149123087124e-06,
+      1.7013905767660475e-06,
+      5.706261216045408e-07
+    ],
+    "geometry": {
+      "d0": 0.0875,
+      "H": 0.15,
+      "h": 0.10854503542535461,
+      "left": 0,
+      "right": 1,
+      "top": 0.5
+    }
+  },
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/prefix.result.json",
+    "bytes": 68202,
+    "sha256": "4bfe3113f1ac1989eba41bb1505d16aeb19e2ed66e8b3ee781ac0745aab469c1"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

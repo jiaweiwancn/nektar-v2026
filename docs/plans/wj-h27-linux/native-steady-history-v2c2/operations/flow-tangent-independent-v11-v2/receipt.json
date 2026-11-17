@@ -1,0 +1,81 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-tangent-serialization-v2/h27/flow_tangent_check.py",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/flow-tangent-native-v2.json",
+    "--output",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/flow-tangent-independent-v2.json",
+    "--seconds",
+    "100"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 120.0,
+  "utc": "2026-11-17T15:25:30.024558+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 486725,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v11b.py"
+      },
+      {
+        "pid": 486756,
+        "parent": 486725,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label flow-tangent-independent-v11-v2 --phase analysis --seconds 120 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools-tangent-serialization-v2/h27/flow_tangent_check.py /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/flow-tangent-native-v2.json --output /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/flow-tangent-independent-v2.json --seconds 100"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-tangent-serialization-v2/h27/flow_tangent_check.py",
+      "bytes": 15121,
+      "sha256": "0747e5a160d677adc3eb7f3a60163fc6c20108af3442e6b832f2aed69d813baa"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v11/flow-tangent-native-v2.json",
+      "bytes": 445749,
+      "sha256": "c9e4f0145ef4be05e6117ef187283d94230f4af8397137031ffbfd97ff0cae79"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 1.3418780980282463,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 77824,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/flow-tangent-independent-v11-v2/command.log",
+    "bytes": 59,
+    "sha256": "c7b6be994845a9fd5431fb0462883e06086dd2031aefbdef17087a4321bd4ea4"
+  }
+}

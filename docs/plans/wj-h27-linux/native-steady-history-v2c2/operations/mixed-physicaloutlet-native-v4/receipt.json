@@ -1,0 +1,82 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v2/WJH27MixedProbe",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-fixtures-v2/physicaloutlet.xml",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-fixtures-v2/physicaloutlet.json",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-physicaloutlet-native-v4.json"
+  ],
+  "phase": "science",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T09:21:34.993287+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 474936,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/mixed-regression-controller-v2.py"
+      },
+      {
+        "pid": 474973,
+        "parent": 474936,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label mixed-physicaloutlet-native-v4 --phase science --seconds 30 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v2/WJH27MixedProbe /home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-fixtures-v2/physicaloutlet.xml /home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-fixtures-v2/physicaloutlet.json /home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-physicaloutlet-native-v4.json"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v2/WJH27MixedProbe",
+      "bytes": 373,
+      "sha256": "1dfcc57d5325c37c1594daaff064365c83173c73e2cca50ad2e9feadf1fe4b44"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-fixtures-v2/physicaloutlet.xml",
+      "bytes": 3849,
+      "sha256": "6244a6b8e1dbf6b61ee46c31df6c291839669fa159134180c293dbb0c2c1c99e"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-fixtures-v2/physicaloutlet.json",
+      "bytes": 106,
+      "sha256": "59f4b7cc1b0086594a6e3ddbcbc94374ec62ec27dc042fbeba7c823a4198e484"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 1.4053915929980576,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 87896064,
+  "peak_host_workers": 7,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/mixed-physicaloutlet-native-v4/command.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

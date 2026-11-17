@@ -1,0 +1,123 @@
+{
+  "schema": "WJH27NativeCoupledStateV2",
+  "model": "FiniteNuIsotropicWallFullWJCollarV2",
+  "signature": "35dfdf82efefd5bfdce1acec07dab7b4abe409b9b8f84da13f35c7c3107af823",
+  "source_identity": "dfdd5d8fb2384d08a5a54e5fd8d76f0ec7e37334fbebeb3b16e439553d8c080b",
+  "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+  "manufactured": true,
+  "step": 6,
+  "time": 0.12,
+  "dt": 0.02,
+  "state_sha256": "2d815e86fee4b6aeb0462199c8cb02d8b2169e86404cfc5411c625aad913a7d8",
+  "previous_sha256": "d629035fecf18cbb181862686d688a674f2cd4a03a5d54a5fdac330b04aabd29",
+  "advection_sha256": "79088481cdda56ff0d1fe822609ec2829114507ef74530ebf00a39499ae6b652",
+  "previous_advection_sha256": "a6ae817d7f508b2ad1d039826d1631c779cc4073034c83b79c2766d4078f4031",
+  "sizes": [
+    91,
+    45,
+    91,
+    49
+  ],
+  "gauge": true,
+  "nonlinear_iterations": 8,
+  "linear_iterations": [
+    11,
+    11,
+    19
+  ],
+  "rebuilds": 0,
+  "retries": 0,
+  "seconds": 0.20969322801101953,
+  "coefficient_drift": 0.0012067377659464155,
+  "residuals": [
+    1.2586814174495744e-12,
+    1.2581251123865239e-17,
+    6.304227791602192e-19,
+    2.1203932004327365e-13,
+    3.4479954600380105e-13,
+    0
+  ],
+  "minimum_k": 0.008820865926094356,
+  "minimum_epsilon": 0.001977029097320029,
+  "minimum_covariance_over_k": 0.6262363923952949,
+  "minimum_principal_over_mu": 0.04915957754008853,
+  "disjoint_seconds": {
+    "constitutive": 0.023222711228299886,
+    "wall": 0.03698706178693101,
+    "assembly": 0.05583858268801123,
+    "flow": 0.00045679305912926793,
+    "scalar": 0.00038489315193146467,
+    "rebuild": 0,
+    "guards": 0.03454920247895643,
+    "forcing": 0.05639189400244504,
+    "residual": 0.0015887650079093874,
+    "nonlinear": 0,
+    "io": 0,
+    "other": 0.00027332460740581155
+  },
+  "quadratureX": 8,
+  "quadratureR": 12,
+  "linear_tolerance": 3e-13,
+  "nonlinear_tolerance": 3e-12,
+  "maximum_iterations": 60,
+  "mms_body_amplitude": 1,
+  "retry_reason": "",
+  "mms_variant": "PolynomialScalarsV1",
+  "steady_velocity_preconditioner": "FullGradientV1",
+  "stress_split": "PositiveShearV1",
+  "all_row_action_crosschecks": false,
+  "current_action_checks": {
+    "all_row_calls": 0,
+    "maximum_scaled_differences_flow_k_epsilon": [
+      0,
+      0,
+      0
+    ],
+    "augmented_calls": 0,
+    "maximum_augmented_scaled_difference": 0,
+    "maximum_weak_divergence_load_norm": 0,
+    "maximum_gauge_multiplier": 0
+  },
+  "basis": "Modified_A",
+  "anderson_depth": 0,
+  "acceleration": {
+    "proposals": 0,
+    "accepted": 0,
+    "inadmissible_trials": 0
+  },
+  "initial_field_transfer": {
+    "packet_sha256": "",
+    "source_state_sha256": "",
+    "projected": false,
+    "source_was_candidate": false
+  },
+  "constitutive_backend": "FastFull3DV1",
+  "constitutive_calls": {
+    "values": 38400,
+    "directions": 3456,
+    "fallbacks": 0,
+    "root_iterations": 192000,
+    "maximum_normalized_root_residual": 4.347357427887442e-17
+  },
+  "mms_rms_errors_U_Pi_k_epsilon_gradU": [
+    2.652199679772876e-08,
+    1.1175779691694742e-08,
+    1.7193440148966951e-06,
+    2.491837831894107e-06,
+    4.844789620088037e-07
+  ],
+  "geometry": {
+    "d0": 0.0875,
+    "H": 0.15,
+    "h": 0.10854503542535461,
+    "left": 0,
+    "right": 1,
+    "top": 0.5
+  },
+  "preserved_raw_artifact": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/history-foundation-v1/control.science-6.json",
+    "bytes": 68171,
+    "sha256": "c17e9e5d4634b2bffd9ff208f2f2dbaf8a6166b16b2fc00632a4f5b063178add"
+  },
+  "publication_scope": "Compact evidence; full owner fields and histories remain at preserved_raw_artifact. No H27 closure inferred."
+}

@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/reference-candidate-observation-v1.py", line 15, in <module>
+    old=float(ref.inlet(np.array([rr]))[1][0]);rows.append(dict(x=x,r=rr,k=values[0],retained_inlet_k=old,departure_scaled_Kin=(values[0]-old)/ref.Kin,owner_spread=max(values)-min(values)))
+KeyError: 1

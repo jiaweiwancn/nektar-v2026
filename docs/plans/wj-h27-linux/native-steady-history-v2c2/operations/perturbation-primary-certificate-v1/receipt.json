@@ -1,0 +1,84 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_certificate.py",
+    "--mesh-native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v1/layout-native.json",
+    "--shape",
+    "PrimaryQuartile",
+    "--seconds",
+    "160",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v1/primary-certificate.json"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 180.0,
+  "utc": "2026-11-17T14:57:44.574550+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 485788,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/perturbation-foundation-v1.py"
+      },
+      {
+        "pid": 485803,
+        "parent": 485788,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label perturbation-primary-certificate-v1 --phase analysis --seconds 180 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_certificate.py --mesh-native /home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v1/layout-native.json --shape PrimaryQuartile --seconds 160 --out /home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v1/primary-certificate.json"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v10/solvers/IncNavierStokesSolver/Tests/RANS/h27/perturbation_certificate.py",
+      "bytes": 19025,
+      "sha256": "7c24d4a3e2ff1fdbf62f808c43ab761e4bdbfbbf1bf65d4d466d0ade442ccd5c"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/perturbation-foundation-v1/layout-native.json",
+      "bytes": 363158,
+      "sha256": "6179c8e8f0ab9f7eb48d3801d9e7609747aa776828c278038468af7fff5759aa"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 3.809475736983586,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 43606016,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/perturbation-primary-certificate-v1/command.log",
+    "bytes": 110,
+    "sha256": "3250bd89e9cf6686ca8df19de97fca6a8fd75d7e14d6d0d45c1a14beaa361910"
+  }
+}

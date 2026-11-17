@@ -1,0 +1,76 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/h27/reference_check.py",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--probe",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-native-v2.json",
+    "--output",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-independent-v2.json"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 60.0,
+  "utc": "2026-11-17T09:52:20.163230+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 476843,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-controller-v5.py"
+      },
+      {
+        "pid": 477714,
+        "parent": 476843,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label reference-independent-v2 --phase analysis --seconds 60 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/h27/reference_check.py --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --probe /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-native-v2.json --output /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-independent-v2.json"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v5/solvers/IncNavierStokesSolver/Tests/RANS/h27/reference_check.py",
+      "bytes": 5019,
+      "sha256": "2b321b5107317024dbe1f6248d3ca8f5dde9a4a5ffc3947582ef2dae59cbf160"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-native-v2.json",
+      "bytes": 70714,
+      "sha256": "5a1f9772c019b46d3a442a5611c816ab509b82df6f61906a767f0ae01e3bbcdc"
+    }
+  ]
+}
