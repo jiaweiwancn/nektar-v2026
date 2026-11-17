@@ -11,6 +11,7 @@ from wj6_resources import scientific_workers,tree_usage
 from wj7_command import owned_groups
 from run_wj_h15 import size
 from wj_h15_observer import identity,atomic
+from run_wj_h7 import update_journal
 
 
 def run(root,label,argv,phase,seconds,evidence=False):
@@ -23,10 +24,15 @@ def run(root,label,argv,phase,seconds,evidence=False):
     req=dict(argv=argv,phase=phase,seconds_cap=seconds,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),allocation=workers,reservation=reservation,free_bytes=free,threads=THREADS,runner=identity(__file__))
     atomic(d/'request.json',req)
     if workers['workers']+reservation>72 or free<15*1024**3:
-        event=dict(status='RESOURCE_NOT_ADMITTED',seconds=1.,phase=phase);a['entries'][label]=event;atomic(book,a);atomic(d/'receipt.json',dict(req,**event));print(label,event['status'],flush=True);return 1
-    used=sum(e.get('seconds',e.get('reserved_seconds',0))for e in a['entries'].values())
-    assert used+seconds+(0 if evidence or phase=='evidence'else 1800)<=21600
-    a['entries'][label]=dict(status='RESERVED',phase=phase,reserved_seconds=seconds);atomic(book,a)
+        event=dict(status='RESOURCE_NOT_ADMITTED',seconds=1.,phase=phase)
+        update_journal(book,lambda b:b['entries'].update({label:event}))
+        atomic(d/'receipt.json',dict(req,**event));print(label,event['status'],flush=True);return 1
+    def reserve(b):
+        assert not b['closed']and label not in b['entries']
+        used=sum(e.get('seconds',e.get('reserved_seconds',0))for e in b['entries'].values())
+        assert used+seconds+(0 if evidence or phase=='evidence'else 1800)<=21600
+        b['entries'][label]=dict(status='RESERVED',phase=phase,reserved_seconds=seconds)
+    update_journal(book,reserve)
     start=time.monotonic();peak=0;reason=None;groups=set()
     env=dict(os.environ,**THREADS,TMPDIR=str(root/'tmp'),H26_ROOT=str(root),H26_OPERATION=str(d),PYTHONPATH=str(Path(__file__).resolve().parent)+':'+str(LEGACY))
     with(d/'command.log').open('xb')as log:
@@ -53,7 +59,7 @@ def run(root,label,argv,phase,seconds,evidence=False):
                 except ProcessLookupError:pass
             code=p.wait()
     event=dict(status='PASS'if code==0 and reason is None else'FAIL',phase=phase,seconds=time.monotonic()-start,exit=code,reason=reason,peak_tree_rss_bytes=peak,log=identity(d/'command.log'))
-    a=json.loads(book.read_text());a['entries'][label]=event;atomic(book,a);atomic(d/'receipt.json',dict(req,**event));print(label,event['status'],event['seconds'],flush=True);return int(event['status']!='PASS')
+    update_journal(book,lambda b:b['entries'].update({label:event}));atomic(d/'receipt.json',dict(req,**event));print(label,event['status'],event['seconds'],flush=True);return int(event['status']!='PASS')
 
 
 if __name__=='__main__':
