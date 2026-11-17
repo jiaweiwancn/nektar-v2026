@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h27/coupled_oracle.py", line 871, in <module>
+    main()
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h27/coupled_oracle.py", line 860, in main
+    if failure is not None: raise failure
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h27/coupled_oracle.py", line 818, in main
+    require(0 < args.seconds <= 300 and 0 < args.direct_seconds <= args.seconds,
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h27/coupled_oracle.py", line 45, in require
+    raise ValueError(reason)
+ValueError: oracle elapsed budget exceeds bounded admission

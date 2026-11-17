@@ -236,7 +236,6 @@ void WJNativeCoupled::v_DoSolve()
             unsigned reasons=TerminalReasons(left,right,false);if(m_scienceStride>0&&m_history.step%std::uint64_t(m_scienceStride)==0)reasons|=Periodic;if(m_terminalOutput&&n+1==m_steps)reasons|=Final;WriteScientificFrame(reasons);
             const double elapsed=Clock()-start;m_completeStepSeconds.push_back(elapsed);m_completeAdvanceSeconds+=elapsed;
         }
-        if(m_terminalOutput&&m_steps==0)WriteScientificFrame(Final);
         m_coupling->Store(m_history.current);m_solveCompleted=true;
     }catch(const std::exception&e){
         try{
@@ -253,7 +252,8 @@ void WJNativeCoupled::v_DoSolve()
 void WJNativeCoupled::v_Output()
 {
     try{
-        double start=Clock();m_coupling->WriteHistory(m_prefix+".final.bin",m_history);
+        double start=Clock();if(m_terminalOutput&&m_steps==0)WriteScientificFrame(Final);
+        m_coupling->WriteHistory(m_prefix+".final.bin",m_history);
         for(int i=0;i<5;++i){std::vector<Array<OneD,NekDouble>>coefficients{m_fields[i]->UpdateCoeffs()};std::vector<std::string>variables{m_session->GetVariable(i)};WriteFld(m_prefix+"-"+variables[0]+".fld",m_fields[i],coefficients,variables);}
         WriteScientificIndex();
         double exportSeconds=Clock()-start;std::ofstream report(m_prefix+".result.json");Check(bool(report),"cannot create coupled result");report<<std::setprecision(17)<<"{\"schema\":\"WJH27RegisteredCoupledRunV2\",\"factory\":\"WJNativeCoupledV2\",\"normal_main\":true,\"qualification\":\"execution evidence; closure gates are assessed independently\",\"construction_seconds\":"<<m_constructionSeconds<<",\"initialisation_seconds\":"<<m_initialisationSeconds<<",\"restart\":"<<(m_restart.empty()?"false":"true")<<",\"complete_advancing_seconds\":"<<m_completeAdvanceSeconds<<",\"final_export_seconds\":"<<exportSeconds<<",\"complete_step_seconds\":[";

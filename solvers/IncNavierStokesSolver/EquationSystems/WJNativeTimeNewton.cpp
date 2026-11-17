@@ -35,12 +35,72 @@ double OperatorChange(const Sparse &current,const Sparse &saved)
     if(!std::isfinite(relative))throw std::runtime_error("nonfinite Newton inverse-operator drift");
     return relative;
 }
+double DataChange(const Vec &current,const Vec &saved)
+{
+    if(current.size()!=saved.size()||current.size()==0)
+        throw std::logic_error("Newton inverse cache has different current-data inventories");
+    const double scale=saved.norm(),difference=(current-saved).norm();
+    if(!(std::isfinite(scale)&&scale>0&&std::isfinite(difference)&&difference>=0))
+        throw std::runtime_error("invalid current-data inverse-cache drift norm");
+    const double relative=difference/scale;
+    if(!std::isfinite(relative))throw std::runtime_error("nonfinite current-data inverse-cache drift");
+    return relative;
+}
+}
+
+Vec Coupling::TimePreconditionerData(const Data &data)const
+{
+    const auto&p=m_reference->Parameters();
+    const double K0=p.KIn,A0=m_reference->Amplitude(K0),c0=m_reference->Cutoff(K0);
+    const auto&rules=m_rules.Static();
+    if(data.kCoefficients.size()==0||data.velocityInputs.size()!=rules.size()||data.coefficients.size()!=2*data.kCoefficients.size())
+        throw std::logic_error("current-data inverse-cache static point inventory differs");
+    Vec value(10*data.kCoefficients.size()+data.eCoefficients.size());
+    Eigen::Index point=0,epsilon=0,entry=0;
+    for(std::size_t i=0;i<rules.size();++i)
+    {
+        const auto&rule=*rules[i];const bool outer=m_e.Owns(rule.geometry);
+        if(data.velocityInputs[i].size()!=std::size_t(rule.w.size()))
+            throw std::logic_error("current-data inverse-cache owned quadrature differs");
+        for(const auto&input:data.velocityInputs[i])
+        {
+            if(point>=data.kCoefficients.size()||entry+10+2*int(outer)>value.size())
+                throw std::logic_error("current-data inverse-cache tuple length differs");
+            const double E0=outer?A0/input.r:A0/std::max(input.r,c0);
+            const double Dk0=p.nu+p.Cd*K0*K0/(p.sigmaK*E0);
+            const double De0=p.nu+p.Cd*K0*K0/(p.sigmaE*E0);
+            const double reaction0=1.82*E0/K0;
+            if(!(std::isfinite(E0)&&E0>0&&std::isfinite(Dk0)&&Dk0>0&&
+                 std::isfinite(De0)&&De0>0&&std::isfinite(reaction0)&&reaction0>0))
+                throw std::runtime_error("invalid fixed current-data inverse-cache units");
+            value[entry++]=input.k/K0;value[entry++]=input.E/E0;value[entry++]=input.aux/Dk0;
+            for(int component:{0,2})for(int derivative:{0,2})
+                value[entry++]=input.gradient[component][derivative]*K0/E0;
+            value[entry++]=data.coefficients[2*point]/Dk0;
+            value[entry++]=data.coefficients[2*point+1]/Dk0;
+            value[entry++]=data.kCoefficients[point++]/Dk0;
+            if(outer)
+            {
+                if(epsilon+2>data.eCoefficients.size())
+                    throw std::logic_error("current-data inverse-cache outer inventory differs");
+                value[entry++]=data.eCoefficients[epsilon++]/De0;
+                value[entry++]=data.eCoefficients[epsilon++]/reaction0;
+            }
+        }
+    }
+    if(entry!=value.size()||point!=data.kCoefficients.size()||epsilon!=data.eCoefficients.size()||!value.allFinite())
+        throw std::logic_error("incomplete/nonfinite current-data inverse-cache tuple");
+    if(!(std::isfinite(value.norm())&&value.norm()>0))
+        throw std::runtime_error("nonpositive/nonfinite current-data inverse-cache tuple norm");
+    return value;
 }
 
 void WriteStepPreconditionerFields(std::ostream &out,const CoupledOptions &options,
                                   const CoupledStepInfo &info)
 {
     out<<std::setprecision(17)<<",\"preconditioner_policy\":\""<<options.stepPreconditioner
+       <<"\",\"drift_measure\":\""<<(options.stepPreconditioner=="CurrentDataDriftV1"?
+            "ScaledCurrentQuadratureDataL2V1":"CurrentInverseOperatorFrobeniusV1")
        <<"\",\"relative_drift_limit\":"<<options.stepPCRelativeDrift
        <<",\"maximum_uses\":"<<options.stepPCMaximumUses
        <<",\"refreshes\":"<<info.timePCRefreshes<<",\"reuses\":"<<info.timePCReuses
@@ -224,19 +284,32 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
                 const auto &data=*owned;
                 // EX advection is fixed history, so it has no current-state
                 // transport Jacobian. Alpha is the actual BE/BDF2 coefficient.
-                Sparse flowPC=VelocityTangent(data,info.timing), kPC, ePC;
-                double drift=0;
-                const int previousAge=m_timePCUses;
-                {
+                Sparse flowPC,kPC,ePC;Vec currentTuple;
+                const bool currentDataPolicy=m_options.stepPreconditioner=="CurrentDataDriftV1";
+                auto assembleInverseOperators=[&] {
+                    flowPC=VelocityTangent(data,info.timing);
                     AccountTime timer(info.timing.assembly);
                     kPC=m_k.Diffusion(data.kRules,data.Dk);
                     ePC=m_e.Diffusion(m_rules.Static(),data.De,data.reactionE);
+                };
+                double drift=0;
+                const int previousAge=m_timePCUses;
+                if(currentDataPolicy)
+                {
+                    AccountTime timer(info.timing.assembly);
+                    currentTuple=TimePreconditionerData(data);
+                    if(m_timePCReady)drift=DataChange(currentTuple,m_timePCData);
+                }
+                else
+                {
+                    assembleInverseOperators();
+                    AccountTime timer(info.timing.assembly);
                     if(m_timePCReady)
                         drift=std::max({OperatorChange(flowPC,m_timePCOperators[0]),
                             OperatorChange(kPC,m_timePCOperators[1]),
                             OperatorChange(ePC,m_timePCOperators[2])});
-                    info.coefficientDrift=std::max(info.coefficientDrift,drift);
                 }
+                info.coefficientDrift=std::max(info.coefficientDrift,drift);
                 // This norm is a numerical refresh heuristic for inverse
                 // operators only. No residual, Jv, load or physical coefficient
                 // is ever taken from this cache. Alpha changes always refresh.
@@ -251,6 +324,7 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
                 if(reason>=0)
                 {
                     m_timePCReady=false; // a partial factorization cannot be reused
+                    if(currentDataPolicy)assembleInverseOperators();
                     {
                         AccountTime timer(info.timing.rebuild);
                         m_flow.PrepareLinearPreconditioner(m_flow.System(alpha,flowPC,1.));++info.rebuilds;
@@ -261,6 +335,7 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
                         AccountTime timer(info.timing.assembly);
                         m_timePCOperators={std::move(flowPC),std::move(kPC),std::move(ePC)};
                         m_timePCEpsilonFull=m_timePCOperators[2]+alpha*m_e.Mass();
+                        m_timePCData=std::move(currentTuple);
                     }
                     m_timePCAlpha=alpha;m_timePCUses=0;m_timePCReady=true;
                     ++info.timePCRefreshes;++info.timePCRefreshReasons[reason];

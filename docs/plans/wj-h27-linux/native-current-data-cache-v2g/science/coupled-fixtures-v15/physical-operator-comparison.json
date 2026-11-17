@@ -1,0 +1,1619 @@
+{
+  "schema": "WJH27ImplicitAlgorithmComparisonV1",
+  "status": "PASS_IMPLICIT_ALGORITHM_COMPARISON_ONLY",
+  "comparison_gate_pass": true,
+  "comparison": "NewtonCacheV1",
+  "full_H27_qualification": false,
+  "complete_current_equations_verified_here": false,
+  "native_json_parser": "PreserveLiteralNegativeZeroV1; metadata/map integers retain integer type",
+  "old": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-fresh.result.json",
+    "sha256": "12b5428f0bf53431f2461c9b8e8ad68e2b8efb507468056290c32c2060c21482"
+  },
+  "new": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-operator.result.json",
+    "sha256": "8edde3c4841f1425ec831d40ce16bfbf3d3d356b191f459ea8786dbeda7d35eb"
+  },
+  "table": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+  },
+  "limit": 1e-08,
+  "sources": {
+    "checker": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h27/implicit_algorithm_check.py",
+      "sha256": "ef9ba86a8be2bd8920a25789f4c356bbc7271d1b79bec2947e163f7ae36af093"
+    },
+    "basis_and_reference": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h27/physical_oracle.py",
+      "sha256": "94fbd2c1fd7c458dfeaa13989a0eec1449dd5d6db854ff89695e705a59dc2358"
+    },
+    "history_ABI": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h27/physical_transient_oracle.py",
+      "sha256": "a5acc31d47a09a2d94562a5052649b825292d1a76680b97fb67b9960fc6a1be3"
+    },
+    "Jacobi_basis": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h26/fixtures.py",
+      "sha256": "632e5cbcdd7a40a993c90cde2aefc3785d73a5f4d1b9634594ea3bb3c9d48b69"
+    }
+  },
+  "workers": 1,
+  "memory_cap_bytes": 8589934592,
+  "wall_cap_seconds": 55.0,
+  "scope": "Algorithm equivalence at matching accepted endpoint and complete exported history only; current PDE equations require the separate independent oracle.",
+  "new_preconditioner": "OperatorDriftV1",
+  "preconditioner_reuse_evidence": {
+    "old": {
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-fresh.steps.jsonl",
+        "sha256": "c145d187510dd0dfe440de1de98b95edd7a651da111b2353a33c32c3786e86e3"
+      },
+      "counts_are": "PER_PHYSICAL_STEP",
+      "final_result_counted_again": false,
+      "first_logged_step": 1,
+      "last_logged_step": 12,
+      "complete_logged_interval": true,
+      "totals": {
+        "refreshes": 48,
+        "reuses": 0,
+        "maximum_used_age": 1,
+        "refresh_reasons": {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 48,
+          "retry": 0,
+          "injected": 0
+        }
+      },
+      "steps": [
+        {
+          "step": 1,
+          "time": 0.005,
+          "refreshes": 4,
+          "reuses": 0,
+          "maximum_used_age": 1,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 0,
+            "control": 4,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 2,
+          "time": 0.01,
+          "refreshes": 4,
+          "reuses": 0,
+          "maximum_used_age": 1,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 0,
+            "control": 4,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 3,
+          "time": 0.015,
+          "refreshes": 4,
+          "reuses": 0,
+          "maximum_used_age": 1,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 0,
+            "control": 4,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 4,
+          "time": 0.02,
+          "refreshes": 4,
+          "reuses": 0,
+          "maximum_used_age": 1,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 0,
+            "control": 4,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 5,
+          "time": 0.025,
+          "refreshes": 4,
+          "reuses": 0,
+          "maximum_used_age": 1,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 0,
+            "control": 4,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 6,
+          "time": 0.03,
+          "refreshes": 4,
+          "reuses": 0,
+          "maximum_used_age": 1,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 0,
+            "control": 4,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 7,
+          "time": 0.035,
+          "refreshes": 4,
+          "reuses": 0,
+          "maximum_used_age": 1,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 0,
+            "control": 4,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 8,
+          "time": 0.04,
+          "refreshes": 4,
+          "reuses": 0,
+          "maximum_used_age": 1,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 0,
+            "control": 4,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 9,
+          "time": 0.045,
+          "refreshes": 4,
+          "reuses": 0,
+          "maximum_used_age": 1,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 0,
+            "control": 4,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 10,
+          "time": 0.05,
+          "refreshes": 4,
+          "reuses": 0,
+          "maximum_used_age": 1,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 0,
+            "control": 4,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 11,
+          "time": 0.055,
+          "refreshes": 4,
+          "reuses": 0,
+          "maximum_used_age": 1,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 0,
+            "control": 4,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 12,
+          "time": 0.06,
+          "refreshes": 4,
+          "reuses": 0,
+          "maximum_used_age": 1,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 0,
+            "control": 4,
+            "retry": 0,
+            "injected": 0
+          }
+        }
+      ]
+    },
+    "new": {
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-operator.steps.jsonl",
+        "sha256": "7fd313f5567b84c23434ffd1656f2bae6411e04ed4d9b837a5c02fdd5c5317c2"
+      },
+      "counts_are": "PER_PHYSICAL_STEP",
+      "final_result_counted_again": false,
+      "first_logged_step": 1,
+      "last_logged_step": 12,
+      "complete_logged_interval": true,
+      "totals": {
+        "refreshes": 9,
+        "reuses": 39,
+        "maximum_used_age": 8,
+        "refresh_reasons": {
+          "cold": 1,
+          "alpha": 1,
+          "drift": 5,
+          "age": 2,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        }
+      },
+      "steps": [
+        {
+          "step": 1,
+          "time": 0.005,
+          "refreshes": 2,
+          "reuses": 2,
+          "maximum_used_age": 3,
+          "refresh_reasons": {
+            "cold": 1,
+            "alpha": 0,
+            "drift": 1,
+            "age": 0,
+            "control": 0,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 2,
+          "time": 0.01,
+          "refreshes": 2,
+          "reuses": 2,
+          "maximum_used_age": 3,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 1,
+            "drift": 1,
+            "age": 0,
+            "control": 0,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 3,
+          "time": 0.015,
+          "refreshes": 1,
+          "reuses": 3,
+          "maximum_used_age": 4,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 1,
+            "age": 0,
+            "control": 0,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 4,
+          "time": 0.02,
+          "refreshes": 0,
+          "reuses": 4,
+          "maximum_used_age": 7,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 0,
+            "control": 0,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 5,
+          "time": 0.025,
+          "refreshes": 1,
+          "reuses": 3,
+          "maximum_used_age": 8,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 1,
+            "age": 0,
+            "control": 0,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 6,
+          "time": 0.03,
+          "refreshes": 0,
+          "reuses": 4,
+          "maximum_used_age": 7,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 0,
+            "control": 0,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 7,
+          "time": 0.035,
+          "refreshes": 1,
+          "reuses": 3,
+          "maximum_used_age": 8,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 1,
+            "age": 0,
+            "control": 0,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 8,
+          "time": 0.04,
+          "refreshes": 0,
+          "reuses": 4,
+          "maximum_used_age": 7,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 0,
+            "control": 0,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 9,
+          "time": 0.045,
+          "refreshes": 1,
+          "reuses": 3,
+          "maximum_used_age": 8,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 1,
+            "control": 0,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 10,
+          "time": 0.05,
+          "refreshes": 0,
+          "reuses": 4,
+          "maximum_used_age": 7,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 0,
+            "control": 0,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 11,
+          "time": 0.055,
+          "refreshes": 1,
+          "reuses": 3,
+          "maximum_used_age": 8,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 1,
+            "control": 0,
+            "retry": 0,
+            "injected": 0
+          }
+        },
+        {
+          "step": 12,
+          "time": 0.06,
+          "refreshes": 0,
+          "reuses": 4,
+          "maximum_used_age": 7,
+          "refresh_reasons": {
+            "cold": 0,
+            "alpha": 0,
+            "drift": 0,
+            "age": 0,
+            "control": 0,
+            "retry": 0,
+            "injected": 0
+          }
+        }
+      ]
+    },
+    "gate_pass": true,
+    "scope": "Recorded refresh/reuse coverage and bounded ages; fresh residual/Jv/guard equations need independent validation."
+  },
+  "source_identity": "47fb3597c4e56348361cfab6eadf9a34ba8d89027e57ed01153ca4d9c5ab10d1",
+  "reference_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+  "exact_metadata_sha256": "72b245aeaf85499f683188f609853725e50acc7389c9912ccd1a628054b53315",
+  "algorithm_signatures": {
+    "old": "a79a6a3be751bc19374f775a0f18829d55450d277337657c047c350b35fecdcd",
+    "new": "bf658cb53081bdf9eb5a95761c155eedda6d7d37e57f99e013ac68ea5b54d580"
+  },
+  "implicit_solvers": {
+    "old": "CoupledJFNKV1",
+    "new": "CoupledJFNKV1"
+  },
+  "coupled_newton": {
+    "old": {
+      "krylov_iterations": 7,
+      "jacobian_actions": 11,
+      "residual_evaluations": 30,
+      "preconditioner_applications": 7,
+      "rejected_trials": 0,
+      "counts_complete": true,
+      "step_seconds_cap": 50,
+      "uncommitted_guard": "positivity/root/covariance",
+      "physical_acceptance_guard": "fresh full planar principal and complete current residual",
+      "preconditioner_policy": "RebuildEveryNewtonV1",
+      "drift_measure": "CurrentInverseOperatorFrobeniusV1",
+      "relative_drift_limit": 0.02,
+      "maximum_uses": 8,
+      "refreshes": 4,
+      "reuses": 0,
+      "maximum_used_age": 1,
+      "refresh_reasons": {
+        "cold": 0,
+        "alpha": 0,
+        "drift": 0,
+        "age": 0,
+        "control": 4,
+        "retry": 0,
+        "injected": 0
+      },
+      "preconditioner_events_recorded": true,
+      "preconditioner_events": [
+        {
+          "attempt": 0,
+          "base": 0,
+          "alpha": 300,
+          "drift": 0,
+          "age_before": 0,
+          "age_used": 1,
+          "reason": "control",
+          "refreshed": true
+        },
+        {
+          "attempt": 0,
+          "base": 1,
+          "alpha": 300,
+          "drift": 0.006779951828269859,
+          "age_before": 1,
+          "age_used": 1,
+          "reason": "control",
+          "refreshed": true
+        },
+        {
+          "attempt": 0,
+          "base": 2,
+          "alpha": 300,
+          "drift": 4.572890933730986e-05,
+          "age_before": 1,
+          "age_used": 1,
+          "reason": "control",
+          "refreshed": true
+        },
+        {
+          "attempt": 0,
+          "base": 3,
+          "alpha": 300,
+          "drift": 6.388101717160772e-09,
+          "age_before": 1,
+          "age_used": 1,
+          "reason": "control",
+          "refreshed": true
+        }
+      ]
+    },
+    "new": {
+      "krylov_iterations": 7,
+      "jacobian_actions": 11,
+      "residual_evaluations": 30,
+      "preconditioner_applications": 7,
+      "rejected_trials": 0,
+      "counts_complete": true,
+      "step_seconds_cap": 50,
+      "uncommitted_guard": "positivity/root/covariance",
+      "physical_acceptance_guard": "fresh full planar principal and complete current residual",
+      "preconditioner_policy": "OperatorDriftV1",
+      "drift_measure": "CurrentInverseOperatorFrobeniusV1",
+      "relative_drift_limit": 0.02,
+      "maximum_uses": 8,
+      "refreshes": 0,
+      "reuses": 4,
+      "maximum_used_age": 7,
+      "refresh_reasons": {
+        "cold": 0,
+        "alpha": 0,
+        "drift": 0,
+        "age": 0,
+        "control": 0,
+        "retry": 0,
+        "injected": 0
+      },
+      "preconditioner_events_recorded": true,
+      "preconditioner_events": [
+        {
+          "attempt": 0,
+          "base": 0,
+          "alpha": 300,
+          "drift": 4.8152000095646583e-05,
+          "age_before": 3,
+          "age_used": 4,
+          "reason": "reuse",
+          "refreshed": false
+        },
+        {
+          "attempt": 0,
+          "base": 1,
+          "alpha": 300,
+          "drift": 0.006732472669731953,
+          "age_before": 4,
+          "age_used": 5,
+          "reason": "reuse",
+          "refreshed": false
+        },
+        {
+          "attempt": 0,
+          "base": 2,
+          "alpha": 300,
+          "drift": 0.006687316553881097,
+          "age_before": 5,
+          "age_used": 6,
+          "reason": "reuse",
+          "refreshed": false
+        },
+        {
+          "attempt": 0,
+          "base": 3,
+          "alpha": 300,
+          "drift": 0.0066873112636622566,
+          "age_before": 6,
+          "age_used": 7,
+          "reason": "reuse",
+          "refreshed": false
+        }
+      ]
+    }
+  },
+  "clocks": {
+    "step": 12,
+    "time": 0.06,
+    "dt": 0.005,
+    "scheme": {
+      "startup": false,
+      "dt": 0.005,
+      "alpha": 300.0,
+      "mass_coefficients": [
+        1.5,
+        -2.0,
+        0.5
+      ],
+      "explicit_coefficients": [
+        2.0,
+        -1.0
+      ],
+      "name": "BDF2_EX2"
+    }
+  },
+  "state_and_history_hashes": {
+    "old": {
+      "accepted": "b237e179c71076befa546331cfaa4ec825ccfc99be0278f706591274cc9783da",
+      "input_current": "8f44a8b154b58511a03d2deb1f235e62cedf0005ba30c4d9de6a495e244b2845",
+      "input_previous": "a820b3d4874f14f01483d6c8111f3457e61c9b724147febcb324ff25b2733fb4",
+      "current_advection": "d1a27a7f4d96099c0801065abd9bdea331e3e1b62967c1c3aadfd29ceb626de5",
+      "previous_advection": "03c9b6d2c400c69c8e61d017bd15b37aafc40a5901eb4d494c4c1c4a18e3c14a",
+      "input_advection": "03c9b6d2c400c69c8e61d017bd15b37aafc40a5901eb4d494c4c1c4a18e3c14a",
+      "input_previous_advection": "8be383691c3db06966a18423a6eb86114621989f5c4459dceaabb960a0a1114b"
+    },
+    "new": {
+      "accepted": "e8f584738e779a5fea88bdeb8132ca6f95da624f19b9a0211f8cc3d1dac4f6d8",
+      "input_current": "c203012266a1e5a020cbbf045b237fec0f1dba734f2daed0f606af93ba7b2a8d",
+      "input_previous": "846b531d15098b23dff6324d17b1690eb50453d59926969b75df3c32a0249ed0",
+      "current_advection": "de0ffccd34c95853bb44ab11b44ecd1c5ea38c51de727e4db87c2ee4ad9e3a98",
+      "previous_advection": "003219b93ae3cc86efe47c3491b1a505fc07b627273dfef55a8dd368bfe86730",
+      "input_advection": "003219b93ae3cc86efe47c3491b1a505fc07b627273dfef55a8dd368bfe86730",
+      "input_previous_advection": "87d4d90ad44e1e5bfb7de38707811cb871ee07e4aa919b5e5f8bc8495aebabd7"
+    }
+  },
+  "scales": {
+    "U": 1.0,
+    "Pi": 0.002600999999999999,
+    "k": 0.008809015145515192,
+    "epsilon_coefficient": 0.0023155240547992535,
+    "epsilon_field": "positive local Ain/r",
+    "cutoff": 0.15,
+    "cache": "all-row reference-weighted mass dual"
+  },
+  "gauge": false,
+  "pressure_policy": "No alignment or constant shift, including gauge cases; compare the native canonical pressure level.",
+  "coefficient_differences": {
+    "accepted": {
+      "U": {
+        "scaled_MAX": 1.0871429319120285e-14,
+        "scaled_coefficient_RMS": 3.271343922065657e-16
+      },
+      "Pi": {
+        "scaled_MAX": 1.4763438582851672e-09,
+        "scaled_coefficient_RMS": 6.428111233528417e-11
+      },
+      "k": {
+        "scaled_MAX": 8.60935538338498e-15,
+        "scaled_coefficient_RMS": 6.234202921523152e-16
+      },
+      "epsilon": {
+        "scaled_MAX": 3.2759028685482665e-15,
+        "scaled_coefficient_RMS": 1.3540602664022697e-16
+      }
+    },
+    "input_current": {
+      "U": {
+        "scaled_MAX": 7.29341577783688e-15,
+        "scaled_coefficient_RMS": 3.364445095077377e-16
+      },
+      "Pi": {
+        "scaled_MAX": 6.825794971509613e-10,
+        "scaled_coefficient_RMS": 7.980172691373149e-11
+      },
+      "k": {
+        "scaled_MAX": 8.917052144764e-15,
+        "scaled_coefficient_RMS": 6.392026139307446e-16
+      },
+      "epsilon": {
+        "scaled_MAX": 2.1264325175607175e-15,
+        "scaled_coefficient_RMS": 1.3092583632466263e-16
+      }
+    },
+    "input_previous": {
+      "U": {
+        "scaled_MAX": 6.53059084410816e-15,
+        "scaled_coefficient_RMS": 2.9436980889777753e-16
+      },
+      "Pi": {
+        "scaled_MAX": 8.276114715155569e-10,
+        "scaled_coefficient_RMS": 7.066213474588066e-11
+      },
+      "k": {
+        "scaled_MAX": 6.892407454890048e-15,
+        "scaled_coefficient_RMS": 6.475052680310432e-16
+      },
+      "epsilon": {
+        "scaled_MAX": 3.2540715041836948e-15,
+        "scaled_coefficient_RMS": 1.4482108615976657e-16
+      }
+    },
+    "current_advection": {
+      "U": {
+        "scaled_MAX": 7.484220432056121e-16,
+        "scaled_coefficient_RMS": 2.0290126858101436e-17
+      },
+      "Pi": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "k": {
+        "scaled_MAX": 1.5754074182605824e-15,
+        "scaled_coefficient_RMS": 7.819149208279607e-17
+      },
+      "epsilon": {
+        "scaled_MAX": 2.0485144582250147e-17,
+        "scaled_coefficient_RMS": 1.5101593304016563e-18
+      }
+    },
+    "previous_advection": {
+      "U": {
+        "scaled_MAX": 6.194559664866123e-16,
+        "scaled_coefficient_RMS": 2.1297494750116066e-17
+      },
+      "Pi": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "k": {
+        "scaled_MAX": 2.3631111273908738e-15,
+        "scaled_coefficient_RMS": 7.655745877511273e-17
+      },
+      "epsilon": {
+        "scaled_MAX": 2.0485144582250147e-17,
+        "scaled_coefficient_RMS": 1.480236821246365e-18
+      }
+    },
+    "input_advection": {
+      "U": {
+        "scaled_MAX": 6.194559664866123e-16,
+        "scaled_coefficient_RMS": 2.1297494750116066e-17
+      },
+      "Pi": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "k": {
+        "scaled_MAX": 2.3631111273908738e-15,
+        "scaled_coefficient_RMS": 7.655745877511273e-17
+      },
+      "epsilon": {
+        "scaled_MAX": 2.0485144582250147e-17,
+        "scaled_coefficient_RMS": 1.480236821246365e-18
+      }
+    },
+    "input_previous_advection": {
+      "U": {
+        "scaled_MAX": 5.025712398083087e-16,
+        "scaled_coefficient_RMS": 1.9178302120937663e-17
+      },
+      "Pi": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "k": {
+        "scaled_MAX": 1.969259272825728e-15,
+        "scaled_coefficient_RMS": 7.763188206376649e-17
+      },
+      "epsilon": {
+        "scaled_MAX": 2.3411593808285882e-17,
+        "scaled_coefficient_RMS": 1.4290805380202526e-18
+      }
+    }
+  },
+  "fields": {
+    "accepted": [
+      {
+        "norms": {
+          "whole/U": {
+            "RMS": 1.5262525918459643e-16,
+            "MAX": 6.744590695894929e-16,
+            "component_RMS": [
+              1.5262525918459643e-16
+            ],
+            "component_MAX": [
+              6.744590695894929e-16
+            ],
+            "measure": 497.8125000000007,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradU": {
+            "RMS": 8.839713105796044e-16,
+            "MAX": 6.052915189310461e-14,
+            "component_RMS": [
+              8.839713105796044e-16
+            ],
+            "component_MAX": [
+              6.052915189310461e-14
+            ],
+            "measure": 497.8125000000007
+          },
+          "whole/Pi": {
+            "RMS": 7.925245522428015e-11,
+            "MAX": 1.9930339662056451e-10,
+            "component_RMS": [
+              7.925245522428015e-11
+            ],
+            "component_MAX": [
+              1.9930339662056451e-10
+            ],
+            "measure": 497.8125000000007,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradPi": {
+            "RMS": 1.97078543397577e-11,
+            "MAX": 2.752410055175644e-10,
+            "component_RMS": [
+              1.97078543397577e-11
+            ],
+            "component_MAX": [
+              2.752410055175644e-10
+            ],
+            "measure": 497.8125000000007
+          },
+          "whole/k": {
+            "RMS": 2.3191081053073956e-16,
+            "MAX": 3.221243383717606e-15,
+            "component_RMS": [
+              2.3191081053073956e-16
+            ],
+            "component_MAX": [
+              3.221243383717606e-15
+            ],
+            "measure": 497.8125000000007,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradk": {
+            "RMS": 1.0440606918301411e-14,
+            "MAX": 1.1455022199443383e-12,
+            "component_RMS": [
+              1.0440606918301411e-14
+            ],
+            "component_MAX": [
+              1.1455022199443383e-12
+            ],
+            "measure": 497.8125000000007
+          },
+          "outer/epsilon": {
+            "RMS": 1.9557217924999184e-16,
+            "MAX": 1.0819395439999412e-15,
+            "component_RMS": [
+              1.9557217924999184e-16
+            ],
+            "component_MAX": [
+              1.0819395439999412e-15
+            ],
+            "measure": 494.0625000000007,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "outer/gradepsilon": {
+            "RMS": 1.1401208595637097e-15,
+            "MAX": 1.7890114509522163e-13,
+            "component_RMS": [
+              1.1401208595637097e-15
+            ],
+            "component_MAX": [
+              1.7890114509522163e-13
+            ],
+            "measure": 494.0625000000007
+          }
+        },
+        "pressure_mean_over_tau": [
+          -0.012113433925111827,
+          -0.012113433852488791
+        ],
+        "quadrature": 8,
+        "owner_grid": 9,
+        "gradient_gate": false,
+        "pressure_alignment": "NONE; native pressure level is retained"
+      },
+      {
+        "norms": {
+          "whole/U": {
+            "RMS": 1.5262525918459646e-16,
+            "MAX": 6.744590695894929e-16,
+            "component_RMS": [
+              1.5262525918459646e-16
+            ],
+            "component_MAX": [
+              6.744590695894929e-16
+            ],
+            "measure": 497.81250000000074,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradU": {
+            "RMS": 8.839713105796043e-16,
+            "MAX": 6.052915189310461e-14,
+            "component_RMS": [
+              8.839713105796043e-16
+            ],
+            "component_MAX": [
+              6.052915189310461e-14
+            ],
+            "measure": 497.81250000000074
+          },
+          "whole/Pi": {
+            "RMS": 7.925245522428015e-11,
+            "MAX": 1.9930339662056451e-10,
+            "component_RMS": [
+              7.925245522428015e-11
+            ],
+            "component_MAX": [
+              1.9930339662056451e-10
+            ],
+            "measure": 497.81250000000074,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradPi": {
+            "RMS": 1.970785433975771e-11,
+            "MAX": 2.752410055175644e-10,
+            "component_RMS": [
+              1.970785433975771e-11
+            ],
+            "component_MAX": [
+              2.752410055175644e-10
+            ],
+            "measure": 497.81250000000074
+          },
+          "whole/k": {
+            "RMS": 2.3191081053073966e-16,
+            "MAX": 3.221243383717606e-15,
+            "component_RMS": [
+              2.3191081053073966e-16
+            ],
+            "component_MAX": [
+              3.221243383717606e-15
+            ],
+            "measure": 497.81250000000074,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradk": {
+            "RMS": 1.0440606918301411e-14,
+            "MAX": 1.1455022199443383e-12,
+            "component_RMS": [
+              1.0440606918301411e-14
+            ],
+            "component_MAX": [
+              1.1455022199443383e-12
+            ],
+            "measure": 497.81250000000074
+          },
+          "outer/epsilon": {
+            "RMS": 1.9557217924999187e-16,
+            "MAX": 1.0819395439999412e-15,
+            "component_RMS": [
+              1.9557217924999187e-16
+            ],
+            "component_MAX": [
+              1.0819395439999412e-15
+            ],
+            "measure": 494.06250000000074,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "outer/gradepsilon": {
+            "RMS": 1.1401208595637101e-15,
+            "MAX": 1.7890114509522163e-13,
+            "component_RMS": [
+              1.1401208595637101e-15
+            ],
+            "component_MAX": [
+              1.7890114509522163e-13
+            ],
+            "measure": 494.06250000000074
+          }
+        },
+        "pressure_mean_over_tau": [
+          -0.012113433925111829,
+          -0.012113433852488796
+        ],
+        "quadrature": 12,
+        "owner_grid": 17,
+        "gradient_gate": false,
+        "pressure_alignment": "NONE; native pressure level is retained"
+      }
+    ],
+    "input_current": [
+      {
+        "norms": {
+          "whole/U": {
+            "RMS": 1.54580040503554e-16,
+            "MAX": 7.8500075260509e-16,
+            "component_RMS": [
+              1.54580040503554e-16
+            ],
+            "component_MAX": [
+              7.8500075260509e-16
+            ],
+            "measure": 497.8125000000007,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradU": {
+            "RMS": 8.744765262016301e-16,
+            "MAX": 6.123854987408405e-14,
+            "component_RMS": [
+              8.744765262016301e-16
+            ],
+            "component_MAX": [
+              6.123854987408405e-14
+            ],
+            "measure": 497.8125000000007
+          },
+          "whole/Pi": {
+            "RMS": 1.5207395295775392e-10,
+            "MAX": 3.1143767325469755e-10,
+            "component_RMS": [
+              1.5207395295775392e-10
+            ],
+            "component_MAX": [
+              3.1143767325469755e-10
+            ],
+            "measure": 497.8125000000007,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradPi": {
+            "RMS": 1.877467971617752e-11,
+            "MAX": 1.952853700395939e-10,
+            "component_RMS": [
+              1.877467971617752e-11
+            ],
+            "component_MAX": [
+              1.952853700395939e-10
+            ],
+            "measure": 497.8125000000007
+          },
+          "whole/k": {
+            "RMS": 2.1923729182304935e-16,
+            "MAX": 3.611786803226091e-15,
+            "component_RMS": [
+              2.1923729182304935e-16
+            ],
+            "component_MAX": [
+              3.611786803226091e-15
+            ],
+            "measure": 497.8125000000007,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradk": {
+            "RMS": 1.1717330610229288e-14,
+            "MAX": 1.6811727455663135e-12,
+            "component_RMS": [
+              1.1717330610229288e-14
+            ],
+            "component_MAX": [
+              1.6811727455663135e-12
+            ],
+            "measure": 497.8125000000007
+          },
+          "outer/epsilon": {
+            "RMS": 1.8830408248140026e-16,
+            "MAX": 1.151916607890815e-15,
+            "component_RMS": [
+              1.8830408248140026e-16
+            ],
+            "component_MAX": [
+              1.151916607890815e-15
+            ],
+            "measure": 494.0625000000007,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "outer/gradepsilon": {
+            "RMS": 1.0730656616997993e-15,
+            "MAX": 1.4359510944958357e-13,
+            "component_RMS": [
+              1.0730656616997993e-15
+            ],
+            "component_MAX": [
+              1.4359510944958357e-13
+            ],
+            "measure": 494.0625000000007
+          }
+        },
+        "pressure_mean_over_tau": [
+          -0.012102383427628904,
+          -0.012102383565076737
+        ],
+        "quadrature": 8,
+        "owner_grid": 9,
+        "gradient_gate": false,
+        "pressure_alignment": "NONE; native pressure level is retained"
+      },
+      {
+        "norms": {
+          "whole/U": {
+            "RMS": 1.5458004050355403e-16,
+            "MAX": 7.934760212609686e-16,
+            "component_RMS": [
+              1.5458004050355403e-16
+            ],
+            "component_MAX": [
+              7.934760212609686e-16
+            ],
+            "measure": 497.81250000000074,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradU": {
+            "RMS": 8.744765262016301e-16,
+            "MAX": 6.123854987408405e-14,
+            "component_RMS": [
+              8.744765262016301e-16
+            ],
+            "component_MAX": [
+              6.123854987408405e-14
+            ],
+            "measure": 497.81250000000074
+          },
+          "whole/Pi": {
+            "RMS": 1.5207395295775392e-10,
+            "MAX": 3.1143767325469755e-10,
+            "component_RMS": [
+              1.5207395295775392e-10
+            ],
+            "component_MAX": [
+              3.1143767325469755e-10
+            ],
+            "measure": 497.81250000000074,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradPi": {
+            "RMS": 1.8774679716177527e-11,
+            "MAX": 1.952853700395939e-10,
+            "component_RMS": [
+              1.8774679716177527e-11
+            ],
+            "component_MAX": [
+              1.952853700395939e-10
+            ],
+            "measure": 497.81250000000074
+          },
+          "whole/k": {
+            "RMS": 2.192372918230494e-16,
+            "MAX": 3.634195750907878e-15,
+            "component_RMS": [
+              2.192372918230494e-16
+            ],
+            "component_MAX": [
+              3.634195750907878e-15
+            ],
+            "measure": 497.81250000000074,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradk": {
+            "RMS": 1.1717330610229288e-14,
+            "MAX": 1.6811727455663135e-12,
+            "component_RMS": [
+              1.1717330610229288e-14
+            ],
+            "component_MAX": [
+              1.6811727455663135e-12
+            ],
+            "measure": 497.81250000000074
+          },
+          "outer/epsilon": {
+            "RMS": 1.883040824814003e-16,
+            "MAX": 1.151916607890815e-15,
+            "component_RMS": [
+              1.883040824814003e-16
+            ],
+            "component_MAX": [
+              1.151916607890815e-15
+            ],
+            "measure": 494.06250000000074,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "outer/gradepsilon": {
+            "RMS": 1.0730656616997991e-15,
+            "MAX": 1.4359510944958357e-13,
+            "component_RMS": [
+              1.0730656616997991e-15
+            ],
+            "component_MAX": [
+              1.4359510944958357e-13
+            ],
+            "measure": 494.06250000000074
+          }
+        },
+        "pressure_mean_over_tau": [
+          -0.012102383427628906,
+          -0.012102383565076742
+        ],
+        "quadrature": 12,
+        "owner_grid": 17,
+        "gradient_gate": false,
+        "pressure_alignment": "NONE; native pressure level is retained"
+      }
+    ],
+    "input_previous": [
+      {
+        "norms": {
+          "whole/U": {
+            "RMS": 1.360266425714412e-16,
+            "MAX": 7.610500335495723e-16,
+            "component_RMS": [
+              1.360266425714412e-16
+            ],
+            "component_MAX": [
+              7.610500335495723e-16
+            ],
+            "measure": 497.8125000000007,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradU": {
+            "RMS": 8.102864094277937e-16,
+            "MAX": 7.110833948390346e-14,
+            "component_RMS": [
+              8.102864094277937e-16
+            ],
+            "component_MAX": [
+              7.110833948390346e-14
+            ],
+            "measure": 497.8125000000007
+          },
+          "whole/Pi": {
+            "RMS": 1.1991593446161626e-10,
+            "MAX": 2.404436351127073e-10,
+            "component_RMS": [
+              1.1991593446161626e-10
+            ],
+            "component_MAX": [
+              2.404436351127073e-10
+            ],
+            "measure": 497.8125000000007,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradPi": {
+            "RMS": 1.846416587027765e-11,
+            "MAX": 1.5383977497562424e-10,
+            "component_RMS": [
+              1.846416587027765e-11
+            ],
+            "component_MAX": [
+              1.5383977497562424e-10
+            ],
+            "measure": 497.8125000000007
+          },
+          "whole/k": {
+            "RMS": 2.1484871069951453e-16,
+            "MAX": 4.296622436877384e-15,
+            "component_RMS": [
+              2.1484871069951453e-16
+            ],
+            "component_MAX": [
+              4.296622436877384e-15
+            ],
+            "measure": 497.8125000000007,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradk": {
+            "RMS": 1.6148331663967068e-14,
+            "MAX": 1.3412151735044462e-12,
+            "component_RMS": [
+              1.6148331663967068e-14
+            ],
+            "component_MAX": [
+              1.3412151735044462e-12
+            ],
+            "measure": 497.8125000000007
+          },
+          "outer/epsilon": {
+            "RMS": 1.8184003811488651e-16,
+            "MAX": 1.0819395439999412e-15,
+            "component_RMS": [
+              1.8184003811488651e-16
+            ],
+            "component_MAX": [
+              1.0819395439999412e-15
+            ],
+            "measure": 494.0625000000007,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "outer/gradepsilon": {
+            "RMS": 1.0241277045583647e-15,
+            "MAX": 1.5859423703227183e-13,
+            "component_RMS": [
+              1.0241277045583647e-15
+            ],
+            "component_MAX": [
+              1.5859423703227183e-13
+            ],
+            "measure": 494.0625000000007
+          }
+        },
+        "pressure_mean_over_tau": [
+          -0.0120909990560477,
+          -0.01209099894662388
+        ],
+        "quadrature": 8,
+        "owner_grid": 9,
+        "gradient_gate": false,
+        "pressure_alignment": "NONE; native pressure level is retained"
+      },
+      {
+        "norms": {
+          "whole/U": {
+            "RMS": 1.3602664257144122e-16,
+            "MAX": 7.610500335495723e-16,
+            "component_RMS": [
+              1.3602664257144122e-16
+            ],
+            "component_MAX": [
+              7.610500335495723e-16
+            ],
+            "measure": 497.81250000000074,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradU": {
+            "RMS": 8.102864094277937e-16,
+            "MAX": 7.110833948390346e-14,
+            "component_RMS": [
+              8.102864094277937e-16
+            ],
+            "component_MAX": [
+              7.110833948390346e-14
+            ],
+            "measure": 497.81250000000074
+          },
+          "whole/Pi": {
+            "RMS": 1.1991593446161626e-10,
+            "MAX": 2.404436351127073e-10,
+            "component_RMS": [
+              1.1991593446161626e-10
+            ],
+            "component_MAX": [
+              2.404436351127073e-10
+            ],
+            "measure": 497.81250000000074,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradPi": {
+            "RMS": 1.8464165870277653e-11,
+            "MAX": 1.5383977497562424e-10,
+            "component_RMS": [
+              1.8464165870277653e-11
+            ],
+            "component_MAX": [
+              1.5383977497562424e-10
+            ],
+            "measure": 497.81250000000074
+          },
+          "whole/k": {
+            "RMS": 2.1484871069951456e-16,
+            "MAX": 4.338721775294918e-15,
+            "component_RMS": [
+              2.1484871069951456e-16
+            ],
+            "component_MAX": [
+              4.338721775294918e-15
+            ],
+            "measure": 497.81250000000074,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "whole/gradk": {
+            "RMS": 1.6148331663967065e-14,
+            "MAX": 1.3455796702820245e-12,
+            "component_RMS": [
+              1.6148331663967065e-14
+            ],
+            "component_MAX": [
+              1.3455796702820245e-12
+            ],
+            "measure": 497.81250000000074
+          },
+          "outer/epsilon": {
+            "RMS": 1.8184003811488656e-16,
+            "MAX": 1.0819395439999412e-15,
+            "component_RMS": [
+              1.8184003811488656e-16
+            ],
+            "component_MAX": [
+              1.0819395439999412e-15
+            ],
+            "measure": 494.06250000000074,
+            "limits": [
+              1e-08,
+              1e-08
+            ],
+            "status": "MET"
+          },
+          "outer/gradepsilon": {
+            "RMS": 1.0241277045583647e-15,
+            "MAX": 1.6170020497130322e-13,
+            "component_RMS": [
+              1.0241277045583647e-15
+            ],
+            "component_MAX": [
+              1.6170020497130322e-13
+            ],
+            "measure": 494.06250000000074
+          }
+        },
+        "pressure_mean_over_tau": [
+          -0.012090999056047705,
+          -0.012090998946623882
+        ],
+        "quadrature": 12,
+        "owner_grid": 17,
+        "gradient_gate": false,
+        "pressure_alignment": "NONE; native pressure level is retained"
+      }
+    ]
+  },
+  "dependent": {
+    "accepted": {
+      "K_over_Kin": 3.938518545651456e-16,
+      "Gamma_over_epsilon_H": 7.803864602761961e-16,
+      "cutoff_over_H": 6.938893903907228e-17,
+      "Ew_over_local_reference": 1.1804883535935767e-15,
+      "native_epsilon_H_difference": 7.491710018651482e-16,
+      "native_Gamma_pointwise_gap_old": 2.7219985866992318e-09,
+      "native_Gamma_pointwise_gap_new": 2.721998773991982e-09,
+      "gate_pass": true,
+      "pointwise_gap_note": "Diagnostic only: endpoint-constrained native Gamma projection need not equal nonlinear Gamma pointwise; exact projected trace/current equations are separate oracle gates."
+    },
+    "input_current": {
+      "K_over_Kin": 3.938518545651456e-16,
+      "Gamma_over_epsilon_H": 7.803864602761961e-16,
+      "cutoff_over_H": 6.938893903907228e-17,
+      "Ew_over_local_reference": 1.0329273093943795e-15,
+      "native_epsilon_H_difference": 9.364637523314354e-16,
+      "native_Gamma_pointwise_gap_old": 2.2395654250221582e-09,
+      "native_Gamma_pointwise_gap_new": 2.2395654250221582e-09,
+      "gate_pass": true,
+      "pointwise_gap_note": "Diagnostic only: endpoint-constrained native Gamma projection need not equal nonlinear Gamma pointwise; exact projected trace/current equations are separate oracle gates."
+    },
+    "input_previous": {
+      "K_over_Kin": 3.938518545651456e-16,
+      "Gamma_over_epsilon_H": 6.243091682209569e-16,
+      "cutoff_over_H": 6.938893903907228e-17,
+      "Ew_over_local_reference": 1.0329273093943795e-15,
+      "native_epsilon_H_difference": 5.618782513988612e-16,
+      "native_Gamma_pointwise_gap_old": 1.811030996488772e-09,
+      "native_Gamma_pointwise_gap_new": 1.811030996488772e-09,
+      "gate_pass": true,
+      "pointwise_gap_note": "Diagnostic only: endpoint-constrained native Gamma projection need not equal nonlinear Gamma pointwise; exact projected trace/current equations are separate oracle gates."
+    }
+  },
+  "essential_lift_scaled_MAX": {
+    "essential_flow_lift": 0.0,
+    "essential_k_lift": 0.0,
+    "essential_epsilon_lift": 1.1675996563025276e-15
+  },
+  "explicit_history_full_mass_dual": {
+    "current_advection": {
+      "U": 2.0743136999320345e-16,
+      "k": 1.4088527625742138e-15,
+      "epsilon": 1.3876536842888901e-15
+    },
+    "previous_advection": {
+      "U": 2.0904584581131366e-16,
+      "k": 1.3105721835593792e-15,
+      "epsilon": 1.2144584629025949e-15
+    },
+    "input_advection": {
+      "U": 2.0904584581131366e-16,
+      "k": 1.3105721835593792e-15,
+      "epsilon": 1.2144584629025949e-15
+    },
+    "input_previous_advection": {
+      "U": 1.9758694753625023e-16,
+      "k": 1.384609346193034e-15,
+      "epsilon": 1.3401670819541088e-15
+    }
+  },
+  "gates": {
+    "coefficients": true,
+    "fields": true,
+    "dependent": true,
+    "lifts": true,
+    "explicit_history_duals": true,
+    "preconditioner_reuse_coverage": true
+  },
+  "elapsed_seconds": 8.004373027011752,
+  "maximum_resident_bytes": 142053376
+}

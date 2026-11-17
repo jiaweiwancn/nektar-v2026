@@ -1,0 +1,89 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h27/implicit_algorithm_check.py",
+    "--comparison",
+    "NewtonCacheV1",
+    "--new-preconditioner",
+    "CurrentDataDriftV1",
+    "--old",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/poly-fresh.result.json",
+    "--new",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/poly-cache.result.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/poly-cache-comparison.json",
+    "--seconds",
+    "25"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T19:35:57.056669+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 495903,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/data-mms-controller-v15.py"
+      },
+      {
+        "pid": 495937,
+        "parent": 495903,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label poly-cache-comparison-v15 --phase analysis --seconds 30 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h27/implicit_algorithm_check.py --comparison NewtonCacheV1 --new-preconditioner CurrentDataDriftV1 --old /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/poly-fresh.result.json --new /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/poly-cache.result.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/poly-cache-comparison.json --seconds 25"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h27/implicit_algorithm_check.py",
+      "bytes": 29224,
+      "sha256": "ef9ba86a8be2bd8920a25789f4c356bbc7271d1b79bec2947e163f7ae36af093"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/poly-fresh.result.json",
+      "bytes": 71802,
+      "sha256": "d2fab6d5d25d79defa02f53f2cc6493a2fdc6bf45102296c550de4152c82afc6"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/poly-cache.result.json",
+      "bytes": 71834,
+      "sha256": "3237a7327f49eee62ec0b6f9226b30ab8f1dfaf0db20bdd0b437f8a6ffb2acb0"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ]
+}

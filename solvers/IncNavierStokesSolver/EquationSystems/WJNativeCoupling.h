@@ -145,6 +145,7 @@ private:
     Loads Forcing(double time,CoupledTiming&timing,bool freezeManufactured=false)const;
     Sparse Strain(const Data&data)const;
     Sparse VelocityTangent(const Data&data,CoupledTiming&timing)const;
+    Vec TimePreconditionerData(const Data&data)const;
     Vec RemainderLoad(const Data&data)const;
     Loads CurrentActions(const CoupledState&state,const Data&data)const;
     Vec MomentumAdvection(const CoupledState&state)const;
@@ -182,6 +183,7 @@ private:
     // data never read them, and no derived factor is serialized in a restart.
     std::array<Sparse,3>m_timePCOperators;
     Sparse m_timePCEpsilonFull;
+    Vec m_timePCData;
     double m_timePCAlpha=-1;
     int m_timePCUses=0;
     bool m_timePCReady=false;

@@ -1,0 +1,89 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h27/implicit_algorithm_check.py",
+    "--comparison",
+    "NewtonCacheV1",
+    "--new-preconditioner",
+    "CurrentDataDriftV1",
+    "--old",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/hist-fresh.result.json",
+    "--new",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/hist-cache.result.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/hist-cache-comparison.json",
+    "--seconds",
+    "25"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-17T19:38:40.450060+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 495952,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/data-mms-controller-v15b.py"
+      },
+      {
+        "pid": 495998,
+        "parent": 495952,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label hist-cache-comparison-v15 --phase analysis --seconds 30 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h27/implicit_algorithm_check.py --comparison NewtonCacheV1 --new-preconditioner CurrentDataDriftV1 --old /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/hist-fresh.result.json --new /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/hist-cache.result.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/hist-cache-comparison.json --seconds 25"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h27/implicit_algorithm_check.py",
+      "bytes": 29224,
+      "sha256": "ef9ba86a8be2bd8920a25789f4c356bbc7271d1b79bec2947e163f7ae36af093"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/hist-fresh.result.json",
+      "bytes": 66790,
+      "sha256": "29e4ed6bc5d68a47d36c8f14fbe663b07afd5bb041f70a7e689151313c178f02"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/hist-cache.result.json",
+      "bytes": 66791,
+      "sha256": "0e704aa3cdfef03673ba6d9831f339f318c0e4f7109d7f84580f244d74b1480f"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ]
+}

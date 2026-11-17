@@ -155,6 +155,9 @@ that timing label is qualified; the measured advancing cases above are unaffecte
 and whole-operation accounting already includes all work. The next numerical
 checkpoint will repair and test that path.
 
+Source15 now repairs and verifies that zero-step timing path; see the
+[current-data and cold-restart checkpoint](wj-h27-current-data-cache-checkpoint-v2.md).
+
 The unresolved v2 same-inlet reference, evolved physical pilots, h/p/q/dt
 accuracy, monitoring escalation and complete per-trajectory/campaign cost
 remain open. V4 awaits its separate scientific decision. The original Task3

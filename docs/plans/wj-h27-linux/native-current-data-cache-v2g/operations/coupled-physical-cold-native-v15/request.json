@@ -1,0 +1,71 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v15/IncNavierStokesSolver",
+    "--use-opt-file",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-cold.xml.opt",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-cold.xml"
+  ],
+  "phase": "science",
+  "seconds_cap": 150.0,
+  "utc": "2026-11-17T19:47:28.533983+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 496047,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/data-physical-controller-v15.py"
+      },
+      {
+        "pid": 496346,
+        "parent": 496047,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label coupled-physical-cold-native-v15 --phase science --seconds 150 -- /home/jay/build/wj-h27-coupling-r1-20261117/runtime-v15/IncNavierStokesSolver --use-opt-file /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-cold.xml.opt /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-cold.xml"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v15/IncNavierStokesSolver",
+      "bytes": 380,
+      "sha256": "dee206e8198228c52b299cef44ee5bffb82d90a003ab86aaebc84fabd3bd0a1b"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-cold.xml.opt",
+      "bytes": 55,
+      "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-cold.xml",
+      "bytes": 112216,
+      "sha256": "55402dcf4c6ac7b8923e09c42b2d7bb08bfc12cbd4e82a540375f8a5713bf726"
+    }
+  ]
+}

@@ -126,3 +126,22 @@ The report binds both native inputs, the reference and the independent basis,
 history and checker sources, retains partial failure data, and reports only
 algorithm-comparison status. Temporal order, spatial convergence, physical
 development, restart qualification and Task3 readiness are not inferred.
+
+## Source15 current-data inverse policy
+
+The original source13 checker is preserved at its recorded hash. The current
+extension has SHA256
+`ef9ba86a8be2bd8920a25789f4c356bbc7271d1b79bec2947e163f7ae36af093`.
+For `--comparison NewtonCacheV1`, optional
+`--new-preconditioner CurrentDataDriftV1` selects the separately admitted
+current-quadrature-data cache. The default remains OperatorDriftV1. The old
+run must still use RebuildEveryNewtonV1; every fixed field/history/trace/cache
+limit above is unchanged. The option is rejected for PicardNewtonV1.
+
+Require the native metric identity `ScaledCurrentQuadratureDataL2V1` for the
+new policy. Operator/fresh source15 runs identify
+`CurrentInverseOperatorFrobeniusV1`; older operator reports without that new
+field remain readable. Every cached trajectory must exercise actual refresh
+and reuse, preserve bounded ages and exclusive reasons, and bind consecutive
+accepted logs. Drift metadata establishes policy consistency; the separately
+bound current-equation oracle establishes the actual accepted PDE equations.

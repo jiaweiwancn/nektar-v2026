@@ -114,3 +114,37 @@ Check their numeric residuals against the unchanged1e-9 flow/continuity and
 spatial, temporal, owner-flux and long-time qualifications remain open. This
 checker does not relabel that overall status or use reaction identities as
 proof of resolved owner-gradient physical budgets.
+
+## Source15 extension
+
+The original source13 checker and reports remain immutable. The current
+extension SHA256 is
+`14808d05cd355f99967b1b0533f9a91de3bb89e06687177dc43df558e1daf1a3`.
+Manifest `preconditioner_policy` may explicitly select CurrentDataDriftV1;
+its absence still selects OperatorDriftV1. Bind every session and native
+record to that exact policy. Require the correctly named drift measure and
+the same .02/eight-use event rules. Do not describe current-data drift as an
+independently measured operator bound. All comparison limits and current
+equation-report requirements above remain unchanged.
+
+Optional boolean `terminal_zero_export=true` additionally requires reload12's
+exact session to enable terminal output at [.0173,.0537]. Its completed
+zero-step index must contain exactly one final step12 frame, identified as
+imported accepted history. Check full file hashes, current/explicit coefficient
+hashes, clocks, source/reference/signature and sole owned scientific-file
+inventory. Require positive frame/index/export times and frame plus index
+work contained in final export. Complete binary history must still equal the
+imported recovery file byte-for-byte, with no advancing log or inverse work.
+Do not interpret default residual/guard zeros as acceptance, or this lone
+final frame as a complete terminal-window assessment.
+
+The first source15 extension at hash
+`bcd2e566693a16a72050e95dc36d2d37f964cd074eb178a671d92acb0f32ba80`
+reaches the retention check, then misclassifies the newly introduced
+`.science-index.json` descriptor as an extra numbered snapshot. Preserve that
+failed assessment. The corrected checker explicitly admits the descriptor
+only when declared by the native result, binds its source/clocks/policy and
+exact four-frame inventory, verifies every numbered file's bytes/SHA/reason/
+provenance, and still rejects any other owned scientific JSON. Legacy source13
+results without a descriptor retain their original four-file requirement.
+No native output, physical field, comparison scale or limit is changed.

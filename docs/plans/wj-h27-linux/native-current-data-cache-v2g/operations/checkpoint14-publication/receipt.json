@@ -1,0 +1,65 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/checkpoint14-publication.py"
+  ],
+  "phase": "evidence",
+  "seconds_cap": 90.0,
+  "utc": "2026-11-17T19:14:25.310847+00:00",
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 495081,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label checkpoint14-publication --phase evidence --seconds 90 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/checkpoint14-publication.py"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/checkpoint14-publication.py",
+      "bytes": 7927,
+      "sha256": "7b016778ae738cda2f456a2a95e20ef3f083b46e7f6e6c4236986f4a15120d2c"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 8.841094154980965,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 52486144,
+  "peak_host_workers": 5,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/checkpoint14-publication/command.log",
+    "bytes": 418,
+    "sha256": "7fe7ddf49d66c34a87e8b70b0a1a3097d0c6975bcf7678215a72b775225e9efd"
+  }
+}

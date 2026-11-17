@@ -1,0 +1,100 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h27/implicit_algorithm_check.py",
+    "--comparison",
+    "NewtonCacheV1",
+    "--new-preconditioner",
+    "OperatorDriftV1",
+    "--old",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-fresh.result.json",
+    "--new",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-operator.result.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-operator-comparison.json",
+    "--seconds",
+    "55"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 60.0,
+  "utc": "2026-11-17T19:46:43.014131+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 496047,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/data-physical-controller-v15.py"
+      },
+      {
+        "pid": 496300,
+        "parent": 496047,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label physical-operator-comparison-v15 --phase analysis --seconds 60 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h27/implicit_algorithm_check.py --comparison NewtonCacheV1 --new-preconditioner OperatorDriftV1 --old /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-fresh.result.json --new /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-operator.result.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-operator-comparison.json --seconds 55"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h27/implicit_algorithm_check.py",
+      "bytes": 29224,
+      "sha256": "ef9ba86a8be2bd8920a25789f4c356bbc7271d1b79bec2947e163f7ae36af093"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-fresh.result.json",
+      "bytes": 4709864,
+      "sha256": "12b5428f0bf53431f2461c9b8e8ad68e2b8efb507468056290c32c2060c21482"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/physical-operator.result.json",
+      "bytes": 4709896,
+      "sha256": "8edde3c4841f1425ec831d40ce16bfbf3d3d356b191f459ea8786dbeda7d35eb"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 9.808100317022763,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 96010240,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/physical-operator-comparison-v15/command.log",
+    "bytes": 92,
+    "sha256": "bff1e32656de693e4062be7caa1f798d9b1a794b0f189adf1c75500c33af2df6"
+  }
+}

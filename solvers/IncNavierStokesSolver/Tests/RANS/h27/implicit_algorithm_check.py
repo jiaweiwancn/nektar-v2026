@@ -97,7 +97,11 @@ def load(path, algorithm):
 def cache_policy_statistics(data, expected):
     """Per-step metadata, with first use age1 and exclusive refresh reasons."""
     s = data['coupled_newton']
+    require(expected in ('RebuildEveryNewtonV1', 'OperatorDriftV1', 'CurrentDataDriftV1'), 'unknown expected cache policy')
     require(s['preconditioner_policy'] == expected, 'wrong Newton preconditioner policy')
+    metric = 'ScaledCurrentQuadratureDataL2V1' if expected == 'CurrentDataDriftV1' else 'CurrentInverseOperatorFrobeniusV1'
+    if expected == 'CurrentDataDriftV1' or 'drift_measure' in s:
+        require(s['drift_measure'] == metric, 'cache drift measure is missing or differs')
     require(isinstance(s['relative_drift_limit'], (int, float)) and not isinstance(s['relative_drift_limit'], bool) and
             math.isfinite(s['relative_drift_limit']) and 0 <= s['relative_drift_limit'] <= .25,
             'relative drift limit must be finite and lie in [0,.25]')
@@ -164,20 +168,21 @@ def cache_log(path, final, expected, deadline):
     for key in ('state_sha256', 'previous_sha256', 'advection_sha256', 'previous_advection_sha256', 'coupled_newton'):
         require(previous[key] == final[key], 'final result differs from duplicate final step-log record: '+key)
     require(total['refreshes'] > 0, 'logged trajectory does not exercise preconditioner refresh')
-    if expected == 'OperatorDriftV1': require(total['reuses'] > 0, 'logged trajectory does not exercise preconditioner reuse')
+    if expected in ('OperatorDriftV1', 'CurrentDataDriftV1'):
+        require(total['reuses'] > 0, 'logged trajectory does not exercise preconditioner reuse')
     return dict(log=identity(log), counts_are='PER_PHYSICAL_STEP', final_result_counted_again=False,
                 first_logged_step=rows[0]['step'], last_logged_step=rows[-1]['step'],
                 complete_logged_interval=True, totals=total, steps=rows)
 
 
-def newton_cache_evidence(old, new, old_path, new_path, deadline):
+def newton_cache_evidence(old, new, old_path, new_path, deadline, new_policy='OperatorDriftV1'):
     a, b = old['data'], new['data']
     sa = cache_policy_statistics(a, 'RebuildEveryNewtonV1')
-    sb = cache_policy_statistics(b, 'OperatorDriftV1')
+    sb = cache_policy_statistics(b, new_policy)
     for key in ('relative_drift_limit', 'maximum_uses', 'step_seconds_cap', 'uncommitted_guard', 'physical_acceptance_guard'):
         require(sa[key] == sb[key], 'Newton-cache comparison changed common policy setting/guard: '+key)
     first = cache_log(old_path, a, 'RebuildEveryNewtonV1', deadline)
-    second = cache_log(new_path, b, 'OperatorDriftV1', deadline)
+    second = cache_log(new_path, b, new_policy, deadline)
     require([(r['step'], r['time']) for r in first['steps']] == [(r['step'], r['time']) for r in second['steps']],
             'old/new step-log intervals or scientific clocks differ')
     return dict(old=first, new=second, gate_pass=True,
@@ -343,6 +348,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for key in ('old', 'new', 'table', 'out'): parser.add_argument('--'+key, type=Path, required=True)
     parser.add_argument('--comparison', choices=('PicardNewtonV1', 'NewtonCacheV1'), default='PicardNewtonV1')
+    parser.add_argument('--new-preconditioner', choices=('OperatorDriftV1', 'CurrentDataDriftV1'), default='OperatorDriftV1')
     parser.add_argument('--seconds', type=float, required=True); args = parser.parse_args()
     require(sys.platform.startswith('linux') and math.isfinite(args.seconds) and 0 < args.seconds <= 180,
             'Linux-only analysis requires explicit cap in (0,180] seconds')
@@ -360,6 +366,8 @@ def main():
         workers=1, memory_cap_bytes=cap, wall_cap_seconds=args.seconds,
         scope='Algorithm equivalence at matching accepted endpoint and complete exported history only; current PDE equations require the separate independent oracle.')
     try:
+        require(args.comparison == 'NewtonCacheV1' or args.new_preconditioner == 'OperatorDriftV1',
+                '--new-preconditioner applies only to NewtonCacheV1')
         require(report['table']['sha256'] == po.TABLE_SHA, 'table is not the pinned qualified v2 reference')
         ref = po.Reference(json.loads(args.table.read_text()))
         old_solver = 'PicardV1' if args.comparison == 'PicardNewtonV1' else 'CoupledJFNKV1'
@@ -370,7 +378,8 @@ def main():
         for key in ('scales', 'reference_scales'):
             require((key in a) == (key in b) and a.get(key) == b.get(key), 'reported scales differ')
         if args.comparison == 'NewtonCacheV1':
-            report['preconditioner_reuse_evidence'] = newton_cache_evidence(old, new, args.old, args.new, deadline)
+            report['new_preconditioner'] = args.new_preconditioner
+            report['preconditioner_reuse_evidence'] = newton_cache_evidence(old, new, args.old, args.new, deadline, args.new_preconditioner)
         owners, _ = inventory(a, ref)
         report.update(source_identity=a['source_identity'], reference_identity=a['reference_identity'],
             exact_metadata_sha256=digest({key: a[key] for key in EXACT_KEYS}),

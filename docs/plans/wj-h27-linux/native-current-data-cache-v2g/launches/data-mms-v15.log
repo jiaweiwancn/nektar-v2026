@@ -1,0 +1,13 @@
+coupled-fixtures-v15 PASS 1.6313701629987918
+coupled-poly-fresh-native-v15 PASS 3.2201300029992126
+coupled-poly-cache-native-v15 PASS 3.2197597679914907
+poly-cache-comparison-v15 PASS 1.6293902359902859
+poly-cache-current-v15 FAIL 1.5971250420552678
+Traceback (most recent call last):
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/data-mms-controller-v15.py", line 14, in <module>
+    run(family+'-cache-current-v15','analysis',30,['python3','-B',t/'coupled_oracle.py','--native',o/(family+'-cache.result.json'),
+  File "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/data-mms-controller-v15.py", line 4, in run
+    def run(label,phase,cap,args):subprocess.run(base+['--label',label,'--phase',phase,'--seconds',str(cap),'--']+list(map(str,args)),check=True)
+  File "/usr/lib/python3.10/subprocess.py", line 526, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['python3', '-B', '/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py', '--root', '/home/jay/build/wj-h27-coupling-r1-20261117', '--label', 'poly-cache-current-v15', '--phase', 'analysis', '--seconds', '30', '--', 'python3', '-B', '/home/jay/build/wj-h27-coupling-r1-20261117/tools-data-validation-v15/h27/coupled_oracle.py', '--native', '/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/poly-cache.result.json', '--table', '/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json', '--out', '/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-fixtures-v15/poly-cache-current.json', '--seconds', '25']' returned non-zero exit status 1.

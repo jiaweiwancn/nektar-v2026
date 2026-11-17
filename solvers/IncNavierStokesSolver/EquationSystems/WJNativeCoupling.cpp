@@ -73,7 +73,7 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     Require(m_options.stressSplit=="PositiveShearV1"||m_options.stressSplit=="IsotropicMuV1","unknown numerical stress split");
     Require(m_options.steadyVelocityPC=="FullGradientV1"||m_options.steadyVelocityPC=="PositiveFrozenV1","unknown steady velocity preconditioner");
     Require(m_options.advancement=="PicardV1"||m_options.advancement=="CoupledJFNKV1","unknown implicit coupled solver");
-    Require(m_options.stepPreconditioner=="RebuildEveryNewtonV1"||m_options.stepPreconditioner=="OperatorDriftV1",
+    Require(m_options.stepPreconditioner=="RebuildEveryNewtonV1"||m_options.stepPreconditioner=="OperatorDriftV1"||m_options.stepPreconditioner=="CurrentDataDriftV1",
         "unknown implicit Newton preconditioner policy");
     Require(std::isfinite(m_options.stepPCRelativeDrift)&&m_options.stepPCRelativeDrift>=0&&m_options.stepPCRelativeDrift<=.25&&
         m_options.stepPCMaximumUses>=1&&m_options.stepPCMaximumUses<=64,"invalid Newton preconditioner refresh policy");
@@ -846,6 +846,7 @@ void Coupling::ResetPreconditioners()
     m_timePCReady=false;m_timePCAlpha=-1;m_timePCUses=0;
     for(auto&matrix:m_timePCOperators)matrix.resize(0,0);
     m_timePCEpsilonFull.resize(0,0);
+    m_timePCData.resize(0);
 }
 
 void Coupling::CheckHistory(const CoupledHistory&h)const

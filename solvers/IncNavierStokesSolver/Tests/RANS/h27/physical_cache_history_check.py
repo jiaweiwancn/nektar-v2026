@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
-"""Independent Linux-only physical OperatorDriftV1 history FOUNDATION check.
+"""Independent Linux-only physical inverse-cache history FOUNDATION check.
 
 WJH27PhysicalCacheHistoryV1: runs maps control,prefix,cold,recovery9,reload12
 and optional retry to .result.json paths; input_checkpoints maps cold,
@@ -69,7 +69,7 @@ def scientific_time(step, value, dt, label):
             abs(value-step*dt) <= 1e-13, 'scientific clock differs: '+label)
 
 
-def session(spec, root, name, result, checkpoint, table_sha):
+def session(spec, root, name, result, checkpoint, table_sha, cache_policy='OperatorDriftV1', terminal_zero=False):
     path, evidence = input_path(spec, root)
     xml = ET.parse(path).getroot(); parameters = {}; solver = {}
     for item in xml.findall('.//PARAMETERS/P'):
@@ -82,7 +82,7 @@ def session(spec, root, name, result, checkpoint, table_sha):
     require(float(parameters['NumSteps']) == steps and float(parameters['TimeStep']) == DT and
             float(parameters['IO_InfoSteps']) == 1, 'session executed steps/dt/info stride differs')
     for key, value in dict(SolverType='WJNativeCoupledV2', WJNativeMode='Physical',
-            WJImplicitSolver='CoupledJFNKV1', WJStepPreconditioner='OperatorDriftV1',
+            WJImplicitSolver='CoupledJFNKV1', WJStepPreconditioner=cache_policy,
             WJOutputCoefficients='True', WJNonlinearTrace='True').items():
         require(solver[key] == value, 'session numerical identity differs: '+key)
     require(float(parameters.get('WJStepPCRelativeDrift', '.02')) == .02 and
@@ -95,6 +95,11 @@ def session(spec, root, name, result, checkpoint, table_sha):
     if name == 'control':
         require(float(parameters['IO_CheckSteps']) == 3 and float(parameters['WJScientificSteps']) == 3,
                 'control recovery/science stride differs')
+    if terminal_zero:
+        require(name == 'reload12' and solver.get('WJTerminalOutput') == 'True' and
+                float(parameters['WJTerminalBegin']) == .0173 and float(parameters['WJTerminalEnd']) == .0537,
+                'zero-step terminal export session differs')
+    else: require(solver.get('WJTerminalOutput', 'False') == 'False', 'unexpected terminal output changes control retention')
     return dict(file=evidence, NumSteps=steps, restart=None if checkpoint is None else checkpoint['path'],
                 output_prefix=str(replace_suffix(result, '.result.json', '')))
 
@@ -215,7 +220,10 @@ def configuration(record, control):
     cap = record['coupled_newton']['step_seconds_cap']
     require(math.isfinite(cap) and cap > 0 and cap == control['coupled_newton']['step_seconds_cap'], 'step cap binding differs')
     cache = record['coupled_newton']
-    require(cache['preconditioner_policy'] == 'OperatorDriftV1' and cache['relative_drift_limit'] == .02 and
+    expected_policy = control['coupled_newton']['preconditioner_policy']
+    require(expected_policy in ('OperatorDriftV1', 'CurrentDataDriftV1'), 'unsupported physical inverse-cache policy')
+    fields.cache_policy_statistics(record, expected_policy)
+    require(cache['preconditioner_policy'] == expected_policy and cache['relative_drift_limit'] == .02 and
             cache['maximum_uses'] == 8 and cache['preconditioner_events_recorded'] is True,
             'fixed numerical cache policy/event recording differs')
     require(cache['uncommitted_guard'] == 'positivity/root/covariance' and
@@ -328,11 +336,12 @@ def accepted(record, control, injected):
                 guards={key: record[key] for key in GUARDS}, newton=stats, rebuilds=record['rebuilds'], timing=timings(record))
 
 
-def cache_events(record, previous_event, cold, injected):
+def cache_events(record, previous_event, cold, injected, cache_policy='OperatorDriftV1'):
     stats = record['coupled_newton']; reasons = ('cold', 'alpha', 'drift', 'age', 'control', 'retry', 'injected')
-    require(stats['preconditioner_policy'] == 'OperatorDriftV1' and stats['relative_drift_limit'] == .02 and
+    fields.cache_policy_statistics(record, cache_policy)
+    require(stats['preconditioner_policy'] == cache_policy and stats['relative_drift_limit'] == .02 and
             stats['maximum_uses'] == 8 and stats['preconditioner_events_recorded'] is True,
-            'prospective OperatorDriftV1 policy/events differ')
+            'prospective inverse-cache policy/events differ')
     events = stats['preconditioner_events']; require(isinstance(events, list) and events, 'no recorded Newton preparation events')
     for key in ('refreshes', 'reuses', 'maximum_used_age'):
         require(type(stats[key]) is int and stats[key] >= 0, 'invalid preconditioner count: '+key)
@@ -364,7 +373,7 @@ def cache_events(record, previous_event, cold, injected):
         require(e['reason'] == expected and e['refreshed'] is (expected != 'reuse'), 'refresh reason/precedence differs from declared policy')
         require(e['age_used'] == (before+1 if expected == 'reuse' else 1) and 1 <= e['age_used'] <= 8,
                 'prepared cache use count is not one per Newton base')
-        if current is None: require(e['drift'] == 0., 'cold cache has a spurious saved-operator drift')
+        if current is None: require(e['drift'] == 0., 'cold cache has a spurious saved-cache drift')
         if expected == 'reuse': reuses += 1
         else: counts[expected] += 1
         current = e
@@ -375,9 +384,10 @@ def cache_events(record, previous_event, cold, injected):
     require(record['rebuilds'] == 3*stats['refreshes'], 'every declared refresh must perform exactly three block-factor rebuilds')
     if record['step'] == 2:
         require(not cold and events[0]['reason'] == 'alpha', 'BE to BDF2 did not refresh the changed alpha')
-    return dict(policy='OperatorDriftV1', refreshes=stats['refreshes'], reuses=reuses, refresh_reasons=counts,
+    return dict(policy=cache_policy, refreshes=stats['refreshes'], reuses=reuses, refresh_reasons=counts,
                 maximum_used_age=stats['maximum_used_age'], events=events,
-                drift_scope='Reported current-versus-saved operator norm validated for policy consistency; not independently reconstructed here.'), current
+                drift_measure=stats.get('drift_measure', 'CurrentInverseOperatorFrobeniusV1'),
+                drift_scope='Reported current-versus-prepared metric validated for policy consistency; not independently reconstructed here.'), current
 
 
 def compare(a, b, data, owners, ref, deadline):
@@ -425,6 +435,48 @@ def equation_report(spec, root, native_path, data, histories, table_sha):
                 scope='Full supplied transient oracle verifies these accepted equations; other physical/mesh/long-time gates remain open.')
 
 
+def zero_terminal_export(packet, path, control, root):
+    """Imported history serialization is charged to export, not advancement."""
+    prefix = replace_suffix(path, '.result.json', '')
+    index_path = Path(str(prefix)+'.science-index.json')
+    require(hr.resolve(root, packet['scientific_index']) == index_path, 'zero-step scientific index prefix differs')
+    index = read(index_path); record = packet['state']
+    require(index['schema'] == 'WJH27NativeScientificIndexV1' and index['run_complete'] is True and
+            index['terminal_output'] is True and index['coefficients_included'] is True and
+            index['terminal_begin'] == .0173 and index['terminal_end'] == .0537,
+            'zero-step terminal index configuration differs')
+    for key in ('source_identity', 'reference_identity', 'signature'):
+        require(index[key] == record[key], 'zero-step index identity differs')
+    require(index['initial_step'] == index['final_step'] == 12 and
+            index['initial_time'] == index['final_time'] == 12*DT and index['dt'] == DT,
+            'zero-step index claims a different scientific clock')
+    require(len(index['frames']) == 1, 'zero-step terminal export must own exactly one final frame')
+    frame = index['frames'][0]; frame_path = Path(str(prefix)+'.science-12.json'); actual = read(frame_path)
+    require(hr.resolve(root, frame['path']) == frame_path and frame['step'] == 12 and frame['time'] == 12*DT and
+            frame['origin'] == 'imported_accepted_history' and frame['reason_mask'] == 128,
+            'zero-step frame is falsely marked as an advancing observation')
+    require(hr.identity(frame_path)['sha256'] == frame['sha256'] and frame_path.stat().st_size == frame['bytes'],
+            'zero-step scientific frame byte identity differs')
+    configuration(actual, control)
+    require(actual['step'] == 12 and actual['time'] == 12*DT and 'input_history' not in actual and
+            all(actual[key] == record[key] for key in HASH_NAMES), 'zero-step exported frame history differs')
+    require(transient.state_hash(transient.state(actual['coefficients'], actual['sizes'])) == actual['state_sha256'],
+            'zero-step terminal current coefficients differ')
+    for key, header in (('current_advection', 'advection_sha256'), ('previous_advection', 'previous_advection_sha256')):
+        require(transient.state_hash(transient.state(actual[key], actual['sizes'])) == actual[header],
+                'zero-step terminal explicit history differs: '+key)
+    require({p.resolve() for p in prefix.parent.glob(prefix.name+'.science-[0-9]*.json')} == {frame_path},
+            'zero-step terminal scientific retention differs')
+    frame_seconds, index_seconds, export = packet['scientific_frame_seconds'], packet['scientific_index_seconds'], packet['final_export_seconds']
+    require(all(math.isfinite(v) and v > 0 for v in (frame_seconds, index_seconds, export)) and
+            frame_seconds == frame['write_seconds'] and frame_seconds+index_seconds <= export+128*np.finfo(float).eps*export,
+            'zero-step terminal frame/index work is outside final export')
+    return dict(index=hr.identity(index_path), frame=hr.identity(frame_path), provenance=frame['origin'],
+                scientific_frame_seconds=frame_seconds, scientific_index_seconds=index_seconds,
+                final_export_seconds=export, contained_in_final_export=True,
+                advanced_residual_evidence=False, full_terminal_window_assessment=False)
+
+
 def run(manifest, folder, table_path, deadline, out):
     root = hr.resolve(folder, manifest.get('root', '.')); runs = manifest['runs']
     needed = {'control', 'prefix', 'cold', 'recovery9', 'reload12'}
@@ -432,11 +484,17 @@ def run(manifest, folder, table_path, deadline, out):
     require(set(manifest['sessions']) == set(runs), 'every native operation needs its exact session XML')
     paths = {name: hr.resolve(root, value) for name, value in runs.items()}
     packets = {name: read(path) for name, path in paths.items()}; control = packets['control']['state']
+    cache_policy = manifest.get('preconditioner_policy', 'OperatorDriftV1')
+    require(cache_policy in ('OperatorDriftV1', 'CurrentDataDriftV1') and
+            control['coupled_newton']['preconditioner_policy'] == cache_policy, 'manifest/cache policy differs')
+    terminal_zero = manifest.get('terminal_zero_export', False)
+    require(type(terminal_zero) is bool, 'terminal-zero-export flag must be boolean')
     require(hr.identity(table_path)['sha256'] == po.TABLE_SHA == control['reference_identity'], 'table is not the qualified active v2 table')
     ref = po.Reference(read(table_path)); mesh = session_geometry(manifest['sessions']['control'], root, ref)
     owners = inventory(control, control, ref, mesh)
     if 'source_identity' in manifest: require(manifest['source_identity'] == control['source_identity'], 'manifest source differs')
-    out.update(root=str(root), source_identity=control['source_identity'], signature=control['signature'], runs={}, comparisons={},
+    out.update(root=str(root), source_identity=control['source_identity'], signature=control['signature'],
+               preconditioner_policy=cache_policy, terminal_zero_export_requested=terminal_zero, runs={}, comparisons={},
                input_checkpoints={}, equation_reports={}, scales=dict(U=1., Pi=ref.tau, k=ref.Kin, epsilon_coefficient=ref.A/ref.H,
                epsilon_field='Ain/r', cutoff=ref.H), original_owner_bounds_preserved=True,
                authoritative_session_geometry=mesh)
@@ -458,7 +516,8 @@ def run(manifest, folder, table_path, deadline, out):
         run_mesh = session_geometry(manifest['sessions'][name], root, ref)
         require(run_mesh['geometry_sha256'] == mesh['geometry_sha256'], 'session geometry/owners differ from authoritative control XML')
         inventory(record, control, ref, mesh)
-        session_evidence = session(manifest['sessions'][name], root, name, path, inputs.get(name), po.TABLE_SHA)
+        session_evidence = session(manifest['sessions'][name], root, name, path, inputs.get(name), po.TABLE_SHA,
+                                   cache_policy, terminal_zero and reload)
         require(session_evidence['file'] == run_mesh['session'], 'session XML changed during audit')
         session_evidence['geometry_sha256'] = run_mesh['geometry_sha256']
         require(record['step'] == end, 'wrong endpoint step'); scientific_time(end, record['time'], DT, name)
@@ -479,7 +538,7 @@ def run(manifest, folder, table_path, deadline, out):
             clock(deadline); injected = name == 'retry' and row['step'] == 4
             scientific_time(row['step'], row['time'], DT, 'step log')
             diagnosis = accepted(row, control, injected)
-            cache, previous_event = cache_events(row, previous_event, index == 0, injected)
+            cache, previous_event = cache_events(row, previous_event, index == 0, injected, cache_policy)
             diagnosis['cache'] = cache; diagnostics.append(diagnosis)
             if previous is not None:
                 require(row['previous_sha256'] == previous['state_sha256'] and row['previous_advection_sha256'] == previous['advection_sha256'], 'accepted history/cache chain differs')
@@ -495,6 +554,7 @@ def run(manifest, folder, table_path, deadline, out):
                     'zero-step reload claims advancing inverse preparations')
             require(cache['maximum_used_age'] == 0 and all(v == 0 for v in cache['refresh_reasons'].values()),
                     'zero-step reload claims advancing cache ages/reasons')
+            if terminal_zero: out['zero_step_terminal_export'] = zero_terminal_export(packet, path, control, root)
         else:
             accepted(record, control, False)
             require(all(record[key] == rows[-1][key] for key in HASH_NAMES), 'final native/log identity differs')
@@ -535,10 +595,37 @@ def run(manifest, folder, table_path, deadline, out):
             'control did not report four writes/two rotations')
     require(not list(prefix.parent.glob(prefix.name+'.recovery-*.bin.tmp')), 'unfinished recovery temporary')
     science_paths = {Path(str(prefix)+'.science-'+str(step)+'.json') for step in (3, 6, 9, 12)}
-    require({p.resolve() for p in prefix.parent.glob(prefix.name+'.science-*.json')} == science_paths, 'science retention differs')
+    index_path = Path(str(prefix)+'.science-index.json'); has_index = 'scientific_index' in packets['control']
+    require(index_path.exists() is has_index, 'scientific descriptor presence differs from native result')
+    expected_paths = science_paths|({index_path} if has_index else set())
+    require({p.resolve() for p in prefix.parent.glob(prefix.name+'.science-*.json')} == expected_paths, 'science retention differs')
     out['rotation'] = dict(removed_absent=[str(p) for p in removed], retained=[hr.identity(p) for p in sorted(retained)], science=[])
+    index_frames = {}
+    if has_index:
+        require(hr.resolve(root, packets['control']['scientific_index']) == index_path, 'scientific descriptor prefix differs')
+        descriptor = read(index_path)
+        require(descriptor['schema'] == 'WJH27NativeScientificIndexV1' and descriptor['run_complete'] is True and
+                descriptor['terminal_output'] is False and descriptor['coefficients_included'] is True,
+                'unexpected control scientific descriptor policy')
+        require(all(descriptor[key] == control[key] for key in ('source_identity', 'reference_identity', 'signature', 'dt')) and
+                descriptor['initial_step'] == 0 and descriptor['initial_time'] == 0. and descriptor['final_step'] == 12 and
+                descriptor['final_time'] == 12*DT, 'scientific descriptor source/clock differs')
+        require([f['step'] for f in descriptor['frames']] == [3, 6, 9, 12], 'scientific descriptor numbered-frame inventory differs')
+        index_frames = {f['step']: f for f in descriptor['frames']}
+        total = math.fsum(f['write_seconds'] for f in descriptor['frames'])
+        require(all(math.isfinite(f['write_seconds']) and f['write_seconds'] > 0 for f in descriptor['frames']) and
+                abs(total-packets['control']['scientific_frame_seconds']) <= 128*np.finfo(float).eps*total and
+                0 < packets['control']['scientific_index_seconds'] <= packets['control']['final_export_seconds'],
+                'scientific descriptor/frame timing differs')
+        out['rotation']['scientific_index'] = hr.identity(index_path)
     for step in (3, 6, 9, 12):
         clock(deadline); path = Path(str(prefix)+'.science-'+str(step)+'.json'); record = read(path)
+        if has_index:
+            frame = index_frames[step]
+            require(hr.resolve(root, frame['path']) == path and hr.identity(path)['sha256'] == frame['sha256'] and
+                    path.stat().st_size == frame['bytes'] and frame['time'] == step*DT and
+                    frame['reason_mask'] == 1 and frame['origin'] == 'current_process_accepted_step',
+                    'numbered scientific frame/descriptor binding differs')
         configuration(record, control); inventory(record, control, ref, mesh); accepted(record, control, False)
         require(record['step'] == step and all(record[key] == logs['control'][step-1][key] for key in HASH_NAMES), 'science/log binding differs')
         require(record['coupled_newton'] == logs['control'][step-1]['coupled_newton'], 'science/log cache event binding differs')
