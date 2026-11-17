@@ -3,7 +3,7 @@
 #define WJ_H26_CHECKS_H
 #include <Eigen/Eigenvalues>
 #include <Eigen/Geometry>
-#include <map>
+#include <LibUtilities/Foundations/ManagerAccess.h>
 namespace H26
 {
 Eigen::Matrix3d Matrix(const Tensor&T){Eigen::Matrix3d A;for(int i=0;i<3;++i)for(int j=0;j<3;++j)A(i,j)=T[i][j];return A;}
@@ -32,9 +32,32 @@ void AdapterChecks(std::ostream&out)
     }
     Tensor G{{{.012,.004,.03},{-.002,-.003,.001},{-.01,.002,-.008}}};Vector n{.3,.4,std::sqrt(.75)};auto inside=Adapt(k,e,G,n,nu,nuA,.14,H),outside=Adapt(k,e,G,n,nu,nuA,H+.01,H);
     error((Matrix(inside.R)-Matrix(outside.R)).norm()/k);double p=.02,Pi=p+2*k/3;
+    Eigen::Vector3d rotatedN=rotation*Eigen::Vector3d(n[0],n[1],n[2]);auto generalRotated=Adapt(k,e,TensorOf(rotation*Matrix(G)*rotation.transpose()),{rotatedN[0],rotatedN[1],rotatedN[2]},nu,nuA,.14,H);error((Matrix(generalRotated.R)-rotation*Matrix(inside.R)*rotation.transpose()).norm()/k);error(std::abs(Matrix(inside.R).trace()-2*k)/k);error(std::abs(inside.production+(Matrix(inside.R).array()*Matrix(G).array()).sum())/e);minEigen=std::min(minEigen,Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d>(Matrix(inside.R)).eigenvalues().minCoeff()/k);
     Eigen::Vector3d normal(n[0],n[1],n[2]);error(((Matrix(inside.V)-Pi*Eigen::Matrix3d::Identity())*normal-(nu*(Matrix(G)+Matrix(G).transpose())-Matrix(inside.R)-p*Eigen::Matrix3d::Identity())*normal).norm()/k);
     Check(minEigen>=0,"selected adapter fixture is unrealizable; no clipping allowed");
     out<<"{\"status\":\"PASS\",\"fixtures\":"<<count<<",\"maximum_dimensionless_identity_error\":"<<worst<<",\"minimum_R_eigenvalue_over_k\":"<<minEigen<<",\"seconds\":"<<Clock()-start<<",\"checks\":\"independent planar cubic/C/d, trace, work, covariance, full-WJ collar, positive realizability, finite-nu total traction\"}";
+}
+double TraceValue(const Element&e,const Vec&physical,double xi,double eta)
+{
+    Array<OneD,NekDouble>point(2),values(physical.size());point[0]=xi;point[1]=eta;for(int q=0;q<physical.size();++q)values[q]=physical[q];return e.velocity->StdPhysEvaluate(point,values);
+}
+void WallTrace(Flow&flow,std::ostream&out)
+{
+    // Smooth prescribed tensor fixture: project 0.01 times a trigonometric
+    // velocity to native Q3. Gradients retain distinct element limits at H.
+    MMS m;m.solution="trigonometric";m.geo=flow.Mapping();m.xl=flow.Elements().front().xl;m.Lx=flow.Elements().back().xr-m.xl;m.zl=m.geo.d0;m.Lz=flow.Elements().back().rr;Vec state=Exact(flow,m.Functions(0));state.head(2*flow.VelocitySize())*=.01;
+    double k=.008809015145515192,e=.002315524054799254,nu=6.423173803526447e-5,jump=0,area=0,pressureMismatch=0,minEigen=1e100;Eigen::Matrix<double,2,3>moments=Eigen::Matrix<double,2,3>::Zero();int faces=0;
+    // Native trace interpolation, with an independent Gauss face rule supplied
+    // by StdRegions' public Points manager (not volume endpoint weights).
+    LibUtilities::PointsKey key(20,LibUtilities::eGaussGaussLegendre);auto points=LibUtilities::PointsManager()[key];auto nodes=points->GetZ(),weights=points->GetW();
+    auto trace=[&](const Element&el,double xi,double eta){Vec u(16),v(16),p(9);for(int j=0;j<16;++j){u[j]=state[el.u[j]];v[j]=state[flow.VelocitySize()+el.u[j]];}for(int j=0;j<9;++j)p[j]=state[2*flow.VelocitySize()+el.p[j]];Tensor G{};G[0][0]=TraceValue(el,el.Dx*u,xi,eta);G[0][2]=TraceValue(el,el.Dz*u,xi,eta);G[2][0]=TraceValue(el,el.Dx*v,xi,eta);G[2][2]=TraceValue(el,el.Dz*v,xi,eta);return std::make_pair(G,TraceValue(el,el.P*p,xi,eta));};
+    for(const auto&lower:flow.Elements())if(std::abs(lower.rr-m.geo.H)<1e-10)
+    {
+        const Element*upper=nullptr;for(const auto&el:flow.Elements())if(std::abs(el.rl-m.geo.H)<1e-10&&std::abs(el.xl-lower.xl)<1e-10&&std::abs(el.xr-lower.xr)<1e-10){upper=&el;break;}Check(upper,"missing two-sided native matching-height trace");++faces;
+        for(int q=0;q<20;++q){double xi=nodes[q],x=(lower.xl+lower.xr)/2+(lower.xr-lower.xl)*xi/2,s=m.geo.Slope(x),norm=std::sqrt(1+s*s),w=weights[q]*(lower.xr-lower.xl)*norm/2;Vector normal{-s/norm,0,1/norm};auto a=trace(lower,xi,1),b=trace(*upper,xi,-1);auto Ra=Adapt(k,e,a.first,normal,nu,.0007,m.geo.H*(1-1e-12),m.geo.H),Rb=Adapt(k,e,b.first,normal,nu,.0007,m.geo.H*(1+1e-12),m.geo.H);pressureMismatch=std::max(pressureMismatch,std::abs(a.second-b.second));minEigen=std::min({minEigen,Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d>(Matrix(Ra.R)).eigenvalues().minCoeff()/k,Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d>(Matrix(Rb.R)).eigenvalues().minCoeff()/k});
+            for(int i=0;i<2;++i){int c=i?2:0;double delta=0;for(int j=0;j<3;++j)delta+=(nu*(a.first[c][j]+a.first[j][c]-b.first[c][j]-b.first[j][c])-Ra.R[c][j]+Rb.R[c][j]-(c==j?a.second-b.second:0))*normal[j];jump+=w*delta*delta;for(int j=0;j<3;++j)moments(i,j)+=w*delta*std::pow((x-m.xl)/m.Lx,j);}area+=w;
+        }
+    }Check(faces>0&&pressureMismatch<1e-11&&minEigen>=0,"C0 WJ trace fixture failed; no clipping allowed");out<<"{\"status\":\"PASS_FIXTURE_REQUIRES_REFINEMENT_COMPARISON\",\"scope\":\"native C0 projection of smooth prescribed velocity, common positive k/E and full-WJ collar, distinct element gradients; no C1 constraint\",\"faces\":"<<faces<<",\"L2_traction_jump_over_k\":"<<std::sqrt(jump/area)/k<<",\"weak_traction_moments_over_k\":"<<moments.norm()/area/k<<",\"pressure_trace_mismatch\":"<<pressureMismatch<<",\"minimum_R_eigenvalue_over_k\":"<<minEigen<<'}';
 }
 struct Constitutive
 {

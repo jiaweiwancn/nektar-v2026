@@ -74,6 +74,12 @@ class Campaign:
         self.launch('tolerance-tight',fixture/'tiny-c0.0-n0.xml',dict(mode='advance',model='time',steps=40,dt=.01,awf=1,tolerance=1e-13,checkpoint_stride=0))
         whole=self.launch('restart-whole',fixture/'tiny-c0.0-n0.xml',dict(mode='advance',steps=80,dt=.005,checkpoint_stride=0));first=self.launch('restart-first',fixture/'tiny-c0.0-n0.xml',dict(mode='advance',steps=37,dt=.005,checkpoint_stride=0));resumed=self.launch('restart-resumed',fixture/'tiny-c0.0-n0.xml',dict(mode='advance',steps=43,dt=.005,checkpoint_stride=0,restart=first['final_checkpoint']))
         assert whole['state_sha256']==resumed['state_sha256']and whole['previous_sha256']==resumed['previous_sha256']
+        # A completed restart must reject altered scientific wall geometry.
+        label=f'restart-reject-height-v{self.version}';request=root/'inputs'/f'{label}.json';out=root/'science'/f'{label}.json'
+        if not request.exists():
+            write(request,dict(mode='advance',steps=1,dt=.005,restart=first['final_checkpoint'],H=.16))
+            status=run(root,label,[str(self.runtime/'WJNativeFlowDriver'),str(fixture/'tiny-c0.0-n0.xml'),str(request),str(out)],'science',60);assert status==1
+        assert 'checkpoint scientific identity'in(root/'operations'/label/'command.log').read_text()
         from fixtures import mesh
         folder=root/f'science/spatial-v{self.version}';folder.mkdir(exist_ok=True)
         for curve in (0.,.1):
@@ -81,6 +87,9 @@ class Campaign:
                 case=folder/f'c{curve}-n{n}.xml'
                 if not case.exists():mesh(case,[i/n for i in range(n+1)],[i/n for i in range(n+1)],curve=curve,natural=True,quadrature=12)
                 d=self.launch(f'spatial-c{curve}-n{n}',case,dict(mode='advance',steps=100,dt=.0001,curve=curve,solution='trigonometric',model='time',awf=1,checkpoint_stride=0));print('SPATIAL',curve,n,d['L2_errors'],d['H1_velocity_seminorm_error'],d['traction_errors_L2_and_weak_moments'],flush=True)
+                tracecase=folder/f'wall-c{curve}-n{n}.xml'
+                if not tracecase.exists():mesh(tracecase,[i/n for i in range(n+1)],[.3*i/n for i in range(n+1)],curve=curve,natural=True,quadrature=12)
+                trace=self.launch(f'wall-trace-c{curve}-n{n}',tracecase,dict(mode='wall_trace',curve=curve));print('WJ-COLLAR-TRACTION',curve,n,trace,flush=True)
     def benchmark(self,pilot=False):
         config=load(self.matrix/'config.json')['cases']
         repetitions=1 if pilot else 3
