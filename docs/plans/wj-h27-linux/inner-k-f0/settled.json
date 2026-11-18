@@ -1,0 +1,71 @@
+{
+  "schema": "WJInnerKFixtureSettlementV1",
+  "phase": "f0",
+  "archive": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/evidence/inner-k-f0.tar.gz",
+    "bytes": 395645,
+    "sha256": "7794231a9320e4c1e082bd49b40eb9fdcbaff2d1f926e8af2e87b3818f2a97cc"
+  },
+  "account": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/accounting.json",
+    "bytes": 268113,
+    "sha256": "a7c2c39a7f4deb94b6b5b2722b28a24d9965dfd39e3f26c248f962595e85dd32"
+  },
+  "account_closed": false,
+  "aggregate_seconds": 19794.505184339825,
+  "package_seconds": 22.128634847002104,
+  "remaining_package_seconds": 5977.871365152998,
+  "remaining_nonprotected_seconds": 19805.494815660175,
+  "evidence_protected_seconds": 3600,
+  "reservations": [],
+  "peak_tree_rss_bytes": 253149184,
+  "peak_workers": 5,
+  "operations": {
+    "inner-k-f0-mechanism": {
+      "status": "FAIL",
+      "phase": "analysis",
+      "seconds": 8.459781223034952,
+      "exit": 2,
+      "reason": null,
+      "peak_tree_rss_bytes": 244973568,
+      "peak_host_workers": 5,
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/inner-k-f0-mechanism/command.log",
+        "bytes": 779,
+        "sha256": "447ac88335a1e3cca2b7860302b28c0c356812ed7918779b67559d5720a293ac"
+      }
+    },
+    "inner-k-f0-mechanism-r1": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 11.958705251978245,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 253149184,
+      "peak_host_workers": 5,
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/inner-k-f0-mechanism-r1/command.log",
+        "bytes": 779,
+        "sha256": "1958f666b04a2696b92a99ded926c16273f5ff3b804c10ecbb3de0b94e2544e6"
+      }
+    },
+    "inner-k-f0-publication": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 1.7101483719889075,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 372736,
+      "peak_host_workers": 5,
+      "log": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/inner-k-f0-publication/command.log",
+        "bytes": 197,
+        "sha256": "ecef05b1a7da020277fb4bee6e1a96c10d53d340eaae129de0ab0a7b95ce3186"
+      }
+    }
+  },
+  "source_build_runtime_bytes": 3007184492,
+  "science_bytes": 3489070914,
+  "free_bytes": 68649320448,
+  "TASK3_READY": false
+}

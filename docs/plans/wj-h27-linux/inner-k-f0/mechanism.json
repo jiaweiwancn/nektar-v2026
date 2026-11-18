@@ -1,0 +1,370 @@
+{
+  "schema": "WJInnerKFixedProfileMechanismV1",
+  "MECHANISM_DIAGNOSIS": "PASS",
+  "TASK3_READY": false,
+  "source19": "56c35390fdf092180913f60c3ae348ca10cdcdf4e6b889c3afd589eddb511acf",
+  "table": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+  },
+  "localization": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-localization-v19/owner-balance.json",
+    "sha256": "3e0b8e3e717c7413e404c3af2e34efc3906d660f5f88790833691fe6127cac19"
+  },
+  "cp2_audit": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/independent48.json",
+    "sha256": "47768f34ead71d59e24dca997e586ee3361db8da1e28ef84a6d94217c587ac12"
+  },
+  "earlier_factorial": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/inactive-reference-factorial-control-v1.json",
+    "sha256": "7b48adfd27add3aa685602232e1d7d32ae0e815f4c99b98d561cdf49d8b30a3b"
+  },
+  "script": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/inner-k-f0/inner_k_mechanism_r1.py",
+    "sha256": "61321f8e698354c5eff18d0fe1b91f34648c3abfdf7b0e0fb62ee736ab78c4a5"
+  },
+  "rows": {
+    "A": [
+      "scalar",
+      "v2"
+    ],
+    "B": [
+      "auxiliary",
+      "v2"
+    ],
+    "C": [
+      "scalar",
+      "historical"
+    ],
+    "D": [
+      "auxiliary",
+      "historical"
+    ]
+  },
+  "cutoffs": {
+    "v2": 0.02954486569124273,
+    "historical": 0.026419898309769346
+  },
+  "ground_historical": {
+    "U": 0.0,
+    "U_r": 22.635162605006414,
+    "k": 0.017238029091569546,
+    "k_r": 0.0,
+    "k_rr": -111.55202896508672,
+    "P_A": 0.025964889303494314,
+    "E_A": 0.013146477861023997,
+    "Q_A": 0.0,
+    "D_A": 0.00011490971129249645,
+    "collar": 0.0
+  },
+  "ground": {
+    "A": {
+      "D": 0.002267882021351934,
+      "D_r": 0.0,
+      "P": 0.025964889303494314,
+      "E": 0.011755971810792094,
+      "Q": 0.0,
+      "diffusion_divergence": -0.25298684093525037,
+      "source": 0.01420891749270222,
+      "rhs": -0.23877792344254817,
+      "diffusion_ratio": 19.73620850529476,
+      "identity": -0.23877792344254808
+    },
+    "B": {
+      "D": 0.00011490971129249645,
+      "D_r": 0.019477811040883385,
+      "P": 0.025964889303494314,
+      "E": 0.011755971810792094,
+      "Q": 0.0,
+      "diffusion_divergence": -0.012818411442470317,
+      "source": 0.01420891749270222,
+      "rhs": 0.0013905060502319034,
+      "diffusion_ratio": 1.0,
+      "identity": 0.0013905060502319034
+    },
+    "C": {
+      "D": 0.0020348014134553027,
+      "D_r": 0.0,
+      "P": 0.025964889303494314,
+      "E": 0.013146477861023997,
+      "Q": 0.0,
+      "diffusion_divergence": -0.22698622621196532,
+      "source": 0.012818411442470317,
+      "rhs": -0.214167814769495,
+      "diffusion_ratio": 17.707828090141362,
+      "identity": -0.21416781476949504
+    },
+    "D": {
+      "D": 0.00011490971129249645,
+      "D_r": 0.019477811040883385,
+      "P": 0.025964889303494314,
+      "E": 0.013146477861023997,
+      "Q": 0.0,
+      "diffusion_divergence": -0.012818411442470317,
+      "source": 0.012818411442470317,
+      "rhs": 0.0,
+      "diffusion_ratio": 1.0,
+      "identity": 0.0
+    }
+  },
+  "scales": {
+    "k": 0.008809015145515192,
+    "action": 0.0023155240547992535,
+    "flux": 0.000347328608219888
+  },
+  "check_limit": 1e-10,
+  "checks": {
+    "cp2_RMS": 1.3877787807814457e-16,
+    "cp2_inner_production": 1.1986736029842373e-15,
+    "cp2_inner_destruction": 7.991157353228248e-16,
+    "cp2_historical_cutoff": 0.0,
+    "cp2_v2_cutoff": 0.0,
+    "cp2_ground_diffusion_ratio": 7.105427357601002e-15,
+    "cp2_parallel_budgets": 1.7763568394002505e-15,
+    "cp2_current_H_flux": 0.0,
+    "historical_ground_and_H": 4.440892098500626e-16,
+    "historical_budget": 4.440892098500626e-16,
+    "cutoff_invariant_production": 0.0,
+    "ratio_identity": 3.5960208089527117e-14,
+    "row_D_lower": 7.491710018651482e-16,
+    "row_D_collar": 7.491710018651482e-16,
+    "cumulative_fundamental_theorem": 2.7478019859472624e-15,
+    "split_quadrature_refinement": 8.881784197001252e-16,
+    "derivative_refined": 9.094935962642899e-12
+  },
+  "integrated": {
+    "A": {
+      "lower": {
+        "integral_over_A": {
+          "diffusion_divergence": 0.20594523177287366,
+          "P": 0.5771690876596397,
+          "E": 0.708434583339594,
+          "source": -0.13126549567995416,
+          "rhs": 0.07467973609291946,
+          "identity": 0.07467973609291946
+        },
+        "cumulative_over_A": {
+          "diffusion_divergence": -0.09064422389052007,
+          "P": 1.9043257951996355,
+          "E": 1.708434583339594,
+          "source": 0.195891211860042,
+          "rhs": 0.10524698796952153,
+          "identity": 0.10524698796952148
+        },
+        "actual_Q_over_A": -0.09064422389051782,
+        "required_Q_over_A": -0.19589121186004155,
+        "cumulative_flux_defect_over_A": 0.10524698796952373
+      },
+      "whole": {
+        "integral_over_A": {
+          "diffusion_divergence": 0.018998957494801568,
+          "P": 0.2747098951631506,
+          "E": 0.287682072451781,
+          "source": -0.012972177288630454,
+          "rhs": 0.006026780206171116,
+          "identity": 0.006026780206171115
+        },
+        "cumulative_over_A": {
+          "diffusion_divergence": -2.203098814490545e-15,
+          "P": 2.7538360942421996,
+          "E": 2.624725315213749,
+          "source": 0.12911077902845078,
+          "rhs": 0.12911077902844817,
+          "identity": 0.1291107790284481
+        },
+        "actual_Q_over_A": 4.3667773675665725e-16,
+        "required_Q_over_A": -0.12911077902845047,
+        "cumulative_flux_defect_over_A": 0.12911077902845092
+      }
+    },
+    "B": {
+      "lower": {
+        "integral_over_A": {
+          "diffusion_divergence": 0.13126549567995416,
+          "P": 0.5771690876596397,
+          "E": 0.708434583339594,
+          "source": -0.13126549567995416,
+          "rhs": 0.0,
+          "identity": 0.0
+        },
+        "cumulative_over_A": {
+          "diffusion_divergence": -0.08409868307752974,
+          "P": 1.9043257951996355,
+          "E": 1.708434583339594,
+          "source": 0.195891211860042,
+          "rhs": 0.11179252878251222,
+          "identity": 0.11179252878251222
+        },
+        "actual_Q_over_A": -0.08409868307752899,
+        "required_Q_over_A": -0.19589121186004155,
+        "cumulative_flux_defect_over_A": 0.11179252878251256
+      },
+      "whole": {
+        "integral_over_A": {
+          "diffusion_divergence": 0.019234598044181383,
+          "P": 0.2747098951631506,
+          "E": 0.287682072451781,
+          "source": -0.012972177288630454,
+          "rhs": 0.0062624207555509286,
+          "identity": 0.0062624207555509286
+        },
+        "cumulative_over_A": {
+          "diffusion_divergence": -7.389922007661198e-16,
+          "P": 2.7538360942421996,
+          "E": 2.624725315213749,
+          "source": 0.12911077902845078,
+          "rhs": 0.12911077902845,
+          "identity": 0.12911077902845
+        },
+        "actual_Q_over_A": 4.440892098500626e-16,
+        "required_Q_over_A": -0.12911077902845047,
+        "cumulative_flux_defect_over_A": 0.12911077902845092
+      }
+    },
+    "C": {
+      "lower": {
+        "integral_over_A": {
+          "diffusion_divergence": 0.20594523177287366,
+          "P": 0.5771690876596397,
+          "E": 0.708434583339594,
+          "source": -0.13126549567995416,
+          "rhs": 0.07467973609291946,
+          "identity": 0.07467973609291946
+        },
+        "cumulative_over_A": {
+          "diffusion_divergence": -0.09064422389052024,
+          "P": 1.9043257951996355,
+          "E": 1.8202271121221063,
+          "source": 0.08409868307752971,
+          "rhs": -0.006545540812990566,
+          "identity": -0.006545540812990455
+        },
+        "actual_Q_over_A": -0.09064422389051782,
+        "required_Q_over_A": -0.08409868307752921,
+        "cumulative_flux_defect_over_A": -0.0065455408129886095
+      },
+      "whole": {
+        "integral_over_A": {
+          "diffusion_divergence": 0.018998957494801568,
+          "P": 0.2747098951631506,
+          "E": 0.287682072451781,
+          "source": -0.012972177288630454,
+          "rhs": 0.006026780206171116,
+          "identity": 0.006026780206171115
+        },
+        "cumulative_over_A": {
+          "diffusion_divergence": -2.3696322681843185e-15,
+          "P": 2.7538360942421996,
+          "E": 2.7365178439962614,
+          "source": 0.017318250245938485,
+          "rhs": 0.017318250245936074,
+          "identity": 0.017318250245936192
+        },
+        "actual_Q_over_A": 4.3667773675665725e-16,
+        "required_Q_over_A": -0.017318250245938138,
+        "cumulative_flux_defect_over_A": 0.017318250245938575
+      }
+    },
+    "D": {
+      "lower": {
+        "integral_over_A": {
+          "diffusion_divergence": 0.13126549567995416,
+          "P": 0.5771690876596397,
+          "E": 0.708434583339594,
+          "source": -0.13126549567995416,
+          "rhs": 0.0,
+          "identity": 0.0
+        },
+        "cumulative_over_A": {
+          "diffusion_divergence": -0.08409868307752974,
+          "P": 1.9043257951996355,
+          "E": 1.8202271121221063,
+          "source": 0.08409868307752971,
+          "rhs": -2.964695152617053e-18,
+          "identity": 0.0
+        },
+        "actual_Q_over_A": -0.08409868307752899,
+        "required_Q_over_A": -0.08409868307752921,
+        "cumulative_flux_defect_over_A": 2.220446049250313e-16
+      },
+      "whole": {
+        "integral_over_A": {
+          "diffusion_divergence": 0.019234598044181383,
+          "P": 0.2747098951631506,
+          "E": 0.287682072451781,
+          "source": -0.012972177288630454,
+          "rhs": 0.0062624207555509286,
+          "identity": 0.0062624207555509286
+        },
+        "cumulative_over_A": {
+          "diffusion_divergence": -7.389922007661198e-16,
+          "P": 2.7538360942421996,
+          "E": 2.7365178439962614,
+          "source": 0.017318250245938485,
+          "rhs": 0.017318250245937767,
+          "identity": 0.017318250245937777
+        },
+        "actual_Q_over_A": 4.440892098500626e-16,
+        "required_Q_over_A": -0.017318250245938138,
+        "cumulative_flux_defect_over_A": 0.017318250245938582
+      }
+    }
+  },
+  "historical_integrated_P_over_A": 2.736517843996261,
+  "cp2_2D": {
+    "inner_k": {
+      "RMS": 0.13279468209091205,
+      "MAX": 0.44168324293315253,
+      "component_RMS": [
+        0.13279468209091205
+      ],
+      "component_MAX": [
+        0.44168324293315253
+      ],
+      "measure": 3.7500000000000386,
+      "limits": [
+        0.05,
+        0.1
+      ],
+      "status": "NOT_MET"
+    },
+    "reintegrated_RMS": 0.1327946820909122,
+    "sampled_endpoint_peak": {
+      "x": -8.749999999999998,
+      "r": 0.0,
+      "owner": 0,
+      "k": 0.013345393703385776,
+      "historical_k": 0.017238029091569542,
+      "signed_over_Kin": -0.44189223470294164
+    },
+    "first_two_squared_share": 0.05387513086096997,
+    "downstream_RMS": [
+      0.1382109923632462,
+      0.1390271797591934,
+      0.1387512363614027,
+      0.1388887618311649,
+      0.13903023699449282,
+      0.1393820974867019,
+      0.13935348840478018,
+      0.13943196455727316,
+      0.13920041655888243,
+      0.1393954458742036,
+      0.13919764676637641,
+      0.13959967545634747,
+      0.13911346113162454,
+      0.14029872181020184,
+      0.1392761819625082,
+      0.14087131546020779,
+      0.13997258731998233,
+      0.13971442933979838,
+      0.13974824171572908,
+      0.1407377126809967,
+      0.14060093115624536,
+      0.14402180395766773
+    ],
+    "P_inner": 0.024396880759093804,
+    "E_inner": 0.024126779768158947,
+    "weak_k_budget_error": 4.820996698967798e-16
+  },
+  "elapsed_seconds": 10.691574063966982
+}
