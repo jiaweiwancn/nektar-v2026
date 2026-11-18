@@ -507,19 +507,24 @@
     },
     "live_account_snapshot": {
       "path": "/home/jay/build/wj-h27-coupling-r1-20261117/accounting.json",
-      "bytes": 258335,
-      "sha256": "8807863fbdd0ad98d9f92a7c7e408cd612fe01ab68d8f1f5255c8fd2c3d18378"
+      "bytes": 266694,
+      "sha256": "2e843c992885f8935587b908d7aab8e45fb28b997f7f195b21aaf9fa29a25b65"
     },
-    "consumed_aggregate_seconds": 19093.30172178487,
-    "remaining_excluding_evidence_seconds": 20506.69827821513,
+    "consumed_aggregate_seconds": 19772.376549492823,
+    "remaining_excluding_evidence_seconds": 19827.623450507177,
     "evidence_protected_seconds": 3600,
     "reserved_operations": [],
     "account_closed": false,
-    "latest_checkpoint": "docs/plans/wj-h27-continuation-cp2.md",
+    "latest_checkpoint": "docs/plans/wj-h27-continuation-cp3.md",
     "cp2_settled_receipt": {
       "path": "docs/plans/wj-h27-linux/continuation-cp2-source19/post-publication.json",
       "bytes": 10993,
       "sha256": "40b4288f3f14ffeee589279c449354be05a2d0fdc9a6519b4f02e339a8d8dfb3"
+    },
+    "cp3_settled_receipt": {
+      "path": "docs/plans/wj-h27-linux/continuation-cp3-source19/post-publication.json",
+      "bytes": 9380,
+      "sha256": "894acfb35479a84849424c2d98b61a5338afcfdd5d8965b3af0f07b587573aba"
     }
   },
   "source19_coupled_numerical_qualification": {
@@ -599,5 +604,88 @@
     "costs_already_charged_seconds": 1976.829730372061,
     "long_physical_pilots_admitted": false,
     "v4_active": false
+  },
+  "source19_execution_viability": {
+    "status": "TARGET_NOT_MET",
+    "source_identity": "56c35390fdf092180913f60c3ae348ca10cdcdf4e6b889c3afd589eddb511acf",
+    "checkpoint": "docs/plans/wj-h27-continuation-cp3.md",
+    "cost_assessment": {
+      "path": "docs/plans/wj-h27-linux/continuation-cp3-source19/assessment-reviewed.json",
+      "bytes": 67199,
+      "sha256": "731355dca8a9818c21c8f41b1a19c72d4e0998d513a61ee92c2b5eb8c2495c39"
+    },
+    "temporal_comparison": {
+      "path": "docs/plans/wj-h27-linux/continuation-cp3-source19/comparisons.json",
+      "bytes": 17812,
+      "sha256": "a07b5bd6c601b1dd6218f9e22a16931b065919e2d72698b79a1cb651a08f0ed5"
+    },
+    "same_mesh_stock_cost_control": "MEASURED_SHORT_VCSWEAKPRESSURE_ONLY",
+    "compared_work_classes": "Retained-inlet short startup and conventional stock only",
+    "conditional_rate_proxies": {
+      "paired": {
+        "dt": 0.005,
+        "steps": 12,
+        "end_time": 0.06,
+        "largest_warm_step_seconds": 6.288725309675404,
+        "warm_seconds_per_physical_unit": 1257.7450619350807,
+        "advancement_only_proxy_seconds": 635192.6999037642,
+        "advancement_only_contingency_proxy_seconds": 793990.8748797053,
+        "four_trajectory_advancement_only_proxy_seconds": 2540770.7996150567,
+        "four_principal_pilots_advancement_only_proxy_seconds": 131484.66877469333
+      },
+      "dt02": {
+        "dt": 0.02,
+        "steps": 12,
+        "end_time": 0.24,
+        "largest_warm_step_seconds": 6.37074189898946,
+        "warm_seconds_per_physical_unit": 318.537094949473,
+        "advancement_only_proxy_seconds": 160873.97443328187,
+        "advancement_only_contingency_proxy_seconds": 201092.46804160235,
+        "four_trajectory_advancement_only_proxy_seconds": 643495.8977331275,
+        "four_principal_pilots_advancement_only_proxy_seconds": 33306.2386479169
+      },
+      "dt04": {
+        "dt": 0.04,
+        "steps": 6,
+        "end_time": 0.24,
+        "largest_warm_step_seconds": 7.386996908986475,
+        "warm_seconds_per_physical_unit": 184.67492272466188,
+        "advancement_only_proxy_seconds": 93268.22297286324,
+        "advancement_only_contingency_proxy_seconds": 116585.27871607905,
+        "four_trajectory_advancement_only_proxy_seconds": 373072.89189145295,
+        "four_principal_pilots_advancement_only_proxy_seconds": 19324.38391390862
+      },
+      "dt08": {
+        "dt": 0.08,
+        "steps": 3,
+        "end_time": 0.24,
+        "largest_warm_step_seconds": 7.420463667018339,
+        "warm_seconds_per_physical_unit": 92.75579583772924,
+        "advancement_only_proxy_seconds": 46845.387129886774,
+        "advancement_only_contingency_proxy_seconds": 58556.73391235847,
+        "four_trajectory_advancement_only_proxy_seconds": 187381.5485195471,
+        "four_principal_pilots_advancement_only_proxy_seconds": 9705.966476459987
+      }
+    },
+    "maximum_complete_seconds_per_trajectory_before_margin": 69120.0,
+    "maximum_equivalent_seconds_per_physical_unit_before_fixed_costs": 136.86460238704856,
+    "qualified_recipe": null,
+    "complete_per_trajectory": null,
+    "complete_campaign": null,
+    "long_physical_pilots_admitted": false
+  },
+  "operations_and_fixed_costs_prerequisites": {
+    "status": "NOT_MET",
+    "persisted_statistics_reuse_audit": {
+      "path": "docs/plans/wj-h27-linux/continuation-cp3-source19/persisted-statistics-source-reuse.json",
+      "bytes": 10297,
+      "sha256": "79dc2233bb0e6f049f2e380af919d3f6c0493be3d2e6e8f49095eb124197f826"
+    },
+    "finite_perturbation_geometry_reuse_audit": {
+      "path": "docs/plans/wj-h27-linux/continuation-cp3-source19/perturbation-foundation-reuse.json",
+      "bytes": 4932,
+      "sha256": "ece25a1cea5348801d248247c96d1ba3f827421a8e2e3581d955e01b489012d7"
+    },
+    "selected_recipe_restart_monitoring_storage_qualified": false
   }
 }

@@ -1,0 +1,2256 @@
+{
+  "schema": "WJH27ShortCostAndStartupScreenV2",
+  "source_identity": "56c35390fdf092180913f60c3ae348ca10cdcdf4e6b889c3afd589eddb511acf",
+  "inputs": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/inputs.json",
+    "bytes": 6147,
+    "sha256": "1638acec35de739ae07d1df33236e2565556af7e7c66c2183951ba1dff988f64"
+  },
+  "measurements": {
+    "paired": {
+      "receipt": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/cp3-short-screen-v19-paired/receipt.json",
+        "bytes": 3080,
+        "sha256": "d46186e593eb6798ddd7d6a5caa110759b41040d90f6af01e21fbd12ae98e0ed"
+      },
+      "status": "PASS",
+      "whole_seconds": 79.81758430198533,
+      "peak_tree_rss_bytes": 630706176,
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired.result.json",
+        "bytes": 4709767,
+        "sha256": "11cf591f4cc56e8d3c06737eefee6505dbd9be9483e5b86c13a5753302bd2725"
+      },
+      "state_sha256": "e11d5bcdfad70c5a42bc4dff6232e632b06eda5803faa09f1aee0239f89bfa1c",
+      "dt": 0.005,
+      "time": 0.06,
+      "steps": 12,
+      "cadence": 3,
+      "complete_step_seconds": [
+        7.3336482949671336,
+        6.73263693600893,
+        5.694223879952915,
+        6.725393358035944,
+        5.264609624980949,
+        6.876172946009319,
+        5.307278675027192,
+        6.697455701010767,
+        5.425779294979293,
+        6.7094973039929755,
+        5.269619819999207,
+        6.830872229998931
+      ],
+      "disjoint_engine": {
+        "constitutive": 15.52832804917125,
+        "wall": 1.9810527709778398,
+        "assembly": 18.556750289455522,
+        "flow": 1.266300737275742,
+        "scalar": 0.3300308564212173,
+        "rebuild": 7.497600693022832,
+        "guards": 22.216116129246075,
+        "forcing": 0.0028681710246019065,
+        "residual": 6.474031220888719,
+        "nonlinear": 0.310752323421184,
+        "io": 0,
+        "other": 0.023724266211502254
+      },
+      "initialization": 2.4200730079901405,
+      "construction": 1.1022269679815508,
+      "science": 0.5269216040614992,
+      "recovery": 0.10094209801172838,
+      "other_advancing": 0.051768855773843825,
+      "export": 0.04007621802156791,
+      "process_remainder": 1.3880200430285186,
+      "unattributed_complete_seconds": 1.4635131650138646,
+      "attributed_complete_fraction": 0.9816642763895642,
+      "nonlinear_iterations": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "coupled_krylov_iterations": [
+        9,
+        7,
+        8,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      "coupled_Jacobian_actions": [
+        13,
+        11,
+        12,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11
+      ],
+      "coupled_residual_evaluations": [
+        34,
+        30,
+        32,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30
+      ],
+      "inverse_factorizations": [
+        3,
+        3,
+        0,
+        3,
+        0,
+        3,
+        0,
+        3,
+        0,
+        3,
+        0,
+        3
+      ],
+      "inverse_refreshes": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "inverse_reuses": [
+        3,
+        3,
+        4,
+        3,
+        4,
+        3,
+        4,
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "inverse_refresh_reasons": [
+        {
+          "cold": 1,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 1,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 1,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 1,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 1,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 1,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 1,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        }
+      ],
+      "rejected_trials": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "retries": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "residual_max": 5.595453108059936e-13,
+      "files": [
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired-epsilon.fld",
+          "bytes": 47220,
+          "sha256": "22575689098bebaf72e5a004426288b2f4b929b38dced488c4b86d07695b7a8a"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired-k.fld",
+          "bytes": 71576,
+          "sha256": "d0c4723d93b194dd5b3b3bc010217c1315ff18beb94f2fbf1e00ca688dd62294"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired-p.fld",
+          "bytes": 35184,
+          "sha256": "95e06ccd16bff79ab6e7bcda6121354658c8c4c65eee6bf9214d552cb60cd1f0"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired-u.fld",
+          "bytes": 69956,
+          "sha256": "ae958e5070d057bfeeba249127717f25b99ad6e39dea2d3a89e21289c777e2c9"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired-v.fld",
+          "bytes": 72124,
+          "sha256": "8d8bd4e1536acee6e373051837efe0a8ed727e502a7232c167a97c386ccbf638"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired.final.bin",
+          "bytes": 859058,
+          "sha256": "04aba27bd386dd9e6a387b5e47cb5d3631bd12a3b678035ad8a168601f6c91f8"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired.recovery-12.bin",
+          "bytes": 859058,
+          "sha256": "04aba27bd386dd9e6a387b5e47cb5d3631bd12a3b678035ad8a168601f6c91f8"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired.recovery-9.bin",
+          "bytes": 859058,
+          "sha256": "cf2dbf0ee04ba3abf37800bccff23440035bf473c1977f0266787bcc9a5eb2aa"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired.result.json",
+          "bytes": 4709767,
+          "sha256": "11cf591f4cc56e8d3c06737eefee6505dbd9be9483e5b86c13a5753302bd2725"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired.science-12.json",
+          "bytes": 4708452,
+          "sha256": "631ad25435fa5a4c9c5ebebc6ed4ba8ba0f5c0e1702934e4ba7aeb71e38ce870"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired.science-3.json",
+          "bytes": 4709783,
+          "sha256": "8252cdd723ba8950698dbd7f36d2b253a31a1545a48821bfdd6afff42b823cfc"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired.science-6.json",
+          "bytes": 4709383,
+          "sha256": "2e686e649da06f5d31b058087fa0ee83ddc68e9c0481c5feda498ddb6528bc9f"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired.science-9.json",
+          "bytes": 4709017,
+          "sha256": "813a994902ac1deae01efac1181df72a56878e24fcb9b209c0266e9003071b22"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired.science-index.json",
+          "bytes": 1971,
+          "sha256": "27961818375b52209ae6baae9eeffd6a1ae11484f00380a0a3002ee611548186"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired.steps.jsonl",
+          "bytes": 64972,
+          "sha256": "b6486c223844532f2aa1d8bb85c828846156dadfbe722f2f2366c02255464dee"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired.xml",
+          "bytes": 112078,
+          "sha256": "491cdf12cca5e1981857ba79a7f775b51e52dafd2ffeb36e84016b1df5f55b58"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/paired.xml.opt",
+          "bytes": 55,
+          "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+        }
+      ],
+      "warm_block_size": 3,
+      "warm_complete_seconds_per_step": [
+        6.288725309675404,
+        5.810171223672417,
+        6.269996451330371
+      ],
+      "warm_seconds_per_unit_physical_time": 1257.7450619350807,
+      "conditional_advancement_seconds": 635192.6999037642,
+      "conditional_margin_seconds": 793990.8748797053,
+      "equation_or_solve_share_of_whole": 0.5530029815011201,
+      "reviewed_startup_binding": {
+        "previous": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical.result.json",
+          "bytes": 4709770,
+          "sha256": "816e9f7aeb3db29bbe0f2244a61ab12a64ccc1dda547a38be7629eb9be48361b"
+        },
+        "history_roles": {
+          "state_sha256": true,
+          "previous_sha256": true,
+          "advection_sha256": true,
+          "previous_advection_sha256": true
+        },
+        "independent": {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/physical-current.json",
+          "bytes": 25993803,
+          "sha256": "1bf6fada32b483e2a61ee35561084269e9c63888f65ab7106f43736b1c2bde3a"
+        }
+      }
+    },
+    "dt02": {
+      "receipt": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/cp3-short-screen-v19-dt02/receipt.json",
+        "bytes": 3064,
+        "sha256": "212472c9857de89821a0d9c5a6c1816cedfebfabb0213846ee5efdf803c33b88"
+      },
+      "status": "PASS",
+      "whole_seconds": 82.02872196101816,
+      "peak_tree_rss_bytes": 620298240,
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt02.result.json",
+        "bytes": 4708590,
+        "sha256": "09c63398371ff87968829487a2ec7b41c699b6a8869b5a3b2afd08ff54345866"
+      },
+      "state_sha256": "8c78adaf0b48dff07875d6fd2db49ea7155522be559fab17cff0fd7465022b71",
+      "dt": 0.02,
+      "time": 0.24,
+      "steps": 12,
+      "cadence": 4,
+      "complete_step_seconds": [
+        8.491150557005312,
+        7.226320298039354,
+        5.822948742017616,
+        6.881529976031743,
+        5.275749080989044,
+        6.7032034790026955,
+        5.29086735995952,
+        6.86994240101194,
+        5.269290148979053,
+        6.719613239984028,
+        5.515403933997732,
+        6.877208522986621
+      ],
+      "disjoint_engine": {
+        "constitutive": 16.198896324262023,
+        "wall": 2.079317522002384,
+        "assembly": 19.52675316442037,
+        "flow": 1.3734938641428016,
+        "scalar": 0.32820454076863825,
+        "rebuild": 7.5261355400434695,
+        "guards": 22.372783880506177,
+        "forcing": 0.0026725479983724654,
+        "residual": 6.65477704256773,
+        "nonlinear": 0.3207849253085442,
+        "io": 0,
+        "other": 0.02342237700941041
+      },
+      "initialization": 2.4193442160030827,
+      "construction": 1.0952305719838478,
+      "science": 0.39366295794025064,
+      "recovery": 0.08062737103318796,
+      "other_advancing": 0.061695682001300156,
+      "export": 0.040391202026512474,
+      "process_remainder": 1.530528231000062,
+      "unattributed_complete_seconds": 1.6156462900107726,
+      "attributed_complete_fraction": 0.9803038953748595,
+      "nonlinear_iterations": [
+        5,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "coupled_krylov_iterations": [
+        12,
+        9,
+        9,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        8,
+        7
+      ],
+      "coupled_Jacobian_actions": [
+        17,
+        13,
+        13,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        12,
+        11
+      ],
+      "coupled_residual_evaluations": [
+        44,
+        34,
+        34,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        32,
+        30
+      ],
+      "inverse_factorizations": [
+        3,
+        3,
+        0,
+        3,
+        0,
+        3,
+        0,
+        3,
+        0,
+        3,
+        0,
+        3
+      ],
+      "inverse_refreshes": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "inverse_reuses": [
+        4,
+        3,
+        4,
+        3,
+        4,
+        3,
+        4,
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "inverse_refresh_reasons": [
+        {
+          "cold": 1,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 1,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 1,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 1,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 1,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 1,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 1,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        }
+      ],
+      "rejected_trials": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "retries": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "residual_max": 1.0288940762656952e-12,
+      "files": [
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt02-epsilon.fld",
+          "bytes": 47896,
+          "sha256": "a3375327e14af714d3fea37ff77625bfd4aa3c0a5df2684fed3f7dce5b346d20"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt02-k.fld",
+          "bytes": 72192,
+          "sha256": "bfeeb3c00f263e4b725bc518e84bb870d01804f240960ba3621825c66bfe3185"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt02-p.fld",
+          "bytes": 35184,
+          "sha256": "96afb2a1a96510c61bd48f7fc9594b06f665d5ccdfcccefb9f8a70fc642929b4"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt02-u.fld",
+          "bytes": 70576,
+          "sha256": "e8963eb587ddb1045aa6f1eb89223aa03cbd39d0bc3469ca15e5cbe48d84bb12"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt02-v.fld",
+          "bytes": 72200,
+          "sha256": "bcd53fa86a8f8d83effc8f011b5921df0a146e5b6dda26d3fc54536006cbc8f5"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt02.final.bin",
+          "bytes": 859058,
+          "sha256": "811c41e3d61a622522dbf05d2863e16f9a7f1a16eae6cba109480614c04a7c5c"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt02.recovery-12.bin",
+          "bytes": 859058,
+          "sha256": "811c41e3d61a622522dbf05d2863e16f9a7f1a16eae6cba109480614c04a7c5c"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt02.recovery-8.bin",
+          "bytes": 859058,
+          "sha256": "ea85aee1e3c401eb00983fdf6ba9471d1349b56a9e497b77a535afd96066c8c3"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt02.result.json",
+          "bytes": 4708590,
+          "sha256": "09c63398371ff87968829487a2ec7b41c699b6a8869b5a3b2afd08ff54345866"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt02.science-12.json",
+          "bytes": 4707302,
+          "sha256": "0e8911d794652801eab1aea3bba57b9631f046107b1b3f5af98e519728c920b8"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt02.science-4.json",
+          "bytes": 4708831,
+          "sha256": "cf425be8ae216b9f5f704c1d1f5c813f486528e232a2e1dfd0a5d7a698f93b8e"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt02.science-8.json",
+          "bytes": 4707532,
+          "sha256": "4d3494f0dde5bae5889d10ada855af56445583e787a4650449aa2a364cebddbc"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt02.science-index.json",
+          "bytes": 1602,
+          "sha256": "a8c4260c3e47e33e465c47e0112d1e8e63fa31daba96289e05f62509c7ab2829"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt02.steps.jsonl",
+          "bytes": 65136,
+          "sha256": "35fbb8fc1cea107b60bdaec69845018355c89478171367257371ff137a0718d5"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt02.xml",
+          "bytes": 112075,
+          "sha256": "5f3b9012aa3fcc4fd8ac000e69fdd7ee17a4b5f1f06304f5878a2546df77acf9"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt02.xml.opt",
+          "bytes": 55,
+          "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+        }
+      ],
+      "warm_block_size": 3,
+      "warm_complete_seconds_per_step": [
+        6.286827512007828,
+        5.810033303316838,
+        6.37074189898946
+      ],
+      "warm_seconds_per_unit_physical_time": 318.537094949473,
+      "conditional_advancement_seconds": 160873.97443328187,
+      "conditional_margin_seconds": 201092.46804160235,
+      "equation_or_solve_share_of_whole": 0.5627798885870795
+    },
+    "dt04": {
+      "receipt": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/cp3-short-screen-v19-dt04/receipt.json",
+        "bytes": 3064,
+        "sha256": "9d61a967d7bb7ee20e2c6aa3608457be9305154f41a1648395d91dcba037a293"
+      },
+      "status": "PASS",
+      "whole_seconds": 47.29807040200103,
+      "peak_tree_rss_bytes": 629264384,
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04.result.json",
+        "bytes": 4708680,
+        "sha256": "126ff1fdbce898fb3866de302d9717166e063c1be64e447f9bf9ad26322d45a9"
+      },
+      "state_sha256": "7e4d2e53933f37378ebf35c8bca0dca55f1845805c125f4e3808b8fd73c3b6a5",
+      "dt": 0.04,
+      "time": 0.24,
+      "steps": 6,
+      "cadence": 2,
+      "complete_step_seconds": [
+        8.765915783005767,
+        7.369920847006142,
+        5.860762773954775,
+        7.173963117995299,
+        5.798836371046491,
+        7.386996908986475
+      ],
+      "disjoint_engine": {
+        "constitutive": 8.84239589649951,
+        "wall": 1.095529138285201,
+        "assembly": 10.542918449034914,
+        "flow": 0.7752087911358103,
+        "scalar": 0.18705659708939493,
+        "rebuild": 5.371923490019981,
+        "guards": 11.266069459961727,
+        "forcing": 0.0026803570217452943,
+        "residual": 3.573708704090677,
+        "nonlinear": 0.1819546979968436,
+        "io": 0,
+        "other": 0.012307578872423619
+      },
+      "initialization": 2.427399505977519,
+      "construction": 1.1056127419578843,
+      "science": 0.3968928069807589,
+      "recovery": 0.08004895300837234,
+      "other_advancing": 0.027700881997589022,
+      "export": 0.04046973597723991,
+      "process_remainder": 1.3681926160934381,
+      "unattributed_complete_seconds": 1.4082010769634508,
+      "attributed_complete_fraction": 0.9702270924586414,
+      "nonlinear_iterations": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "coupled_krylov_iterations": [
+        9,
+        9,
+        9,
+        8,
+        9,
+        9
+      ],
+      "coupled_Jacobian_actions": [
+        13,
+        13,
+        13,
+        12,
+        13,
+        13
+      ],
+      "coupled_residual_evaluations": [
+        34,
+        34,
+        34,
+        32,
+        34,
+        34
+      ],
+      "inverse_factorizations": [
+        6,
+        3,
+        0,
+        3,
+        0,
+        3
+      ],
+      "inverse_refreshes": [
+        2,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "inverse_reuses": [
+        2,
+        3,
+        4,
+        3,
+        4,
+        3
+      ],
+      "inverse_refresh_reasons": [
+        {
+          "cold": 1,
+          "alpha": 0,
+          "drift": 1,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 1,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 1,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 1,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        }
+      ],
+      "rejected_trials": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "retries": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "residual_max": 2.275068429118532e-12,
+      "files": [
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24-epsilon.fld",
+          "bytes": 47928,
+          "sha256": "b98faaf3916481b4cc6bf1eb276d835fe1769487b9e107cb4d0a2a7df36ef88c"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24-k.fld",
+          "bytes": 72204,
+          "sha256": "1b63eab80a9eb883c655225006d6a68620c6ae78a31bae87a11b5da00c3f08a7"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24-p.fld",
+          "bytes": 35224,
+          "sha256": "a7d244443f80cb4fbad1f92c8252d850a2eb92236c4e9aa50bda94b1c7de42d4"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24-u.fld",
+          "bytes": 70584,
+          "sha256": "78f664bf59c19187dfae426a9b989e32449df2efecf74ddd14642b78a65c3cea"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24-v.fld",
+          "bytes": 72196,
+          "sha256": "f42da520aa4f2b17f81cc4323ba15d0871ce547b92e03749334869cef300d10b"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-epsilon.fld",
+          "bytes": 47928,
+          "sha256": "4ca5a9eccbe2a3a4307adddd7d3869932b18b480df63ca222d50ab88c37a9b11"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-k.fld",
+          "bytes": 72220,
+          "sha256": "357a55bcaff5bfc2244619c158319ec3774c26c482914f54d47c3bbd67f467d1"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose-epsilon.fld",
+          "bytes": 47928,
+          "sha256": "ce9f594d5d9092fa60b2c74c162bd0dfb16148c6390d1a61d609f0030ceaed8a"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose-k.fld",
+          "bytes": 72200,
+          "sha256": "69dc31bbe09e05aaaba5ee05a8efc5d1c826dc2a285c066153dd8b4b8b41a800"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose-p.fld",
+          "bytes": 35252,
+          "sha256": "c5237adbcf709413df50545b921e70d6c4c9dc93d56684b962830c17d10b11d4"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose-u.fld",
+          "bytes": 70608,
+          "sha256": "767676f847154fff692e56fc7bc973b9b388c7146d2f36b2d1dfc441d227bc30"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose-v.fld",
+          "bytes": 72184,
+          "sha256": "8970a3a3971d40bc87de81a000525b136754bedb0ebd7f866ae45fa96a31d38b"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-p.fld",
+          "bytes": 35232,
+          "sha256": "a09e6209f8be0a5a9757ef8fca95c23e197dc72e5e5af29fdff29fdca03cf2f5"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-u.fld",
+          "bytes": 70584,
+          "sha256": "d5d247c29c551f893c84a8a43b421fcf42721489d8c0a11d5dce761fb466e24d"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-v.fld",
+          "bytes": 72232,
+          "sha256": "e2404aa318882b5e6f24a75e9c40d99c30225ef584b22f018cc4a9f668a57018"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04.final.bin",
+          "bytes": 859058,
+          "sha256": "7032c0fbde48d73562029d0fa17e08ce91da8e2b7c2a2a39177208c65cd7e82f"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04.recovery-4.bin",
+          "bytes": 859058,
+          "sha256": "4e165382f9fc018dc2cbe8759a652718bf82039126ba20586f83485bb695129a"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04.recovery-6.bin",
+          "bytes": 859058,
+          "sha256": "7032c0fbde48d73562029d0fa17e08ce91da8e2b7c2a2a39177208c65cd7e82f"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04.result.json",
+          "bytes": 4708680,
+          "sha256": "126ff1fdbce898fb3866de302d9717166e063c1be64e447f9bf9ad26322d45a9"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04.science-2.json",
+          "bytes": 4293993,
+          "sha256": "e5cb2e2faefa7c806ff141f00c41a09c971131c4797e7f6645566e8a0cba2b3b"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04.science-4.json",
+          "bytes": 4708441,
+          "sha256": "99ac138ccc117ff43c8f6fd6db829c4492f7b3979b4d305d66c81148b9924d1b"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04.science-6.json",
+          "bytes": 4707507,
+          "sha256": "057b33dfe670701d5ed9600e8ab6541c81890c0408e965a7528c66b851ac3267"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04.science-index.json",
+          "bytes": 1615,
+          "sha256": "79235985d58be775779d15934a1dc70f59a773d694b33f378187912b468e967d"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04.steps.jsonl",
+          "bytes": 32483,
+          "sha256": "e9c4c778289c347de6beb6ef3360c05a5dfcb2e5eb887fe171d578b3daab340c"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04.xml",
+          "bytes": 112074,
+          "sha256": "b8e2f2a02507851659c7208a56075c974ed434c5407a6a7a56fa11b9cfaa02fb"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04.xml.opt",
+          "bytes": 55,
+          "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+        }
+      ],
+      "warm_block_size": 1,
+      "warm_complete_seconds_per_step": [
+        7.369920847006142,
+        5.860762773954775,
+        7.173963117995299,
+        5.798836371046491,
+        7.386996908986475
+      ],
+      "warm_seconds_per_unit_physical_time": 184.67492272466188,
+      "conditional_advancement_seconds": 93268.22297286324,
+      "conditional_margin_seconds": 116585.27871607905,
+      "equation_or_solve_share_of_whole": 0.528975024150219
+    },
+    "dt08": {
+      "receipt": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/cp3-short-screen-v19-dt08/receipt.json",
+        "bytes": 3063,
+        "sha256": "5defa6e8147b384fe63d5b008a35e5efa36a793c53a0bf6d7453c2ff9471231e"
+      },
+      "status": "PASS",
+      "whole_seconds": 29.200655555992853,
+      "peak_tree_rss_bytes": 634888192,
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08.result.json",
+        "bytes": 4709182,
+        "sha256": "96ececfd352c503b97c6b02724ff9fcaa969c870ebc19756bbc150055b5b1bc0"
+      },
+      "state_sha256": "63fe9440daa2c506761b042f2b8211cf2c4e064debf9dfe88d0fa8f87965ca8b",
+      "dt": 0.08,
+      "time": 0.24,
+      "steps": 3,
+      "cadence": 1,
+      "complete_step_seconds": [
+        9.865984122036025,
+        7.420463667018339,
+        5.9595461880089715
+      ],
+      "disjoint_engine": {
+        "constitutive": 4.922456316882744,
+        "wall": 0.5931821624399163,
+        "assembly": 5.80135942826746,
+        "flow": 0.42416790610877797,
+        "scalar": 0.10082057723775506,
+        "rebuild": 3.22862757591065,
+        "guards": 5.683125899115112,
+        "forcing": 0.00267383101163432,
+        "residual": 1.9144128729822114,
+        "nonlinear": 0.09911572997225448,
+        "io": 0,
+        "other": 0.006116597156506032
+      },
+      "initialization": 2.417879521031864,
+      "construction": 1.10123679501703,
+      "science": 0.38249725801870227,
+      "recovery": 0.07134252996183932,
+      "other_advancing": 0.01609529199777171,
+      "export": 0.0404201410128735,
+      "process_remainder": 2.39512512186775,
+      "unattributed_complete_seconds": 2.4173370110220276,
+      "attributed_complete_fraction": 0.9172163444623106,
+      "nonlinear_iterations": [
+        5,
+        4,
+        4
+      ],
+      "coupled_krylov_iterations": [
+        11,
+        9,
+        9
+      ],
+      "coupled_Jacobian_actions": [
+        16,
+        13,
+        13
+      ],
+      "coupled_residual_evaluations": [
+        42,
+        34,
+        34
+      ],
+      "inverse_factorizations": [
+        6,
+        3,
+        0
+      ],
+      "inverse_refreshes": [
+        2,
+        1,
+        0
+      ],
+      "inverse_reuses": [
+        3,
+        3,
+        4
+      ],
+      "inverse_refresh_reasons": [
+        {
+          "cold": 1,
+          "alpha": 0,
+          "drift": 1,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 1,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        }
+      ],
+      "rejected_trials": [
+        0,
+        0,
+        0
+      ],
+      "retries": [
+        0,
+        0,
+        0
+      ],
+      "residual_max": 8.801558278736895e-13,
+      "files": [
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08-epsilon.fld",
+          "bytes": 47884,
+          "sha256": "8c33d4c2f70160907f9049112e0b7d7d789028a14434bd0ab94bbd7d1b5a8e63"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08-k.fld",
+          "bytes": 72152,
+          "sha256": "d3f48c6c46647b57b6d0869c00593d60a264dae5b1bf69179208222db3061424"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08-p.fld",
+          "bytes": 35224,
+          "sha256": "f32d49f155435500fcc269ef564f5802ffa4bffa06003dc8415ee96eb7b436d8"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08-u.fld",
+          "bytes": 70596,
+          "sha256": "6452f3e08ba708ce765269e1e21197c5cc9f7c613db9879339842f9f8b3f1dd5"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08-v.fld",
+          "bytes": 72168,
+          "sha256": "09985f808443f40978dc4f43fab460a736e8ac2b86014c051d22e9b9810de845"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08.final.bin",
+          "bytes": 859058,
+          "sha256": "1c74bb711f000c67993d667161724cdc86e21b9e3feb576b0428762cd848f200"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08.recovery-2.bin",
+          "bytes": 859058,
+          "sha256": "08e4b7e69f27b466c723dfa685b27822ad5b54bc597468653b160769cc01eb13"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08.recovery-3.bin",
+          "bytes": 859058,
+          "sha256": "1c74bb711f000c67993d667161724cdc86e21b9e3feb576b0428762cd848f200"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08.result.json",
+          "bytes": 4709182,
+          "sha256": "96ececfd352c503b97c6b02724ff9fcaa969c870ebc19756bbc150055b5b1bc0"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08.science-1.json",
+          "bytes": 3728063,
+          "sha256": "83f8efe4a61af23056265fda6891cfa5f9fa460e3c892782536f003edf979833"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08.science-2.json",
+          "bytes": 4293496,
+          "sha256": "a61b21c26da6d948ce976ad286c7b41ec3bfc7391ed20a3043df40aab6bd2ba8"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08.science-3.json",
+          "bytes": 4708067,
+          "sha256": "5b1a24bd2fd04069f919b1b7f5ea5525a306443e8e5be3d00a26b660d26bcf7f"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08.science-index.json",
+          "bytes": 1614,
+          "sha256": "b551f0bc7f30b16746b34ce18c4a365da6f7494378564f4c8e031459bffbfe5d"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08.steps.jsonl",
+          "bytes": 16701,
+          "sha256": "0490d58021fe238041b56bfc44103e5aeed6f32ee307671f48da6c1c30f6b256"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08.xml",
+          "bytes": 112074,
+          "sha256": "049b0ab99c4952fa23304bfc68cabb1f3529ad0ffa15d142fe36569d3e84f760"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08.xml.opt",
+          "bytes": 55,
+          "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+        }
+      ],
+      "warm_block_size": 1,
+      "warm_complete_seconds_per_step": [
+        7.420463667018339,
+        5.9595461880089715
+      ],
+      "warm_seconds_per_unit_physical_time": 92.75579583772924,
+      "conditional_advancement_seconds": 46845.387129886774,
+      "conditional_margin_seconds": 58556.73391235847,
+      "equation_or_solve_share_of_whole": 0.471190554902002
+    },
+    "dt04-age24": {
+      "receipt": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/cp3-short-screen-v19-dt04-age24/receipt.json",
+        "bytes": 3112,
+        "sha256": "53ef6444e3cab91ccbef3a9ac617a904cd651d1215a146691105be0585332f70"
+      },
+      "status": "PASS",
+      "whole_seconds": 46.10191012197174,
+      "peak_tree_rss_bytes": 629198848,
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24.result.json",
+        "bytes": 4708446,
+        "sha256": "5338e5b947e532ac12ab3c52b35d761774a591e89aacde0cbc4c6032486b8d48"
+      },
+      "state_sha256": "1c139480c639f3b6b596c90ae4ddb6d5cc293d78d7d30cb7f7f7b65661655bb1",
+      "dt": 0.04,
+      "time": 0.24,
+      "steps": 6,
+      "cadence": 2,
+      "complete_step_seconds": [
+        8.671358561026864,
+        7.364952451956924,
+        5.770089269964956,
+        7.33524420595495,
+        5.952043775992934,
+        5.893697014951613
+      ],
+      "disjoint_engine": {
+        "constitutive": 8.735873515543062,
+        "wall": 1.1068692416301928,
+        "assembly": 10.43344502185937,
+        "flow": 0.7890440522460267,
+        "scalar": 0.18467963649891317,
+        "rebuild": 4.280780486995354,
+        "guards": 11.280509784060996,
+        "forcing": 0.002654662006534636,
+        "residual": 3.479661589197349,
+        "nonlinear": 0.1778593729250133,
+        "io": 0,
+        "other": 0.012412132055032998
+      },
+      "initialization": 2.4447342889616266,
+      "construction": 1.0921122549916618,
+      "science": 0.3904943959787488,
+      "recovery": 0.0804292350076139,
+      "other_advancing": 0.03267215384403244,
+      "export": 0.040382493985816836,
+      "process_remainder": 1.5372958041843958,
+      "unattributed_complete_seconds": 1.5823800900834613,
+      "attributed_complete_fraction": 0.9656764744476539,
+      "nonlinear_iterations": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "coupled_krylov_iterations": [
+        9,
+        9,
+        9,
+        9,
+        9,
+        9
+      ],
+      "coupled_Jacobian_actions": [
+        13,
+        13,
+        13,
+        13,
+        14,
+        13
+      ],
+      "coupled_residual_evaluations": [
+        34,
+        34,
+        34,
+        34,
+        36,
+        34
+      ],
+      "inverse_factorizations": [
+        6,
+        3,
+        0,
+        3,
+        0,
+        0
+      ],
+      "inverse_refreshes": [
+        2,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "inverse_reuses": [
+        2,
+        3,
+        4,
+        3,
+        4,
+        4
+      ],
+      "inverse_refresh_reasons": [
+        {
+          "cold": 1,
+          "alpha": 0,
+          "drift": 1,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 1,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 1,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        }
+      ],
+      "rejected_trials": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "retries": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "residual_max": 2.275068429118532e-12,
+      "files": [
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24-epsilon.fld",
+          "bytes": 47928,
+          "sha256": "b98faaf3916481b4cc6bf1eb276d835fe1769487b9e107cb4d0a2a7df36ef88c"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24-k.fld",
+          "bytes": 72204,
+          "sha256": "1b63eab80a9eb883c655225006d6a68620c6ae78a31bae87a11b5da00c3f08a7"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24-p.fld",
+          "bytes": 35224,
+          "sha256": "a7d244443f80cb4fbad1f92c8252d850a2eb92236c4e9aa50bda94b1c7de42d4"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24-u.fld",
+          "bytes": 70584,
+          "sha256": "78f664bf59c19187dfae426a9b989e32449df2efecf74ddd14642b78a65c3cea"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24-v.fld",
+          "bytes": 72196,
+          "sha256": "f42da520aa4f2b17f81cc4323ba15d0871ce547b92e03749334869cef300d10b"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24.final.bin",
+          "bytes": 859058,
+          "sha256": "d460e7ad1ff4af85c0d8963455cfa5c4541cef4b4929b18f5115fc81ba88a42e"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24.recovery-4.bin",
+          "bytes": 859058,
+          "sha256": "b80faf9c2d4ad37965e9152b03a3c7cc7a0646b0d65efa1c0e53d61cb62dbdc2"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24.recovery-6.bin",
+          "bytes": 859058,
+          "sha256": "d460e7ad1ff4af85c0d8963455cfa5c4541cef4b4929b18f5115fc81ba88a42e"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24.result.json",
+          "bytes": 4708446,
+          "sha256": "5338e5b947e532ac12ab3c52b35d761774a591e89aacde0cbc4c6032486b8d48"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24.science-2.json",
+          "bytes": 4293992,
+          "sha256": "ff86c22054fd18b5caa9d7fe6e4ecd6e9acbad3035da2b11256559d1580b20af"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24.science-4.json",
+          "bytes": 4708222,
+          "sha256": "6c7bb4ab1f96a91518291cf11fa4b02b9c1ab32c84b22884d6873a426233a8e5"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24.science-6.json",
+          "bytes": 4707256,
+          "sha256": "a86d4e7204d126ab4aea0da768bbace4762e4991c24eca74535194dbcaba712a"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24.science-index.json",
+          "bytes": 1632,
+          "sha256": "1f1efae7902c1e599f0e4dfd682c34a0b24ec1ec70d587ec53e5331433b5ab4d"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24.steps.jsonl",
+          "bytes": 32479,
+          "sha256": "922c9b6cf6472fbd66ebc5738157e0f589beb7d615061d54076185e92caeb4c4"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24.xml",
+          "bytes": 112081,
+          "sha256": "ea48b192a542f0b34f743cca38e9ea61a4d3254d66cb603fe217b1627748b081"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24.xml.opt",
+          "bytes": 55,
+          "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+        }
+      ],
+      "warm_block_size": 1,
+      "warm_complete_seconds_per_step": [
+        7.364952451956924,
+        5.770089269964956,
+        7.33524420595495,
+        5.952043775992934,
+        5.893697014951613
+      ],
+      "warm_seconds_per_unit_physical_time": 184.1238112989231,
+      "conditional_advancement_seconds": 92989.88965840812,
+      "conditional_margin_seconds": 116237.36207301015,
+      "equation_or_solve_share_of_whole": 0.536468611681109
+    },
+    "dt04-loose": {
+      "receipt": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/cp3-short-screen-v19-dt04-loose/receipt.json",
+        "bytes": 3113,
+        "sha256": "2be644a175a0f055e7250a8ce70984fbb08f3a7b719820a69d38fc1b838f5a74"
+      },
+      "status": "PASS",
+      "whole_seconds": 45.425933663966134,
+      "peak_tree_rss_bytes": 638025728,
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose.result.json",
+        "bytes": 4708418,
+        "sha256": "dfd77dd39770fd9260134e29567537053c4f1fc6f38eeb0d28157e9dcae8228a"
+      },
+      "state_sha256": "cef0f23dbc78edce97b87d3d21fb8aa01b65c163e9724f1fe9570294d10c034f",
+      "dt": 0.04,
+      "time": 0.24,
+      "steps": 6,
+      "cadence": 2,
+      "complete_step_seconds": [
+        8.7424337239936,
+        7.387772116984706,
+        5.789675006002653,
+        7.119351455010474,
+        4.595000865985639,
+        6.202879521006253
+      ],
+      "disjoint_engine": {
+        "constitutive": 8.198196280398406,
+        "wall": 0.9850272500189021,
+        "assembly": 9.433675053529441,
+        "flow": 0.6860384698957205,
+        "scalar": 0.16804430191405118,
+        "rebuild": 5.371006204048172,
+        "guards": 11.132364088087343,
+        "forcing": 0.00265772599959746,
+        "residual": 3.174787707393989,
+        "nonlinear": 0.16765578277409077,
+        "io": 0,
+        "other": 0.01240478694671765
+      },
+      "initialization": 2.41685136500746,
+      "construction": 1.100906144012697,
+      "science": 0.3912439640262164,
+      "recovery": 0.08083237905520946,
+      "other_advancing": 0.03317869489546865,
+      "export": 0.04030638898257166,
+      "process_remainder": 2.0307570769800805,
+      "unattributed_complete_seconds": 2.0763405588222668,
+      "attributed_complete_fraction": 0.9542917362099415,
+      "nonlinear_iterations": [
+        4,
+        4,
+        4,
+        4,
+        3,
+        3
+      ],
+      "coupled_krylov_iterations": [
+        9,
+        9,
+        9,
+        8,
+        6,
+        6
+      ],
+      "coupled_Jacobian_actions": [
+        13,
+        13,
+        13,
+        12,
+        9,
+        9
+      ],
+      "coupled_residual_evaluations": [
+        34,
+        34,
+        34,
+        32,
+        24,
+        24
+      ],
+      "inverse_factorizations": [
+        6,
+        3,
+        0,
+        3,
+        0,
+        3
+      ],
+      "inverse_refreshes": [
+        2,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "inverse_reuses": [
+        2,
+        3,
+        4,
+        3,
+        3,
+        2
+      ],
+      "inverse_refresh_reasons": [
+        {
+          "cold": 1,
+          "alpha": 0,
+          "drift": 1,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 1,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 1,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 0,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        },
+        {
+          "cold": 0,
+          "alpha": 0,
+          "drift": 0,
+          "age": 1,
+          "control": 0,
+          "retry": 0,
+          "injected": 0
+        }
+      ],
+      "rejected_trials": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "retries": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "residual_max": 2.6776074478012954e-11,
+      "files": [
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose-epsilon.fld",
+          "bytes": 47928,
+          "sha256": "ce9f594d5d9092fa60b2c74c162bd0dfb16148c6390d1a61d609f0030ceaed8a"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose-k.fld",
+          "bytes": 72200,
+          "sha256": "69dc31bbe09e05aaaba5ee05a8efc5d1c826dc2a285c066153dd8b4b8b41a800"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose-p.fld",
+          "bytes": 35252,
+          "sha256": "c5237adbcf709413df50545b921e70d6c4c9dc93d56684b962830c17d10b11d4"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose-u.fld",
+          "bytes": 70608,
+          "sha256": "767676f847154fff692e56fc7bc973b9b388c7146d2f36b2d1dfc441d227bc30"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose-v.fld",
+          "bytes": 72184,
+          "sha256": "8970a3a3971d40bc87de81a000525b136754bedb0ebd7f866ae45fa96a31d38b"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose.final.bin",
+          "bytes": 859058,
+          "sha256": "499e6e0b36c1a0680377ed0c232a97be591ebcbceeebadccfb2a1fb715e2f558"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose.recovery-4.bin",
+          "bytes": 859058,
+          "sha256": "d9c7b22a6b2bdbc0925dbfbfda20a7c6d3807421842513662fbad8de5d856e21"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose.recovery-6.bin",
+          "bytes": 859058,
+          "sha256": "499e6e0b36c1a0680377ed0c232a97be591ebcbceeebadccfb2a1fb715e2f558"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose.result.json",
+          "bytes": 4708418,
+          "sha256": "dfd77dd39770fd9260134e29567537053c4f1fc6f38eeb0d28157e9dcae8228a"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose.science-2.json",
+          "bytes": 4293975,
+          "sha256": "e5342c9198d3e5b7295e164434fbaf8a941bae2a5eee15aa0b6d1255ba81deba"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose.science-4.json",
+          "bytes": 4708420,
+          "sha256": "34dfdf93f15ff70fe69d1bdb6e86608cfa84c6a83c573225b23dc1077fe9e473"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose.science-6.json",
+          "bytes": 4707226,
+          "sha256": "d3e0b36e44ffcff6223f6dbb0d06a11b8d04cee7860cb1cba3140a6de1f525c6"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose.science-index.json",
+          "bytes": 1633,
+          "sha256": "0cfde1f16c50ae2a18c731cd5c6469fbb132c498592747ba3e319e24fdda2915"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose.steps.jsonl",
+          "bytes": 31459,
+          "sha256": "27e69bde64b23d36077e6bd399ce02b597e0ecb94185713b679e5cc65bcbe9c2"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose.xml",
+          "bytes": 112080,
+          "sha256": "edfe7136db70f291b267b8cae356d3c3f449f71d8a3cee572078b452afd047d4"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose.xml.opt",
+          "bytes": 55,
+          "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+        }
+      ],
+      "warm_block_size": 1,
+      "warm_complete_seconds_per_step": [
+        7.387772116984706,
+        5.789675006002653,
+        7.119351455010474,
+        4.595000865985639,
+        6.202879521006253
+      ],
+      "warm_seconds_per_unit_physical_time": 184.69430292461766,
+      "conditional_advancement_seconds": 93278.0107490489,
+      "conditional_margin_seconds": 116597.51343631113,
+      "equation_or_solve_share_of_whole": 0.49857922473734084
+    },
+    "stock-1": {
+      "receipt": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/cp3-short-screen-v19-stock-1/receipt.json",
+        "bytes": 3347,
+        "sha256": "eb335e5878c50a2fac9744af4f1b920982e4d0b7971f4ac1c920fc975dda8645"
+      },
+      "status": "PASS",
+      "whole_seconds": 1.7346547240158543,
+      "peak_tree_rss_bytes": 278528,
+      "stable_complete": true,
+      "stock_child_wall_seconds": 1.48,
+      "step_internal_seconds": [
+        [
+          1,
+          0.005,
+          0.15625
+        ],
+        [
+          2,
+          0.01,
+          0.116585
+        ],
+        [
+          3,
+          0.015,
+          0.0106702
+        ],
+        [
+          4,
+          0.02,
+          0.010498
+        ],
+        [
+          5,
+          0.025,
+          0.0103058
+        ],
+        [
+          6,
+          0.03,
+          0.0103447
+        ],
+        [
+          7,
+          0.035,
+          0.0104153
+        ],
+        [
+          8,
+          0.04,
+          0.0104917
+        ],
+        [
+          9,
+          0.045,
+          0.0109895
+        ],
+        [
+          10,
+          0.05,
+          0.0105327
+        ],
+        [
+          11,
+          0.055,
+          0.0105126
+        ],
+        [
+          12,
+          0.06,
+          0.0104259
+        ]
+      ],
+      "files": [
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-1.fld",
+          "bytes": 177983,
+          "sha256": "a0aad69fe119a8e21068d7a56ff5de13127437e1c0d2bbea76478c9533ad9b09"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-1_0.chk",
+          "bytes": 23892,
+          "sha256": "479b42975b81d503ce2bbee7c0702f311b687d6a145d9f63028b319e9469d02f"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-1_1.chk",
+          "bytes": 177487,
+          "sha256": "8c30b7579900e7b4f15ae28abe2704169dad2d505d7147e8c816c308a5a8f71c"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-1_2.chk",
+          "bytes": 177799,
+          "sha256": "5645fccf531ae2b797f40a880a778171af2d4feb7f92c8bf014b2e01b5d13cc6"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-1_3.chk",
+          "bytes": 177947,
+          "sha256": "06e56a9838fbe1a1241769df161b6ed3d4a3428d20cdb36598392dacef6b2d87"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-1_4.chk",
+          "bytes": 177983,
+          "sha256": "dae780be64237bc23648bf9e893395a291d1070d85cfa2e4ccedaf1e17fee9f7"
+        }
+      ],
+      "warm_internal_seconds_per_step": [
+        0.010382833333333334,
+        0.010632166666666667,
+        0.0104904
+      ]
+    },
+    "stock-2": {
+      "receipt": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/cp3-short-screen-v19-stock-2/receipt.json",
+        "bytes": 3347,
+        "sha256": "7c1bb4fcc83fdcb601a9f7569528423a36314b8748cc4e8648c6a11a88c64712"
+      },
+      "status": "PASS",
+      "whole_seconds": 1.7120758619857952,
+      "peak_tree_rss_bytes": 167936,
+      "stable_complete": true,
+      "stock_child_wall_seconds": 1.47,
+      "step_internal_seconds": [
+        [
+          1,
+          0.005,
+          0.155339
+        ],
+        [
+          2,
+          0.01,
+          0.116166
+        ],
+        [
+          3,
+          0.015,
+          0.0106161
+        ],
+        [
+          4,
+          0.02,
+          0.010575
+        ],
+        [
+          5,
+          0.025,
+          0.0102999
+        ],
+        [
+          6,
+          0.03,
+          0.0102709
+        ],
+        [
+          7,
+          0.035,
+          0.0163495
+        ],
+        [
+          8,
+          0.04,
+          0.0117259
+        ],
+        [
+          9,
+          0.045,
+          0.0112715
+        ],
+        [
+          10,
+          0.05,
+          0.0112488
+        ],
+        [
+          11,
+          0.055,
+          0.0111098
+        ],
+        [
+          12,
+          0.06,
+          0.0110069
+        ]
+      ],
+      "files": [
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-2.fld",
+          "bytes": 177983,
+          "sha256": "d140473e927273a2dd8d4537e9304cdfe7de81e241a463c0b896031c876e46cc"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-2_0.chk",
+          "bytes": 23892,
+          "sha256": "6e25f6c9726bb6e23bfdbfe5dda949260235973d18baed17f686541afa99cb07"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-2_1.chk",
+          "bytes": 177487,
+          "sha256": "cd98bb387ccccc2f75981b07d8f6fb77e8bf7fe51575d3d9cbcac42b750ccbd0"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-2_2.chk",
+          "bytes": 177799,
+          "sha256": "7a0b72789b3c4ac1e33e24acdca3a3d00f8942d4bde09244f0c15e48668b248a"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-2_3.chk",
+          "bytes": 177947,
+          "sha256": "9137200e8b6ee41f9dd7ac7446898b7f10deaa0005b3b08578373417c50fc467"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-2_4.chk",
+          "bytes": 177983,
+          "sha256": "138ee89cf63d7a58bfc54b5ec330023159b83e196da5ed4a532fd0a3e982aa0c"
+        }
+      ],
+      "warm_internal_seconds_per_step": [
+        0.010381933333333333,
+        0.013115633333333333,
+        0.011121833333333333
+      ]
+    },
+    "stock-3": {
+      "receipt": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/cp3-short-screen-v19-stock-3/receipt.json",
+        "bytes": 3347,
+        "sha256": "78f17369d82f7a773ac688d2979f3871e565d2bccbb4b8bec17f0b9b45083180"
+      },
+      "status": "PASS",
+      "whole_seconds": 1.7308406510273926,
+      "peak_tree_rss_bytes": 274432,
+      "stable_complete": true,
+      "stock_child_wall_seconds": 1.49,
+      "step_internal_seconds": [
+        [
+          1,
+          0.005,
+          0.157095
+        ],
+        [
+          2,
+          0.01,
+          0.117593
+        ],
+        [
+          3,
+          0.015,
+          0.0106109
+        ],
+        [
+          4,
+          0.02,
+          0.010479
+        ],
+        [
+          5,
+          0.025,
+          0.0103472
+        ],
+        [
+          6,
+          0.03,
+          0.0102914
+        ],
+        [
+          7,
+          0.035,
+          0.0104649
+        ],
+        [
+          8,
+          0.04,
+          0.0110307
+        ],
+        [
+          9,
+          0.045,
+          0.010949
+        ],
+        [
+          10,
+          0.05,
+          0.0105373
+        ],
+        [
+          11,
+          0.055,
+          0.0104843
+        ],
+        [
+          12,
+          0.06,
+          0.0103851
+        ]
+      ],
+      "files": [
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-3.fld",
+          "bytes": 177983,
+          "sha256": "33b38e9879c9782fb9c46a3698bd64377cc9fb328ea5f60ec32df6fc0d83ae8f"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-3_0.chk",
+          "bytes": 23892,
+          "sha256": "ea1325982a1d7c0741a3351910f245405e9feb49123c32e91b93aea8f9c06f3b"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-3_1.chk",
+          "bytes": 177487,
+          "sha256": "37cd5013890b1da2a348a1ecdc9e9737684cd4d809caebc9a94fd533d5b7cf08"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-3_2.chk",
+          "bytes": 177799,
+          "sha256": "576ab3468d52a61f4a8baf05f5f689e9b7f8c7a88d44b2fa8ca4f9b6244b9552"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-3_3.chk",
+          "bytes": 177947,
+          "sha256": "0004e446700674d090acf64e7c25cf8c2593e6b233c146404437cb6ff4ce1c3c"
+        },
+        {
+          "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/stock-3_4.chk",
+          "bytes": 177983,
+          "sha256": "d5d5fac86f1e7b6a157f9fb759af9004fc740b6836aa7ca24d3f4b9d9962fc38"
+        }
+      ],
+      "warm_internal_seconds_per_step": [
+        0.010372533333333333,
+        0.010814866666666666,
+        0.0104689
+      ]
+    }
+  },
+  "comparisons": {
+    "dt04-to-dt02": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-to-dt02.json",
+      "bytes": 26288929,
+      "sha256": "7573139ee8f00685dd41f1948e4995d5ea748255403dc507af946305ef129106"
+    },
+    "dt08-to-dt04": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt08-to-dt04.json",
+      "bytes": 26293099,
+      "sha256": "a25039e19bd646e7f221ebfd58723340925a8acc148c792c92b5455d96edb969"
+    },
+    "dt04-age24-to-dt04": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-age24-to-dt04.json",
+      "bytes": 26300014,
+      "sha256": "4347478fdbc8f85f09159b5c48d290eb149c529fed52a6d01b332be464168f37"
+    },
+    "dt04-loose-to-dt04": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp3-short-screen-v19/dt04-loose-to-dt04.json",
+      "bytes": 26296872,
+      "sha256": "89d480c03dcb6b62a406ecd5a41133eae425c3caf9a9f56c58ba8cca5840f77f"
+    }
+  },
+  "assessor": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/cp3-short-screen-v19/physical_cost_screen_review_v2.py",
+    "bytes": 15337,
+    "sha256": "c84cb56616ec0b2b7d7482961f3fdf2993b628c46eafd0c4d2392a36d5453b2f"
+  },
+  "scope": "Bounded retained-inlet startup and conventional cost comparison",
+  "selected_recipe": null,
+  "complete_trajectory_forecast": null,
+  "TASK3_READY": false
+}
