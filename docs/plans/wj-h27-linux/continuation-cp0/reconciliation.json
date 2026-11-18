@@ -1,0 +1,177 @@
+{
+  "host": "jay-Super-Server",
+  "kernel": "6.8.0-149-generic",
+  "namespace": "/home/jay/build/wj-h27-coupling-r1-20261117",
+  "filesystem": "/dev/nvme0n1p5 ext4   rw,relatime,errors=remount-ro",
+  "source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v19.json",
+    "bytes": 1141639,
+    "sha256": "26e414f6d5238c7d5bf44cdd1c2fe38d341bbdff697f4f3105c6dd247b84eb82"
+  },
+  "source_identity": "56c35390fdf092180913f60c3ae348ca10cdcdf4e6b889c3afd589eddb511acf",
+  "runtime": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/runtime-v19.json",
+    "bytes": 3336,
+    "sha256": "b42dd0c1bc018ecbf3e2b5a39faaf374fb44f2afe084ee68195ae499629b3b04"
+  },
+  "elf": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v19/IncNavierStokesSolver.elf",
+    "bytes": 9932832,
+    "sha256": "37307b1662d694124326568fd1137050a56955928c48f6406989a171596fc52b"
+  },
+  "table": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "bytes": 92259,
+    "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+  },
+  "account": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/accounting.json",
+    "bytes": 242418,
+    "sha256": "3ef3f0730282fa607fd15950b2991605d650b8d843632b5cec93e4ace9c6db8e"
+  },
+  "account_closed": false,
+  "total_seconds": 16991.556598995754,
+  "entries": 501,
+  "ceiling": 43200,
+  "evidence_protected": 3600,
+  "entry_status_counts": {
+    "CARRIED_FORWARD_CLOSED": 1,
+    "FAIL": 46,
+    "FULLY_CHARGED": 1,
+    "PASS": 453
+  },
+  "reserved_or_coupled_return": {},
+  "linux_primary": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026",
+    "head": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+    "status": " M docs/developer-guide/src/library\n"
+  },
+  "old_controller": {
+    "pid": 504745,
+    "proc_cmdline": null,
+    "log": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/launches/coupled-return-v19.log",
+      "bytes": 240,
+      "sha256": "5c1f4548f2114cee6e610c3744a4ad855b7796e11af5969c1e00fde4a4ee3e2f"
+    },
+    "tail": "Traceback (most recent call last):\n  File \"/home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-controller-v19.py\", line 3, in <module>\n    from resources import identity,atomic\nModuleNotFoundError: No module named 'resources'\n",
+    "science_namespace_exists": false,
+    "inputs": [
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-CMakeLists-v19.txt",
+        "bytes": 1483,
+        "sha256": "acdcb5b8e39c3c0fb9771300e087f48f423ff49c4689e77379ea6326fba204fa"
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-admission-v19.md",
+        "bytes": 4593,
+        "sha256": "d7d1c247f2eef6eb6d66e71246de6bbfc5498f6a9af8a4b0fe2549ecdb2fde0e"
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-check-v19.py",
+        "bytes": 13305,
+        "sha256": "4a1f5c3b7d7f41107eaf4872280c773d189ac8d4b01dbfd6c4606e9c02c1e147"
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-controller-v19.py",
+        "bytes": 3097,
+        "sha256": "bc6d7e5c9a66d1cb510b4c61ac213572d757684f6aedf0b24b1b302fba23f5b8"
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-fixtures-v19.py",
+        "bytes": 1829,
+        "sha256": "3dbc8c552ca808e7b134ff4b92fce169243497e652a6019b8ab8ebdece4cf806"
+      },
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-probe-v19.cpp",
+        "bytes": 8030,
+        "sha256": "a9db7cc69a0cff3a8aa945d9b9a07074327e3ae3a29d7b70f76d1ef64aea1662"
+      }
+    ]
+  },
+  "storage": {
+    "free_bytes": 69421993984,
+    "source_build_runtime_bytes": 3002450622,
+    "science_bytes": 2726725508
+  },
+  "observed_workers": 4,
+  "observed_owned_operations": [],
+  "available_excluding_evidence": 22608.443401004246,
+  "remaining_including_evidence": 26208.443401004246,
+  "schema": "WJH27ContinuationCP0V1",
+  "fetched_branch": "codex/wj-earsm-awf",
+  "local_head": "93c5829313eeabd3499fde2336c8e07165862093",
+  "fetched_head": "93c5829313eeabd3499fde2336c8e07165862093",
+  "mac_source19_cpp_h_hpp_cmake_CMakeLists_verified": 1853,
+  "literature": [
+    {
+      "path": "/Users/jay/Documents/nektar-v2026/docs/literature/wj_earsm_neutral_abl_ep_awf_note.tex",
+      "bytes": 138078,
+      "sha256": "1959e96ea0b61f9deb9ff9ad1f5b26488a932a8451c2de6d3b6f7b7c9dbd9124"
+    },
+    {
+      "path": "/Users/jay/Documents/nektar-v2026/docs/literature/wj_earsm_budget_cutoff_awf_appendix.tex",
+      "bytes": 53271,
+      "sha256": "0ab52e0d813b8fb344973f75ca6d8da97ff389ef9f93476500ca9d1df1fbc47c"
+    },
+    {
+      "path": "/Users/jay/Documents/nektar-v2026/docs/literature/Experimental study on roughness effects on turbulent boundary layer flow over a two-dimensional steep hill.pdf",
+      "bytes": 497768,
+      "sha256": "adffb5c1d740be791211d82ce35778a37a3315a6dc72c56c80b70cc6642a43df"
+    },
+    {
+      "path": "/Users/jay/Documents/nektar-v2026/docs/literature/Appropriate boundary conditions for computational wind engineering models revisited.pdf",
+      "bytes": 462734,
+      "sha256": "2a8d769dde2d85a6034f2cc64a5da70da31feb9dfdf2c236484cf38520541780"
+    }
+  ],
+  "package": {
+    "path": "/Users/jay/.codex/attachments/b0892b98-f6fe-45aa-8ca0-28607f3268a7/Pasted text.txt",
+    "bytes": 17661,
+    "sha256": "8414e38f7da3ce3ce675c8e62f2125cbf10dd96e3b64920a9a0080ea51965430"
+  },
+  "reused_evidence": [
+    {
+      "file": {
+        "path": "docs/plans/wj-h27-linux/native-cutoff-panels-v2i/assessment.json",
+        "bytes": 353217,
+        "sha256": "9ceedc6845d13eec3368e40bca5b13314f5028024477bbaa376b48519b3a23b2"
+      },
+      "status": "PASS_CUTOFF_INTEGRATION_FOUNDATION_ONLY"
+    },
+    {
+      "file": {
+        "path": "docs/plans/wj-h27-linux/native-cutoff-recovery-v2i2/assessment.json",
+        "bytes": 1134,
+        "sha256": "c806de92f494a3186a9dab64ef3c5be26038b9b690de11efc4600ff4833a079a"
+      },
+      "status": "PASS_RETAINED_RECOVERY_CONTINUATION_ONLY"
+    },
+    {
+      "file": {
+        "path": "docs/plans/wj-h27-linux/native-mms-requalification-v2j/assessment.json",
+        "bytes": 442316,
+        "sha256": "442b3a9b1f52684d7dca868d212570bac9bdfba3a6ebe19ab69055eeb855a471"
+      },
+      "status": "PASS_SOURCE19_COUPLED_MMS_FOUNDATIONS_ONLY"
+    },
+    {
+      "file": {
+        "path": "docs/plans/wj-h27-linux/native-cutoff-owner-transition-v2k/assessment.json",
+        "bytes": 20744,
+        "sha256": "62b3bea95abb52899e057ebb5f49387b5045ff646429ce59bab4c0ac3d54f314"
+      },
+      "status": "PASS_CUTOFF_OWNER_CACHE_HISTORY_ONLY"
+    },
+    {
+      "file": {
+        "path": "docs/plans/wj-h27-linux/native-reference-inverse-v2l/assessment.json",
+        "bytes": 9879,
+        "sha256": "05e2d35322f725fa693cb4b9b43db7adb90a03ece0e2cff8ab14ef1886a0ebce"
+      },
+      "status": "PASS_FOCUSED_INVERSE_AND_REUSE_FOUNDATIONS_ONLY"
+    }
+  ],
+  "cp1_admission_seconds": 1120,
+  "whole_physical_pilot_matrix_admitted": false
+}
