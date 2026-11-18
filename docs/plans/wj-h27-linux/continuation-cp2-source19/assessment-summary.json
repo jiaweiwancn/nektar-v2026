@@ -1,0 +1,3841 @@
+{
+  "schema": "WJH27Source19ReferenceAssessmentV1",
+  "source_identity": "56c35390fdf092180913f60c3ae348ca10cdcdf4e6b889c3afd589eddb511acf",
+  "run_index": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/run-index.json",
+    "bytes": 3521,
+    "sha256": "43b1e4bfa19dc08064ed7df4af03639844be993909c6d01812304223218c65db"
+  },
+  "input_manifest": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/inputs.json",
+    "bytes": 24615,
+    "sha256": "a17db1a28b835a32e5aa4762866da1d03a10326403ef07383443ac27b71b3937"
+  },
+  "localization": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-localization-v19/owner-balance.json",
+    "bytes": 1392059,
+    "sha256": "3e0b8e3e717c7413e404c3af2e34efc3906d660f5f88790833691fe6127cac19"
+  },
+  "candidates": {
+    "base": {
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/base.result.json",
+        "bytes": 23526372,
+        "sha256": "c6b2eec7d06fed2223d747b5a29ecbb0d5392e611b999315b52939ae83fd273a"
+      },
+      "independent": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/base-current.json",
+        "bytes": 49551819,
+        "sha256": "62ca40cfc33174ebc1eecf93aeb2522387b098ac86f36032e231fc419f8ea490"
+      },
+      "native_acceptance": 1.883380709472496e-13,
+      "state_sha256": "727bdb20be09986cdbed6ba3bded6b655e7248ee7dfea386bc0403eb07f8d241",
+      "quadrature": [
+        8,
+        12
+      ],
+      "numerical_current": {
+        "momentum": 1.5898064742092004e-12,
+        "continuity": 1.5409508574795864e-15,
+        "k": 1.5837712036158026e-10,
+        "epsilon": 5.1659121886186845e-14
+      },
+      "numerical_limits": {
+        "momentum": 1e-09,
+        "continuity": 1e-09,
+        "k": 1e-08,
+        "epsilon": 1e-08
+      },
+      "equations": "MET",
+      "native_admissibility": {
+        "minimum_k": 0.00875810805265067,
+        "minimum_epsilon": 1.7439458710029955e-05,
+        "minimum_covariance_over_k": 0.2793528200219572,
+        "minimum_principal_over_mu": 0.004219097401519356,
+        "cutoff_radius_range": [
+          0.028661026763011046,
+          0.03059290528812411
+        ]
+      },
+      "boundary": "MET",
+      "principal_scope": {
+        "status": "NOT_MET",
+        "reason": "Independent continuum principal certification is a separate required gate; sampled covariance is not a substitute"
+      },
+      "owner_flux": {
+        "interior/mass_shared": {
+          "RMS": 3.34789088932739e-17,
+          "MAX": 4.440892098500626e-16,
+          "component_RMS": [
+            3.34789088932739e-17
+          ],
+          "component_MAX": [
+            4.440892098500626e-16
+          ],
+          "measure": 2987.637500000016
+        },
+        "interior/k_advection_shared": {
+          "RMS": 5.573544220637723e-17,
+          "MAX": 7.877037091302912e-16,
+          "component_RMS": [
+            5.573544220637723e-17
+          ],
+          "component_MAX": [
+            7.877037091302912e-16
+          ],
+          "measure": 2987.637500000016
+        },
+        "interior/k_owner_diffusion_jump": {
+          "RMS": 0.001129243546462871,
+          "MAX": 0.10892356529262208,
+          "component_RMS": [
+            0.001129243546462871
+          ],
+          "component_MAX": [
+            0.10892356529262208
+          ],
+          "measure": 2987.637500000016
+        },
+        "interior/total_traction_owner_jump": {
+          "RMS": 0.0008177600333814569,
+          "MAX": 0.08495563319658006,
+          "component_RMS": [
+            0.0008177600333814569,
+            0.0006130507226799809
+          ],
+          "component_MAX": [
+            0.08495563319658006,
+            0.017818081726291218
+          ],
+          "measure": 2987.637500000016
+        },
+        "H/mass_shared": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.000000000000014
+        },
+        "H/k_advection_shared": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.000000000000014
+        },
+        "H/k_owner_diffusion_jump": {
+          "RMS": 1.86740052860292e-05,
+          "MAX": 2.4160192836620406e-05,
+          "component_RMS": [
+            1.86740052860292e-05
+          ],
+          "component_MAX": [
+            2.4160192836620406e-05
+          ],
+          "measure": 25.000000000000014
+        },
+        "H/total_traction_owner_jump": {
+          "RMS": 0.0008758719450064837,
+          "MAX": 0.015486832101058763,
+          "component_RMS": [
+            0.00020938846596621662,
+            0.0008758719450064837
+          ],
+          "component_MAX": [
+            0.0036718358911745435,
+            0.015486832101058763
+          ],
+          "measure": 25.000000000000014
+        },
+        "interior/epsilon_owner_diffusion_jump": {
+          "RMS": 1.545170756358674e-05,
+          "MAX": 0.0012007501809008414,
+          "component_RMS": [
+            1.545170756358674e-05
+          ],
+          "component_MAX": [
+            0.0012007501809008414
+          ],
+          "measure": 2208.587499999974
+        }
+      },
+      "physical_development": "NOT_MET",
+      "envelope": {
+        "domain/inner/U": {
+          "RMS": 0.0053384670126861425,
+          "MAX": 0.01154071374739507,
+          "component_RMS": [
+            0.0053384670126861425
+          ],
+          "component_MAX": [
+            0.01154071374739507
+          ],
+          "measure": 3.7500000000000226,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/inner/W": {
+          "RMS": 0.00015773574629510367,
+          "MAX": 0.0009015357310043294,
+          "component_RMS": [
+            0.00015773574629510367
+          ],
+          "component_MAX": [
+            0.0009015357310043294
+          ],
+          "measure": 3.7500000000000226,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/inner/k": {
+          "RMS": 0.132794503641201,
+          "MAX": 0.44142666336623315,
+          "component_RMS": [
+            0.132794503641201
+          ],
+          "component_MAX": [
+            0.44142666336623315
+          ],
+          "measure": 3.7500000000000226,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "NOT_MET"
+        },
+        "domain/whole/U": {
+          "RMS": 0.0009100754175308661,
+          "MAX": 0.01154071374739507,
+          "component_RMS": [
+            0.0009100754175308661
+          ],
+          "component_MAX": [
+            0.01154071374739507
+          ],
+          "measure": 497.8125000000011,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/whole/W": {
+          "RMS": 9.111225118427437e-05,
+          "MAX": 0.0009015357310043294,
+          "component_RMS": [
+            9.111225118427437e-05
+          ],
+          "component_MAX": [
+            0.0009015357310043294
+          ],
+          "measure": 497.8125000000011,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/whole/k": {
+          "RMS": 0.012093528613028055,
+          "MAX": 0.44142666336623315,
+          "component_RMS": [
+            0.012093528613028055
+          ],
+          "component_MAX": [
+            0.44142666336623315
+          ],
+          "measure": 497.8125000000011,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "NOT_MET"
+        },
+        "domain/outer/U": {
+          "RMS": 0.0007862637947471998,
+          "MAX": 0.00914272249569792,
+          "component_RMS": [
+            0.0007862637947471998
+          ],
+          "component_MAX": [
+            0.00914272249569792
+          ],
+          "measure": 494.0625000000011,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/outer/W": {
+          "RMS": 9.04190498043927e-05,
+          "MAX": 0.000637270023483012,
+          "component_RMS": [
+            9.04190498043927e-05
+          ],
+          "component_MAX": [
+            0.000637270023483012
+          ],
+          "measure": 494.0625000000011,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/outer/k": {
+          "RMS": 0.0036764424763457847,
+          "MAX": 0.04724833897127398,
+          "component_RMS": [
+            0.0036764424763457847
+          ],
+          "component_MAX": [
+            0.04724833897127398
+          ],
+          "measure": 494.0625000000011,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "MET"
+        },
+        "domain/outer/epsilon": {
+          "RMS": 0.009218630796806569,
+          "MAX": 0.07170669139105756,
+          "component_RMS": [
+            0.009218630796806569
+          ],
+          "component_MAX": [
+            0.07170669139105756
+          ],
+          "measure": 494.0625000000011,
+          "limits": [
+            0.1,
+            0.2
+          ],
+          "status": "MET"
+        },
+        "domain/whole/epsilon": {
+          "RMS": 0.009218630796806569,
+          "MAX": 0.07170669139105756,
+          "component_RMS": [
+            0.009218630796806569
+          ],
+          "component_MAX": [
+            0.07170669139105756
+          ],
+          "measure": 494.0625000000011,
+          "limits": [
+            0.1,
+            0.2
+          ],
+          "status": "MET"
+        },
+        "ground/shear": {
+          "RMS": 0.038240614254162184,
+          "MAX": 0.057890811310756254,
+          "component_RMS": [
+            0.038240614254162184
+          ],
+          "component_MAX": [
+            0.057890811310756254
+          ],
+          "measure": 25.000000000000014,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "MET"
+        }
+      },
+      "stations": [
+        -10,
+        -7.5,
+        -5,
+        -2.5,
+        -1.25,
+        0,
+        1.25,
+        2.5,
+        3.75,
+        4,
+        4.25,
+        4.5,
+        4.75,
+        5,
+        5.25,
+        5.5,
+        5.75,
+        6.0,
+        6.25,
+        6.5,
+        6.75,
+        7.0,
+        7.25,
+        7.5,
+        7.75,
+        8.0,
+        10,
+        12.5,
+        15
+      ],
+      "budget_normalized_defects": {
+        "k": {
+          "mixed_physical_balance": 1.6475012415623577e-05,
+          "all_owner_gradient_balance": 5.173884446677241e-05
+        },
+        "epsilon": {
+          "mixed_physical_balance": -0.00023555104321100286,
+          "all_owner_gradient_balance": -0.00022343228732831817
+        },
+        "mechanical": {
+          "mixed_physical_balance": -0.00013048676836492233,
+          "all_owner_gradient_balance": -6.226714384802959e-05
+        }
+      },
+      "station_summary": {
+        "rows": 319,
+        "failures": 56,
+        "failed_quantities": [
+          "k"
+        ]
+      }
+    },
+    "quadrature": {
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/quadrature.result.json",
+        "bytes": 23526325,
+        "sha256": "e7c671748826a1e7e48517e3a875a73574c3a562c6acef16a2b0d79d4b87cdcb"
+      },
+      "independent": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/quadrature-current.json",
+        "bytes": 49547946,
+        "sha256": "8492e3ac4e648785b448bc9f83056f28cc960ae33cdd922407e0a7e0074a9902"
+      },
+      "native_acceptance": 6.597496226754463e-12,
+      "state_sha256": "762ba7a465497bc27b85f58da454a63e1aaef5716fe7c1a321e7ef75480a7a7d",
+      "quadrature": [
+        12,
+        16
+      ],
+      "numerical_current": {
+        "momentum": 6.935351930891182e-14,
+        "continuity": 1.4668112710602604e-15,
+        "k": 6.6282907341413186e-12,
+        "epsilon": 5.055865043662905e-13
+      },
+      "numerical_limits": {
+        "momentum": 1e-09,
+        "continuity": 1e-09,
+        "k": 1e-08,
+        "epsilon": 1e-08
+      },
+      "equations": "MET",
+      "native_admissibility": {
+        "minimum_k": 0.008758108052665727,
+        "minimum_epsilon": 1.7439458710029867e-05,
+        "minimum_covariance_over_k": 0.27933700011677837,
+        "minimum_principal_over_mu": 0.004187193235549885,
+        "cutoff_radius_range": [
+          0.028661026763011046,
+          0.03059290528812411
+        ]
+      },
+      "boundary": "MET",
+      "principal_scope": {
+        "status": "NOT_MET",
+        "reason": "Independent continuum principal certification is a separate required gate; sampled covariance is not a substitute"
+      },
+      "owner_flux": {
+        "interior/mass_shared": {
+          "RMS": 3.4448890960253115e-17,
+          "MAX": 4.440892098500626e-16,
+          "component_RMS": [
+            3.4448890960253115e-17
+          ],
+          "component_MAX": [
+            4.440892098500626e-16
+          ],
+          "measure": 2987.637500000016
+        },
+        "interior/k_advection_shared": {
+          "RMS": 5.648248732286829e-17,
+          "MAX": 7.877037091302912e-16,
+          "component_RMS": [
+            5.648248732286829e-17
+          ],
+          "component_MAX": [
+            7.877037091302912e-16
+          ],
+          "measure": 2987.637500000016
+        },
+        "interior/k_owner_diffusion_jump": {
+          "RMS": 0.0011292435446054053,
+          "MAX": 0.1089235645824278,
+          "component_RMS": [
+            0.0011292435446054053
+          ],
+          "component_MAX": [
+            0.1089235645824278
+          ],
+          "measure": 2987.637500000016
+        },
+        "interior/total_traction_owner_jump": {
+          "RMS": 0.0008177600340291599,
+          "MAX": 0.0849556340747443,
+          "component_RMS": [
+            0.0008177600340291599,
+            0.0006130507226303069
+          ],
+          "component_MAX": [
+            0.0849556340747443,
+            0.01781808170964344
+          ],
+          "measure": 2987.637500000016
+        },
+        "H/mass_shared": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.000000000000014
+        },
+        "H/k_advection_shared": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.000000000000014
+        },
+        "H/k_owner_diffusion_jump": {
+          "RMS": 1.8674005273895325e-05,
+          "MAX": 2.4160188787841323e-05,
+          "component_RMS": [
+            1.8674005273895325e-05
+          ],
+          "component_MAX": [
+            2.4160188787841323e-05
+          ],
+          "measure": 25.000000000000014
+        },
+        "H/total_traction_owner_jump": {
+          "RMS": 0.0008758719450090285,
+          "MAX": 0.015486832101134045,
+          "component_RMS": [
+            0.00020938846597585363,
+            0.0008758719450090285
+          ],
+          "component_MAX": [
+            0.003671835891216561,
+            0.015486832101134045
+          ],
+          "measure": 25.000000000000014
+        },
+        "interior/epsilon_owner_diffusion_jump": {
+          "RMS": 1.5451707545604546e-05,
+          "MAX": 0.0012007501785749513,
+          "component_RMS": [
+            1.5451707545604546e-05
+          ],
+          "component_MAX": [
+            0.0012007501785749513
+          ],
+          "measure": 2208.587499999974
+        }
+      },
+      "physical_development": "NOT_MET",
+      "envelope": {
+        "domain/inner/U": {
+          "RMS": 0.005338467012643187,
+          "MAX": 0.011540713740126607,
+          "component_RMS": [
+            0.005338467012643187
+          ],
+          "component_MAX": [
+            0.011540713740126607
+          ],
+          "measure": 3.7500000000000226,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/inner/W": {
+          "RMS": 0.00015773574635099053,
+          "MAX": 0.000901535732838745,
+          "component_RMS": [
+            0.00015773574635099053
+          ],
+          "component_MAX": [
+            0.000901535732838745
+          ],
+          "measure": 3.7500000000000226,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/inner/k": {
+          "RMS": 0.13279450364096465,
+          "MAX": 0.44142666422531956,
+          "component_RMS": [
+            0.13279450364096465
+          ],
+          "component_MAX": [
+            0.44142666422531956
+          ],
+          "measure": 3.7500000000000226,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "NOT_MET"
+        },
+        "domain/whole/U": {
+          "RMS": 0.0009100754175387002,
+          "MAX": 0.011540713740126607,
+          "component_RMS": [
+            0.0009100754175387002
+          ],
+          "component_MAX": [
+            0.011540713740126607
+          ],
+          "measure": 497.8125000000011,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/whole/W": {
+          "RMS": 9.111225118144926e-05,
+          "MAX": 0.000901535732838745,
+          "component_RMS": [
+            9.111225118144926e-05
+          ],
+          "component_MAX": [
+            0.000901535732838745
+          ],
+          "measure": 497.8125000000011,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/whole/k": {
+          "RMS": 0.012093528613027817,
+          "MAX": 0.44142666422531956,
+          "component_RMS": [
+            0.012093528613027817
+          ],
+          "component_MAX": [
+            0.44142666422531956
+          ],
+          "measure": 497.8125000000011,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "NOT_MET"
+        },
+        "domain/outer/U": {
+          "RMS": 0.0007862637947585497,
+          "MAX": 0.009142722495952549,
+          "component_RMS": [
+            0.0007862637947585497
+          ],
+          "component_MAX": [
+            0.009142722495952549
+          ],
+          "measure": 494.0625000000011,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/outer/W": {
+          "RMS": 9.041904980078435e-05,
+          "MAX": 0.0006372700236847776,
+          "component_RMS": [
+            9.041904980078435e-05
+          ],
+          "component_MAX": [
+            0.0006372700236847776
+          ],
+          "measure": 494.0625000000011,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/outer/k": {
+          "RMS": 0.00367644247640979,
+          "MAX": 0.047248338941829025,
+          "component_RMS": [
+            0.00367644247640979
+          ],
+          "component_MAX": [
+            0.047248338941829025
+          ],
+          "measure": 494.0625000000011,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "MET"
+        },
+        "domain/outer/epsilon": {
+          "RMS": 0.009218630796869387,
+          "MAX": 0.07170669134584995,
+          "component_RMS": [
+            0.009218630796869387
+          ],
+          "component_MAX": [
+            0.07170669134584995
+          ],
+          "measure": 494.0625000000011,
+          "limits": [
+            0.1,
+            0.2
+          ],
+          "status": "MET"
+        },
+        "domain/whole/epsilon": {
+          "RMS": 0.009218630796869387,
+          "MAX": 0.07170669134584995,
+          "component_RMS": [
+            0.009218630796869387
+          ],
+          "component_MAX": [
+            0.07170669134584995
+          ],
+          "measure": 494.0625000000011,
+          "limits": [
+            0.1,
+            0.2
+          ],
+          "status": "MET"
+        },
+        "ground/shear": {
+          "RMS": 0.0382406142545042,
+          "MAX": 0.05789081130777851,
+          "component_RMS": [
+            0.0382406142545042
+          ],
+          "component_MAX": [
+            0.05789081130777851
+          ],
+          "measure": 25.000000000000014,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "MET"
+        }
+      },
+      "stations": [
+        -10,
+        -7.5,
+        -5,
+        -2.5,
+        -1.25,
+        0,
+        1.25,
+        2.5,
+        3.75,
+        4,
+        4.25,
+        4.5,
+        4.75,
+        5,
+        5.25,
+        5.5,
+        5.75,
+        6.0,
+        6.25,
+        6.5,
+        6.75,
+        7.0,
+        7.25,
+        7.5,
+        7.75,
+        8.0,
+        10,
+        12.5,
+        15
+      ],
+      "budget_normalized_defects": {
+        "k": {
+          "mixed_physical_balance": 1.6475014719823854e-05,
+          "all_owner_gradient_balance": 5.173884680789433e-05
+        },
+        "epsilon": {
+          "mixed_physical_balance": -0.00023555104223790628,
+          "all_owner_gradient_balance": -0.00022343228635449242
+        },
+        "mechanical": {
+          "mixed_physical_balance": -0.00013048676810177259,
+          "all_owner_gradient_balance": -6.226714352704239e-05
+        }
+      },
+      "station_summary": {
+        "rows": 319,
+        "failures": 56,
+        "failed_quantities": [
+          "k"
+        ]
+      }
+    },
+    "radial": {
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/reference-r2.result.json",
+        "bytes": 47147684,
+        "sha256": "f48243ee0d94b39eb394ab05eb6a00bc23d0caf91956783ab7e62699afcd072e"
+      },
+      "independent": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-panels-v19/independent32.json",
+        "bytes": 87102576,
+        "sha256": "11c53feb25b86fc1895eca276d2aa69124c4f212f6e486483565f1c126f65535"
+      },
+      "native_acceptance": 1.915058684864861e-11,
+      "state_sha256": "fa5a9dd2c2a38828c63789f85cddf7bbdc884715fb6ef4307dea051ef2fb9712",
+      "quadrature": [
+        8,
+        12
+      ],
+      "numerical_current": {
+        "momentum": 1.6223929502523693e-12,
+        "continuity": 1.621771435220138e-15,
+        "k": 5.816106648667614e-10,
+        "epsilon": 5.227820662208984e-13
+      },
+      "numerical_limits": {
+        "momentum": 1e-09,
+        "continuity": 1e-09,
+        "k": 1e-08,
+        "epsilon": 1e-08
+      },
+      "equations": "MET",
+      "native_admissibility": {
+        "minimum_k": 0.008760037703215604,
+        "minimum_epsilon": 1.7439456139595767e-05,
+        "minimum_covariance_over_k": 0.2793478737215498,
+        "minimum_principal_over_mu": 0.00423058758510759,
+        "cutoff_radius_range": [
+          0.028661026763011046,
+          0.03059290528812411
+        ]
+      },
+      "boundary": "MET",
+      "principal_scope": {
+        "status": "NOT_MET",
+        "reason": "Independent continuum principal certification is a separate required gate; sampled covariance is not a substitute"
+      },
+      "owner_flux": {
+        "interior/mass_shared": {
+          "RMS": 2.4559894878899466e-17,
+          "MAX": 4.440892098500626e-16,
+          "component_RMS": [
+            2.4559894878899466e-17
+          ],
+          "component_MAX": [
+            4.440892098500626e-16
+          ],
+          "measure": 5487.637499999902
+        },
+        "interior/k_advection_shared": {
+          "RMS": 4.1453850105841817e-17,
+          "MAX": 7.877037091302912e-16,
+          "component_RMS": [
+            4.1453850105841817e-17
+          ],
+          "component_MAX": [
+            7.877037091302912e-16
+          ],
+          "measure": 5487.637499999902
+        },
+        "interior/k_owner_diffusion_jump": {
+          "RMS": 0.0008028296098598504,
+          "MAX": 0.1089139442418463,
+          "component_RMS": [
+            0.0008028296098598504
+          ],
+          "component_MAX": [
+            0.1089139442418463
+          ],
+          "measure": 5487.637499999902
+        },
+        "interior/total_traction_owner_jump": {
+          "RMS": 0.0005559575712486104,
+          "MAX": 0.08495826128397307,
+          "component_RMS": [
+            0.0005559575712486104,
+            0.0002133882287389884
+          ],
+          "component_MAX": [
+            0.08495826128397307,
+            0.017816761606590695
+          ],
+          "measure": 5487.637499999902
+        },
+        "H/mass_shared": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.000000000000014
+        },
+        "H/k_advection_shared": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.000000000000014
+        },
+        "H/k_owner_diffusion_jump": {
+          "RMS": 2.1784406757972236e-06,
+          "MAX": 2.753175733924572e-06,
+          "component_RMS": [
+            2.1784406757972236e-06
+          ],
+          "component_MAX": [
+            2.753175733924572e-06
+          ],
+          "measure": 25.000000000000014
+        },
+        "H/total_traction_owner_jump": {
+          "RMS": 0.0008762347174433362,
+          "MAX": 0.015493645248704542,
+          "component_RMS": [
+            0.0002094465381685478,
+            0.0008762347174433362
+          ],
+          "component_MAX": [
+            0.0036734976302296323,
+            0.015493645248704542
+          ],
+          "measure": 25.000000000000014
+        },
+        "interior/epsilon_owner_diffusion_jump": {
+          "RMS": 1.1216934803270291e-05,
+          "MAX": 0.0012006530781169815,
+          "component_RMS": [
+            1.1216934803270291e-05
+          ],
+          "component_MAX": [
+            0.0012006530781169815
+          ],
+          "measure": 3908.587500000028
+        }
+      },
+      "physical_development": "NOT_MET",
+      "envelope": {
+        "domain/inner/U": {
+          "RMS": 0.005338517044203256,
+          "MAX": 0.011540042258894823,
+          "component_RMS": [
+            0.005338517044203256
+          ],
+          "component_MAX": [
+            0.011540042258894823
+          ],
+          "measure": 3.750000000000039,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/inner/W": {
+          "RMS": 0.0001577053393542219,
+          "MAX": 0.0009041789580528489,
+          "component_RMS": [
+            0.0001577053393542219
+          ],
+          "component_MAX": [
+            0.0009041789580528489
+          ],
+          "measure": 3.750000000000039,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/inner/k": {
+          "RMS": 0.13279468209091205,
+          "MAX": 0.44142773945768443,
+          "component_RMS": [
+            0.13279468209091205
+          ],
+          "component_MAX": [
+            0.44142773945768443
+          ],
+          "measure": 3.750000000000039,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "NOT_MET"
+        },
+        "domain/whole/U": {
+          "RMS": 0.0009100782740726496,
+          "MAX": 0.011540042258894823,
+          "component_RMS": [
+            0.0009100782740726496
+          ],
+          "component_MAX": [
+            0.011540042258894823
+          ],
+          "measure": 497.8125000000021,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/whole/W": {
+          "RMS": 9.111178763734283e-05,
+          "MAX": 0.0009041789580528489,
+          "component_RMS": [
+            9.111178763734283e-05
+          ],
+          "component_MAX": [
+            0.0009041789580528489
+          ],
+          "measure": 497.8125000000021,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/whole/k": {
+          "RMS": 0.012093545421558945,
+          "MAX": 0.44142773945768443,
+          "component_RMS": [
+            0.012093545421558945
+          ],
+          "component_MAX": [
+            0.44142773945768443
+          ],
+          "measure": 497.8125000000021,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "NOT_MET"
+        },
+        "domain/outer/U": {
+          "RMS": 0.0007862645478454186,
+          "MAX": 0.009142682654592504,
+          "component_RMS": [
+            0.0007862645478454186
+          ],
+          "component_MAX": [
+            0.009142682654592504
+          ],
+          "measure": 494.0625000000022,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/outer/W": {
+          "RMS": 9.041898173783801e-05,
+          "MAX": 0.0006372831309871344,
+          "component_RMS": [
+            9.041898173783801e-05
+          ],
+          "component_MAX": [
+            0.0006372831309871344
+          ],
+          "measure": 494.0625000000022,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/outer/k": {
+          "RMS": 0.0036764492635813647,
+          "MAX": 0.04724924481005662,
+          "component_RMS": [
+            0.0036764492635813647
+          ],
+          "component_MAX": [
+            0.04724924481005662
+          ],
+          "measure": 494.0625000000022,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "MET"
+        },
+        "domain/outer/epsilon": {
+          "RMS": 0.009218635376823929,
+          "MAX": 0.07170701235348198,
+          "component_RMS": [
+            0.009218635376823929
+          ],
+          "component_MAX": [
+            0.07170701235348198
+          ],
+          "measure": 494.0625000000022,
+          "limits": [
+            0.1,
+            0.2
+          ],
+          "status": "MET"
+        },
+        "domain/whole/epsilon": {
+          "RMS": 0.009218635376823929,
+          "MAX": 0.07170701235348198,
+          "component_RMS": [
+            0.009218635376823929
+          ],
+          "component_MAX": [
+            0.07170701235348198
+          ],
+          "measure": 494.0625000000022,
+          "limits": [
+            0.1,
+            0.2
+          ],
+          "status": "MET"
+        },
+        "ground/shear": {
+          "RMS": 0.03824383696179599,
+          "MAX": 0.05789395189046748,
+          "component_RMS": [
+            0.03824383696179599
+          ],
+          "component_MAX": [
+            0.05789395189046748
+          ],
+          "measure": 25.000000000000014,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "MET"
+        }
+      },
+      "stations": [
+        -10,
+        -7.5,
+        -5,
+        -2.5,
+        -1.25,
+        0,
+        1.25,
+        2.5,
+        3.75,
+        4,
+        4.25,
+        4.5,
+        4.75,
+        5,
+        5.25,
+        5.5,
+        5.75,
+        6.0,
+        6.25,
+        6.5,
+        6.75,
+        7.0,
+        7.25,
+        7.5,
+        7.75,
+        8.0,
+        10,
+        12.5,
+        15
+      ],
+      "budget_normalized_defects": {
+        "k": {
+          "mixed_physical_balance": 1.642788463402855e-05,
+          "all_owner_gradient_balance": 3.789415964738572e-05
+        },
+        "epsilon": {
+          "mixed_physical_balance": -0.0002451645883487939,
+          "all_owner_gradient_balance": -0.00023471621150375187
+        },
+        "mechanical": {
+          "mixed_physical_balance": -0.00013048267850423675,
+          "all_owner_gradient_balance": -3.4489560808963546e-05
+        }
+      },
+      "station_summary": {
+        "rows": 319,
+        "failures": 56,
+        "failed_quantities": [
+          "k"
+        ]
+      }
+    },
+    "streamwise": {
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/streamwise.result.json",
+        "bytes": 47007811,
+        "sha256": "9fd3329af76c93d23da4c744d98217d6b77bb8bc813c9aa0fb74068f5f2883ec"
+      },
+      "independent": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/streamwise-current.json",
+        "bytes": 60086231,
+        "sha256": "42294e4707ba6d588d6a36f8e4230fcff487fe9fa992d2255f1c0fb32f06b381"
+      },
+      "native_acceptance": 2.399883476550935e-13,
+      "state_sha256": "cef46e111948db115cc30dbe7cd20b22ba83850a0e657c9f84e7c28705cbb0d9",
+      "quadrature": [
+        8,
+        12
+      ],
+      "numerical_current": {
+        "momentum": 1.5318172550218102e-14,
+        "continuity": 2.972326909462798e-15,
+        "k": 2.9370007295281552e-12,
+        "epsilon": 1.1144747181833853e-13
+      },
+      "numerical_limits": {
+        "momentum": 1e-09,
+        "continuity": 1e-09,
+        "k": 1e-08,
+        "epsilon": 1e-08
+      },
+      "equations": "MET",
+      "native_admissibility": {
+        "minimum_k": 0.008798954508775035,
+        "minimum_epsilon": 1.743942854539197e-05,
+        "minimum_covariance_over_k": 0.279663685768459,
+        "minimum_principal_over_mu": 0.004267331276464317,
+        "cutoff_radius_range": [
+          0.028661026763011046,
+          0.03059290528812411
+        ]
+      },
+      "boundary": "MET",
+      "principal_scope": {
+        "status": "NOT_MET",
+        "reason": "Independent continuum principal certification is a separate required gate; sampled covariance is not a substitute"
+      },
+      "owner_flux": {
+        "interior/mass_shared": {
+          "RMS": 4.751515514648287e-17,
+          "MAX": 4.440892098500626e-16,
+          "component_RMS": [
+            4.751515514648287e-17
+          ],
+          "component_MAX": [
+            4.440892098500626e-16
+          ],
+          "measure": 3545.1875000000646
+        },
+        "interior/k_advection_shared": {
+          "RMS": 7.887388317979572e-17,
+          "MAX": 7.877037091302912e-16,
+          "component_RMS": [
+            7.887388317979572e-17
+          ],
+          "component_MAX": [
+            7.877037091302912e-16
+          ],
+          "measure": 3545.1875000000646
+        },
+        "interior/k_owner_diffusion_jump": {
+          "RMS": 0.00043553789035018166,
+          "MAX": 0.07238899981518601,
+          "component_RMS": [
+            0.00043553789035018166
+          ],
+          "component_MAX": [
+            0.07238899981518601
+          ],
+          "measure": 3545.1875000000646
+        },
+        "interior/total_traction_owner_jump": {
+          "RMS": 0.0005461816275598886,
+          "MAX": 0.01852104906392584,
+          "component_RMS": [
+            0.00036320798082872715,
+            0.0005461816275598886
+          ],
+          "component_MAX": [
+            0.01852104906392584,
+            0.012357335045727627
+          ],
+          "measure": 3545.1875000000646
+        },
+        "H/mass_shared": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.000000000000036
+        },
+        "H/k_advection_shared": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.000000000000036
+        },
+        "H/k_owner_diffusion_jump": {
+          "RMS": 1.8659098689338293e-05,
+          "MAX": 2.079592055529101e-05,
+          "component_RMS": [
+            1.8659098689338293e-05
+          ],
+          "component_MAX": [
+            2.079592055529101e-05
+          ],
+          "measure": 25.000000000000036
+        },
+        "H/total_traction_owner_jump": {
+          "RMS": 0.0006200220052175348,
+          "MAX": 0.015453744413955889,
+          "component_RMS": [
+            0.00014973337485175875,
+            0.0006200220052175348
+          ],
+          "component_MAX": [
+            0.003720988287981258,
+            0.015453744413955889
+          ],
+          "measure": 25.000000000000036
+        },
+        "interior/epsilon_owner_diffusion_jump": {
+          "RMS": 4.7222675114520505e-06,
+          "MAX": 0.0002979340662363481,
+          "component_RMS": [
+            4.7222675114520505e-06
+          ],
+          "component_MAX": [
+            0.0002979340662363481
+          ],
+          "measure": 2761.937499999919
+        }
+      },
+      "physical_development": "NOT_MET",
+      "envelope": {
+        "domain/inner/U": {
+          "RMS": 0.005310944928224454,
+          "MAX": 0.009063631233477032,
+          "component_RMS": [
+            0.005310944928224454
+          ],
+          "component_MAX": [
+            0.009063631233477032
+          ],
+          "measure": 3.750000000000032,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/inner/W": {
+          "RMS": 0.00010621837004646108,
+          "MAX": 0.0005634240201761294,
+          "component_RMS": [
+            0.00010621837004646108
+          ],
+          "component_MAX": [
+            0.0005634240201761294
+          ],
+          "measure": 3.750000000000032,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/inner/k": {
+          "RMS": 0.13264342247277927,
+          "MAX": 0.423652728765012,
+          "component_RMS": [
+            0.13264342247277927
+          ],
+          "component_MAX": [
+            0.423652728765012
+          ],
+          "measure": 3.750000000000032,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "NOT_MET"
+        },
+        "domain/whole/U": {
+          "RMS": 0.0009098988529343011,
+          "MAX": 0.009063631233477032,
+          "component_RMS": [
+            0.0009098988529343011
+          ],
+          "component_MAX": [
+            0.009063631233477032
+          ],
+          "measure": 497.8125000000022,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/whole/W": {
+          "RMS": 9.104370380381831e-05,
+          "MAX": 0.0006082735553975972,
+          "component_RMS": [
+            9.104370380381831e-05
+          ],
+          "component_MAX": [
+            0.0006082735553975972
+          ],
+          "measure": 497.8125000000022,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/whole/k": {
+          "RMS": 0.01208108766685209,
+          "MAX": 0.423652728765012,
+          "component_RMS": [
+            0.01208108766685209
+          ],
+          "component_MAX": [
+            0.423652728765012
+          ],
+          "measure": 497.8125000000022,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "NOT_MET"
+        },
+        "domain/outer/U": {
+          "RMS": 0.0007874716473469006,
+          "MAX": 0.008976067131782228,
+          "component_RMS": [
+            0.0007874716473469006
+          ],
+          "component_MAX": [
+            0.008976067131782228
+          ],
+          "measure": 494.0625000000019,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/outer/W": {
+          "RMS": 9.091884185340457e-05,
+          "MAX": 0.0006082735553975972,
+          "component_RMS": [
+            9.091884185340457e-05
+          ],
+          "component_MAX": [
+            0.0006082735553975972
+          ],
+          "measure": 494.0625000000019,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/outer/k": {
+          "RMS": 0.0036766256293136864,
+          "MAX": 0.04464632158024182,
+          "component_RMS": [
+            0.0036766256293136864
+          ],
+          "component_MAX": [
+            0.04464632158024182
+          ],
+          "measure": 494.0625000000019,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "MET"
+        },
+        "domain/outer/epsilon": {
+          "RMS": 0.009222367654478135,
+          "MAX": 0.06771427156868359,
+          "component_RMS": [
+            0.009222367654478135
+          ],
+          "component_MAX": [
+            0.06771427156868359
+          ],
+          "measure": 494.0625000000019,
+          "limits": [
+            0.1,
+            0.2
+          ],
+          "status": "MET"
+        },
+        "domain/whole/epsilon": {
+          "RMS": 0.009222367654478135,
+          "MAX": 0.06771427156868359,
+          "component_RMS": [
+            0.009222367654478135
+          ],
+          "component_MAX": [
+            0.06771427156868359
+          ],
+          "measure": 494.0625000000019,
+          "limits": [
+            0.1,
+            0.2
+          ],
+          "status": "MET"
+        },
+        "ground/shear": {
+          "RMS": 0.03806953506379926,
+          "MAX": 0.051533358180637895,
+          "component_RMS": [
+            0.03806953506379926
+          ],
+          "component_MAX": [
+            0.051533358180637895
+          ],
+          "measure": 25.000000000000036,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "MET"
+        }
+      },
+      "stations": [
+        -10,
+        -7.5,
+        -5,
+        -2.5,
+        -1.25,
+        0,
+        1.25,
+        2.5,
+        3.75,
+        4,
+        4.25,
+        4.5,
+        4.75,
+        5,
+        5.25,
+        5.5,
+        5.75,
+        6.0,
+        6.25,
+        6.5,
+        6.75,
+        7.0,
+        7.25,
+        7.5,
+        7.75,
+        8.0,
+        10,
+        12.5,
+        15
+      ],
+      "budget_normalized_defects": {
+        "k": {
+          "mixed_physical_balance": 1.2043012219801817e-05,
+          "all_owner_gradient_balance": 5.1041593470185716e-05
+        },
+        "epsilon": {
+          "mixed_physical_balance": -3.376846732120543e-05,
+          "all_owner_gradient_balance": -1.0519038808522616e-05
+        },
+        "mechanical": {
+          "mixed_physical_balance": 2.306277598197046e-06,
+          "all_owner_gradient_balance": -6.777453569313487e-06
+        }
+      },
+      "station_summary": {
+        "rows": 319,
+        "failures": 56,
+        "failed_quantities": [
+          "k"
+        ]
+      }
+    },
+    "targeted": {
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/targeted.result.json",
+        "bytes": 46882615,
+        "sha256": "30efa1bf21f6028413184b7058ad0821a0455917c9a3127841029ea86515a1af"
+      },
+      "independent": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/targeted-current.json",
+        "bytes": 70851100,
+        "sha256": "81defa44753477c3655ab191209f4abe2aeae49bdf54b9eba8be8423bb3bccf8"
+      },
+      "native_acceptance": 8.207528445735005e-13,
+      "state_sha256": "d1d06a93c066af75ead058c4e16d2d9e9e759f2b8690cedbae85cc9fec7a75e1",
+      "quadrature": [
+        8,
+        12
+      ],
+      "numerical_current": {
+        "momentum": 6.662914438276352e-14,
+        "continuity": 2.6518310174754934e-15,
+        "k": 5.1767386385551174e-11,
+        "epsilon": 2.460770260816406e-13
+      },
+      "numerical_limits": {
+        "momentum": 1e-09,
+        "continuity": 1e-09,
+        "k": 1e-08,
+        "epsilon": 1e-08
+      },
+      "equations": "MET",
+      "native_admissibility": {
+        "minimum_k": 0.008802683874490392,
+        "minimum_epsilon": 1.7439424689209188e-05,
+        "minimum_covariance_over_k": 0.2796774725552276,
+        "minimum_principal_over_mu": 0.004267323083068009,
+        "cutoff_radius_range": [
+          0.028661026763011046,
+          0.03059290528812411
+        ]
+      },
+      "boundary": "MET",
+      "principal_scope": {
+        "status": "NOT_MET",
+        "reason": "Independent continuum principal certification is a separate required gate; sampled covariance is not a substitute"
+      },
+      "owner_flux": {
+        "interior/mass_shared": {
+          "RMS": 3.911463002878657e-17,
+          "MAX": 4.440892098500626e-16,
+          "component_RMS": [
+            3.911463002878657e-17
+          ],
+          "component_MAX": [
+            4.440892098500626e-16
+          ],
+          "measure": 4106.2374999999765
+        },
+        "interior/k_advection_shared": {
+          "RMS": 6.56657178460586e-17,
+          "MAX": 7.877037091302912e-16,
+          "component_RMS": [
+            6.56657178460586e-17
+          ],
+          "component_MAX": [
+            7.877037091302912e-16
+          ],
+          "measure": 4106.2374999999765
+        },
+        "interior/k_owner_diffusion_jump": {
+          "RMS": 0.0006029644303114403,
+          "MAX": 0.17134167387040308,
+          "component_RMS": [
+            0.0006029644303114403
+          ],
+          "component_MAX": [
+            0.17134167387040308
+          ],
+          "measure": 4106.2374999999765
+        },
+        "interior/total_traction_owner_jump": {
+          "RMS": 0.00036400369600799414,
+          "MAX": 0.053154162608223976,
+          "component_RMS": [
+            0.00036400369600799414,
+            0.00022502134584764439
+          ],
+          "component_MAX": [
+            0.053154162608223976,
+            0.012730153599346601
+          ],
+          "measure": 4106.2374999999765
+        },
+        "H/mass_shared": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.00000000000003
+        },
+        "H/k_advection_shared": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.00000000000003
+        },
+        "H/k_owner_diffusion_jump": {
+          "RMS": 3.3938550570571944e-06,
+          "MAX": 1.964043236880655e-05,
+          "component_RMS": [
+            3.3938550570571944e-06
+          ],
+          "component_MAX": [
+            1.964043236880655e-05
+          ],
+          "measure": 25.00000000000003
+        },
+        "H/total_traction_owner_jump": {
+          "RMS": 0.00022337303613387136,
+          "MAX": 0.015497735163844837,
+          "component_RMS": [
+            5.381559863196138e-05,
+            0.00022337303613387136
+          ],
+          "component_MAX": [
+            0.0037008093436389175,
+            0.015497735163844837
+          ],
+          "measure": 25.00000000000003
+        },
+        "interior/epsilon_owner_diffusion_jump": {
+          "RMS": 9.178136621100176e-06,
+          "MAX": 0.0009377407415962476,
+          "component_RMS": [
+            9.178136621100176e-06
+          ],
+          "component_MAX": [
+            0.0009377407415962476
+          ],
+          "measure": 2524.7874999999503
+        }
+      },
+      "physical_development": "NOT_MET",
+      "envelope": {
+        "domain/inner/U": {
+          "RMS": 0.0053143459895576665,
+          "MAX": 0.010023613324165903,
+          "component_RMS": [
+            0.0053143459895576665
+          ],
+          "component_MAX": [
+            0.010023613324165903
+          ],
+          "measure": 3.7500000000000293,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/inner/W": {
+          "RMS": 0.00011749210648349901,
+          "MAX": 0.0006198957766658128,
+          "component_RMS": [
+            0.00011749210648349901
+          ],
+          "component_MAX": [
+            0.0006198957766658128
+          ],
+          "measure": 3.7500000000000293,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/inner/k": {
+          "RMS": 0.13267988437826267,
+          "MAX": 0.4062625021753682,
+          "component_RMS": [
+            0.13267988437826267
+          ],
+          "component_MAX": [
+            0.4062625021753682
+          ],
+          "measure": 3.7500000000000293,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "NOT_MET"
+        },
+        "domain/whole/U": {
+          "RMS": 0.0009097931079135605,
+          "MAX": 0.010023613324165903,
+          "component_RMS": [
+            0.0009097931079135605
+          ],
+          "component_MAX": [
+            0.010023613324165903
+          ],
+          "measure": 497.8125000000018,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/whole/W": {
+          "RMS": 9.131319499455772e-05,
+          "MAX": 0.0006276748013112344,
+          "component_RMS": [
+            9.131319499455772e-05
+          ],
+          "component_MAX": [
+            0.0006276748013112344
+          ],
+          "measure": 497.8125000000018,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/whole/k": {
+          "RMS": 0.01208371660819485,
+          "MAX": 0.4062625021753682,
+          "component_RMS": [
+            0.01208371660819485
+          ],
+          "component_MAX": [
+            0.4062625021753682
+          ],
+          "measure": 497.8125000000018,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "NOT_MET"
+        },
+        "domain/outer/U": {
+          "RMS": 0.0007871743293848777,
+          "MAX": 0.00896431512363216,
+          "component_RMS": [
+            0.0007871743293848777
+          ],
+          "component_MAX": [
+            0.00896431512363216
+          ],
+          "measure": 494.0625000000016,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/outer/W": {
+          "RMS": 9.108572704409607e-05,
+          "MAX": 0.0006276748013112344,
+          "component_RMS": [
+            9.108572704409607e-05
+          ],
+          "component_MAX": [
+            0.0006276748013112344
+          ],
+          "measure": 494.0625000000016,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/outer/k": {
+          "RMS": 0.003675344561200018,
+          "MAX": 0.04504230867126363,
+          "component_RMS": [
+            0.003675344561200018
+          ],
+          "component_MAX": [
+            0.04504230867126363
+          ],
+          "measure": 494.0625000000016,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "MET"
+        },
+        "domain/outer/epsilon": {
+          "RMS": 0.009221431899603585,
+          "MAX": 0.06832151124463448,
+          "component_RMS": [
+            0.009221431899603585
+          ],
+          "component_MAX": [
+            0.06832151124463448
+          ],
+          "measure": 494.0625000000016,
+          "limits": [
+            0.1,
+            0.2
+          ],
+          "status": "MET"
+        },
+        "domain/whole/epsilon": {
+          "RMS": 0.009221431899603585,
+          "MAX": 0.06832151124463448,
+          "component_RMS": [
+            0.009221431899603585
+          ],
+          "component_MAX": [
+            0.06832151124463448
+          ],
+          "measure": 494.0625000000016,
+          "limits": [
+            0.1,
+            0.2
+          ],
+          "status": "MET"
+        },
+        "ground/shear": {
+          "RMS": 0.03808521467515193,
+          "MAX": 0.05394832531526921,
+          "component_RMS": [
+            0.03808521467515193
+          ],
+          "component_MAX": [
+            0.05394832531526921
+          ],
+          "measure": 25.00000000000003,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "MET"
+        }
+      },
+      "stations": [
+        -10,
+        -7.5,
+        -5,
+        -2.5,
+        -1.25,
+        0,
+        1.25,
+        2.5,
+        3.75,
+        4,
+        4.25,
+        4.5,
+        4.75,
+        5,
+        5.25,
+        5.5,
+        5.75,
+        6.0,
+        6.25,
+        6.5,
+        6.75,
+        7.0,
+        7.25,
+        7.5,
+        7.75,
+        8.0,
+        10,
+        12.5,
+        15
+      ],
+      "budget_normalized_defects": {
+        "k": {
+          "mixed_physical_balance": -2.9038820631690514e-06,
+          "all_owner_gradient_balance": 3.4145341592049005e-05
+        },
+        "epsilon": {
+          "mixed_physical_balance": 1.0929564471782958e-05,
+          "all_owner_gradient_balance": 3.405147932495098e-05
+        },
+        "mechanical": {
+          "mixed_physical_balance": 1.0858153455348737e-07,
+          "all_owner_gradient_balance": -2.3699801422484468e-05
+        }
+      },
+      "station_summary": {
+        "rows": 319,
+        "failures": 56,
+        "failed_quantities": [
+          "k"
+        ]
+      }
+    },
+    "tight": {
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/tight.result.json",
+        "bytes": 23526398,
+        "sha256": "d6e0504508c56537c76487efb5e02c456509b2c35017745b60a440e94b59c12c"
+      },
+      "independent": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/tight-current.json",
+        "bytes": 49551817,
+        "sha256": "980d36a367ac1eb1dc87de9a046a50d63f3162dcd858054745bd722d4c760a8f"
+      },
+      "native_acceptance": 1.883380709472496e-13,
+      "state_sha256": "727bdb20be09986cdbed6ba3bded6b655e7248ee7dfea386bc0403eb07f8d241",
+      "quadrature": [
+        8,
+        12
+      ],
+      "numerical_current": {
+        "momentum": 1.5898064742092004e-12,
+        "continuity": 1.5409508574795864e-15,
+        "k": 1.5837712036158026e-10,
+        "epsilon": 5.1659121886186845e-14
+      },
+      "numerical_limits": {
+        "momentum": 1e-09,
+        "continuity": 1e-09,
+        "k": 1e-08,
+        "epsilon": 1e-08
+      },
+      "equations": "MET",
+      "native_admissibility": {
+        "minimum_k": 0.00875810805265067,
+        "minimum_epsilon": 1.7439458710029955e-05,
+        "minimum_covariance_over_k": 0.2793528200219572,
+        "minimum_principal_over_mu": 0.004219097401519356,
+        "cutoff_radius_range": [
+          0.028661026763011046,
+          0.03059290528812411
+        ]
+      },
+      "boundary": "MET",
+      "principal_scope": {
+        "status": "NOT_MET",
+        "reason": "Independent continuum principal certification is a separate required gate; sampled covariance is not a substitute"
+      },
+      "owner_flux": {
+        "interior/mass_shared": {
+          "RMS": 3.34789088932739e-17,
+          "MAX": 4.440892098500626e-16,
+          "component_RMS": [
+            3.34789088932739e-17
+          ],
+          "component_MAX": [
+            4.440892098500626e-16
+          ],
+          "measure": 2987.637500000016
+        },
+        "interior/k_advection_shared": {
+          "RMS": 5.573544220637723e-17,
+          "MAX": 7.877037091302912e-16,
+          "component_RMS": [
+            5.573544220637723e-17
+          ],
+          "component_MAX": [
+            7.877037091302912e-16
+          ],
+          "measure": 2987.637500000016
+        },
+        "interior/k_owner_diffusion_jump": {
+          "RMS": 0.001129243546462871,
+          "MAX": 0.10892356529262208,
+          "component_RMS": [
+            0.001129243546462871
+          ],
+          "component_MAX": [
+            0.10892356529262208
+          ],
+          "measure": 2987.637500000016
+        },
+        "interior/total_traction_owner_jump": {
+          "RMS": 0.0008177600333814569,
+          "MAX": 0.08495563319658006,
+          "component_RMS": [
+            0.0008177600333814569,
+            0.0006130507226799809
+          ],
+          "component_MAX": [
+            0.08495563319658006,
+            0.017818081726291218
+          ],
+          "measure": 2987.637500000016
+        },
+        "H/mass_shared": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.000000000000014
+        },
+        "H/k_advection_shared": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.000000000000014
+        },
+        "H/k_owner_diffusion_jump": {
+          "RMS": 1.86740052860292e-05,
+          "MAX": 2.4160192836620406e-05,
+          "component_RMS": [
+            1.86740052860292e-05
+          ],
+          "component_MAX": [
+            2.4160192836620406e-05
+          ],
+          "measure": 25.000000000000014
+        },
+        "H/total_traction_owner_jump": {
+          "RMS": 0.0008758719450064837,
+          "MAX": 0.015486832101058763,
+          "component_RMS": [
+            0.00020938846596621662,
+            0.0008758719450064837
+          ],
+          "component_MAX": [
+            0.0036718358911745435,
+            0.015486832101058763
+          ],
+          "measure": 25.000000000000014
+        },
+        "interior/epsilon_owner_diffusion_jump": {
+          "RMS": 1.545170756358674e-05,
+          "MAX": 0.0012007501809008414,
+          "component_RMS": [
+            1.545170756358674e-05
+          ],
+          "component_MAX": [
+            0.0012007501809008414
+          ],
+          "measure": 2208.587499999974
+        }
+      },
+      "physical_development": "NOT_MET",
+      "envelope": {
+        "domain/inner/U": {
+          "RMS": 0.0053384670126861425,
+          "MAX": 0.01154071374739507,
+          "component_RMS": [
+            0.0053384670126861425
+          ],
+          "component_MAX": [
+            0.01154071374739507
+          ],
+          "measure": 3.7500000000000226,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/inner/W": {
+          "RMS": 0.00015773574629510367,
+          "MAX": 0.0009015357310043294,
+          "component_RMS": [
+            0.00015773574629510367
+          ],
+          "component_MAX": [
+            0.0009015357310043294
+          ],
+          "measure": 3.7500000000000226,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/inner/k": {
+          "RMS": 0.132794503641201,
+          "MAX": 0.44142666336623315,
+          "component_RMS": [
+            0.132794503641201
+          ],
+          "component_MAX": [
+            0.44142666336623315
+          ],
+          "measure": 3.7500000000000226,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "NOT_MET"
+        },
+        "domain/whole/U": {
+          "RMS": 0.0009100754175308661,
+          "MAX": 0.01154071374739507,
+          "component_RMS": [
+            0.0009100754175308661
+          ],
+          "component_MAX": [
+            0.01154071374739507
+          ],
+          "measure": 497.8125000000011,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/whole/W": {
+          "RMS": 9.111225118427437e-05,
+          "MAX": 0.0009015357310043294,
+          "component_RMS": [
+            9.111225118427437e-05
+          ],
+          "component_MAX": [
+            0.0009015357310043294
+          ],
+          "measure": 497.8125000000011,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/whole/k": {
+          "RMS": 0.012093528613028055,
+          "MAX": 0.44142666336623315,
+          "component_RMS": [
+            0.012093528613028055
+          ],
+          "component_MAX": [
+            0.44142666336623315
+          ],
+          "measure": 497.8125000000011,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "NOT_MET"
+        },
+        "domain/outer/U": {
+          "RMS": 0.0007862637947471998,
+          "MAX": 0.00914272249569792,
+          "component_RMS": [
+            0.0007862637947471998
+          ],
+          "component_MAX": [
+            0.00914272249569792
+          ],
+          "measure": 494.0625000000011,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/outer/W": {
+          "RMS": 9.04190498043927e-05,
+          "MAX": 0.000637270023483012,
+          "component_RMS": [
+            9.04190498043927e-05
+          ],
+          "component_MAX": [
+            0.000637270023483012
+          ],
+          "measure": 494.0625000000011,
+          "limits": [
+            0.01,
+            0.02
+          ],
+          "status": "MET"
+        },
+        "domain/outer/k": {
+          "RMS": 0.0036764424763457847,
+          "MAX": 0.04724833897127398,
+          "component_RMS": [
+            0.0036764424763457847
+          ],
+          "component_MAX": [
+            0.04724833897127398
+          ],
+          "measure": 494.0625000000011,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "MET"
+        },
+        "domain/outer/epsilon": {
+          "RMS": 0.009218630796806569,
+          "MAX": 0.07170669139105756,
+          "component_RMS": [
+            0.009218630796806569
+          ],
+          "component_MAX": [
+            0.07170669139105756
+          ],
+          "measure": 494.0625000000011,
+          "limits": [
+            0.1,
+            0.2
+          ],
+          "status": "MET"
+        },
+        "domain/whole/epsilon": {
+          "RMS": 0.009218630796806569,
+          "MAX": 0.07170669139105756,
+          "component_RMS": [
+            0.009218630796806569
+          ],
+          "component_MAX": [
+            0.07170669139105756
+          ],
+          "measure": 494.0625000000011,
+          "limits": [
+            0.1,
+            0.2
+          ],
+          "status": "MET"
+        },
+        "ground/shear": {
+          "RMS": 0.038240614254162184,
+          "MAX": 0.057890811310756254,
+          "component_RMS": [
+            0.038240614254162184
+          ],
+          "component_MAX": [
+            0.057890811310756254
+          ],
+          "measure": 25.000000000000014,
+          "limits": [
+            0.05,
+            0.1
+          ],
+          "status": "MET"
+        }
+      },
+      "stations": [
+        -10,
+        -7.5,
+        -5,
+        -2.5,
+        -1.25,
+        0,
+        1.25,
+        2.5,
+        3.75,
+        4,
+        4.25,
+        4.5,
+        4.75,
+        5,
+        5.25,
+        5.5,
+        5.75,
+        6.0,
+        6.25,
+        6.5,
+        6.75,
+        7.0,
+        7.25,
+        7.5,
+        7.75,
+        8.0,
+        10,
+        12.5,
+        15
+      ],
+      "budget_normalized_defects": {
+        "k": {
+          "mixed_physical_balance": 1.6475012415623577e-05,
+          "all_owner_gradient_balance": 5.173884446677241e-05
+        },
+        "epsilon": {
+          "mixed_physical_balance": -0.00023555104321100286,
+          "all_owner_gradient_balance": -0.00022343228732831817
+        },
+        "mechanical": {
+          "mixed_physical_balance": -0.00013048676836492233,
+          "all_owner_gradient_balance": -6.226714384802959e-05
+        }
+      },
+      "station_summary": {
+        "rows": 319,
+        "failures": 56,
+        "failed_quantities": [
+          "k"
+        ]
+      }
+    }
+  },
+  "comparisons": {
+    "base-to-quadrature": {
+      "archive": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/base-to-quadrature-order20.json",
+        "bytes": 282170,
+        "sha256": "c71209239bf8988c2a60a256802804ef56346a8f6f6cd262093909496775f866"
+      },
+      "status": "MET",
+      "example_norms": {
+        "inner/k": {
+          "RMS": 3.560062866890424e-11,
+          "MAX": 8.675920285325035e-10,
+          "component_RMS": [
+            3.560062866890424e-11
+          ],
+          "component_MAX": [
+            8.675920285325035e-10
+          ],
+          "measure": 3.7500000000000226,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "MET"
+        },
+        "inner/U": {
+          "RMS": 1.741898794888103e-12,
+          "MAX": 2.458100389901574e-11,
+          "component_RMS": [
+            1.741898794888103e-12
+          ],
+          "component_MAX": [
+            2.458100389901574e-11
+          ],
+          "measure": 3.7500000000000226,
+          "limits": [
+            0.0001,
+            0.0001
+          ],
+          "status": "MET"
+        },
+        "inner/W": {
+          "RMS": 4.0927368789827403e-13,
+          "MAX": 8.7605799893066e-12,
+          "component_RMS": [
+            4.0927368789827403e-13
+          ],
+          "component_MAX": [
+            8.7605799893066e-12
+          ],
+          "measure": 3.7500000000000226,
+          "limits": [
+            0.0001,
+            0.0001
+          ],
+          "status": "MET"
+        },
+        "inner/G": {
+          "RMS": 1.0329109748979652e-10,
+          "MAX": 3.899274902963157e-09,
+          "component_RMS": [
+            3.0275988540427676e-11,
+            1.0329109748979652e-10,
+            7.412458741345685e-12,
+            2.822757841247909e-11
+          ],
+          "component_MAX": [
+            5.784100004513348e-10,
+            3.899274902963157e-09,
+            2.4454164734843964e-10,
+            1.1008818683044819e-09
+          ],
+          "measure": 3.7500000000000226,
+          "limits": [
+            0.01,
+            0.01
+          ],
+          "status": "MET"
+        },
+        "outer/epsilon": {
+          "RMS": 2.989391986541787e-13,
+          "MAX": 5.6972956349840794e-11,
+          "component_RMS": [
+            2.989391986541787e-13
+          ],
+          "component_MAX": [
+            5.6972956349840794e-11
+          ],
+          "measure": 494.0625000000011,
+          "limits": [
+            0.01,
+            0.01
+          ],
+          "status": "MET"
+        },
+        "whole/R": {
+          "RMS": 8.448368381200733e-12,
+          "MAX": 2.0639968012300388e-09,
+          "component_RMS": [
+            8.448368381200733e-12,
+            0.0,
+            2.8802374082210977e-12,
+            7.2631293911729776e-12,
+            0.0,
+            7.627357151190211e-12
+          ],
+          "component_MAX": [
+            2.0639968012300388e-09,
+            0.0,
+            1.3245702526501047e-09,
+            1.958895634876605e-09,
+            0.0,
+            1.958895634876605e-09
+          ],
+          "measure": 497.8125000000011,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "MET"
+        },
+        "whole/Pi": {
+          "RMS": 8.873561965570418e-12,
+          "MAX": 6.722220830875818e-10,
+          "component_RMS": [
+            8.873561965570418e-12
+          ],
+          "component_MAX": [
+            6.722220830875818e-10
+          ],
+          "measure": 497.8125000000011,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "MET"
+        },
+        "whole/traction": {
+          "RMS": 3.066257703456759e-12,
+          "MAX": 1.4107605321140405e-09,
+          "component_RMS": [
+            3.066257703456759e-12
+          ],
+          "component_MAX": [
+            1.4107605321140405e-09
+          ],
+          "measure": 497.8125000000011,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "MET"
+        }
+      },
+      "checked": 690,
+      "common_owner_subcells": 2800,
+      "budget_changes": {
+        "k": {
+          "mixed_physical_balance": 2.3042002780699075e-12,
+          "all_owner_gradient_balance": 2.341121922278495e-12
+        },
+        "epsilon": {
+          "mixed_physical_balance": 9.73096568972355e-13,
+          "all_owner_gradient_balance": 9.73825753362743e-13
+        },
+        "mechanical": {
+          "mixed_physical_balance": 2.631497480512915e-13,
+          "all_owner_gradient_balance": 3.2098720281357865e-13
+        }
+      },
+      "failed_rows": 0,
+      "failed_quantities": []
+    },
+    "base-to-radial": {
+      "archive": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/base-to-radial-order20.json",
+        "bytes": 282895,
+        "sha256": "e87c37022b8ca788a20e1577432c6bfce8736761b2ef7b3eb641d9ea01f58013"
+      },
+      "status": "NOT_MET",
+      "example_norms": {
+        "inner/k": {
+          "RMS": 6.6169446645324995e-06,
+          "MAX": 5.661054319210994e-05,
+          "component_RMS": [
+            6.6169446645324995e-06
+          ],
+          "component_MAX": [
+            5.661054319210994e-05
+          ],
+          "measure": 3.750000000000039,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "MET"
+        },
+        "inner/U": {
+          "RMS": 8.184012113648148e-07,
+          "MAX": 4.178627485473818e-06,
+          "component_RMS": [
+            8.184012113648148e-07
+          ],
+          "component_MAX": [
+            4.178627485473818e-06
+          ],
+          "measure": 3.750000000000039,
+          "limits": [
+            0.0001,
+            0.0001
+          ],
+          "status": "MET"
+        },
+        "inner/W": {
+          "RMS": 2.4361758789840867e-06,
+          "MAX": 1.816564411167945e-05,
+          "component_RMS": [
+            2.4361758789840867e-06
+          ],
+          "component_MAX": [
+            1.816564411167945e-05
+          ],
+          "measure": 3.750000000000039,
+          "limits": [
+            0.0001,
+            0.0001
+          ],
+          "status": "MET"
+        },
+        "inner/G": {
+          "RMS": 0.0017997390918136412,
+          "MAX": 0.013921138752388984,
+          "component_RMS": [
+            7.507814272570598e-07,
+            0.0010591152284142463,
+            1.7663850660987335e-06,
+            0.0017997390918136412
+          ],
+          "component_MAX": [
+            1.8987085370292256e-05,
+            0.013921138752388984,
+            8.57985868014e-05,
+            0.012227664468615843
+          ],
+          "measure": 3.750000000000039,
+          "limits": [
+            0.01,
+            0.01
+          ],
+          "status": "NOT_MET"
+        },
+        "outer/epsilon": {
+          "RMS": 2.010546134045859e-06,
+          "MAX": 2.278874310398099e-05,
+          "component_RMS": [
+            2.010546134045859e-06
+          ],
+          "component_MAX": [
+            2.278874310398099e-05
+          ],
+          "measure": 494.0625000000023,
+          "limits": [
+            0.01,
+            0.01
+          ],
+          "status": "MET"
+        },
+        "whole/R": {
+          "RMS": 4.769843192093201e-05,
+          "MAX": 0.0031289998018038563,
+          "component_RMS": [
+            3.548363423254627e-05,
+            0.0,
+            1.9417037049422606e-05,
+            2.3721617274273442e-05,
+            0.0,
+            4.769843192093201e-05
+          ],
+          "component_MAX": [
+            0.001903875812141935,
+            0.0,
+            0.001415309824131991,
+            0.0013852947048929199,
+            0.0,
+            0.0031289998018038563
+          ],
+          "measure": 497.81250000000256,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "NOT_MET"
+        },
+        "whole/Pi": {
+          "RMS": 6.223104256433391e-05,
+          "MAX": 0.0026122133270993914,
+          "component_RMS": [
+            6.223104256433391e-05
+          ],
+          "component_MAX": [
+            0.0026122133270993914
+          ],
+          "measure": 497.81250000000256,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "NOT_MET"
+        },
+        "whole/traction": {
+          "RMS": 2.0638266104072484e-05,
+          "MAX": 0.0015784356417857255,
+          "component_RMS": [
+            2.0638266104072484e-05
+          ],
+          "component_MAX": [
+            0.0015784356417857255
+          ],
+          "measure": 497.81250000000256,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "NOT_MET"
+        }
+      },
+      "checked": 690,
+      "common_owner_subcells": 5600,
+      "budget_changes": {
+        "k": {
+          "mixed_physical_balance": -4.7127781595025336e-08,
+          "all_owner_gradient_balance": -1.3844684819386692e-05
+        },
+        "epsilon": {
+          "mixed_physical_balance": -9.613545137791066e-06,
+          "all_owner_gradient_balance": -1.1283924175433679e-05
+        },
+        "mechanical": {
+          "mixed_physical_balance": 4.089860685583807e-09,
+          "all_owner_gradient_balance": 2.777758303906604e-05
+        }
+      },
+      "failed_rows": 240,
+      "failed_quantities": [
+        "G",
+        "Pi",
+        "R",
+        "traction"
+      ]
+    },
+    "base-to-streamwise": {
+      "archive": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/base-to-streamwise-order20.json",
+        "bytes": 281085,
+        "sha256": "55279112eccdaa59f783ed77affd18ec24c91c3306acb12b473cf3a8429d9baf"
+      },
+      "status": "NOT_MET",
+      "example_norms": {
+        "inner/k": {
+          "RMS": 0.00802871991885921,
+          "MAX": 0.1308823616934508,
+          "component_RMS": [
+            0.00802871991885921
+          ],
+          "component_MAX": [
+            0.1308823616934508
+          ],
+          "measure": 3.7500000000000315,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "NOT_MET"
+        },
+        "inner/U": {
+          "RMS": 0.0005324260612179992,
+          "MAX": 0.004578605472362773,
+          "component_RMS": [
+            0.0005324260612179992
+          ],
+          "component_MAX": [
+            0.004578605472362773
+          ],
+          "measure": 3.7500000000000315,
+          "limits": [
+            0.0001,
+            0.0001
+          ],
+          "status": "NOT_MET"
+        },
+        "inner/W": {
+          "RMS": 0.0001315700019336186,
+          "MAX": 0.0011084214930101278,
+          "component_RMS": [
+            0.0001315700019336186
+          ],
+          "component_MAX": [
+            0.0011084214930101278
+          ],
+          "measure": 3.7500000000000315,
+          "limits": [
+            0.0001,
+            0.0001
+          ],
+          "status": "NOT_MET"
+        },
+        "inner/G": {
+          "RMS": 0.016612491671796722,
+          "MAX": 0.6098595280639039,
+          "component_RMS": [
+            0.006626313707779754,
+            0.016612491671796722,
+            0.001713333684557787,
+            0.0031174681643857246
+          ],
+          "component_MAX": [
+            0.07588184331773118,
+            0.6098595280639039,
+            0.01695681466429274,
+            0.054718550686126216
+          ],
+          "measure": 3.7500000000000315,
+          "limits": [
+            0.01,
+            0.01
+          ],
+          "status": "NOT_MET"
+        },
+        "outer/epsilon": {
+          "RMS": 0.0001870849340709123,
+          "MAX": 0.020706551655825953,
+          "component_RMS": [
+            0.0001870849340709123
+          ],
+          "component_MAX": [
+            0.020706551655825953
+          ],
+          "measure": 494.0625000000019,
+          "limits": [
+            0.01,
+            0.01
+          ],
+          "status": "NOT_MET"
+        },
+        "whole/R": {
+          "RMS": 0.0017225620527572066,
+          "MAX": 0.295513188885917,
+          "component_RMS": [
+            0.0017225620527572066,
+            0.0,
+            0.000411556166758972,
+            0.001594352800480344,
+            0.0,
+            0.001564065366139108
+          ],
+          "component_MAX": [
+            0.295513188885917,
+            0.0,
+            0.03971236684192265,
+            0.295513188885917,
+            0.0,
+            0.295513188885917
+          ],
+          "measure": 497.8125000000022,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "NOT_MET"
+        },
+        "whole/Pi": {
+          "RMS": 0.0016947674814880495,
+          "MAX": 0.05556402395402707,
+          "component_RMS": [
+            0.0016947674814880495
+          ],
+          "component_MAX": [
+            0.05556402395402707
+          ],
+          "measure": 497.8125000000022,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "NOT_MET"
+        },
+        "whole/traction": {
+          "RMS": 0.00042587243490411526,
+          "MAX": 0.04021869976394808,
+          "component_RMS": [
+            0.00042587243490411526
+          ],
+          "component_MAX": [
+            0.04021869976394808
+          ],
+          "measure": 497.8125000000022,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "NOT_MET"
+        }
+      },
+      "checked": 690,
+      "common_owner_subcells": 5600,
+      "budget_changes": {
+        "k": {
+          "mixed_physical_balance": -4.432000195821758e-06,
+          "all_owner_gradient_balance": -6.972509965866915e-07
+        },
+        "epsilon": {
+          "mixed_physical_balance": 0.00020178257588979742,
+          "all_owner_gradient_balance": 0.00021291324851979558
+        },
+        "mechanical": {
+          "mixed_physical_balance": 0.00013279304596311938,
+          "all_owner_gradient_balance": 5.54896902787161e-05
+        }
+      },
+      "failed_rows": 549,
+      "failed_quantities": [
+        "G",
+        "Pi",
+        "R",
+        "U",
+        "W",
+        "epsilon",
+        "k",
+        "traction"
+      ]
+    },
+    "base-to-tight": {
+      "archive": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/base-to-tight-order20.json",
+        "bytes": 212522,
+        "sha256": "7baae8ee02bbf699f9d86db309d3bf987cdbb107b4b4825680576a6565172afc"
+      },
+      "status": "MET",
+      "example_norms": {
+        "inner/k": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 3.7500000000000226,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "MET"
+        },
+        "inner/U": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 3.7500000000000226,
+          "limits": [
+            0.0001,
+            0.0001
+          ],
+          "status": "MET"
+        },
+        "inner/W": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 3.7500000000000226,
+          "limits": [
+            0.0001,
+            0.0001
+          ],
+          "status": "MET"
+        },
+        "inner/G": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "component_MAX": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "measure": 3.7500000000000226,
+          "limits": [
+            0.01,
+            0.01
+          ],
+          "status": "MET"
+        },
+        "outer/epsilon": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 494.0625000000011,
+          "limits": [
+            0.01,
+            0.01
+          ],
+          "status": "MET"
+        },
+        "whole/R": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "component_MAX": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "measure": 497.8125000000011,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "MET"
+        },
+        "whole/Pi": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 497.8125000000011,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "MET"
+        },
+        "whole/traction": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 497.8125000000011,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "MET"
+        }
+      },
+      "checked": 690,
+      "common_owner_subcells": 2800,
+      "budget_changes": {
+        "k": {
+          "mixed_physical_balance": 0.0,
+          "all_owner_gradient_balance": 0.0
+        },
+        "epsilon": {
+          "mixed_physical_balance": 0.0,
+          "all_owner_gradient_balance": 0.0
+        },
+        "mechanical": {
+          "mixed_physical_balance": 0.0,
+          "all_owner_gradient_balance": 0.0
+        }
+      },
+      "failed_rows": 0,
+      "failed_quantities": []
+    },
+    "radial-to-targeted": {
+      "archive": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/radial-to-targeted-order20.json",
+        "bytes": 281470,
+        "sha256": "07b4d4eb7eefa72a135860b2bf28f1bcef80ec14ebbdafd5ea7b683de457f66e"
+      },
+      "status": "NOT_MET",
+      "example_norms": {
+        "inner/k": {
+          "RMS": 0.00941669848143875,
+          "MAX": 0.26041328566273564,
+          "component_RMS": [
+            0.00941669848143875
+          ],
+          "component_MAX": [
+            0.26041328566273564
+          ],
+          "measure": 3.750000000000029,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "NOT_MET"
+        },
+        "inner/U": {
+          "RMS": 0.0006824143119385002,
+          "MAX": 0.0068247228900449874,
+          "component_RMS": [
+            0.0006824143119385002
+          ],
+          "component_MAX": [
+            0.0068247228900449874
+          ],
+          "measure": 3.750000000000029,
+          "limits": [
+            0.0001,
+            0.0001
+          ],
+          "status": "NOT_MET"
+        },
+        "inner/W": {
+          "RMS": 0.00016224821619517936,
+          "MAX": 0.0015364760338838982,
+          "component_RMS": [
+            0.00016224821619517936
+          ],
+          "component_MAX": [
+            0.0015364760338838982
+          ],
+          "measure": 3.750000000000029,
+          "limits": [
+            0.0001,
+            0.0001
+          ],
+          "status": "NOT_MET"
+        },
+        "inner/G": {
+          "RMS": 0.021745366994268364,
+          "MAX": 0.8409323778105389,
+          "component_RMS": [
+            0.008177822413911283,
+            0.021745366994268364,
+            0.0020011805255693666,
+            0.0036743152610269505
+          ],
+          "component_MAX": [
+            0.10897695377992689,
+            0.8409323778105389,
+            0.025343516654844356,
+            0.05406505011749588
+          ],
+          "measure": 3.750000000000029,
+          "limits": [
+            0.01,
+            0.01
+          ],
+          "status": "NOT_MET"
+        },
+        "outer/epsilon": {
+          "RMS": 0.0002248461057690863,
+          "MAX": 0.03369012052283166,
+          "component_RMS": [
+            0.0002248461057690863
+          ],
+          "component_MAX": [
+            0.03369012052283166
+          ],
+          "measure": 494.0625000000016,
+          "limits": [
+            0.01,
+            0.01
+          ],
+          "status": "NOT_MET"
+        },
+        "whole/R": {
+          "RMS": 0.0020401319657653385,
+          "MAX": 0.5879750294749237,
+          "component_RMS": [
+            0.0020401319657653385,
+            0.0,
+            0.0005283986567308719,
+            0.001863400815790765,
+            0.0,
+            0.0018331668251765812
+          ],
+          "component_MAX": [
+            0.5879750294749237,
+            0.0,
+            0.058945785329039456,
+            0.5879750294749237,
+            0.0,
+            0.5879750294749237
+          ],
+          "measure": 497.8125000000014,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "NOT_MET"
+        },
+        "whole/Pi": {
+          "RMS": 0.001858630765757656,
+          "MAX": 0.05874944393903171,
+          "component_RMS": [
+            0.001858630765757656
+          ],
+          "component_MAX": [
+            0.05874944393903171
+          ],
+          "measure": 497.8125000000014,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "NOT_MET"
+        },
+        "whole/traction": {
+          "RMS": 0.0005472900021635796,
+          "MAX": 0.06010155906648652,
+          "component_RMS": [
+            0.0005472900021635796
+          ],
+          "component_MAX": [
+            0.06010155906648652
+          ],
+          "measure": 497.8125000000014,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "NOT_MET"
+        }
+      },
+      "checked": 690,
+      "common_owner_subcells": 8800,
+      "budget_changes": {
+        "k": {
+          "mixed_physical_balance": -1.9331766697197603e-05,
+          "all_owner_gradient_balance": -3.74881805533671e-06
+        },
+        "epsilon": {
+          "mixed_physical_balance": 0.0002560941528205769,
+          "all_owner_gradient_balance": 0.00026876769082870283
+        },
+        "mechanical": {
+          "mixed_physical_balance": 0.00013059126003879025,
+          "all_owner_gradient_balance": 1.078975938647908e-05
+        }
+      },
+      "spatial_mechanism": {
+        "spatial_samples": "Gauss8 plus both exact owner endpoints in each common rectangle",
+        "sign": "second minus first",
+        "peak": {
+          "inner/U": {
+            "x": 10.0,
+            "r": 0.03646585482902282,
+            "second_minus_first": -0.006827120135631859,
+            "first_owner": 1003,
+            "second_owner": 1578
+          },
+          "inner/W": {
+            "x": 10.0,
+            "r": 0.07869823325779894,
+            "second_minus_first": 0.0015470504692574735,
+            "first_owner": 1255,
+            "second_owner": 1974
+          },
+          "inner/k": {
+            "x": -9.968102915722486,
+            "r": 0.0,
+            "second_minus_first": -0.26039297742119794,
+            "first_owner": 0,
+            "second_owner": 0
+          },
+          "inner/dUdx": {
+            "x": 7.5,
+            "r": 0.05476728878098855,
+            "second_minus_first": -0.10903805782800707,
+            "first_owner": 1141,
+            "second_owner": 1794
+          },
+          "inner/dUdr": {
+            "x": 10.0,
+            "r": 0.0,
+            "second_minus_first": -0.8409323778105389,
+            "first_owner": 23,
+            "second_owner": 38
+          },
+          "inner/dWdx": {
+            "x": 7.5,
+            "r": 0.08762409419844519,
+            "second_minus_first": 0.02534504136428952,
+            "first_owner": 1309,
+            "second_owner": 2058
+          },
+          "inner/dWdr": {
+            "x": 14.523271121901146,
+            "r": 0.0,
+            "second_minus_first": -0.05355359540702668,
+            "first_owner": 27,
+            "second_owner": 43
+          },
+          "outer/U": {
+            "x": 10.0,
+            "r": 0.15,
+            "second_minus_first": -0.0015464367798773138,
+            "first_owner": 1815,
+            "second_owner": 2854
+          },
+          "outer/W": {
+            "x": 7.5,
+            "r": 0.15,
+            "second_minus_first": 0.000577672709326609,
+            "first_owner": 1813,
+            "second_owner": 2850
+          },
+          "outer/k": {
+            "x": 10.0,
+            "r": 0.15,
+            "second_minus_first": 0.022105791027668964,
+            "first_owner": 1815,
+            "second_owner": 2854
+          },
+          "outer/dUdx": {
+            "x": 7.5,
+            "r": 0.15,
+            "second_minus_first": -0.026160489383898033,
+            "first_owner": 1813,
+            "second_owner": 2850
+          },
+          "outer/dUdr": {
+            "x": 10.0,
+            "r": 0.15,
+            "second_minus_first": 0.024708400942949016,
+            "first_owner": 1815,
+            "second_owner": 2854
+          },
+          "outer/dWdx": {
+            "x": 7.5,
+            "r": 0.15,
+            "second_minus_first": 0.016580866065032812,
+            "first_owner": 1813,
+            "second_owner": 2850
+          },
+          "outer/dWdr": {
+            "x": 10.0,
+            "r": 0.15,
+            "second_minus_first": -0.008915157852244896,
+            "first_owner": 1815,
+            "second_owner": 2854
+          }
+        },
+        "inner_k_bands": [
+          {
+            "x": [
+              -10.0,
+              -8.75
+            ],
+            "area": 0.18750000000000164,
+            "square": 5.317032074288995e-05,
+            "RMS_over_Kin": 0.016839686575529762
+          },
+          {
+            "x": [
+              -8.75,
+              -7.5
+            ],
+            "area": 0.18750000000000172,
+            "square": 4.265473656449004e-06,
+            "RMS_over_Kin": 0.004769611392387694
+          },
+          {
+            "x": [
+              -7.5,
+              -5.0
+            ],
+            "area": 0.3750000000000031,
+            "square": 4.721555816048237e-06,
+            "RMS_over_Kin": 0.0035483539154743094
+          },
+          {
+            "x": [
+              -5.0,
+              0.0
+            ],
+            "area": 0.75000000000001,
+            "square": 1.106130877922314e-05,
+            "RMS_over_Kin": 0.00384036609005322
+          },
+          {
+            "x": [
+              0.0,
+              4.75
+            ],
+            "area": 0.7125000000000052,
+            "square": 6.762520572151171e-06,
+            "RMS_over_Kin": 0.0030807883639370616
+          },
+          {
+            "x": [
+              4.75,
+              8.75
+            ],
+            "area": 0.6000000000000055,
+            "square": 0.00012053978305332633,
+            "RMS_over_Kin": 0.014173906956877088
+          },
+          {
+            "x": [
+              8.75,
+              12.5
+            ],
+            "area": 0.5625000000000048,
+            "square": 0.00011581535706541599,
+            "RMS_over_Kin": 0.014349005823271985
+          },
+          {
+            "x": [
+              12.5,
+              15.0
+            ],
+            "area": 0.3750000000000033,
+            "square": 1.6191968903236185e-05,
+            "RMS_over_Kin": 0.006571041298147713
+          }
+        ]
+      },
+      "failed_rows": 548,
+      "failed_quantities": [
+        "G",
+        "Pi",
+        "R",
+        "U",
+        "W",
+        "epsilon",
+        "k",
+        "traction"
+      ]
+    },
+    "streamwise-to-targeted": {
+      "archive": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/streamwise-to-targeted-order20.json",
+        "bytes": 282162,
+        "sha256": "a6687995c60949b159a88bc0f7958083e1f700f2118dcc6aa6a30040d83747a0"
+      },
+      "status": "NOT_MET",
+      "example_norms": {
+        "inner/k": {
+          "RMS": 0.004774940057903531,
+          "MAX": 0.20418269137422845,
+          "component_RMS": [
+            0.004774940057903531
+          ],
+          "component_MAX": [
+            0.20418269137422845
+          ],
+          "measure": 3.750000000000034,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "NOT_MET"
+        },
+        "inner/U": {
+          "RMS": 0.0003124764589387766,
+          "MAX": 0.003731096449870075,
+          "component_RMS": [
+            0.0003124764589387766
+          ],
+          "component_MAX": [
+            0.003731096449870075
+          ],
+          "measure": 3.750000000000034,
+          "limits": [
+            0.0001,
+            0.0001
+          ],
+          "status": "NOT_MET"
+        },
+        "inner/W": {
+          "RMS": 7.27055511426939e-05,
+          "MAX": 0.0008393549367225209,
+          "component_RMS": [
+            7.27055511426939e-05
+          ],
+          "component_MAX": [
+            0.0008393549367225209
+          ],
+          "measure": 3.750000000000034,
+          "limits": [
+            0.0001,
+            0.0001
+          ],
+          "status": "NOT_MET"
+        },
+        "inner/G": {
+          "RMS": 0.010188697573059267,
+          "MAX": 0.46900641943162924,
+          "component_RMS": [
+            0.005533109867764906,
+            0.010188697573059267,
+            0.001297908702467472,
+            0.0023432420714302746
+          ],
+          "component_MAX": [
+            0.06754838481722214,
+            0.46900641943162924,
+            0.015600362500047347,
+            0.027970380701179246
+          ],
+          "measure": 3.750000000000034,
+          "limits": [
+            0.01,
+            0.01
+          ],
+          "status": "NOT_MET"
+        },
+        "outer/epsilon": {
+          "RMS": 9.372705967687078e-05,
+          "MAX": 0.015883214311185667,
+          "component_RMS": [
+            9.372705967687078e-05
+          ],
+          "component_MAX": [
+            0.015883214311185667
+          ],
+          "measure": 494.0625000000018,
+          "limits": [
+            0.01,
+            0.01
+          ],
+          "status": "NOT_MET"
+        },
+        "whole/R": {
+          "RMS": 0.0010037914248494978,
+          "MAX": 0.4610145894572941,
+          "component_RMS": [
+            0.0010037914248494978,
+            0.0,
+            0.0002339102700147977,
+            0.000945921126823531,
+            0.0,
+            0.0009365153137663792
+          ],
+          "component_MAX": [
+            0.4610145894572941,
+            0.0,
+            0.03152169251162663,
+            0.4610145894572941,
+            0.0,
+            0.4610145894572941
+          ],
+          "measure": 497.81250000000216,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "NOT_MET"
+        },
+        "whole/Pi": {
+          "RMS": 0.000393910565319271,
+          "MAX": 0.03144285902207889,
+          "component_RMS": [
+            0.000393910565319271
+          ],
+          "component_MAX": [
+            0.03144285902207889
+          ],
+          "measure": 497.81250000000216,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "NOT_MET"
+        },
+        "whole/traction": {
+          "RMS": 0.0002442073685789826,
+          "MAX": 0.03294973780101052,
+          "component_RMS": [
+            0.0002442073685789826
+          ],
+          "component_MAX": [
+            0.03294973780101052
+          ],
+          "measure": 497.81250000000216,
+          "limits": [
+            0.001,
+            0.001
+          ],
+          "status": "NOT_MET"
+        }
+      },
+      "checked": 690,
+      "common_owner_subcells": 7656,
+      "budget_changes": {
+        "k": {
+          "mixed_physical_balance": -1.494689428297087e-05,
+          "all_owner_gradient_balance": -1.689625187813671e-05
+        },
+        "epsilon": {
+          "mixed_physical_balance": 4.4698031792988386e-05,
+          "all_owner_gradient_balance": 4.4570518133473594e-05
+        },
+        "mechanical": {
+          "mixed_physical_balance": -2.1976960636435582e-06,
+          "all_owner_gradient_balance": -1.692234785317098e-05
+        }
+      },
+      "spatial_mechanism": {
+        "spatial_samples": "Gauss8 plus both exact owner endpoints in each common rectangle",
+        "sign": "second minus first",
+        "peak": {
+          "inner/U": {
+            "x": 10.0,
+            "r": 0.035961686070036546,
+            "second_minus_first": -0.0037313431888235105,
+            "first_owner": 999,
+            "second_owner": 1578
+          },
+          "inner/W": {
+            "x": 10.0,
+            "r": 0.07500000000000001,
+            "second_minus_first": 0.0008393549367225209,
+            "first_owner": 1223,
+            "second_owner": 1930
+          },
+          "inner/k": {
+            "x": -9.968102915722486,
+            "r": 0.0,
+            "second_minus_first": -0.20306595879200073,
+            "first_owner": 0,
+            "second_owner": 0
+          },
+          "inner/dUdx": {
+            "x": 10.0,
+            "r": 0.037910285083658436,
+            "second_minus_first": -0.06755114540562726,
+            "first_owner": 999,
+            "second_owner": 1578
+          },
+          "inner/dUdr": {
+            "x": 12.5,
+            "r": 0.0,
+            "second_minus_first": -0.4690064194316257,
+            "first_owner": 51,
+            "second_owner": 40
+          },
+          "inner/dWdx": {
+            "x": 10.0,
+            "r": 0.07869823325779894,
+            "second_minus_first": 0.015733242485618387,
+            "first_owner": 1279,
+            "second_owner": 1974
+          },
+          "inner/dWdr": {
+            "x": 10.0,
+            "r": 0.0625,
+            "second_minus_first": 0.027970380701179246,
+            "first_owner": 1223,
+            "second_owner": 1886
+          },
+          "outer/U": {
+            "x": 10.0,
+            "r": 0.15,
+            "second_minus_first": -0.0007463440076903027,
+            "first_owner": 1839,
+            "second_owner": 2854
+          },
+          "outer/W": {
+            "x": 9.375,
+            "r": 0.15,
+            "second_minus_first": -0.0002734327065946435,
+            "first_owner": 1838,
+            "second_owner": 2853
+          },
+          "outer/k": {
+            "x": 10.0,
+            "r": 0.15,
+            "second_minus_first": 0.010392302834728584,
+            "first_owner": 1839,
+            "second_owner": 2854
+          },
+          "outer/dUdx": {
+            "x": 10.0,
+            "r": 0.15,
+            "second_minus_first": -0.013742597551591906,
+            "first_owner": 1839,
+            "second_owner": 2854
+          },
+          "outer/dUdr": {
+            "x": -9.981466109762357,
+            "r": 0.15,
+            "second_minus_first": -0.02135366439614539,
+            "first_owner": 1792,
+            "second_owner": 2816
+          },
+          "outer/dWdx": {
+            "x": 7.5,
+            "r": 0.15,
+            "second_minus_first": 0.008204431720135023,
+            "first_owner": 1835,
+            "second_owner": 2850
+          },
+          "outer/dWdr": {
+            "x": 10.0,
+            "r": 0.15,
+            "second_minus_first": -0.004715038616696479,
+            "first_owner": 1839,
+            "second_owner": 2854
+          }
+        },
+        "inner_k_bands": [
+          {
+            "x": [
+              -10.0,
+              -8.75
+            ],
+            "area": 0.18750000000000164,
+            "square": 1.8645504309703425e-05,
+            "RMS_over_Kin": 0.009972095549670126
+          },
+          {
+            "x": [
+              -8.75,
+              -7.5
+            ],
+            "area": 0.18750000000000172,
+            "square": 3.347130334619747e-07,
+            "RMS_over_Kin": 0.0013360898841260076
+          },
+          {
+            "x": [
+              -7.5,
+              -5.0
+            ],
+            "area": 0.3750000000000031,
+            "square": 1.092169313635596e-07,
+            "RMS_over_Kin": 0.0005396713354466987
+          },
+          {
+            "x": [
+              -5.0,
+              0.0
+            ],
+            "area": 0.7500000000000062,
+            "square": 7.32958920518391e-08,
+            "RMS_over_Kin": 0.00031261454871633535
+          },
+          {
+            "x": [
+              0.0,
+              4.75
+            ],
+            "area": 0.7125000000000068,
+            "square": 3.9890241581684275e-08,
+            "RMS_over_Kin": 0.00023661425141840715
+          },
+          {
+            "x": [
+              4.75,
+              8.75
+            ],
+            "area": 0.6000000000000055,
+            "square": 2.125493493287835e-05,
+            "RMS_over_Kin": 0.005951881345826454
+          },
+          {
+            "x": [
+              8.75,
+              12.5
+            ],
+            "area": 0.562500000000005,
+            "square": 4.1277907691965744e-05,
+            "RMS_over_Kin": 0.008566384710479588
+          },
+          {
+            "x": [
+              12.5,
+              15.0
+            ],
+            "area": 0.3750000000000031,
+            "square": 3.7647340541370468e-06,
+            "RMS_over_Kin": 0.003168483992547862
+          }
+        ]
+      },
+      "failed_rows": 382,
+      "failed_quantities": [
+        "G",
+        "Pi",
+        "R",
+        "U",
+        "W",
+        "epsilon",
+        "k",
+        "traction"
+      ]
+    }
+  },
+  "notes": "Classify using the frozen field, admissibility, physical and convergence conditions together",
+  "qualified_reference": null,
+  "TASK3_READY": false,
+  "full_linux_assessment": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/assessment.json",
+    "bytes": 919194,
+    "sha256": "7567ac2ec24fd74cc5b70ddae4ef40792d12f0e15140eea5ceedbbfe42609792"
+  },
+  "classification": "C_UNRESOLVED_WITHIN_ADMITTED_V2_MATRIX",
+  "physical_reference_qualified": false
+}

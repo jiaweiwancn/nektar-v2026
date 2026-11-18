@@ -507,19 +507,97 @@
     },
     "live_account_snapshot": {
       "path": "/home/jay/build/wj-h27-coupling-r1-20261117/accounting.json",
-      "bytes": 248363,
-      "sha256": "fbb16155b6da2c4a0b5e5342339a4ffd0dc1645de99c35b3ea6d67e870986ad6"
+      "bytes": 258335,
+      "sha256": "8807863fbdd0ad98d9f92a7c7e408cd612fe01ab68d8f1f5255c8fd2c3d18378"
     },
-    "consumed_aggregate_seconds": 17116.471991412807,
-    "remaining_excluding_evidence_seconds": 22483.528008587193,
+    "consumed_aggregate_seconds": 19093.30172178487,
+    "remaining_excluding_evidence_seconds": 20506.69827821513,
     "evidence_protected_seconds": 3600,
     "reserved_operations": [],
     "account_closed": false,
-    "latest_checkpoint": "docs/plans/wj-h27-continuation-cp1.md"
+    "latest_checkpoint": "docs/plans/wj-h27-continuation-cp2.md",
+    "cp2_settled_receipt": {
+      "path": "docs/plans/wj-h27-linux/continuation-cp2-source19/post-publication.json",
+      "bytes": 10993,
+      "sha256": "40b4288f3f14ffeee589279c449354be05a2d0fdc9a6519b4f02e339a8d8dfb3"
+    }
   },
   "source19_coupled_numerical_qualification": {
     "path": "docs/plans/wj-h27-linux/continuation-cp1-source19/numerical-coverage.json",
     "bytes": 8092,
     "sha256": "1e99fee0f21caaef8b4787d6dfc3812a0000a8b1fc9823e2c65595e8cba3bc60"
+  },
+  "source19_reference_resolution": {
+    "classification": "C_UNRESOLVED_WITHIN_ADMITTED_V2_MATRIX",
+    "result": "NOT_MET",
+    "qualified_reference": false,
+    "source_identity": "56c35390fdf092180913f60c3ae348ca10cdcdf4e6b889c3afd589eddb511acf",
+    "checkpoint": "docs/plans/wj-h27-continuation-cp2.md",
+    "assessment": {
+      "path": "docs/plans/wj-h27-linux/continuation-cp2-source19/assessment-summary.json",
+      "bytes": 102442,
+      "sha256": "09ddaef6e7a1717d9517a84b7ed61a5415ce24478a68844604e5f4a8fe0e0b96"
+    },
+    "latest_developed_diagnostic": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/targeted.result.json",
+      "bytes": 46882615,
+      "sha256": "30efa1bf21f6028413184b7058ad0821a0455917c9a3127841029ea86515a1af"
+    },
+    "mesh": {
+      "nx": 44,
+      "nr": 132,
+      "cells": 5808
+    },
+    "inner_k_envelope": {
+      "RMS": 0.13267988437826267,
+      "MAX": 0.4062625021753682,
+      "component_RMS": [
+        0.13267988437826267
+      ],
+      "component_MAX": [
+        0.4062625021753682
+      ],
+      "measure": 3.7500000000000293,
+      "limits": [
+        0.05,
+        0.1
+      ],
+      "status": "NOT_MET"
+    },
+    "numerical_inner_k_streamwise_to_targeted": {
+      "RMS": 0.004774940057903531,
+      "MAX": 0.20418269137422845,
+      "component_RMS": [
+        0.004774940057903531
+      ],
+      "component_MAX": [
+        0.20418269137422845
+      ],
+      "measure": 3.750000000000034,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "NOT_MET"
+    },
+    "numerical_inner_k_radial_to_targeted": {
+      "RMS": 0.00941669848143875,
+      "MAX": 0.26041328566273564,
+      "component_RMS": [
+        0.00941669848143875
+      ],
+      "component_MAX": [
+        0.26041328566273564
+      ],
+      "measure": 3.750000000000029,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "NOT_MET"
+    },
+    "costs_already_charged_seconds": 1976.829730372061,
+    "long_physical_pilots_admitted": false,
+    "v4_active": false
   }
 }
