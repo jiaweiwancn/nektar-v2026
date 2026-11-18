@@ -1,0 +1,239 @@
+{
+  "schema": "WJH27MatchedInletPrincipalObstructionV1",
+  "prior": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/active-inlet-cp1-edge/branch-assessment.json",
+    "sha256": "703e9e31be0662076e18a3ec17b468682bb7f6b20e3d3a9aeafc69aebea777de"
+  },
+  "table": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+  },
+  "first_sampled_H_crossing": {
+    "q": 3.6998021118580775,
+    "shear": 0.0026780993439189807,
+    "minimum_covariance_over_k": 0.2738544817085211,
+    "minimum_principal_over_mu": 9.999067791229923e-09,
+    "tangent_refinement_difference": 5.392353230604385e-12,
+    "radii_checked": 1
+  },
+  "H_bracket": [
+    3.6926410256410254,
+    3.721481971153846
+  ],
+  "controls": [
+    {
+      "label": "below",
+      "H": {
+        "q": 3.6997821118580774,
+        "shear": 0.0026780982205349456,
+        "minimum_covariance_over_k": 0.27385495394327847,
+        "minimum_principal_over_mu": 1.5436418750509597e-06,
+        "tangent_refinement_difference": 4.5430326167661406e-12,
+        "radii_checked": 1
+      },
+      "current": {
+        "T_in": 0.002678098220534946,
+        "T_in_over_tau": 1.0296417610668769,
+        "Q_H": -4.1184510933997806e-05,
+        "Q_H_over_A": -0.11857506107854084,
+        "endpoint_errors": {
+          "U0": 0.0,
+          "Q0_over_A": -1.0975248487810063e-13
+        },
+        "quadrature": [
+          {
+            "order": 32,
+            "production": 0.0009528267016266963,
+            "destruction": 0.0009116421906926982,
+            "budget_error_over_A": 1.1064992930741826e-13,
+            "shear_error_over_tau": 1.167153434432685e-15
+          },
+          {
+            "order": 48,
+            "production": 0.0009528267016266965,
+            "destruction": 0.0009116421906926982,
+            "budget_error_over_A": 1.1096208389152874e-13,
+            "shear_error_over_tau": 1.167153434432685e-15
+          },
+          {
+            "order": 64,
+            "production": 0.0009528267016266962,
+            "destruction": 0.0009116421906926982,
+            "budget_error_over_A": 1.1033777472330777e-13,
+            "shear_error_over_tau": 1.0004172295137299e-15
+          }
+        ],
+        "independent_forward_profile_error": null,
+        "min_k": 0.008809015145515192,
+        "min_E": 0.0023155240547992535,
+        "min_shear_tangent": 0.00011490971129249645,
+        "guard": {
+          "minimum_covariance_over_k": 0.2738549539432785,
+          "minimum_principal_over_mu": 1.5436389079583872e-06,
+          "tangent_refinement_difference": 6.473863112255174e-12,
+          "radii_checked": 516
+        },
+        "sampled_admissibility_pass": true,
+        "interface": {
+          "r": 0.15,
+          "U": 0.42864957994800895,
+          "k": 0.008809015145515192,
+          "E": 0.0023155240547992535,
+          "U_r": [
+            0.9725189860622411,
+            0.8902437734714551
+          ],
+          "k_r": [
+            -0.013792981720186127,
+            0.0
+          ],
+          "E_r": [
+            -0.015436827031995023,
+            -0.015436827031995023
+          ],
+          "finite_nu_total_shear": [
+            0.002678098220534946,
+            0.0026581819048451445
+          ],
+          "shear_inner_minus_outer": 1.9916315689801588e-05,
+          "stress_normal_component": [
+            0.003607276408864722,
+            0.0036976112956483525
+          ],
+          "Q": [
+            -4.1184510933997806e-05,
+            0.0
+          ]
+        }
+      },
+      "U_H": 0.42864957994800895,
+      "gap": 0.008594661238678414,
+      "independent_match": {
+        "T": 0.002678098220534946,
+        "U_H": 0.428649579948097,
+        "sampled_ground_k": 0.015709025955834444,
+        "Q_H_over_A": -0.11857506107854084,
+        "match_residual": [
+          3.0020430585864233e-13,
+          5.345723863570129e-13
+        ],
+        "difference_in_U_H": 8.804068585277491e-14,
+        "fixed_scaled_profile_difference": {
+          "k": 1.765698698363849e-12,
+          "Q": 3.512912183367689e-12,
+          "U": 1.2874146193553315e-12,
+          "U_r": 1.606159649725214e-12,
+          "k_r": 1.001498883823615e-11
+        }
+      },
+      "witness_representation": {
+        "derivative_degree": 18,
+        "samples": 2060,
+        "maximum_scaled_error": {
+          "U": 3.1669666888944903e-12,
+          "k": 9.895527845949283e-13,
+          "G": 5.568120631238571e-09,
+          "kr": 2.2225095599778074e-10
+        },
+        "maximum_scaled_join_jump": 1.3233858453531866e-11
+      },
+      "diagnostic_polynomial": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/active-inlet-cp1-principal-r1/unmatched-witness-polynomials.json",
+        "sha256": "5343b3d20d15f22e765fe393cb39c31b57d8c1b744fe14355c96eb3fd70877e2"
+      }
+    },
+    {
+      "label": "above",
+      "H": {
+        "q": 3.6998221118580776,
+        "shear": 0.0026781004672857874,
+        "minimum_covariance_over_k": 0.27385400947772665,
+        "minimum_principal_over_mu": -1.523627131912369e-06,
+        "tangent_refinement_difference": 5.5420112943238564e-12,
+        "radii_checked": 1
+      },
+      "current": {
+        "T_in": 0.002678100467285787,
+        "T_in_over_tau": 1.029642624869584,
+        "Q_H": -4.118580612075599e-05,
+        "Q_H_over_A": -0.1185787900738713,
+        "endpoint_errors": {
+          "U0": 0.0,
+          "Q0_over_A": -1.105400493361941e-13
+        },
+        "quadrature": [
+          {
+            "order": 32,
+            "production": 0.0009528279968134545,
+            "destruction": 0.0009116421906926982,
+            "budget_error_over_A": 1.1145700342701863e-13,
+            "shear_error_over_tau": 1.167153434432685e-15
+          },
+          {
+            "order": 48,
+            "production": 0.0009528279968134548,
+            "destruction": 0.0009116421906926982,
+            "budget_error_over_A": 1.1208131259523958e-13,
+            "shear_error_over_tau": 1.0004172295137299e-15
+          },
+          {
+            "order": 64,
+            "production": 0.0009528279968134545,
+            "destruction": 0.0009116421906926982,
+            "budget_error_over_A": 1.1145700342701863e-13,
+            "shear_error_over_tau": 1.0004172295137299e-15
+          }
+        ],
+        "independent_forward_profile_error": null,
+        "min_k": 0.008809015145515192,
+        "min_E": 0.0023155240547992535,
+        "min_shear_tangent": 0.00011490971129249645,
+        "guard": {
+          "minimum_covariance_over_k": 0.27385400947772665,
+          "minimum_principal_over_mu": -1.523623409783296e-06,
+          "tangent_refinement_difference": 7.898903753300601e-12,
+          "radii_checked": 516
+        },
+        "sampled_admissibility_pass": false,
+        "interface": {
+          "r": 0.15,
+          "U": 0.42864982134039414,
+          "k": 0.008809015145515192,
+          "E": 0.0023155240547992535,
+          "U_r": [
+            0.9725295004001853,
+            0.8902437734714551
+          ],
+          "k_r": [
+            -0.013793415487320293,
+            0.0
+          ],
+          "E_r": [
+            -0.015436827031995023,
+            -0.015436827031995023
+          ],
+          "finite_nu_total_shear": [
+            0.0026781004672857883,
+            0.0026581819048451445
+          ],
+          "shear_inner_minus_outer": 1.9918562440643817e-05,
+          "stress_normal_component": [
+            0.0036072655151204737,
+            0.0036976112956483525
+          ],
+          "Q": [
+            -4.118580612075599e-05,
+            0.0
+          ]
+        }
+      },
+      "U_H": 0.42864982134039414,
+      "gap": 0.008594419846293222
+    }
+  ],
+  "scope": "Fixed K and E at H. Finite q scan plus directional stationary points of the supported planar quartic.",
+  "raw_assessment": {
+    "sha256": "422b75f4f00d905fe0496ebc5a29eeb06577b1fecc4c0a1e01c9e80b95f66494",
+    "archive_path": "science/active-inlet-cp1-principal-r1/principal-assessment.json"
+  }
+}

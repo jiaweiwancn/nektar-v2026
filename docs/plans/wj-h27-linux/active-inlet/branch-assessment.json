@@ -1,0 +1,170 @@
+{
+  "schema": "WJH27MatchedInletBranchAssessmentV1",
+  "status": "BLOCKED",
+  "table": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+  },
+  "cutoff": 0.02954486569124273,
+  "exact_shear_ceiling_at_H": 0.0027362151252511993,
+  "maximum_q_at_H": 5.538461538461538,
+  "target_U_H": 0.43724424118668737,
+  "last_column": {
+    "Q_H_over_A": -0.22270442755496744,
+    "U_H": 0.43582682210201834,
+    "k_ground": 0.01662207723890467,
+    "G_ground": 23.811870158507105,
+    "ground_residual_over_A": -1.1762476843230063e-13,
+    "dUH_d_T_over_tau": 0.379133124746201,
+    "upper_match_slope": 1.8581069523611078
+  },
+  "anchor_gap": 0.0014174190846690249,
+  "highest_sampled_U_H": 0.43582682210201834,
+  "minimum_sampled_UH_sensitivity": 0.054702950226052316,
+  "sampled_shears": 31,
+  "sampled_roots": 24,
+  "checked_branch": {
+    "T_in": 0.0027362151252484633,
+    "T_in_over_tau": 1.051985822856003,
+    "Q_H": -7.735161886707372e-05,
+    "Q_H_over_A": -0.22270442755496744,
+    "endpoint_errors": {
+      "U0": 0.0,
+      "Q0_over_A": -1.1762476843230063e-13
+    },
+    "quadrature": [
+      {
+        "order": 32,
+        "production": 0.000988993809559773,
+        "destruction": 0.0009116421906926982,
+        "budget_error_over_A": 1.2074631427340542e-13,
+        "shear_error_over_tau": 1.3338896393516399e-15
+      },
+      {
+        "order": 48,
+        "production": 0.0009889938095597728,
+        "destruction": 0.0009116421906926982,
+        "budget_error_over_A": 1.2012200510518447e-13,
+        "shear_error_over_tau": 1.3338896393516399e-15
+      },
+      {
+        "order": 64,
+        "production": 0.0009889938095597722,
+        "destruction": 0.0009116421906926982,
+        "budget_error_over_A": 1.182490776005216e-13,
+        "shear_error_over_tau": 1.5006258442705948e-15
+      }
+    ],
+    "independent_forward_profile_error": null,
+    "min_k": 0.008809015145515192,
+    "min_E": 0.0023155240547992535,
+    "min_shear_tangent": 6.423173804087474e-05,
+    "guard": {
+      "minimum_covariance_over_k": 0.24240259795675537,
+      "minimum_principal_over_mu": -0.104312949025365,
+      "tangent_refinement_difference": 6.931122342734852e-12,
+      "radii_checked": 516
+    },
+    "sampled_admissibility_pass": false,
+    "interface": {
+      "r": 0.15,
+      "U": 0.43582682210201834,
+      "k": 0.008809015145515192,
+      "E": 0.0023155240547992535,
+      "U_r": [
+        1.4558314075600207,
+        0.8902437734714551
+      ],
+      "k_r": [
+        -0.025905599966214936,
+        0.0
+      ],
+      "E_r": [
+        -0.015436827031995023,
+        -0.015436827031995023
+      ],
+      "finite_nu_total_shear": [
+        0.0027362151252484633,
+        0.0026581819048451445
+      ],
+      "shear_inner_minus_outer": 7.803322040331878e-05,
+      "stress_normal_component": [
+        0.0032299722200473673,
+        0.0036976112956483525
+      ],
+      "Q": [
+        -7.735161886707372e-05,
+        0.0
+      ]
+    }
+  },
+  "cached_sweep": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/active-inlet-cp1-obstruction/fixed-shear-trials.json",
+    "sha256": "5ccada50ef723fc97fffbe2503b6e8253b4f49480884248e016e240d8a55ea50"
+  },
+  "edge_approach": [
+    [
+      {
+        "Q_H_over_A": -0.22265049614885943,
+        "U_H": 0.43582283410502565,
+        "k_ground": 0.01662166407696076,
+        "G_ground": 23.811632039829334,
+        "ground_residual_over_A": -1.1416930768837208e-13,
+        "dUH_d_T_over_tau": 0.3790515131429907,
+        "upper_match_slope": 1.8581287783966922
+      }
+    ],
+    [
+      {
+        "Q_H_over_A": -0.222703888212816,
+        "U_H": 0.4358267822181929,
+        "k_ground": 0.01662207310739775,
+        "G_ground": 23.8118677773439,
+        "ground_residual_over_A": -1.155771442093445e-13,
+        "dUH_d_T_over_tau": 0.37913230830539013,
+        "upper_match_slope": 1.8581071704677181
+      }
+    ],
+    [
+      {
+        "Q_H_over_A": -0.22270442216688194,
+        "U_H": 0.43582682170357495,
+        "k_ground": 0.01662207719763047,
+        "G_ground": 23.811870134719047,
+        "ground_residual_over_A": -1.1487891801026384e-13,
+        "dUH_d_T_over_tau": 0.37913311658984883,
+        "upper_match_slope": 1.858106954540009
+      }
+    ],
+    [
+      {
+        "Q_H_over_A": -0.22270442755496744,
+        "U_H": 0.43582682210201834,
+        "k_ground": 0.01662207723890467,
+        "G_ground": 23.811870158507105,
+        "ground_residual_over_A": -1.1762476843230063e-13,
+        "dUH_d_T_over_tau": 0.379133124746201,
+        "upper_match_slope": 1.8581069523611078
+      }
+    ]
+  ],
+  "two_ended": {
+    "T": 0.0027362151252484633,
+    "U_H": 0.435826822102134,
+    "sampled_ground_k": 0.01662207723890467,
+    "Q_H_over_A": -0.22270442755496744,
+    "match_residual": [
+      3.9390712913700554e-13,
+      4.4536596632838155e-13
+    ],
+    "difference_in_U_H": 1.156852391659413e-13,
+    "fixed_scaled_profile_difference": {
+      "k": 1.9904078385479806e-12,
+      "Q": 3.839872864119798e-12,
+      "U": 1.2305712004945235e-12,
+      "U_r": 1.0509371151101732e-12,
+      "k_r": 8.619771563189715e-12
+    }
+  },
+  "interpretation": "Canonical increasing-shear branch reached the H traction bound with a positive velocity gap. The fixed-shear scan and two-ended solve test this obstruction without a global-uniqueness claim."
+}
