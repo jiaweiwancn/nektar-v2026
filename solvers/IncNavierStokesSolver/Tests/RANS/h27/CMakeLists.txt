@@ -86,6 +86,15 @@ target_compile_options(WJH27CutoffPanelProbe PRIVATE
 add_executable(WJH27CutoffPanelsUnit cutoff_panels_unit.cpp)
 target_compile_options(WJH27CutoffPanelsUnit PRIVATE
     -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra)
+# The transport diagnostic has its own main and requires a fresh steady
+# physical session. It is deliberately absent from the production factory.
+file(SHA256 "${CMAKE_CURRENT_LIST_DIR}/inner_k_fixture.cpp" inner_k_main)
+string(SHA256 inner_k_source "WJInnerKFixture|${wj_source_identity}|${inner_k_main}")
+add_executable(WJH27InnerKFixture inner_k_fixture.cpp)
+target_link_libraries(WJH27InnerKFixture PRIVATE WJNativeMixedFlow)
+target_compile_definitions(WJH27InnerKFixture PRIVATE WJ_INNER_K_FIXTURE_SOURCE_ID="${inner_k_source}")
+target_compile_options(WJH27InnerKFixture PRIVATE
+    -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra)
 # The real production main, Standard Driver and complete existing factory
 # source inventory. No probe is relabelled as the application executable.
 set(h27_solver_root "${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver")

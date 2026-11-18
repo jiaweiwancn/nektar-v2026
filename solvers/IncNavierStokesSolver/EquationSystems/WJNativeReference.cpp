@@ -3,6 +3,7 @@
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/math/quadrature/gauss_kronrod.hpp>
+#include <algorithm>
 #include <cmath>
 #include <fstream>
 #include <iomanip>
@@ -69,7 +70,8 @@ double Reference::Polynomial::Evaluate(double argument) const
     const double value=x*b1-b2+coefficients[0]; Finite(value,"Clenshaw result"); return value;
 }
 
-Reference::Reference(const std::string &json, const std::string &expectedSha256)
+Reference::Reference(const std::string &json, const std::string &expectedSha256,
+                     InnerKTransport transport)
 {
     HashSyntax(expectedSha256);
     std::ifstream input(json,std::ios::binary);
@@ -78,6 +80,7 @@ Reference::Reference(const std::string &json, const std::string &expectedSha256)
     Require(!input.bad() && !bytes.empty() && bytes.size()<1024*1024,"invalid table size/read");
     m_identity=RANSWallR3::Hash(bytes);
     Require(m_identity==expectedSha256,"immutable table SHA256 differs");
+    m_boundaryIdentity=m_identity;
     Tree table; std::istringstream stream(bytes); boost::property_tree::read_json(stream,table);
     Require(table.get<std::string>("schema")=="WJH27V2ReferenceTablesV1","schema differs");
     Require(table.get<std::string>("status")=="PASS","table is not qualified PASS");
@@ -191,13 +194,16 @@ Reference::Reference(const std::string &json, const std::string &expectedSha256)
     const double z=m_inletSlope*p.H/m_inletD;
     const double budget=std::log1p(z)+p.nu/(m_inletD+m_inletSlope*p.H)-p.nu/m_inletD;
     // This OLD cutoff appears ONLY in the fixed historical inlet k profile.
-    // The current dependent epsilon always uses m_logCutoff's NEW table.
+    // The ordinary v2 dependent epsilon uses its qualified cutoff table.
     m_inletCutoff=p.H*std::exp(1-budget);
     Require(m_inletCutoff>0 && m_inletCutoff<p.H,"historical inlet cutoff is inadmissible");
     p.z0=p.H/(1+z); Same(p.z0,.005676270321216798,"fixed fitted aerodynamic roughness");
     Same(m_inletA,Number(table,"inlet_binding.A_in"),"inlet amplitude");
     Same(m_inletA/p.H,Number(table,"inlet_binding.epsilon_in_H"),"epsilon inlet/H corner");
     for (double K:{p.KMinimum,p.KIn,p.KMaximum}) { Cutoff(K); Auxiliary(K,0.); }
+    Require(transport==InnerKTransport::ScalarV2||transport==InnerKTransport::AuxiliaryHistoricalFixtureV1,
+            "unknown inner-k transport policy");
+    if (transport==InnerKTransport::AuxiliaryHistoricalFixtureV1) BindFixtureTransport();
 }
 
 void Reference::CheckK(double K) const
@@ -206,11 +212,77 @@ void Reference::CheckRadius(double r) const
 { Finite(r,"radius"); Require(r>=0 && r<=m_p.topRadius,"radius outside fixed physical domain"); }
 double Reference::Cutoff(double K) const
 {
-    CheckK(K); const double c=m_p.H*std::exp(m_logCutoff.Evaluate(K));
+    CheckK(K);
+    const double logCutoff=m_transport==InnerKTransport::ScalarV2 ? m_logCutoff.Evaluate(K) : HistoricalLogCutoff(K)[0];
+    const double c=m_p.H*std::exp(logCutoff);
     Require(std::isfinite(c) && c>0 && c<.4*m_p.H,"cutoff outside selected 0<c<.4H branch"); return c;
 }
 double Reference::CutoffDerivative(double K) const
-{ const double v=Cutoff(K)*m_logCutoffDerivative.Evaluate(K); Finite(v,"cutoff derivative"); return v; }
+{
+    const double slope=m_transport==InnerKTransport::ScalarV2 ? m_logCutoffDerivative.Evaluate(K) : HistoricalLogCutoff(K)[1];
+    const double v=Cutoff(K)*slope;
+    Finite(v,"cutoff derivative");return v;
+}
+
+const char *Reference::TransportName() const
+{
+    return m_transport==InnerKTransport::ScalarV2 ? "ScalarCdV2" : "AuxiliaryHistoricalInnerKFixtureV1";
+}
+
+double Reference::KDiffusivity(double k, double epsilon, double auxiliary, bool outer) const
+{
+    if (!outer && m_transport==InnerKTransport::AuxiliaryHistoricalFixtureV1)
+        return m_p.nu+auxiliary;
+    return m_p.nu+m_p.Cd*k*k/(m_p.sigmaK*epsilon);
+}
+
+std::array<double,2> Reference::HistoricalLogCutoff(double K) const
+{
+    const auto ground=Auxiliary(K,0.);
+    const double a=ground.dr, nu=m_p.nu, d=nu+ground.value, B=d+a*m_p.H;
+    const double dK=ground.dK, BK=dK+a*m_p.H/(2*K);
+    const double J=std::log1p(a*m_p.H/d)+nu/B-nu/d;
+    const double JK=BK*(B-nu)/(B*B)-dK*(d-nu)/(d*d);
+    Require(std::isfinite(J)&&std::isfinite(JK)&&JK>0,"invalid historical cutoff slope");
+    return {1-J,-JK};
+}
+
+void Reference::BindFixtureTransport()
+{
+    Require(m_boundaryIdentity==QualifiedTableSha256,
+            "the inner-k fixture requires the exact retained v2 boundary table");
+    const long double nu=m_p.nu, H=m_p.H;
+    const long double multiplier=10.7L*m_p.kappa/std::sqrt(static_cast<long double>(m_p.qe));
+    auto roughness=[&](long double K){return m_p.roughness*std::sqrt(K)/(70*nu);};
+    const long double X0=roughness(m_p.KMinimum), X1=roughness(m_p.KMaximum);
+    auto m=[](long double X){return 1-.79L*std::pow(X,-.28L);};
+    Require(multiplier>1 && X0>1 && m(X0)>std::max(0.L,.5L-.4L*std::pow(X0,.7L)) &&
+            .28L*std::log(X1)<2, "historical roughness branch is not separated across the interval");
+    auto bounds=[&](long double K,long double X){
+        const long double a=m_p.kappa*std::sqrt(K/m_p.qe), logX=std::log(X), q=m(X)*logX;
+        const long double d=nu*(1+multiplier*std::expm1(q));
+        const long double factor=multiplier*std::exp(q)*nu/d;
+        const long double dq=(m(X)+.2212L*std::pow(X,-.28L)*logX)/2;
+        return std::array<long double,5>{a,d,d+a*H,factor,dq};
+    };
+    const auto lo=bounds(m_p.KMinimum,X0), hi=bounds(m_p.KMaximum,X1);
+    // s = K d'(K)/d(K) is a product of a decreasing and an increasing
+    // positive factor. Bound each factor by its endpoint. Set p=aH/B.
+    // Then K J' = (1-nu/B) p (1/2-s) + (nu/d-nu/B) s.
+    const long double s0=hi[3]*lo[4], s1=lo[3]*hi[4];
+    Require(s0>0 && s1<.5L && hi[1]<lo[2], "historical cutoff monotonicity bound failed");
+    const long double j0=(1-nu/lo[2])*(lo[0]*H/hi[2])*(.5L-s1)+(nu/hi[1]-nu/lo[2])*s0;
+    const long double j1=(1-nu/hi[2])*(.5L-s0)+(nu/lo[1]-nu/hi[2])*s1;
+    constexpr double reserve=1e-9;
+    m_logCutoffSlopeBounds={double(-j1/m_p.KMinimum)-reserve, double(-j0/m_p.KMaximum)+reserve};
+    Require(m_logCutoffSlopeBounds[1]<0 && m_logCutoffSlopeBounds[0]<=m_logCutoffSlopeBounds[1],
+            "historical cutoff slope enclosure is not strictly decreasing");
+    m_transport=InnerKTransport::AuxiliaryHistoricalFixtureV1;
+    m_identity=RANSWallR3::Hash(std::string("WJH27|")+TransportName()+"|retained-v2-boundaries|"+m_boundaryIdentity);
+    const auto range=CutoffRadiusRange();
+    Require(0<range[0] && range[0]<range[1] && range[1]<.4*m_p.H,
+            "historical cutoff leaves the admitted lower-wall domain");
+}
 std::array<double,2> Reference::CutoffRadiusRange() const
 { return {Cutoff(m_p.KMaximum),Cutoff(m_p.KMinimum)}; }
 double Reference::KAtCutoff(double radius) const
@@ -256,7 +328,16 @@ ReferenceValue Reference::Auxiliary(double K,double r) const
 ReferenceValue Reference::DependentEpsilon(double K,double r) const
 {
     CheckRadius(r); Require(r<=m_p.H,"dependent wall epsilon requested outside inner domain");
-    const double A=Amplitude(K),Ap=AmplitudeDerivative(K),c=Cutoff(K);
+    const double A=Amplitude(K),Ap=AmplitudeDerivative(K);
+    if (m_transport==InnerKTransport::AuxiliaryHistoricalFixtureV1)
+    {
+        const auto law=HistoricalLogCutoff(K);
+        const double c=m_p.H*std::exp(law[0]);
+        Require(c>0 && c<.4*m_p.H,"cutoff leaves the admitted lower-wall domain");
+        if (r<=c) return {A/c,(Ap-A*law[1])/c,0.};
+        return {A/r,Ap/r,-A/(r*r)};
+    }
+    const double c=Cutoff(K);
     // At the kink use the plateau-side derivative; MMS derivative evaluation
     // must avoid r=c. This prescribed max law is not a positivity clamp.
     if (r<=c) return {A/c,Ap/c-A*CutoffDerivative(K)/(c*c),0.};

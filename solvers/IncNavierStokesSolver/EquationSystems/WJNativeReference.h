@@ -20,6 +20,12 @@ struct ReferenceValue
     double value, dK, dr;
 };
 
+enum class InnerKTransport
+{
+    ScalarV2,
+    AuxiliaryHistoricalFixtureV1
+};
+
 /** Immutable, qualified H27-v2 counterfactual tables and historical inlet.
  * All heights are MODEL radius r=physical_z-d0. K is the current sampled
  * interface value, restricted to the qualified interval. These tables never
@@ -31,10 +37,14 @@ public:
     static constexpr const char *QualifiedTableSha256 =
         "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d";
     explicit Reference(const std::string &json,
-        const std::string &expectedSha256 = QualifiedTableSha256);
+        const std::string &expectedSha256 = QualifiedTableSha256,
+        InnerKTransport transport = InnerKTransport::ScalarV2);
     const ReferenceParameters &Parameters() const { return m_p; }
     const ReferenceParameters &GetParameters() const { return m_p; }
     const std::string &Identity() const { return m_identity; }
+    const std::string &BoundaryIdentity() const { return m_boundaryIdentity; }
+    InnerKTransport Transport() const { return m_transport; }
+    const char *TransportName() const;
 
     double Cutoff(double K) const;
     double CutoffDerivative(double K) const;
@@ -54,6 +64,7 @@ public:
     double Ew(double K, double r) const { return DependentEpsilon(K,r).value; }
     double EwDerivativeK(double K, double r) const { return DependentEpsilon(K,r).dK; }
     double EwDerivativeR(double K, double r) const { return DependentEpsilon(K,r).dr; }
+    double KDiffusivity(double k, double epsilon, double auxiliary, bool outer) const;
 
     // Fixed historical inlet: old finite-nu momentum and nonconstant k below
     // H, high-Re-derived logarithmic U and constant k above H. InletE is only
@@ -77,9 +88,12 @@ private:
     };
     void CheckK(double K) const;
     void CheckRadius(double r) const;
+    std::array<double,2> HistoricalLogCutoff(double K) const;
+    void BindFixtureTransport();
     double InletQ(double r) const;
     ReferenceParameters m_p{};
-    std::string m_identity;
+    std::string m_identity, m_boundaryIdentity;
+    InnerKTransport m_transport = InnerKTransport::ScalarV2;
     Polynomial m_logCutoff, m_logCutoffDerivative;
     std::array<double,2> m_logCutoffSlopeBounds{};
     std::array<Polynomial,3> m_outlet;

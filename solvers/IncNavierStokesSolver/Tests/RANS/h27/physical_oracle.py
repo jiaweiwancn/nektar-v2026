@@ -116,6 +116,9 @@ class Reference:
                 table['model'] == 'IsotropicLowerWallFullWJCollarV2', 'unqualified v2 reference table')
         p, c, inlet = table['parameters'], table['constants'], table['inlet_binding']
         self.table = table
+        self.identity = TABLE_SHA
+        self.boundary_identity = TABLE_SHA
+        self.inner_k_transport = 'ScalarCdV2'
         self.Kin, self.H, self.h, self.nu = p['K'], p['H'], p['h'], p['nu']
         self.cd, self.sk, self.se = p['cd'], p['sigma_k'], table['guard']['sigma_e']
         self.cl, self.qe, self.Ne, self.kappa = c['c_length'], c['q_e'], c['N_e'], c['kappa']
@@ -156,6 +159,9 @@ class Reference:
         zv = self.intercept(K)
         require(np.all(zv < 0), 'dynamic roughness branch changed')
         return self.kappa*np.sqrt(K/self.qe)*(r-zv)
+
+    def k_diffusivity(self, k, epsilon, auxiliary, outer):
+        return self.nu+self.cd*k*k/(self.sk*epsilon)
 
     def old_integral_p(self, r):
         return np.log1p(self.a*r/self.D0)+self.nu/(self.D0+self.a*r)-self.nu/self.D0
@@ -265,7 +271,10 @@ class PhysicalOracle:
         require(data['schema'] == 'WJH27NativeCoupledStateV2' and data['manufactured'] is False and
                 data['gauge'] is False and data['model'] == 'FiniteNuIsotropicWallFullWJCollarV2',
                 'physical oracle requires actual open-outlet v2 state, no MMS or pressure gauge')
-        require(data['reference_identity'] == TABLE_SHA, 'native reference identity mismatch')
+        require(data['reference_identity'] == reference.identity and
+                data.get('boundary_identity', TABLE_SHA) == reference.boundary_identity and
+                data.get('inner_k_transport', 'ScalarCdV2') == reference.inner_k_transport,
+                'native reference, boundary or inner transport identity mismatch')
         self.s = {key: np.asarray(data['coefficients'][key], dtype=float) for key in ('flow', 'k', 'epsilon')}
         for key, length in zip(self.s, (2*self.n+self.np, self.nk, self.ne)):
             require(self.s[key].shape == (length,) and np.all(np.isfinite(self.s[key])), 'invalid '+key+' coefficients')
@@ -465,7 +474,7 @@ class PhysicalOracle:
         V = ref.nu*strain-R+2*k[:, None, None]*np.eye(3)/3
         Pi = basis(e, 'p', x, r)[0]@self.s['flow'][2*self.n+np.asarray(e['p'])]
         P = -np.einsum('qij,qij->q', R, G)
-        Dk = ref.nu+ref.cd*k*k/(ref.sk*E)
+        Dk = ref.k_diffusivity(k,E,aux,outer)
         De = ref.nu+ref.cd*k*k/(ref.se*E) if outer else np.zeros(len(x))
         div = G[:, 0, 0]+G[:, 2, 2]
         return dict(U=u, W=w, G=G, k=k, E=E, K=K, cutoff=cutoff, chi=chi, R=R, V=V, Pi=Pi,

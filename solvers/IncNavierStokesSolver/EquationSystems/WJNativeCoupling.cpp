@@ -98,6 +98,8 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     Require(m_options.manufactured||m_options.mmsBodyAmplitude==0,"the prescribed MMS body is verification-only");
     Require(m_options.mmsVariant=="Historical"||m_options.mmsVariant=="PolynomialScalarsV1","unknown continuous MMS variant");
     Require(m_options.manufactured||m_options.mmsVariant=="Historical","a continuous MMS variant is verification-only");
+    Require(m_reference->Transport()==InnerKTransport::ScalarV2||!m_options.manufactured,
+            "inner-k diagnostic transport is restricted to the unforced physical steady fixture");
     if(m_options.manufactured)m_mms=std::make_unique<CoupledMMS>(*m_reference,m_geometry,m_top,m_options.mmsBodyAmplitude,
         m_options.mmsVariant=="Historical"?MMSVariant::Historical:MMSVariant::PolynomialScalarsV1);
     else Require(std::abs(m_geometry.d0-m_reference->Parameters().d0)<1e-14&&
@@ -111,6 +113,8 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     signature<<'|'<<m_options.advancement<<'|'<<newton.maximumSeconds<<'|'<<newton.acceptanceNorm<<'|'
         <<newton.maximumNewtonIterations<<'|'<<newton.restartDimension<<'|'<<newton.maximumLinearCycles<<'|'<<newton.fdRelativeStep;
     signature<<'|'<<m_options.stepPreconditioner<<'|'<<m_options.stepPCRelativeDrift<<'|'<<m_options.stepPCMaximumUses;
+    if(m_reference->Transport()!=InnerKTransport::ScalarV2)
+        signature<<'|'<<m_reference->TransportName()<<'|'<<m_reference->BoundaryIdentity();
     for(const auto&e:m_flow.Elements()){
         signature<<'|'<<e.geometry<<','<<e.xl<<','<<e.xr<<','<<e.rl<<','<<e.rr;
         for(int a:e.u)signature<<','<<a;for(double a:e.us)signature<<','<<a;
@@ -337,7 +341,11 @@ CoupledHistory Coupling::ReadInitialFields(const std::string&path,bool allowCand
     const std::string expectedSource=m_options.initialSourceIdentity.empty()?m_options.sourceIdentity:m_options.initialSourceIdentity;
     Require(expectedSource.size()==64,"initial-field source binding is missing");
     Require(expectedSource==m_options.sourceIdentity||allowCandidate,"a different declared initial source is allowed only as a steady-preparation guess");
-    initial.ValidateBindings(expectedSource,m_reference->Identity(),WallModelV2,m_options.manufactured,m_options.mmsVariant,geometry);
+    const auto &seedReference=m_options.initialReferenceIdentity;
+    Require(seedReference.empty()||(allowCandidate&&m_reference->Transport()==InnerKTransport::AuxiliaryHistoricalFixtureV1&&
+            seedReference==m_reference->BoundaryIdentity()),"a different reference is allowed only as an explicitly bound v2 steady fixture guess");
+    initial.ValidateBindings(expectedSource,seedReference.empty()?m_reference->Identity():seedReference,
+                             WallModelV2,m_options.manufactured,m_options.mmsVariant,geometry);
     Require(initial.Metadata().gauge==m_flow.Gauge(),"initial-field pressure-gauge binding differs");
     Require(allowCandidate||initial.Metadata().qualifiedReference,"advancement requires a qualified reference initial packet");
     std::vector<InitialFieldElement>inventory;
@@ -427,7 +435,7 @@ Coupling::Data Coupling::Evaluate(const CoupledState&s,double time,bool principa
             // COMPLETE V-B remainder, including weak-divergence terms.
             if(shear[q]!=0)for(int i:{0,2})for(int j:{0,2})
                 if(i==j)rem[q][i][j]+=shear[q]*(G[i][j]+G[j][i]);
-            Dk[q]=p.nu+p.Cd*k*k/(p.sigmaK*E);
+            Dk[q]=m_reference->KDiffusivity(k,E,aux,outer);
             De[q]=outer?p.nu+p.Cd*k*k/(p.sigmaE*E):0.;
             sourceK[q]=a.production-E;sourceE[q]=outer?1.44*a.production*E/k:0.;reactionE[q]=outer?1.82*E/k:0.;
             d.minK=std::min(d.minK,k);d.minE=std::min(d.minE,E);
@@ -662,6 +670,7 @@ CoupledResidual Coupling::Residual(const CoupledState&s,const Data&d,const Loads
 
 CoupledStepInfo Coupling::Advance(CoupledHistory&h,bool injectRetry)
 {
+    Require(m_reference->Transport()==InnerKTransport::ScalarV2,"inner-k diagnostic transport cannot advance a trajectory");
     if(m_options.advancement=="CoupledJFNKV1")return AdvanceNewton(h,injectRetry);
     const double begin=Clock();CheckHistory(h);m_constitutiveStats={};m_lastInputHistory=h;m_hasInputHistory=true;CoupledStepInfo info;const double time=(h.step+1)*h.dt,alpha=(h.step==0?1.:1.5)/h.dt;
     m_lastAttempt={};auto saveAttempt=[&]{info.seconds=Clock()-begin;info.constitutiveStats=m_constitutiveStats;info.timing.other=info.seconds-info.timing.Sum();m_lastAttempt=info;};
@@ -937,6 +946,8 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
 {
     out<<std::setprecision(17)<<"{\"schema\":\"WJH27NativeCoupledStateV2\",\"model\":\""<<WallModelV2<<"\",\"signature\":\""<<m_signature<<"\",\"source_identity\":\""<<m_options.sourceIdentity<<"\",\"reference_identity\":\""<<m_reference->Identity()<<"\",\"manufactured\":"<<(m_mms?"true":"false")<<",\"step\":"<<h.step<<",\"time\":"<<h.time<<",\"dt\":"<<h.dt<<",\"state_sha256\":\""<<StateHash(h.current)<<"\",\"previous_sha256\":\""<<StateHash(h.previous)<<"\",\"advection_sha256\":\""<<StateHash(h.advection)<<"\",\"previous_advection_sha256\":\""<<StateHash(h.previousAdvection)<<"\",\"sizes\":["<<m_flow.VelocitySize()<<','<<m_flow.PressureSize()<<','<<m_k.Size()<<','<<m_e.Size()<<"],\"gauge\":"<<(m_flow.Gauge()?"true":"false")<<",\"nonlinear_iterations\":"<<info.nonlinearIterations<<",\"linear_iterations\":["<<info.flowIterations<<','<<info.kIterations<<','<<info.epsilonIterations<<"],\"rebuilds\":"<<info.rebuilds<<",\"retries\":"<<info.retries<<",\"seconds\":"<<info.seconds<<",\"coefficient_drift\":"<<info.coefficientDrift<<",\"residuals\":["<<info.residual.momentum<<','<<info.residual.continuity<<','<<info.residual.gauge<<','<<info.residual.k<<','<<info.residual.epsilon<<','<<info.residual.trace<<"],\"minimum_k\":"<<info.minimumK<<",\"minimum_epsilon\":"<<info.minimumEpsilon<<",\"minimum_covariance_over_k\":"<<info.minimumCovarianceOverK<<",\"minimum_principal_over_mu\":"<<info.minimumPrincipalOverMu<<",\"disjoint_seconds\":{\"constitutive\":"<<info.timing.constitutive<<",\"wall\":"<<info.timing.wall<<",\"assembly\":"<<info.timing.assembly<<",\"flow\":"<<info.timing.flow<<",\"scalar\":"<<info.timing.scalar<<",\"rebuild\":"<<info.timing.rebuild<<",\"guards\":"<<info.timing.guards<<",\"forcing\":"<<info.timing.forcing<<",\"residual\":"<<info.timing.residual<<",\"nonlinear\":"<<info.timing.nonlinear<<",\"io\":"<<info.timing.io<<",\"other\":"<<info.timing.other<<'}';
     out<<",\"quadratureX\":"<<m_options.quadratureX<<",\"quadratureR\":"<<m_options.quadratureR<<",\"linear_tolerance\":"<<m_options.linearTolerance<<",\"nonlinear_tolerance\":"<<m_options.nonlinearTolerance<<",\"maximum_iterations\":"<<m_options.maximumIterations<<",\"mms_body_amplitude\":"<<m_options.mmsBodyAmplitude<<",\"retry_reason\":"<<RANSWallSolveJson::Quote(info.retryReason);
+    out<<",\"inner_k_transport\":"<<RANSWallSolveJson::Quote(m_reference->TransportName())
+       <<",\"boundary_identity\":"<<RANSWallSolveJson::Quote(m_reference->BoundaryIdentity());
     const auto slopes=m_reference->LogCutoffDerivativeBounds();
     out<<",\"scalar_quadrature_policy\":\"CubicCutoffFacePanelsV1\",\"cutoff_radius_range\":["<<m_cutoffRange[0]<<','<<m_cutoffRange[1]
        <<"],\"cutoff_log_slope_bounds\":["<<slopes[0]<<','<<slopes[1]<<']';

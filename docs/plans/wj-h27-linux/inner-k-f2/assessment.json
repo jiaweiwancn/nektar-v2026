@@ -1,0 +1,726 @@
+{
+  "schema": "WJInnerKFixtureOperatorAssessmentV1",
+  "F2": "PASS",
+  "TASK3_READY": false,
+  "native": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/inner-k-f2-r2/actions/actions.json",
+    "sha256": "3ea57603902daaeb5f54972254c9cefa13452b6ed207698cf849db97d3eee739"
+  },
+  "parity": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/inner-k-f2-r2/parity/steady.json",
+    "sha256": "a136dc0558792f9d70b76ad1b880e689f326cdc968031b5cc1a566aa8e6f0df3"
+  },
+  "v2": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/base.result.json",
+    "sha256": "c6b2eec7d06fed2223d747b5a29ecbb0d5392e611b999315b52939ae83fd273a"
+  },
+  "v2_audit": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cp2-refinement-v19/base-current.json",
+    "sha256": "62ca40cfc33174ebc1eecf93aeb2522387b098ac86f36032e231fc419f8ea490"
+  },
+  "v2_same_history_roles": {
+    "state_sha256": true,
+    "previous_sha256": true,
+    "advection_sha256": true,
+    "previous_advection_sha256": true
+  },
+  "v2_current_residuals": [
+    6.684657243652035e-15,
+    5.555481456319572e-16,
+    0,
+    1.883380709472496e-13,
+    4.77106873135251e-14,
+    0
+  ],
+  "diagnostic_source": "f6000e775564bbdb665d8cce292511eeb39324ea68509309f75216de145ac90b",
+  "kernel_source": "9dc5aec5f2e5493b37ed4b026398cb2e5fc19b1fe3c035919775f646c79eb6b4",
+  "reference_identity": "cdbabf20a178cf8d1ea89e9160517b8e2276050f1efd5dc0072e8df6a61cb2ae",
+  "boundary_identity": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d",
+  "coefficient_errors": {
+    "c": 0.0,
+    "c_K": 1.3039961918430252e-17,
+    "inverse": 1.5754074182605824e-15,
+    "aux": 1.6893431591898628e-16,
+    "aux_K": 1.5621432257263515e-16,
+    "aux_r": 0.0,
+    "E": 0.0,
+    "E_K": 4.946801972758001e-16,
+    "E_r": 8.233897021336579e-16,
+    "D_inner": 1.6893431591898628e-16,
+    "D_outer": 0.0
+  },
+  "actions": {
+    "flux": {
+      "order20": {
+        "action_errors": {
+          "k_diffusion": 2.4496818729607467e-16,
+          "k_source": 5.791846141332215e-16,
+          "k_transport": 6.471501657925159e-15,
+          "k_natural": 0.0,
+          "k_current": 6.951670901567384e-15,
+          "epsilon_current": 8.507151221189567e-16
+        },
+        "accounting": 1.1165635977811306e-15,
+        "boundary": {
+          "k_essential_coefficient_error": {
+            "value": 2.5600370546734465e-15,
+            "limit": 1e-10,
+            "status": "MET",
+            "projection": "Endpoint constrained physical Gauss16 per fixed material panel; basis independent of native operators"
+          },
+          "epsilon_essential_coefficient_error": {
+            "value": 8.574496232284704e-16,
+            "limit": 1e-10,
+            "status": "MET",
+            "projection": "Endpoint constrained physical Gauss16 per fixed material panel; basis independent of native operators"
+          },
+          "pointwise_boundary_representation": {
+            "inlet/U_representation": {
+              "RMS": 9.837224695988528e-07,
+              "MAX": 3.065153040947288e-05,
+              "component_RMS": [
+                9.837224695988528e-07
+              ],
+              "component_MAX": [
+                3.065153040947288e-05
+              ],
+              "measure": 19.91250000000002
+            },
+            "inlet/W_essential": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 19.91250000000002,
+              "limits": [
+                1e-10,
+                1e-10
+              ],
+              "status": "MET"
+            },
+            "ground/U_essential": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 25.00000000000001,
+              "limits": [
+                1e-10,
+                1e-10
+              ],
+              "status": "MET"
+            },
+            "ground/W_essential": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 25.00000000000001,
+              "limits": [
+                1e-10,
+                1e-10
+              ],
+              "status": "MET"
+            },
+            "top/W_essential": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 25.00000000000001,
+              "limits": [
+                1e-10,
+                1e-10
+              ],
+              "status": "MET"
+            }
+          },
+          "homogeneous_velocity_boundary_check": {
+            "status": "MET"
+          },
+          "dependent_H_pointwise_representation_error": 3.745855009325741e-16,
+          "dependent_H_note": "Algebraic condition is the current endpoint-constrained projection; nonzero pointwise projection error is a spatial error, not an extra boundary equation.",
+          "velocity_essential_coefficient_error": {
+            "value": 0.0,
+            "limit": 1e-10,
+            "status": "MET",
+            "scope": "Actual coefficients versus exported fresh native lift; historical pointwise comparison above is independent"
+          },
+          "status": "MET"
+        },
+        "native_dependent_trace": 0,
+        "independent": {
+          "residuals": {
+            "momentum": 0.00039016013618222844,
+            "continuity": 1.4603537057517897e-16,
+            "k": 0.025918285227349597,
+            "epsilon": 0.00028743896494051437
+          },
+          "steady_residual_status": "NOT_MET",
+          "accounting_identity_status": "MET",
+          "accounting_identity_max_error": 1.1165635977811306e-15,
+          "sampled_minima": {
+            "k": 0.008802022180812191,
+            "epsilon": 1.7454060041646682e-05,
+            "covariance_over_k": 0.28160531272091827
+          },
+          "maximum_independent_cubic_relative_residual": 9.09208041626811e-16
+        },
+        "native_minima": {
+          "minimum_k": 0.008793209547698315,
+          "minimum_epsilon": 1.7442742409033924e-05,
+          "minimum_covariance_over_k": 0.28160906234959715,
+          "minimum_principal_over_mu": 0.004031454815903922
+        }
+      },
+      "order32": {
+        "action_errors": {
+          "k_diffusion": 2.4121257745599547e-16,
+          "k_source": 5.767041603580369e-16,
+          "k_transport": 3.845657226860299e-15,
+          "k_natural": 0.0,
+          "k_current": 3.425814493127301e-15,
+          "epsilon_current": 8.203324391861368e-16
+        },
+        "accounting": 8.135011050316882e-15,
+        "boundary": {
+          "k_essential_coefficient_error": {
+            "value": 2.5600370546734465e-15,
+            "limit": 1e-10,
+            "status": "MET",
+            "projection": "Endpoint constrained physical Gauss16 per fixed material panel; basis independent of native operators"
+          },
+          "epsilon_essential_coefficient_error": {
+            "value": 8.574496232284704e-16,
+            "limit": 1e-10,
+            "status": "MET",
+            "projection": "Endpoint constrained physical Gauss16 per fixed material panel; basis independent of native operators"
+          },
+          "pointwise_boundary_representation": {
+            "inlet/U_representation": {
+              "RMS": 9.837224696076696e-07,
+              "MAX": 3.0679569854016875e-05,
+              "component_RMS": [
+                9.837224696076696e-07
+              ],
+              "component_MAX": [
+                3.0679569854016875e-05
+              ],
+              "measure": 19.91250000000002
+            },
+            "inlet/W_essential": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 19.91250000000002,
+              "limits": [
+                1e-10,
+                1e-10
+              ],
+              "status": "MET"
+            },
+            "ground/U_essential": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 25.000000000000007,
+              "limits": [
+                1e-10,
+                1e-10
+              ],
+              "status": "MET"
+            },
+            "ground/W_essential": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 25.000000000000007,
+              "limits": [
+                1e-10,
+                1e-10
+              ],
+              "status": "MET"
+            },
+            "top/W_essential": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 25.000000000000007,
+              "limits": [
+                1e-10,
+                1e-10
+              ],
+              "status": "MET"
+            }
+          },
+          "homogeneous_velocity_boundary_check": {
+            "status": "MET"
+          },
+          "dependent_H_pointwise_representation_error": 3.745855009325741e-16,
+          "dependent_H_note": "Algebraic condition is the current endpoint-constrained projection; nonzero pointwise projection error is a spatial error, not an extra boundary equation.",
+          "velocity_essential_coefficient_error": {
+            "value": 0.0,
+            "limit": 1e-10,
+            "status": "MET",
+            "scope": "Actual coefficients versus exported fresh native lift; historical pointwise comparison above is independent"
+          },
+          "status": "MET"
+        },
+        "native_dependent_trace": 0,
+        "independent": {
+          "residuals": {
+            "momentum": 0.0003901601361822486,
+            "continuity": 1.4601169049990142e-16,
+            "k": 0.025918285227349597,
+            "epsilon": 0.00028743896494047095
+          },
+          "steady_residual_status": "NOT_MET",
+          "accounting_identity_status": "MET",
+          "accounting_identity_max_error": 8.135011050316882e-15,
+          "sampled_minima": {
+            "k": 0.00880199526591514,
+            "epsilon": 1.7447247360799237e-05,
+            "covariance_over_k": 0.2816011076605314
+          },
+          "maximum_independent_cubic_relative_residual": 8.56003888399599e-16
+        },
+        "native_minima": {
+          "minimum_k": 0.008793209547698315,
+          "minimum_epsilon": 1.7442742409033924e-05,
+          "minimum_covariance_over_k": 0.28160906234959715,
+          "minimum_principal_over_mu": 0.004031454815903922
+        }
+      },
+      "independent_refinement": {
+        "k_diffusion": 2.2631207348009688e-17,
+        "k_source": 3.0004154207478267e-17,
+        "k_transport": 8.230633731081854e-15,
+        "k_natural": 0.0,
+        "k_current": 8.23224162737088e-15,
+        "epsilon_current": 2.0552629691731826e-16
+      },
+      "stale_diffusivity_change": 0.014315944842480936
+    },
+    "moving": {
+      "order20": {
+        "action_errors": {
+          "k_diffusion": 2.4496818729607467e-16,
+          "k_source": 5.805732321186223e-16,
+          "k_transport": 6.622749695133938e-15,
+          "k_natural": 0.0,
+          "k_current": 7.09020118483938e-15,
+          "epsilon_current": 8.507151221189567e-16
+        },
+        "accounting": 4.367510671592858e-16,
+        "boundary": {
+          "k_essential_coefficient_error": {
+            "value": 2.5600370546734465e-15,
+            "limit": 1e-10,
+            "status": "MET",
+            "projection": "Endpoint constrained physical Gauss16 per fixed material panel; basis independent of native operators"
+          },
+          "epsilon_essential_coefficient_error": {
+            "value": 8.574496232284704e-16,
+            "limit": 1e-10,
+            "status": "MET",
+            "projection": "Endpoint constrained physical Gauss16 per fixed material panel; basis independent of native operators"
+          },
+          "pointwise_boundary_representation": {
+            "inlet/U_representation": {
+              "RMS": 9.837224695988528e-07,
+              "MAX": 3.065153040947288e-05,
+              "component_RMS": [
+                9.837224695988528e-07
+              ],
+              "component_MAX": [
+                3.065153040947288e-05
+              ],
+              "measure": 19.91250000000002
+            },
+            "inlet/W_essential": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 19.91250000000002,
+              "limits": [
+                1e-10,
+                1e-10
+              ],
+              "status": "MET"
+            },
+            "ground/U_essential": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 25.00000000000001,
+              "limits": [
+                1e-10,
+                1e-10
+              ],
+              "status": "MET"
+            },
+            "ground/W_essential": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 25.00000000000001,
+              "limits": [
+                1e-10,
+                1e-10
+              ],
+              "status": "MET"
+            },
+            "top/W_essential": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 25.00000000000001,
+              "limits": [
+                1e-10,
+                1e-10
+              ],
+              "status": "MET"
+            }
+          },
+          "homogeneous_velocity_boundary_check": {
+            "status": "MET"
+          },
+          "dependent_H_pointwise_representation_error": 3.4513866925312205e-07,
+          "dependent_H_note": "Algebraic condition is the current endpoint-constrained projection; nonzero pointwise projection error is a spatial error, not an extra boundary equation.",
+          "velocity_essential_coefficient_error": {
+            "value": 0.0,
+            "limit": 1e-10,
+            "status": "MET",
+            "scope": "Actual coefficients versus exported fresh native lift; historical pointwise comparison above is independent"
+          },
+          "status": "MET"
+        },
+        "native_dependent_trace": 0,
+        "independent": {
+          "residuals": {
+            "momentum": 0.0003903022388296953,
+            "continuity": 1.4603537048094115e-16,
+            "k": 0.026238568178619838,
+            "epsilon": 0.00823647193823624
+          },
+          "steady_residual_status": "NOT_MET",
+          "accounting_identity_status": "MET",
+          "accounting_identity_max_error": 4.367510671592858e-16,
+          "sampled_minima": {
+            "k": 0.008710357849260088,
+            "epsilon": 1.7454060041646682e-05,
+            "covariance_over_k": 0.2809755371924421
+          },
+          "maximum_independent_cubic_relative_residual": 9.09208041626811e-16
+        },
+        "native_minima": {
+          "minimum_k": 0.008705194609871592,
+          "minimum_epsilon": 1.7442742409033924e-05,
+          "minimum_covariance_over_k": 0.2809792550563587,
+          "minimum_principal_over_mu": 0.0018217943323908421
+        }
+      },
+      "order32": {
+        "action_errors": {
+          "k_diffusion": 2.4121257745599547e-16,
+          "k_source": 5.790909551017891e-16,
+          "k_transport": 3.845657226860299e-15,
+          "k_natural": 0.0,
+          "k_current": 3.425814493127301e-15,
+          "epsilon_current": 8.203324391861368e-16
+        },
+        "accounting": 8.134983011921509e-15,
+        "boundary": {
+          "k_essential_coefficient_error": {
+            "value": 2.5600370546734465e-15,
+            "limit": 1e-10,
+            "status": "MET",
+            "projection": "Endpoint constrained physical Gauss16 per fixed material panel; basis independent of native operators"
+          },
+          "epsilon_essential_coefficient_error": {
+            "value": 8.574496232284704e-16,
+            "limit": 1e-10,
+            "status": "MET",
+            "projection": "Endpoint constrained physical Gauss16 per fixed material panel; basis independent of native operators"
+          },
+          "pointwise_boundary_representation": {
+            "inlet/U_representation": {
+              "RMS": 9.837224696076696e-07,
+              "MAX": 3.0679569854016875e-05,
+              "component_RMS": [
+                9.837224696076696e-07
+              ],
+              "component_MAX": [
+                3.0679569854016875e-05
+              ],
+              "measure": 19.91250000000002
+            },
+            "inlet/W_essential": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 19.91250000000002,
+              "limits": [
+                1e-10,
+                1e-10
+              ],
+              "status": "MET"
+            },
+            "ground/U_essential": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 25.000000000000007,
+              "limits": [
+                1e-10,
+                1e-10
+              ],
+              "status": "MET"
+            },
+            "ground/W_essential": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 25.000000000000007,
+              "limits": [
+                1e-10,
+                1e-10
+              ],
+              "status": "MET"
+            },
+            "top/W_essential": {
+              "RMS": 0.0,
+              "MAX": 0.0,
+              "component_RMS": [
+                0.0
+              ],
+              "component_MAX": [
+                0.0
+              ],
+              "measure": 25.000000000000007,
+              "limits": [
+                1e-10,
+                1e-10
+              ],
+              "status": "MET"
+            }
+          },
+          "homogeneous_velocity_boundary_check": {
+            "status": "MET"
+          },
+          "dependent_H_pointwise_representation_error": 3.431530958347405e-07,
+          "dependent_H_note": "Algebraic condition is the current endpoint-constrained projection; nonzero pointwise projection error is a spatial error, not an extra boundary equation.",
+          "velocity_essential_coefficient_error": {
+            "value": 0.0,
+            "limit": 1e-10,
+            "status": "MET",
+            "scope": "Actual coefficients versus exported fresh native lift; historical pointwise comparison above is independent"
+          },
+          "status": "MET"
+        },
+        "native_dependent_trace": 0,
+        "independent": {
+          "residuals": {
+            "momentum": 0.0003903022388297153,
+            "continuity": 1.4601169245548534e-16,
+            "k": 0.026238568178619782,
+            "epsilon": 0.008236471938236246
+          },
+          "steady_residual_status": "NOT_MET",
+          "accounting_identity_status": "MET",
+          "accounting_identity_max_error": 8.134983011921509e-15,
+          "sampled_minima": {
+            "k": 0.008710369391778244,
+            "epsilon": 1.7447247360799237e-05,
+            "covariance_over_k": 0.28097146634576764
+          },
+          "maximum_independent_cubic_relative_residual": 8.646199149773304e-16
+        },
+        "native_minima": {
+          "minimum_k": 0.008705194609871592,
+          "minimum_epsilon": 1.7442742409033924e-05,
+          "minimum_covariance_over_k": 0.2809792550563587,
+          "minimum_principal_over_mu": 0.0018217943323908421
+        }
+      },
+      "independent_refinement": {
+        "k_diffusion": 3.7458550093257415e-17,
+        "k_source": 3.0004154207478267e-17,
+        "k_transport": 8.230633731081854e-15,
+        "k_natural": 0.0,
+        "k_current": 8.23224162737088e-15,
+        "epsilon_current": 2.0552629691731826e-16
+      },
+      "stale_diffusivity_change": 0.014315944842480936
+    }
+  },
+  "common_H_flux": {
+    "lower": {
+      "owner": 215,
+      "side": "lower",
+      "x": 0.45,
+      "K": 0.008809015145515192,
+      "E": 0.0023155240547992535,
+      "D": 0.003036581367425004,
+      "gradient": 0.0018758559331889565,
+      "Q": 5.696189174695228e-06,
+      "action_errors": {
+        "K": 0.0,
+        "E": 0.0,
+        "D": 0.0,
+        "gradient": 6.182120250922717e-13,
+        "Q": 3.174099991789009e-13
+      },
+      "expected_Q": 5.696189174806164e-06,
+      "target_error_over_A": 3.1939754594491687e-13
+    },
+    "upper": {
+      "owner": 229,
+      "side": "upper",
+      "x": 0.45,
+      "K": 0.008809015145515192,
+      "E": 0.0023155240547992535,
+      "D": 0.002985903394167773,
+      "gradient": 0.0019076937271859753,
+      "Q": 5.696189175037173e-06,
+      "action_errors": {
+        "K": 0.0,
+        "E": 0.0,
+        "D": 0.0,
+        "gradient": 1.3251625653792073e-12,
+        "Q": 6.690228736870945e-13
+      },
+      "expected_Q": 5.696189174806164e-06,
+      "target_error_over_A": 6.651014317242066e-13
+    }
+  },
+  "moving_cutoff": {
+    "two_owner_crossing": [
+      {
+        "native": {
+          "owner": 103,
+          "x_cuts": [
+            0.3000000000001454
+          ],
+          "points": 576
+        },
+        "independent": [
+          0.30000000000014837
+        ],
+        "cell": [
+          0,
+          1.25,
+          0.023209949154884654,
+          0.026419898309769332
+        ]
+      },
+      {
+        "native": {
+          "owner": 117,
+          "x_cuts": [
+            0.3000000000001454
+          ],
+          "points": 576
+        },
+        "independent": [
+          0.30000000000014837
+        ],
+        "cell": [
+          0,
+          1.25,
+          0.026419898309769332,
+          0.038209949154884654
+        ]
+      }
+    ],
+    "K": [
+      0.008809015145515192,
+      0.008824493843556599
+    ],
+    "cutoff": [
+      0.026419898309769336,
+      0.026406191349698637
+    ],
+    "Gamma_change_over_reference": 0.0026368717784912244
+  },
+  "physical_launch_authorized": false,
+  "oracle": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/inner-k-f2-r1/inner_k_fixture_oracle.py",
+    "sha256": "0f19b71d19f340b98829d8c8f0dd2642b3861bb4e485a1f745454934a21e8555"
+  },
+  "base_oracle": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v21/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_oracle.py",
+    "sha256": "ed1dd8aa7cd11e6e94d2729b20b1f3eeb9bc98549324dac8c5aa932681aeac6a"
+  }
+}

@@ -34,7 +34,7 @@ struct CoupledOptions
     double stepPCRelativeDrift=.02;
     int stepPCMaximumUses=8;
     ConstitutiveBackend backend=ConstitutiveBackend::Historical;
-    std::string sourceIdentity,mmsVariant="Historical",initialSourceIdentity;
+    std::string sourceIdentity,mmsVariant="Historical",initialSourceIdentity,initialReferenceIdentity;
 };
 struct CoupledResidual
 {
@@ -119,6 +119,7 @@ public:
     std::array<double,5> MMSErrors(const CoupledState&state,double time)const;
     void ResetPreconditioners();
 private:
+    friend struct InnerKFixtureAccess;
     CoupledStepInfo AdvanceNewton(CoupledHistory&history,bool injectRetry);
     struct Data
     {
