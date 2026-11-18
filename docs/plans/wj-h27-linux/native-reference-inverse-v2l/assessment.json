@@ -1,0 +1,287 @@
+{
+  "schema": "WJH27ReferenceInverseCheckpointV1",
+  "status": "PASS_FOCUSED_INVERSE_AND_REUSE_FOUNDATIONS_ONLY",
+  "full_H27_qualification": false,
+  "TASK3_READY": false,
+  "active_model": "FiniteNuIsotropicWallFullWJCollarV2",
+  "v4_implemented": false,
+  "parent": "d205335c80458009387430d2fa54f3c3e39ef560",
+  "source_identity": "56c35390fdf092180913f60c3ae348ca10cdcdf4e6b889c3afd589eddb511acf",
+  "native": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-inverse-v19/native.json",
+    "bytes": 23212,
+    "sha256": "2c057e9a1de51ffb9d52c919e505d4bcd9df6527b5079513b6aa958efe0d50dc"
+  },
+  "probe": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-reference-inverse-v19/WJH27ReferenceInverseProbe",
+    "bytes": 240448,
+    "sha256": "a0ef00e11367e765a75f962102890dc3bd8431ccc95491bd2018ef62c6ad986d"
+  },
+  "independent": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-inverse-v19/independent.json",
+    "bytes": 38644,
+    "sha256": "676bd3602bd1c3e6d09c600c539801bdc81892f1256ae79564badc64d48d1aa0"
+  },
+  "reuse_audit": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-inverse-v19/reuse-audit.json",
+    "bytes": 26267,
+    "sha256": "2d967e472910b2961d12155fb7664ee338b05842bbd419c5b0f3aeac84545353"
+  },
+  "maximum_scaled_errors": {
+    "cutoff_over_H": 6.938893903907228e-17,
+    "K_over_Kin": 1.3784814909780096e-15,
+    "inverse_residual_over_H": 6.938893903907228e-17,
+    "derivative_relative": 4.512506311378652e-16
+  },
+  "roundtrip_queries": 129,
+  "independent_radius_queries": 129,
+  "invalid_radius_controls": 7,
+  "synthetic_mutations": 4,
+  "default_identity_rejections": 4,
+  "constructor_guard_rejections": 4,
+  "legacy_foundations": {
+    "closed": {
+      "report": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-closed-oracle-v8.json",
+        "bytes": 3315,
+        "sha256": "b20a389a7aee62e22530b5a4eb9450392dfeedbf249af4f291709c1484ab209c"
+      },
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-closed-native-v8.json",
+        "bytes": 511898,
+        "sha256": "f18b2909eb4e76ccce3ac8c5bf7d671cdb5fc67145ad1ff5bef6706aef335776"
+      },
+      "maximum_operator_error": 1.8398339349425294e-15,
+      "gauge": true,
+      "unaugmented_null_modes": 1,
+      "native_v_map": {
+        "relative_target_error": 0.0,
+        "permuted_ids": 0,
+        "negative_signs": 0
+      },
+      "direct_solution_relative_error": 1.279350842829516e-13,
+      "known_scalar": {
+        "relative_force_error": 6.031855382790057e-15,
+        "independent_Q2_L2_projection_loss": 0.012520736440811501,
+        "native_oldQ2_negative_control_loss": 0.0033200616160253896,
+        "maximum_cubic_trace_Legendre_coefficient": 1.65912294631395e-05,
+        "outer_trace_owners": [
+          {
+            "test_geometry": 0,
+            "trace_geometry": 2,
+            "x_interval": [
+              0,
+              0.5
+            ],
+            "trace_bounds": [
+              0,
+              0.5,
+              0.15,
+              0.5
+            ],
+            "height": 0.15
+          },
+          {
+            "test_geometry": 1,
+            "trace_geometry": 3,
+            "x_interval": [
+              0.49999999999999994,
+              1
+            ],
+            "trace_bounds": [
+              0.49999999999999994,
+              1,
+              0.15,
+              0.5
+            ],
+            "height": 0.15
+          }
+        ]
+      },
+      "mutations": {
+        "missing_transpose": 0.4509477889063661,
+        "flipped_awf": 0.14417040160860167,
+        "flipped_scalar_sign": 2.0
+      }
+    },
+    "slip": {
+      "report": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-slip-oracle-v8.json",
+        "bytes": 3310,
+        "sha256": "c941ad1ea2e7b095537a53100b4237795c76881ff05c6a9b2dafd9062ca87127"
+      },
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-slip-native-v8.json",
+        "bytes": 522409,
+        "sha256": "b8d054286ab21fe9074af77553677af008af86d49cd8908a56a4e11060ed5abf"
+      },
+      "maximum_operator_error": 1.8398339349425294e-15,
+      "gauge": true,
+      "unaugmented_null_modes": 1,
+      "native_v_map": {
+        "relative_target_error": 0.0,
+        "permuted_ids": 11,
+        "negative_signs": 0
+      },
+      "direct_solution_relative_error": 6.036136749498618e-14,
+      "known_scalar": {
+        "relative_force_error": 6.031855382790057e-15,
+        "independent_Q2_L2_projection_loss": 0.012520736440811501,
+        "native_oldQ2_negative_control_loss": 0.0033200616160253896,
+        "maximum_cubic_trace_Legendre_coefficient": 1.65912294631395e-05,
+        "outer_trace_owners": [
+          {
+            "test_geometry": 0,
+            "trace_geometry": 2,
+            "x_interval": [
+              0,
+              0.5
+            ],
+            "trace_bounds": [
+              0,
+              0.5,
+              0.15,
+              0.5
+            ],
+            "height": 0.15
+          },
+          {
+            "test_geometry": 1,
+            "trace_geometry": 3,
+            "x_interval": [
+              0.49999999999999994,
+              1
+            ],
+            "trace_bounds": [
+              0.49999999999999994,
+              1,
+              0.15,
+              0.5
+            ],
+            "height": 0.15
+          }
+        ]
+      },
+      "mutations": {
+        "missing_transpose": 0.4509477889063661,
+        "flipped_awf": 0.1377667520677492,
+        "flipped_scalar_sign": 2.0
+      }
+    },
+    "physicaloutlet": {
+      "report": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-physicaloutlet-oracle-v8.json",
+        "bytes": 3324,
+        "sha256": "3cb7a2a6abcc6e68f3eafe08d995248e77c0b6123a817331ab1d29b2cf3e9d9b"
+      },
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mixed-physicaloutlet-native-v8.json",
+        "bytes": 563711,
+        "sha256": "d047d951182c30d6d0c1ba47fd4590229b8bb9dba278a43a4e144ab29413bda9"
+      },
+      "maximum_operator_error": 1.839833934942529e-15,
+      "gauge": false,
+      "unaugmented_null_modes": 0,
+      "native_v_map": {
+        "relative_target_error": 0.0,
+        "permuted_ids": 13,
+        "negative_signs": 0
+      },
+      "direct_solution_relative_error": 7.209246186869224e-14,
+      "known_scalar": {
+        "relative_force_error": 6.031855382790057e-15,
+        "independent_Q2_L2_projection_loss": 0.012520736440811501,
+        "native_oldQ2_negative_control_loss": 0.0033200616160253896,
+        "maximum_cubic_trace_Legendre_coefficient": 1.65912294631395e-05,
+        "outer_trace_owners": [
+          {
+            "test_geometry": 0,
+            "trace_geometry": 2,
+            "x_interval": [
+              0,
+              0.5
+            ],
+            "trace_bounds": [
+              0,
+              0.5,
+              0.15,
+              0.5
+            ],
+            "height": 0.15
+          },
+          {
+            "test_geometry": 1,
+            "trace_geometry": 3,
+            "x_interval": [
+              0.49999999999999994,
+              1
+            ],
+            "trace_bounds": [
+              0.49999999999999994,
+              1,
+              0.15,
+              0.5
+            ],
+            "height": 0.15
+          }
+        ]
+      },
+      "mutations": {
+        "missing_transpose": 0.450947788906366,
+        "flipped_awf": 0.15096126762166698,
+        "flipped_scalar_sign": 2.0
+      }
+    },
+    "admissibility-independent-v2": {
+      "report": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/admissibility-independent-v2.json",
+        "bytes": 67557,
+        "sha256": "ef451ba9b688f4617860df87b0c09eb8356a9147aa6ca846175f336759d3ae90"
+      },
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/admissibility-native-v2.json",
+        "bytes": 336596,
+        "sha256": "2993b962538e9dfc29c31d6f7d18280fc799f4712a0feb0457a985fd28a04e9a"
+      },
+      "states": 67,
+      "negative_covariance_count": 4,
+      "negative_principal_count": 1,
+      "unsupported_spanwise_rejected": true
+    },
+    "constitutive-independent-v1": {
+      "report": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/constitutive-independent-v1.json",
+        "bytes": 117684,
+        "sha256": "f8e0e1726a91c2f1f852d9b2f9104e423673f032019b888512fee41be0cabc67"
+      },
+      "native": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/constitutive-native-v1.json",
+        "bytes": 1006026,
+        "sha256": "69e0dce3f3f1ff66b9da3ae02c329e06060ded5e9f0f014c0ec232b1cda3729e"
+      },
+      "states": 85,
+      "maximum_value_parity_error": 7.346672369403494e-15,
+      "maximum_direction_parity_error": 1.1368683772161603e-13,
+      "maximum_joint_FD_error": 1.0800093702989166e-10,
+      "value_fallbacks": 3,
+      "direction_fallbacks": 3
+    }
+  },
+  "resources": {
+    "source_build_runtime_and_thin_probe_bytes": 3002450622,
+    "science_bytes": 2726725508,
+    "free_bytes": 69430677504,
+    "thin_project_and_build_bytes": 675145,
+    "account_closed": false,
+    "campaign_ceiling": 43200,
+    "evidence_protected": 3600,
+    "aggregate_completed_seconds_open_snapshot": 16987.964911453775,
+    "phase_completed_seconds_open_snapshot": 12.402364198002033,
+    "phase_max_host_workers": 8,
+    "phase_max_tree_rss_bytes": 314953728,
+    "ranks": 1,
+    "all_six_thread_limits_one": true,
+    "compiler_parallelism": 4
+  },
+  "scope": "New source19 inverse guard checks plus source-bound reuse of unchanged mixed/gauge/Q3 and constitutive/admissibility tests. No full coupled/physical/operational/cost closure or production recipe selection."
+}

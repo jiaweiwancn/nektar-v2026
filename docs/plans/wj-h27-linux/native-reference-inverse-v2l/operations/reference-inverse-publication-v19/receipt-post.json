@@ -1,0 +1,65 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/reference-inverse-publication-v19.py"
+  ],
+  "phase": "evidence",
+  "seconds_cap": 60.0,
+  "utc": "2026-11-18T00:57:05.528498+00:00",
+  "allocation": {
+    "workers": 4,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 504587,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label reference-inverse-publication-v19 --phase evidence --seconds 60 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/reference-inverse-publication-v19.py"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/reference-inverse-publication-v19.py",
+      "bytes": 5075,
+      "sha256": "fd962b8602cca20d8974828bac69543105be700265361ec8d639580b30406364"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 3.5916875419788994,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 20975616,
+  "peak_host_workers": 5,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/reference-inverse-publication-v19/command.log",
+    "bytes": 786,
+    "sha256": "e255de0aebe196de609a461e77a64f786b877e9a3172beef4fe134a91ca99bc7"
+  }
+}

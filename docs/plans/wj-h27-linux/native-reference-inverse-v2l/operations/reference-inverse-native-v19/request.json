@@ -1,0 +1,79 @@
+{
+  "argv": [
+    "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2",
+    "--library-path",
+    "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc:/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/geometry:/home/jay/.local/opt/nektar-v2026-mpi/lib64",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/build-reference-inverse-v19/WJH27ReferenceInverseProbe",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-inverse-v19/mutations.json",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-inverse-v19/native.json"
+  ],
+  "phase": "science",
+  "seconds_cap": 20.0,
+  "utc": "2026-11-18T00:54:34.360980+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 504506,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/reference-inverse-controller-v19.py"
+      },
+      {
+        "pid": 504567,
+        "parent": 504506,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label reference-inverse-native-v19 --phase science --seconds 20 -- /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2 --library-path /home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc:/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/geometry:/home/jay/.local/opt/nektar-v2026-mpi/lib64 /home/jay/build/wj-h27-coupling-r1-20261117/build-reference-inverse-v19/WJH27ReferenceInverseProbe /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-inverse-v19/mutations.json /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-inverse-v19/native.json"
+      }
+    ]
+  },
+  "reservation": 10,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2",
+      "bytes": 240936,
+      "sha256": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-reference-inverse-v19/WJH27ReferenceInverseProbe",
+      "bytes": 240448,
+      "sha256": "a0ef00e11367e765a75f962102890dc3bd8431ccc95491bd2018ef62c6ad986d"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-inverse-v19/mutations.json",
+      "bytes": 1857,
+      "sha256": "49295041c60ff1bd952f979947edd8fa76d32198d128602d4c9458efa40bef25"
+    }
+  ]
+}

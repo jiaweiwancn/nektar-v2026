@@ -1,0 +1,48 @@
+{
+  "schema": "WJH27ReferenceInverseMutationsV1",
+  "table": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "bytes": 92259,
+    "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+  },
+  "mutations": [
+    {
+      "name": "constant_cutoff",
+      "file": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-inverse-v19/constant_cutoff.json",
+        "bytes": 91105,
+        "sha256": "77844ed607ac644c5a7b4af62bcb670f1095e1a8f8439addf9b0fbe2cb1e10da"
+      },
+      "expected_reason": "cutoff table has no certified strictly decreasing inverse"
+    },
+    {
+      "name": "increasing_cutoff",
+      "file": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-inverse-v19/increasing_cutoff.json",
+        "bytes": 91121,
+        "sha256": "c142dcff4a07b6707c4d90731c16d311afcb4969c4d13c55e2ddec7cf10dd1f3"
+      },
+      "expected_reason": "cutoff table has no certified strictly decreasing inverse"
+    },
+    {
+      "name": "two_inverse_roots",
+      "file": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-inverse-v19/two_inverse_roots.json",
+        "bytes": 91142,
+        "sha256": "e5b6a278328a95474666b1c357b021b983f92cac7d1c133a797d732bf141274b"
+      },
+      "expected_reason": "cutoff table has no certified strictly decreasing inverse"
+    },
+    {
+      "name": "stale_derivative",
+      "file": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-inverse-v19/stale_derivative.json",
+        "bytes": 92259,
+        "sha256": "595aa1a3a7ee1526856a5a44713475bcd00e1f3a301ede0f54d1d75bc25dd1f2"
+      },
+      "expected_reason": "analytic derivative coefficients differ"
+    }
+  ],
+  "synthetic_unqualified_controls": true,
+  "TASK3_READY": false
+}

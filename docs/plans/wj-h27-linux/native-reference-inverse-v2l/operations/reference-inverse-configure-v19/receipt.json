@@ -1,0 +1,73 @@
+{
+  "argv": [
+    "cmake",
+    "-S",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/reference-inverse-project-v19/reference_inverse",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/build-reference-inverse-v19",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math",
+    "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+    "-DH27_PINNED_SOURCE=/home/jay/build/wj-h27-coupling-r1-20261117/source-v19",
+    "-DH27_PINNED_BUILD=/home/jay/build/wj-h27-coupling-r1-20261117/build-v19"
+  ],
+  "phase": "build",
+  "seconds_cap": 40.0,
+  "utc": "2026-11-18T00:54:28.696712+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 504506,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/reference-inverse-controller-v19.py"
+      },
+      {
+        "pid": 504512,
+        "parent": 504506,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label reference-inverse-configure-v19 --phase build --seconds 40 -- cmake -S /home/jay/build/wj-h27-coupling-r1-20261117/reference-inverse-project-v19/reference_inverse -B /home/jay/build/wj-h27-coupling-r1-20261117/build-reference-inverse-v19 -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math -DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DH27_PINNED_SOURCE=/home/jay/build/wj-h27-coupling-r1-20261117/source-v19 -DH27_PINNED_BUILD=/home/jay/build/wj-h27-coupling-r1-20261117/build-v19"
+      }
+    ]
+  },
+  "reservation": 16,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [],
+  "status": "PASS",
+  "seconds": 1.7670248359791003,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 135168,
+  "peak_host_workers": 7,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/reference-inverse-configure-v19/command.log",
+    "bytes": 407,
+    "sha256": "603431f6b44d6047f0b50c7317f8e472653a91861c5d0a562c26df616c3e7dd7"
+  }
+}
