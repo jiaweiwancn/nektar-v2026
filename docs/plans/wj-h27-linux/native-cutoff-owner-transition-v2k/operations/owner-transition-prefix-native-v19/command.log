@@ -1,0 +1,43 @@
+
+[36mWarning : [0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	     WJ coupled path: WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon
+	         Wall tensor: FiniteNuIsotropicWallFullWJCollarV2
+	         Integration: current coupled BDF2/EX2, BE startup, no clipping
+	      Pressure gauge: native restricted mean
+=======================================================================
+WJ-H27 step 1, t=0.02, coupled residual=3.13181e-13, nonlinear iterations=3
+WJ-H27 step 2, t=0.04, coupled residual=7.62912e-14, nonlinear iterations=3
+WJ-H27 step 3, t=0.06, coupled residual=6.82922e-14, nonlinear iterations=3
+WJ-H27 step 4, t=0.08, coupled residual=6.12636e-14, nonlinear iterations=3
+WJ-H27 step 5, t=0.1, coupled residual=5.46367e-14, nonlinear iterations=3
+WJ-H27 step 6, t=0.12, coupled residual=5.02066e-14, nonlinear iterations=3
+WJ-H27 step 7, t=0.14, coupled residual=4.46863e-14, nonlinear iterations=3
+WJ-H27 step 8, t=0.16, coupled residual=4.24593e-14, nonlinear iterations=3
+WJ-H27 step 9, t=0.18, coupled residual=4.15594e-14, nonlinear iterations=3
+WJ-H27 step 10, t=0.2, coupled residual=3.93383e-14, nonlinear iterations=3
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/prefix-u.fld" (0.000728984s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/prefix-v.fld" (0.000161s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/prefix-k.fld" (0.00016049s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/prefix-epsilon.fld" (0.000129418s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/prefix-p.fld" (0.000127948s, XML)
+-------------------------------------------
+Total Computation Time = 3.27803s
+-------------------------------------------
+L 2 error (variable u) : 3.83229e-07
+L inf error (variable u) : 1.41618e-06
+L 2 error (variable v) : 5.3441e-08
+L inf error (variable v) : 2.4517e-07
+L 2 error (variable k) : 1.08463e-07
+L inf error (variable k) : 6.82803e-07
+L 2 error (variable epsilon) : 1.77281e-06
+L inf error (variable epsilon) : 7.48801e-06
+L 2 error (variable p) : 9.67294e-08
+L inf error (variable p) : 6.39835e-07
+-------------------------------------------
+                       Region  Elapsed time Avg (s)       Min (s)       Max (s)         Count      IO Level
+                      Execute               3.30602       3.30602       3.30602             1             0
+

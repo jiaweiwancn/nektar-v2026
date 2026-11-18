@@ -1,0 +1,33 @@
+
+[36mWarning : [0mLevel 0 assertion violation
+The IO_CheckSteps parameter is now deprecated.
+Please use the 'Checkpoint' filter instead
+
+=======================================================================
+	     WJ coupled path: WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon
+	         Wall tensor: FiniteNuIsotropicWallFullWJCollarV2
+	         Integration: current coupled BDF2/EX2, BE startup, no clipping
+	      Pressure gauge: native restricted mean
+=======================================================================
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/reload15-u.fld" (0.000387023s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/reload15-v.fld" (0.00015842s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/reload15-k.fld" (0.000153339s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/reload15-epsilon.fld" (0.000135688s, XML)
+Writing: "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/reload15-p.fld" (0.000123197s, XML)
+-------------------------------------------
+Total Computation Time = 0.0646908s
+-------------------------------------------
+L 2 error (variable u) : 3.98894e-07
+L inf error (variable u) : 1.44823e-06
+L 2 error (variable v) : 6.40518e-08
+L inf error (variable v) : 2.80577e-07
+L 2 error (variable k) : 1.50192e-07
+L inf error (variable k) : 8.21674e-07
+L 2 error (variable epsilon) : 1.7751e-06
+L inf error (variable epsilon) : 7.46443e-06
+L 2 error (variable p) : 1.16552e-07
+L inf error (variable p) : 7.08889e-07
+-------------------------------------------
+                       Region  Elapsed time Avg (s)       Min (s)       Max (s)         Count      IO Level
+                      Execute             0.0908321     0.0908321     0.0908321             1             0
+

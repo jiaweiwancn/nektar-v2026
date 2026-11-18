@@ -1,0 +1,782 @@
+{
+  "schema": "WJH27CutoffOwnerTransitionCheckpointV1",
+  "status": "PASS_CUTOFF_OWNER_CACHE_HISTORY_ONLY",
+  "full_H27_qualification": false,
+  "TASK3_READY": false,
+  "active_model": "FiniteNuIsotropicWallFullWJCollarV2",
+  "v4_implemented": false,
+  "mac_parent": "82d11ddeb21118293737fd67d5be265000a256b2",
+  "source_identity": "56c35390fdf092180913f60c3ae348ca10cdcdf4e6b889c3afd589eddb511acf",
+  "runtime": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/runtime-v19.json",
+    "bytes": 3336,
+    "sha256": "b42dd0c1bc018ecbf3e2b5a39faaf374fb44f2afe084ee68195ae499629b3b04"
+  },
+  "independent": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/independent.json",
+    "bytes": 341503,
+    "sha256": "802f41784e827979c63d25b811ec674aa072c1f08f24d2a81c874e94bb758ca8"
+  },
+  "cache_comparison": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cache-comparison.json",
+    "bytes": 51007,
+    "sha256": "d006fbfbb16219ca62b5d89750f0c9154f67fd115697d25c2c78cd417c2839f1"
+  },
+  "owner_transitions": [
+    {
+      "before": {
+        "step": 10,
+        "time": 0.2,
+        "column": [
+          0.49999999999999994,
+          1
+        ],
+        "roots": [
+          {
+            "owner": 1,
+            "x": 0.504795249975577,
+            "bounds": [
+              0.49999999999999994,
+              1,
+              0,
+              0.02944229043455092
+            ],
+            "cutoff_residual": 0.0
+          },
+          {
+            "owner": 3,
+            "x": 0.504795249975577,
+            "bounds": [
+              0.49999999999999994,
+              1,
+              0.02944229043455089,
+              0.15000000000000002
+            ],
+            "cutoff_residual": 0.0
+          }
+        ],
+        "K_samples": [
+          0.008868550565598722,
+          0.008938544464502398
+        ],
+        "cutoff_samples": [
+          0.02948045639475028,
+          0.0294056653096156
+        ],
+        "refreshes": 1,
+        "reuses": 2,
+        "maximum_age": 3,
+        "newton": 3,
+        "krylov": 5
+      },
+      "after": {
+        "step": 11,
+        "time": 0.22,
+        "column": [
+          0,
+          0.5
+        ],
+        "roots": [
+          {
+            "owner": 0,
+            "x": 0.4880293076910518,
+            "bounds": [
+              0,
+              0.5,
+              0,
+              0.02944229043455092
+            ],
+            "cutoff_residual": 0.0
+          },
+          {
+            "owner": 2,
+            "x": 0.4880293076910518,
+            "bounds": [
+              0,
+              0.5,
+              0.02944229043455089,
+              0.15000000000000002
+            ],
+            "cutoff_residual": 0.0
+          }
+        ],
+        "K_samples": [
+          0.008870950358832699,
+          0.008940766742911624
+        ],
+        "cutoff_samples": [
+          0.029477875541338586,
+          0.02940330701454725
+        ],
+        "refreshes": 0,
+        "reuses": 3,
+        "maximum_age": 6,
+        "newton": 3,
+        "krylov": 5
+      }
+    }
+  ],
+  "sampled_K_change_over_Kin": 0.005143957540781112,
+  "sampled_cutoff_change_over_H": 0.0003249059116068829,
+  "frame_comparison_MAX": {
+    "fresh": 1.281276550940104e-13,
+    "cold": 1.2518632422911197e-13
+  },
+  "current_equations": {
+    "fresh": {
+      "file": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/fresh-current.json",
+        "sha256": "e63268250b6990ba2dce26ea3113c55073c13c9921a7ceb92a98c97a970bacb6",
+        "bytes": 17181
+      },
+      "status": "PASS_CURRENT_COUPLED_STEP_ONLY",
+      "residuals": {
+        "momentum": 3.2563119316691863e-12,
+        "k": 1.274291556529686e-13,
+        "epsilon": 1.0422539903897286e-13,
+        "continuity": 1.8380242316481844e-17,
+        "gauge": 1.4253976315513773e-18
+      }
+    },
+    "cached": {
+      "file": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cached-current.json",
+        "sha256": "e348dc2e8514ab4cace3d5084938407fa75e50a454aae4accdc105554131594d",
+        "bytes": 17175
+      },
+      "status": "PASS_CURRENT_COUPLED_STEP_ONLY",
+      "residuals": {
+        "momentum": 3.2563958933385e-12,
+        "k": 1.3642453373408475e-13,
+        "epsilon": 1.2245778009847005e-13,
+        "continuity": 2.4045798002034555e-17,
+        "gauge": 9.39015431370197e-19
+      }
+    },
+    "cold": {
+      "file": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cold-current.json",
+        "sha256": "c3567c5ce4cee29639b5a7ab65a16920430929b3c5f105e1c31cc693ad7040a8",
+        "bytes": 17177
+      },
+      "status": "PASS_CURRENT_COUPLED_STEP_ONLY",
+      "residuals": {
+        "momentum": 3.2563689142664054e-12,
+        "k": 1.404733292606178e-13,
+        "epsilon": 1.4041099289344561e-13,
+        "continuity": 1.1881915575842167e-17,
+        "gauge": 1.0812904967293178e-18
+      }
+    }
+  },
+  "retained_recovery_imports": {
+    "15": {
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cached.recovery-15.bin",
+        "sha256": "c91e587a2c76bd245f4ecc13cabc0485942ddfe22e7b560a943c4b5ee0b841d7",
+        "bytes": 12018,
+        "payload_sha256": "8ffb0f6eba5734c614056b0c3bd08dbc6b75cfc8aa82d5519bbcf385976903b1",
+        "signature": "1980ff853f419cf3c4cf6dc3c3a73f9ad996f6fe26189ba603807fb63166f435",
+        "step": 15,
+        "time": 0.3,
+        "dt": 0.02,
+        "hashes": {
+          "current": "bc2ebde8add5e1f23656d92c4668bec1a804074e3285feb991b9e730ff413e82",
+          "previous": "c21ebeed12f23c1596a618a2d6f5c9ed3ce974c458addeba796bf0fd1cec0854",
+          "advection": "579efd601e16176e7b0d8282c59bacbfbb3fd1c1d5eef72baaa7b7142c0f5e14",
+          "previous_advection": "9d32dbef01cbe700e71d4dc8451cf7462b82ddbb8e1bf25d7401e4edb3e42847"
+        }
+      },
+      "output": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/reload15.final.bin",
+        "sha256": "c91e587a2c76bd245f4ecc13cabc0485942ddfe22e7b560a943c4b5ee0b841d7",
+        "bytes": 12018
+      },
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/reload15.result.json",
+        "sha256": "1ef966de5206f72fae5e823c52c8e78fd8c88d6a0ec24e3153523adeb4f751c4",
+        "bytes": 33251
+      },
+      "exact_four_histories": true,
+      "advancing_evidence_claimed": false
+    },
+    "18": {
+      "input": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cached.recovery-18.bin",
+        "sha256": "caa21b85c14df4b0dcf0b5d0721fde079bac627bc41f0c3cda11e4e4a69a3204",
+        "bytes": 12018,
+        "payload_sha256": "a8494c6c28f128633d3afdda9fdc7e4f566fda8ef2b25eb8d04a69bd7e500bba",
+        "signature": "1980ff853f419cf3c4cf6dc3c3a73f9ad996f6fe26189ba603807fb63166f435",
+        "step": 18,
+        "time": 0.36,
+        "dt": 0.02,
+        "hashes": {
+          "current": "b9d1bad9a348a0d46407f6e6a0eb64202c82f5a11727cb40f1acbc6c1396cbc6",
+          "previous": "6055d1a88bacf3d1558fad76937ce0b814d22987d289b140aa0989db54ee6fb5",
+          "advection": "7b0d7c42dc1630991328f206370a95f998574133716d556c9714ee4c71a66b21",
+          "previous_advection": "1c11968a78072ee33b9e0d5d9c7a591128f1ff890c6b87fe8341a7d6ed6e971e"
+        }
+      },
+      "output": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/reload18.final.bin",
+        "sha256": "caa21b85c14df4b0dcf0b5d0721fde079bac627bc41f0c3cda11e4e4a69a3204",
+        "bytes": 12018
+      },
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/reload18.result.json",
+        "sha256": "99dd5c368dc172e4b5992acc8cd62d82f0c622fe015a0740ba80fd87d237e33a",
+        "bytes": 33401
+      },
+      "exact_four_histories": true,
+      "advancing_evidence_claimed": false
+    }
+  },
+  "first_cold_inverse_event": {
+    "attempt": 0,
+    "base": 0,
+    "alpha": 75,
+    "drift": 0,
+    "age_before": 0,
+    "age_used": 1,
+    "reason": "cold",
+    "refreshed": true
+  },
+  "cases": {
+    "fresh": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/fresh.result.json",
+        "bytes": 72212,
+        "sha256": "a267262ee0450fcc65562807fac2ba7ec5be357f5e38352de39b61143f3cef97"
+      },
+      "whole_seconds": 8.723433404986281,
+      "construction_seconds": 0.030052074987906963,
+      "initialisation_seconds": 0.036201737995725125,
+      "advancing_seconds": 6.836166187946219,
+      "step_seconds": [
+        0.34116181498393416,
+        0.33895257901167497,
+        0.34362382401013747,
+        0.3422161319758743,
+        0.339881099993363,
+        0.3396941979881376,
+        0.3392743860022165,
+        0.34541712899226695,
+        0.3423124309629202,
+        0.34201216604560614,
+        0.3413931980030611,
+        0.3412509189802222,
+        0.34058696299325675,
+        0.34118970995768905,
+        0.3415480889962055,
+        0.3497877739719115,
+        0.34075765701709315,
+        0.3411428580293432,
+        0.3409872149932198,
+        0.34297604503808543
+      ],
+      "export_seconds": 0.023287251009605825,
+      "science_frame_seconds": 0.0637654471793212,
+      "science_index_seconds": 0.00012605800293385983,
+      "recovery_seconds": [],
+      "step": 20,
+      "time": 0.4,
+      "dt": 0.02,
+      "policy": "RebuildEveryNewtonV1",
+      "newton": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "krylov": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "refreshes": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "reuses": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "native_minima": {
+        "minimum_k": 0.008859208491284905,
+        "minimum_epsilon": 0.0007013006129049239,
+        "minimum_covariance_over_k": 0.5370006232786033,
+        "minimum_principal_over_mu": 0.04922172593451521
+      }
+    },
+    "cached": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cached.result.json",
+        "bytes": 72532,
+        "sha256": "8e624fd49a8ad25d03d9a7fd729a3e7f002e9c35f3c479be82e7d288a0b529af"
+      },
+      "whole_seconds": 8.801372010959312,
+      "construction_seconds": 0.02915591496275738,
+      "initialisation_seconds": 0.03617885004496202,
+      "advancing_seconds": 6.597256055974867,
+      "step_seconds": [
+        0.32887314399704337,
+        0.32486789900576696,
+        0.34431777597637847,
+        0.32754323800327256,
+        0.3180466510239057,
+        0.33971263200510293,
+        0.3246677769930102,
+        0.32300124497851357,
+        0.34357074898434803,
+        0.3268412830075249,
+        0.3190184480044991,
+        0.3481810810044408,
+        0.3188921970431693,
+        0.3191186080221087,
+        0.34894267097115517,
+        0.3285813359543681,
+        0.3190310070058331,
+        0.3478105759713799,
+        0.3198018800467253,
+        0.32643585797632113
+      ],
+      "export_seconds": 0.023497689049690962,
+      "science_frame_seconds": 0.06470945192268118,
+      "science_index_seconds": 0.00013680802658200264,
+      "recovery_seconds": [
+        0.022332021966576576,
+        0.021794439002405852,
+        0.02193740603979677,
+        0.022032852051779628,
+        0.021797647001221776,
+        0.02190347301075235
+      ],
+      "step": 20,
+      "time": 0.4,
+      "dt": 0.02,
+      "policy": "CurrentDataDriftV1",
+      "newton": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "krylov": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "refreshes": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "reuses": [
+        2,
+        2,
+        3,
+        2,
+        3,
+        3,
+        2,
+        3,
+        3,
+        2,
+        3,
+        2,
+        3,
+        3,
+        2,
+        3,
+        3,
+        2,
+        3,
+        2
+      ],
+      "native_minima": {
+        "minimum_k": 0.008859208491284905,
+        "minimum_epsilon": 0.0007013006129049239,
+        "minimum_covariance_over_k": 0.5370006232786033,
+        "minimum_principal_over_mu": 0.04922172593451521
+      }
+    },
+    "prefix": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/prefix.result.json",
+        "bytes": 72273,
+        "sha256": "12b736b01872d956bb91917d4f06116c43e5da0372c77487e45d94848ce89146"
+      },
+      "whole_seconds": 5.1555867019924335,
+      "construction_seconds": 0.0294080349849537,
+      "initialisation_seconds": 0.036256719031371176,
+      "advancing_seconds": 3.241578993969597,
+      "step_seconds": [
+        0.32834269700106233,
+        0.3260150250280276,
+        0.32278381899232045,
+        0.3279877500026487,
+        0.3184902350185439,
+        0.3182512099738233,
+        0.3252634899690747,
+        0.32358187600038946,
+        0.3218545410200022,
+        0.3290083509637043
+      ],
+      "export_seconds": 0.02415654598735273,
+      "science_frame_seconds": 0.03197621903382242,
+      "science_index_seconds": 9.002495789900422e-05,
+      "recovery_seconds": [],
+      "step": 10,
+      "time": 0.2,
+      "dt": 0.02,
+      "policy": "CurrentDataDriftV1",
+      "newton": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "krylov": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "refreshes": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "reuses": [
+        2,
+        2,
+        3,
+        2,
+        3,
+        3,
+        2,
+        3,
+        3,
+        2
+      ],
+      "native_minima": {
+        "minimum_k": 0.00883421369276861,
+        "minimum_epsilon": 0.0006979965228742286,
+        "minimum_covariance_over_k": 0.5383820416548288,
+        "minimum_principal_over_mu": 0.04927487038782164
+      }
+    },
+    "cold": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cold.result.json",
+        "bytes": 71993,
+        "sha256": "9b243b8c8119e7741a33c332214cfa0a9dee8f36ebc6c858262cb664298ac9f2"
+      },
+      "whole_seconds": 5.244740331021603,
+      "construction_seconds": 0.029462585982400924,
+      "initialisation_seconds": 0.0650701510021463,
+      "advancing_seconds": 3.251520861114841,
+      "step_seconds": [
+        0.32832357403822243,
+        0.32138736598426476,
+        0.33248332899529487,
+        0.32349636702565476,
+        0.32168103801086545,
+        0.32773151696892455,
+        0.3210818750085309,
+        0.3249377880129032,
+        0.3290306600392796,
+        0.3213673470309004
+      ],
+      "export_seconds": 0.02443123998818919,
+      "science_frame_seconds": 0.03196894790744409,
+      "science_index_seconds": 9.293499169871211e-05,
+      "recovery_seconds": [],
+      "step": 20,
+      "time": 0.4,
+      "dt": 0.02,
+      "policy": "CurrentDataDriftV1",
+      "newton": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "krylov": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "refreshes": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      "reuses": [
+        2,
+        3,
+        2,
+        3,
+        3,
+        2,
+        3,
+        3,
+        2,
+        3
+      ],
+      "native_minima": {
+        "minimum_k": 0.008859208491284905,
+        "minimum_epsilon": 0.0007013006129049239,
+        "minimum_covariance_over_k": 0.5370006232786032,
+        "minimum_principal_over_mu": 0.04922172593451523
+      }
+    },
+    "reload15": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/reload15.result.json",
+        "bytes": 33251,
+        "sha256": "1ef966de5206f72fae5e823c52c8e78fd8c88d6a0ec24e3153523adeb4f751c4"
+      },
+      "whole_seconds": 1.7356726250145584,
+      "construction_seconds": 0.029240449948702008,
+      "initialisation_seconds": 0.06466997100505978,
+      "advancing_seconds": 0,
+      "step_seconds": [],
+      "export_seconds": 0.023119070974644274,
+      "science_frame_seconds": 0,
+      "science_index_seconds": 4.86319768242538e-05,
+      "recovery_seconds": [],
+      "step": 15,
+      "time": 0.3,
+      "dt": 0.02,
+      "policy": "CurrentDataDriftV1",
+      "newton": [],
+      "krylov": [],
+      "refreshes": [],
+      "reuses": [],
+      "native_minima": {
+        "minimum_k": 0,
+        "minimum_epsilon": 0,
+        "minimum_covariance_over_k": 0,
+        "minimum_principal_over_mu": 0
+      }
+    },
+    "reload18": {
+      "result": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/reload18.result.json",
+        "bytes": 33401,
+        "sha256": "99dd5c368dc172e4b5992acc8cd62d82f0c622fe015a0740ba80fd87d237e33a"
+      },
+      "whole_seconds": 1.7565514980233274,
+      "construction_seconds": 0.02892142895143479,
+      "initialisation_seconds": 0.06463975697988644,
+      "advancing_seconds": 0,
+      "step_seconds": [],
+      "export_seconds": 0.02408736798679456,
+      "science_frame_seconds": 0,
+      "science_index_seconds": 9.476504055783153e-05,
+      "recovery_seconds": [],
+      "step": 18,
+      "time": 0.36,
+      "dt": 0.02,
+      "policy": "CurrentDataDriftV1",
+      "newton": [],
+      "krylov": [],
+      "refreshes": [],
+      "reuses": [],
+      "native_minima": {
+        "minimum_k": 0,
+        "minimum_epsilon": 0,
+        "minimum_covariance_over_k": 0,
+        "minimum_principal_over_mu": 0
+      }
+    }
+  },
+  "resources": {
+    "source_build_runtime_bytes": 3001775477,
+    "science_bytes": 2725900259,
+    "free_bytes": 69434105856,
+    "account_closed": false,
+    "aggregate_completed_seconds_open_snapshot": 16970.16970700276,
+    "phase_completed_seconds_open_snapshot": 84.51772231905488,
+    "max_phase_host_workers": 12,
+    "max_phase_tree_rss_bytes": 182808576,
+    "ranks": 1,
+    "all_six_thread_limits_one": true,
+    "worker_ceiling": 72,
+    "campaign_ceiling": 43200,
+    "evidence_protected": 3600
+  },
+  "scope": "Focused current-rule owner crossing, inverse-cache equivalence and cold/rotation foundation; physical reference, selected h/p/q/dt, required-duration pilots, monitoring/storage and complete production cost remain open.",
+  "visualization": {
+    "png": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/evidence/native-cutoff-owner-transition-v2k/owner-transition.png",
+      "bytes": 97479,
+      "sha256": "4d4cad7458d112c957da420ad52117730837b8cbbdd40e9f12d463d5df295cb3"
+    },
+    "svg": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/evidence/native-cutoff-owner-transition-v2k/owner-transition.svg",
+      "bytes": 62220,
+      "sha256": "30c20eed229ac404ad86154afe119ce0301326b172fa114bfe2becd77218149a"
+    },
+    "scope": "Root from one retained original radial side; both radial owners independently validated. Bars count preparation bases, not Krylov applications."
+  }
+}

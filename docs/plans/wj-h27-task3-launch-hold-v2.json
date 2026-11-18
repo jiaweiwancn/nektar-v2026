@@ -260,7 +260,12 @@
     "prior_source_checkpoint_rejected": true,
     "removed_binary_byte_audit_claimed": false,
     "persisted_statistics_proof_source": "source15; separately bound, not transferred to source19",
-    "production_policy_qualified": false
+    "production_policy_qualified": false,
+    "source19_MMS_owner_transition": {
+      "path": "docs/plans/wj-h27-linux/native-cutoff-owner-transition-v2k/science/cutoff-owner-transition-v19/independent.json",
+      "bytes": 341503,
+      "sha256": "802f41784e827979c63d25b811ec674aa072c1f08f24d2a81c874e94bb758ca8"
+    }
   },
   "storage": {
     "diagnostic_resource_snapshot": {
@@ -329,7 +334,8 @@
   ],
   "diagnostic_commands": {
     "operator": "See docs/plans/wj-h27-cutoff-panels-checkpoint-v2.md",
-    "retained_history": "Use source-bound tools-cutoff-recovery-v19b/h27/retained_recovery_check.py with the archived manifest and a fresh output path"
+    "retained_history": "Use source-bound tools-cutoff-recovery-v19b/h27/retained_recovery_check.py with the archived manifest and a fresh output path",
+    "cutoff_owner_transition": "See docs/plans/wj-h27-cutoff-owner-transition-checkpoint-v2.md; use a fresh reassessment label/output with the frozen source19 helper"
   },
   "next_model_decision": {
     "path": "docs/plans/wj-h27-historical-inner-transport-proposal-v4.md",
@@ -361,6 +367,21 @@
       "path": "docs/plans/wj-h27-linux/native-mms-requalification-v2j/post-publication-summary.json",
       "bytes": 249620,
       "sha256": "b5aac7d9ec3f31faa6d4a2b615ceccfe948855ce7a181e02c6a8f7c12d5e9e82"
+    },
+    {
+      "path": "docs/plans/wj-h27-linux/native-cutoff-owner-transition-v2k/inventory.json",
+      "bytes": 68561,
+      "sha256": "5be962605a1de138af5ce064d2c0bb096fcdc818ae3f3cbc1518a6618d94259f"
+    },
+    {
+      "path": "docs/plans/wj-h27-linux/native-cutoff-owner-transition-v2k/post-publication-summary.json",
+      "bytes": 3108,
+      "sha256": "7bac81afe029e0a547a4ef33b4455232127e71c7aa1359813fa0ec45bd9c861b"
+    },
+    {
+      "path": "docs/plans/wj-h27-linux/native-cutoff-owner-transition-v2k/local-source-equivalence.json",
+      "bytes": 1011,
+      "sha256": "61ec065605688008270677b9b009065f67af6722edfdb748a6ac4bb68ed8af34"
     }
   ],
   "source19_numerical_MMS_foundations": {
@@ -372,8 +393,45 @@
     },
     "temporal_source": "CoupledJFNKV1 with CurrentDataDriftV1; six source19 endpoints",
     "steady_spatial_source": "True t=0 current-advection Historical MMS; five source19 endpoints",
-    "moving_cutoff_source": "Two continuous MMS variants with distinct current/exact surface roots and independent dense references; eight-cell two-step cases only",
+    "moving_cutoff_source": "Two continuous MMS variants with separate current/exact surfaces and independent tiny dense references; supplemented by an actual 20-step Historical owner transition with live inverse reuse and cold history",
     "physical_dt_selected": false,
+    "full_H27_numerical_closure_claimed": false
+  },
+  "source19_cutoff_owner_transition": {
+    "status": "PASS_CUTOFF_OWNER_CACHE_HISTORY_ONLY",
+    "report": {
+      "path": "docs/plans/wj-h27-linux/native-cutoff-owner-transition-v2k/assessment.json",
+      "bytes": 20744,
+      "sha256": "62b3bea95abb52899e057ebb5f49387b5045ff646429ce59bab4c0ac3d54f314"
+    },
+    "independent": {
+      "path": "docs/plans/wj-h27-linux/native-cutoff-owner-transition-v2k/science/cutoff-owner-transition-v19/independent.json",
+      "bytes": 341503,
+      "sha256": "802f41784e827979c63d25b811ec674aa072c1f08f24d2a81c874e94bb758ca8"
+    },
+    "checkpoint": "docs/plans/wj-h27-cutoff-owner-transition-checkpoint-v2.md",
+    "source_identity": "56c35390fdf092180913f60c3ae348ca10cdcdf4e6b889c3afd589eddb511acf",
+    "actual_owner_transition_steps": [
+      10,
+      11
+    ],
+    "fresh_cached_frame_MAX": 1.281276550940104e-13,
+    "cold_cached_frame_MAX": 1.2518632422911197e-13,
+    "current_equations_pass": true,
+    "retained_MMS_recovery_writes": [
+      3,
+      6,
+      9,
+      12,
+      15,
+      18
+    ],
+    "retained_MMS_actual_rotations": 4,
+    "retained_MMS_reloaded_byte_exact": [
+      15,
+      18
+    ],
+    "physical_recipe_qualified": false,
     "full_H27_numerical_closure_claimed": false
   }
 }

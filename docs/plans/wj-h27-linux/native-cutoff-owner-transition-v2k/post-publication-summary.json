@@ -1,0 +1,91 @@
+{
+  "schema": "WJH27CutoffOwnerPostPublicationV1",
+  "utc": "2026-11-18T00:10:54.781781+00:00",
+  "account_identity": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/accounting.json",
+    "bytes": 238999,
+    "sha256": "09bcf880744dcab7f9e99c6b5bd24c8729b30ced0514f5bb704c2bc285324a0a"
+  },
+  "account_closed": false,
+  "aggregate_seconds": 16975.562547255773,
+  "phase_seconds": 89.91056257206947,
+  "phase_operations": 13,
+  "all_phase_pass": true,
+  "active_reservations": [],
+  "ceiling": 43200,
+  "evidence_protected": 3600,
+  "remaining_seconds": 26224.437452744227,
+  "remaining_science_before_protection": 22624.437452744227,
+  "phase_max_workers": 12,
+  "phase_max_tree_rss_bytes": 182808576,
+  "publication_receipt": {
+    "argv": [
+      "python3",
+      "-B",
+      "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/owner-transition-publication-v19.py"
+    ],
+    "phase": "evidence",
+    "seconds_cap": 90.0,
+    "utc": "2026-11-18T00:07:31.052406+00:00",
+    "allocation": {
+      "workers": 4,
+      "processes": [
+        {
+          "pid": 2109,
+          "parent": 1,
+          "threads": 1,
+          "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+        },
+        {
+          "pid": 2270,
+          "parent": 1,
+          "threads": 2,
+          "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+        },
+        {
+          "pid": 504307,
+          "parent": 1,
+          "threads": 1,
+          "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label owner-transition-publication-v19 --phase evidence --seconds 90 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/owner-transition-publication-v19.py"
+        }
+      ]
+    },
+    "reservation": 2,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "runner": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+      "bytes": 4663,
+      "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+    },
+    "input_files": [
+      {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/owner-transition-publication-v19.py",
+        "bytes": 9263,
+        "sha256": "5396d50d479fe6fa36c35911802c94acd5aad5381cf4c0fcc764ba956e112f4b"
+      }
+    ],
+    "status": "PASS",
+    "seconds": 5.392840253014583,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 61841408,
+    "peak_host_workers": 6,
+    "log": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/owner-transition-publication-v19/command.log",
+      "bytes": 720,
+      "sha256": "e1adcb95468cd81708425fc75c3be65d81a5bb385214d1dc5f374cb7698f4d3f"
+    }
+  },
+  "linux_primary": {
+    "head": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+    "status": " M docs/developer-guide/src/library\n"
+  },
+  "TASK3_READY": false
+}

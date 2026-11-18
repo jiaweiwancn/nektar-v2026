@@ -1,0 +1,134 @@
+{
+  "schema": "WJH27CutoffOwnerTransitionCasesV1",
+  "source_identity": "56c35390fdf092180913f60c3ae348ca10cdcdf4e6b889c3afd589eddb511acf",
+  "template": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/hist8.xml",
+    "bytes": 6061,
+    "sha256": "f952781e65efefe34b9b639d18cefe7c1461ac29ed51d8275b5a91ed01214af6"
+  },
+  "geometry": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/mms-requalification-v19/crossing/geometry.json",
+    "bytes": 785,
+    "sha256": "5e8138435d012dbdba1a2d1d21a6953f796451c99e30aaeeb4fb691683c55b8e"
+  },
+  "source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v19.json",
+    "bytes": 1141639,
+    "sha256": "26e414f6d5238c7d5bf44cdd1c2fe38d341bbdff697f4f3105c6dd247b84eb82"
+  },
+  "runtime": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/runtime-v19.json",
+    "bytes": 3336,
+    "sha256": "b42dd0c1bc018ecbf3e2b5a39faaf374fb44f2afe084ee68195ae499629b3b04"
+  },
+  "helpers": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-cutoff-owner-transition-v19/transition-overlay.json",
+    "bytes": 21056,
+    "sha256": "506da1d943b187ccc0a4c0f52edf94efbc11f95b8825c84658d1c7b0d9bc1280"
+  },
+  "cases": {
+    "fresh": {
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/fresh.xml",
+        "bytes": 6059,
+        "sha256": "4df2a154c8409b0dc6b651a077bf14844c6b95657f390f07649d6152a326dede"
+      },
+      "options": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/fresh.xml.opt",
+        "bytes": 55,
+        "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+      },
+      "steps": 20,
+      "policy": "RebuildEveryNewtonV1",
+      "recovery_stride": 0,
+      "scientific_stride": 1,
+      "restart": ""
+    },
+    "cached": {
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cached.xml",
+        "bytes": 6058,
+        "sha256": "4ba28293bb13b67f63e771ee3c65d6a93cb57bf8b305f28b09d66c0197b2a1f0"
+      },
+      "options": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cached.xml.opt",
+        "bytes": 55,
+        "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+      },
+      "steps": 20,
+      "policy": "CurrentDataDriftV1",
+      "recovery_stride": 3,
+      "scientific_stride": 1,
+      "restart": ""
+    },
+    "prefix": {
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/prefix.xml",
+        "bytes": 6058,
+        "sha256": "a862ad999c8d4d70651e9a4d314824a5bf752e190edaba1ee7ab88e8c48486c8"
+      },
+      "options": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/prefix.xml.opt",
+        "bytes": 55,
+        "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+      },
+      "steps": 10,
+      "policy": "CurrentDataDriftV1",
+      "recovery_stride": 0,
+      "scientific_stride": 1,
+      "restart": ""
+    },
+    "cold": {
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cold.xml",
+        "bytes": 6187,
+        "sha256": "fc3f3b26641851a4fe2d5f59f1dc563af9defd3f077ee36807901849b633c216"
+      },
+      "options": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cold.xml.opt",
+        "bytes": 55,
+        "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+      },
+      "steps": 10,
+      "policy": "CurrentDataDriftV1",
+      "recovery_stride": 0,
+      "scientific_stride": 1,
+      "restart": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/prefix.final.bin"
+    },
+    "reload15": {
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/reload15.xml",
+        "bytes": 6196,
+        "sha256": "5e69f1603c7acb698fad4bc48b07e158d33ee24f488373ed7eee190fce1bf99d"
+      },
+      "options": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/reload15.xml.opt",
+        "bytes": 55,
+        "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+      },
+      "steps": 0,
+      "policy": "CurrentDataDriftV1",
+      "recovery_stride": 0,
+      "scientific_stride": 0,
+      "restart": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cached.recovery-15.bin"
+    },
+    "reload18": {
+      "session": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/reload18.xml",
+        "bytes": 6196,
+        "sha256": "a1c27390112262342059b96954b7aff67a4b41bfecee5831ef7bee959d7fad94"
+      },
+      "options": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/reload18.xml.opt",
+        "bytes": 55,
+        "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+      },
+      "steps": 0,
+      "policy": "CurrentDataDriftV1",
+      "recovery_stride": 0,
+      "scientific_stride": 0,
+      "restart": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cached.recovery-18.bin"
+    }
+  },
+  "TASK3_READY": false
+}

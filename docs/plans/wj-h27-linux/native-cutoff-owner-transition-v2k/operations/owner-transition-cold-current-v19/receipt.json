@@ -1,0 +1,91 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-cutoff-owner-transition-v19/h27/coupled_oracle.py",
+    "--native",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cold.result.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cold-current.json",
+    "--seconds",
+    "75",
+    "--direct-seconds",
+    "40"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 80.0,
+  "utc": "2026-11-18T00:02:45.668954+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 504144,
+        "parent": 1,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/owner-transition-controller-v19.py"
+      },
+      {
+        "pid": 504263,
+        "parent": 504144,
+        "threads": 1,
+        "args": "python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label owner-transition-cold-current-v19 --phase analysis --seconds 80 -- python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools-cutoff-owner-transition-v19/h27/coupled_oracle.py --native /home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cold.result.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cold-current.json --seconds 75 --direct-seconds 40"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools-cutoff-owner-transition-v19/h27/coupled_oracle.py",
+      "bytes": 62217,
+      "sha256": "44891e974a4104313cd6f64764d01f6f7a207eb28498e3153635f00d0a041ff6"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/cutoff-owner-transition-v19/cold.result.json",
+      "bytes": 71993,
+      "sha256": "9b243b8c8119e7741a33c332214cfa0a9dee8f36ebc6c858262cb664298ac9f2"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 14.125504251976963,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 125255680,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/owner-transition-cold-current-v19/command.log",
+    "bytes": 204,
+    "sha256": "57f19225435d91860ed19d8facf6ef2406a8f3a2c7e1440d6efb19c22812a4b1"
+  }
+}

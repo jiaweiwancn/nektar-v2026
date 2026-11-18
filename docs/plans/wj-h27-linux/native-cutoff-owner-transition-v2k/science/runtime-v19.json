@@ -1,0 +1,77 @@
+{
+  "scope": "opt-in H27 native targets; qualification scope belongs to each test",
+  "source": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/source-v19.json",
+    "bytes": 1141639,
+    "sha256": "26e414f6d5238c7d5bf44cdd1c2fe38d341bbdff697f4f3105c6dd247b84eb82"
+  },
+  "configure": [
+    "cmake",
+    "-S",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/source-v19/solvers/IncNavierStokesSolver/Tests/RANS/h27",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/build-v19",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math",
+    "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+  ],
+  "build": [
+    "cmake",
+    "--build",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/build-v19",
+    "--target",
+    "IncNavierStokesSolver",
+    "WJH27CutoffPanelProbe",
+    "--parallel",
+    "4"
+  ],
+  "executables": [
+    {
+      "executable": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v19/IncNavierStokesSolver.elf",
+        "bytes": 9932832,
+        "sha256": "37307b1662d694124326568fd1137050a56955928c48f6406989a171596fc52b"
+      },
+      "wrapper": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v19/IncNavierStokesSolver",
+        "bytes": 380,
+        "sha256": "fa22c4ad5427840d2e83a5f89006a3f8fdcba4b2d23cd34ed5f804b2d5932194"
+      },
+      "link": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v19/CMakeFiles/IncNavierStokesSolver.dir/link.txt",
+        "bytes": 12653,
+        "sha256": "b1d5c55efb7d840e28dc6b10d08799eb8d54bc5aa9ade867af951267ba9117d5"
+      }
+    },
+    {
+      "executable": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v19/WJH27CutoffPanelProbe.elf",
+        "bytes": 1012224,
+        "sha256": "33ed3d222388cec950a788f43b5f790bd51740ea93fa31e6720abee613df0c8c"
+      },
+      "wrapper": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v19/WJH27CutoffPanelProbe",
+        "bytes": 380,
+        "sha256": "7cc06b19042dee54efac12524735c6346245a588f5fdcc8b090fcace6011d1b4"
+      },
+      "link": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v19/CMakeFiles/WJH27CutoffPanelProbe.dir/link.txt",
+        "bytes": 1728,
+        "sha256": "39380de5b8ce6be58c01add32a27663825c09ad1423f0bdb06b8c7f0f9b30d06"
+      }
+    }
+  ],
+  "loader": {
+    "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2",
+    "bytes": 240936,
+    "sha256": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+  },
+  "libraries": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc:/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/geometry:/home/jay/.local/opt/nektar-v2026-mpi/lib64",
+  "compiler": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0\nCopyright (C) 2021 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "compile_commands": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-v19/compile_commands.json",
+    "bytes": 157283,
+    "sha256": "11290cd5d682d794ec6b89f2e771f31c108bca6fbbfb985f139f0b3a622b7870"
+  }
+}
