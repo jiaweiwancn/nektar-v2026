@@ -1,0 +1,28 @@
+{
+  "schema": "WJInnerKDirectionalAdmissionV1",
+  "case": "streamwise",
+  "base_current_sha256": "ea6b4b6107c9bfb3840eed4cdc5abdc82bd2f747aa32aff43c0e2fb9131fabb0",
+  "extra_x": [-9.921875, -9.8046875, -9.609375, -9.375, -9.0625, -8.125, -6.875, -5.625, 3.625, 4.375, 5.125, 5.75, 6.25, 6.75, 7.25, 7.875, 8.3125, 9.375, 10.625, 11.875],
+  "extra_z": [],
+  "rationale": [
+    "The same-mesh candidate passes the independent steady equations and reduces the inner domain k RMS from .13279450 to .08419314.",
+    "Refine the inlet-H corner and early rise from the .0189 first-column sample to .1272 at x=-6.51 in the ground owner. The existing CP2 corner and candidate H traction MAX .01543 remain sampled.",
+    "In x=4.75 through 7.5, candidate owner-integrated streamwise advection alternates from +1.2743e-5 to -1.5583e-5 even though the five-column net production surplus is 6.70e-6. The retained x=7.5 ground sample peaks at .30427. Resolve this change and the grading transition downstream through x=12.5.",
+    "Preserve all original x/r faces and radial allocation, limit adjacent x-width ratio to two, and repeat quadrature and algebraic controls on this directional mesh."
+  ],
+  "memory_forecast_bytes": 7400000000,
+  "cost_basis": "The 2800-cell candidate took 466.450s and 2.874GB for 183 Krylov iterations. CP2 measured 770s and 6.773GB at 5808 cells. The 4800-cell projected-seed solve has a 1280s wall allocation. The higher quadrature control increases the flux sampling rule at the converged projected state.",
+  "caps": {
+    "inputs": 35,
+    "directional-steady": 1280,
+    "directional-current": 270,
+    "directional-compare": 230,
+    "quadrature-steady": 360,
+    "quadrature-current": 190,
+    "quadrature-compare": 230,
+    "algebraic-steady": 360,
+    "algebraic-current": 190,
+    "algebraic-compare": 230,
+    "publication": 60
+  }
+}
