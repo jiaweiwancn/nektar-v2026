@@ -1,0 +1,2145 @@
+{
+  "schema": "WJInnerKFixedChoiceColumnsV1",
+  "TASK3_READY": false,
+  "table": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+  },
+  "mechanism": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/inner-k-f0r1/mechanism.json",
+    "sha256": "dc5f18f66c5201ffe3ef91d6b2f2eb5eb1fa87990fc967ca75891f926b6717df"
+  },
+  "script": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/inner-k-f1/inner_k_columns.py",
+    "sha256": "de7c2aef8c4c1fbd162eb352ee0cfed0db8c67c440c1953578f9fc0cffcefd34"
+  },
+  "brackets": [
+    -0.4,
+    0.4
+  ],
+  "scope": "Finite K/radius and branch checks; counterfactual columns",
+  "groups": {
+    "0.9": {
+      "A": {
+        "cutoff": 0.03059290528812411,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.007928113630963672,
+        "minimum_e": 0.001977029097320029,
+        "minimum_shear_tangent": 0.00010981175917698893,
+        "traction_error_over_tau": 5.00208614756865e-15,
+        "tensor_production_error_over_A_per_H": 6.580796452344782e-16,
+        "budget_error_over_A": -4.7268594780866325e-12,
+        "P_integral_over_A": 2.589867165349381,
+        "E_integral_over_A": 2.5898671653493364,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.30166213514581897,
+          "minimum_principal_over_mu": 0.051299236648010595,
+          "tangent_refinement_difference": 6.026845689177662e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.12732446745567724,
+            "MAX": 0.4941676064599673,
+            "signed_peak": -0.4941676064599673,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.0232852395565425,
+            "MAX": 0.03870272373803474,
+            "signed_peak": -0.03870272373803474,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.012884899161840699,
+        "QH_over_A": 5.427077324063976e-14,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -4.627735694651136e-12,
+        "sensitivity": 2.1846203624940346,
+        "minimum_scanned_sensitivity": 1.2504043720669382,
+        "differentiated_sensitivity": 2.184620362451784,
+        "UH": 0.3985415174486526,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "B": {
+        "cutoff": 0.03059290528812411,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.00792810851061533,
+        "minimum_e": 0.001977029097320029,
+        "minimum_shear_tangent": 0.00010981175917698893,
+        "traction_error_over_tau": 5.37261104738855e-15,
+        "tensor_production_error_over_A_per_H": 8.774395269793042e-16,
+        "budget_error_over_A": -2.7526354134423114e-12,
+        "P_integral_over_A": 2.589500209425841,
+        "E_integral_over_A": 2.5898671653493364,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.30166213514581897,
+          "minimum_principal_over_mu": 0.051306942966397186,
+          "tangent_refinement_difference": 6.378814534971747e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.10217174965890988,
+            "MAX": 0.1872162992457478,
+            "signed_peak": 0.1872162992457478,
+            "r": 0.009375
+          },
+          "U": {
+            "RMS": 0.023325239925216405,
+            "MAX": 0.03875388163659155,
+            "signed_peak": -0.03875388163659155,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.018807145569776806,
+        "QH_over_A": 0.0003669559235013683,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -2.7468270713537635e-12,
+        "sensitivity": 2.24006956879143,
+        "minimum_scanned_sensitivity": 1.5346474705310715,
+        "differentiated_sensitivity": 2.2400695688762347,
+        "UH": 0.3984903595500958,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      },
+      "C": {
+        "cutoff": 0.027274535277580492,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.007828760037492508,
+        "minimum_e": 0.001977029097320029,
+        "minimum_shear_tangent": 0.00010981175917698893,
+        "traction_error_over_tau": 6.2989232969383e-15,
+        "tensor_production_error_over_A_per_H": 6.580796452344782e-16,
+        "budget_error_over_A": -4.026071143137244e-12,
+        "P_integral_over_A": 2.6581682180426394,
+        "E_integral_over_A": 2.7046818009244578,
+        "integrated_E_error": 4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.2963806871846143,
+          "minimum_principal_over_mu": 0.051243122860676824,
+          "tangent_refinement_difference": 5.86786175205134e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.20301482829572126,
+            "MAX": 0.6406011175106776,
+            "signed_peak": -0.6406011175106776,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.01973068883535164,
+            "MAX": 0.02956202195434038,
+            "signed_peak": -0.02956202195434038,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.011594964145184026,
+        "QH_over_A": 0.046513582881915025,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -3.929440540312301e-12,
+        "sensitivity": 2.8423005521722096,
+        "minimum_scanned_sensitivity": 1.2504043720669382,
+        "differentiated_sensitivity": 2.8423005521295446,
+        "UH": 0.407682219232347,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "D": {
+        "cutoff": 0.027274535277580492,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.007830468774471083,
+        "minimum_e": 0.001977029097320029,
+        "minimum_shear_tangent": 0.00010981175917698893,
+        "traction_error_over_tau": 5.9283983971184e-15,
+        "tensor_production_error_over_A_per_H": 6.580796452344782e-16,
+        "budget_error_over_A": -2.798469789233593e-12,
+        "P_integral_over_A": 2.6577977784504214,
+        "E_integral_over_A": 2.7046818009244578,
+        "integrated_E_error": 4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.29653022024364384,
+          "minimum_principal_over_mu": 0.051243000367129525,
+          "tangent_refinement_difference": 5.53379564394163e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.13349892065373484,
+            "MAX": 0.227435912593778,
+            "signed_peak": -0.227435912593778,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.019743324878913938,
+            "MAX": 0.029611330368167155,
+            "signed_peak": -0.029611330368167155,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.015234542692896882,
+        "QH_over_A": 0.046884022474126166,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -2.708639302434479e-12,
+        "sensitivity": 2.755069321673298,
+        "minimum_scanned_sensitivity": 1.5346474705310715,
+        "differentiated_sensitivity": 2.7550693216015287,
+        "UH": 0.4076329108185202,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      }
+    },
+    "0.925": {
+      "A": {
+        "cutoff": 0.030312872009336328,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.008148339009601553,
+        "minimum_e": 0.0020599747455372257,
+        "minimum_shear_tangent": 0.00011110842196509287,
+        "traction_error_over_tau": 5.047149986735934e-15,
+        "tensor_production_error_over_A_per_H": 8.421090985386835e-16,
+        "budget_error_over_A": -5.124427589369375e-12,
+        "P_integral_over_A": 2.599062853000956,
+        "E_integral_over_A": 2.5990628530009094,
+        "integrated_E_error": -4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.3014631924131732,
+          "minimum_principal_over_mu": 0.05062429389777221,
+          "tangent_refinement_difference": 5.317829510076422e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.10946097115909728,
+            "MAX": 0.45222903056265934,
+            "signed_peak": -0.45222903056265934,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.01882567486888027,
+            "MAX": 0.03284541501186178,
+            "signed_peak": -0.03284541501186178,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.013254336712101423,
+        "QH_over_A": 5.241880417972331e-14,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -5.025379418155396e-12,
+        "sensitivity": 2.1942792044179638,
+        "minimum_scanned_sensitivity": 1.2508935023954717,
+        "differentiated_sensitivity": 2.194279204430794,
+        "UH": 0.4043988261748256,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "B": {
+        "cutoff": 0.030312872009336328,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.008148334130016593,
+        "minimum_e": 0.0020599747455372257,
+        "minimum_shear_tangent": 0.00011110842196509287,
+        "traction_error_over_tau": 5.227405343405075e-15,
+        "tensor_production_error_over_A_per_H": 8.421090985386835e-16,
+        "budget_error_over_A": -2.771400296752713e-12,
+        "P_integral_over_A": 2.598709792260205,
+        "E_integral_over_A": 2.5990628530009094,
+        "integrated_E_error": -4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.3014631924131732,
+          "minimum_principal_over_mu": 0.05063192518130765,
+          "tangent_refinement_difference": 6.1643052318313665e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.11610045065013963,
+            "MAX": 0.24107182624069018,
+            "signed_peak": 0.24107182624069018,
+            "r": 0.0052734374999999995
+          },
+          "U": {
+            "RMS": 0.018865379637879192,
+            "MAX": 0.03289529959612136,
+            "signed_peak": -0.03289529959612136,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.01934559339845589,
+        "QH_over_A": 0.0003530607407174367,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -2.7584774742184237e-12,
+        "sensitivity": 2.24921730174575,
+        "minimum_scanned_sensitivity": 1.5361434693642628,
+        "differentiated_sensitivity": 2.249217301851282,
+        "UH": 0.404348941590566,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      },
+      "C": {
+        "cutoff": 0.027046103544794198,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.008047574908593303,
+        "minimum_e": 0.0020599747455372257,
+        "minimum_shear_tangent": 0.00011110842196509287,
+        "traction_error_over_tau": 5.948426770081637e-15,
+        "tensor_production_error_over_A_per_H": 8.421090985386835e-16,
+        "budget_error_over_A": -4.345968029895175e-12,
+        "P_integral_over_A": 2.6671036847675254,
+        "E_integral_over_A": 2.713092345582617,
+        "integrated_E_error": -4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.2962233111727981,
+          "minimum_principal_over_mu": 0.05056831841531512,
+          "tangent_refinement_difference": 5.339395592329765e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.17894452713836637,
+            "MAX": 0.6020565566795142,
+            "signed_peak": -0.6020565566795142,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.015147011792470385,
+            "MAX": 0.023620339066038776,
+            "signed_peak": -0.023620339066038776,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.011934503765322976,
+        "QH_over_A": 0.045988660815183886,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -4.253535024201227e-12,
+        "sensitivity": 2.855237551463785,
+        "minimum_scanned_sensitivity": 1.2508935023954717,
+        "differentiated_sensitivity": 2.8552375513822557,
+        "UH": 0.4136239021206486,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "D": {
+        "cutoff": 0.027046103544794198,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.008049313839037238,
+        "minimum_e": 0.0020599747455372257,
+        "minimum_shear_tangent": 0.00011110842196509287,
+        "traction_error_over_tau": 5.768171413412497e-15,
+        "tensor_production_error_over_A_per_H": 6.315818239040126e-16,
+        "budget_error_over_A": -2.953824684848172e-12,
+        "P_integral_over_A": 2.666735349203123,
+        "E_integral_over_A": 2.713092345582617,
+        "integrated_E_error": -4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.2963721490397724,
+          "minimum_principal_over_mu": 0.050568187941795656,
+          "tangent_refinement_difference": 7.146329113921238e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.10468631589927531,
+            "MAX": 0.17595178221972943,
+            "signed_peak": -0.17595178221972943,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.015160048645574261,
+            "MAX": 0.023670009593033836,
+            "signed_peak": -0.023670009593033836,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.015688067177115555,
+        "QH_over_A": 0.046356996379588004,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -2.8596847112538626e-12,
+        "sensitivity": 2.7672740283573845,
+        "minimum_scanned_sensitivity": 1.5361434693642628,
+        "differentiated_sensitivity": 2.767274028398457,
+        "UH": 0.41357423159365353,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      }
+    },
+    "0.95": {
+      "A": {
+        "cutoff": 0.03004542859398542,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.008368564388239432,
+        "minimum_e": 0.0021440489924457163,
+        "minimum_shear_tangent": 0.00011238997945029098,
+        "traction_error_over_tau": 5.440865634197479e-15,
+        "tensor_production_error_over_A_per_H": 8.090876104458828e-16,
+        "budget_error_over_A": -5.552248737755375e-12,
+        "P_integral_over_A": 2.6079247713435785,
+        "E_integral_over_A": 2.6079247713435314,
+        "integrated_E_error": 4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.30127104504120356,
+          "minimum_principal_over_mu": 0.049975864678211565,
+          "tangent_refinement_difference": 4.9114046163367675e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.09756129619894544,
+            "MAX": 0.4102920742901816,
+            "signed_peak": -0.4102920742901816,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.01449854977060674,
+            "MAX": 0.027067493213661753,
+            "signed_peak": -0.027067493213661753,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.013623759995062488,
+        "QH_over_A": 5.3041745201246036e-14,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -5.452133536310022e-12,
+        "sensitivity": 2.203725669451657,
+        "minimum_scanned_sensitivity": 1.2513652905659094,
+        "differentiated_sensitivity": 2.203725669403661,
+        "UH": 0.4101767479730256,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "B": {
+        "cutoff": 0.03004542859398542,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.008368559753853694,
+        "minimum_e": 0.0021440489924457163,
+        "minimum_shear_tangent": 0.00011238997945029098,
+        "traction_error_over_tau": 5.265353839545947e-15,
+        "tensor_production_error_over_A_per_H": 6.068157078344121e-16,
+        "budget_error_over_A": -2.8041855404566107e-12,
+        "P_integral_over_A": 2.6075850463036407,
+        "E_integral_over_A": 2.6079247713435314,
+        "integrated_E_error": 4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.30127104504120356,
+          "minimum_principal_over_mu": 0.04998342245743066,
+          "tangent_refinement_difference": 9.557243885183198e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.13637058076175604,
+            "MAX": 0.3003030874840285,
+            "signed_peak": 0.3003030874840285,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.014537923096075022,
+            "MAX": 0.027116125678557867,
+            "signed_peak": -0.027116125678557867,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.019883403537461323,
+        "QH_over_A": 0.0003397250399077687,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -2.7870761254433774e-12,
+        "sensitivity": 2.258156790624519,
+        "minimum_scanned_sensitivity": 1.5375894735780187,
+        "differentiated_sensitivity": 2.258156790544673,
+        "UH": 0.4101281155081295,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      },
+      "C": {
+        "cutoff": 0.026827991349616904,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.008266416158601074,
+        "minimum_e": 0.0021440489924457163,
+        "minimum_shear_tangent": 0.00011238997945029098,
+        "traction_error_over_tau": 5.7918892235005415e-15,
+        "tensor_production_error_over_A_per_H": 8.090876104458828e-16,
+        "budget_error_over_A": -4.6087786365056616e-12,
+        "P_integral_over_A": 2.6757079528602796,
+        "E_integral_over_A": 2.7211894982974294,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.2960719158520611,
+          "minimum_principal_over_mu": 0.04992002940121607,
+          "tangent_refinement_difference": 4.454769886308441e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.1560470122218617,
+            "MAX": 0.5634882848521365,
+            "signed_peak": -0.5634882848521365,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.010644095991506489,
+            "MAX": 0.01776019992809419,
+            "signed_peak": -0.01776019992809419,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.012274252255986693,
+        "QH_over_A": 0.04548154543723994,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -4.518614649118291e-12,
+        "sensitivity": 2.8678199390482724,
+        "minimum_scanned_sensitivity": 1.2513652905659094,
+        "differentiated_sensitivity": 2.867819939155781,
+        "UH": 0.4194840412585932,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "D": {
+        "cutoff": 0.026827991349616904,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.008268181598797185,
+        "minimum_e": 0.0021440489924457163,
+        "minimum_shear_tangent": 0.00011238997945029098,
+        "traction_error_over_tau": 6.142912812803605e-15,
+        "tensor_production_error_over_A_per_H": 8.090876104458828e-16,
+        "budget_error_over_A": -2.9794500200353013e-12,
+        "P_integral_over_A": 2.6753417221047484,
+        "E_integral_over_A": 2.7211894982974294,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.296220062487113,
+          "minimum_principal_over_mu": 0.04991989130100574,
+          "tangent_refinement_difference": 5.1958026512565876e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.07590796471248072,
+            "MAX": 0.12446164261839499,
+            "signed_peak": -0.12446164261839499,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.010657811241603247,
+            "MAX": 0.01781021652453768,
+            "signed_peak": -0.01781021652453768,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.0161416445967084,
+        "QH_over_A": 0.0458477761927711,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -2.88933807435221e-12,
+        "sensitivity": 2.779146207586871,
+        "minimum_scanned_sensitivity": 1.5375894735780187,
+        "differentiated_sensitivity": 2.7791462075661686,
+        "UH": 0.4194340246621497,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      }
+    },
+    "0.975": {
+      "A": {
+        "cutoff": 0.029789693063327426,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.008588789766877311,
+        "minimum_e": 0.0022292368864167585,
+        "minimum_shear_tangent": 0.00011365692085454324,
+        "traction_error_over_tau": 5.3013562589616466e-15,
+        "tensor_production_error_over_A_per_H": 5.836268971279591e-16,
+        "budget_error_over_A": -6.021520759325892e-12,
+        "P_integral_over_A": 2.616472830770036,
+        "E_integral_over_A": 2.616472830769985,
+        "integrated_E_error": -8.881784197001252e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.30108529588900546,
+          "minimum_principal_over_mu": 0.04935225723222022,
+          "tangent_refinement_difference": 4.7871706598812125e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.09390285417021775,
+            "MAX": 0.3683572103736025,
+            "signed_peak": -0.3683572103736025,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.01038545598655398,
+            "MAX": 0.021365785887422162,
+            "signed_peak": -0.021365785887422162,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.013993164846428752,
+        "QH_over_A": 5.3999143579684673e-14,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -5.9168954458233e-12,
+        "sensitivity": 2.212969553650476,
+        "minimum_scanned_sensitivity": 1.251820771267092,
+        "differentiated_sensitivity": 2.2129695536022655,
+        "UH": 0.4158784552992652,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "B": {
+        "cutoff": 0.029789693063327426,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.00858878538184933,
+        "minimum_e": 0.0022292368864167585,
+        "minimum_shear_tangent": 0.00011365692085454324,
+        "traction_error_over_tau": 5.6433792434107844e-15,
+        "tensor_production_error_over_A_per_H": 7.781691961706121e-16,
+        "budget_error_over_A": -2.843722924240205e-12,
+        "P_integral_over_A": 2.616145915555717,
+        "E_integral_over_A": 2.616472830769985,
+        "integrated_E_error": -8.881784197001252e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.30108529588900546,
+          "minimum_principal_over_mu": 0.04935974300459058,
+          "tangent_refinement_difference": 8.417710972707937e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.16057477444625978,
+            "MAX": 0.36128385189492157,
+            "signed_peak": 0.36128385189492157,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.010424097713125854,
+            "MAX": 0.02141318684604898,
+            "signed_peak": -0.02141318684604898,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.020420584014741974,
+        "QH_over_A": 0.0003269152142839898,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -2.827930598026107e-12,
+        "sensitivity": 2.2668978804608115,
+        "minimum_scanned_sensitivity": 1.5389883539326281,
+        "differentiated_sensitivity": 2.2668978805618725,
+        "UH": 0.4158310543406384,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      },
+      "C": {
+        "cutoff": 0.026619475001186183,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.008485282779846432,
+        "minimum_e": 0.0022292368864167585,
+        "minimum_shear_tangent": 0.00011365692085454324,
+        "traction_error_over_tau": 5.6433792434107844e-15,
+        "tensor_production_error_over_A_per_H": 9.727114952132651e-16,
+        "budget_error_over_A": -4.834840861001055e-12,
+        "P_integral_over_A": 2.684000983357728,
+        "E_integral_over_A": 2.728992203292735,
+        "integrated_E_error": -4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.2959261272094066,
+          "minimum_principal_over_mu": 0.04929656373081974,
+          "tangent_refinement_difference": 4.510614104447086e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.1349200878632802,
+            "MAX": 0.5248974109396773,
+            "signed_peak": -0.5248974109396773,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.006255366298201431,
+            "MAX": 0.011978330944646343,
+            "signed_peak": -0.011978330944646343,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.012614199848760213,
+        "QH_over_A": 0.044991219935117496,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -4.724446528436843e-12,
+        "sensitivity": 2.8800654963043315,
+        "minimum_scanned_sensitivity": 1.251820771267092,
+        "differentiated_sensitivity": 2.8800654963231915,
+        "UH": 0.425265910242041,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "D": {
+        "cutoff": 0.026619475001186183,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.008487074267224629,
+        "minimum_e": 0.0022292368864167585,
+        "minimum_shear_tangent": 0.00011365692085454324,
+        "traction_error_over_tau": 5.985402227859923e-15,
+        "tensor_production_error_over_A_per_H": 7.781691961706121e-16,
+        "budget_error_over_A": -2.984931746219388e-12,
+        "P_integral_over_A": 2.6836368551937047,
+        "E_integral_over_A": 2.728992203292735,
+        "integrated_E_error": -4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.29607358718102567,
+          "minimum_principal_over_mu": 0.049296418333586764,
+          "tangent_refinement_difference": 5.2976512066038595e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.04721169889614657,
+            "MAX": 0.07296649952248219,
+            "signed_peak": -0.07296649952248219,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.006270535367157156,
+            "MAX": 0.012028678461565245,
+            "signed_peak": -0.012028678461565245,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.01659526609216077,
+        "QH_over_A": 0.04535534809912721,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -2.8880266234043717e-12,
+        "sensitivity": 2.790702478648048,
+        "minimum_scanned_sensitivity": 1.5389883539326281,
+        "differentiated_sensitivity": 2.7907024786305574,
+        "UH": 0.4252155627251221,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      }
+    },
+    "1.0": {
+      "A": {
+        "cutoff": 0.02954486569124273,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.008809015145515192,
+        "minimum_e": 0.0023155240547992535,
+        "minimum_shear_tangent": 0.00011490971129249645,
+        "traction_error_over_tau": 5.3355585574065596e-15,
+        "tensor_production_error_over_A_per_H": 7.491710018651482e-16,
+        "budget_error_over_A": -6.528882247992508e-12,
+        "P_integral_over_A": 2.6247253152137997,
+        "E_integral_over_A": 2.6247253152137495,
+        "integrated_E_error": -4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.3009055803215412,
+          "minimum_principal_over_mu": 0.04875192715447341,
+          "tangent_refinement_difference": 4.778399897986674e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.09938390054505501,
+            "MAX": 0.32642485985405256,
+            "signed_peak": -0.32642485985405256,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.006761604704551295,
+            "MAX": 0.01573732678544354,
+            "signed_peak": -0.01573732678544354,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.01436254755724252,
+        "QH_over_A": 5.4775407088959404e-14,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -6.4239247601904914e-12,
+        "sensitivity": 2.2220199665416698,
+        "minimum_scanned_sensitivity": 1.2522608933583919,
+        "differentiated_sensitivity": 2.222019966377035,
+        "UH": 0.4215069144012438,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "B": {
+        "cutoff": 0.02954486569124273,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.008809011013746985,
+        "minimum_e": 0.0023155240547992535,
+        "minimum_shear_tangent": 0.00011490971129249645,
+        "traction_error_over_tau": 5.168822352487605e-15,
+        "tensor_production_error_over_A_per_H": 5.618782513988612e-16,
+        "budget_error_over_A": -2.8816974848022703e-12,
+        "P_integral_over_A": 2.6244107148637115,
+        "E_integral_over_A": 2.6247253152137495,
+        "integrated_E_error": -4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.3009055803215412,
+          "minimum_principal_over_mu": 0.04875934237811451,
+          "tangent_refinement_difference": 7.569056492684467e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.18717353763672612,
+            "MAX": 0.4221940873631238,
+            "signed_peak": 0.4221940873631238,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.006796899553923023,
+            "MAX": 0.015783516282868948,
+            "signed_peak": -0.015783516282868948,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.020957143201498264,
+        "QH_over_A": 0.0003146003500559885,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -2.863761311422408e-12,
+        "sensitivity": 2.2754497126166036,
+        "minimum_scanned_sensitivity": 1.540342749488704,
+        "differentiated_sensitivity": 2.2754497128101243,
+        "UH": 0.4214607249038184,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      },
+      "C": {
+        "cutoff": 0.026419898309769346,
+        "quadrature": 48,
+        "samples": 500,
+        "minimum_k": 0.008704173827458353,
+        "minimum_e": 0.0023155240547992535,
+        "minimum_shear_tangent": 0.00011490971129249645,
+        "traction_error_over_tau": 6.002503377082379e-15,
+        "tensor_production_error_over_A_per_H": 7.491710018651482e-16,
+        "budget_error_over_A": -5.079422993325977e-12,
+        "P_integral_over_A": 2.6920010957708174,
+        "E_integral_over_A": 2.7365178439962614,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.2957856033897883,
+          "minimum_principal_over_mu": 0.048696376700305875,
+          "tangent_refinement_difference": 4.875488901490144e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.11653008002533434,
+            "MAX": 0.48628496210469024,
+            "signed_peak": -0.48628496210469024,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.0022980888684935017,
+            "MAX": 0.006271671781541144,
+            "signed_peak": -0.006271671781541144,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.012954337495353045,
+        "QH_over_A": 0.044516748225546306,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -4.977167983311048e-12,
+        "sensitivity": 2.8919907084985743,
+        "minimum_scanned_sensitivity": 1.2522608933583919,
+        "differentiated_sensitivity": 2.891990708519855,
+        "UH": 0.4309725694051462,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "D": {
+        "cutoff": 0.026419898309769346,
+        "quadrature": 48,
+        "samples": 500,
+        "minimum_k": 0.008705990917974997,
+        "minimum_e": 0.0023155240547992535,
+        "minimum_shear_tangent": 0.00011490971129249645,
+        "traction_error_over_tau": 6.002503377082379e-15,
+        "tensor_production_error_over_A_per_H": 9.364637523314354e-16,
+        "budget_error_over_A": -2.997359305201286e-12,
+        "P_integral_over_A": 2.691639065398776,
+        "E_integral_over_A": 2.7365178439962614,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.2959323817745363,
+          "minimum_principal_over_mu": 0.0486962243136806,
+          "tangent_refinement_difference": 4.894529226362465e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.01893855946767498,
+            "MAX": 0.021467240901949382,
+            "signed_peak": -0.021467240901949382,
+            "r": 0.027571919261457925
+          },
+          "U": {
+            "RMS": 0.0023173052470679594,
+            "MAX": 0.006322335897587017,
+            "signed_peak": -0.006322335897587017,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.01704892384141634,
+        "QH_over_A": 0.04487877859758038,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -2.9023242142933725e-12,
+        "sensitivity": 2.801958251374475,
+        "minimum_scanned_sensitivity": 1.540342749488704,
+        "differentiated_sensitivity": 2.8019582512827976,
+        "UH": 0.43092190528910035,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      }
+    },
+    "1.025": {
+      "A": {
+        "cutoff": 0.02931021954575136,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.00902924052415307,
+        "minimum_e": 0.0024028966674886775,
+        "minimum_shear_tangent": 0.00011614879323507275,
+        "traction_error_over_tau": 5.205422982835669e-15,
+        "tensor_production_error_over_A_per_H": 7.219301185305677e-16,
+        "budget_error_over_A": -7.083352441664548e-12,
+        "P_integral_over_A": 2.6326990489289748,
+        "E_integral_over_A": 2.632699048928927,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.3007315628212051,
+          "minimum_principal_over_mu": 0.048173461279963005,
+          "tangent_refinement_difference": 7.268741164523362e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.11266497086924837,
+            "MAX": 0.2844953980041576,
+            "signed_peak": -0.2844953980041576,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.004718154826073089,
+            "MAX": 0.010179337590522364,
+            "signed_peak": -0.010179337590522364,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.014731904821721546,
+        "QH_over_A": 5.4910377203920637e-14,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -6.98048042979682e-12,
+        "sensitivity": 2.230885395006572,
+        "minimum_scanned_sensitivity": 1.2526865289011642,
+        "differentiated_sensitivity": 2.230885394959835,
+        "UH": 0.427064903596165,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "B": {
+        "cutoff": 0.02931021954575136,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.009029236649308967,
+        "minimum_e": 0.0024028966674886775,
+        "minimum_shear_tangent": 0.00011614879323507275,
+        "traction_error_over_tau": 5.530761919262898e-15,
+        "tensor_production_error_over_A_per_H": 7.219301185305677e-16,
+        "budget_error_over_A": -2.924611887302614e-12,
+        "P_integral_over_A": 2.6323962969706356,
+        "E_integral_over_A": 2.632699048928927,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.3007315628212051,
+          "minimum_principal_over_mu": 0.04818080737711079,
+          "tangent_refinement_difference": 8.701483977802127e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.2152647432401108,
+            "MAX": 0.48303477229726177,
+            "signed_peak": 0.48303477229726177,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.004735718242908806,
+            "MAX": 0.010224335118656835,
+            "signed_peak": -0.010224335118656835,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.021493089716546603,
+        "QH_over_A": 0.00030275195831611085,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -2.8997151901855034e-12,
+        "sensitivity": 2.28382079136533,
+        "minimum_scanned_sensitivity": 1.5416550914871292,
+        "differentiated_sensitivity": 2.283820791378644,
+        "UH": 0.42701990606803053,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      },
+      "C": {
+        "cutoff": 0.026228664825276856,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.008923086731943546,
+        "minimum_e": 0.0024028966674886775,
+        "minimum_shear_tangent": 0.00011614879323507275,
+        "traction_error_over_tau": 6.181439792117357e-15,
+        "tensor_production_error_over_A_per_H": 9.024126481632097e-16,
+        "budget_error_over_A": -5.333233854543096e-12,
+        "P_integral_over_A": 2.699725137270254,
+        "E_integral_over_A": 2.7437824040949508,
+        "integrated_E_error": -4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.2956500312122722,
+          "minimum_principal_over_mu": 0.048118054888305235,
+          "tangent_refinement_difference": 6.554645715084462e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.10236209511404568,
+            "MAX": 0.4476518917758607,
+            "signed_peak": -0.4476518917758607,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.0031949484551150424,
+            "MAX": 0.004497621417605235,
+            "signed_peak": 0.004497621417605235,
+            "r": 0.07851562499999999
+          }
+        },
+        "ground_k": 0.013294656796997458,
+        "QH_over_A": 0.04405726682478748,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -5.242327405508007e-12,
+        "sensitivity": 2.903610887940009,
+        "minimum_scanned_sensitivity": 1.2526865289011642,
+        "differentiated_sensitivity": 2.9036108883412344,
+        "UH": 0.43660688474739323,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "D": {
+        "cutoff": 0.026228664825276856,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.008924930680997237,
+        "minimum_e": 0.0024028966674886775,
+        "minimum_shear_tangent": 0.00011614879323507275,
+        "traction_error_over_tau": 5.8561008556901276e-15,
+        "tensor_production_error_over_A_per_H": 9.024126481632097e-16,
+        "budget_error_over_A": -3.01304814431802e-12,
+        "P_integral_over_A": 2.6993651976687567,
+        "E_integral_over_A": 2.7437824040949508,
+        "integrated_E_error": -4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.29579613350883943,
+          "minimum_principal_over_mu": 0.048117895798814946,
+          "tangent_refinement_difference": 6.23900930918353e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.01224437245268628,
+            "MAX": 0.030035348068464515,
+            "signed_peak": 0.030035348068464515,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.0031931099902349825,
+            "MAX": 0.004498824072352192,
+            "signed_peak": 0.004498824072352192,
+            "r": 0.07851562499999999
+          }
+        },
+        "ground_k": 0.017502610927605466,
+        "QH_over_A": 0.04441720642629139,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -2.9157214836983414e-12,
+        "sensitivity": 2.8129278410044773,
+        "minimum_scanned_sensitivity": 1.5416550914871292,
+        "differentiated_sensitivity": 2.812927841131888,
+        "UH": 0.4365559175867502,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      }
+    },
+    "1.05": {
+      "A": {
+        "cutoff": 0.029085092312096727,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.009249465902790951,
+        "minimum_e": 0.0024913414036269238,
+        "minimum_shear_tangent": 0.00011737458788343822,
+        "traction_error_over_tau": 5.2402807260243e-15,
+        "tensor_production_error_over_A_per_H": 6.963009860677371e-16,
+        "budget_error_over_A": -4.113612312750361e-12,
+        "P_integral_over_A": 2.6404095428655996,
+        "E_integral_over_A": 2.64040954286555,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.3005629340250559,
+          "minimum_principal_over_mu": 0.047615563699481306,
+          "tangent_refinement_difference": 4.573119660733482e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.13139066354100296,
+            "MAX": 0.24256915947706664,
+            "signed_peak": -0.24256915947706664,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.006003843900230593,
+            "MAX": 0.008849854993463413,
+            "signed_peak": 0.008849854993463413,
+            "r": 0.075
+          }
+        },
+        "ground_k": 0.015101233691901172,
+        "QH_over_A": 5.803699273370343e-14,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -4.005837328513451e-12,
+        "sensitivity": 2.239573759819179,
+        "minimum_scanned_sensitivity": 1.2530984810476724,
+        "differentiated_sensitivity": 2.2395737599622865,
+        "UH": 0.4325550295189691,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "B": {
+        "cutoff": 0.029085092312096727,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.009249462288314695,
+        "minimum_e": 0.0024913414036269238,
+        "minimum_shear_tangent": 0.00011737458788343822,
+        "traction_error_over_tau": 5.0814843403872004e-15,
+        "tensor_production_error_over_A_per_H": 1.0444514791016055e-15,
+        "budget_error_over_A": -2.9685444640631387e-12,
+        "P_integral_over_A": 2.6401181991269604,
+        "E_integral_over_A": 2.64040954286555,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.3005629340250559,
+          "minimum_principal_over_mu": 0.047622842053532476,
+          "tangent_refinement_difference": 8.446576771348191e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.24432031528923565,
+            "MAX": 0.5438069042801688,
+            "signed_peak": 0.5438069042801688,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.005992684762528408,
+            "MAX": 0.00883809259514462,
+            "signed_peak": 0.00883809259514462,
+            "r": 0.0744140625
+          }
+        },
+        "ground_k": 0.02202843234760928,
+        "QH_over_A": 0.0002913437386148812,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -2.9430746034675437e-12,
+        "sensitivity": 2.2920190427065696,
+        "minimum_scanned_sensitivity": 1.5429276242570242,
+        "differentiated_sensitivity": 2.2920190426013267,
+        "UH": 0.43251120500677676,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      },
+      "C": {
+        "cutoff": 0.02604523112730004,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.009142020248881963,
+        "minimum_e": 0.0024913414036269238,
+        "minimum_shear_tangent": 0.00011737458788343822,
+        "traction_error_over_tau": 6.0342626542098e-15,
+        "tensor_production_error_over_A_per_H": 8.703762325846713e-16,
+        "budget_error_over_A": -5.600991892507068e-12,
+        "P_integral_over_A": 2.707188631083557,
+        "E_integral_over_A": 2.7508006087860464,
+        "integrated_E_error": -4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.29551912313790113,
+          "minimum_principal_over_mu": 0.04756030215268837,
+          "tangent_refinement_difference": 6.206091196503394e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.09433711813433283,
+            "MAX": 0.408999086698129,
+            "signed_peak": -0.408999086698129,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.007243018516003398,
+            "MAX": 0.00912535118485347,
+            "signed_peak": 0.00912535118485347,
+            "r": 0.085546875
+          }
+        },
+        "ground_k": 0.013635149942343843,
+        "QH_over_A": 0.0436119777025842,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -5.506267317101354e-12,
+        "sensitivity": 2.9149402828066084,
+        "minimum_scanned_sensitivity": 1.2530984810476724,
+        "differentiated_sensitivity": 2.9149402828432946,
+        "UH": 0.4421715447582848,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "D": {
+        "cutoff": 0.02604523112730004,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.009143891942925406,
+        "minimum_e": 0.0024913414036269238,
+        "minimum_shear_tangent": 0.00011737458788343822,
+        "traction_error_over_tau": 5.8754662685727004e-15,
+        "tensor_production_error_over_A_per_H": 8.703762325846713e-16,
+        "budget_error_over_A": -3.0324562305672487e-12,
+        "P_integral_over_A": 2.7068307733216934,
+        "E_integral_over_A": 2.7508006087860464,
+        "integrated_E_error": -4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.29566455519333257,
+          "minimum_principal_over_mu": 0.04756013663096692,
+          "tangent_refinement_difference": 6.706024624492102e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.04001878347821536,
+            "MAX": 0.081540572043878,
+            "signed_peak": 0.081540572043878,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.007235333560025218,
+            "MAX": 0.009128517138584535,
+            "signed_peak": 0.009128517138584535,
+            "r": 0.085546875
+          }
+        },
+        "ground_k": 0.017956321225678036,
+        "QH_over_A": 0.04396983546444607,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -2.9393414785472416e-12,
+        "sensitivity": 2.823624569673864,
+        "minimum_scanned_sensitivity": 1.5429276242570242,
+        "differentiated_sensitivity": 2.823624569626981,
+        "UH": 0.4421202873959642,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      }
+    },
+    "1.075": {
+      "A": {
+        "cutoff": 0.028868879198863585,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.00946969128142883,
+        "minimum_e": 0.0025808454210953322,
+        "minimum_shear_tangent": 0.00011858749645584222,
+        "traction_error_over_tau": 5.273517178832066e-15,
+        "tensor_production_error_over_A_per_H": 6.721531874003426e-16,
+        "budget_error_over_A": -4.1569233589281945e-12,
+        "P_integral_over_A": 2.6478711235213246,
+        "E_integral_over_A": 2.6478711235212753,
+        "integrated_E_error": -4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.3003994081255543,
+          "minimum_principal_over_mu": 0.0470770435322263,
+          "tangent_refinement_difference": 5.625381838797937e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.15357292584952092,
+            "MAX": 0.2405320293894668,
+            "signed_peak": 0.2405320293894668,
+            "r": 0.03130351555990696
+          },
+          "U": {
+            "RMS": 0.009258791793538803,
+            "MAX": 0.013310112359214754,
+            "signed_peak": 0.013310112359214754,
+            "r": 0.07734375
+          }
+        },
+        "ground_k": 0.015470531538076909,
+        "QH_over_A": 5.716810142535967e-14,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -4.050461355209478e-12,
+        "sensitivity": 2.2480924658379746,
+        "minimum_scanned_sensitivity": 1.2534974909553191,
+        "differentiated_sensitivity": 2.2480924657525962,
+        "UH": 0.4379797416146166,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "B": {
+        "cutoff": 0.028868879198863585,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.009469687930559127,
+        "minimum_e": 0.0025808454210953322,
+        "minimum_shear_tangent": 0.00011858749645584222,
+        "traction_error_over_tau": 5.428620625268303e-15,
+        "tensor_production_error_over_A_per_H": 6.721531874003426e-16,
+        "budget_error_over_A": -3.0118568771810017e-12,
+        "P_integral_over_A": 2.6475907721514105,
+        "E_integral_over_A": 2.6478711235212753,
+        "integrated_E_error": -4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.3003994081255543,
+          "minimum_principal_over_mu": 0.04708425549171454,
+          "tangent_refinement_difference": 6.018963105702824e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.2740217968884257,
+            "MAX": 0.6045114927187926,
+            "signed_peak": 0.6045114927187926,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.009235993546558413,
+            "MAX": 0.013291978168960772,
+            "signed_peak": 0.013291978168960772,
+            "r": 0.077297506648383
+          }
+        },
+        "ground_k": 0.022563179986567383,
+        "QH_over_A": 0.0002803513698921494,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -2.9845249535642715e-12,
+        "sensitivity": 2.3000518664818643,
+        "minimum_scanned_sensitivity": 1.5441624235825084,
+        "differentiated_sensitivity": 2.3000518665364,
+        "UH": 0.43793707168496415,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      },
+      "C": {
+        "cutoff": 0.025869101003779194,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.009360975613231771,
+        "minimum_e": 0.0025808454210953322,
+        "minimum_shear_tangent": 0.00011858749645584222,
+        "traction_error_over_tau": 5.893930964577015e-15,
+        "tensor_production_error_over_A_per_H": 1.008229781100514e-15,
+        "budget_error_over_A": -5.876757414036149e-12,
+        "P_integral_over_A": 2.714405907050516,
+        "E_integral_over_A": 2.757586049032507,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.29539261462148036,
+          "minimum_principal_over_mu": 0.047021927412037035,
+          "tangent_refinement_difference": 6.1188276667678565e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.09404035881000758,
+            "MAX": 0.37032737315494024,
+            "signed_peak": -0.37032737315494024,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.01143163671071276,
+            "MAX": 0.013800877936013811,
+            "signed_peak": 0.013800877936013811,
+            "r": 0.09023437499999999
+          }
+        },
+        "ground_k": 0.013975809652648817,
+        "QH_over_A": 0.043180141982087965,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -5.7794012631173786e-12,
+        "sensitivity": 2.925992173605848,
+        "minimum_scanned_sensitivity": 1.2534974909553191,
+        "differentiated_sensitivity": 2.9259921735687424,
+        "UH": 0.44766907541771017,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "D": {
+        "cutoff": 0.025869101003779194,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.009362871878294645,
+        "minimum_e": 0.0025808454210953322,
+        "minimum_shear_tangent": 0.00011858749645584222,
+        "traction_error_over_tau": 6.049034411013252e-15,
+        "tensor_production_error_over_A_per_H": 1.1762680779505996e-15,
+        "budget_error_over_A": -3.0492899871781276e-12,
+        "P_integral_over_A": 2.7140501205593845,
+        "E_integral_over_A": 2.757586049032507,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.2955373825677583,
+          "minimum_principal_over_mu": 0.04702175571128842,
+          "tangent_refinement_difference": 5.1414428270391e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.06864584161677743,
+            "MAX": 0.1330478145387863,
+            "signed_peak": 0.1330478145387863,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.011422454838941666,
+            "MAX": 0.013805551623362111,
+            "signed_peak": 0.013805551623362111,
+            "r": 0.09023437499999999
+          }
+        },
+        "ground_k": 0.018410049304919407,
+        "QH_over_A": 0.043535928473217925,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -2.9536286610953866e-12,
+        "sensitivity": 2.8340608563753173,
+        "minimum_scanned_sensitivity": 1.5441624235825084,
+        "differentiated_sensitivity": 2.8340608563545002,
+        "UH": 0.44761754003524956,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      }
+    },
+    "1.1": {
+      "A": {
+        "cutoff": 0.028661026763011046,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.009689916660066711,
+        "minimum_e": 0.0026713963285067126,
+        "minimum_shear_tangent": 0.00011978790139082279,
+        "traction_error_over_tau": 5.153664515676791e-15,
+        "tensor_production_error_over_A_per_H": 8.117119582114302e-16,
+        "budget_error_over_A": -4.2267681259207715e-12,
+        "P_integral_over_A": 2.655097046692122,
+        "E_integral_over_A": 2.655097046692069,
+        "integrated_E_error": -4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.30024072058292806,
+          "minimum_principal_over_mu": 0.04655565251653515,
+          "tangent_refinement_difference": 4.924616270329807e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.177915855682875,
+            "MAX": 0.2731299030153642,
+            "signed_peak": 0.2731299030153642,
+            "r": 0.03046875
+          },
+          "U": {
+            "RMS": 0.013039499495092319,
+            "MAX": 0.017763889583278625,
+            "signed_peak": 0.017763889583278625,
+            "r": 0.0796875
+          }
+        },
+        "ground_k": 0.015839796014201022,
+        "QH_over_A": 5.4744288408742365e-14,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -4.118733132330021e-12,
+        "sensitivity": 2.256448446694272,
+        "minimum_scanned_sensitivity": 1.253884243865987,
+        "differentiated_sensitivity": 2.256448446639793,
+        "UH": 0.4433413450883277,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "B": {
+        "cutoff": 0.028661026763011046,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.009689913575851423,
+        "minimum_e": 0.0026713963285067126,
+        "minimum_shear_tangent": 0.00011978790139082279,
+        "traction_error_over_tau": 5.00208614756865e-15,
+        "tensor_production_error_over_A_per_H": 1.1363967414960024e-15,
+        "budget_error_over_A": -3.088175060724646e-12,
+        "P_integral_over_A": 2.6548272943669766,
+        "E_integral_over_A": 2.655097046692069,
+        "integrated_E_error": -4.440892098500626e-16,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.30024072058292806,
+          "minimum_principal_over_mu": 0.04655774364112542,
+          "tangent_refinement_difference": 6.620520890268037e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.3041697450683091,
+            "MAX": 0.6651495528046972,
+            "signed_peak": 0.6651495528046972,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.013012717804792488,
+            "MAX": 0.017738814190747243,
+            "signed_peak": 0.017738814190747243,
+            "r": 0.0796875
+          }
+        },
+        "ground_k": 0.023097341576258777,
+        "QH_over_A": 0.00026975232512363396,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -3.0568395037455787e-12,
+        "sensitivity": 2.307926182692617,
+        "minimum_scanned_sensitivity": 1.5453614128879054,
+        "differentiated_sensitivity": 2.307926182695587,
+        "UH": 0.44329981181417144,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      },
+      "C": {
+        "cutoff": 0.025699820383653357,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.009579952085673865,
+        "minimum_e": 0.0026713963285067126,
+        "minimum_shear_tangent": 0.00011978790139082279,
+        "traction_error_over_tau": 5.9115563562174956e-15,
+        "tensor_production_error_over_A_per_H": 8.117119582114302e-16,
+        "budget_error_over_A": -6.168184019106349e-12,
+        "P_integral_over_A": 2.721390216813018,
+        "E_integral_over_A": 2.764151291182409,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.29527026179101223,
+          "minimum_principal_over_mu": 0.04650183394507295,
+          "tangent_refinement_difference": 5.381903256385101e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.10153888073481732,
+            "MAX": 0.3316375224764762,
+            "signed_peak": -0.3316375224764762,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.01560742171224066,
+            "MAX": 0.01849189207620655,
+            "signed_peak": 0.01849189207620655,
+            "r": 0.09375
+          }
+        },
+        "ground_k": 0.014316629133253128,
+        "QH_over_A": 0.04276107436948581,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -6.073063059386374e-12,
+        "sensitivity": 2.9367789589213826,
+        "minimum_scanned_sensitivity": 1.253884243865987,
+        "differentiated_sensitivity": 2.9367789587247484,
+        "UH": 0.4531018536076427,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "D": {
+        "cutoff": 0.025699820383653357,
+        "quadrature": 48,
+        "samples": 501,
+        "minimum_k": 0.009581872541985784,
+        "minimum_e": 0.0026713963285067126,
+        "minimum_shear_tangent": 0.00011978790139082279,
+        "traction_error_over_tau": 5.759977988109354e-15,
+        "tensor_production_error_over_A_per_H": 9.740543498537163e-16,
+        "budget_error_over_A": -3.0685107232919506e-12,
+        "P_integral_over_A": 2.7210364896219073,
+        "E_integral_over_A": 2.764151291182409,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.2954143719905091,
+          "minimum_principal_over_mu": 0.04650165630227432,
+          "tangent_refinement_difference": 5.651090706493278e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.09737078538080947,
+            "MAX": 0.18455652833575625,
+            "signed_peak": 0.18455652833575625,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.015597569029942037,
+            "MAX": 0.018497419558297812,
+            "signed_peak": 0.018497419558297812,
+            "r": 0.09375
+          }
+        },
+        "ground_k": 0.018863790344882923,
+        "QH_over_A": 0.043114801560596,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -2.9741330925814324e-12,
+        "sensitivity": 2.844248296924536,
+        "minimum_scanned_sensitivity": 1.5453614128879054,
+        "differentiated_sensitivity": 2.844248297095899,
+        "UH": 0.4530500517709685,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      }
+    }
+  },
+  "derivatives": [
+    {
+      "K_over_Kin": 0.9,
+      "cutoff": 0.027274535277580492,
+      "cutoff_dK": -1.0618729035687675,
+      "normalized_action_errors": [
+        6.938893903907228e-17,
+        2.6079923836860508e-17,
+        1.118828226775781e-16,
+        6.307695868734566e-17
+      ],
+      "a": 0.018478274017069963,
+      "d": 0.00010981175917698892,
+      "D": 0.0009690515009707422,
+      "D_K": 0.060112373209508095,
+      "m2_minus_m1": 0.5458124635031428,
+      "X": 2.1495481812172157,
+      "J": 1.658907376608033,
+      "J_K": 35.53249583218478
+    },
+    {
+      "K_over_Kin": 0.925,
+      "cutoff": 0.027046103544794198,
+      "cutoff_dK": -1.0132587693842312,
+      "normalized_action_errors": [
+        0.0,
+        1.3039961918430254e-17,
+        0.0,
+        6.223254167346581e-17
+      ],
+      "a": 0.018733158802602724,
+      "d": 0.00011110842196509285,
+      "D": 0.0009822003062861194,
+      "D_K": 0.05930532868454799,
+      "m2_minus_m1": 0.5548391517523111,
+      "X": 2.1791985222964616,
+      "J": 1.6665848953160678,
+      "J_K": 34.2056741317296
+    },
+    {
+      "K_over_Kin": 0.95,
+      "cutoff": 0.026827991349616904,
+      "cutoff_dK": -0.9680971423879715,
+      "normalized_action_errors": [
+        0.0,
+        1.955994287764538e-17,
+        0.0,
+        0.0
+      ],
+      "a": 0.01898462185025398,
+      "d": 0.00011238997945029098,
+      "D": 0.0009951748954871008,
+      "D_K": 0.05852986175880038,
+      "m2_minus_m1": 0.5636770588225282,
+      "X": 2.2084508180586497,
+      "J": 1.6739791844852685,
+      "J_K": 32.9591525141242
+    },
+    {
+      "K_over_Kin": 0.975,
+      "cutoff": 0.026619475001186183,
+      "cutoff_dK": -0.9260620844313889,
+      "normalized_action_errors": [
+        9.251858538542972e-17,
+        5.2159847673721016e-17,
+        0.0,
+        6.064078680539686e-17
+      ],
+      "a": 0.019232797375076507,
+      "d": 0.00011365692085454324,
+      "D": 0.0010079819987956007,
+      "D_K": 0.05778396905211188,
+      "m2_minus_m1": 0.572335234831854,
+      "X": 2.2373206815270716,
+      "J": 1.6811071863754772,
+      "J_K": 31.786315043103833
+    },
+    {
+      "K_over_Kin": 1.0,
+      "cutoff": 0.026419898309769346,
+      "cutoff_dK": -0.8868655726980099,
+      "normalized_action_errors": [
+        4.625929269271486e-17,
+        2.6079923836860508e-17,
+        0.0,
+        5.988942690451419e-17
+      ],
+      "a": 0.019477811040883385,
+      "d": 0.00011490971129249645,
+      "D": 0.001020627924693574,
+      "D_K": 0.057065820511511336,
+      "m2_minus_m1": 0.5808220706893817,
+      "X": 2.265822730972924,
+      "J": 1.6879844629821146,
+      "J_K": 30.681227603640252
+    },
+    {
+      "K_over_Kin": 1.025,
+      "cutoff": 0.026228664825276856,
+      "cutoff_dK": -0.8502523049759119,
+      "normalized_action_errors": [
+        0.0,
+        6.519980959215127e-18,
+        0.0,
+        5.916534822887471e-17
+      ],
+      "a": 0.019719780704104385,
+      "d": 0.00011614879323507273,
+      "D": 0.0010331185959759266,
+      "D_K": 0.05637374061423298,
+      "m2_minus_m1": 0.5891453615437295,
+      "X": 2.293970676446942,
+      "J": 1.6946253367467277,
+      "J_K": 29.638554282113688
+    },
+    {
+      "K_over_Kin": 1.05,
+      "cutoff": 0.02604523112730004,
+      "cutoff_dK": -0.8159953184446822,
+      "normalized_action_errors": [
+        6.938893903907228e-17,
+        1.955994287764538e-17,
+        0.0,
+        1.1693387778661987e-16
+      ],
+      "a": 0.01995881707645963,
+      "d": 0.00011737458788343822,
+      "D": 0.001045459581938811,
+      "D_K": 0.05570619200154438,
+      "m2_minus_m1": 0.5973123627191989,
+      "X": 2.3217773968671676,
+      "J": 1.7010430141906698,
+      "J_K": 28.65348555656489
+    },
+    {
+      "K_over_Kin": 1.075,
+      "cutoff": 0.025869101003779194,
+      "cutoff_dK": -0.7838922794284026,
+      "normalized_action_errors": [
+        0.0,
+        6.519980959215127e-18,
+        0.0,
+        5.779271723656407e-17
+      ],
+      "a": 0.02019502431702387,
+      "d": 0.00011858749645584222,
+      "D": 0.0010576561271974524,
+      "D_K": 0.055061761180690616,
+      "m2_minus_m1": 0.605329839187066,
+      "X": 2.3492550088928446,
+      "J": 1.7072496948594127,
+      "J_K": 27.721676420267364
+    },
+    {
+      "K_over_Kin": 1.1,
+      "cutoff": 0.025699820383653357,
+      "cutoff_dK": -0.7537623290728351,
+      "normalized_action_errors": [
+        2.312964634635743e-17,
+        6.519980959215127e-18,
+        0.0,
+        5.714131860314886e-17
+      ],
+      "a": 0.020428500562664764,
+      "d": 0.00011978790139082278,
+      "D": 0.0010697131775547343,
+      "D_K": 0.05443914599325998,
+      "m2_minus_m1": 0.6132041094524465,
+      "X": 2.37641492862946,
+      "J": 1.7132566675893017,
+      "J_K": 26.83919289166689
+    }
+  ],
+  "kin_refined": {
+    "A": {
+      "result": {
+        "cutoff": 0.02954486569124273,
+        "quadrature": 80,
+        "samples": 1429,
+        "minimum_k": 0.008809015145515192,
+        "minimum_e": 0.0023155240547992535,
+        "minimum_shear_tangent": 0.00011490971129249645,
+        "traction_error_over_tau": 5.502294762325514e-15,
+        "tensor_production_error_over_A_per_H": 8.428173770982917e-16,
+        "budget_error_over_A": -8.907352715998741e-14,
+        "P_integral_over_A": 2.6247253152137593,
+        "E_integral_over_A": 2.624725315213749,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.3009055803215412,
+          "minimum_principal_over_mu": 0.048751927155615236,
+          "tangent_refinement_difference": 5.820566251202308e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.09938390066278102,
+            "MAX": 0.3264248598541522,
+            "signed_peak": -0.3264248598541522,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.006761604705523673,
+            "MAX": 0.015737326787086336,
+            "signed_peak": -0.015737326787086336,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.014362547557241642,
+        "QH_over_A": -1e-14,
+        "bracket": [
+          -0.04999999999999999,
+          0.0
+        ],
+        "ground_Q_over_A": -8.885947533343597e-14,
+        "sensitivity": 2.2220199665424545,
+        "minimum_scanned_sensitivity": 1.2522608933596246,
+        "differentiated_sensitivity": 2.222019966651237,
+        "UH": 0.42150691439960103,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "common_k_MAX": 1.1152856416174473e-11,
+      "common_U_MAX": 1.4152270466638581e-11,
+      "norm_RMS_change": 1.1772600949644385e-10,
+      "sampled_MAX_change": 1.6427970095378441e-12
+    },
+    "B": {
+      "result": {
+        "cutoff": 0.02954486569124273,
+        "quadrature": 80,
+        "samples": 1429,
+        "minimum_k": 0.008809010911727755,
+        "minimum_e": 0.0023155240547992535,
+        "minimum_shear_tangent": 0.00011490971129249645,
+        "traction_error_over_tau": 5.502294762325514e-15,
+        "tensor_production_error_over_A_per_H": 7.491710018651482e-16,
+        "budget_error_over_A": -8.757469575904064e-14,
+        "P_integral_over_A": 2.624410714863718,
+        "E_integral_over_A": 2.624725315213749,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.3009055803215412,
+          "minimum_principal_over_mu": 0.048759342379073076,
+          "tangent_refinement_difference": 7.456812944894864e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.1871735377716381,
+            "MAX": 0.4221940873646606,
+            "signed_peak": 0.4221940873646606,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.006796899554337901,
+            "MAX": 0.015783516283564114,
+            "signed_peak": -0.015783516283564114,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.0209571432015118,
+        "QH_over_A": 0.0003146003500333293,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -8.5192269905221e-14,
+        "sensitivity": 2.2754497126227857,
+        "minimum_scanned_sensitivity": 1.5403427494872202,
+        "differentiated_sensitivity": 2.2754497126877684,
+        "UH": 0.42146072490312325,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      },
+      "common_k_MAX": 1.8692158931798986e-11,
+      "common_U_MAX": 3.790452840490843e-12,
+      "norm_RMS_change": 1.349119704840973e-10,
+      "sampled_MAX_change": 1.5367707106861417e-12
+    },
+    "C": {
+      "result": {
+        "cutoff": 0.026419898309769346,
+        "quadrature": 80,
+        "samples": 1428,
+        "minimum_k": 0.008704172577278981,
+        "minimum_e": 0.0023155240547992535,
+        "minimum_shear_tangent": 0.00011490971129249645,
+        "traction_error_over_tau": 6.169239582001335e-15,
+        "tensor_production_error_over_A_per_H": 9.364637523314354e-16,
+        "budget_error_over_A": -7.960992975952763e-14,
+        "P_integral_over_A": 2.6920010957707734,
+        "E_integral_over_A": 2.7365178439962614,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.29578560338980336,
+          "minimum_principal_over_mu": 0.04869637670017238,
+          "tangent_refinement_difference": 5.2841064857034326e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.11653008002516199,
+            "MAX": 0.4862849621049425,
+            "signed_peak": -0.4862849621049425,
+            "r": 0.0
+          },
+          "U": {
+            "RMS": 0.0022980888692117865,
+            "MAX": 0.006271671782795418,
+            "signed_peak": -0.006271671782795418,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.012954337495350823,
+        "QH_over_A": 0.044516748225498996,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -6.862696175224947e-14,
+        "sensitivity": 2.8919907084955123,
+        "minimum_scanned_sensitivity": 1.2522608933596246,
+        "differentiated_sensitivity": 2.8919907084701264,
+        "UH": 0.43097256940389195,
+        "scanned_admissible": 11,
+        "scanned_rejected": 6
+      },
+      "common_k_MAX": 8.93063401008476e-12,
+      "common_U_MAX": 1.0565727404099332e-11,
+      "norm_RMS_change": 7.182848066333847e-13,
+      "sampled_MAX_change": 1.2542744620702706e-12
+    },
+    "D": {
+      "result": {
+        "cutoff": 0.026419898309769346,
+        "quadrature": 80,
+        "samples": 1428,
+        "minimum_k": 0.00870599094005138,
+        "minimum_e": 0.0023155240547992535,
+        "minimum_shear_tangent": 0.00011490971129249645,
+        "traction_error_over_tau": 6.002503377082379e-15,
+        "tensor_production_error_over_A_per_H": 7.491710018651482e-16,
+        "budget_error_over_A": -7.726458362000699e-14,
+        "P_integral_over_A": 2.691639065398733,
+        "E_integral_over_A": 2.7365178439962614,
+        "integrated_E_error": 0.0,
+        "admissibility": {
+          "minimum_covariance_over_k": 0.29593238177455083,
+          "minimum_principal_over_mu": 0.04869622431385875,
+          "tangent_refinement_difference": 6.9038108563290734e-12,
+          "radii_checked": 132
+        },
+        "norms": {
+          "k_over_Kin": {
+            "RMS": 0.018938559467740358,
+            "MAX": 0.021467240892010533,
+            "signed_peak": -0.021467240892010533,
+            "r": 0.010396302601864965
+          },
+          "U": {
+            "RMS": 0.002317305247430214,
+            "MAX": 0.006322335898219622,
+            "signed_peak": -0.006322335898219622,
+            "r": 0.15
+          }
+        },
+        "ground_k": 0.017048923841421076,
+        "QH_over_A": 0.044878778597531956,
+        "bracket": [
+          0.0,
+          0.04999999999999999
+        ],
+        "ground_Q_over_A": -7.373073505900773e-14,
+        "sensitivity": 2.8019582513719685,
+        "minimum_scanned_sensitivity": 1.5403427494872202,
+        "differentiated_sensitivity": 2.801958251447712,
+        "UH": 0.43092190528846774,
+        "scanned_admissible": 7,
+        "scanned_rejected": 10
+      },
+      "common_k_MAX": 1.7287948850253088e-11,
+      "common_U_MAX": 3.05219494123321e-12,
+      "norm_RMS_change": 3.6225449723259473e-13,
+      "sampled_MAX_change": 9.938848355428576e-12
+    }
+  },
+  "invalid_K_controls": [
+    {
+      "K": "0.007928105702850042",
+      "rejection": "historical column K outside qualified interval"
+    },
+    {
+      "K": "0.00968992634998337",
+      "rejection": "historical column K outside qualified interval"
+    },
+    {
+      "K": "nan",
+      "rejection": "historical column K outside qualified interval"
+    },
+    {
+      "K": "0.0",
+      "rejection": "historical column K outside qualified interval"
+    }
+  ],
+  "COLUMN_REMEDY": "SUPPORTED",
+  "elapsed_seconds": 205.4510159199708,
+  "full_linux_report": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/inner-k-f1/columns.json",
+    "bytes": 167393,
+    "sha256": "e4917bca1e38ec7992b6b50403550b33dc2cc0985286194acf4f4ca5dac65652"
+  }
+}
