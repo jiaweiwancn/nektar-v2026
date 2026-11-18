@@ -1,0 +1,76 @@
+{
+  "request": {
+    "label": "r2-reject-same-policy-stale-epsilon",
+    "phase": "science",
+    "command": [
+      "bash",
+      "-eu",
+      "-c",
+      "\n        set +e\n        \"$1\" --use-opt-file \"$2.opt\" \"$2\" > \"$3\" 2>&1\n        result=$?\n        set -e\n        test \"$result\" -ne 0\n        grep -F \"$4\" \"$3\"\n    ",
+      "verify",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-r2-v1/IncNavierStokesSolver",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-v1/same-policy-stale-epsilon.xml",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-v1/same-policy-stale-epsilon.log",
+      "restored dependent trace differs"
+    ],
+    "cap_seconds": 30.0,
+    "reserved_seconds": 37.0,
+    "workers_before": 38,
+    "idle_mpi_event_helpers": 56,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 34682802,
+      "source_build_runtime_bytes": 138442549,
+      "free_bytes": 3606963015680
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/task2r_run-v2.py",
+      "bytes": 10890,
+      "sha256": "a60e1df7825fe3a707cf24a0d796d27aad9bf78d8918e3d9b3f6dc6c8b557de2"
+    },
+    "input_files": [
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-r2-v1/IncNavierStokesSolver",
+        "bytes": 9985016,
+        "sha256": "7a94420aaa31f41d9d8b6754d20c16f11d1398e894f243eaa6beaa3af7924819"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-v1/same-policy-stale-epsilon.xml",
+        "bytes": 6338,
+        "sha256": "0b799e5e3e68b5db6d377a6d29195ff9914a1893f5bd3a5a844230959e9196d5"
+      }
+    ]
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "science",
+    "seconds": 1.848148578999826,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 103944192,
+    "peak_host_workers": 40,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-reject-same-policy-stale-epsilon/command.log",
+      "bytes": 56,
+      "sha256": "7740fa0ca588c19b71aa100d470e0c13cd6429842d9e2a827cef2df5e609e926"
+    }
+  },
+  "balance": {
+    "charged_seconds": 22841.83985176685,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 16758.16014823315,
+    "tranche_remaining": 5441.450867838086
+  },
+  "storage": {
+    "science_bytes": 34683399,
+    "source_build_runtime_bytes": 138442549,
+    "free_bytes": 3606962995200
+  }
+}

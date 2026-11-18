@@ -14,21 +14,26 @@ int main(int argc,char **argv)
 {
     try
     {
-        if(argc!=3)throw std::invalid_argument("usage: reference_probe qualified-table.json new-output.json");
+        if(argc!=3&&argc!=4)throw std::invalid_argument("usage: reference_probe qualified-table.json new-output.json [policy]");
         if(std::filesystem::exists(argv[2]))throw std::invalid_argument("immutable probe output exists");
-        Reference reference(argv[1]);const auto &p=reference.Parameters();
+        const auto policy=Reference::ParsePolicy(argc==4?argv[3]:"Historical");
+        Reference reference(argv[1],policy);const auto &p=reference.Parameters();
+        const bool exact=policy==Nektar::WJNative::ReferencePolicy::ExactInnerFiniteNuV1;
         std::vector<std::string> dynamic,inlet,rejections;
         for(int i=0;i<=16;++i)
         {
             const double K=i==0?p.KMinimum:i==16?p.KMaximum:p.KIn*(.9+.2*i/16);
             const double cutoff=reference.Cutoff(K);
-            for(double r:{0.,.1*p.H,.4*p.H,.6*p.H,.75*p.H,p.H})
+            std::vector<double> radii{0.,.1*p.H,.4*p.H,.6*p.H,.75*p.H,p.H};
+            if(exact)for(double r:{cutoff,std::nextafter(cutoff,p.H),p.roughness})radii.push_back(r);
+            for(double r:radii)
             {
                 const auto a=reference.Auxiliary(K,r),e=reference.DependentEpsilon(K,r);
                 dynamic.push_back(J::Object({{"K",J::Number(K)},{"r",J::Number(r)},
                     {"A",J::Number(reference.Amplitude(K))},{"dA",J::Number(reference.AmplitudeDerivative(K))},
                     {"ddA",J::Number(reference.AmplitudeSecondDerivative(K))},
                     {"c",J::Number(cutoff)},{"dc",J::Number(reference.CutoffDerivative(K))},
+                    {"K_at_c",J::Number(reference.KAtCutoff(cutoff))},
                     {"aux",J::Numbers(std::array<double,3>{a.value,a.dK,a.dr})},
                     {"epsilon",J::Numbers(std::array<double,3>{e.value,e.dK,e.dr})}}));
             }
@@ -36,9 +41,10 @@ int main(int argc,char **argv)
         std::vector<double> radii;
         for(int i=0;i<=96;++i)radii.push_back(p.H*i/96);
         for(int i=1;i<=64;++i)radii.push_back(i==64?p.topRadius:p.H*std::exp(std::log(p.topRadius/p.H)*i/64));
-        const double oldCutoff=reference.HistoricalInletCutoff();
+        const double oldCutoff=reference.PrescribedInletCutoff();
         for(double r:{oldCutoff,std::nextafter(oldCutoff,0.),std::nextafter(oldCutoff,p.H),
                       std::nextafter(p.H,0.),p.H*(1-1e-10),p.H*1e-12})radii.push_back(r);
+        if(exact)for(double r:{.4*p.H,.75*p.H,p.roughness,std::nextafter(p.H,p.topRadius)})radii.push_back(r);
         for(double r:radii)
         {
             const auto traction=reference.OutletTraction(r);
@@ -47,6 +53,7 @@ int main(int argc,char **argv)
                 {"k_r",J::Number(reference.InletKGradient(r))},
                 {"epsilon",r>=p.H?J::Number(reference.InletE(r)):"null"},
                 {"epsilon_r",r>=p.H?J::Number(reference.InletEGradient(r)):"null"},
+                {"Pi",exact?J::Number(reference.InletModifiedPressure(r)):"null"},
                 {"traction",J::Numbers(traction)}}));
         }
         auto rejected=[&](const char *name,const auto &operation)
@@ -66,7 +73,9 @@ int main(int argc,char **argv)
         rejected("wrong table identity",[&]{Reference other(argv[1],std::string(64,'0'));});
         const auto result=J::Object({{"schema",J::Quote("WJH27NativeReferenceProbeV1")},
             {"status",J::Quote("RECORDED")},{"table_sha256",J::Quote(reference.Identity())},
-            {"historical_inlet_cutoff",J::Number(reference.HistoricalInletCutoff())},
+            {"historical_inlet_cutoff",J::Number(reference.PrescribedInletCutoff())},
+            {"reference_policy",J::Quote(reference.PolicyName())},
+            {"top_tangential_traction",J::Number(reference.TopTangentialTraction())},
             {"top_epsilon_outward_flux",J::Number(reference.TopEpsilonOutwardFlux())},
             {"dynamic",J::List(dynamic)},{"inlet",J::List(inlet)},{"rejections",J::List(rejections)}});
         std::ofstream output(argv[2]);output<<result<<'\n';

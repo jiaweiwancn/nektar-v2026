@@ -87,7 +87,9 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     Check(m_session->GetVariables()==std::vector<std::string>({"u","v","k","epsilon","p"}),"WJNativeCoupledV2 variable order must be u,v,k,epsilon,p");
     Check(m_NumQuadPointsError==0,"restricted epsilon output currently requires NumQuadPointsError=0");
     std::string mode,table;m_session->LoadSolverInfo("WJNativeMode",mode,"Physical");Check(mode=="Physical"||mode=="Manufactured","unknown WJNativeMode");
-    m_session->LoadSolverInfo("WJReferenceTable",table,"");Check(!table.empty(),"WJReferenceTable is required");auto reference=std::make_shared<WJNative::Reference>(table);
+    m_session->LoadSolverInfo("WJReferenceTable",table,"");Check(!table.empty(),"WJReferenceTable is required");
+    std::string policy;m_session->LoadSolverInfo("WJReferencePolicy",policy,"Historical");
+    auto reference=std::make_shared<WJNative::Reference>(table,WJNative::Reference::ParsePolicy(policy));
     double viscosity;m_session->LoadParameter("Kinvis",viscosity,reference->Parameters().nu);Check(std::isfinite(viscosity)&&std::abs(viscosity-reference->Parameters().nu)<=16*std::numeric_limits<double>::epsilon()*reference->Parameters().nu,"Kinvis differs from the pinned physical reference viscosity");
     WJNative::Geometry geometry;geometry.d0=reference->Parameters().d0;geometry.H=reference->Parameters().H;geometry.h=reference->Parameters().roughness;
     m_session->LoadParameter("WJPhysicalDisplacement",geometry.d0,geometry.d0);

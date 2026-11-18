@@ -36,10 +36,11 @@ int main(int argc,char **argv)
 {
     try
     {
-        if(argc<3||(argc-3)%2!=0)throw std::invalid_argument("usage: WJH27CoupledMMSProbe qualified-table.json new-output.json [--body-amplitude VALUE] [--variant Historical|PolynomialScalarsV1]");
+        if(argc<3||(argc-3)%2!=0)throw std::invalid_argument("usage: WJH27CoupledMMSProbe qualified-table.json new-output.json [--body-amplitude VALUE] [--variant Historical|PolynomialScalarsV1] [--policy VALUE]");
         double bodyAmplitude=0;
         MMSVariant variant=MMSVariant::Historical;
-        bool seenBody=false,seenVariant=false;
+        auto policy=ReferencePolicy::Historical;
+        bool seenBody=false,seenVariant=false,seenPolicy=false;
         for(int argument=3;argument<argc;argument+=2)
         {
             const std::string option=argv[argument],value=argv[argument+1];
@@ -56,9 +57,14 @@ int main(int argc,char **argv)
                 else throw std::invalid_argument("unknown MMS variant");
                 seenVariant=true;
             }
+            else if(option=="--policy"&&!seenPolicy)
+            {
+                policy=Reference::ParsePolicy(value);
+                seenPolicy=true;
+            }
             else throw std::invalid_argument("unknown or repeated MMS probe option");
         }
-        Reference reference(argv[1]);const auto &p=reference.Parameters();
+        Reference reference(argv[1],policy);const auto &p=reference.Parameters();
         Geometry geometry;geometry.d0=p.d0;geometry.H=p.H;geometry.h=p.roughness;
         CoupledMMS mms(reference,geometry,.5,bodyAmplitude,variant);
         std::vector<std::string> states,boundaries;

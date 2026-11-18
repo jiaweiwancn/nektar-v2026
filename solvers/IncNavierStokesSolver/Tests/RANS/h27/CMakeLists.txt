@@ -106,3 +106,8 @@ add_executable(IncNavierStokesSolver "${h27_solver_root}/IncNavierStokesSolver.c
     "${h27_solver_root}/EquationSystems/WJNativeCoupled.cpp" ${h27_solver_sources})
 target_link_libraries(IncNavierStokesSolver PRIVATE WJNativeMixedFlow)
 target_compile_options(IncNavierStokesSolver PRIVATE -O3 -ffp-contract=off -fno-fast-math -Wno-sign-compare)
+
+add_executable(WJH27CoupledReturnProbe coupled_return_probe.cpp)
+target_link_libraries(WJH27CoupledReturnProbe PRIVATE WJNativeMixedFlow)
+target_compile_options(WJH27CoupledReturnProbe PRIVATE
+    -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra)

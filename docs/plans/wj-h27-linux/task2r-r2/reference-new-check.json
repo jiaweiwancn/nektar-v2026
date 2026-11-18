@@ -1,0 +1,71 @@
+{
+  "status": "PASS",
+  "actual": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-v1/reference-new.json",
+    "bytes": 96308,
+    "sha256": "65959cdda9397887141c0e4395e350eb581de2f1772fcf093a181176ef7b76be"
+  },
+  "historical": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-v1/reference-old.json",
+    "bytes": 75608,
+    "sha256": "65a591f5ed5e660302af444579c341d6a9e4c48bd1928ef30da5ed8502ec273d"
+  },
+  "fixed_scale_errors": {
+    "cutoff": 6.938893903907228e-17,
+    "cutoff_K": 1.1713905610496673e-16,
+    "cutoff_inverse": 9.84629636412864e-16,
+    "amplitude": 1.7905663218588866e-16,
+    "auxiliary": 3.7220459688099694e-16,
+    "dependent_epsilon": 1.2225704029849915e-15,
+    "U": 5.551115123125783e-17,
+    "k": 1.969259272825728e-16,
+    "U_r": 1.7763568394002505e-15,
+    "k_r": 8.86509225806707e-15,
+    "Pi": 1.6673620491895496e-16,
+    "outlet_traction": 3.334724098379099e-16,
+    "top_tangent": 1.6673620491895496e-16,
+    "top_epsilon_flux": 0.0,
+    "outer_parity_U": 2.220446049250313e-16,
+    "outer_parity_k": 0.0,
+    "outer_parity_U_r": 0.0,
+    "outer_parity_k_r": 0.0,
+    "outer_parity_epsilon": 2.6668077928172694e-16,
+    "outer_parity_epsilon_r": 3.5138253434380503e-16
+  },
+  "dynamic_cases": 153,
+  "inlet_cases": 171,
+  "rejected": [
+    {
+      "case": "K below interval",
+      "reason": "H27 reference: K outside qualified [.9,1.1] inlet interval"
+    },
+    {
+      "case": "K above interval",
+      "reason": "H27 reference: K outside qualified [.9,1.1] inlet interval"
+    },
+    {
+      "case": "nonfinite K",
+      "reason": "H27 reference: nonfinite K"
+    },
+    {
+      "case": "negative radius",
+      "reason": "H27 reference: radius outside fixed physical domain"
+    },
+    {
+      "case": "above top",
+      "reason": "H27 reference: radius outside fixed physical domain"
+    },
+    {
+      "case": "transported inner inlet epsilon",
+      "reason": "H27 reference: no transported inner inlet epsilon"
+    },
+    {
+      "case": "dependent outer epsilon",
+      "reason": "H27 reference: dependent wall epsilon requested outside inner domain"
+    },
+    {
+      "case": "wrong table identity",
+      "reason": "H27 reference: immutable table SHA256 differs"
+    }
+  ]
+}

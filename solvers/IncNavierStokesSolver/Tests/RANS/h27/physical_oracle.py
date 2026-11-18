@@ -34,6 +34,8 @@ from fixtures import modified
 
 SCHEMA = 'WJH27IndependentPhysicalOracleV1'
 TABLE_SHA = 'b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d'
+EXACT_TABLE_SHA = '3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1'
+EXACT_SCHEMA = 'WJH27ExactInnerFiniteNuTablesV1'
 SIGNS = dict(u='us', p='ps', k='ks', epsilon='epsilon_signs')
 EDGES = ((0, 4, 8, 12), (1, 5, 9, 13), (0, 1, 2, 3), (4, 5, 6, 7))
 NORMALS = ((-1., 0.), (1., 0.), (0., -1.), (0., 1.))
@@ -110,14 +112,28 @@ def full_wj(k, epsilon, gradient):
     return R, N, np.abs(defect)/denominator, conditioning
 
 
+def load_reference(path):
+    table = json.loads(path.read_text())
+    reference = Reference(table)
+    require(identity(path)['sha256'] == reference.boundary_identity, 'wrong immutable qualified reference table')
+    return reference
+
+
 class Reference:
     def __init__(self, table):
-        require(table['schema'] == 'WJH27V2ReferenceTablesV1' and table['status'] == 'PASS' and
+        self.exact_inner = table['schema'] == EXACT_SCHEMA
+        require(table['schema'] in ('WJH27V2ReferenceTablesV1', EXACT_SCHEMA) and table['status'] == 'PASS' and
                 table['model'] == 'IsotropicLowerWallFullWJCollarV2', 'unqualified v2 reference table')
+        if self.exact_inner:
+            require(table['policy'] == 'ExactInnerFiniteNuV1' and table['transport'] == 'ScalarCdV2',
+                    'wrong exact-inner policy or transport')
+            for component, digest in table['bindings'].items():
+                encoded = json.dumps(table[component], sort_keys=True, separators=(',', ':'), allow_nan=False).encode()
+                require(hashlib.sha256(encoded).hexdigest() == digest, 'wrong exact-inner binding: '+component)
         p, c, inlet = table['parameters'], table['constants'], table['inlet_binding']
         self.table = table
-        self.identity = TABLE_SHA
-        self.boundary_identity = TABLE_SHA
+        self.identity = EXACT_TABLE_SHA if self.exact_inner else TABLE_SHA
+        self.boundary_identity = self.identity
         self.inner_k_transport = 'ScalarCdV2'
         self.Kin, self.H, self.h, self.nu = p['K'], p['H'], p['h'], p['nu']
         self.cd, self.sk, self.se = p['cd'], p['sigma_k'], table['guard']['sigma_e']
@@ -125,6 +141,8 @@ class Reference:
         self.d0, self.top, self.utau = inlet['d0'], inlet['top_model_radius'], inlet['u_tau']
         self.A, self.tau = self.Kin**1.5/self.cl, self.Kin/self.qe
         self.z0 = .005676270321216798
+        if self.exact_inner:
+            require(inlet['z0e'] == self.z0, 'outer calibration changed')
         self.lo, self.hi = table['cutoff_table']['domain']
         self.coefficients = table['cutoff_table']['coefficients']
         derivative = np.polynomial.chebyshev.chebder(self.coefficients)*2/(self.hi-self.lo)
@@ -138,6 +156,14 @@ class Reference:
         require(self.zv < 0, 'historical inlet requires the fixed negative roughness intercept')
         self.D0 = self.nu-self.a*self.zv
         self.old_c = self.H*math.exp(1-self.old_integral_p(self.H))
+        self.inlet_cutoff = table['inlet']['cutoff'] if self.exact_inner else self.old_c
+        self.reference_shear = self.tau
+        self.top_tangent = self.tau
+        if self.exact_inner:
+            self.reference_shear += self.nu*self.utau/(self.kappa*self.H)
+            self.top_tangent += self.nu*self.utau/(self.kappa*self.top)
+            self.inlet_panels = table['inlet']['panels']
+            self.inlet_panel_bounds = np.array([p['domain'][1] for p in self.inlet_panels])
         self.top_flux = self.nu*self.A/self.top**2+self.cd*self.Kin**2/(self.se*self.top)
         self.inlet_quadrature = (leggauss(64), leggauss(96))
         require(0 < self.old_c < self.H, 'invalid historical inlet cutoff')
@@ -177,6 +203,8 @@ class Reference:
     def inlet(self, r):
         r = np.asarray(r, dtype=float)
         require(np.all((r >= -1e-13) & (r <= self.top+1e-12)), 'inlet physical radius outside domain')
+        if self.exact_inner:
+            return self.exact_inlet(r)
         U, k, G = np.empty_like(r), np.full_like(r, self.Kin), np.empty_like(r)
         inner = r <= self.H
         U[inner] = self.tau/self.a*np.log1p(self.a*r[inner]/self.D0)
@@ -199,8 +227,33 @@ class Reference:
         k[inner] -= values[1]
         return dict(U=U, W=np.zeros_like(r), k=k, G=G)
 
+    def exact_inlet(self, r):
+        inner = r <= self.H
+        ri = r[inner]
+        indices = np.searchsorted(self.inlet_panel_bounds, ri)
+        U, G = np.empty_like(r), np.empty_like(r)
+        k, kr, Pi = np.full_like(r, self.Kin), np.zeros_like(r), np.zeros_like(r)
+        U[~inner] = self.utau/self.kappa*np.log(r[~inner]/self.z0)
+        G[~inner] = self.utau/(self.kappa*r[~inner])
+        inner_ids = np.flatnonzero(inner)
+        for index in np.unique(indices):
+            ids = inner_ids[indices == index]
+            panel = self.inlet_panels[index]
+            lo, hi = panel['domain']
+            x = (2*r[ids]-lo-hi)/(hi-lo)
+            for target, key in ((U, 'U'), (k, 'k'), (Pi, 'Pi')):
+                target[ids] = chebval(x, panel[key])
+            for target, key in ((G, 'U'), (kr, 'k')):
+                target[ids] = chebval(x, np.polynomial.chebyshev.chebder(panel[key]))*2/(hi-lo)
+        return dict(U=U, W=np.zeros_like(r), k=k, G=G, kr=kr, Pi=Pi)
+
     def outlet(self, r):
         r = np.asarray(r, dtype=float)
+        if self.exact_inner:
+            tz = np.full_like(r, self.reference_shear)
+            outer = r > self.H
+            tz[outer] = self.tau+self.nu*self.utau/(self.kappa*r[outer])
+            return np.column_stack((-self.Kin/self.Ne-2*self.exact_inlet(r)['Pi'], tz))
         tx = np.full_like(r, self.Kin/self.Ne)
         for j, segment in enumerate(self.table['outlet_traction']['segments']):
             mask = ((r > .4*self.H) & (r <= .75*self.H) if j == 0 else
@@ -425,7 +478,7 @@ class PhysicalOracle:
         if side < 2:
             x = xl if side == 0 else xr
             cutoff = self.ref.cutoff(self.trace(e, 'k', np.array([x])))[0]
-            cuts = self.cuts(rl, rr, (cutoff, self.ref.old_c))
+            cuts = self.cuts(rl, rr, (cutoff, self.ref.inlet_cutoff))
             rs = np.concatenate([(lo+hi)/2+(hi-lo)*a/2 for lo, hi in zip(cuts[:-1], cuts[1:])])
             weights = np.concatenate([w*(hi-lo)/2 for lo, hi in zip(cuts[:-1], cuts[1:])])
             if endpoints:
@@ -534,7 +587,7 @@ class PhysicalOracle:
                       'kinetic_advection', 'stress_work', 'molecular_work', 'pressure_divergence',
                       'isotropic_k_divergence', 'kinetic_energy_divergence', 'roughness_work', 'divergence', 'strong_divergence_square')
         bulk = {region: {key: 0. for key in quantities} for region in ('whole', 'inner', 'outer')}
-        norms = Norms()
+        norms, shear_diagnostic = Norms(), Norms()
         minima = dict(k=float('inf'), epsilon=float('inf'), covariance_over_k=float('inf'))
         max_root_error = 0.
         for e in self.elements:
@@ -602,7 +655,7 @@ class PhysicalOracle:
                     ui = np.asarray(e['u']); b = basis(e, 'u', x, r)[0]
                     traction = np.column_stack((nx*(a['V'][:, 0, 0]-a['Pi'])+nr*a['V'][:, 0, 2],
                                                 nx*a['V'][:, 2, 0]+nr*(a['V'][:, 2, 2]-a['Pi'])))
-                    prescribed = self.ref.outlet(r) if side == 1 else np.column_stack((np.full(len(x), self.ref.tau), np.zeros(len(x)))) if side == 3 else np.zeros((len(x), 2))
+                    prescribed = self.ref.outlet(r) if side == 1 else np.column_stack((np.full(len(x), self.ref.top_tangent), np.zeros(len(x)))) if side == 3 else np.zeros((len(x), 2))
                     for component in (0, 1):
                         parts['natural']['flow'][component*self.n+ui] -= b.T@(weight*prescribed[:, component])
                     natural_work = a['U']*prescribed[:, 0]+a['W']*prescribed[:, 1]
@@ -621,6 +674,9 @@ class PhysicalOracle:
                         row['natural_traction_scaled_MAX'] = float(np.max(np.abs(compared)))
                     if side == 2:
                         norms.add('ground', 'shear', (a['V'][:, 0, 2]-self.ref.tau)/self.ref.tau, weight)
+                        if self.ref.exact_inner:
+                            shear_diagnostic.add('ground', 'shear_vs_reference',
+                                      (a['V'][:, 0, 2]-self.ref.reference_shear)/self.ref.tau, weight)
                 else:
                     b = basis(e, key, x, r)[0]; ids = np.asarray(e[key])
                     q, gradient, D = (a['k'], a['gradk'], a['Dk']) if key == 'k' else (a['E'], a['grade'], a['De'])
@@ -728,6 +784,7 @@ class PhysicalOracle:
                     bulk=bulk, boundary=boundary, boundary_faces=face_rows, budgets=budget,
                     accounting_identity_status='MET' if max(identities) <= 1e-10 else 'NOT_MET',
                     accounting_identity_max_error=max(identities), physical_envelope=envelope,
+                    ground_shear_diagnostic=shear_diagnostic.report({}),
                     sampled_minima=minima, maximum_independent_cubic_relative_residual=max_root_error,
                     mutations=mutations, sparse_Riesz_nonzeros={key: matrix.nnz for key, matrix in self.masses.items()},
                     principal_admissibility=dict(status='NOT_MET', reason='Independent continuum principal certification is a separate required gate; sampled covariance is not a substitute'))
@@ -864,7 +921,7 @@ class PhysicalOracle:
             for e in owners:
                 xl, xr, rl, rr = e['bounds']
                 cutoff = self.ref.cutoff(self.trace(e, 'k', np.array([station])))[0]
-                cuts = self.cuts(rl, rr, (cutoff, self.ref.old_c, *extra))
+                cuts = self.cuts(rl, rr, (cutoff, self.ref.inlet_cutoff, *extra))
                 gauss, weight = self.gauss
                 for lo, hi in zip(cuts[:-1], cuts[1:]):
                     r = (lo+hi)/2+(hi-lo)*gauss/2
@@ -890,11 +947,13 @@ class PhysicalOracle:
                         retained_inlet={key: float(value[j]) for key, value in inlet.items() if key != 'G'}))
                 if rl == 0:
                     ground.append(dict(x=station, owner=e['geometry'], upward_shear=float(a['V'][0, 0, 2]),
-                                       scaled_deviation=float(a['V'][0, 0, 2]/self.ref.tau-1)))
+                                       scaled_deviation=float(a['V'][0, 0, 2]/self.ref.tau-1),
+                                       scaled_deviation_vs_reference=float((a['V'][0, 0, 2]-self.ref.reference_shear)/self.ref.tau)))
         result = norms.report(ENVELOPES)
         return dict(stations=STATIONS, norms=result, rows=rows, ground_stations=ground,
             status='MET' if all(v.get('status') == 'MET' for v in result.values()) and all(abs(v['scaled_deviation']) <= .10 for v in ground) else 'NOT_MET',
-            comparator='Retained imposed historical inlet only. Pi has no inlet preservation target. R/G/Ew/c are reported separately.',
+            comparator=('Exact-inner and retained outer inlet. Ground shear gate uses tau0.'
+                        if self.ref.exact_inner else 'Retained imposed historical inlet.'),
             sampling='Physical Gauss integration per native/material/cutoff/Fig3 panel; MAX also includes exact endpoints, panel midpoints and relative 1e-8 inward offsets, both original owners.',
             physical_7mm=dict(z_code=.175, r_code=.0875, region='inner', conversion_mm_per_code=40), fig3_source=identity(path))
 
@@ -996,9 +1055,7 @@ def main():
                   unresolved_gates=['Whole-state admissibility certification', 'Temporal and finite perturbation qualification',
                                     'Stationary uniqueness/existence is not inferred from one residual evaluation'])
     try:
-        require(report['table']['sha256'] == TABLE_SHA, 'reference table identity is not the frozen qualified table')
-        table = json.loads(args.table.read_text())
-        reference = Reference(table)
+        reference = load_reference(args.table)
         data, metadata = load_native(args.native)
         report['native_run_metadata'] = metadata
         report['native_source_identity'] = data['source_identity']

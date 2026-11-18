@@ -1,0 +1,539 @@
+{
+  "schema": "WJH27IndependentCoupledStepOracleV1",
+  "status": "PASS_CURRENT_COUPLED_STEP_ONLY",
+  "full_coupled_gate_pass": false,
+  "current_coupled_step_gate_pass": true,
+  "current_coupled_steady_gate_pass": false,
+  "direct_reference_gate_pass": true,
+  "platform": "linux",
+  "native": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-direct-tiny/case.result.json",
+  "table": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+  "source_sha256": "44891e974a4104313cd6f64764d01f6f7a207eb28498e3153635f00d0a041ff6",
+  "continuous_MMS_source_sha256": "dc0283398bfa0a41870134459c3e3d07ca016a4ca13ae643e8b83ffc1699dc6a",
+  "independent_WJ_source_sha256": "f5c97e5c1f5426df4ac363b8d8dd99b84d636514a0cb899dec1219ceda4b35e9",
+  "independent_basis_sha256": "632e5cbcdd7a40a993c90cde2aefc3785d73a5f4d1b9634594ea3bb3c9d48b69",
+  "scope": "Accepted current coupled MMS step only; startup is identified explicitly. No temporal-order, physical-development, principal-certification or Task3 claim.",
+  "forcing_route": "Continuous analytic fields integrated by parts with complete exterior momentum stress terms and exact scalar natural-flux cancellation; no native/projected A_h*target forcing.",
+  "steady_mode": false,
+  "native_sha256": "e670a4b62f313544fdf2a084c9d5fd5bbfac530e7bff99a7c752ce333838c10e",
+  "table_sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1",
+  "native_source_identity": "061c48fe6805b1b1bb66a8effffc3bfc28c5f86777c5e669f52afd9f8c0d861f",
+  "native_signature": "d94bad02608ba94691e4c4cc595fa51375b0e02e6979286f74cb9f8b905752c3",
+  "native_configuration": {
+    "quadratureX": 8,
+    "quadratureR": 12,
+    "linear_tolerance": 3e-13,
+    "nonlinear_tolerance": 3e-12,
+    "maximum_iterations": 60,
+    "mms_body_amplitude": 1,
+    "mms_variant": "PolynomialScalarsV1"
+  },
+  "mms_variant": "PolynomialScalarsV1",
+  "mms_body_amplitude": 1.0,
+  "body_amplitude_provenance": "state.mms_body_amplitude",
+  "history_scheme": "BDF2_EX2",
+  "ex2_exercised": true,
+  "independent_assemblies": [
+    {
+      "quadrature": [
+        20,
+        24
+      ],
+      "current_residual": {
+        "momentum": 1.4755089986910092e-12,
+        "k": 2.3727115261936916e-13,
+        "epsilon": 5.161668810463159e-13,
+        "continuity": 1.366027030639396e-17,
+        "gauge": 2.2961228410067863e-18
+      },
+      "stored_history_errors": {
+        "current": {
+          "momentum": 7.180911739973867e-20,
+          "k": 3.099153171603595e-17,
+          "epsilon": 1.6909101339863595e-16
+        },
+        "previous": {
+          "momentum": 7.267810799071101e-20,
+          "k": 2.6651505884477995e-17,
+          "epsilon": 8.904889643607545e-17
+        }
+      },
+      "current_trace": {
+        "k": 3.9654790094450995e-16,
+        "epsilon": 5.265636683069435e-16,
+        "velocity": 4.28198793415842e-18
+      },
+      "input_trace": {
+        "k": 4.3490575313591944e-16,
+        "epsilon": 8.955163260515132e-16,
+        "velocity": 5.204170427930421e-18
+      },
+      "previous_trace": {
+        "k": 4.473673936415535e-16,
+        "epsilon": 6.14685732072723e-16,
+        "velocity": 9.540979117872439e-18
+      }
+    },
+    {
+      "quadrature": [
+        24,
+        32
+      ],
+      "current_residual": {
+        "momentum": 1.4755214080323627e-12,
+        "k": 2.5707073331551523e-13,
+        "epsilon": 4.983718440342346e-13,
+        "continuity": 1.2785256159240933e-17,
+        "gauge": 1.769622381116784e-18
+      },
+      "stored_history_errors": {
+        "current": {
+          "momentum": 7.93480683416094e-20,
+          "k": 1.2542592593222143e-16,
+          "epsilon": 3.9655803638487824e-16
+        },
+        "previous": {
+          "momentum": 8.142805924940819e-20,
+          "k": 1.3536768641071213e-16,
+          "epsilon": 3.842645701404377e-16
+        }
+      },
+      "current_trace": {
+        "k": 3.4700297410219536e-16,
+        "epsilon": 6.537599200556447e-16,
+        "velocity": 4.948728505605507e-18
+      },
+      "input_trace": {
+        "k": 5.169305591167536e-16,
+        "epsilon": 8.155648186808338e-16,
+        "velocity": 5.204170427930421e-18
+      },
+      "previous_trace": {
+        "k": 4.2196982401613644e-16,
+        "epsilon": 4.577481718888046e-16,
+        "velocity": 1.214306433183765e-17
+      }
+    }
+  ],
+  "quadrature_difference_dual": {
+    "momentum": 6.242566421286571e-16,
+    "k": 1.2628686439633532e-13,
+    "epsilon": 1.1291172839964196e-13,
+    "continuity": 8.378974489934325e-18,
+    "gauge": 3.2633159675494787e-18
+  },
+  "current_residual_pass": true,
+  "stored_history_pass": true,
+  "essential_trace_pass": true,
+  "independent_quadrature_pass": true,
+  "negative_controls": {
+    "frozen_prior_scalar_and_source": {
+      "change_dual": {
+        "momentum": 3.69875768995242e-08,
+        "k": 6.024136783662172e-05,
+        "epsilon": 3.9542208990792617e-05
+      },
+      "status": "DETECTED"
+    },
+    "replace_actual_Q3_k_by_Q2_projection": {
+      "change_dual": {
+        "momentum": 2.0406399140719908e-13,
+        "k": 0.0,
+        "epsilon": 0.0
+      },
+      "status": "NOT_EXERCISED_AT_THIS_STATE"
+    },
+    "missing_sampled_AWF_convection": {
+      "change_dual": {
+        "momentum": 3.4533435002765515e-06,
+        "k": 0.0,
+        "epsilon": 0.0
+      },
+      "status": "DETECTED"
+    },
+    "missing_sampled_AWF_pressure": {
+      "change_dual": {
+        "momentum": 9.32397271647525e-05,
+        "k": 0.0,
+        "epsilon": 0.0
+      },
+      "status": "DETECTED"
+    },
+    "missing_sampled_AWF_Q3_k": {
+      "change_dual": {
+        "momentum": 3.87816102011418e-05,
+        "k": 0.0,
+        "epsilon": 0.0
+      },
+      "status": "DETECTED"
+    },
+    "missing_bulk_physical_body": {
+      "change_dual": {
+        "momentum": 0.0002907015736192936,
+        "k": 0.0,
+        "epsilon": 0.0
+      },
+      "status": "DETECTED"
+    },
+    "missing_sampled_AWF_body": {
+      "change_dual": {
+        "momentum": 0.00013130276159583362,
+        "k": 0.0,
+        "epsilon": 0.0
+      },
+      "status": "DETECTED"
+    },
+    "replace_conservative_scalar_transport_by_advective_form": {
+      "change_dual": {
+        "momentum": 0.0,
+        "k": 9.075053156498038e-09,
+        "epsilon": 1.3991473011501385e-08
+      },
+      "status": "NOT_EXERCISED_AT_THIS_STATE"
+    },
+    "stale_EX1_instead_of_EX2": {
+      "change_dual": {
+        "momentum": 7.52379839600631e-09,
+        "k": 1.3404805738544356e-08,
+        "epsilon": 3.5760055213390434e-08
+      },
+      "status": "NOT_EXERCISED_AT_THIS_STATE"
+    }
+  },
+  "nonzero_prescribed_body_mutation_coverage_pass": true,
+  "prescribed_body_actions": {
+    "bulk_rhs": [
+      1.0187454156284385e-05,
+      3.604150447928831e-05,
+      3.4270679114699e-06,
+      3.749983125012626e-08,
+      2.6687379906340067e-05,
+      8.725655178848898e-06,
+      2.0416574791735618e-07,
+      1.2687442906292827e-05,
+      4.437480031264976e-05,
+      4.260397494806045e-06,
+      3.749983125012621e-08,
+      3.252068698969309e-05,
+      1.0670090873299907e-05,
+      2.041657479173563e-07,
+      3.8124828437628684e-06,
+      4.999977500016881e-07,
+      9.868011149338866e-06,
+      1.1666614166706044e-06,
+      1.3402717465323014e-05,
+      1.666659166672293e-06,
+      1.2812442343793245e-06,
+      1.6666591666722924e-07,
+      1.2499943750042081e-08,
+      -2.3161057151484775e-23,
+      3.2326243420248e-06,
+      3.8888713889020196e-07,
+      6.805524930578544e-08,
+      2.1180347325332408e-23,
+      2.362498425000316e-08,
+      9.12499391666788e-08,
+      8.062494625001074e-09,
+      2.2499985000002934e-10,
+      7.2624951583343e-08,
+      2.3187484541669768e-08,
+      1.224999183333498e-09,
+      2.3624984250003154e-08,
+      9.124993916667882e-08,
+      8.062494625001076e-09,
+      2.2499985000002937e-10,
+      7.262495158334301e-08,
+      2.3187484541669764e-08,
+      1.224999183333498e-09,
+      7.874994750001052e-09,
+      -1.0339757656912846e-24,
+      2.4208317194447682e-08,
+      -8.482077230457148e-25,
+      3.041664638889294e-08,
+      -1.9536200131556487e-25,
+      2.687498208333693e-09,
+      -2.0679515313825692e-25,
+      7.499995000000983e-11,
+      -2.5849394142282115e-26,
+      7.729161513889922e-09,
+      -1.4866490650567485e-25,
+      4.083330611111661e-10,
+      6.485168200378698e-26
+    ],
+    "sampled_H_rhs": [
+      -1.0000799504583998e-05,
+      -6.252788264773945e-06,
+      -3.0455077850099205e-06,
+      6.649775842900195e-07,
+      0.0,
+      0.0,
+      0.0,
+      -1.236785264176364e-05,
+      -7.732738149927537e-06,
+      -3.7663380299826836e-06,
+      8.22368728500675e-07,
+      0.0,
+      0.0,
+      0.0,
+      -3.72810869105794e-06,
+      -4.734106274359287e-07,
+      0.0,
+      0.0,
+      -2.3309210691169148e-06,
+      -2.959899770307193e-07,
+      -1.135307635832101e-06,
+      -1.4416604899455259e-07,
+      2.478910521317825e-07,
+      3.14782288421311e-08,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "signs": "FullRHS adds integral phi*b and subtracts integral_(r<h) phi*b_x(x,H,t)*e_x, distinct from f_M.",
+    "source": "Independent analytic prescribed body, not current state or native cancellation data."
+  },
+  "native_prescribed_body_action_comparison": {
+    "status": "PASS",
+    "actions": {
+      "mms_bulk_body_rhs": {
+        "momentum_dual_error": 6.484746420919973e-20,
+        "passed": true
+      },
+      "mms_sampled_body_rhs": {
+        "momentum_dual_error": 1.0397942800836067e-19,
+        "passed": true
+      }
+    },
+    "momentum_dual_tolerance": 1e-10,
+    "limitation": "Net manufactured forcing cancels body changes; the final state alone cannot establish that the native separate body paths ran."
+  },
+  "nonzero_prescribed_body_coverage_pass": true,
+  "accepted_advection_error": {
+    "momentum": 7.973557591477986e-20,
+    "k": 1.266799834555291e-16,
+    "epsilon": 3.5462452886745913e-16
+  },
+  "essential_reaction_diagnostics": {
+    "k": {
+      "constant_test_full_residual": 1.4877848952821182e-11,
+      "essential_coefficient_reaction_norm": 1.0240738946235747e-11,
+      "note": "Essential reactions are reported, not constrained to zero."
+    },
+    "epsilon": {
+      "constant_test_full_residual": 2.5993998620243985e-12,
+      "essential_coefficient_reaction_norm": 3.303803022017013e-12,
+      "note": "Essential reactions are reported, not constrained to zero."
+    }
+  },
+  "direct_nonlinear": {
+    "status": "PASS_INDEPENDENT_DENSE_NONLINEAR_REFERENCE",
+    "iterations": [
+      {
+        "momentum": 2.0975135861384516e-07,
+        "k": 3.6081586078014e-05,
+        "epsilon": 5.292608131044663e-05,
+        "continuity": 5.348373346598492e-18,
+        "gauge": 1.9218507556903907e-19
+      },
+      {
+        "momentum": 3.4515644264320585e-10,
+        "k": 4.825073907032766e-08,
+        "epsilon": 7.090438610410328e-08,
+        "continuity": 6.712211216147497e-18,
+        "gauge": 1.3578686742940795e-20
+      },
+      {
+        "momentum": 1.0041573361510967e-11,
+        "k": 6.65120088098348e-11,
+        "epsilon": 1.2029977463192424e-10,
+        "continuity": 4.036296467665475e-18,
+        "gauge": 3.611405930921163e-19
+      },
+      {
+        "momentum": 3.8335049715987477e-13,
+        "k": 4.814385814765402e-13,
+        "epsilon": 5.012057426366737e-13,
+        "continuity": 2.1614035092686197e-18,
+        "gauge": 6.199330950172808e-20
+      }
+    ],
+    "reference_scaled_RMS_difference": {
+      "U": 2.262838081704643e-15,
+      "Pi": 6.847823066372588e-11,
+      "k": 1.0348556793310408e-15,
+      "epsilon": 2.5671873114840536e-15
+    },
+    "final_state_sha256": "f451d7cce6d5924226628462c6e19ccd42d7e3cd87c64a8d5bf29e96308c59bb",
+    "coefficients": {
+      "flow": [
+        0.0,
+        0.003299987850082013,
+        3.0747560194950314e-19,
+        4.005386878351063e-19,
+        0.010999959500273375,
+        6.83032032738585e-19,
+        -8.829703587848634e-19,
+        0.0,
+        0.003299987850082013,
+        3.0747560194950314e-19,
+        4.005386878351063e-19,
+        0.010999959500273375,
+        6.83032032738585e-19,
+        -8.829703587848634e-19,
+        0.0,
+        0.0,
+        -0.006258749928541842,
+        -0.003129374964270921,
+        0.0020654065006769644,
+        0.0010326937382094086,
+        0.0016897968228935401,
+        0.0008449312403531319,
+        -1.9805036260436818e-09,
+        1.8802682745350446e-17,
+        0.009200309001484159,
+        0.004600181197478233,
+        -3.968263705713149e-08,
+        4.5837531017144995e-18,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.00039430124549813615,
+        -0.00030980812146282115,
+        4.2246562017657546e-05,
+        0.0,
+        0.0029134480917362283,
+        0.0005366878063724628,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.001182903893441742,
+        2.6198118580489476e-09,
+        0.0009294248352304664,
+        -1.7915846200624274e-08,
+        -0.00012673929368463613,
+        -1.3335967406466399e-08,
+        -0.008740343804366685,
+        1.9456323906554438e-08,
+        -0.0016100638114857218,
+        1.445806063206332e-09,
+        -1.8043858153040182e-05,
+        -1.8045691329417626e-05,
+        -0.00020048224060597688,
+        6.682762594321621e-05,
+        -0.00013365336828895954,
+        -0.00020048056792184687,
+        -0.00011561059260775796,
+        8.487069145704951e-05,
+        -9.823594961425648e-05,
+        -0.00020048100990263117,
+        -9.823686407906486e-05,
+        6.68265683704402e-05,
+        0.00026730722535613707,
+        7.283695286194432e-09,
+        4.10500070304237e-09
+      ],
+      "k": [
+        0.008810283681750556,
+        0.008810283681750556,
+        -1.3233926967260263e-05,
+        -8.389531462675445e-20,
+        0.008913214224829257,
+        -7.205138015509204e-05,
+        -1.4082762702487404e-19,
+        -1.3446552496871072e-05,
+        8.441575684606088e-12,
+        -5.637080993440755e-07,
+        -3.651213883689975e-11,
+        0.008951795843164835,
+        -5.63711263009886e-07,
+        -3.28814318044963e-11,
+        0.008951795808698796,
+        -5.702873605007929e-07,
+        -3.4210146476364776e-11,
+        -7.320868156257429e-05,
+        1.9418373934342917e-12,
+        0.009056379644293273,
+        8.605333514369102e-10,
+        5.606917512889582e-11,
+        5.4943826979981504e-12,
+        -4.213661564708283e-11,
+        4.585019895738765e-09,
+        1.2985894632222692e-11,
+        -2.3011232592833015e-12,
+        -2.5653296284334837e-11
+      ],
+      "epsilon": [
+        -5.674235747769161e-08,
+        1.1055151208268187e-19,
+        -4.4633567862746634e-07,
+        -3.2990763167775414e-10,
+        -5.8103706693674166e-08,
+        -1.7864829924007886e-11,
+        -4.463459003089585e-07,
+        -3.093527994009713e-10,
+        0.0023160809833631165,
+        0.0023721063484785144,
+        0.002316024241005639,
+        0.00237204821835903,
+        2.4858572261299142e-11,
+        -1.3417443364798487e-11,
+        -2.5661465710983713e-11,
+        1.862666174147865e-11
+      ]
+    },
+    "method": "Independent dense block-direct current nonlinear iteration from pre-step state; same spaces with independently resolved quadrature."
+  },
+  "norm_limits": {
+    "momentum": 1e-09,
+    "continuity": 1e-09,
+    "gauge": 1e-09,
+    "k": 1e-08,
+    "epsilon": 1e-08
+  },
+  "quadrature_reserve_fraction": 0.2,
+  "native_reported_residuals": [
+    8.604126572246255e-18,
+    2.15660934813982e-18,
+    8.092152836241423e-20,
+    5.9441428755970295e-15,
+    1.931144596969466e-14,
+    0
+  ],
+  "norms": "Free-test mass dual / sqrt(domain volume): U force and continuity scale1; k uses integral Kin\u00b2 phi phi; epsilon uses integral (Ain/r)\u00b2 phi phi on outer volume; gauge |integral Pi|/(.01 volume). No alpha normalization.",
+  "elapsed_seconds": 17.245312934999674
+}

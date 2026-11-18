@@ -45,7 +45,10 @@ int main(int argc,char **argv)
         auto session=LibUtilities::SessionReader::CreateInstance(4,args);auto graph=SpatialDomains::MeshGraphIO::Read(session);
         Check(session->GetComm()->GetSize()==1,"coupled return requires one rank");
         Check(session->GetVariables()==std::vector<std::string>({"u","v","k","epsilon","p"}),"wrong variable order");
-        std::string table;session->LoadSolverInfo("WJReferenceTable",table,"");auto reference=std::make_shared<Reference>(table);
+        std::string table,policyName;
+        session->LoadSolverInfo("WJReferenceTable",table,"");
+        session->LoadSolverInfo("WJReferencePolicy",policyName,"Historical");
+        auto reference=std::make_shared<Reference>(table,Reference::ParsePolicy(policyName));
         Geometry geometry;geometry.d0=reference->Parameters().d0;geometry.H=reference->Parameters().H;geometry.h=reference->Parameters().roughness;
         CoupledOptions options;options.sourceIdentity=WJ_H27_SOURCE_ID;options.manufactured=true;options.checkCurrentActions=true;options.recordNonlinearTrace=true;
         session->LoadParameter("TimeStep",options.dt,.02);session->LoadParameter("WJLinearTolerance",options.linearTolerance,3e-13);

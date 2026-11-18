@@ -70,9 +70,50 @@ double Reference::Polynomial::Evaluate(double argument) const
     const double value=x*b1-b2+coefficients[0]; Finite(value,"Clenshaw result"); return value;
 }
 
+Reference::Polynomial Reference::Polynomial::Differentiate() const
+{
+    const std::size_t n=coefficients.size()-1;
+    Require(n>=1,"cannot differentiate constant inlet panel");
+    std::vector<double> d(n+2,0.);
+    for (std::size_t j=n;j>0;--j) d[j-1]=d[j+1]+2*j*coefficients[j];
+    d[0]*=.5;
+    d.resize(n);
+    for (double &v:d) v*=2/(upper-lower);
+    return {lower,upper,std::move(d)};
+}
+
+ReferencePolicy Reference::ParsePolicy(const std::string &name)
+{
+    if (name=="Historical") return ReferencePolicy::Historical;
+    if (name=="ExactInnerFiniteNuV1") return ReferencePolicy::ExactInnerFiniteNuV1;
+    throw std::invalid_argument("H27 reference: unknown WJReferencePolicy "+name);
+}
+
+const char *Reference::PolicyName() const
+{
+    return m_policy==ReferencePolicy::ExactInnerFiniteNuV1?"ExactInnerFiniteNuV1":"Historical";
+}
+
+Reference::Reference(const std::string &json, ReferencePolicy policy)
+    : Reference(json, policy==ReferencePolicy::ExactInnerFiniteNuV1 ?
+                QualifiedExactInnerSha256 : QualifiedTableSha256, InnerKTransport::ScalarV2, policy)
+{
+}
+
 Reference::Reference(const std::string &json, const std::string &expectedSha256,
                      InnerKTransport transport)
+    : Reference(json,expectedSha256,transport,ReferencePolicy::Historical)
 {
+}
+
+Reference::Reference(const std::string &json, const std::string &expectedSha256,
+                     InnerKTransport transport, ReferencePolicy policy)
+    : m_policy(policy)
+{
+    const bool exact=policy==ReferencePolicy::ExactInnerFiniteNuV1;
+    Require(exact || policy==ReferencePolicy::Historical,"unsupported reference policy");
+    Require(!exact || (expectedSha256==QualifiedExactInnerSha256 &&
+                      transport==InnerKTransport::ScalarV2),"exact-inner identity or transport differs");
     HashSyntax(expectedSha256);
     std::ifstream input(json,std::ios::binary);
     Require(input.good(),"cannot read table "+json);
@@ -82,20 +123,41 @@ Reference::Reference(const std::string &json, const std::string &expectedSha256,
     Require(m_identity==expectedSha256,"immutable table SHA256 differs");
     m_boundaryIdentity=m_identity;
     Tree table; std::istringstream stream(bytes); boost::property_tree::read_json(stream,table);
-    Require(table.get<std::string>("schema")=="WJH27V2ReferenceTablesV1","schema differs");
+    Require(table.get<std::string>("schema")==
+        (exact?"WJH27ExactInnerFiniteNuTablesV1":"WJH27V2ReferenceTablesV1"),"schema differs");
     Require(table.get<std::string>("status")=="PASS","table is not qualified PASS");
     Require(table.get<std::string>("model")=="IsotropicLowerWallFullWJCollarV2","model identity differs");
     Require(table.get<std::string>("coefficient_convention")==
         "Ascending Chebyshev T_j coefficients; x=(2*argument-lo-hi)/(hi-lo)","coefficient convention differs");
     Require(table.get<std::string>("parameters.inner_diffusion")=="scalar","inner diffusion differs");
-    Require(table.get<std::string>("sources.generator.sha256")==
-        "65664ef400cfd90f5bb4d83e24b08e0f9ac52d1f6f4385b87012360accd526e0","generator identity differs");
-    Require(table.get<std::string>("sources.reference_oracle.sha256")==
-        "f5c97e5c1f5426df4ac363b8d8dd99b84d636514a0cb899dec1219ceda4b35e9","oracle identity differs");
-    Require(table.get<std::string>("sources.amended_model_contract.sha256")==
-        "727b59a125429f8ecd1cb865be627de59b489cdd20773589a74961bdd9ae1922","amended model identity differs");
-    Require(table.get<std::string>("inlet_binding.calibration.sha256")==
-        "00007be74f8689b09d6d295b21e458041918e21e2e5a7a081e2a8d0ccc75c454","historical calibration identity differs");
+    if (exact)
+    {
+        Require(table.get<std::string>("policy")==PolicyName() &&
+                table.get<std::string>("transport")==TransportName(),"exact-inner policy/transport binding differs");
+        // The pinned byte identity authenticates the component contents as
+        // well as these independently generated canonical component digests.
+        for (const auto &[path, hash]:std::array<std::array<const char *,2>,7>{{
+            {{"bindings.calibration","e3ade3777175e06286e1391bb7d4436dba305a46068fa27751f539eec9bfcb60"}},
+            {{"bindings.cutoff_table","97101fe763cd4b0dc6bb2fffabc3d24c53b85fc34733b97efcd2755fc31cbc41"}},
+            {{"bindings.inlet","e13609d631071d1372931444ccd110729a4789b339ac06634a6d8e969de33d6a"}},
+            {{"bindings.loads","8a849654f638a1942cf6dab04f51c0f2f95223053bbfdb8b96f64bb43bae6f0d"}},
+            {{"bindings.geometry","67bcb96b0d8696aeda4286aa79b6fc193e7239f8e9e131473bfcba5dd34c4dfe"}},
+            {{"bindings.units","b86156fa2c62f755705607bcbc1d1de949373b42d212609d2b97720007466805"}},
+            {{"bindings.sources","ca5457f7f440982afcb13eba504d54a725de55da386f2584e3bee0af9fd5080e"}}
+        }})
+            Require(table.get<std::string>(path)==hash,std::string(path)+" differs");
+    }
+    else
+    {
+        Require(table.get<std::string>("sources.generator.sha256")==
+            "65664ef400cfd90f5bb4d83e24b08e0f9ac52d1f6f4385b87012360accd526e0","generator identity differs");
+        Require(table.get<std::string>("sources.reference_oracle.sha256")==
+            "f5c97e5c1f5426df4ac363b8d8dd99b84d636514a0cb899dec1219ceda4b35e9","oracle identity differs");
+        Require(table.get<std::string>("sources.amended_model_contract.sha256")==
+            "727b59a125429f8ecd1cb865be627de59b489cdd20773589a74961bdd9ae1922","amended model identity differs");
+        Require(table.get<std::string>("inlet_binding.calibration.sha256")==
+            "00007be74f8689b09d6d295b21e458041918e21e2e5a7a081e2a8d0ccc75c454","historical calibration identity differs");
+    }
 
     auto &p=m_p;
     p.KIn=Number(table,"parameters.K"); p.H=Number(table,"parameters.H");
@@ -106,7 +168,7 @@ Reference::Reference(const std::string &json, const std::string &expectedSha256,
     p.cLength=Number(table,"constants.c_length"); p.d0=Number(table,"inlet_binding.d0");
     p.topRadius=Number(table,"inlet_binding.top_model_radius"); p.uTau=Number(table,"inlet_binding.u_tau");
     Same(p.KIn,.008809015145515192,"fixed inlet K"); Same(p.H,.15,"fixed H");
-    Same(p.roughness,.10854503542535461,"fixed roughness"); Same(p.nu,6.423173803526447e-5,"physical nu");
+    Same(p.roughness,exact?.11541061001735275:.10854503542535461,"fixed roughness"); Same(p.nu,6.423173803526447e-5,"physical nu");
     Same(p.Cd,572./6561.,"independent Cd"); Same(p.sigmaK,1.,"sigma_k"); Same(p.sigmaE,1.3,"sigma_e");
     Same(p.qe,1/std::sqrt(572./6561.),"q_e"); Same(p.Ne,81./20.,"N_e");
     Same(p.kappa,std::sqrt(1.3*(1.82-1.44)*std::sqrt(572./6561.)),"kappa");
@@ -164,6 +226,83 @@ Reference::Reference(const std::string &json, const std::string &expectedSha256,
                 Number(v,"minimum_shear_tangent")>0,"reference validation witness is inadmissible");
     }
     p.tau0=p.KIn/p.qe; Same(p.tau0,p.uTau*p.uTau,"fixed total traction");
+    if (exact)
+    {
+        p.z0=Number(table,"inlet_binding.z0e");
+        Same(p.z0,.005676270321216798,"fixed outer aerodynamic roughness");
+        Same(Number(table,"geometry.H"),p.H,"matching radius");
+        Same(Number(table,"geometry.d0"),p.d0,"geometry displacement");
+        Same(Number(table,"geometry.rT"),p.topRadius,"geometry top");
+        Same(Number(table,"geometry.force_support"),p.roughness,"force support");
+        Same(Number(table,"units.L0_m"),.04,"reference length");
+        Same(Number(table,"units.H_m"),p.H*.04,"physical matching height");
+        Same(Number(table,"units.interface_elevation_m"),(p.H+p.d0)*.04,"physical matching elevation");
+        const auto &metrics=cutoff.get_child("maxima");
+        Require(Number(metrics,"relative_cutoff_error")<=1e-10 &&
+                Number(metrics,"K_times_log_derivative_error")<=1e-8 &&
+                Number(metrics,"epsilon_K_derivative_fixed_radius_error")<=1e-8 &&
+                Number(metrics,"inverse_K_error_over_Kin")<=1e-9 &&
+                Number(metrics,"represented_inverse_residual")<=256*std::numeric_limits<double>::epsilon()*p.H,
+                "exact-inner cutoff controls failed");
+        m_inletA=Amplitude(p.KIn);
+        Same(m_inletA,Number(table,"inlet_binding.A_in"),"outer inlet amplitude");
+        Same(m_inletA/p.H,Number(table,"inlet_binding.epsilon_in_H"),"outer epsilon inlet/H corner");
+        m_inletCutoff=Cutoff(p.KIn);
+        Same(m_inletCutoff,Number(table,"inlet.cutoff"),"prescribed inlet cutoff");
+        const auto edges=Numbers(table,"geometry.material_edges");
+        Require(edges.size()==6,"exact-inner material edge count");
+        const std::array<double,6> required{0.,m_inletCutoff,.4*p.H,.75*p.H,p.roughness,p.H};
+        Require(std::is_sorted(required.begin(),required.end()),"exact-inner material order differs");
+        for (std::size_t j=0;j<edges.size();++j) Same(edges[j],required[j],"material edge");
+        m_referenceShear=p.tau0+p.nu*p.qe*m_inletA/(p.H*p.KIn);
+        Same(m_referenceShear,Number(table,"calibration.reference_shear"),"reference total shear");
+        Same(m_referenceShear,Number(table,"loads.interface_r"),"interface total shear");
+        Same(TopTangentialTraction(),Number(table,"loads.top_x"),"top tangent");
+        Same(TopEpsilonOutwardFlux(),Number(table,"loads.top_e_out"),"top epsilon flux");
+        Same(Number(table,"loads.interface_x"),-p.KIn/p.Ne,"interface axial traction");
+        for (const auto &entry:table.get_child("inlet.scaled_errors"))
+            Require(Number(table,"inlet.scaled_errors."+entry.first)<=1e-8,"inlet qualification failed");
+        double end=0.;
+        for (const auto &entry:table.get_child("inlet.panels"))
+        {
+            const auto &node=entry.second;
+            const auto domain=Numbers(node,"domain");
+            Require(domain.size()==2 && domain[0]==end && domain[1]>end && domain[1]<=p.H,
+                    "exact-inner inlet panel partition differs");
+            end=domain[1];
+            auto read=[&](const char *field)
+            {
+                auto coefficients=Numbers(node,field);
+                Require(coefficients.size()>=2 && coefficients.size()<=64,"invalid inlet panel degree");
+                return Polynomial{domain[0],end,std::move(coefficients)};
+            };
+            InletPanel panel{read("U"),read("k"),read("Pi"),{},{}};
+            panel.du=panel.u.Differentiate();
+            panel.dk=panel.k.Differentiate();
+            if (!m_exactInnerInlet.empty())
+            {
+                const auto &previous=m_exactInnerInlet.back();
+                Require(std::abs(previous.u.Evaluate(domain[0])-panel.u.Evaluate(domain[0]))<=1e-10 &&
+                        std::abs(previous.k.Evaluate(domain[0])-panel.k.Evaluate(domain[0]))<=1e-10*p.KIn,
+                        "inlet panel field discontinuity");
+            }
+            m_exactInnerInlet.push_back(std::move(panel));
+        }
+        Require(end==p.H,"exact-inner inlet partition does not reach H");
+        for (double edge:edges)
+            Require(edge==0. || std::any_of(m_exactInnerInlet.begin(),m_exactInnerInlet.end(),
+                [edge](const InletPanel &panel){return panel.u.upper==edge;}),
+                "material edge is absent from inlet partition");
+        Require(std::abs(InletU(0.))<=1e-10 &&
+                std::abs(InletU(p.H)-p.uTau/p.kappa*std::log(p.H/p.z0))<=1e-10 &&
+                std::abs(InnerPanel(p.H).k.Evaluate(p.H)-p.KIn)<=1e-10*p.KIn &&
+                std::abs(InnerPanel(p.H).dk.Evaluate(p.H))*p.H<=1e-10*p.KIn &&
+                std::abs(InletUGradient(p.H)-p.uTau/(p.kappa*p.H))*p.H<=1e-10 &&
+                std::abs(InletModifiedPressure(p.H))<=1e-10*p.tau0,
+                "exact-inner inlet endpoint continuity failed");
+        for (double K:{p.KMinimum,p.KIn,p.KMaximum}) { Cutoff(K); Auxiliary(K,0.); }
+        return;
+    }
     const auto &outlet=table.get_child("outlet_traction");
     Same(Number(outlet,"lower_constant.tx"),p.KIn/p.Ne,"lower outlet tx");
     Same(Number(outlet,"lower_constant.tz"),p.tau0,"lower outlet tz");
@@ -348,15 +487,33 @@ double Reference::InletQ(double r) const
 {
     return double(HistoricalQ(r,m_inletA,m_inletCutoff,m_inletD,m_inletSlope,m_p.nu));
 }
+const Reference::InletPanel &Reference::InnerPanel(double r) const
+{
+    auto found=std::lower_bound(m_exactInnerInlet.begin(),m_exactInnerInlet.end(),r,
+        [](const InletPanel &panel,double radius){return panel.u.upper<radius;});
+    Require(found!=m_exactInnerInlet.end(),"exact-inner panel outside qualified radius");
+    return *found;
+}
+
+double Reference::InletModifiedPressure(double r) const
+{
+    CheckRadius(r);
+    Require(m_policy==ReferencePolicy::ExactInnerFiniteNuV1,"pressure panel requires exact-inner policy");
+    return r<=m_p.H?InnerPanel(r).pressure.Evaluate(r):0.;
+}
+
 double Reference::InletU(double r) const
 {
     CheckRadius(r);
+    if (r<=m_p.H && m_policy==ReferencePolicy::ExactInnerFiniteNuV1)
+        return InnerPanel(r).u.Evaluate(r);
     return r<=m_p.H?m_p.tau0/m_inletSlope*std::log1p(m_inletSlope*r/m_inletD)
                      :m_p.uTau/m_p.kappa*std::log(r/m_p.z0);
 }
 double Reference::InletK(double r) const
 {
     CheckRadius(r); if (r>=m_p.H) return m_p.KIn;
+    if (m_policy==ReferencePolicy::ExactInnerFiniteNuV1) return InnerPanel(r).k.Evaluate(r);
     using Real=long double;
     struct Panel { Real a,b,budget; };
     const Real budget=2e-12L*m_p.KIn;
@@ -413,18 +570,39 @@ double Reference::InletK(double r) const
 double Reference::InletE(double r) const
 { CheckRadius(r); Require(r>=m_p.H,"no transported inner inlet epsilon"); return m_inletA/r; }
 double Reference::InletUGradient(double r) const
-{ CheckRadius(r); return r<=m_p.H?m_p.tau0/(m_inletD+m_inletSlope*r):m_p.uTau/(m_p.kappa*r); }
+{
+    CheckRadius(r);
+    if (r<=m_p.H && m_policy==ReferencePolicy::ExactInnerFiniteNuV1)
+        return InnerPanel(r).du.Evaluate(r);
+    return r<=m_p.H?m_p.tau0/(m_inletD+m_inletSlope*r):m_p.uTau/(m_p.kappa*r);
+}
 double Reference::InletKGradient(double r) const
-{ CheckRadius(r); return r<m_p.H?InletQ(r)/(m_inletD+m_inletSlope*r):0.; }
+{
+    CheckRadius(r);
+    if (r>=m_p.H) return 0.;
+    if (m_policy==ReferencePolicy::ExactInnerFiniteNuV1) return InnerPanel(r).dk.Evaluate(r);
+    return InletQ(r)/(m_inletD+m_inletSlope*r);
+}
 double Reference::InletEGradient(double r) const
 { return -InletE(r)/r; }
 std::array<double,2> Reference::OutletTraction(double r) const
 {
-    CheckRadius(r); double tx=m_p.KIn/m_p.Ne;
+    CheckRadius(r);
+    if (m_policy==ReferencePolicy::ExactInnerFiniteNuV1)
+    {
+        const auto &p=m_p;
+        const double tz=r<=p.H?m_referenceShear:p.tau0+p.nu*p.uTau/(p.kappa*r);
+        return {-p.KIn/p.Ne-2*InletModifiedPressure(r),tz};
+    }
+    double tx=m_p.KIn/m_p.Ne;
     if (r>.4*m_p.H && r<=.75*m_p.H) tx=m_outlet[0].Evaluate(r);
     else if (r>.75*m_p.H && r<=m_p.H) tx=m_outlet[1].Evaluate(r);
     else if (r>m_p.H) tx=m_outlet[2].Evaluate(r==m_p.topRadius?m_outlet[2].upper:std::log(r/m_p.H));
     return {tx,m_p.tau0};
+}
+double Reference::TopTangentialTraction() const
+{
+    return OutletTraction(m_p.topRadius)[1];
 }
 double Reference::TopEpsilonOutwardFlux() const
 { return m_p.nu*m_inletA/(m_p.topRadius*m_p.topRadius)+m_p.Cd*m_p.KIn*m_p.KIn/(m_p.sigmaE*m_p.topRadius); }

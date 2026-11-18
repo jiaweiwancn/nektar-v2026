@@ -1,0 +1,76 @@
+{
+  "request": {
+    "label": "r2-reject-wrong-calibration-artifact",
+    "phase": "science",
+    "command": [
+      "bash",
+      "-eu",
+      "-c",
+      "\n        set +e\n        \"$1\" --use-opt-file \"$2.opt\" \"$2\" > \"$3\" 2>&1\n        result=$?\n        set -e\n        test \"$result\" -ne 0\n        grep -F \"$4\" \"$3\"\n    ",
+      "verify",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-r2-v1/IncNavierStokesSolver",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-v1/wrong-calibration-artifact.xml",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-v1/wrong-calibration-artifact.log",
+      "immutable table SHA256 differs"
+    ],
+    "cap_seconds": 30.0,
+    "reserved_seconds": 37.0,
+    "workers_before": 38,
+    "idle_mpi_event_helpers": 56,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 34683605,
+      "source_build_runtime_bytes": 138442549,
+      "free_bytes": 3606962962432
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/task2r_run-v2.py",
+      "bytes": 10890,
+      "sha256": "a60e1df7825fe3a707cf24a0d796d27aad9bf78d8918e3d9b3f6dc6c8b557de2"
+    },
+    "input_files": [
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-r2-v1/IncNavierStokesSolver",
+        "bytes": 9985016,
+        "sha256": "7a94420aaa31f41d9d8b6754d20c16f11d1398e894f243eaa6beaa3af7924819"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-v1/wrong-calibration-artifact.xml",
+        "bytes": 6156,
+        "sha256": "0aac50d87ce9c4666464140efa1300558ec119c1578800751ab368420c1ba331"
+      }
+    ]
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "science",
+    "seconds": 1.7008700110018253,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 103739392,
+    "peak_host_workers": 41,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-reject-wrong-calibration-artifact/command.log",
+      "bytes": 67,
+      "sha256": "8a116630ba98f535b935f2dd41e74f7bae625108e05b838e6c6c1b216599e074"
+    }
+  },
+  "balance": {
+    "charged_seconds": 22845.247921211852,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 16754.752078788148,
+    "tranche_remaining": 5438.042798393084
+  },
+  "storage": {
+    "science_bytes": 34683811,
+    "source_build_runtime_bytes": 138442549,
+    "free_bytes": 3606962937856
+  }
+}

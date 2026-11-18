@@ -1,0 +1,753 @@
+{
+  "status": "PASS",
+  "source_identity": "061c48fe6805b1b1bb66a8effffc3bfc28c5f86777c5e669f52afd9f8c0d861f",
+  "table": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+    "bytes": 139982,
+    "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+  },
+  "historical_parity": {
+    "U": {
+      "scaled_MAX": 0.0,
+      "scaled_coefficient_RMS": 0.0
+    },
+    "Pi": {
+      "scaled_MAX": 0.0,
+      "scaled_coefficient_RMS": 0.0
+    },
+    "k": {
+      "scaled_MAX": 0.0,
+      "scaled_coefficient_RMS": 0.0
+    },
+    "epsilon": {
+      "scaled_MAX": 0.0,
+      "scaled_coefficient_RMS": 0.0
+    }
+  },
+  "cache_return_comparisons": {
+    "warm-a-return": {
+      "U": {
+        "scaled_MAX": 6.5037307272553316e-18,
+        "scaled_coefficient_RMS": 1.1431434608155205e-18
+      },
+      "Pi": {
+        "scaled_MAX": 3.257217815623804e-15,
+        "scaled_coefficient_RMS": 8.165263338922794e-16
+      },
+      "k": {
+        "scaled_MAX": 1.4423849099238813e-16,
+        "scaled_coefficient_RMS": 3.057718675472343e-17
+      },
+      "epsilon": {
+        "scaled_MAX": 1.505063691796347e-16,
+        "scaled_coefficient_RMS": 4.027860092474636e-17
+      }
+    },
+    "cold-a": {
+      "U": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "Pi": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "k": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      },
+      "epsilon": {
+        "scaled_MAX": 0.0,
+        "scaled_coefficient_RMS": 0.0
+      }
+    },
+    "cold-b": {
+      "U": {
+        "scaled_MAX": 8.673755022737964e-17,
+        "scaled_coefficient_RMS": 1.5331086741824997e-17
+      },
+      "Pi": {
+        "scaled_MAX": 1.2125890502731e-13,
+        "scaled_coefficient_RMS": 2.646566771420671e-14
+      },
+      "k": {
+        "scaled_MAX": 6.376113924224587e-15,
+        "scaled_coefficient_RMS": 1.5189025939289557e-15
+      },
+      "epsilon": {
+        "scaled_MAX": 4.900430680535151e-15,
+        "scaled_coefficient_RMS": 1.2400319064811015e-15
+      }
+    },
+    "retry-a": {
+      "U": {
+        "scaled_MAX": 9.974659986866641e-18,
+        "scaled_coefficient_RMS": 2.6603386930469127e-18
+      },
+      "Pi": {
+        "scaled_MAX": 1.6336993283258464e-14,
+        "scaled_coefficient_RMS": 5.476993317674747e-15
+      },
+      "k": {
+        "scaled_MAX": 3.601856521271332e-15,
+        "scaled_coefficient_RMS": 6.981051823529193e-16
+      },
+      "epsilon": {
+        "scaled_MAX": 9.507301923083594e-16,
+        "scaled_coefficient_RMS": 2.61299539691216e-16
+      }
+    }
+  },
+  "failed_history_byte_preserved": true,
+  "roots": [
+    0.5704494816761526,
+    0.44007953875182887,
+    0.5704494816761526
+  ],
+  "fixed": {
+    "warm-a-first": {
+      "assemblies": [
+        {
+          "rule": [
+            20,
+            24
+          ],
+          "residuals": {
+            "momentum": 6.249687691397582e-07,
+            "k": 7.923842332373524e-05,
+            "epsilon": 0.0005871227102501641,
+            "continuity": 1.484610681495085e-17,
+            "gauge": 1.669581348377031e-18,
+            "trace": 6.434873179014748e-16
+          },
+          "trace": {
+            "k": 4.66170077550769e-16,
+            "epsilon": 6.434873179014748e-16,
+            "velocity": 1.22514845490862e-17
+          },
+          "roots": [
+            {
+              "owner": 1,
+              "x": 0.5704494816761526,
+              "x_column": [
+                0.49999999999999994,
+                1
+              ],
+              "cutoff_residual": 0.0
+            },
+            {
+              "owner": 3,
+              "x": 0.5704494816761526,
+              "x_column": [
+                0.49999999999999994,
+                1
+              ],
+              "cutoff_residual": 0.0
+            }
+          ]
+        },
+        {
+          "rule": [
+            24,
+            32
+          ],
+          "residuals": {
+            "momentum": 6.249687691397222e-07,
+            "k": 7.923842332382143e-05,
+            "epsilon": 0.0005871227102501534,
+            "continuity": 1.5326380450208292e-17,
+            "gauge": 1.4571613670734136e-18,
+            "trace": 7.155168357657371e-16
+          },
+          "trace": {
+            "k": 2.8212397536616696e-16,
+            "epsilon": 7.155168357657371e-16,
+            "velocity": 1.3010426069826053e-17
+          },
+          "roots": [
+            {
+              "owner": 1,
+              "x": 0.5704494816761526,
+              "x_column": [
+                0.49999999999999994,
+                1
+              ],
+              "cutoff_residual": 0.0
+            },
+            {
+              "owner": 3,
+              "x": 0.5704494816761526,
+              "x_column": [
+                0.49999999999999994,
+                1
+              ],
+              "cutoff_residual": 0.0
+            }
+          ]
+        }
+      ],
+      "quadrature_difference": {
+        "momentum": 3.5998900258307764e-20,
+        "continuity": 4.802736352574424e-19,
+        "gauge": 2.124199813036175e-19,
+        "k": 8.61940727125976e-17,
+        "epsilon": 1.0625181290357943e-17,
+        "trace": 7.202951786426234e-17
+      },
+      "native_current_residual_difference": {
+        "momentum": 4.630796451170655e-14,
+        "continuity": 7.777760318493917e-18,
+        "gauge": 1.1779051922755112e-18,
+        "k": 2.0757050592234982e-16,
+        "epsilon": 8.002496235115508e-16,
+        "trace": 7.155168357657371e-16
+      }
+    },
+    "warm-b": {
+      "assemblies": [
+        {
+          "rule": [
+            20,
+            24
+          ],
+          "residuals": {
+            "momentum": 3.47790127635766e-07,
+            "k": 7.784101553911234e-05,
+            "epsilon": 0.0004016207321282643,
+            "continuity": 1.6144718634539307e-17,
+            "gauge": 1.3929721515392986e-18,
+            "trace": 1.1306610939404002e-15
+          },
+          "trace": {
+            "k": 4.961610277236697e-16,
+            "epsilon": 1.1306610939404002e-15,
+            "velocity": 1.3335686721571705e-17
+          },
+          "roots": [
+            {
+              "owner": 0,
+              "x": 0.44007953875182887,
+              "x_column": [
+                0,
+                0.5
+              ],
+              "cutoff_residual": 0.0
+            },
+            {
+              "owner": 2,
+              "x": 0.44007953875182887,
+              "x_column": [
+                0,
+                0.5
+              ],
+              "cutoff_residual": 0.0
+            }
+          ]
+        },
+        {
+          "rule": [
+            24,
+            32
+          ],
+          "residuals": {
+            "momentum": 3.4779012763601486e-07,
+            "k": 7.78410155390473e-05,
+            "epsilon": 0.0004016207321282416,
+            "continuity": 1.5398451132176508e-17,
+            "gauge": 1.0118073252748635e-18,
+            "trace": 1.0950864455364032e-15
+          },
+          "trace": {
+            "k": 5.359692962270805e-16,
+            "epsilon": 1.0950864455364032e-15,
+            "velocity": 1.2576745200831851e-17
+          },
+          "roots": [
+            {
+              "owner": 0,
+              "x": 0.44007953875182887,
+              "x_column": [
+                0,
+                0.5
+              ],
+              "cutoff_residual": 0.0
+            },
+            {
+              "owner": 2,
+              "x": 0.44007953875182887,
+              "x_column": [
+                0,
+                0.5
+              ],
+              "cutoff_residual": 0.0
+            }
+          ]
+        }
+      ],
+      "quadrature_difference": {
+        "momentum": 2.488688678151541e-19,
+        "continuity": 7.4626750236279875e-19,
+        "gauge": 3.8116482626443515e-19,
+        "k": 6.50385778219742e-17,
+        "epsilon": 2.2714035513571318e-17,
+        "trace": 3.5574648403996984e-17
+      },
+      "native_current_residual_difference": {
+        "momentum": 3.840261104424029e-14,
+        "continuity": 1.1289790348586256e-17,
+        "gauge": 6.504948337117008e-19,
+        "k": 2.0479223785535572e-16,
+        "epsilon": 3.436920886779049e-16,
+        "trace": 1.0950864455364032e-15
+      }
+    },
+    "warm-a-return": {
+      "assemblies": [
+        {
+          "rule": [
+            20,
+            24
+          ],
+          "residuals": {
+            "momentum": 6.249687691397582e-07,
+            "k": 7.923842332373524e-05,
+            "epsilon": 0.0005871227102501641,
+            "continuity": 1.484610681495085e-17,
+            "gauge": 1.669581348377031e-18,
+            "trace": 6.434873179014748e-16
+          },
+          "trace": {
+            "k": 4.66170077550769e-16,
+            "epsilon": 6.434873179014748e-16,
+            "velocity": 1.22514845490862e-17
+          },
+          "roots": [
+            {
+              "owner": 1,
+              "x": 0.5704494816761526,
+              "x_column": [
+                0.49999999999999994,
+                1
+              ],
+              "cutoff_residual": 0.0
+            },
+            {
+              "owner": 3,
+              "x": 0.5704494816761526,
+              "x_column": [
+                0.49999999999999994,
+                1
+              ],
+              "cutoff_residual": 0.0
+            }
+          ]
+        },
+        {
+          "rule": [
+            24,
+            32
+          ],
+          "residuals": {
+            "momentum": 6.249687691397222e-07,
+            "k": 7.923842332382143e-05,
+            "epsilon": 0.0005871227102501534,
+            "continuity": 1.5326380450208292e-17,
+            "gauge": 1.4571613670734136e-18,
+            "trace": 7.155168357657371e-16
+          },
+          "trace": {
+            "k": 2.8212397536616696e-16,
+            "epsilon": 7.155168357657371e-16,
+            "velocity": 1.3010426069826053e-17
+          },
+          "roots": [
+            {
+              "owner": 1,
+              "x": 0.5704494816761526,
+              "x_column": [
+                0.49999999999999994,
+                1
+              ],
+              "cutoff_residual": 0.0
+            },
+            {
+              "owner": 3,
+              "x": 0.5704494816761526,
+              "x_column": [
+                0.49999999999999994,
+                1
+              ],
+              "cutoff_residual": 0.0
+            }
+          ]
+        }
+      ],
+      "quadrature_difference": {
+        "momentum": 3.5998900258307764e-20,
+        "continuity": 4.802736352574424e-19,
+        "gauge": 2.124199813036175e-19,
+        "k": 8.61940727125976e-17,
+        "epsilon": 1.0625181290357943e-17,
+        "trace": 7.202951786426234e-17
+      },
+      "native_current_residual_difference": {
+        "momentum": 4.630796451170655e-14,
+        "continuity": 7.777760318493917e-18,
+        "gauge": 1.1779051922755112e-18,
+        "k": 2.0757050592234982e-16,
+        "epsilon": 8.002496235115508e-16,
+        "trace": 7.155168357657371e-16
+      }
+    }
+  },
+  "current": {
+    "warm-a-return": {
+      "independent_assemblies": [
+        {
+          "quadrature": [
+            20,
+            24
+          ],
+          "current_residual": {
+            "momentum": 2.746164533938186e-12,
+            "k": 8.36250459318014e-14,
+            "epsilon": 1.1741049535670323e-13,
+            "continuity": 2.087292490956473e-17,
+            "gauge": 1.8681046953897577e-18
+          },
+          "stored_history_errors": {
+            "current": {
+              "momentum": 1.449394801605882e-19,
+              "k": 7.43907486063641e-17,
+              "epsilon": 6.468061262960694e-17
+            },
+            "previous": {
+              "momentum": 1.4726925040041917e-19,
+              "k": 5.097798460477866e-17,
+              "epsilon": 5.660605524654079e-17
+            }
+          },
+          "current_trace": {
+            "k": 4.035154559772054e-16,
+            "epsilon": 4.1569296740454474e-16,
+            "velocity": 1.1709383462843448e-17
+          },
+          "input_trace": {
+            "k": 4.66170077550769e-16,
+            "epsilon": 6.434873179014748e-16,
+            "velocity": 1.22514845490862e-17
+          },
+          "previous_trace": {
+            "k": 3.058788264118881e-16,
+            "epsilon": 9.555714081178365e-16,
+            "velocity": 5.587208936724798e-18
+          }
+        },
+        {
+          "quadrature": [
+            24,
+            32
+          ],
+          "current_residual": {
+            "momentum": 2.7461107421991863e-12,
+            "k": 1.0355227426867228e-13,
+            "epsilon": 8.557486193525203e-14,
+            "continuity": 2.228473011996998e-17,
+            "gauge": 1.7827396561742852e-18
+          },
+          "stored_history_errors": {
+            "current": {
+              "momentum": 1.516898382836671e-19,
+              "k": 1.9187512983847497e-16,
+              "epsilon": 2.1883373931532525e-16
+            },
+            "previous": {
+              "momentum": 1.5420924958655157e-19,
+              "k": 1.840547002296776e-16,
+              "epsilon": 2.1837526276013164e-16
+            }
+          },
+          "current_trace": {
+            "k": 3.836593993444656e-16,
+            "epsilon": 9.640821169021473e-16,
+            "velocity": 9.974659986866641e-18
+          },
+          "input_trace": {
+            "k": 2.8212397536616696e-16,
+            "epsilon": 7.155168357657371e-16,
+            "velocity": 1.3010426069826053e-17
+          },
+          "previous_trace": {
+            "k": 4.1734077628096393e-16,
+            "epsilon": 8.818671839582059e-16,
+            "velocity": 4.589731475048251e-18
+          }
+        }
+      ],
+      "negative_controls": {
+        "frozen_prior_scalar_and_source": {
+          "change_dual": {
+            "momentum": 3.6030746446139953e-07,
+            "k": 0.0002108861288059273,
+            "epsilon": 5.807002233793216e-05
+          },
+          "status": "DETECTED"
+        },
+        "replace_actual_Q3_k_by_Q2_projection": {
+          "change_dual": {
+            "momentum": 2.185186302696388e-07,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "status": "DETECTED"
+        },
+        "missing_sampled_AWF_convection": {
+          "change_dual": {
+            "momentum": 4.5691494718662415e-06,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "status": "DETECTED"
+        },
+        "missing_sampled_AWF_pressure": {
+          "change_dual": {
+            "momentum": 0.0001071515006981273,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "status": "DETECTED"
+        },
+        "missing_sampled_AWF_Q3_k": {
+          "change_dual": {
+            "momentum": 4.176458956967359e-05,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "status": "DETECTED"
+        },
+        "missing_bulk_physical_body": {
+          "change_dual": {
+            "momentum": 0.0003142790407799728,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "status": "DETECTED"
+        },
+        "missing_sampled_AWF_body": {
+          "change_dual": {
+            "momentum": 0.00014355187126258138,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "status": "DETECTED"
+        },
+        "replace_conservative_scalar_transport_by_advective_form": {
+          "change_dual": {
+            "momentum": 0.0,
+            "k": 2.8801157191339745e-06,
+            "epsilon": 2.246696342054967e-06
+          },
+          "status": "DETECTED"
+        },
+        "stale_EX1_instead_of_EX2": {
+          "change_dual": {
+            "momentum": 3.289770829410147e-08,
+            "k": 3.0232200682032393e-07,
+            "epsilon": 2.89399780284954e-06
+          },
+          "status": "DETECTED"
+        }
+      },
+      "native_prescribed_body_action_comparison": {
+        "status": "PASS",
+        "actions": {
+          "mms_bulk_body_rhs": {
+            "momentum_dual_error": 6.656656908847941e-19,
+            "passed": true
+          },
+          "mms_sampled_body_rhs": {
+            "momentum_dual_error": 3.513455041126613e-19,
+            "passed": true
+          }
+        },
+        "momentum_dual_tolerance": 1e-10,
+        "limitation": "Net manufactured forcing cancels body changes; the final state alone cannot establish that the native separate body paths ran."
+      },
+      "current_coupled_step_gate_pass": true
+    },
+    "warm-b": {
+      "independent_assemblies": [
+        {
+          "quadrature": [
+            20,
+            24
+          ],
+          "current_residual": {
+            "momentum": 3.196351761463543e-12,
+            "k": 1.1014100937703187e-13,
+            "epsilon": 9.680301987596373e-14,
+            "continuity": 1.732046556441595e-17,
+            "gauge": 1.78406314515437e-18
+          },
+          "stored_history_errors": {
+            "current": {
+              "momentum": 1.4509759618184388e-19,
+              "k": 6.992358286687088e-17,
+              "epsilon": 5.776063984290324e-17
+            },
+            "previous": {
+              "momentum": 1.460052148627004e-19,
+              "k": 7.29582427220177e-17,
+              "epsilon": 8.56315331529196e-17
+            }
+          },
+          "current_trace": {
+            "k": 3.5626717593888794e-16,
+            "epsilon": 1.2136533649600074e-15,
+            "velocity": 1.452830911130576e-17
+          },
+          "input_trace": {
+            "k": 4.961610277236697e-16,
+            "epsilon": 1.1306610939404002e-15,
+            "velocity": 1.3335686721571705e-17
+          },
+          "previous_trace": {
+            "k": 4.3462167544786576e-16,
+            "epsilon": 8.100862999637337e-16,
+            "velocity": 6.071532165918825e-18
+          }
+        },
+        {
+          "quadrature": [
+            24,
+            32
+          ],
+          "current_residual": {
+            "momentum": 3.196409440854668e-12,
+            "k": 1.0857455308541418e-13,
+            "epsilon": 2.2134482912584535e-13,
+            "continuity": 1.6648735485363672e-17,
+            "gauge": 1.9521462456251453e-18
+          },
+          "stored_history_errors": {
+            "current": {
+              "momentum": 1.5258565100899114e-19,
+              "k": 1.9598390040299696e-16,
+              "epsilon": 2.1334371975852088e-16
+            },
+            "previous": {
+              "momentum": 1.5199757482907692e-19,
+              "k": 2.0126975594015684e-16,
+              "epsilon": 2.4589166178910925e-16
+            }
+          },
+          "current_trace": {
+            "k": 3.1923538993073326e-16,
+            "epsilon": 9.048215200749237e-16,
+            "velocity": 1.4474099002681484e-17
+          },
+          "input_trace": {
+            "k": 5.359692962270805e-16,
+            "epsilon": 1.0950864455364032e-15,
+            "velocity": 1.2576745200831851e-17
+          },
+          "previous_trace": {
+            "k": 4.276984983168378e-16,
+            "epsilon": 8.891261498118492e-16,
+            "velocity": 5.120797102615497e-18
+          }
+        }
+      ],
+      "negative_controls": {
+        "frozen_prior_scalar_and_source": {
+          "change_dual": {
+            "momentum": 3.242770718001458e-07,
+            "k": 0.00019556587896712795,
+            "epsilon": 5.4014749691538735e-05
+          },
+          "status": "DETECTED"
+        },
+        "replace_actual_Q3_k_by_Q2_projection": {
+          "change_dual": {
+            "momentum": 2.6814874694069497e-07,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "status": "DETECTED"
+        },
+        "missing_sampled_AWF_convection": {
+          "change_dual": {
+            "momentum": 4.660951295365488e-06,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "status": "DETECTED"
+        },
+        "missing_sampled_AWF_pressure": {
+          "change_dual": {
+            "momentum": 0.00011090295383965303,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "status": "DETECTED"
+        },
+        "missing_sampled_AWF_Q3_k": {
+          "change_dual": {
+            "momentum": 4.048012373041476e-05,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "status": "DETECTED"
+        },
+        "missing_bulk_physical_body": {
+          "change_dual": {
+            "momentum": 0.0003137124915526458,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "status": "DETECTED"
+        },
+        "missing_sampled_AWF_body": {
+          "change_dual": {
+            "momentum": 0.0001429312723120923,
+            "k": 0.0,
+            "epsilon": 0.0
+          },
+          "status": "DETECTED"
+        },
+        "replace_conservative_scalar_transport_by_advective_form": {
+          "change_dual": {
+            "momentum": 0.0,
+            "k": 3.1257091294415947e-06,
+            "epsilon": 2.3165284718874714e-06
+          },
+          "status": "DETECTED"
+        },
+        "stale_EX1_instead_of_EX2": {
+          "change_dual": {
+            "momentum": 2.8347844907730246e-08,
+            "k": 4.961395267324531e-07,
+            "epsilon": 2.905532851921215e-06
+          },
+          "status": "DETECTED"
+        }
+      },
+      "native_prescribed_body_action_comparison": {
+        "status": "PASS",
+        "actions": {
+          "mms_bulk_body_rhs": {
+            "momentum_dual_error": 8.246053413487146e-19,
+            "passed": true
+          },
+          "mms_sampled_body_rhs": {
+            "momentum_dual_error": 2.701507858458576e-19,
+            "passed": true
+          }
+        },
+        "momentum_dual_tolerance": 1e-10,
+        "limitation": "Net manufactured forcing cancels body changes; the final state alone cannot establish that the native separate body paths ran."
+      },
+      "current_coupled_step_gate_pass": true
+    }
+  }
+}

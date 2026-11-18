@@ -1,0 +1,66 @@
+{
+  "request": {
+    "label": "r2-native-build",
+    "phase": "build",
+    "command": [
+      "cmake",
+      "--build",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r2-make-v1",
+      "--parallel",
+      "4",
+      "--target",
+      "IncNavierStokesSolver",
+      "WJH27ReferenceProbe",
+      "WJH27CoupledMMSProbe",
+      "WJH27CoupledReturnProbe"
+    ],
+    "cap_seconds": 1050.0,
+    "reserved_seconds": 1057.0,
+    "workers_before": 41,
+    "idle_mpi_event_helpers": 56,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 9889550,
+      "source_build_runtime_bytes": 50280815,
+      "free_bytes": 3607078739968
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/task2r_run-v2.py",
+      "bytes": 10890,
+      "sha256": "a60e1df7825fe3a707cf24a0d796d27aad9bf78d8918e3d9b3f6dc6c8b557de2"
+    },
+    "input_files": []
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "build",
+    "seconds": 260.122654892999,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 4612952064,
+    "peak_host_workers": 52,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-native-build/command.log",
+      "bytes": 108400,
+      "sha256": "72a4151d10896c2ecb49e319b7903494c5b92f2b9d43d77ba8e467d1aedd867a"
+    }
+  },
+  "balance": {
+    "charged_seconds": 22758.75091497685,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 16841.24908502315,
+    "tranche_remaining": 5524.539804628088
+  },
+  "storage": {
+    "science_bytes": 9889550,
+    "source_build_runtime_bytes": 125618061,
+    "free_bytes": 3607001903104
+  }
+}

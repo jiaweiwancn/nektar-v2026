@@ -1,0 +1,86 @@
+{
+  "schema": "WJH27MMSStudyManifestV1",
+  "terminal_time": 0.4,
+  "runs": [
+    {
+      "label": "dt08",
+      "role": "temporal",
+      "session": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-temporal-refined/dt08.xml",
+        "bytes": 9674,
+        "sha256": "a07d31905e7847bd451630a05f58b387f4911073919e509680189a143f877441"
+      },
+      "native": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-temporal-refined/dt08.result.json"
+    },
+    {
+      "label": "dt04",
+      "role": "temporal",
+      "session": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-temporal-refined/dt04.xml",
+        "bytes": 9675,
+        "sha256": "f2361200db6ac4bae886a3d2e1d33db9d7ac37afd5a219c1da87fa689a31a1c3"
+      },
+      "native": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-temporal-refined/dt04.result.json"
+    },
+    {
+      "label": "dt02",
+      "role": "temporal",
+      "session": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-temporal-refined/dt02.xml",
+        "bytes": 9675,
+        "sha256": "ca26420850624d901c364ffa094116d0c62a2bee81d358178d47853ee260a7fb"
+      },
+      "native": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-temporal-refined/dt02.result.json"
+    },
+    {
+      "label": "h",
+      "role": "control",
+      "session": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-temporal-refined/h.xml",
+        "bytes": 24101,
+        "sha256": "b39f12d1f9661d758e13ebd532759edf07d3443b9746456573276091a6f0dee9"
+      },
+      "native": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-temporal-refined/h.result.json"
+    },
+    {
+      "label": "q",
+      "role": "control",
+      "session": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-temporal-refined/q.xml",
+        "bytes": 9673,
+        "sha256": "09150608d07f7970d7d2dcb642553b4b0a84b1d46c1264e2162df07c4e6238f5"
+      },
+      "native": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-temporal-refined/q.result.json"
+    },
+    {
+      "label": "tight",
+      "role": "control",
+      "session": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-temporal-refined/tight.xml",
+        "bytes": 9676,
+        "sha256": "883833cb9fa1b8d69a683adac1cbe5c43d9127e7579825daaa97281bd8473df3"
+      },
+      "native": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r2-temporal-refined/tight.result.json"
+    }
+  ],
+  "comparisons": [
+    {
+      "label": "mesh",
+      "kind": "mesh",
+      "coarse": "dt02",
+      "fine": "h"
+    },
+    {
+      "label": "quadrature",
+      "kind": "quadrature",
+      "coarse": "dt02",
+      "fine": "q"
+    },
+    {
+      "label": "tolerance",
+      "kind": "tolerance",
+      "coarse": "dt02",
+      "fine": "tight"
+    }
+  ]
+}

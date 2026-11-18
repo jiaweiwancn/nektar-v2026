@@ -113,6 +113,8 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     signature<<'|'<<m_options.advancement<<'|'<<newton.maximumSeconds<<'|'<<newton.acceptanceNorm<<'|'
         <<newton.maximumNewtonIterations<<'|'<<newton.restartDimension<<'|'<<newton.maximumLinearCycles<<'|'<<newton.fdRelativeStep;
     signature<<'|'<<m_options.stepPreconditioner<<'|'<<m_options.stepPCRelativeDrift<<'|'<<m_options.stepPCMaximumUses;
+    if(m_reference->Policy()!=ReferencePolicy::Historical)
+        signature<<'|'<<m_reference->PolicyName()<<'|'<<m_reference->TransportName();
     if(m_reference->Transport()!=InnerKTransport::ScalarV2)
         signature<<'|'<<m_reference->TransportName()<<'|'<<m_reference->BoundaryIdentity();
     for(const auto&e:m_flow.Elements()){
@@ -308,6 +310,8 @@ CoupledHistory Coupling::Initialise()const
             if(m_mms){auto a=m_mms->Fields(NativeX(x),NativeRadius(z)+m_geometry.d0,0);return component==0?a.u.value:component==1?a.w.value:a.Pi.value;}
             if(component==0)return m_reference->InletU(NativeRadius(z));
             if(component==1)return 0.;
+            if(m_reference->Policy()==ReferencePolicy::ExactInnerFiniteNuV1)
+                return m_reference->InletModifiedPressure(NativeRadius(z));
             // A fresh normal-traction-compatible seed, with no imposed old
             // normal-stress jump. This is not a stationary-flow assertion.
             double r=NativeRadius(z),K=m_reference->Parameters().KIn,k=m_reference->InletK(r);
@@ -599,9 +603,9 @@ Coupling::Loads Coupling::Forcing(double time,CoupledTiming&timing,bool freezeMa
     }else{
         // The application has no manufactured/balance forcing. Body force
         // is exactly zero for this pinned neutral, flat physical case.
-        const auto&p=m_reference->Parameters();
+        const double topTraction=m_reference->TopTangentialTraction();
         for(const auto&[index,side]:m_boundaryFaces)if(side==1||side==3){auto r=m_rules.Face(m_flow.Elements()[index],side,20);Vec tx(r.w.size()),tz(tx.size());
-            for(int q=0;q<tx.size();++q){if(side==1){auto t=m_reference->OutletTraction(r.z[q]-m_geometry.d0);tx[q]=t[0];tz[q]=t[1];}else{tx[q]=p.tau0;tz[q]=0;}}
+            for(int q=0;q<tx.size();++q){if(side==1){auto t=m_reference->OutletTraction(r.z[q]-m_geometry.d0);tx[q]=t[0];tz[q]=t[1];}else{tx[q]=topTraction;tz[q]=0;}}
             Add(load.flow,r.u,r.B.transpose()*r.w.asDiagonal()*tx);Add(load.flow,r.u,r.B.transpose()*r.w.asDiagonal()*tz,n);}
         load.epsilon+=m_e.NaturalFlux([&](double,double,const Vector&normal){return normal[2]>.5?m_reference->TopEpsilonOutwardFlux():0.;},m_rules);
     }

@@ -424,8 +424,7 @@ def main():
             'One accepted timestep does not establish temporal order, long-time stability, or a stationary state',
             'Owner-gradient physical budget convergence needs resolution evidence; reaction identities alone do not qualify it'])
     try:
-        po.require(report['table']['sha256'] == po.TABLE_SHA, 'wrong immutable qualified reference table')
-        ref = po.Reference(json.loads(args.table.read_text()))
+        ref = po.load_reference(args.table)
         data, metadata = po.load_native(args.native)
         po.require(metadata.get('steady_mode') is not True, 'a steady preparation packet is not an accepted physical timestep')
         report['native_run_metadata'] = metadata
