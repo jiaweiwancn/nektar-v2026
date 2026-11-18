@@ -1,0 +1,136 @@
+{
+  "schema": "WJH27Task2RContinuationV1",
+  "closed": false,
+  "ceiling": 43200,
+  "protected_seconds": 3600,
+  "opening_seconds": 22438.642918664846,
+  "opening_nonprotected_remaining": 17161.357081335154,
+  "initial_tranche_seconds": 5844.647800940089,
+  "tranche_seconds": 5844.647800940089,
+  "initial_evidence_seconds": 300,
+  "prior_account": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/accounting.json",
+    "bytes": 287890,
+    "sha256": "3c16883f2f134f17614eaf25d83561c14e113799504ebc08cc15a9882e3bc2be"
+  },
+  "prior_settlement": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/inputs/settled-pre-migration.json",
+    "bytes": 4340,
+    "sha256": "50c57af686e39ab51fd9119eaf126e92264e49dd20f82b90963e2503a9edb016"
+  },
+  "entries": {
+    "r0-ledger-continuity": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 2.12994493700171,
+      "earlier_linux_inventory_charge_seconds": 2.0,
+      "peak_host_workers": 39,
+      "idle_mpi_event_helpers": 56
+    },
+    "r1-archive-integrity": {
+      "status": "FAIL",
+      "phase": "evidence",
+      "seconds": 0.454,
+      "reason": "preflight OSError: argument was interpreted as a filename",
+      "launched": false
+    },
+    "r1-verified-archive": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 0.8772871310029586,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 208896,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r1-verified-archive/command.log",
+        "bytes": 1193,
+        "sha256": "1a4c7b91718bb6efc85c948c0a0d0ec6754af68d1eb17acd71acbac19bdcaedd"
+      }
+    },
+    "r1-supplied-shooting": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 2.0986810860013065,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 60944384,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r1-supplied-shooting/command.log",
+        "bytes": 7859,
+        "sha256": "094b8337934277af45c79839e64e4f2778b82e239c73296d433a5faf6f87225b"
+      }
+    },
+    "r1-supplied-collocation": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 2.7396005440023146,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 77877248,
+      "peak_host_workers": 40,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r1-supplied-collocation/command.log",
+        "bytes": 4977,
+        "sha256": "e3d0286270b1f26a64814c073c3c429ef230618e5e81f46ad7c66af7a76c6a3d"
+      }
+    },
+    "r1-supplied-family": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.9837001059968316,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 62271488,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r1-supplied-family/command.log",
+        "bytes": 5956,
+        "sha256": "ffe617185a8d1c7b77a8e1fdec9b5aeee85912767e2d7b73373be4ce8d2d5071"
+      }
+    },
+    "r1-supplied-full-tensor": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 13.370547570997587,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 85647360,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r1-supplied-full-tensor/command.log",
+        "bytes": 314,
+        "sha256": "3cf322d6cfadebc65d28f750324465aca2f5a798f25c3e7409f2cc13f6062efc"
+      }
+    },
+    "r1-qualified-representation": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 31.564059830001497,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 70418432,
+      "peak_host_workers": 40,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r1-qualified-representation/command.log",
+        "bytes": 623,
+        "sha256": "553070525a3d311131a6e924e2b131c9bb14f4e01cd564d73bc165319845fad8"
+      }
+    },
+    "r1-publication": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 0.8777458059994387,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 245760,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r1-publication/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  }
+}

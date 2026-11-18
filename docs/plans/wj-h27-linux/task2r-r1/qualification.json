@@ -1,0 +1,417 @@
+{
+  "R1": "PASS",
+  "archive": "1d4fff1e0efe09820bf3189d2c670ac4b55303536f7af45664760fad4421a619",
+  "table": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+    "bytes": 139982,
+    "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+  },
+  "calibration": {
+    "h": 0.11541061001735275,
+    "reproduced_h": 0.11541061001726277,
+    "independent_h": 0.1154106100172848,
+    "independent_c": 0.024396032178245222,
+    "roughness_intercept": -0.002926631422545874,
+    "top_velocity": 0.43724424118668737,
+    "reference_shear": 0.002658181904845143,
+    "historical_shear": 0.0026009999999999996,
+    "ground_k": 0.012784290318074194,
+    "interface_gradient": 0.8902437734714551,
+    "endpoint_defects": [
+      0.0,
+      -8.959499808725013e-14,
+      0.0,
+      0.0,
+      -1.6673620491895496e-16,
+      -9.11838620650535e-17,
+      -1.6673620491895496e-16
+    ],
+    "inner_production": 0.0009781519636903385,
+    "inner_destruction": 0.0009781519636903675
+  },
+  "geometry": {
+    "H": 0.15,
+    "d0": 0.0875,
+    "rT": 19.9125,
+    "force_support": 0.11541061001735275,
+    "collar": [
+      0.06,
+      0.11249999999999999
+    ],
+    "material_edges": [
+      0.0,
+      0.0243960321782528,
+      0.06,
+      0.11249999999999999,
+      0.11541061001735275,
+      0.15
+    ]
+  },
+  "fixed_scale_inlet_errors": {
+    "U": 9.14823772291129e-14,
+    "G": 2.606813431782484e-10,
+    "k": 4.251630770030747e-13,
+    "kr": 2.691325404207537e-10,
+    "Q": 2.8846985504109583e-13,
+    "Qr": 1.4228862495934404e-09,
+    "Pi": 1.0203766995539375e-10,
+    "P": 2.9571667354542095e-09
+  },
+  "cutoff_maxima": {
+    "relative_cutoff_error": 1.609823385706477e-14,
+    "K_in_times_derivative_error": 1.5968198985305548e-11,
+    "K_times_log_derivative_error": 1.7565018883836103e-11,
+    "inverse_K_error_over_Kin": 6.341014858498844e-14,
+    "represented_inverse_residual": 6.938893903907228e-18,
+    "ground_flux_over_A": 5.726853453263958e-14,
+    "interface_flux_over_A": 0.0,
+    "interface_K_error_over_Kin": 0.0,
+    "independent_budget_over_A": 1.3564746663572215e-14,
+    "total_shear_error_over_tau0": 1.0004172295137297e-15,
+    "epsilon_K_derivative_fixed_radius_error": 2.009001243182693e-11
+  },
+  "loads": {
+    "outlet_inner": "(-Kin/Ne-2*Pi, Tref(Kin))",
+    "outlet_outer": "(-Kin/Ne, tau0+nu*utau/(kappa*r))",
+    "top_x": 0.0026014307488123924,
+    "interface_x": -0.0021750654680284427,
+    "interface_r": 0.002658181904845143,
+    "top_e_out": 2.613996809487407e-07,
+    "outlet_normal": [
+      1,
+      0
+    ],
+    "top_normal": [
+      0,
+      1
+    ]
+  },
+  "native_dependencies": {
+    "geometry": "67bcb96b0d8696aeda4286aa79b6fc193e7239f8e9e131473bfcba5dd34c4dfe",
+    "policy": "ExactInnerFiniteNuV1",
+    "legacy_table_sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+  },
+  "heldout_K_count": 47,
+  "sampled_full_tensor": {
+    "theory_profile": {
+      "schema": "IndependentFullTensorRecalibrationAuditV1",
+      "physics_source": "General invariant WJ tensor, independent implementation; complex-step implicit cubic derivative",
+      "h_s": 0.11541061001735224,
+      "cutoff": 0.024396032178238655,
+      "roughness": {
+        "x": 2.409138129146397,
+        "exponent": 0.38240209382581236,
+        "branch": 2,
+        "exponent_margin": 0.6226261282890939,
+        "z_v": -0.0029266314225458515,
+        "a": 0.019477811040883385
+      },
+      "minimum_covariance_over_k": 0.281766487206916,
+      "minimum_planar_over_mu": 0.02556018256354352,
+      "maximum_root_defect": 1.7044902907874242e-16,
+      "maximum_planar_polynomial_error": 6.708500942254059e-18,
+      "planar_scope": "All supported planar angles at each supplied radial state, not a continuous-radius certificate",
+      "maximum_shear_error": 3.903127820947816e-18,
+      "maximum_production_difference": 1.734723475976807e-17,
+      "maximum_planar_difference_from_other_validator": 2.3245294578089215e-15
+    },
+    "collocation_radial_refinement": [
+      {
+        "schema": "IndependentFullTensorRecalibrationAuditV1",
+        "physics_source": "General invariant WJ tensor, independent implementation; complex-step implicit cubic derivative",
+        "h_s": 0.1154106100172848,
+        "cutoff": 0.024396032178245222,
+        "roughness": {
+          "x": 2.409138129144989,
+          "exponent": 0.38240209382571133,
+          "branch": 2,
+          "exponent_margin": 0.62262612828869,
+          "z_v": -0.00292663142254265,
+          "a": 0.019477811040883385
+        },
+        "minimum_covariance_over_k": 0.28176648720691594,
+        "minimum_planar_over_mu": 0.025560182563542526,
+        "maximum_root_defect": 1.656368418783857e-16,
+        "maximum_planar_polynomial_error": 8.267041565201971e-18,
+        "planar_scope": "All supported planar angles at each supplied radial state, not a continuous-radius certificate",
+        "maximum_shear_error": 9.126319491792323e-13,
+        "maximum_scalar_constitutive_and_balance_error": [
+          2.1534909429181458e-14,
+          6.701193419611506e-12
+        ],
+        "sample_count": 2003,
+        "minimum_principal_radius": 0.15,
+        "minimum_covariance_radius": 0.15
+      },
+      {
+        "schema": "IndependentFullTensorRecalibrationAuditV1",
+        "physics_source": "General invariant WJ tensor, independent implementation; complex-step implicit cubic derivative",
+        "h_s": 0.1154106100172848,
+        "cutoff": 0.024396032178245222,
+        "roughness": {
+          "x": 2.409138129144989,
+          "exponent": 0.38240209382571133,
+          "branch": 2,
+          "exponent_margin": 0.62262612828869,
+          "z_v": -0.00292663142254265,
+          "a": 0.019477811040883385
+        },
+        "minimum_covariance_over_k": 0.28176648720691594,
+        "minimum_planar_over_mu": 0.025560182563542526,
+        "maximum_root_defect": 2.504899236278103e-16,
+        "maximum_planar_polynomial_error": 8.267041565201971e-18,
+        "planar_scope": "All supported planar angles at each supplied radial state, not a continuous-radius certificate",
+        "maximum_shear_error": 1.0247558010489932e-12,
+        "maximum_scalar_constitutive_and_balance_error": [
+          2.1554095360711478e-14,
+          7.415497035867524e-12
+        ],
+        "sample_count": 4003,
+        "minimum_principal_radius": 0.15,
+        "minimum_covariance_radius": 0.15
+      }
+    ],
+    "radial_searches": [
+      {
+        "quantity": "principal",
+        "interval": [
+          0.0,
+          0.024396032178245222
+        ],
+        "minimum_point": [
+          0.024396032178245222,
+          0.1076959462074454
+        ],
+        "bounded_search_success": true
+      },
+      {
+        "quantity": "covariance",
+        "interval": [
+          0.0,
+          0.024396032178245222
+        ],
+        "minimum_point": [
+          0.024396032178245222,
+          0.4468730363795905
+        ],
+        "bounded_search_success": true
+      },
+      {
+        "quantity": "principal",
+        "interval": [
+          0.024396032178245222,
+          0.06
+        ],
+        "minimum_point": [
+          0.06,
+          0.04979572082674315
+        ],
+        "bounded_search_success": true
+      },
+      {
+        "quantity": "covariance",
+        "interval": [
+          0.024396032178245222,
+          0.06
+        ],
+        "minimum_point": [
+          0.06,
+          0.39343873551587966
+        ],
+        "bounded_search_success": true
+      },
+      {
+        "quantity": "principal",
+        "interval": [
+          0.06,
+          0.11249999999999999
+        ],
+        "minimum_point": [
+          0.06286726283026206,
+          0.048409619399608125
+        ],
+        "bounded_search_success": true
+      },
+      {
+        "quantity": "covariance",
+        "interval": [
+          0.06,
+          0.11249999999999999
+        ],
+        "minimum_point": [
+          0.11249999999999999,
+          0.2899062810765284
+        ],
+        "bounded_search_success": true
+      },
+      {
+        "quantity": "principal",
+        "interval": [
+          0.11249999999999999,
+          0.1154106100172848
+        ],
+        "minimum_point": [
+          0.1154106100172848,
+          0.05401816021487422
+        ],
+        "bounded_search_success": true
+      },
+      {
+        "quantity": "covariance",
+        "interval": [
+          0.11249999999999999,
+          0.1154106100172848
+        ],
+        "minimum_point": [
+          0.1154106100172848,
+          0.2889058225805117
+        ],
+        "bounded_search_success": true
+      },
+      {
+        "quantity": "principal",
+        "interval": [
+          0.1154106100172848,
+          0.15
+        ],
+        "minimum_point": [
+          0.15,
+          0.025560182563542526
+        ],
+        "bounded_search_success": true
+      },
+      {
+        "quantity": "covariance",
+        "interval": [
+          0.1154106100172848,
+          0.15
+        ],
+        "minimum_point": [
+          0.15,
+          0.28176648720691594
+        ],
+        "bounded_search_success": true
+      }
+    ],
+    "interface": {
+      "inner": {
+        "r": 0.15,
+        "k": 0.008809015145515192,
+        "E": 0.0023155240547992548,
+        "G": 0.8902437734714576,
+        "q": 3.3867801405287254,
+        "auxiliary": 0.002978676029967105,
+        "chi": 1.0,
+        "T": 0.0026581819048451445,
+        "P": 0.0023155240547992617,
+        "R": [
+          [
+            0.00804774223170524,
+            0.0,
+            -0.0026010000000000004
+          ],
+          [
+            0.0,
+            0.005872676763676794,
+            0.0
+          ],
+          [
+            -0.0026010000000000004,
+            0.0,
+            0.0036976112956483495
+          ]
+        ],
+        "V_rr": 0.0021750654680284453,
+        "min_covariance_over_k": 0.28176648720691594,
+        "mu": 0.0029859033941677642,
+        "root": 4.050000000000006,
+        "root_defect": 3.147204056531779e-17,
+        "planar": {
+          "minimum": 7.632023587202933e-05,
+          "minimum_over_mu": 0.025560182563542526,
+          "angle_radians": -1.4293942494922354,
+          "direct_contraction": 7.632023587203195e-05,
+          "direct_polynomial_error": 2.6156377411212794e-18,
+          "polynomial_coefficients": [
+            0.0046523022987895535,
+            -0.009077159091088149,
+            0.007017867414594459,
+            0.002559181115326965,
+            0.00027344386328704624
+          ]
+        }
+      },
+      "outer_tensor": [
+        [
+          0.008047742231705235,
+          0.0,
+          -0.002601
+        ],
+        [
+          0.0,
+          0.005872676763676794,
+          0.0
+        ],
+        [
+          -0.002601,
+          0.0,
+          0.0036976112956483525
+        ]
+      ],
+      "covariance_maximum_absolute_difference": 5.204170427930421e-18,
+      "U_difference": 0.0,
+      "G_difference": 2.4424906541753444e-15,
+      "k_difference": 0.0,
+      "E_difference": 0.0,
+      "Q_H": -2.3163843954176736e-27,
+      "pressure_modified_inner": 2.6020852139652106e-18,
+      "pressure_modified_outer": -4.336808689942018e-19,
+      "pressure_modified_jump": 3.0357660829594124e-18,
+      "normal_total_traction": 0.0021750654680284427,
+      "tangential_total_traction_difference": 1.3010426069826053e-18,
+      "physical_p_over_rho_inner": -0.005872676763676792,
+      "physical_p_over_rho_outer": -0.005872676763676796
+    },
+    "three_dimensional_finite_sample": {
+      "radial_states": 28,
+      "directions_per_state": 1026,
+      "lowest": {
+        "r": 0.15,
+        "sampled_minimum": 7.76313409719476e-05,
+        "sampled_minimum_over_mu": 0.025999280862060554,
+        "wave_direction": [
+          0.1317417352334887,
+          -0.010536986948133716,
+          -0.9912280701754386
+        ],
+        "polarization": [
+          -0.9912828453986068,
+          0.0001739144867969517,
+          -0.13175086402826128
+        ],
+        "directions": 1026,
+        "scope": "Finite sphere sampling only"
+      },
+      "scope": "Finite directions only. No global three-dimensional certificate."
+    },
+    "scope": "Independent full tensor and derivatives; all supported planar angles per tested radial state. Finite radial grids and bounded radial searches do not prove whole-state/global admissibility."
+  },
+  "continuum_diagnostic": {
+    "inner_parallel_exact": true,
+    "outer_rhs_integrated": {
+      "momentum": -5.6751156032751036e-05,
+      "k": 0.0,
+      "epsilon": 9.914779649721804e-07
+    },
+    "independently_integrated": {
+      "momentum": -5.6751156032752554e-05,
+      "k": 0.0,
+      "epsilon": 9.914779676594973e-07
+    }
+  },
+  "versions": {
+    "python": "3.10.12",
+    "scipy": "1.8.0",
+    "numpy": "1.21.5"
+  }
+}
