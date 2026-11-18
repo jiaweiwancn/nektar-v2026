@@ -1,0 +1,67 @@
+{
+  "request": {
+    "label": "r3-before-radial-publication",
+    "phase": "evidence",
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-support/h27/wj-task2r-r3-archive-v2.py",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+      "task2r-r3-before-radial"
+    ],
+    "cap_seconds": 140.0,
+    "reserved_seconds": 147.0,
+    "workers_before": 69,
+    "idle_mpi_event_helpers": 118,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 730641491,
+      "source_build_runtime_bytes": 138442549,
+      "free_bytes": 3584663707648
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/task2r_run-v4.py",
+      "bytes": 11248,
+      "sha256": "815a5603bcab2b1702bb7f92dd25c4dc6c1876cd8f171fe99a2d139cf35ec69e"
+    },
+    "input_files": [
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-support/h27/wj-task2r-r3-archive-v2.py",
+        "bytes": 2527,
+        "sha256": "1411e6625a87059846e0056dde0a5ef99c32439becab8e0099fd31c6e1259b6e"
+      }
+    ]
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "evidence",
+    "seconds": 15.648352151001745,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 376619008,
+    "peak_host_workers": 72,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-before-radial-publication/command.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "balance": {
+    "charged_seconds": 30739.447072760828,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 8860.552927239174,
+    "tranche_remaining": 2643.8436468441087
+  },
+  "storage": {
+    "science_bytes": 730641491,
+    "source_build_runtime_bytes": 138442549,
+    "free_bytes": 3584617779200
+  }
+}

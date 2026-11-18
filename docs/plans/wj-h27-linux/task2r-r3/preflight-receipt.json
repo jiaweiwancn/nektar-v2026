@@ -1,0 +1,106 @@
+{
+  "request": {
+    "label": "r3-corner-inputs",
+    "phase": "analysis",
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-support/h27/task2r_physical-v6.py",
+      "prepare",
+      "--table",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+      "--geometry",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-terminal-refined/geometry.xml",
+      "--out",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-corner-balanced",
+      "--seed",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-terminal-refined/state.result.json",
+      "--refinement-witness",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-terminal-refined/corner-witness.json",
+      "--qx",
+      "6",
+      "--qr",
+      "8",
+      "--krylov-dimension",
+      "30",
+      "--wall-levels",
+      "2",
+      "--solve-seconds",
+      "980"
+    ],
+    "cap_seconds": 60.0,
+    "reserved_seconds": 67.0,
+    "workers_before": 69,
+    "idle_mpi_event_helpers": 118,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 730592102,
+      "source_build_runtime_bytes": 138442549,
+      "free_bytes": 3584688128000
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/task2r_run-v3.py",
+      "bytes": 11107,
+      "sha256": "c086b0ee4295efab0679705a10dc7809ae4b164391484fecf020c6ccf08acb9b"
+    },
+    "input_files": [
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-support/h27/task2r_physical-v6.py",
+        "bytes": 10198,
+        "sha256": "b62eab77228b3ef6c17686f113021e00f67820dfd5c1eae5e2099a331d3de241"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+        "bytes": 139982,
+        "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-terminal-refined/geometry.xml",
+        "bytes": 1108493,
+        "sha256": "71ed4ed8a582e64e7ca2667ef88f8bf30a69cf28fddc1d1995f787e5e4262977"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-terminal-refined/state.result.json",
+        "bytes": 53695676,
+        "sha256": "8f65f3b43e8281a1ed56d29f16997ae257478329da366cc496c748f138bac3d1"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-terminal-refined/corner-witness.json",
+        "bytes": 3118,
+        "sha256": "e417404087b64de88dbbd17e5fa6fad26a0d1d786e23aabcc626e4f3ae728b15"
+      }
+    ]
+  },
+  "result": {
+    "status": "FAIL",
+    "phase": "analysis",
+    "seconds": 0.3983430740008771,
+    "exit": null,
+    "reason": "shared worker limit at admission",
+    "peak_tree_rss_bytes": 0,
+    "peak_host_workers": 69,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-corner-inputs/command.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "balance": {
+    "charged_seconds": 30717.512048985824,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 8882.487951014178,
+    "tranche_remaining": 2665.7786706191127
+  },
+  "storage": {
+    "science_bytes": 730592102,
+    "source_build_runtime_bytes": 138442549,
+    "free_bytes": 3584688119808
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "schema": "WJH27Task3LaunchHoldV1",
+  "status": "NOT_READY_DO_NOT_LAUNCH",
+  "checkpoint": "R3",
+  "checkpoint_status": {
+    "R0": "PASS",
+    "R1": "PASS",
+    "R2": "PASS",
+    "R3": "NOT_MET",
+    "R4": "NOT_RUN"
+  },
+  "prior_verified_remote_checkpoints": {
+    "R0": "9d4961c5e19d0e73edc70cd551427d824bf72d57",
+    "R1": "8a1d675c36a09339524ce32f31e8310a1394dcff",
+    "R2": "501fdd5052a7fe4385d094fce0ae4f524c9d29ec"
+  },
+  "branch": "codex/wj-earsm-awf",
+  "validation_host": "jay@100.88.70.60",
+  "gates": {
+    "H27_MODEL_AND_REFERENCE": "NOT_MET",
+    "H27_COUPLED_NUMERICS": "NOT_MET",
+    "H27_PHYSICAL_PILOTS_AND_ACCURACY": "NOT_RUN",
+    "H27_RESTART_MONITORING_STORAGE": "NOT_RUN",
+    "H27_COMPLETE_COST": "NOT_RUN",
+    "RECALIBRATED_NATIVE_REFERENCE": "NOT_MET",
+    "SHORT_SCREEN": "NOT_RUN",
+    "TASK2_COMPLETE": "NO",
+    "TASK3_READY": "NO"
+  },
+  "r3": {
+    "physical_envelopes": "PASS",
+    "current_equations_and_native_guards": "PASS",
+    "quadrature_and_algebraic_controls_on_tested_meshes": "PASS",
+    "mesh_convergence": "NOT_MET",
+    "latest_completed_comparison": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-terminal-refined/comparison.json",
+      "bytes": 279168,
+      "sha256": "97b54f355f30da017fbf8ed96336af1982a13266bfda8835bfce03f1995f0e03"
+    },
+    "row_count": 690,
+    "failed_row_count": 28,
+    "radial_recovery_trial_at_snapshot": "BLOCKED",
+    "radial_blocker": "The observed shared-worker headroom did not admit the staged 114 by 62 run."
+  },
+  "horizon": 505.02466521278404,
+  "terminal_window": [
+    447.8483832973273,
+    505.02466521278404
+  ],
+  "principal_class_endpoint_lower_bound": 26.13350407707765,
+  "planned_case_classes": [
+    "developed_control",
+    "exact_inner_inlet_startup",
+    "finite_perturbation",
+    "second_sign_or_shape"
+  ],
+  "native_evidence_identities": {
+    "table": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+      "bytes": 139982,
+      "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+    },
+    "compiled_artifact": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-r2-v1/IncNavierStokesSolver",
+      "bytes": 9985016,
+      "sha256": "7a94420aaa31f41d9d8b6754d20c16f11d1398e894f243eaa6beaa3af7924819"
+    },
+    "calibration_policy": "ExactInnerFiniteNuV1",
+    "inner_transport": "ScalarCdV2",
+    "source_identity": "061c48fe6805b1b1bb66a8effffc3bfc28c5f86777c5e669f52afd9f8c0d861f"
+  },
+  "evidence_bundle": {
+    "archive": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/task2r-r3-before-radial.tar.gz",
+      "bytes": 44809328,
+      "sha256": "f4b005465b2ec339fa8af810c6c4b438564cfefefd92608db4686023c1ddcffd"
+    },
+    "manifest": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/task2r-r3-before-radial-bundle-manifest.json",
+      "bytes": 96324,
+      "sha256": "befc804ae0497f56515417a9a962e0f243e54fcacc82ced96eef74ee6a9afe96"
+    }
+  },
+  "qualified_mesh_p_q_dt": null,
+  "initial_state": null,
+  "restart_state": null,
+  "per_trajectory_complete_forecasts": null,
+  "total_campaign_forecast": null,
+  "launch_commands": null,
+  "abort_before_launch": [
+    "The stationary candidate must meet the coupled spatial budgets at all retained owner and station observations.",
+    "A matched three-timestep screen, stock control, and history-bearing cold restart remain pending.",
+    "A full measured entry and cost forecast is required before admitting the R4 matrix."
+  ]
+}

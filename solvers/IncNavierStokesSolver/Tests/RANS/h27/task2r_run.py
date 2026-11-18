@@ -38,9 +38,11 @@ def workers():
         pid, tid, state, wait, comm = row.split(None, 4)
         if state in ("X", "Z") or comm.startswith("kworker"):
             continue
-        if tid != pid and comm.startswith(("simpleFoam", "IncNavierStokes", "WJ")) \
-                and state == "S" and wait in ("do_pol", "ep_pol"):
-            # Idle OpenMPI event listeners. A runnable helper is counted.
+        rank_event = comm.startswith(("simpleFoam", "IncNavierStokes", "WJ")) and wait in ("do_pol", "ep_pol")
+        launcher_event = comm in ("orted", "mpirun", "mpiexec") and wait in ("do_pol", "ep_pol", "do_sel")
+        if tid != pid and state == "S" and (rank_event or launcher_event):
+            # Parked OpenMPI event listeners, including launcher transport
+            # threads. Main processes and runnable helpers remain counted.
             helpers += 1
             continue
         if state in ("R", "D") or comm.startswith(WORK):
@@ -136,7 +138,9 @@ def run(root, book, args, began):
             "operation cap exceeds live tranche or parent allowance")
     operation = root / "operations" / label
     host, helpers = workers()
-    limits = {"build": 16, "science": 10, "analysis": 6, "evidence": 5}
+    # Evidence commands run serially with a buffer for the process census.
+    # The shared 72-worker watchdog also applies after admission.
+    limits = {"build": 16, "science": 10, "analysis": 6, "evidence": 3}
     info = storage(root)
     request = dict(label=label, phase=phase, command=command, cap_seconds=args.seconds,
                    reserved_seconds=cap, workers_before=host, idle_mpi_event_helpers=helpers,
