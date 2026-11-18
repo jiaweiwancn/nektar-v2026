@@ -1,0 +1,70 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-v19r1/coupled_return_run.py",
+    "--root",
+    "/home/jay/build/wj-h27-coupling-r1-20261117",
+    "--name",
+    "coupled-return-v19r1",
+    "--fixtures"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 30.0,
+  "utc": "2026-11-18T01:45:05.679123+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 504915,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-v19r1/coupled_return_run.py --root /home/jay/build/wj-h27-coupling-r1-20261117"
+      },
+      {
+        "pid": 504916,
+        "parent": 504915,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label coupled-return-v19r1-fixtures --phase analysis --seconds 30 -- /usr/bin/python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-v19r1/coupled_return_run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --name coupled-return-v19r1 --fixtures"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/usr/bin/python3.10",
+      "bytes": 5941864,
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-v19r1/coupled_return_run.py",
+      "bytes": 8938,
+      "sha256": "d3dab0b0839b1f132a89684124f1f9b3ff136a4c804e22a2743bab3ccff763e9"
+    }
+  ]
+}

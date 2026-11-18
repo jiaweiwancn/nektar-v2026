@@ -1,0 +1,196 @@
+{
+  "schema": "WJH27NumericalClosureAuditV1",
+  "scope": "Approved v2 source19 on the supported serial structured flat Q3/Q2 formulation",
+  "source_identity": "56c35390fdf092180913f60c3ae348ca10cdcdf4e6b889c3afd589eddb511acf",
+  "H27_COUPLED_NUMERICS": "PASS",
+  "full_H27_qualification": false,
+  "TASK3_READY": false,
+  "compiled_sources": [
+    {
+      "path": "solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupled.cpp",
+      "bytes": 30665,
+      "sha256": "a18657bdaa2217f2916ab2684ead7aa43d9a424ad9b3ae1de71f01fbe1c81174"
+    },
+    {
+      "path": "solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp",
+      "bytes": 84233,
+      "sha256": "9ec4dd67865fc86c4567f06ae5b5a4a059162dcfd515ce41feb579ff772b8224"
+    },
+    {
+      "path": "solvers/IncNavierStokesSolver/EquationSystems/WJNativeTimeNewton.cpp",
+      "bytes": 23300,
+      "sha256": "77411b31a6dace42e2173ad328c97513c038b06f23a9b0068885af56fee23db9"
+    },
+    {
+      "path": "solvers/IncNavierStokesSolver/EquationSystems/WJNativeReference.cpp",
+      "bytes": 19660,
+      "sha256": "32197b3345237db91c32c16888839a2aeff4347082319b43bcc76b8ab33f2e46"
+    },
+    {
+      "path": "solvers/IncNavierStokesSolver/EquationSystems/WJNativeRules.cpp",
+      "bytes": 10467,
+      "sha256": "160dac18612f9b9c9cc2bd3889f8ec2e7bd5f04353a67a36527ff70252865e43"
+    },
+    {
+      "path": "solvers/IncNavierStokesSolver/EquationSystems/WJNativeScalar.cpp",
+      "bytes": 36235,
+      "sha256": "32d4210fd5713f7bfe5accdafb754f4a495a9d7f209432f318d0a04eb27a7eb5"
+    },
+    {
+      "path": "solvers/IncNavierStokesSolver/EquationSystems/WJNativeAdmissibility.cpp",
+      "bytes": 7646,
+      "sha256": "41b4b1c90ff844082474e7caf902e0c3c35134e60ceddb3b1c7947c921af88db"
+    },
+    {
+      "path": "solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.cpp",
+      "bytes": 18086,
+      "sha256": "0ecd0851b080a9a1360620d0b28d80b8c3a45778bd5ef67f993551bef7d5709e"
+    }
+  ],
+  "source_manifest": {
+    "path": "docs/plans/wj-h27-linux/native-cutoff-panels-v2i/source-v19.json",
+    "bytes": 1141639,
+    "sha256": "26e414f6d5238c7d5bf44cdd1c2fe38d341bbdff697f4f3105c6dd247b84eb82"
+  },
+  "requirements": {
+    "mixed_gauge_full_strain_Q3_k_sign": {
+      "status": "MET",
+      "evidence": [
+        {
+          "path": "docs/plans/wj-h27-linux/native-reference-inverse-v2l/science/reference-inverse-v19/reuse-audit.json",
+          "bytes": 26267,
+          "sha256": "2d967e472910b2961d12155fb7664ee338b05842bbd419c5b0f3aeac84545353"
+        }
+      ]
+    },
+    "evolving_continuous_MMS_body_trace_tiny_direct": {
+      "status": "MET",
+      "evidence": [
+        {
+          "path": "docs/plans/wj-h27-linux/native-mms-requalification-v2j/science/mms-requalification-v19/crossing/independent.json",
+          "bytes": 9972,
+          "sha256": "18e477451968b77c3cf4b98eeff9ff8aa8568516abb02400d54e267357acc6c9"
+        },
+        {
+          "path": "docs/plans/wj-h27-linux/native-mms-requalification-v2j/science/mms-requalification-v19/temporal/independent.json",
+          "bytes": 462680,
+          "sha256": "cb77c94ebe269b87fbbe1dcfe5baa7beb91778e3ef59f6756c83813e20fe6183"
+        }
+      ]
+    },
+    "temporal_spatial_quadrature_algebraic_separation": {
+      "status": "MET",
+      "evidence": [
+        {
+          "path": "docs/plans/wj-h27-linux/native-mms-requalification-v2j/science/mms-requalification-v19/temporal/independent.json",
+          "bytes": 462680,
+          "sha256": "cb77c94ebe269b87fbbe1dcfe5baa7beb91778e3ef59f6756c83813e20fe6183"
+        },
+        {
+          "path": "docs/plans/wj-h27-linux/native-mms-requalification-v2j/science/mms-requalification-v19/spatial/independent.json",
+          "bytes": 1396670,
+          "sha256": "dc8a61aa5466097b1c91d8207712a32ad219fe19d6e248e2d08dd4ade40f304b"
+        },
+        {
+          "path": "docs/plans/wj-h27-linux/native-mms-requalification-v2j/science/mms-requalification-v19/crossing/independent.json",
+          "bytes": 9972,
+          "sha256": "18e477451968b77c3cf4b98eeff9ff8aa8568516abb02400d54e267357acc6c9"
+        }
+      ]
+    },
+    "independent_scalar_mechanical_accounts_and_owner_flux_resolution": {
+      "status": "MET",
+      "evidence": [
+        {
+          "path": "docs/plans/wj-h27-linux/native-mms-requalification-v2j/science/mms-requalification-v19/spatial/independent.json",
+          "bytes": 1396670,
+          "sha256": "dc8a61aa5466097b1c91d8207712a32ad219fe19d6e248e2d08dd4ade40f304b"
+        },
+        {
+          "path": "docs/plans/wj-h27-linux/native-mms-requalification-v2j/science/mms-requalification-v19/temporal/independent.json",
+          "bytes": 462680,
+          "sha256": "cb77c94ebe269b87fbbe1dcfe5baa7beb91778e3ef59f6756c83813e20fe6183"
+        },
+        {
+          "path": "docs/plans/wj-h27-linux/native-cutoff-panels-v2i/compact/science/cutoff-panels-v19/independent48.json",
+          "bytes": 988005,
+          "sha256": "d87cef7c64311f1a0e4633d6a3f060b82893e202bd88c0b1ce6a6789fb04653a"
+        }
+      ],
+      "steady_normalized_absolute_owner_jumps": {
+        "k": [
+          9.11429404800497e-05,
+          1.5667564333657425e-05,
+          3.267864342307985e-06
+        ],
+        "epsilon": [
+          0.005916342867386907,
+          0.0021328240154844277,
+          0.0006711228951807581
+        ],
+        "traction_power": [
+          3.8257739889710805e-08,
+          4.027999928054073e-09,
+          3.4322110976425664e-10
+        ]
+      }
+    },
+    "cutoff_root_constitutive_resolved_small_actions_and_invalid_inputs": {
+      "status": "MET",
+      "evidence": [
+        {
+          "path": "docs/plans/wj-h27-linux/native-cutoff-panels-v2i/science/cutoff-panels-v19/operator-independent.json",
+          "bytes": 2867,
+          "sha256": "8c6807e06eaa4658936c443fa4918a181b9d3a0ea9523a70b2d4c11161e4b598"
+        },
+        {
+          "path": "docs/plans/wj-h27-linux/native-reference-inverse-v2l/science/reference-inverse-v19/independent.json",
+          "bytes": 38644,
+          "sha256": "676bd3602bd1c3e6d09c600c539801bdc81892f1256ae79564badc64d48d1aa0"
+        },
+        {
+          "path": "docs/plans/wj-h27-linux/native-cutoff-owner-transition-v2k/assessment.json",
+          "bytes": 20744,
+          "sha256": "62b3bea95abb52899e057ebb5f49387b5045ff646429ce59bab4c0ac3d54f314"
+        },
+        {
+          "path": "docs/plans/wj-h27-linux/native-reference-inverse-v2l/science/reference-inverse-v19/reuse-audit.json",
+          "bytes": 26267,
+          "sha256": "2d967e472910b2961d12155fb7664ee338b05842bbd419c5b0f3aeac84545353"
+        }
+      ]
+    },
+    "complete_current_equations_and_cache_history_failures": {
+      "status": "MET",
+      "evidence": [
+        {
+          "path": "docs/plans/wj-h27-linux/continuation-cp1-source19/science/coupled-return-v19r1/independent.json",
+          "bytes": 141048,
+          "sha256": "d13f3d43b0725aede8c4f704590339b0149a4d9453150a94f98ceeb134746f2b"
+        },
+        {
+          "path": "docs/plans/wj-h27-linux/native-cutoff-owner-transition-v2k/assessment.json",
+          "bytes": 20744,
+          "sha256": "62b3bea95abb52899e057ebb5f49387b5045ff646429ce59bab4c0ac3d54f314"
+        },
+        {
+          "path": "docs/plans/wj-h27-linux/native-cutoff-recovery-v2i2/assessment.json",
+          "bytes": 1134,
+          "sha256": "c806de92f494a3186a9dab64ef3c5be26038b9b690de11efc4600ff4833a079a"
+        },
+        {
+          "path": "docs/plans/wj-h27-linux/native-cutoff-panels-v2i/compact/science/cutoff-panels-v19/independent48.json",
+          "bytes": 988005,
+          "sha256": "d87cef7c64311f1a0e4633d6a3f060b82893e202bd88c0b1ce6a6789fb04653a"
+        }
+      ],
+      "positive_case_reports": 6
+    }
+  },
+  "remaining_scope": [
+    "Independent same-source physical mesh and budget resolution and physical envelope",
+    "Selected physical h/p/q/dt and four required duration pilots",
+    "Production restart, monitoring, persisted statistics and storage on one recipe",
+    "Complete per-case and campaign cost and executable launch manifest"
+  ]
+}

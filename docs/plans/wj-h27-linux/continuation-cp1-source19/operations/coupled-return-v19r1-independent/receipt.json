@@ -1,0 +1,97 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "-c",
+    "import runpy,sys;sys.path.insert(0,sys.argv.pop(1));sys.argv[0]=sys.argv.pop(1);runpy.run_path(sys.argv[0],run_name=\"__main__\")",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-cutoff-owner-transition-v19/h27",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-v19r1/coupled_return_check.py",
+    "--manifest",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/manifest.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/independent.json",
+    "--seconds",
+    "115"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 120.0,
+  "utc": "2026-11-18T01:46:53.186349+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 504915,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-v19r1/coupled_return_run.py --root /home/jay/build/wj-h27-coupling-r1-20261117"
+      },
+      {
+        "pid": 505074,
+        "parent": 504915,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label coupled-return-v19r1-independent --phase analysis --seconds 120 -- /usr/bin/python3 -B -c import runpy,sys;sys.path.insert(0,sys.argv.pop(1));sys.argv[0]=sys.argv.pop(1);runpy.run_path(sys.argv[0],run_name=\"__main__\") /home/jay/build/wj-h27-coupling-r1-20261117/tools-cutoff-owner-transition-v19/h27 /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-v19r1/coupled_return_check.py --manifest /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/manifest.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --out /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/independent.json --seconds 115"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/usr/bin/python3.10",
+      "bytes": 5941864,
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-v19r1/coupled_return_check.py",
+      "bytes": 20029,
+      "sha256": "b0c1afb9704a95c47a039637dd780063b33ccfe0ec8be2e950db063c9ebc4571"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/manifest.json",
+      "bytes": 5142,
+      "sha256": "18200127292cfda69269403ddaacd2ec65518259840a27aa76964ae4b2a92021"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ],
+  "status": "PASS",
+  "seconds": 17.828180209035054,
+  "exit": 0,
+  "reason": null,
+  "peak_tree_rss_bytes": 121376768,
+  "peak_host_workers": 6,
+  "log": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/operations/coupled-return-v19r1-independent/command.log",
+    "bytes": 98,
+    "sha256": "a0b11acc9d9fe78abf5eb2d2865ced8ef256bb3a4136746213731e29811e77ac"
+  }
+}

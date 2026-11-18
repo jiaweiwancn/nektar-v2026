@@ -1,0 +1,62 @@
+{
+  "argv": [
+    "cmake",
+    "-S",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/project-coupled-return-v19r1/coupled_return",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/build-coupled-return-v19r1",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math",
+    "-DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+    "-DH27_PINNED_SOURCE=/home/jay/build/wj-h27-coupling-r1-20261117/source-v19",
+    "-DH27_PINNED_BUILD=/home/jay/build/wj-h27-coupling-r1-20261117/build-v19"
+  ],
+  "phase": "build",
+  "seconds_cap": 40.0,
+  "utc": "2026-11-18T01:45:07.685763+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 504915,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-v19r1/coupled_return_run.py --root /home/jay/build/wj-h27-coupling-r1-20261117"
+      },
+      {
+        "pid": 504920,
+        "parent": 504915,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label coupled-return-v19r1-configure --phase build --seconds 40 -- cmake -S /home/jay/build/wj-h27-coupling-r1-20261117/project-coupled-return-v19r1/coupled_return -B /home/jay/build/wj-h27-coupling-r1-20261117/build-coupled-return-v19r1 -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off -fno-fast-math -DNektar++_DIR=/home/jay/.local/opt/nektar-v2026-mpi/lib64/nektar++/cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DH27_PINNED_SOURCE=/home/jay/build/wj-h27-coupling-r1-20261117/source-v19 -DH27_PINNED_BUILD=/home/jay/build/wj-h27-coupling-r1-20261117/build-v19"
+      }
+    ]
+  },
+  "reservation": 16,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": []
+}

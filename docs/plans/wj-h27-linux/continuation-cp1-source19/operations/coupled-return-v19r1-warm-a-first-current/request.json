@@ -1,0 +1,88 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "-c",
+    "import runpy,sys;sys.path.insert(0,sys.argv.pop(1));sys.argv[0]=sys.argv.pop(1);runpy.run_path(sys.argv[0],run_name=\"__main__\")",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/tools-cutoff-owner-transition-v19/h27",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-v19r1/coupled_return_check.py",
+    "--manifest",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/manifest-native.json",
+    "--table",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "--case",
+    "warm-a-first",
+    "--out",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/warm-a-first-current.json",
+    "--seconds",
+    "75"
+  ],
+  "phase": "analysis",
+  "seconds_cap": 80.0,
+  "utc": "2026-11-18T01:45:25.902856+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 504915,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-v19r1/coupled_return_run.py --root /home/jay/build/wj-h27-coupling-r1-20261117"
+      },
+      {
+        "pid": 504996,
+        "parent": 504915,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label coupled-return-v19r1-warm-a-first-current --phase analysis --seconds 80 -- /usr/bin/python3 -B -c import runpy,sys;sys.path.insert(0,sys.argv.pop(1));sys.argv[0]=sys.argv.pop(1);runpy.run_path(sys.argv[0],run_name=\"__main__\") /home/jay/build/wj-h27-coupling-r1-20261117/tools-cutoff-owner-transition-v19/h27 /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-v19r1/coupled_return_check.py --manifest /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/manifest-native.json --table /home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json --case warm-a-first --out /home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/warm-a-first-current.json --seconds 75"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/usr/bin/python3.10",
+      "bytes": 5941864,
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-v19r1/coupled_return_check.py",
+      "bytes": 20029,
+      "sha256": "b0c1afb9704a95c47a039637dd780063b33ccfe0ec8be2e950db063c9ebc4571"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/manifest-native.json",
+      "bytes": 3419,
+      "sha256": "0b23071a43a7c7d0b748c2a0437576ce40fc4df0b92d56ed3bfeba494506925b"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+      "bytes": 92259,
+      "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+    }
+  ]
+}

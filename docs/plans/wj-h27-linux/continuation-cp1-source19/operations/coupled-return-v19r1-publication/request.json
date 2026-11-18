@@ -1,0 +1,65 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-v19r1-publication.py"
+  ],
+  "phase": "evidence",
+  "seconds_cap": 90.0,
+  "utc": "2026-11-18T01:51:21.488051+00:00",
+  "allocation": {
+    "workers": 5,
+    "processes": [
+      {
+        "pid": 2109,
+        "parent": 1,
+        "threads": 1,
+        "args": "/usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers"
+      },
+      {
+        "pid": 2270,
+        "parent": 1,
+        "threads": 2,
+        "args": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal"
+      },
+      {
+        "pid": 505104,
+        "parent": 505103,
+        "threads": 1,
+        "args": "python3 -B -"
+      },
+      {
+        "pid": 505105,
+        "parent": 505104,
+        "threads": 1,
+        "args": "/usr/bin/python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py --root /home/jay/build/wj-h27-coupling-r1-20261117 --label coupled-return-v19r1-publication --phase evidence --seconds 90 -- /usr/bin/python3 -B /home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-v19r1-publication.py"
+      }
+    ]
+  },
+  "reservation": 2,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  },
+  "runner": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/tools/run.py",
+    "bytes": 4663,
+    "sha256": "b64ac707f1c1098e219c6cbe0f218e5c29f6d170289e5d2514ffc11c2aec265c"
+  },
+  "input_files": [
+    {
+      "path": "/usr/bin/python3.10",
+      "bytes": 5941864,
+      "sha256": "a2f33a6e006989270f4340528eb61f8f97366e00a5d1b602ac8672ea44fc56ae"
+    },
+    {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/inputs/coupled-return-v19r1-publication.py",
+      "bytes": 5418,
+      "sha256": "0cfe1c8590290f410969f2a290349dec5df96da29189447cba8c2c86aad616fc"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
   "status": "NOT_READY_DO_NOT_LAUNCH",
   "gates": {
     "H27_MODEL_AND_REFERENCE": "NOT_MET",
-    "H27_COUPLED_NUMERICS": "NOT_MET",
+    "H27_COUPLED_NUMERICS": "PASS",
     "H27_PHYSICAL_PILOTS_AND_ACCURACY": "NOT_MET",
     "H27_RESTART_MONITORING_STORAGE": "NOT_MET",
     "H27_COMPLETE_COST": "TARGET_NOT_MET",
@@ -398,6 +398,26 @@
       "path": "docs/plans/wj-h27-linux/native-reference-inverse-v2l/local-source-equivalence.json",
       "bytes": 2278,
       "sha256": "b343628c96b3f13fbae78f04f8af1719726d3662ba7eb3b80ad784258c6adc4d"
+    },
+    {
+      "path": "docs/plans/wj-h27-linux/continuation-cp1-source19/assessment.json",
+      "bytes": 22919,
+      "sha256": "05e4bbaa9a520f40e035dfe2c3a172ddedfd8e8d7d79817cf8b321ee33bc26d3"
+    },
+    {
+      "path": "docs/plans/wj-h27-linux/continuation-cp1-source19/inventory.json",
+      "bytes": 26580,
+      "sha256": "ff5151e84ac3b00aaa3cbeee010ef6d5f1c82b50edb939e0a195ad4c132ec329"
+    },
+    {
+      "path": "docs/plans/wj-h27-linux/continuation-cp1-source19/post-publication.json",
+      "bytes": 6862,
+      "sha256": "676b720c5b18af293b24e68abc64179463d0e385cc8a3a2e3ff556d01d358934"
+    },
+    {
+      "path": "docs/plans/wj-h27-linux/continuation-cp1-source19/numerical-coverage.json",
+      "bytes": 8092,
+      "sha256": "1e99fee0f21caaef8b4787d6dfc3812a0000a8b1fc9823e2c65595e8cba3bc60"
     }
   ],
   "source19_numerical_MMS_foundations": {
@@ -487,13 +507,19 @@
     },
     "live_account_snapshot": {
       "path": "/home/jay/build/wj-h27-coupling-r1-20261117/accounting.json",
-      "bytes": 242418,
-      "sha256": "3ef3f0730282fa607fd15950b2991605d650b8d843632b5cec93e4ace9c6db8e"
+      "bytes": 248363,
+      "sha256": "fbb16155b6da2c4a0b5e5342339a4ffd0dc1645de99c35b3ea6d67e870986ad6"
     },
-    "consumed_aggregate_seconds": 16991.556598995754,
-    "remaining_excluding_evidence_seconds": 22608.443401004246,
+    "consumed_aggregate_seconds": 17116.471991412807,
+    "remaining_excluding_evidence_seconds": 22483.528008587193,
     "evidence_protected_seconds": 3600,
     "reserved_operations": [],
-    "account_closed": false
+    "account_closed": false,
+    "latest_checkpoint": "docs/plans/wj-h27-continuation-cp1.md"
+  },
+  "source19_coupled_numerical_qualification": {
+    "path": "docs/plans/wj-h27-linux/continuation-cp1-source19/numerical-coverage.json",
+    "bytes": 8092,
+    "sha256": "1e99fee0f21caaef8b4787d6dfc3812a0000a8b1fc9823e2c65595e8cba3bc60"
   }
 }

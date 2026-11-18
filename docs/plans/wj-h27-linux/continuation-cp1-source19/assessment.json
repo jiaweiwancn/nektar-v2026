@@ -1,0 +1,779 @@
+{
+  "schema": "WJH27ContinuationCP1AssessmentV1",
+  "status": "PASS_COMPLETE_COUPLED_RETURN_FOUNDATION_ONLY",
+  "TASK3_READY": false,
+  "active_model": "FiniteNuIsotropicWallFullWJCollarV2",
+  "source_identity": "56c35390fdf092180913f60c3ae348ca10cdcdf4e6b889c3afd589eddb511acf",
+  "application_elf": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/runtime-v19/IncNavierStokesSolver.elf",
+    "bytes": 9932832,
+    "sha256": "37307b1662d694124326568fd1137050a56955928c48f6406989a171596fc52b"
+  },
+  "table": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/reference-tables-v1.json",
+    "bytes": 92259,
+    "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+  },
+  "runtime": {
+    "probe": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/build-coupled-return-v19r1/WJH27CoupledReturnProbe.elf",
+      "bytes": 1963672,
+      "sha256": "fa2bf63e186fce3dd47293ef11b58be6439967c34d4d62beaf8fc4d9268584ca"
+    },
+    "loader": {
+      "path": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc/ld-linux-x86-64.so.2",
+      "bytes": 240936,
+      "sha256": "41daf7836f7fce21a40ca63a00c5caf21b05a35a76ccc075d86f1716212cdf01"
+    },
+    "library_path": "/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/glibc:/home/jay/build/wj-h22-early-phase-replay-20261115/runtime/geometry:/home/jay/.local/opt/nektar-v2026-mpi/lib64",
+    "project": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/project-coupled-return-v19r1/manifest.json",
+      "bytes": 3686,
+      "sha256": "cd979d188bdb91a34a9ab0c04099d03b573fe63da7defe5c728eb4794aaee773"
+    }
+  },
+  "independent": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/independent.json",
+    "bytes": 141048,
+    "sha256": "d13f3d43b0725aede8c4f704590339b0149a4d9453150a94f98ceeb134746f2b"
+  },
+  "exact_inputs": {
+    "A": {
+      "assemblies": [
+        {
+          "rule": [
+            20,
+            24
+          ],
+          "residuals": {
+            "momentum": 6.221394495120596e-07,
+            "k": 7.693537950105732e-05,
+            "epsilon": 0.0005871680076029344,
+            "continuity": 1.3136876402629652e-17,
+            "gauge": 9.621764885216818e-19,
+            "trace": 9.105143783349464e-16
+          },
+          "trace": {
+            "k": 4.861744048091857e-16,
+            "epsilon": 9.105143783349464e-16,
+            "velocity": 1.22514845490862e-17
+          },
+          "roots": [
+            {
+              "owner": 1,
+              "x": 0.504795249975577,
+              "x_column": [
+                0.49999999999999994,
+                1
+              ],
+              "cutoff_residual": 0.0
+            },
+            {
+              "owner": 3,
+              "x": 0.504795249975577,
+              "x_column": [
+                0.49999999999999994,
+                1
+              ],
+              "cutoff_residual": 0.0
+            }
+          ]
+        },
+        {
+          "rule": [
+            24,
+            32
+          ],
+          "residuals": {
+            "momentum": 6.221394495122159e-07,
+            "k": 7.693537950105369e-05,
+            "epsilon": 0.0005871680076029372,
+            "continuity": 1.388683196081846e-17,
+            "gauge": 8.774731937962518e-19,
+            "trace": 8.896405647148636e-16
+          },
+          "trace": {
+            "k": 3.7372836617691027e-16,
+            "epsilon": 8.896405647148636e-16,
+            "velocity": 1.3010426069826053e-17
+          },
+          "roots": [
+            {
+              "owner": 1,
+              "x": 0.504795249975577,
+              "x_column": [
+                0.49999999999999994,
+                1
+              ],
+              "cutoff_residual": 0.0
+            },
+            {
+              "owner": 3,
+              "x": 0.504795249975577,
+              "x_column": [
+                0.49999999999999994,
+                1
+              ],
+              "cutoff_residual": 0.0
+            }
+          ]
+        }
+      ],
+      "quadrature_difference": {
+        "momentum": 1.5627757876841841e-19,
+        "continuity": 7.499555581888094e-19,
+        "gauge": 8.470329472543003e-20,
+        "k": 3.63207727782644e-18,
+        "epsilon": 2.710505431213761e-18,
+        "trace": 2.0873813620082878e-17
+      }
+    },
+    "B": {
+      "assemblies": [
+        {
+          "rule": [
+            20,
+            24
+          ],
+          "residuals": {
+            "momentum": 3.4220548500350034e-07,
+            "k": 7.39985552522583e-05,
+            "epsilon": 0.00040161475239153954,
+            "continuity": 1.4484307746131004e-17,
+            "gauge": 8.278423570430701e-19,
+            "trace": 7.342186753508719e-16
+          },
+          "trace": {
+            "k": 4.961610277236697e-16,
+            "epsilon": 7.342186753508719e-16,
+            "velocity": 1.3335686721571705e-17
+          },
+          "roots": [
+            {
+              "owner": 0,
+              "x": 0.3720752367119697,
+              "x_column": [
+                0,
+                0.5
+              ],
+              "cutoff_residual": 0.0
+            },
+            {
+              "owner": 2,
+              "x": 0.3720752367119697,
+              "x_column": [
+                0,
+                0.5
+              ],
+              "cutoff_residual": 0.0
+            }
+          ]
+        },
+        {
+          "rule": [
+            24,
+            32
+          ],
+          "residuals": {
+            "momentum": 3.4220548500361765e-07,
+            "k": 7.399855525232144e-05,
+            "epsilon": 0.0004016147523915371,
+            "continuity": 1.3631144993357898e-17,
+            "gauge": 5.31380825504065e-19,
+            "trace": 6.935227408013125e-16
+          },
+          "trace": {
+            "k": 5.359692962270805e-16,
+            "epsilon": 6.935227408013125e-16,
+            "velocity": 1.2576745200831851e-17
+          },
+          "roots": [
+            {
+              "owner": 0,
+              "x": 0.3720752367119697,
+              "x_column": [
+                0,
+                0.5
+              ],
+              "cutoff_residual": 0.0
+            },
+            {
+              "owner": 2,
+              "x": 0.3720752367119697,
+              "x_column": [
+                0,
+                0.5
+              ],
+              "cutoff_residual": 0.0
+            }
+          ]
+        }
+      ],
+      "quadrature_difference": {
+        "momentum": 1.173140631947206e-19,
+        "continuity": 8.531627527731052e-19,
+        "gauge": 2.964615315390051e-19,
+        "k": 6.314122402012456e-17,
+        "epsilon": 2.439454888092385e-18,
+        "trace": 4.069593454955943e-17
+      }
+    }
+  },
+  "exact_input_native_independent_MAX": 4.694194908508949e-14,
+  "exact_input_native_cold_MAX": 0.0,
+  "max_ref_scaled_coefficients": {
+    "warm-a-first": 0.0,
+    "warm-b": 6.328355421304852e-14,
+    "warm-a-return": 3.343842484585605e-15,
+    "retry-a": 5.3366657900173495e-14
+  },
+  "observed_A_B_changes": {
+    "K_over_Kin": 0.002275241134127876,
+    "cutoff_over_H": 0.00014440016200304812,
+    "outer_epsilon_over_local_reference": 0.0038124380813464253,
+    "gradient_over_Uref_per_Lref": 0.0003998440416684368,
+    "U_over_Uref": 7.651064719326785e-05,
+    "transported_k_over_Kin": 0.002939775745107322,
+    "dependent_Ew_over_local_reference": 0.004163601658577562,
+    "essential_velocity_over_Uref": 8.553298343745228e-05,
+    "essential_k_over_Kin": 0.0029337873845170525
+  },
+  "current_equations": {
+    "warm-a-first": {
+      "file": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/warm-a-first-current.json",
+        "sha256": "f8e5cfebfb832da72002e8f5c0f721b8b7d889db4f21ca1189026e375a36c6d0",
+        "bytes": 17654
+      },
+      "status": "PASS_CURRENT_COUPLED_STEP_ONLY",
+      "residuals": {
+        "momentum": 2.7462111143655388e-12,
+        "k": 1.5462383161989985e-13,
+        "epsilon": 1.6705598485255206e-13,
+        "continuity": 1.8506819249566503e-17,
+        "gauge": 4.949848785517318e-19
+      }
+    },
+    "warm-b": {
+      "file": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/warm-b-current.json",
+        "sha256": "0335e9d45e6cf71a2c868dc37cd741200c4729c1a1058ca60585dae741704f25",
+        "bytes": 17627
+      },
+      "status": "PASS_CURRENT_COUPLED_STEP_ONLY",
+      "residuals": {
+        "momentum": 3.1964685464094505e-12,
+        "k": 1.1396660925736512e-13,
+        "epsilon": 6.5123767999063e-14,
+        "continuity": 1.2719462446370966e-17,
+        "gauge": 5.98878763488392e-19
+      }
+    },
+    "warm-a-return": {
+      "file": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/warm-a-return-current.json",
+        "sha256": "6483b4dd2ed45f3ba663ad4dc7813507046a199fa89f2a77704cfb23ab1c336b",
+        "bytes": 17647
+      },
+      "status": "PASS_CURRENT_COUPLED_STEP_ONLY",
+      "residuals": {
+        "momentum": 2.746197333517956e-12,
+        "k": 1.553294124320389e-13,
+        "epsilon": 1.3230204979795306e-13,
+        "continuity": 1.910468939381574e-17,
+        "gauge": 9.46956365250706e-19
+      }
+    },
+    "retry-a": {
+      "file": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/retry-a-current.json",
+        "sha256": "75af3c1577be19ca1e7d2b16ca6f20149174663e4d0edd9e8b41ee9d8f104190",
+        "bytes": 17635
+      },
+      "status": "PASS_CURRENT_COUPLED_STEP_ONLY",
+      "residuals": {
+        "momentum": 2.7461938703926236e-12,
+        "k": 1.601751626837331e-13,
+        "epsilon": 1.6267903182832743e-13,
+        "continuity": 2.0133957344452874e-17,
+        "gauge": 5.062345348824529e-19
+      }
+    },
+    "cold-a": {
+      "file": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/cold-a-current.json",
+        "sha256": "a21794cc2c85bd4ed14ba21a9e5097d5abe9321832b793956b1f8610c195d2c1",
+        "bytes": 17648
+      },
+      "status": "PASS_CURRENT_COUPLED_STEP_ONLY",
+      "residuals": {
+        "momentum": 2.7462111143655388e-12,
+        "k": 1.5462383161989985e-13,
+        "epsilon": 1.6705598485255206e-13,
+        "continuity": 1.8506819249566503e-17,
+        "gauge": 4.949848785517318e-19
+      }
+    },
+    "cold-b": {
+      "file": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/cold-b-current.json",
+        "sha256": "97c2aac8779f2b425399571e9c72dc6e6faf5720426cf986b9fa1ba1c9840250",
+        "bytes": 17633
+      },
+      "status": "PASS_CURRENT_COUPLED_STEP_ONLY",
+      "residuals": {
+        "momentum": 3.196487288302731e-12,
+        "k": 1.0836830501665748e-13,
+        "epsilon": 1.3454545278369843e-13,
+        "continuity": 1.670686062572415e-17,
+        "gauge": 4.784412663006712e-19
+      }
+    }
+  },
+  "events": {
+    "warm-a-first": [
+      {
+        "attempt": 0,
+        "base": 0,
+        "alpha": 75,
+        "drift": 0,
+        "age_before": 0,
+        "age_used": 1,
+        "reason": "cold",
+        "refreshed": true
+      },
+      {
+        "attempt": 0,
+        "base": 1,
+        "alpha": 75,
+        "drift": 0.0001538236589345231,
+        "age_before": 1,
+        "age_used": 2,
+        "reason": "reuse",
+        "refreshed": false
+      },
+      {
+        "attempt": 0,
+        "base": 2,
+        "alpha": 75,
+        "drift": 0.00015305038024509938,
+        "age_before": 2,
+        "age_used": 3,
+        "reason": "reuse",
+        "refreshed": false
+      }
+    ],
+    "warm-b": [
+      {
+        "attempt": 0,
+        "base": 0,
+        "alpha": 75,
+        "drift": 0.0015778957872658265,
+        "age_before": 3,
+        "age_used": 4,
+        "reason": "reuse",
+        "refreshed": false
+      },
+      {
+        "attempt": 0,
+        "base": 1,
+        "alpha": 75,
+        "drift": 0.0016966958334500993,
+        "age_before": 4,
+        "age_used": 5,
+        "reason": "reuse",
+        "refreshed": false
+      },
+      {
+        "attempt": 0,
+        "base": 2,
+        "alpha": 75,
+        "drift": 0.0016960665983569744,
+        "age_before": 5,
+        "age_used": 6,
+        "reason": "reuse",
+        "refreshed": false
+      }
+    ],
+    "warm-a-return": [
+      {
+        "attempt": 0,
+        "base": 0,
+        "alpha": 75,
+        "drift": 0,
+        "age_before": 6,
+        "age_used": 7,
+        "reason": "reuse",
+        "refreshed": false
+      },
+      {
+        "attempt": 0,
+        "base": 1,
+        "alpha": 75,
+        "drift": 0.0001538236589345231,
+        "age_before": 7,
+        "age_used": 8,
+        "reason": "reuse",
+        "refreshed": false
+      },
+      {
+        "attempt": 0,
+        "base": 2,
+        "alpha": 75,
+        "drift": 0.00015305038024509938,
+        "age_before": 8,
+        "age_used": 1,
+        "reason": "age",
+        "refreshed": true
+      }
+    ],
+    "retry-a": [
+      {
+        "attempt": 0,
+        "base": 0,
+        "alpha": 75,
+        "drift": 0.0001530311680448598,
+        "age_before": 1,
+        "age_used": 1,
+        "reason": "injected",
+        "refreshed": true
+      },
+      {
+        "attempt": 1,
+        "base": 0,
+        "alpha": 75,
+        "drift": 0,
+        "age_before": 0,
+        "age_used": 1,
+        "reason": "retry",
+        "refreshed": true
+      },
+      {
+        "attempt": 1,
+        "base": 1,
+        "alpha": 75,
+        "drift": 0.0001538236589345231,
+        "age_before": 1,
+        "age_used": 1,
+        "reason": "retry",
+        "refreshed": true
+      },
+      {
+        "attempt": 1,
+        "base": 2,
+        "alpha": 75,
+        "drift": 1.6894645617562212e-06,
+        "age_before": 1,
+        "age_used": 1,
+        "reason": "retry",
+        "refreshed": true
+      }
+    ],
+    "cold-a": [
+      {
+        "attempt": 0,
+        "base": 0,
+        "alpha": 75,
+        "drift": 0,
+        "age_before": 0,
+        "age_used": 1,
+        "reason": "cold",
+        "refreshed": true
+      },
+      {
+        "attempt": 0,
+        "base": 1,
+        "alpha": 75,
+        "drift": 0.0001538236589345231,
+        "age_before": 1,
+        "age_used": 2,
+        "reason": "reuse",
+        "refreshed": false
+      },
+      {
+        "attempt": 0,
+        "base": 2,
+        "alpha": 75,
+        "drift": 0.00015305038024509938,
+        "age_before": 2,
+        "age_used": 3,
+        "reason": "reuse",
+        "refreshed": false
+      }
+    ],
+    "cold-b": [
+      {
+        "attempt": 0,
+        "base": 0,
+        "alpha": 75,
+        "drift": 0,
+        "age_before": 0,
+        "age_used": 1,
+        "reason": "cold",
+        "refreshed": true
+      },
+      {
+        "attempt": 0,
+        "base": 1,
+        "alpha": 75,
+        "drift": 0.0001386056853732317,
+        "age_before": 1,
+        "age_used": 2,
+        "reason": "reuse",
+        "refreshed": false
+      },
+      {
+        "attempt": 0,
+        "base": 2,
+        "alpha": 75,
+        "drift": 0.00013791289621368195,
+        "age_before": 2,
+        "age_used": 3,
+        "reason": "reuse",
+        "refreshed": false
+      }
+    ]
+  },
+  "stale_history": {
+    "file": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/native/stale-rejection.json",
+      "sha256": "dd93da2ab39f4d7a17285ac97509823b1ebc1bdac39120d717adf5f7bd1e6257",
+      "bytes": 208
+    },
+    "checkpoint": {
+      "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/stale-A.bin",
+      "sha256": "65cb6ce83cd1026e25d0968fd8aa9141a392ab3ebdfbe304c44ce6050a596f6b",
+      "bytes": 12018,
+      "payload_sha256": "a9c37e7cf05a73f8f699d180ada74d367609fd9f532121ec657c7459b90e6ee1",
+      "signature": "1980ff853f419cf3c4cf6dc3c3a73f9ad996f6fe26189ba603807fb63166f435",
+      "step": 10,
+      "time": 0.2,
+      "dt": 0.02,
+      "hashes": {
+        "current": "6dbb9726bb185a2852a667235f20b48b0ff7cf7f5880a3d2e36ad07dbf7175c7",
+        "previous": "82797c139b7101832ef542c710ce78192e40d4977baa16822dd4828c9d0eaccf",
+        "advection": "7b0d7c42dc1630991328f206370a95f998574133716d556c9714ee4c71a66b21",
+        "previous_advection": "70a159509995845d4248f1e16d8ee382d466ad3ec75fa8da1bc30962837724e1"
+      }
+    },
+    "reason": "restored explicit history differs from current state"
+  },
+  "cases": {
+    "cold-a": {
+      "path": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/native/cold-a.result.json",
+        "bytes": 71938,
+        "sha256": "d6823c9bf0c6778ee158fe2ed18961a2a857d4c3518e3474d0585edf83a81cab"
+      },
+      "accepted": true,
+      "native_seconds": 0.34972447098698467,
+      "zero_mass_audit_seconds": 0.08896124799503013,
+      "newton": 3,
+      "krylov": 5,
+      "rebuilds": 3,
+      "retries": 0,
+      "reason": "",
+      "all_row_calls": 24,
+      "all_row_max": [
+        4.54009659728305e-19,
+        1.69233218758461e-17,
+        8.779347678107206e-18
+      ],
+      "native_residuals": [
+        7.476675578938351e-16,
+        4.859195010073555e-18,
+        6.974786925047133e-19,
+        2.485347470100894e-14,
+        3.666651304905026e-14,
+        0
+      ]
+    },
+    "cold-b": {
+      "path": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/native/cold-b.result.json",
+        "bytes": 71684,
+        "sha256": "4f3b58a2bb81fff0bc075568bfe1f248f654d84a09ef8eaedcc672cf2f27f050"
+      },
+      "accepted": true,
+      "native_seconds": 0.3491316940053366,
+      "zero_mass_audit_seconds": 0.08924500097054988,
+      "newton": 3,
+      "krylov": 5,
+      "rebuilds": 3,
+      "retries": 0,
+      "reason": "",
+      "all_row_calls": 48,
+      "all_row_max": [
+        4.946672411965114e-19,
+        1.69233218758461e-17,
+        8.779347678107206e-18
+      ],
+      "native_residuals": [
+        6.004515779043966e-16,
+        5.110123003517532e-18,
+        1.5683344414005412e-19,
+        2.104907866658316e-14,
+        3.125531306874662e-14,
+        0
+      ]
+    },
+    "failed-a": {
+      "path": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/native/failed-a.result.json",
+        "bytes": 70937,
+        "sha256": "3aaa4083d60f3ca33b4a60f30b7c676eee8eea75d1448f84d319a26b8d473b84"
+      },
+      "accepted": false,
+      "native_seconds": 0.13511697301873937,
+      "zero_mass_audit_seconds": 0.09079192002536729,
+      "newton": 1,
+      "krylov": 1,
+      "rebuilds": 3,
+      "retries": 0,
+      "reason": "current implicit Newton step failed: NEWTON_NOT_CONVERGED: declared Newton iteration bound exhausted",
+      "all_row_calls": 7,
+      "all_row_max": [
+        2.913793338554793e-19,
+        1.23078704551608e-17,
+        5.8528984520714706e-18
+      ],
+      "native_residuals": [
+        3.555960114011148e-07,
+        1.1561787632533804e-08,
+        3.4476887931210213e-19,
+        0.00013352754985998866,
+        7.270922266870669e-05,
+        0
+      ]
+    },
+    "retry-a": {
+      "path": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/native/retry-a.result.json",
+        "bytes": 72295,
+        "sha256": "7866b4d21c2766b10ac9ac9773245c99b407159d5dcad9405446a89e459378c2"
+      },
+      "accepted": true,
+      "native_seconds": 0.38580146501772106,
+      "zero_mass_audit_seconds": 0.08922543103108183,
+      "newton": 3,
+      "krylov": 5,
+      "rebuilds": 12,
+      "retries": 1,
+      "reason": "",
+      "all_row_calls": 97,
+      "all_row_max": [
+        4.946672411965114e-19,
+        1.69233218758461e-17,
+        8.779347678107206e-18
+      ],
+      "native_residuals": [
+        7.379013819273041e-16,
+        6.259231439734553e-18,
+        5.2939559203393795e-20,
+        2.4836801149413436e-14,
+        3.738874664681855e-14,
+        0
+      ]
+    },
+    "warm-a-first": {
+      "path": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/native/warm-a-first.result.json",
+        "bytes": 71945,
+        "sha256": "12491342990872f94da64082963e7fe33afc095c0c2c6fce283fb35cf589bd60"
+      },
+      "accepted": true,
+      "native_seconds": 0.3499915639986284,
+      "zero_mass_audit_seconds": 0.08932812500279397,
+      "newton": 3,
+      "krylov": 5,
+      "rebuilds": 3,
+      "retries": 0,
+      "reason": "",
+      "all_row_calls": 24,
+      "all_row_max": [
+        4.54009659728305e-19,
+        1.69233218758461e-17,
+        8.779347678107206e-18
+      ],
+      "native_residuals": [
+        7.476675578938351e-16,
+        4.859195010073555e-18,
+        6.974786925047133e-19,
+        2.485347470100894e-14,
+        3.666651304905026e-14,
+        0
+      ]
+    },
+    "warm-a-return": {
+      "path": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/native/warm-a-return.result.json",
+        "bytes": 71933,
+        "sha256": "37e06e97156da079a593b153f42fd5dbfba755e6ec1e34cf2f97b8371efe8223"
+      },
+      "accepted": true,
+      "native_seconds": 0.3483944020117633,
+      "zero_mass_audit_seconds": 0.08895510900765657,
+      "newton": 3,
+      "krylov": 5,
+      "rebuilds": 3,
+      "retries": 0,
+      "reason": "",
+      "all_row_calls": 72,
+      "all_row_max": [
+        4.946672411965114e-19,
+        1.69233218758461e-17,
+        8.779347678107206e-18
+      ],
+      "native_residuals": [
+        7.397939676254247e-16,
+        3.900796694935803e-18,
+        4.804264997707987e-19,
+        2.4907190427436017e-14,
+        3.691035970902284e-14,
+        0
+      ]
+    },
+    "warm-b": {
+      "path": {
+        "path": "/home/jay/build/wj-h27-coupling-r1-20261117/science/coupled-return-v19r1/native/warm-b.result.json",
+        "bytes": 71678,
+        "sha256": "5a96501d80f1ef68048ba5afc3999f47d19dcdbd0265b55d723938f389c8ef56"
+      },
+      "accepted": true,
+      "native_seconds": 0.3467025160207413,
+      "zero_mass_audit_seconds": 0.0889408880029805,
+      "newton": 3,
+      "krylov": 5,
+      "rebuilds": 0,
+      "retries": 0,
+      "reason": "",
+      "all_row_calls": 48,
+      "all_row_max": [
+        4.946672411965114e-19,
+        1.69233218758461e-17,
+        8.779347678107206e-18
+      ],
+      "native_residuals": [
+        8.360490298849627e-16,
+        6.919247432282183e-18,
+        4.526332311890169e-19,
+        3.221324523363969e-14,
+        3.6880426240018165e-14,
+        0
+      ]
+    }
+  },
+  "native_whole_seconds": 5.250962910999078,
+  "primary": {
+    "path": "/media/jay/\u65b0\u52a0\u53771/nektar-v2026",
+    "head": "f4b70baec10016dd098005bc5a5507b87e4a57bf",
+    "status": " M docs/developer-guide/src/library\n"
+  },
+  "resources": {
+    "source_build_runtime_bytes": 3007225390,
+    "science_bytes": 2727671568,
+    "free_bytes": 69414567936,
+    "consumed_before_this_receipt": 17114.68187346577,
+    "phase_seconds_before_this_receipt": 123.12527447001776
+  }
+}

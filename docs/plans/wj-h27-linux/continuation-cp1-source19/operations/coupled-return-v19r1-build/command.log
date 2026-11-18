@@ -1,0 +1,42 @@
+[ 50%] Building CXX object CMakeFiles/WJH27CoupledReturnProbe.dir/home/jay/build/wj-h27-coupling-r1-20261117/project-coupled-return-v19r1/coupled_return_probe.cpp.o
+In file included from /usr/include/boost/smart_ptr/detail/sp_thread_sleep.hpp:22,
+                 from /usr/include/boost/smart_ptr/detail/yield_k.hpp:23,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_gcc_atomic.hpp:14,
+                 from /usr/include/boost/smart_ptr/detail/spinlock.hpp:42,
+                 from /usr/include/boost/smart_ptr/detail/spinlock_pool.hpp:25,
+                 from /usr/include/boost/smart_ptr/shared_ptr.hpp:29,
+                 from /usr/include/boost/shared_ptr.hpp:17,
+                 from /usr/include/boost/program_options/variables_map.hpp:13,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/LibUtilities/BasicUtils/SessionReader.h:48,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/SpatialDomains/Conditions.h:43,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.h:4,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.h:4,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/project-coupled-return-v19r1/coupled_return_probe.cpp:3:
+/usr/include/boost/bind.hpp:36:1: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+In file included from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/StdRegions/StdExpansion3D.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/SpatialDomains/Geometry3D.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/SpatialDomains/HexGeom.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/SpatialDomains/MeshGraph.h:45,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/SpatialDomains/Conditions.h:44,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/MultiRegions/MultiRegions.hpp:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/MultiRegions/AssemblyMap/AssemblyMap.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/MultiRegions/AssemblyMap/AssemblyMapCG.h:40,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/MultiRegions/ContField.h:38,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.h:7,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.h:4,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/source-v19/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.h:4,
+                 from /home/jay/build/wj-h27-coupling-r1-20261117/project-coupled-return-v19r1/coupled_return_probe.cpp:3:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/StdRegions/StdExpansion.h: In instantiation of ‘Nektar::NekDouble Nektar::StdRegions::StdExpansion::BaryEvaluate(const NekDouble&, const NekDouble*, Nektar::NekDouble&, Nektar::NekDouble&) [with int DIR = 0; bool DERIV = true; bool DERIV2 = true; Nektar::NekDouble = double]’:
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/StdRegions/StdExpansion1D.h:70:57:   required from here
+/home/jay/build/wj-h27-coupling-r1-20261117/source-v19/library/StdRegions/StdExpansion.h:1440:41: warning: comparison of integer expressions of different signedness: ‘int’ and ‘const size_t’ {aka ‘const long unsigned int’} [-Wsign-compare]
+ 1440 |                     for (int kk = 0; kk < nquad; kk++)
+      |                                      ~~~^~~~~~~
+[100%] Linking CXX executable WJH27CoupledReturnProbe
+[100%] Built target WJH27CoupledReturnProbe
