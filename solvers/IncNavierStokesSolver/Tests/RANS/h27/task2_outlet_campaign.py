@@ -165,6 +165,41 @@ def readmit_memory_stop(root, previous, base, x, z, q, t, data):
         memory_growth_factor=memory_growth,runtime_overrun_factor=measured_overrun)
 
 
+def scale_radius_after_stop(root, previous, base, x, z, q, t, data):
+    """Use both the early and late memory from a wider stopped radial solve."""
+    first = case_dir(root,previous)
+    later = case_dir(root,previous,1)
+    root_ops = root/"operations"
+    start_path = root_ops/f"{first.name}-steady"/"receipt.json"
+    late_path = root_ops/f"{later.name}-steady"/"receipt.json"
+    start,late = (read(p)["result"] for p in (start_path,late_path))
+    inputs = read(later/"inputs.json")
+    original = read(verified(inputs["admission"]))
+    require(start["reason"] is None and late["reason"]=="RSS_LIMIT"
+            and late["peak_tree_rss_bytes"]>late["rss_limit_bytes"]==CAMPAIGN_RSS_GIB*GIB
+            and original["base"]==base and x==inputs["x_edges"]
+            and set(z)<set(inputs["physical_z_edges"])
+            and [q,t]==[inputs["quadrature"],inputs["tolerances"]],
+            "staging forecast requires a nested subset of the stopped radial grid")
+    scale = (len(z)-1)/inputs["cells"][1]
+    past_growth = original["readmission"]["memory_growth_factor"]
+    # The late stop already includes much of the growth from the first
+    # Newton factor. Charge the larger of the observed late peak and the
+    # early peak carried through the measured prior growth.
+    large_peak = max(late["peak_tree_rss_bytes"],start["peak_tree_rss_bytes"]*past_growth)
+    data["peak"] = max(data["peak"],math.ceil(large_peak*scale*data["margin"]))
+    data["first"] = max(data["first"],math.ceil(start["seconds"]*scale*1.04))
+    data["continuation"] = max(data["continuation"],
+        math.ceil(original["attempts"][later.name]["native_seconds"]*scale))
+    data["retry"] = max(data["retry"],data["first"])
+    data["anchors"].extend(identity(p) for p in (start_path,late_path))
+    return dict(early=identity(start_path),late=identity(late_path),
+        early_peak_tree_rss_bytes=start["peak_tree_rss_bytes"],
+        late_peak_tree_rss_bytes=late["peak_tree_rss_bytes"],
+        modelled_larger_peak_bytes=large_peak,scaled_cell_count_ratio=scale,
+        measured_first_to_final_growth=past_growth)
+
+
 def freeze(root, design_path, out):
     design = read(design_path)
     case, base = design["case"], design["base"]
@@ -181,6 +216,9 @@ def freeze(root, design_path, out):
     if design.get("readmit_after_rss"):
         retry = readmit_memory_stop(root,design["readmit_after_rss"],base,new_x,new_z,
                                     quadrature,tolerances,data)
+    elif design.get("scaled_from_rss_stop"):
+        retry = scale_radius_after_stop(root,design["scaled_from_rss_stop"],base,new_x,new_z,
+                                        quadrature,tolerances,data)
     attempts = {case_dir(root,case,i).name:planned_attempt(seconds,seconds+115,n)
                 for i,(seconds,n) in enumerate(((data["first"],1),(data["continuation"],50),
                                                  (data["retry"],50)))}
