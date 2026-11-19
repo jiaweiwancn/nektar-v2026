@@ -1,0 +1,63 @@
+{
+  "schema": "WJH27FlatCampaignFailureCompactionV1",
+  "status": "VERIFIED",
+  "records": [
+    {
+      "result": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bx3-steady/receipt.json",
+        "bytes": 6538,
+        "sha256": "6831cf68f9faa2c02820ba6fd3aebdeb06f65f46bcc5a9f139b1313b03f4e082"
+      },
+      "original": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bx3/state.failure.json",
+        "bytes": 76505547,
+        "sha256": "2033d516561c459e5996411c83f61890c3922cac15d3384d8d92662330d82712"
+      },
+      "compressed": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bx3/state.failure.json.gz",
+        "bytes": 33516405,
+        "sha256": "94ff88e579cdc0502ccd40a9500543d417190a5db6a9cbd0b66eca7b171af7d7"
+      }
+    },
+    {
+      "result": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bx3-continue-1-steady/receipt.json",
+        "bytes": 6628,
+        "sha256": "2ebc7186915c5a9f5464eaf0a1de16995f7dc5ffa7b5153562bfc419eb744949"
+      },
+      "original": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bx3-continue-1/state.failure.json",
+        "bytes": 76508555,
+        "sha256": "e7c9f2b9e42d899e9e6c7d659b89f3cc32dea58aff7d873ae2a4739c17114224"
+      },
+      "compressed": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bx3-continue-1/state.failure.json.gz",
+        "bytes": 33631818,
+        "sha256": "f26a8518d33a1e4d8d5d85664eb6157a5c73c2280c519a1921717498d1fbcd3c"
+      }
+    },
+    {
+      "result": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bx3-continue-2-steady/receipt.json",
+        "bytes": 6628,
+        "sha256": "1fe0e97d1fa854a836970d3f67dcb9876dabf90c31654081433940a995353e83"
+      },
+      "original": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bx3-continue-2/state.failure.json",
+        "bytes": 76508607,
+        "sha256": "b13e8650b32906256a2bf19e2406ad019854796234050e8814f4424362703750"
+      },
+      "compressed": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bx3-continue-2/state.failure.json.gz",
+        "bytes": 33629364,
+        "sha256": "203b40d55b8c52e6c4c8ad973ffc4d3af425853b1f669779bcd124c0404db2df"
+      }
+    }
+  ],
+  "prior_storage": {
+    "science_bytes": 8304271568,
+    "source_build_runtime_bytes": 394931219,
+    "free_bytes": 3544084250624
+  },
+  "restoration": "Decode each .json.gz into a temporary file, verify SHA-256, then rename to the original path."
+}

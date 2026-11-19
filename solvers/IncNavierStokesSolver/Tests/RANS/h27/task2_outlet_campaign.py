@@ -392,7 +392,7 @@ def resume_time(root, admission_path, out):
     print(case,"bound readmission from first Newton",required,"seconds",blockers,flush=True)
 
 
-def resume_iterate(root, admission_path, out):
+def resume_iterate(root, admission_path, out, slots=2, updates=1):
     initial = read(admission_path)
     case = initial["case"]
     require(campaign_case(case) and initial["schema"]=="WJH27FlatQualificationAdmissionV1"
@@ -432,9 +432,9 @@ def resume_iterate(root, admission_path, out):
     last = measured[-1]
     start = last["index"]+1
     padding = max(244,initial.get("extra_watch_padding_seconds",0))
-    native_seconds = math.ceil(1.22*max(v["seconds"]/v["steps"] for v in measured))
-    attempts = {case_dir(root,case,i).name:planned_attempt(native_seconds,native_seconds+padding,1)
-                for i in (start,start+1)}
+    native_seconds = math.ceil(1.22*updates*max(v["seconds"]/v["steps"] for v in measured))
+    attempts = {case_dir(root,case,i).name:planned_attempt(native_seconds,native_seconds+padding,updates)
+                for i in range(start,start+slots)}
     require(all(not (root/"science"/name).exists() for name in attempts), "iterate continuation already exists")
     caps = dict(initial["reservation_caps"])
     caps["preparations_and_native"] = sum(v["preparation_seconds"]+v["watch_seconds"]+2*GRACE
@@ -499,9 +499,15 @@ def main():
         task = modes.add_parser(mode)
         task.add_argument("input",type=Path)
         task.add_argument("output",type=Path)
+        if mode=="resume-iterate":
+            task.add_argument("--slots",type=int,choices=(1,2),default=2)
+            task.add_argument("--updates",type=int,choices=(1,2),default=1)
     args=parser.parse_args()
-    actions = {"freeze":freeze,"pin":pin,"admit":admit,"resume-time":resume_time,"resume-iterate":resume_iterate}
-    actions[args.mode](args.root,args.input,args.output)
+    if args.mode=="resume-iterate":
+        resume_iterate(args.root,args.input,args.output,args.slots,args.updates)
+    else:
+        actions = {"freeze":freeze,"pin":pin,"admit":admit,"resume-time":resume_time}
+        actions[args.mode](args.root,args.input,args.output)
 
 
 if __name__ == "__main__":
