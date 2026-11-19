@@ -1,0 +1,828 @@
+{
+  "schema": "WJH27OutletFlatLaunchHoldV2",
+  "status": "NOT_READY_DO_NOT_LAUNCH",
+  "TASK2_COMPLETE": "NO",
+  "TASK3_READY": "NO",
+  "simulation_time_advanced": 0.0,
+  "reason": "Flat spatial and final control qualification remain open",
+  "default_outlet": "FullTractionV1",
+  "explicit_flat_candidate": "ZeroTransverseV1",
+  "historical_A": {
+    "corner_misses": 16,
+    "collar_misses": 180
+  },
+  "checkpoints": {
+    "CP0": "bf34514ef0a348304403f9bb122c6bc3576a476d",
+    "CP1": "5999a4a8e4322212f91946cf0778a83a72c5f23e",
+    "CP2": "59c0fff2b9249a71a037cc60565dec29553e6b41"
+  },
+  "previous_hold": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/task3-launch-hold.json",
+    "bytes": 5338,
+    "sha256": "742e63ec01096965983316838b06a31ced766f2f33c590bf64380045f9e558c5"
+  },
+  "qualification_decision": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-cp2-decision.json",
+    "bytes": 72545,
+    "sha256": "0a03d3674b28354242dfc4d29469af8d71c790896e765231fef694d69556ca03"
+  },
+  "scientific_observations": {
+    "B3": {
+      "cells": [
+        111,
+        77
+      ],
+      "state": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-6/state.result.json",
+        "bytes": 65371159,
+        "sha256": "4cea90ce0861e8fcd37532051e2f7ae44d6b5ac8135106292e57553a9d2ea5d6"
+      },
+      "mesh": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3/geometry.xml",
+        "bytes": 1396103,
+        "sha256": "ba5a6a2af50c4071e8741fe3791c77a2390c9df0f917b0a15af59a54e3f8e55d"
+      },
+      "independent_gates": {
+        "independent_current": "MET",
+        "weak_accounting": "MET",
+        "boundary": "MET",
+        "shared_interface_flux": "MET",
+        "physical": "MET",
+        "inlet_projection": "MET",
+        "native_guards": "MET"
+      }
+    },
+    "B4": {
+      "cells": [
+        111,
+        85
+      ],
+      "state": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b4-continue-1/state.result.json",
+        "bytes": 71581925,
+        "sha256": "5d7c5bceed89955534eaf936d6111d65ba1a8319ff94ad2f13d3253ff7fd2a03"
+      },
+      "mesh": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b4/geometry.xml",
+        "bytes": 1543767,
+        "sha256": "980ee1bd6c42cbefd4dd5834deaee3129856ad174e7072b9335f1cbc67f53832"
+      },
+      "independent_gates": {
+        "independent_current": "MET",
+        "weak_accounting": "MET",
+        "boundary": "MET",
+        "shared_interface_flux": "MET",
+        "physical": "MET",
+        "inlet_projection": "MET",
+        "native_guards": "MET"
+      }
+    },
+    "Bn": {
+      "cells": [
+        111,
+        87
+      ],
+      "state": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bn-continue-1/state.result.json",
+        "bytes": 73127152,
+        "sha256": "15a3ef8b3ad92a05e3010a7d12fa1fb670948f5922f3d53be30a9fac7f2b1d1a"
+      },
+      "mesh": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bn/geometry.xml",
+        "bytes": 1581131,
+        "sha256": "5d18a0b3646194b2228a39d7c4867fa459346805924bea540c6ade72bccade57"
+      },
+      "independent_gates": {
+        "independent_current": "MET",
+        "weak_accounting": "MET",
+        "boundary": "MET",
+        "shared_interface_flux": "MET",
+        "physical": "MET",
+        "inlet_projection": "MET",
+        "native_guards": "MET"
+      }
+    },
+    "Bn2": {
+      "cells": [
+        111,
+        90
+      ],
+      "state": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bn2-continue-1/state.result.json",
+        "bytes": 75445071,
+        "sha256": "ebd2c4926571c6b4dd18ae01d37cbfdbe357068e454a53ddb61f7cff0a15b2b3"
+      },
+      "mesh": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bn2/geometry.xml",
+        "bytes": 1636902,
+        "sha256": "c732c972af9c36b08d67c1937ec44a982720a4786e03504f33aa730f145fabf2"
+      },
+      "independent_gates": {
+        "independent_current": "MET",
+        "weak_accounting": "MET",
+        "boundary": "MET",
+        "shared_interface_flux": "MET",
+        "physical": "MET",
+        "inlet_projection": "MET",
+        "native_guards": "MET"
+      }
+    },
+    "Btip": {
+      "cells": [
+        113,
+        90
+      ],
+      "state": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-btip-continue-1/state.result.json",
+        "bytes": 76792333,
+        "sha256": "db14483ee7ab007b2d1dfe94c519edb374880fdbe8b26c7ce20dc839dc59f563"
+      },
+      "mesh": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-btip/geometry.xml",
+        "bytes": 1669897,
+        "sha256": "b1e76c5c2dfe6c96635e1415c796d5d73eda5a99ed1cda5dc4c389855c14e9d3"
+      },
+      "independent_gates": {
+        "independent_current": "NOT_MET",
+        "weak_accounting": "MET",
+        "boundary": "MET",
+        "shared_interface_flux": "MET",
+        "physical": "MET",
+        "inlet_projection": "MET",
+        "native_guards": "MET"
+      }
+    },
+    "Bf": {
+      "cells": [
+        111,
+        92
+      ],
+      "state": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bf-continue-2/state.result.json",
+        "bytes": 76986400,
+        "sha256": "23ee2191573f48a4312352ea5549fb1b37b76a44347eb102f17593b000e85782"
+      },
+      "mesh": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bf-continue-1/geometry.xml",
+        "bytes": 1675595,
+        "sha256": "3a14dd102a8f1c829b7a5331bc7d5bedc35664c3a3d736caa6c0bc3bcd0b0ff4"
+      },
+      "independent_gates": {
+        "independent_current": "MET",
+        "weak_accounting": "MET",
+        "boundary": "MET",
+        "shared_interface_flux": "MET",
+        "physical": "MET",
+        "inlet_projection": "MET",
+        "native_guards": "MET"
+      }
+    }
+  },
+  "tested_settings": {
+    "velocity_scalar_order": 3,
+    "pressure_order": 2,
+    "quadrature": [
+      6,
+      8
+    ],
+    "tolerances": [
+      1e-12,
+      1e-10
+    ],
+    "time": 0.0
+  },
+  "native_source": "54b2f4268a5903fcf894f032b968bbfcb42a3e999a9c0409d032e999114894a8",
+  "application": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+    "bytes": 9997280,
+    "sha256": "3e8db421575122676808adc6c9783f0c897136e9d9d283b9d0cb200c5ec2df45"
+  },
+  "reference": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+    "bytes": 139982,
+    "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+  },
+  "outlet_location": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-outlet-location-disposition.json",
+    "bytes": 2960,
+    "sha256": "af745177d4cfc1c8b338ea401bea07ca02ed7933da4eb75083cc8477c4010e68"
+  },
+  "next_experiment": {
+    "base": "Bf",
+    "purpose": "Repeat the previously untouched lower blend interval on its two Bf children with the companion radial and x owners fixed. Preserve the one-sided stress, shear and velocity-gradient maxima at both faces.",
+    "radial_support": [
+      [
+        0.06,
+        0.06875
+      ]
+    ],
+    "added_radial_cells": 2,
+    "comparison_status": "LOWER_BAND_ONLY_SEQUENCE",
+    "controlling_outer_coordinate": "x=15",
+    "retain_unchanged_owner_observation": [
+      0.05,
+      0.06
+    ],
+    "complete_paired_support_for_future_contraction": [
+      [
+        0.06,
+        0.071875
+      ]
+    ],
+    "complete_paired_support_dimensions": [
+      111,
+      96
+    ],
+    "additional_tested_pairs": [
+      [
+        "Bn2",
+        "Bf",
+        "outlet-qual-Bf-Bn2.json"
+      ]
+    ],
+    "schema": "WJH27FlatQualificationNextExperimentV1",
+    "disposition": "DEFERRED",
+    "cells": [
+      111,
+      94
+    ],
+    "x_edges": [
+      -10.0,
+      -9.84375,
+      -9.6875,
+      -9.53125,
+      -9.375,
+      -9.21875,
+      -9.0625,
+      -8.90625,
+      -8.75,
+      -8.59375,
+      -8.4375,
+      -8.28125,
+      -8.125,
+      -7.96875,
+      -7.8125,
+      -7.65625,
+      -7.5,
+      -6.875,
+      -6.40625,
+      -6.25,
+      -6.09375,
+      -5.9375,
+      -5.78125,
+      -5.625,
+      -5.46875,
+      -5.3125,
+      -5.15625,
+      -5.0,
+      -4.375,
+      -3.75,
+      -3.125,
+      -2.5,
+      -2.1875,
+      -1.875,
+      -1.5625,
+      -1.25,
+      -0.9375,
+      -0.625,
+      -0.3125,
+      0.0,
+      0.3125,
+      0.625,
+      0.9375,
+      1.5625,
+      1.875,
+      2.5,
+      2.875,
+      3.625,
+      4.0,
+      4.75,
+      4.9375,
+      5.125,
+      5.3125,
+      5.5,
+      5.75,
+      6.0,
+      6.25,
+      6.5,
+      6.75,
+      7.0,
+      7.25,
+      7.5,
+      7.8125,
+      8.125,
+      8.4375,
+      8.75,
+      8.90625,
+      9.0625,
+      9.21875,
+      9.375,
+      9.53125,
+      9.6875,
+      9.84375,
+      10.0,
+      10.15625,
+      10.3125,
+      10.46875,
+      10.625,
+      10.78125,
+      10.9375,
+      11.09375,
+      11.25,
+      11.5625,
+      11.875,
+      12.1875,
+      12.5,
+      12.65625,
+      12.8125,
+      12.96875,
+      13.125,
+      13.28125,
+      13.4375,
+      13.59375,
+      13.75,
+      13.90625,
+      14.0625,
+      14.21875,
+      14.375,
+      14.453125,
+      14.53125,
+      14.609375,
+      14.6875,
+      14.765625,
+      14.84375,
+      14.921875,
+      14.9609375,
+      14.98046875,
+      14.990234375,
+      14.9951171875,
+      14.998779296875,
+      14.9993896484375,
+      15.0
+    ],
+    "physical_z_edges": [
+      0.0875,
+      0.08753124999999999,
+      0.08756249999999999,
+      0.08775,
+      0.088,
+      0.0885,
+      0.089,
+      0.0895,
+      0.09,
+      0.09075,
+      0.0915,
+      0.0925,
+      0.09343749999999999,
+      0.094375,
+      0.09578125,
+      0.0971875,
+      0.0990625,
+      0.1009375,
+      0.1028125,
+      0.105625,
+      0.10830248728872,
+      0.11189603217824999,
+      0.11539365466540999,
+      0.11981492373232999,
+      0.12570994915487999,
+      0.13160497457744,
+      0.1375,
+      0.1475,
+      0.14968749999999997,
+      0.15187499999999998,
+      0.1540625,
+      0.15625,
+      0.1578125,
+      0.159375,
+      0.1625,
+      0.1640625,
+      0.16562500000000002,
+      0.16718750000000002,
+      0.16875,
+      0.169921875,
+      0.17109375000000002,
+      0.17226562500000003,
+      0.17343750000000002,
+      0.174609375,
+      0.17578125,
+      0.176953125,
+      0.178125,
+      0.17929687500000002,
+      0.18046875,
+      0.181640625,
+      0.1828125,
+      0.18398437499999998,
+      0.18515625,
+      0.186328125,
+      0.1875,
+      0.1883010970711275,
+      0.189102194142255,
+      0.1899032912133825,
+      0.19070438828451,
+      0.1915054853556375,
+      0.19230658242676502,
+      0.1931076794978925,
+      0.19390877656902,
+      0.19999999999999998,
+      0.20291061001735,
+      0.21677251771268,
+      0.22195438828451,
+      0.22713625885634,
+      0.23231812942816998,
+      0.2375,
+      0.23982189736084,
+      0.24214379472168,
+      0.24446569208252,
+      0.24678758944336,
+      0.2491094868042,
+      0.25143138416503996,
+      0.28777239568814,
+      0.33531822089025,
+      0.38286404609237,
+      0.45976573390020004,
+      0.5685606588607,
+      0.69386848341232,
+      0.88181570021374,
+      1.132445869343,
+      1.4437552272093699,
+      1.88255041353034,
+      2.50699865254159,
+      3.2573137371062098,
+      4.25706834866648,
+      5.633160254623171,
+      7.50781177399869,
+      10.00390588699935,
+      12.5,
+      16.25,
+      20.0
+    ],
+    "added_r": [
+      0.06218749999999998,
+      0.0665625
+    ],
+    "quadrature": [
+      6,
+      8
+    ],
+    "tolerances": [
+      1e-12,
+      1e-10
+    ],
+    "complete_forecast_seconds": 2783,
+    "estimated_peak_tree_rss_bytes": 13115247741,
+    "named_RSS_limit_bytes": 12884901888,
+    "reservation_breakdown": {
+      "forecast_admission": 59,
+      "preparations": 75,
+      "first_native": 359,
+      "continuation": 1057,
+      "bounded_retry": 472,
+      "audit": 256,
+      "comparison": 135,
+      "checkpoint_publication": 70,
+      "final_evidence": 300
+    },
+    "normalized_peak_bytes_per_cell": {
+      "Bf": 1194486.9753231492,
+      "Bn2": 1208627.0974974975,
+      "Btip": 1200442.9529990167
+    },
+    "measured_margin": 1.04,
+    "scaled_measured_wall_seconds": {
+      "audit": 216,
+      "comparison": 111,
+      "native_first_packet": 314,
+      "native_converged": 937
+    },
+    "anchors": [
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bf-audit/receipt.json",
+        "bytes": 2887,
+        "sha256": "239d3cdffb7ccf787fa24eef7e5c146e55f798e1bc7c29fe8f05842c044ed888"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bf-compare/receipt.json",
+        "bytes": 2922,
+        "sha256": "1c381a93a44dd39df3741af57ba513ecef3458f58a72e2feccd3ea7328bbfbdf"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bf-continue-1-steady/receipt.json",
+        "bytes": 6662,
+        "sha256": "53079e07b0b29b4290f9ea161fc71235158b75173f22064d6cfde92d4b3114dc"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bf-continue-2-steady/receipt.json",
+        "bytes": 7589,
+        "sha256": "0c6b63973ebc62ec6a34dc5c2e362d0f532543fd4bd3a23690cceb48599deec9"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bn2-audit/receipt.json",
+        "bytes": 2889,
+        "sha256": "8a662b55b08aa0ac2a44c427d2266799923e44e618529a8d7002c49a51fc5aba"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bn2-compare/receipt.json",
+        "bytes": 2921,
+        "sha256": "1969c92746c03685cc4e7e0a162569de3ac0e88cd8abee3590e3f6be68c66b42"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bn2-continue-1-steady/receipt.json",
+        "bytes": 7506,
+        "sha256": "7a0b137fd7f0eff8f4d0c3e6756d505899a761c43d62fcc2afb5689b444dfd97"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bn2-steady/receipt.json",
+        "bytes": 6488,
+        "sha256": "e031efbf7e3fc833a64e4be8c103c3c787090cbf37f56fa6f4f8a673e7d4ff16"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-btip-audit-v2/receipt.json",
+        "bytes": 2899,
+        "sha256": "60a602a60194f4d1971b70bdf2710a5191cedba0e070382977214177b79ba482"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-btip-compare/receipt.json",
+        "bytes": 2930,
+        "sha256": "4f1f6b9c1add70c3f9c7fcd462e7de5452133ca1afe4c10f253e41580c095fb7"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-btip-continue-1-steady/receipt.json",
+        "bytes": 7518,
+        "sha256": "188e155ce03d4aec1f011a730b3579a63a64eb686070db8a9d5cce0d5e76f5d4"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-btip-steady/receipt.json",
+        "bytes": 6500,
+        "sha256": "51642b49c1d11da6fd11a3da5a6811d57c64296bca4fd7ae7637155b7bb9ff13"
+      }
+    ],
+    "prior_design": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-bf-recovery-forecast.json",
+      "bytes": 13645,
+      "sha256": "5d3d033bbf1a54a77377d2b618845a1d197307954eed1fdc8c822d52533a7f4a"
+    },
+    "live_at_forecast": {
+      "charged_seconds": 59300.962729364735,
+      "reserved_seconds": 52.0,
+      "nonprotected_remaining": 1847.0372706352646,
+      "tranche_remaining": 1413.3279902401991
+    },
+    "observed_flank_comparison": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-Bf-Bn2.json",
+      "bytes": 1612020,
+      "sha256": "24b45eb1246fa73dd0c4bf1ae23d29befd5cf9ba62d68594d34d2b9d97fc8a4c"
+    },
+    "hidden_component_maxima": [
+      {
+        "row": "inner/G",
+        "peak": {
+          "component": "Wr",
+          "x": -9.939670769620442,
+          "r": 0.059965642995925474,
+          "coarse_owner": 2886,
+          "fine_owner": 2886,
+          "owner_bounds": [
+            [
+              -10.0,
+              -9.843749999999998,
+              0.05000000000000002,
+              0.06
+            ],
+            [
+              -10.0,
+              -9.843749999999998,
+              0.05000000000000002,
+              0.06
+            ]
+          ],
+          "signed_difference": -0.01117434908199356,
+          "included_with_quadrature_weight": true,
+          "first_raw_value": 0.013111596927802043,
+          "second_raw_value": 0.0019372478458084832
+        }
+      },
+      {
+        "row": "whole/G",
+        "peak": {
+          "component": "Wr",
+          "x": -9.939670769620442,
+          "r": 0.059965642995925474,
+          "coarse_owner": 2886,
+          "fine_owner": 2886,
+          "owner_bounds": [
+            [
+              -10.0,
+              -9.843749999999998,
+              0.05000000000000002,
+              0.06
+            ],
+            [
+              -10.0,
+              -9.843749999999998,
+              0.05000000000000002,
+              0.06
+            ]
+          ],
+          "signed_difference": -0.01117434908199356,
+          "included_with_quadrature_weight": true,
+          "first_raw_value": 0.013111596927802043,
+          "second_raw_value": 0.0019372478458084832
+        }
+      }
+    ],
+    "signed_shear_control": {
+      "peak": {
+        "component": "Vxr",
+        "x": 15.0,
+        "r": 0.06,
+        "coarse_owner": 3107,
+        "fine_owner": 3107,
+        "owner_bounds": [
+          [
+            14.999389648437498,
+            15.0,
+            0.06,
+            0.06875
+          ],
+          [
+            14.999389648437498,
+            15.0,
+            0.06,
+            0.06437500000000002
+          ]
+        ],
+        "signed_difference": 0.0033125011010932248,
+        "included_with_quadrature_weight": false,
+        "first_raw_value": 0.002614648367944374,
+        "second_raw_value": 0.0026232641833083175
+      },
+      "molecular_over_tau": 0.00016564956752685716,
+      "minus_Rxr_over_tau": 0.0031468515335662103,
+      "shear_over_tau": 0.0033125011010932248,
+      "reynolds_fraction": 0.949992600010806
+    },
+    "gap_seconds": 935.9627293647354,
+    "gap_bytes": 230345853,
+    "x_spatial_coverage": {
+      "number_of_experimental_stations": 23,
+      "distinct_columns_covering_experimental_stations": 25,
+      "tested_terminal_columns": [
+        [
+          14.998779296875,
+          14.9993896484375
+        ],
+        [
+          14.9993896484375,
+          15.0
+        ]
+      ],
+      "tested_experimental_columns": 0,
+      "prospective_full_columns": [
+        [
+          -3.125,
+          -2.5
+        ],
+        [
+          -2.5,
+          -2.1875
+        ],
+        [
+          -1.5625,
+          -1.25
+        ],
+        [
+          -1.25,
+          -0.9375
+        ],
+        [
+          -0.3125,
+          0.0
+        ],
+        [
+          0.0,
+          0.3125
+        ],
+        [
+          0.9375,
+          1.5625
+        ],
+        [
+          1.875,
+          2.5
+        ],
+        [
+          2.5,
+          2.875
+        ],
+        [
+          3.625,
+          4.0
+        ],
+        [
+          4.0,
+          4.75
+        ],
+        [
+          4.75,
+          4.9375
+        ],
+        [
+          4.9375,
+          5.125
+        ],
+        [
+          5.125,
+          5.3125
+        ],
+        [
+          5.3125,
+          5.5
+        ],
+        [
+          5.5,
+          5.75
+        ],
+        [
+          5.75,
+          6.0
+        ],
+        [
+          6.0,
+          6.25
+        ],
+        [
+          6.25,
+          6.5
+        ],
+        [
+          6.5,
+          6.75
+        ],
+        [
+          6.75,
+          7.0
+        ],
+        [
+          7.0,
+          7.25
+        ],
+        [
+          7.25,
+          7.5
+        ],
+        [
+          7.5,
+          7.8125
+        ],
+        [
+          7.8125,
+          8.125
+        ],
+        [
+          14.998779296875,
+          14.9993896484375
+        ],
+        [
+          14.9993896484375,
+          15.0
+        ]
+      ],
+      "prospective_full_cells": [
+        138,
+        92
+      ],
+      "prospective_full_rss_bytes": 15958518816
+    }
+  },
+  "pending_gates": {
+    "flat": {
+      "original_collar_contraction": "MEASURED",
+      "lower_support_contraction": "MEASURED",
+      "full_domain_spatial": "OPEN",
+      "full_blend_flank_challenge": "OPEN",
+      "full_streamwise_coverage": "OPEN",
+      "higher_quadrature": "PENDING_SPATIAL_SELECTION",
+      "tighter_algebraic": "PENDING_SPATIAL_SELECTION",
+      "independent_current": "SEE_CASE_GATES_BTIP_MOMENTUM_NOT_MET",
+      "physical": "MET_FOR_AUDITED_STATES",
+      "shared_interface_flux": "MET_FOR_AUDITED_STATES",
+      "one_sided_H_convergence": "OPEN"
+    },
+    "outlet_location": "DEFERRED",
+    "advancing": [
+      "PHYSICAL_TIMESTEP_ACCURACY",
+      "COLD_RESTART",
+      "MATCHED_STOCK_TIMING",
+      "COMPLETE_ADVANCING_COST"
+    ]
+  },
+  "production_wall_seconds": {
+    "criterion": "1.25*C_total <= 86400",
+    "per_trajectory": true
+  },
+  "qualified_recipe": null,
+  "initial_state_for_task3": null,
+  "restart_for_task3": null,
+  "launch_commands": []
+}

@@ -1,0 +1,167 @@
+{
+  "archive": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-cp3.tar.gz",
+    "bytes": 76581,
+    "sha256": "d5849a9dd346ce4d920e7df120c8d979700f707e1e4752d67220b8b08462464f"
+  },
+  "publication": {
+    "request": {
+      "label": "outlet-qual-cp3-publish",
+      "phase": "evidence",
+      "command": [
+        "/bin/bash",
+        "-euc",
+        "set -euo pipefail\ncd \"$1\"\nshopt -s nullglob\narchive=evidence/outlet-qual-cp3.tar.gz\ntest ! -e \"$archive\"\nfor expected in 'evidence/outlet-qual-outlet-location-disposition.json' 'evidence/outlet-qual-task3-launch-hold.json' 'evidence/outlet-qual-cp2-decision.json' 'evidence/outlet-qual-next-experiment.json'; do test -f \"$expected\"; done\nrecords=('evidence/outlet-qual-outlet-location-disposition.json' 'evidence/outlet-qual-task3-launch-hold.json' 'evidence/outlet-qual-cp2-decision.json' 'evidence/outlet-qual-next-experiment.json'\n operations/outlet-qual-cp3-decision* science/outlet-qual-cp3-decision*\n tools/outlet-qual-drivers/cp3-decision.*\n 'tools/outlet-control-v12/task2r_run.py'\n accounting.json)\nunique=()\ndeclare -A seen\nfor p in \"${records[@]}\"; do\n if test -e \"$p\" && test ! \"${seen[$p]+yes}\"; then\n   seen[$p]=1\n   unique+=(\"$p\")\n fi\ndone\ntemporary=\"$archive.work-$$\"\ntrap 'rm -f -- \"$temporary\"' EXIT\ntar -I \"gzip -1\" -cf \"$temporary\" \"${unique[@]}\"\ntar -tzf \"$temporary\" >/dev/null\nmv -- \"$temporary\" \"$archive\"\nstat -c '%n %s' \"$archive\"",
+        "outlet-qual",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118"
+      ],
+      "cap_seconds": 60.0,
+      "reserved_seconds": 67.0,
+      "workers_before": 63,
+      "idle_mpi_event_helpers": 102,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "storage_before": {
+        "science_bytes": 4306922084,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3561199341568
+      },
+      "runner": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v12/task2r_run.py",
+        "bytes": 37307,
+        "sha256": "072b4d6607f374fb4847ccbd29739d1a6b9dce80938ba812b0547a14a9d58f7a"
+      },
+      "rss_limit_bytes": 8589934592,
+      "memory_before": null,
+      "worker_pause_policy": null,
+      "worker_limit": 80,
+      "worker_admission_margin": 3,
+      "input_files": [
+        {
+          "path": "/usr/bin/bash",
+          "bytes": 1396520,
+          "sha256": "59474588a312b6b6e73e5a42a59bf71e62b55416b6c9d5e4a6e1c630c2a9ecd4"
+        }
+      ]
+    },
+    "result": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 1.3238846670137718,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 90112,
+      "peak_host_workers": 63,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-cp3-publish/command.log",
+        "bytes": 38,
+        "sha256": "0e27779f01a08af6950870cf1cba5a6ebba566ae1fec38545086e062f0c3e7d9"
+      },
+      "rss_limit_bytes": 8589934592,
+      "job_memory": null,
+      "minimum_memory_headroom_bytes": null,
+      "worker_limit": 80,
+      "peak_owned_workers": 0,
+      "worker_pauses": [],
+      "worker_paused_seconds": 0.0
+    },
+    "balance": {
+      "charged_seconds": 59341.32938283075,
+      "reserved_seconds": 0,
+      "nonprotected_remaining": 1858.6706171692495,
+      "tranche_remaining": 1424.961336774184
+    },
+    "storage": {
+      "science_bytes": 4306922084,
+      "source_build_runtime_bytes": 266581583,
+      "free_bytes": 3561199259648
+    }
+  },
+  "operations": {
+    "outlet-qual-cp3-decision": {
+      "request": {
+        "label": "outlet-qual-cp3-decision",
+        "phase": "evidence",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-qual-drivers/cp3-decision.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "{\"CP0\":\"bf34514ef0a348304403f9bb122c6bc3576a476d\",\"CP1\":\"5999a4a8e4322212f91946cf0778a83a72c5f23e\",\"CP2\":\"59c0fff2b9249a71a037cc60565dec29553e6b41\"}"
+        ],
+        "cap_seconds": 30.0,
+        "reserved_seconds": 37.0,
+        "workers_before": 62,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 4306922084,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3561199398912
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v12/task2r_run.py",
+          "bytes": 37307,
+          "sha256": "072b4d6607f374fb4847ccbd29739d1a6b9dce80938ba812b0547a14a9d58f7a"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 3,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-qual-drivers/cp3-decision.py",
+            "bytes": 4619,
+            "sha256": "8c8fbb94583f4c38df89e6e86ba04867cafab83e82903a6f01dde1412e11260f"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "evidence",
+        "seconds": 1.271893651006394,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 208896,
+        "peak_host_workers": 65,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-cp3-decision/command.log",
+          "bytes": 33,
+          "sha256": "7bb2a0b21d3be0f78829a5f49e3d0a5643f7782d523d6d89b8523ba3c1f87497"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 59340.00549816374,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 1859.9945018362632,
+        "tranche_remaining": 1426.2852214411978
+      },
+      "storage": {
+        "science_bytes": 4306922084,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3561199357952
+      }
+    }
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "schema": "WJH27FlatOutletLocationDispositionV1",
+  "status": "DEFERRED",
+  "reasons": [
+    "CANONICAL_SPATIAL_QUALIFICATION_OPEN",
+    "EXTENT_FORECAST_REQUIRES_QUALIFIED_MATCHED_RECIPE"
+  ],
+  "canonical": null,
+  "extended": null,
+  "physical_departures": null,
+  "extended_minus_canonical": null,
+  "previous_B2_design": {
+    "source": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-location-eligibility.json",
+      "bytes": 8870,
+      "sha256": "b0cae3fefcf323e05e2261372b0bfb8f58f1b0492eb08dcf8d90b07192db2fc1"
+    },
+    "cells": [
+      118,
+      69
+    ],
+    "forecast_seconds": 2464,
+    "forecast_peak_tree_rss_bytes": 10650540479,
+    "applicability": "FROZEN_B2_ONLY"
+  },
+  "retained_extent_comparison": {
+    "exit_positions_code": [
+      15.0,
+      17.5
+    ],
+    "keep_upstream_through_code": 14.375,
+    "experimental_x": [
+      -2.5,
+      8.0
+    ],
+    "keep_old_outlet_as_interior_station": true,
+    "retained_stations_code": [
+      -10,
+      -7.5,
+      -5,
+      -2.5,
+      -1.25,
+      0,
+      1.25,
+      2.5,
+      3.75,
+      4,
+      4.25,
+      4.5,
+      4.75,
+      5,
+      5.25,
+      5.5,
+      5.75,
+      6.0,
+      6.25,
+      6.5,
+      6.75,
+      7.0,
+      7.25,
+      7.5,
+      7.75,
+      8.0,
+      10,
+      12.5,
+      15,
+      17.5
+    ],
+    "physical_RMS_MAX_limits": {
+      "U": [
+        0.01,
+        0.02
+      ],
+      "W": [
+        0.01,
+        0.02
+      ],
+      "k": [
+        0.05,
+        0.1
+      ],
+      "epsilon": [
+        0.1,
+        0.2
+      ],
+      "wall_shear": [
+        0.05,
+        0.1
+      ]
+    },
+    "signed_fields_with_numerical_uncertainty_and_no_physical_limit": [
+      "R",
+      "Pi",
+      "traction"
+    ],
+    "prerequisites": [
+      "CURRENT_AND_SPATIAL_QUALIFIED_CANONICAL_MESH",
+      "MATCHED_P_Q_AND_TOLERANCES",
+      "COMPLETE_NAMED_ADMISSION",
+      "X15_NATIVE_PARITY"
+    ],
+    "reporting": [
+      "PHYSICAL_DEPARTURE_FROM_INLET_REFERENCE_FOR_EACH_EXTENT",
+      "SIGNED_EXTENDED_MINUS_CANONICAL_CHANGE",
+      "WITHIN_B_NUMERICAL_UNCERTAINTY"
+    ]
+  },
+  "flat_outlet_location_sensitivity": "UNMEASURED",
+  "hill_wake_location_sensitivity": "FUTURE_SEPARATE_DECISION",
+  "cp2": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-cp2-decision.json",
+    "bytes": 72545,
+    "sha256": "0a03d3674b28354242dfc4d29469af8d71c790896e765231fef694d69556ca03"
+  },
+  "verified_checkpoints": {
+    "CP0": "bf34514ef0a348304403f9bb122c6bc3576a476d",
+    "CP1": "5999a4a8e4322212f91946cf0778a83a72c5f23e",
+    "CP2": "59c0fff2b9249a71a037cc60565dec29553e6b41"
+  },
+  "live_before_final_settlement": {
+    "charged_seconds": 59338.73360451273,
+    "reserved_seconds": 37.0,
+    "nonprotected_remaining": 1824.2663954872696,
+    "tranche_remaining": 1390.5571150922042
+  }
+}
