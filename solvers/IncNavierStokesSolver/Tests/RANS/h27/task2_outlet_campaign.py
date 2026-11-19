@@ -383,6 +383,73 @@ def resume_time(root, admission_path, out):
     print(case,"bound readmission from first Newton",required,"seconds",blockers,flush=True)
 
 
+def resume_iterate(root, admission_path, out):
+    initial = read(admission_path)
+    case = initial["case"]
+    require(campaign_case(case) and initial["schema"]=="WJH27FlatQualificationAdmissionV1"
+            and initial["status"]=="ADMITTED" and initial["attempts"],
+            "iterate readmission requires a settled named outlet admission")
+    admitted = identity(admission_path)
+    verified(initial["forecast"])
+    measured = []
+    stem = case_dir(root,case).name
+    for label,attempt in initial["attempts"].items():
+        index = 0 if label==stem else int(label.removeprefix(stem+"-continue-"))
+        directory = case_dir(root,case,index)
+        receipt_path = root/"operations"/f"{label}-steady"/"receipt.json"
+        receipt = read(receipt_path)
+        result = receipt["result"]
+        report_path = directory/"state.steady.json"
+        report = read(report_path)
+        inputs = read(directory/"inputs.json")
+        packet = directory/"state.steady-candidate.json"
+        steps = report["accepted_newton_steps"]
+        seed = identity(packet)
+        require(directory.name==label and result["status"]=="FAIL" and result["reason"] is None
+                and not (directory/"state.result.json").exists()
+                and report["reason"].startswith("NEWTON_NOT_CONVERGED")
+                and report["best_from_accepted_iterate"] and steps==attempt["newton_iterations"]
+                and report["true_norm"]>initial["tolerances"][1]
+                and inputs["admission"]==admitted and inputs["source"]==initial["source"]
+                and inputs["quadrature"]==initial["quadrature"] and inputs["tolerances"]==initial["tolerances"]
+                and [inputs["x_edges"],inputs["physical_z_edges"]]==[initial["x_edges"],initial["physical_z_edges"]],
+                "only a matching bounded Newton iterate may be continued")
+        if measured:
+            previous = measured[-1]
+            require(index==previous["index"]+1 and inputs["initial_guess"]==previous["seed"]
+                    and report["true_norm"]<previous["norm"], "typed Newton chain did not make progress")
+        measured.append(dict(index=index,seconds=result["seconds"],steps=steps,norm=report["true_norm"],
+            seed=seed,report=identity(report_path),operation=identity(receipt_path),bytes=size(directory)))
+    last = measured[-1]
+    start = last["index"]+1
+    padding = max(244,initial.get("extra_watch_padding_seconds",0))
+    native_seconds = math.ceil(1.22*max(v["seconds"]/v["steps"] for v in measured))
+    attempts = {case_dir(root,case,i).name:planned_attempt(native_seconds,native_seconds+padding,1)
+                for i in (start,start+1)}
+    require(all(not (root/"science"/name).exists() for name in attempts), "iterate continuation already exists")
+    caps = dict(initial["reservation_caps"])
+    caps["preparations_and_native"] = sum(v["preparation_seconds"]+v["watch_seconds"]+2*GRACE
+                                         for v in attempts.values())
+    required = sum(caps.values())
+    additional = math.ceil(1.10*len(attempts)*max(v["bytes"] for v in measured))
+    live = balance(read(root/"accounting.json"))
+    memory = memory_snapshot()
+    disk = storage(root)
+    blockers = [name for name,fits in (
+        ("wall_time",required<=live["nonprotected_remaining"]),
+        ("host_or_cgroup",memory_headroom(memory)>=initial["rss_limit_bytes"]+2*GIB),
+        ("science_storage",disk["science_bytes"]+additional<=8*GIB),
+        ("build_storage",disk["source_build_runtime_bytes"]<=8*GIB),
+        ("free_space",disk["free_bytes"]-additional>=15*GIB)) if not fits]
+    atomic(out,dict(initial,schema="WJH27FlatQualificationForecastV1",
+        status="DEFERRED" if blockers else "FITS",blockers=blockers,prior_admission=admitted,
+        recovery_checkpoint=last["seed"],recovery_first_label=case_dir(root,case,start).name,
+        recovery_residual=last["norm"],iterate_timing=measured,extra_watch_padding_seconds=padding,
+        attempts=attempts,reservation_caps=caps,required_seconds=required,
+        forecast_additional_science_bytes=additional,live=live,memory=memory,storage=disk))
+    print(case,"typed Newton readmission",last["norm"],required,"seconds",blockers,flush=True)
+
+
 def pin(root, initial_forecast, out):
     ev = root/"evidence"
     hold_path = ev/"outlet-qual-task3-launch-hold.json"
@@ -419,12 +486,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("root",type=Path)
     modes = parser.add_subparsers(dest="mode",required=True)
-    for mode in ("freeze","pin","admit","resume-time"):
+    for mode in ("freeze","pin","admit","resume-time","resume-iterate"):
         task = modes.add_parser(mode)
         task.add_argument("input",type=Path)
         task.add_argument("output",type=Path)
     args=parser.parse_args()
-    {"freeze":freeze,"pin":pin,"admit":admit,"resume-time":resume_time}[args.mode](args.root,args.input,args.output)
+    actions = {"freeze":freeze,"pin":pin,"admit":admit,"resume-time":resume_time,"resume-iterate":resume_iterate}
+    actions[args.mode](args.root,args.input,args.output)
 
 
 if __name__ == "__main__":

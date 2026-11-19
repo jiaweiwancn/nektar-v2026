@@ -1,0 +1,7 @@
+# Bx3 recovery at the Newton iteration bound
+
+The three 139×92 Bx3 segments took 419.424, 875.711 and 1,002.546 native seconds. One, two and two accepted updates reduced the native residual to 2.64144e−7, 7.34091e−9 and 1.05766e−10. Peak RSS was 14.49 GiB within the 16 GiB allowance. Each bounded segment wrote a typed continuation. The last residual is 5.8% above the original 1e−10 coupled limit, so the independent audit and signed comparison await native acceptance. [Admitted axes and recipe](wj-h27-linux/task2-outlet-campaign/cp2-bx3-iterate/outlet-qual-bx3-admission.json) · [Measured segment receipts](wj-h27-linux/task2-outlet-campaign/cp2-bx3-iterate/operations.json)
+
+Readmission uses the last packet with SHA-256 `b04f6c1accd9f2f35f97e3cb4e425e5b4dadf57257cc5e5b81cc66a10fa04c03`. It holds the exact mesh, runtime, reference, quadrature and tolerances and rebuilds lifts and histories at zero time. One further Newton update is expected to bring the native norm below 1e−10. The new forecast covers two individually recoverable one-update slots and the still-pending independent, signed and publication gates. It reserves 2,678 s and 450,490,362 science bytes. Each slot allows 612 s for Newton and a 244 s watchdog gap for typed output. [Full recovery forecast and exact packet binding](wj-h27-linux/task2-outlet-campaign/cp2-bx3-iterate/outlet-qual-bx3-iterate-recovery-forecast.json)
+
+**Campaign OPEN. TASK2_COMPLETE=NO. TASK3_READY=NO.**
