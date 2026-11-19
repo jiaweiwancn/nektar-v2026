@@ -1,0 +1,334 @@
+{
+  "schema": "WJH27Task3LaunchHoldV1",
+  "status": "NOT_READY_DO_NOT_LAUNCH",
+  "checkpoint_status": {
+    "S0": "PASS",
+    "S1": "PASS",
+    "S2": "INCONCLUSIVE",
+    "S3": "NOT_RUN",
+    "S4": "NOT_RUN"
+  },
+  "gates": {
+    "DIAGNOSIS": "INCONCLUSIVE",
+    "ORIGINAL_PROBLEM_SPATIAL_QUALIFICATION": "NOT_MET",
+    "RECALIBRATED_NATIVE_REFERENCE": "NOT_MET",
+    "SHORT_SCREEN": "NOT_RUN",
+    "COMPLETE_COST": "NOT_RUN",
+    "TASK2_COMPLETE": "NO",
+    "TASK3_READY": "NO"
+  },
+  "reviewed_git": "366627a734b642788e18b9aebe0561074d72e92b",
+  "branch": "codex/wj-earsm-awf",
+  "verified_prior_checkpoints": {
+    "S0": "ee985d825ea80639707b16b1b9e6b270c91f6d73",
+    "S0_correction": "710ccc56922f1599644db0cdf1f59ddd4191358a",
+    "S1": "8d06204b1f2b5205a8ce61aa139327adb83f171b"
+  },
+  "native_source": "061c48fe6805b1b1bb66a8effffc3bfc28c5f86777c5e669f52afd9f8c0d861f",
+  "runtime": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-r2-v1/IncNavierStokesSolver",
+    "bytes": 9985016,
+    "sha256": "7a94420aaa31f41d9d8b6754d20c16f11d1398e894f243eaa6beaa3af7924819"
+  },
+  "reference": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+    "bytes": 139982,
+    "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+  },
+  "most_resolved_steady_witness": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/task2rs-s2-nested-finish/state.result.json",
+    "bytes": 54567675,
+    "sha256": "f7a0c20b290453c3758e398eae23b88c423fd6c3945f48e27a5d4506d69c6d3f"
+  },
+  "original_28_disposition": {
+    "inner/G": {
+      "RMS": 1.4825256387363869e-05,
+      "MAX": 0.36531619934278936,
+      "limits": [
+        0.01,
+        0.01
+      ],
+      "status": "NOT_MET"
+    },
+    "inner/Pi": {
+      "RMS": 7.497394247846183e-07,
+      "MAX": 0.018054711094644137,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "NOT_MET"
+    },
+    "inner/R": {
+      "RMS": 3.6253293478056596e-07,
+      "MAX": 0.007944123613931705,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "NOT_MET"
+    },
+    "inner/W": {
+      "RMS": 2.217598776571153e-09,
+      "MAX": 9.005889514800538e-06,
+      "limits": [
+        0.0001,
+        0.0001
+      ],
+      "status": "MET"
+    },
+    "inner/k": {
+      "RMS": 2.2057849912403836e-08,
+      "MAX": 4.263923360412432e-06,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "MET"
+    },
+    "inner/traction": {
+      "RMS": 7.349158767199531e-07,
+      "MAX": 0.016965613201099877,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "NOT_MET"
+    },
+    "outer/Pi": {
+      "RMS": 7.650210552875251e-08,
+      "MAX": 7.337873384610968e-06,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "MET"
+    },
+    "outer/R": {
+      "RMS": 2.2073899187124336e-09,
+      "MAX": 1.2172131633349123e-05,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "MET"
+    },
+    "outer/traction": {
+      "RMS": 2.2099480420326075e-09,
+      "MAX": 1.2416625498194941e-05,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "MET"
+    },
+    "whole/G": {
+      "RMS": 1.28672266098861e-06,
+      "MAX": 0.36531619934278936,
+      "limits": [
+        0.01,
+        0.01
+      ],
+      "status": "NOT_MET"
+    },
+    "whole/Pi": {
+      "RMS": 1.0021391755732243e-07,
+      "MAX": 0.018054711094644137,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "NOT_MET"
+    },
+    "whole/R": {
+      "RMS": 3.15419297573425e-08,
+      "MAX": 0.007944123613931705,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "NOT_MET"
+    },
+    "whole/W": {
+      "RMS": 2.3244610911249375e-10,
+      "MAX": 9.005889514800538e-06,
+      "limits": [
+        0.0001,
+        0.0001
+      ],
+      "status": "MET"
+    },
+    "whole/k": {
+      "RMS": 1.9221778663944735e-09,
+      "MAX": 4.263923360412432e-06,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "MET"
+    },
+    "whole/traction": {
+      "RMS": 6.382324909052022e-08,
+      "MAX": 0.016965613201099877,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "NOT_MET"
+    },
+    "x=15/inner/G": {
+      "RMS": 0.004939261003714943,
+      "MAX": 0.36531619934278936,
+      "limits": [
+        0.01,
+        0.01
+      ],
+      "status": "NOT_MET"
+    },
+    "x=15/inner/Pi": {
+      "RMS": 0.00026195260883869016,
+      "MAX": 0.018054711094644137,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "NOT_MET"
+    },
+    "x=15/inner/R": {
+      "RMS": 0.0001506913690639349,
+      "MAX": 0.007944123613931705,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "NOT_MET"
+    },
+    "x=15/inner/k": {
+      "RMS": 4.5899480219253976e-07,
+      "MAX": 4.2662363741747e-06,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "MET"
+    },
+    "x=15/inner/traction": {
+      "RMS": 0.0003108742978991233,
+      "MAX": 0.016965613201099877,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "NOT_MET"
+    },
+    "x=15/outer/Pi": {
+      "RMS": 8.772561441345333e-08,
+      "MAX": 7.465059278334047e-06,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "MET"
+    },
+    "x=15/outer/R": {
+      "RMS": 9.197117340087325e-08,
+      "MAX": 1.240683156424753e-05,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "MET"
+    },
+    "x=15/outer/traction": {
+      "RMS": 8.033307680638277e-08,
+      "MAX": 1.265615738795506e-05,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "MET"
+    },
+    "x=15/whole/G": {
+      "RMS": 0.0004286913472240597,
+      "MAX": 0.36531619934278936,
+      "limits": [
+        0.01,
+        0.01
+      ],
+      "status": "NOT_MET"
+    },
+    "x=15/whole/Pi": {
+      "RMS": 2.2735717885586414e-05,
+      "MAX": 0.018054711094644137,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "NOT_MET"
+    },
+    "x=15/whole/R": {
+      "RMS": 1.30791318008731e-05,
+      "MAX": 0.007944123613931705,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "NOT_MET"
+    },
+    "x=15/whole/k": {
+      "RMS": 3.984319122698248e-08,
+      "MAX": 4.2662363741747e-06,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "MET"
+    },
+    "x=15/whole/traction": {
+      "RMS": 2.6981709551495645e-05,
+      "MAX": 0.016965613201099877,
+      "limits": [
+        0.001,
+        0.001
+      ],
+      "status": "NOT_MET"
+    }
+  },
+  "controls": {
+    "independent_current": "PASS",
+    "physical_envelopes": "PASS",
+    "inlet_projection": "PASS",
+    "full_spatial": "NOT_MET",
+    "final_higher_quadrature": "NOT_RUN",
+    "final_tighter_algebraic": "NOT_RUN"
+  },
+  "abort_before_launch": [
+    "The nested pair leaves raw pressure, shear, stress and velocity-gradient rows over budget.",
+    "The independently observed angular mode amplitude remains inconclusive.",
+    "There is no qualified final mesh and independent collar resolution pair.",
+    "The three-dt, restart and cost screen requires a spatially qualified reference."
+  ],
+  "qualified_mesh_p_q_dt": null,
+  "initial_state": null,
+  "restart_state": null,
+  "per_trajectory_complete_forecasts": null,
+  "total_campaign_forecast": null,
+  "launch_commands": null,
+  "future_horizon": 505.02466521278404,
+  "terminal_window": [
+    447.8483832973273,
+    505.02466521278404
+  ],
+  "evidence_bundle": {
+    "archive": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/task2rs-s2.tar.gz",
+      "bytes": 39316279,
+      "sha256": "bd6f39fe7249c76dc3f4875b66bfe63aaa356a6eb16554a0daaac58d1150506c"
+    },
+    "manifest": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/task2rs-s2-manifest.json",
+      "bytes": 89717,
+      "sha256": "772c617e0d23c08188d2cf15ec0c53e8d4d0c3a3ae0452060c3c68414abc30b7"
+    }
+  }
+}

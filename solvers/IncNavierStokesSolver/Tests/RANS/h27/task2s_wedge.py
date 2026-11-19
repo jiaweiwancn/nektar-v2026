@@ -21,6 +21,9 @@ RADII = (.0035, .005, .0071, .01, .0141, .02, .0283, .04)
 ANGLES = (14, 24, 34, 44, 54, 64, 74)
 HOLD_RADII, HOLD_ANGLES = (.0071, .02), (24, 54)
 ANNULI = ((.0035, .02), (.0071, .04))
+NEAR = dict(radii_code=(.0025,.003,.0035,.004,.0045,.005,.0055,.006),
+            angles_deg=(12,18,24,30,36,42,48),heldout_radii=(.0035,.005),
+            heldout_angles_deg=(18,36),annuli_code=((.0025,.005),(.0035,.006)))
 ANCHOR_RADIUS = .01
 BACKGROUND_MODELS = (("exact_reference", 3), ("exact_reference", 4),
                      ("local_auxiliary", 3), ("local_auxiliary", 4))
@@ -284,12 +287,13 @@ def fit_window(fields, envelope, owners, mask, parts, background, columns, singu
     return result
 
 
-def examine(cases, ref, mode_fields, points, radii, angles, resolved):
+def examine(cases, ref, mode_fields, points, radii, angles, resolved, sampling):
     s, r = points.T
     mask = np.all([np.isfinite(case["fields"]).all(axis=1) for case in cases], axis=0)
     if resolved:
         mask &= np.all([np.all(points > case["width"], axis=1) for case in cases], axis=0)
-    hold_r, hold_angle = np.isin(radii, HOLD_RADII), np.isin(angles, HOLD_ANGLES)
+    hold_r = np.isin(radii,sampling["heldout_radii"])
+    hold_angle = np.isin(angles,sampling["heldout_angles_deg"])
     parts = dict(training=~(hold_r|hold_angle), ray=hold_angle & ~hold_r,
                  radius=hold_r & ~hold_angle, ray_and_radius=hold_angle & hold_r)
     result = dict(resolved_sampling=resolved, common_points=int(np.count_nonzero(mask)), fits={})
@@ -301,7 +305,7 @@ def examine(cases, ref, mode_fields, points, radii, angles, resolved):
     owners = cases[0]["owners"]  # Same coarse-owner weights at each compared level.
     for base, degree in BACKGROUND_MODELS:
         background, columns = smooth_background(ref, cases[-1]["K"], s, r, base, degree)
-        for lo, hi in ANNULI:
+        for lo, hi in sampling["annuli_code"]:
             window = mask & (radii >= lo) & (radii <= hi)
             record = dict(background=base, degree=degree, annulus_code=[lo, hi],
                           levels=[fit_window(values, envelope, owners, window, parts,
@@ -344,13 +348,16 @@ def main():
                         help="Registered steady state, with coarser grids first.")
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--seconds", required=True, type=float)
+    parser.add_argument("--near",action="store_true",help="Supplement with shorter annuli to limit coefficient variation.")
     args = parser.parse_args()
     require(sys.platform.startswith("linux"), "coupled numerical evidence is collected on Linux")
     require(math.isfinite(args.seconds) and args.seconds > 0., "explicit finite wall cap required")
     deadline = time.monotonic()+args.seconds
     ref = load_reference(args.table)
     require(ref.exact_inner, "corner diagnosis requires the immutable exact-inner reference")
-    radii, angles = np.meshgrid(RADII, ANGLES, indexing="ij")
+    sampling = NEAR if args.near else dict(radii_code=RADII,angles_deg=ANGLES,
+        heldout_radii=HOLD_RADII,heldout_angles_deg=HOLD_ANGLES,annuli_code=ANNULI)
+    radii, angles = np.meshgrid(sampling["radii_code"],sampling["angles_deg"],indexing="ij")
     radii, angles = radii.ravel(), angles.ravel()
     phase = np.deg2rad(angles)
     points = radii[:,None]*np.column_stack((np.cos(phase), np.sin(phase)))
@@ -361,10 +368,10 @@ def main():
     mode = Wedge(ref.nu, ref.nu+float(ref.aux(K, np.zeros(1))[0]))
     shape = mode.fields(*points.T)
     shape[:,6] /= ref.tau
-    studies = dict(all_levels_unresolved_control=examine(cases, ref, shape, points, radii, angles, False),
-                   latest_individual=examine(cases[-1:], ref, shape, points, radii, angles, True),
-                   latest_pair=examine(cases[-2:], ref, shape, points, radii, angles, True),
-                   latest_three=examine(cases[-3:], ref, shape, points, radii, angles, True))
+    studies = dict(all_levels_unresolved_control=examine(cases,ref,shape,points,radii,angles,False,sampling),
+                   latest_individual=examine(cases[-1:],ref,shape,points,radii,angles,True,sampling),
+                   latest_pair=examine(cases[-2:],ref,shape,points,radii,angles,True,sampling),
+                   latest_three=examine(cases[-3:],ref,shape,points,radii,angles,True,sampling))
     status, reason = classify(studies["latest_three"], cases)
     for case in cases:
         case["report"].update(state=case["state"], source_identity=case["source"])
@@ -373,8 +380,9 @@ def main():
         status=status, reason=reason, fitted_shape_pencil=mode.audit(), field_order=list(FIELDS),
         field_scales=[1.]*6+[ref.tau], fit_budget_weights=BUDGETS.tolist(),
         pressure_treatment="Absolute physical pressure in tau0 units, with fixed smooth-part Pi(0)=-t_x(0). No fitted constant.",
-        sampling=dict(radii_code=list(RADII), angles_deg=list(ANGLES), heldout_radii=list(HOLD_RADII),
-                      heldout_angles_deg=list(HOLD_ANGLES), annuli_code=ANNULI,
+        sampling=dict(**sampling, supplemental_near_profile=args.near,
+                      largest_relative_shear_coefficient_change=float(
+                          np.max(abs(ref.nu+ref.aux(K,points[:,1])-mode.mu))/mode.mu),
                       owner_policy="Record all ties. Fit unambiguous original owners only and weight each coarse owner equally.",
                       resolved_policy="Both s and r exceed their terminal owner widths on every compared grid."),
         amplitude_uncertainty="Observed common-point intermesh envelope propagated through the nuisance-orthogonal mode. Window and background spread are separate sensitivities.",

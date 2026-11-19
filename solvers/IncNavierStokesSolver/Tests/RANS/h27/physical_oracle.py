@@ -59,6 +59,17 @@ def identity(path):
     return dict(path=str(path), sha256=hashlib.sha256(path.read_bytes()).hexdigest())
 
 
+def coordinate_aliases(values, tolerance=1e-12):
+    """Group geometrically coincident edge coordinates for topology only."""
+    aliases = {}
+    anchor = -float('inf')
+    for coordinate in sorted(set(values)):
+        if coordinate-anchor > tolerance:
+            anchor = coordinate
+        aliases[coordinate] = anchor
+    return aliases
+
+
 def basis(e, key, x, r):
     degree = 2 if key == 'p' else 3
     xl, xr, rl, rr = e['bounds']
@@ -364,10 +375,15 @@ class PhysicalOracle:
                 for edge in ((-10., 15.) if j < 2 else (0., p.H, p.top)):
                     if abs(value-edge) <= 64*np.finfo(float).eps*max(p.H, abs(value), abs(edge)):
                         e['bounds'][j] = edge
+        x_alias = coordinate_aliases(e['bounds'][i] for e in self.elements for i in (0,1))
+        r_alias = coordinate_aliases(e['bounds'][i] for e in self.elements for i in (2,3))
+        for e in self.elements:
             xl, xr, rl, rr = e['bounds']
             outer = rl >= p.H
             require(bool(e['epsilon']) == outer, 'transported epsilon ownership mismatch')
-            columns.setdefault((round(xl, 12), round(xr, 12)), []).append(e)
+            ax,bx,ar,br = x_alias[xl],x_alias[xr],r_alias[rl],r_alias[rr]
+            require(ax<bx and ar<br, 'topology tolerance collapses an element')
+            columns.setdefault((ax,bx), []).append(e)
             for key, size in (('u', self.n), ('p', self.np), ('k', self.nk), ('epsilon', self.ne)):
                 ids, signs = e[key], e[SIGNS[key]]
                 if key == 'epsilon' and not outer:
@@ -376,9 +392,9 @@ class PhysicalOracle:
                 require(len(ids) == len(signs) == count and len(set(ids)) == count and
                         all(0 <= i < size for i in ids) and all(s in (-1., 1.) for s in signs), 'invalid '+key+' signed map')
                 visited[key].update(ids)
-            for side, coordinates in enumerate(((xl, xl, rl, rr), (xr, xr, rl, rr),
-                                                 (xl, xr, rl, rl), (xl, xr, rr, rr))):
-                edges.setdefault(tuple(round(v, 12) for v in coordinates), []).append((e, side))
+            for side, coordinates in enumerate(((ax, ax, ar, br), (bx, bx, ar, br),
+                                                 (ax, bx, ar, ar), (ax, bx, br, br))):
+                edges.setdefault(coordinates, []).append((e, side))
             for key in self.faces:
                 if key == 'epsilon' and not outer:
                     continue

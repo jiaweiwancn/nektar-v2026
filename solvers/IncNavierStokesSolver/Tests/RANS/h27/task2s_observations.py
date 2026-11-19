@@ -92,9 +92,11 @@ def orientation_audit(state):
 def cell_index(elements):
     owners = {}
     xa, ra = set(), set()
+    x_keys = oracle.coordinate_aliases(e["bounds"][i] for e in elements for i in (0,1))
+    r_keys = oracle.coordinate_aliases(e["bounds"][i] for e in elements for i in (2,3))
     for e in elements:
-        a,b,c,d = (round(v,12) for v in e["bounds"])
-        xi, ri = (a,b), (c,d)
+        a,b,c,d = e["bounds"]
+        xi,ri = (x_keys[a],x_keys[b]),(r_keys[c],r_keys[d])
         xa.add(xi)
         ra.add(ri)
         oracle.require((xi,ri) not in owners,"duplicate rectangular owner")
@@ -181,11 +183,13 @@ def station_points(a, w, breaks, multiplicity):
     return np.r_[rad,breaks], np.r_[weights,np.zeros(len(breaks))]
 
 
-def compare(first,second):
+def compare(first,second,quiet=()):
     rows, count = Rows(), 0
-    edges = sorted({round(e["bounds"][i],12)
+    local = Rows()
+    edges = sorted({e["bounds"][i]
                     for model in (first,second) for e in model.elements for i in (0,1)})
-    multiplicity = {x:2 if -10. < x < 15. and round(x,12) in edges else 1 for x in oracle.STATIONS}
+    multiplicity = {x:2 if -10. < x < 15. and any(abs(x-edge)<1e-12 for edge in edges) else 1
+                    for x in oracle.STATIONS}
     for e,f,bounds in common_cells(first,second):
         first.clock()
         count += 1
@@ -199,13 +203,18 @@ def compare(first,second):
         x = np.r_[x,np.repeat([left,right],[len(v) for v in corners])]
         r = np.r_[r,extra_radius]
         weights = np.r_[weights,np.zeros(len(extra_radius))]
-        def add(groups,x,r,w):
-            rows.add(groups,e,f,x,r,w,first.sample(e,x,r),second.sample(f,x,r),first.ref)
-        add(("whole",region),x,r,weights)
+        a,b = first.sample(e,x,r),second.sample(f,x,r)
+        rows.add(("whole",region),e,f,x,r,weights,a,b,first.ref)
+        for lo,hi in quiet:
+            if lo-1e-12 <= left < right <= hi+1e-12:
+                local.add((f"{lo:g}..{hi:g}/whole",f"{lo:g}..{hi:g}/{region}"),
+                          e,f,x,r,weights,a,b,first.ref)
         for x in oracle.STATIONS:
             if left-1e-12 <= x <= right+1e-12:
                 r,w = station_points(*first.gauss,cuts(first,second,e,f,x,bottom,top),multiplicity[x])
-                add((f"x={x:g}/whole",f"x={x:g}/{region}"),np.full(len(r),x),r,w)
+                xx = np.full(len(r),x)
+                rows.add((f"x={x:g}/whole",f"x={x:g}/{region}"),e,f,xx,r,w,
+                         first.sample(e,xx,r),second.sample(f,xx,r),first.ref)
     result = rows.finish()
     expected = {"whole":first.ref.top,"inner":first.ref.H,"outer":first.ref.top-first.ref.H}
     weight_error = 0.
@@ -216,8 +225,10 @@ def compare(first,second):
         measure = expected[group] * (1 if key.startswith("x=") else 25.)
         weight_error = max(weight_error,abs(row["measure"]-measure)/measure)
     oracle.require(len(result) == 690 and weight_error < 1e-10, "original row inventory or station measure changed")
-    return result,dict(common_owner_subcells=count, relative_measure_error=weight_error,
-                       station_multiplicity={str(x):m for x,m in multiplicity.items()})
+    local_rows = local.finish()
+    oracle.require(len(local_rows) == len(quiet)*23, "redistributed x-strip observation missing")
+    return result,local_rows,dict(common_owner_subcells=count, relative_measure_error=weight_error,
+                                 station_multiplicity={str(x):m for x,m in multiplicity.items()})
 
 
 def check_archived(rows, archived):
@@ -237,6 +248,7 @@ def main():
     for key in ("table","first","second","out"):
         p.add_argument("--"+key,type=Path,required=True)
     p.add_argument("--archived",type=Path)
+    p.add_argument("--quiet-plan",type=Path,help="Add every reallocated upstream strip as a separate observation.")
     p.add_argument("--seconds",type=float,required=True)
     args=p.parse_args()
     end=time.monotonic()+args.seconds
@@ -245,12 +257,16 @@ def main():
     b=load_state(args.second,ref,20,end)
     oracle.require(a.data["source_identity"] == b.data["source_identity"], "comparison crosses native sources")
     signed_basis=dict(first=orientation_audit(a),second=orientation_audit(b))
-    rows,sampling=compare(a,b)
+    quiet = [(row["x"][0],row["x"][2]) for row in json.loads(args.quiet_plan.read_text())["removed"]] if args.quiet_plan else []
+    rows,extra,sampling=compare(a,b,quiet)
     failures=[key for key,value in rows.items() if value["status"]!="MET"]
     info=dict(schema="WJH27Task2RSOwnerComparisonV1", first=identity(args.first),
               second=identity(args.second), table=identity(args.table), source=a.data["source_identity"],
               station_inventory=oracle.STATIONS, signed_basis=signed_basis,
               rows=rows, sampling=sampling, failures=failures, comparison_status="NOT_MET" if failures else "MET")
+    if args.quiet_plan:
+        info["redistributed_strip_controls"]=dict(plan=identity(args.quiet_plan),rows=extra,
+            failures=[name for name,item in extra.items() if item["status"]!="MET"])
     if args.archived:
         info["archive_replay"]=dict(artifact=identity(args.archived),
                                    **check_archived(rows,json.loads(args.archived.read_text())))

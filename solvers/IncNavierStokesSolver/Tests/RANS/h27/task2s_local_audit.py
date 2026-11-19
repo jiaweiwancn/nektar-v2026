@@ -230,17 +230,8 @@ def admissibility(state):
             x=float(x[i]),r=float(r[i]),owner=int(points["owner"][i])))
 
 
-def compare_collar(first,second,report):
-    if report is None:
-        return None
-    observations = json.loads(report.read_text())["rows"]
-    key = "x=15/inner/R"
-    peak = observations[key].get("peak")
-    if peak is None:
-        return dict(row=key,status=observations[key]["status"])
-    x,r = (np.array([peak[k]]) for k in ("x","r"))
-    owners = [next(e for e in a.elements if e["geometry"]==peak[k])
-              for a,k in ((first,"coarse_owner"),(second,"fine_owner"))]
+def compare_collar_owners(first,second,owners,x,r):
+    x,r = np.array([x]),np.array([r])
     a,b = [s.sample(e,x,r) for s,e in zip((first,second),owners)]
     def summary(v):
         return dict(k=float(v["k"][0]),epsilon=float(v["E"][0]),K=float(v["K"][0]),
@@ -255,10 +246,32 @@ def compare_collar(first,second,report):
     path = [yy(a["k"],a["E"],a["G"],a["chi"]),yy(b["k"],a["E"],a["G"],a["chi"]),
             yy(b["k"],b["E"],a["G"],a["chi"]),yy(b["k"],b["E"],b["G"],b["chi"])]
     filtered = yy(b["k"],b["E"],remove_div(b),b["chi"])-yy(a["k"],a["E"],remove_div(a),a["chi"])
-    return dict(peak=peak,first=summary(a),second=summary(b),diagnostic_only=True,
+    return dict(owners=[e["geometry"] for e in owners],bounds=[e["bounds"] for e in owners],
+        first=summary(a),second=summary(b),diagnostic_only=True,
         raw_fine_minus_coarse=float(path[-1]-path[0]),change_from_k_then_E_then_G=np.diff(path).tolist(),
         delta_using_trace_free_planar_gradients=filtered,
         interpretation="Telescoping finite substitutions depend on the order. All governing observations use the original gradients.")
+
+
+def compare_collar(first,second,report):
+    x,r = 15.,.10
+    def owners_at(state):
+        return [e for e,side in state.faces["u"] if side==1 and e["bounds"][2]-1e-12<=r<=e["bounds"][3]+1e-12]
+    fixed=[]
+    for a in owners_at(first):
+        for b in owners_at(second):
+            if min(a["bounds"][3],b["bounds"][3])-max(a["bounds"][2],b["bounds"][2])>1e-12:
+                fixed.append(compare_collar_owners(first,second,(a,b),x,r))
+    po.require(fixed,"missing fixed one-sided collar observations")
+    row = json.loads(report.read_text())["rows"]["x=15/inner/R"]
+    peak = row.get("peak")
+    result = dict(fixed_station={"x":x,"r":r,"diagnostics":fixed},
+                  comparison_row_status=row["status"],comparison_peak=peak)
+    if peak and peak["component"]=="Ryy":
+        owners = [next(e for e in a.elements if e["geometry"]==peak[k])
+                  for a,k in ((first,"coarse_owner"),(second,"fine_owner"))]
+        result["peak_diagnostic"]=compare_collar_owners(first,second,owners,peak["x"],peak["r"])
+    return result
 
 
 def main():

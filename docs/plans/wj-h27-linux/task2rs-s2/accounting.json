@@ -1,0 +1,2728 @@
+{
+  "schema": "WJH27Task2RContinuationV1",
+  "closed": false,
+  "ceiling": 43200,
+  "protected_seconds": 3600,
+  "opening_seconds": 22438.642918664846,
+  "opening_nonprotected_remaining": 17161.357081335154,
+  "initial_tranche_seconds": 5844.647800940089,
+  "tranche_seconds": 16109.647800940089,
+  "initial_evidence_seconds": 300,
+  "prior_account": {
+    "path": "/home/jay/build/wj-h27-coupling-r1-20261117/accounting.json",
+    "bytes": 287890,
+    "sha256": "3c16883f2f134f17614eaf25d83561c14e113799504ebc08cc15a9882e3bc2be"
+  },
+  "prior_settlement": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/inputs/settled-pre-migration.json",
+    "bytes": 4340,
+    "sha256": "50c57af686e39ab51fd9119eaf126e92264e49dd20f82b90963e2503a9edb016"
+  },
+  "entries": {
+    "r0-ledger-continuity": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 2.12994493700171,
+      "earlier_linux_inventory_charge_seconds": 2.0,
+      "peak_host_workers": 39,
+      "idle_mpi_event_helpers": 56
+    },
+    "r1-archive-integrity": {
+      "status": "FAIL",
+      "phase": "evidence",
+      "seconds": 0.454,
+      "reason": "preflight OSError: argument was interpreted as a filename",
+      "launched": false
+    },
+    "r1-verified-archive": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 0.8772871310029586,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 208896,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r1-verified-archive/command.log",
+        "bytes": 1193,
+        "sha256": "1a4c7b91718bb6efc85c948c0a0d0ec6754af68d1eb17acd71acbac19bdcaedd"
+      }
+    },
+    "r1-supplied-shooting": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 2.0986810860013065,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 60944384,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r1-supplied-shooting/command.log",
+        "bytes": 7859,
+        "sha256": "094b8337934277af45c79839e64e4f2778b82e239c73296d433a5faf6f87225b"
+      }
+    },
+    "r1-supplied-collocation": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 2.7396005440023146,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 77877248,
+      "peak_host_workers": 40,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r1-supplied-collocation/command.log",
+        "bytes": 4977,
+        "sha256": "e3d0286270b1f26a64814c073c3c429ef230618e5e81f46ad7c66af7a76c6a3d"
+      }
+    },
+    "r1-supplied-family": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.9837001059968316,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 62271488,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r1-supplied-family/command.log",
+        "bytes": 5956,
+        "sha256": "ffe617185a8d1c7b77a8e1fdec9b5aeee85912767e2d7b73373be4ce8d2d5071"
+      }
+    },
+    "r1-supplied-full-tensor": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 13.370547570997587,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 85647360,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r1-supplied-full-tensor/command.log",
+        "bytes": 314,
+        "sha256": "3cf322d6cfadebc65d28f750324465aca2f5a798f25c3e7409f2cc13f6062efc"
+      }
+    },
+    "r1-qualified-representation": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 31.564059830001497,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 70418432,
+      "peak_host_workers": 40,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r1-qualified-representation/command.log",
+        "bytes": 623,
+        "sha256": "553070525a3d311131a6e924e2b131c9bb14f4e01cd564d73bc165319845fad8"
+      }
+    },
+    "r1-publication": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 0.8777458059994387,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 245760,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r1-publication/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r2-source-stage": {
+      "status": "FAIL",
+      "phase": "build",
+      "seconds": 0.9047777539999515,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 368640,
+      "peak_host_workers": 42,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-source-stage/command.log",
+        "bytes": 421,
+        "sha256": "7a45f390c9b9da229de6246b29e05155b505b541b85f1f7e6210097e492837b8"
+      }
+    },
+    "r2-configure-make": {
+      "status": "PASS",
+      "phase": "build",
+      "seconds": 0.9849966539986781,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 339968,
+      "peak_host_workers": 43,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-configure-make/command.log",
+        "bytes": 451,
+        "sha256": "ecd1c4262a0df5c96fe86e0e3898cd54342c9661938c5fb6efbe38918e19014b"
+      }
+    },
+    "r2-native-build": {
+      "status": "PASS",
+      "phase": "build",
+      "seconds": 260.122654892999,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 4612952064,
+      "peak_host_workers": 52,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-native-build/command.log",
+        "bytes": 108400,
+        "sha256": "72a4151d10896c2ecb49e319b7903494c5b92f2b9d43d77ba8e467d1aedd867a"
+      }
+    },
+    "r2-runtime-seal": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 0.975809173000016,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 368640,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-runtime-seal/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r2-prepare": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.6853804509992187,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 100024320,
+      "peak_host_workers": 40,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-prepare/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r2-reference-old": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.98869334399933,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 266240,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-reference-old/command.log",
+        "bytes": 32,
+        "sha256": "bcdb4076ddb1769788e642e6b25f5a43bddcc925b329e9fadac344db90d2651c"
+      }
+    },
+    "r2-reference-new": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.9984157389990287,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 282624,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-reference-new/command.log",
+        "bytes": 32,
+        "sha256": "bcdb4076ddb1769788e642e6b25f5a43bddcc925b329e9fadac344db90d2651c"
+      }
+    },
+    "r2-reference-old-check": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.0162022539989266,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 139264,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-reference-old-check/command.log",
+        "bytes": 935,
+        "sha256": "36befc276298292573ef0678d3752911305393974106ccce1701f50ce3a1dd96"
+      }
+    },
+    "r2-reference-new-check": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.6942371080003795,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 94601216,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-reference-new-check/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r2-continuum-actions": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.6991998699995747,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 167936,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-continuum-actions/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r2-initial": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 18.393291897999006,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1018740736,
+      "peak_host_workers": 44,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-initial/command.log",
+        "bytes": 2078,
+        "sha256": "734262acb7b7a057f80152843eb6541326daba1f3637a1647cc1af7e41188f8b"
+      }
+    },
+    "r2-inlet-projection": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.7088287039987335,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 115617792,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-inlet-projection/command.log",
+        "bytes": 700,
+        "sha256": "4572cf29e8f2f439d943b718e434820e71edce5cc4d4bb48607c024c7622e811"
+      }
+    },
+    "r2-mms-point-probe": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 0.9892164349985251,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 192512,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-mms-point-probe/command.log",
+        "bytes": 40,
+        "sha256": "37eeada683e1e87b3fbdb09bd2bb4d051cbfe239424957338d0d677724a9fdc1"
+      }
+    },
+    "r2-mms-point-check": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 2.412462117001269,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 91893760,
+      "peak_host_workers": 40,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-mms-point-check/command.log",
+        "bytes": 143,
+        "sha256": "dcb64dd447dbe68ee3ced0b6f93208ad4bc3b377c95ad330f2a95912655d7c9f"
+      }
+    },
+    "r2-crossing-hist": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 8.700362502000644,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 184426496,
+      "peak_host_workers": 44,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-crossing-hist/command.log",
+        "bytes": 3468,
+        "sha256": "09514bba9805ca53d2d09e48450d56da7b1ca5f852f2da694542d063aa9cc998"
+      }
+    },
+    "r2-legacy-reference": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 2.39673277899783,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 117587968,
+      "peak_host_workers": 43,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-legacy-reference/command.log",
+        "bytes": 2292,
+        "sha256": "691fc5d7746e3332b008df90febbd80355a5e460059c38fee06056d053454077"
+      }
+    },
+    "r2-legacy-baseline": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 2.4017026889996487,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 117796864,
+      "peak_host_workers": 43,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-legacy-baseline/command.log",
+        "bytes": 2342,
+        "sha256": "76725cfdca7311e5ec0588a7b0ce7e64d9043c5c842baf12056c23ac5ba9f561"
+      }
+    },
+    "r2-restored-negatives": {
+      "status": "FAIL",
+      "phase": "analysis",
+      "seconds": 0.9932386170003156,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 184320,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-restored-negatives/command.log",
+        "bytes": 681,
+        "sha256": "243fff953809806bf4265d2584439d27d9f37c6cf04af7074d02d1f022ef4a88"
+      }
+    },
+    "r2-graded-design": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.6986841870020726,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 105091072,
+      "peak_host_workers": 40,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-graded-design/command.log",
+        "bytes": 22,
+        "sha256": "9ac864710f4fd6552ba6fb5ff1d01941c1ed013ea66e5322536c5b61c7ea7565"
+      }
+    },
+    "r2-graded-initial": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 20.49140565400012,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1148203008,
+      "peak_host_workers": 44,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-graded-initial/command.log",
+        "bytes": 2097,
+        "sha256": "56cb80829c8fff61d75590f6348bae8082662942c2f0c88e0718cd75cf34095a"
+      }
+    },
+    "r2-graded-projection": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.7026208120005322,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 121634816,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-graded-projection/command.log",
+        "bytes": 700,
+        "sha256": "f2261502b5edb92016d7850bec0223c584dc9e248d91b7f19daac792ac6ff7fa"
+      }
+    },
+    "r2-restored-negatives-v2": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.018280226002389,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 278528,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-restored-negatives-v2/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r2-cache-return": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 5.850667463000718,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 125624320,
+      "peak_host_workers": 45,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-cache-return/command.log",
+        "bytes": 41,
+        "sha256": "17cfe6723f8e7c71ca3df950d5325384d266d63fd89be09a0ecad3a4afb1b0ac"
+      }
+    },
+    "r2-reject-old-to-new": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.7160139030020218,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 103768064,
+      "peak_host_workers": 40,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-reject-old-to-new/command.log",
+        "bytes": 70,
+        "sha256": "89b91ca47dcee6d6a9f61c112bf8cf6dbe8fabdd12faa61484084eb6c7ab7e13"
+      }
+    },
+    "r2-reject-new-to-old": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.709342286001629,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 103866368,
+      "peak_host_workers": 40,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-reject-new-to-old/command.log",
+        "bytes": 70,
+        "sha256": "89b91ca47dcee6d6a9f61c112bf8cf6dbe8fabdd12faa61484084eb6c7ab7e13"
+      }
+    },
+    "r2-reject-same-policy-stale-epsilon": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.848148578999826,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 103944192,
+      "peak_host_workers": 40,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-reject-same-policy-stale-epsilon/command.log",
+        "bytes": 56,
+        "sha256": "7740fa0ca588c19b71aa100d470e0c13cd6429842d9e2a827cef2df5e609e926"
+      }
+    },
+    "r2-reject-wrong-policy-artifact": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.7071994340003585,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 103866368,
+      "peak_host_workers": 40,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-reject-wrong-policy-artifact/command.log",
+        "bytes": 67,
+        "sha256": "8a116630ba98f535b935f2dd41e74f7bae625108e05b838e6c6c1b216599e074"
+      }
+    },
+    "r2-reject-wrong-calibration-artifact": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.7008700110018253,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 103739392,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-reject-wrong-calibration-artifact/command.log",
+        "bytes": 67,
+        "sha256": "8a116630ba98f535b935f2dd41e74f7bae625108e05b838e6c6c1b216599e074"
+      }
+    },
+    "r2-temporal-08": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 3.788415251998231,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 133337088,
+      "peak_host_workers": 44,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-temporal-08/command.log",
+        "bytes": 2509,
+        "sha256": "b907ca0fd4b7cad4eef12b4f707efb99400c889392f224d04553ce7f7adbf29f"
+      }
+    },
+    "r2-temporal-04": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 5.232443471002625,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 148865024,
+      "peak_host_workers": 43,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-temporal-04/command.log",
+        "bytes": 2884,
+        "sha256": "3e9cb442fdfc74a7f3f91b928a9dc47504ab964d3f97f55bd82d21c179fe2ecc"
+      }
+    },
+    "r2-temporal-02": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 9.341438768999069,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 187404288,
+      "peak_host_workers": 46,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-temporal-02/command.log",
+        "bytes": 3657,
+        "sha256": "e242787875cc0f27c40d02c162c42b7d78e9daf8b1b4153d2b2ca4edd1f0cb33"
+      }
+    },
+    "r2-temporal-q": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 16.226400094998098,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 193556480,
+      "peak_host_workers": 44,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-temporal-q/command.log",
+        "bytes": 3651,
+        "sha256": "562e434ca5e1f454b5feecb03676a981a56158157a9132b49b3b25033c50e168"
+      }
+    },
+    "r2-temporal-tight": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 9.303517811000347,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 187514880,
+      "peak_host_workers": 43,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-temporal-tight/command.log",
+        "bytes": 3671,
+        "sha256": "bc09c7bfe90fa254c0409ed0178f090c9af90d6ee8349c2ec74edd4484a8ba0d"
+      }
+    },
+    "r2-temporal-h": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 23.121107062997908,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 432037888,
+      "peak_host_workers": 44,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-temporal-h/command.log",
+        "bytes": 3653,
+        "sha256": "c2a91cc8df57ff8d151e1e83aa2418a32922b68634823ba4a6487d72df7073dd"
+      }
+    },
+    "r2-temporal-study": {
+      "status": "FAIL",
+      "phase": "analysis",
+      "seconds": 109.45255771400116,
+      "exit": 2,
+      "reason": null,
+      "peak_tree_rss_bytes": 156209152,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-temporal-study/command.log",
+        "bytes": 124,
+        "sha256": "ffd6cc8d3f2fd7a0e90b34aa017bcd2de6c9fb1773184426ad6e52446e1f4702"
+      }
+    },
+    "r2-crossing-current": {
+      "status": "FAIL",
+      "phase": "analysis",
+      "seconds": 91.6666651710002,
+      "exit": 2,
+      "reason": null,
+      "peak_tree_rss_bytes": 125865984,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-crossing-current/command.log",
+        "bytes": 202,
+        "sha256": "246d68e9af64bd65e028a57518ec871e41a5088c75ba9ffb3a13e9a9b31a8791"
+      }
+    },
+    "r2-cache-independent": {
+      "status": "FAIL",
+      "phase": "analysis",
+      "seconds": 1.0141072580008768,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 188416,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-cache-independent/command.log",
+        "bytes": 1332,
+        "sha256": "8199fe687927541c06a7c6e18c224f1404ff156fd2dc9f2c4abc24d84d7bd913"
+      }
+    },
+    "r2-temporal-refined-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 0.9964824390008289,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 90112,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-temporal-refined-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r2-refined-dt08": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 6.5974026800031425,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 205774848,
+      "peak_host_workers": 44,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-refined-dt08/command.log",
+        "bytes": 2544,
+        "sha256": "aa72825436d3965388e97efb0e52d17385d2374ff89efd5889d4cf1f3595ebe2"
+      }
+    },
+    "r2-refined-dt04": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 10.780400261999603,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 276602880,
+      "peak_host_workers": 44,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-refined-dt04/command.log",
+        "bytes": 2924,
+        "sha256": "c70270c8b0d93b2a4a3a21cb118c2c4130a9afcadb2a3fffc91b36830137c27f"
+      }
+    },
+    "r2-refined-dt02": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 19.870024236999598,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 429891584,
+      "peak_host_workers": 45,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-refined-dt02/command.log",
+        "bytes": 3687,
+        "sha256": "1d13fddbd6e9c4fdf34b7d1cc70783915b3f6ee77429691888fed2e192b180b2"
+      }
+    },
+    "r2-refined-h": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 63.83600119699986,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1406021632,
+      "peak_host_workers": 45,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-refined-h/command.log",
+        "bytes": 3673,
+        "sha256": "9f6a2c7ede13b5fd81cf3472564b677afca31eec9b53f855d764b324ecd6f8ff"
+      }
+    },
+    "r2-refined-q": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 31.101132177998807,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 437563392,
+      "peak_host_workers": 45,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-refined-q/command.log",
+        "bytes": 3675,
+        "sha256": "34a45074239acf246c6f364a915782e295e7edfd5c008e61ba4144b692959b7d"
+      }
+    },
+    "r2-refined-tight": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 19.145608909999282,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 429940736,
+      "peak_host_workers": 45,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-refined-tight/command.log",
+        "bytes": 3694,
+        "sha256": "7160a85189bb6dde1a704a017a8e844ef3d4b67904ee659f8666e32aa711331d"
+      }
+    },
+    "r2-temporal-refined-study": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 267.0711667889991,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 480079872,
+      "peak_host_workers": 40,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-temporal-refined-study/command.log",
+        "bytes": 124,
+        "sha256": "e21f72edc3351db0d3879225aaf80024b1c8d70248c5eeec3b1e2b5dc4f1f3e0"
+      }
+    },
+    "r2-cache-independent-v2": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 58.465789412999584,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 135401472,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-cache-independent-v2/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r2-tiny-direct-fixture": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 0.9955717390002974,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 135168,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-tiny-direct-fixture/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r2-tiny-direct-native": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1.6960305789980339,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 100352000,
+      "peak_host_workers": 44,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-tiny-direct-native/command.log",
+        "bytes": 2294,
+        "sha256": "47a0ec64fbb45a4ae594899ad621fb8915a668490c134d3780840cf2dff76cea"
+      }
+    },
+    "r2-tiny-direct-independent": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 18.252542418998928,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 105193472,
+      "peak_host_workers": 40,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-tiny-direct-independent/command.log",
+        "bytes": 203,
+        "sha256": "9100921b0b16352bafd89c4fd55d6d06adf85b9e35f422b29e5b7ac9bd09896f"
+      }
+    },
+    "r2-publication": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 1.0006966380024096,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 319488,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r2-publication/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-base-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.697165263001807,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 97611776,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-base-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-base-steady": {
+      "status": "FAIL",
+      "phase": "science",
+      "seconds": 559.538484454999,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 3137032192,
+      "peak_host_workers": 49,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-base-steady/command.log",
+        "bytes": 660,
+        "sha256": "6576e62d87e8adf0e713c3b1c244fbb469264be7fbc8af9e3aff902748191810"
+      }
+    },
+    "r3-base-resume-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.703765635000309,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 130097152,
+      "peak_host_workers": 44,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-base-resume-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-base-resume-steady": {
+      "status": "FAIL",
+      "phase": "science",
+      "seconds": 342.927211203998,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 3044167680,
+      "peak_host_workers": 48,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-base-resume-steady/command.log",
+        "bytes": 660,
+        "sha256": "6576e62d87e8adf0e713c3b1c244fbb469264be7fbc8af9e3aff902748191810"
+      }
+    },
+    "r3-converge-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.7174243919980654,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 120881152,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-converge-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-converge-steady": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 125.90711659600129,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 3055935488,
+      "peak_host_workers": 45,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-converge-steady/command.log",
+        "bytes": 2138,
+        "sha256": "d153675b2bfd4970b5f8944b72cc261342bcc83154899f70534bedcf7592e68b"
+      }
+    },
+    "r3-converge-current": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 73.54287662199931,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 873050112,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-converge-current/command.log",
+        "bytes": 40,
+        "sha256": "7a46e8020a5076628cc441f87ff55249fb766458dbdba890c2844a0b6917f8b1"
+      }
+    },
+    "r3-quadrature-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.7404522620017815,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 132931584,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-quadrature-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-quadrature-steady": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 64.77791788000104,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1713336320,
+      "peak_host_workers": 44,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-quadrature-steady/command.log",
+        "bytes": 2123,
+        "sha256": "3f4fa5e068655ec6befa1be7468851230bb1b47b15c7649aeff7ad3b1a1b742d"
+      }
+    },
+    "r3-quadrature-current": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 74.4496899299993,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 874074112,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-quadrature-current/command.log",
+        "bytes": 40,
+        "sha256": "7a46e8020a5076628cc441f87ff55249fb766458dbdba890c2844a0b6917f8b1"
+      }
+    },
+    "r3-quadrature-delta": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 43.279590322999866,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 242704384,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-quadrature-delta/command.log",
+        "bytes": 18,
+        "sha256": "b6dfded82d4722157934010b2aa771770c94e1bcd706f17de1290a862fe158d0"
+      }
+    },
+    "r3-algebraic-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.7206438610010082,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 129896448,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-algebraic-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-algebraic-steady": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 214.44357359999776,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 3064586240,
+      "peak_host_workers": 48,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-algebraic-steady/command.log",
+        "bytes": 2119,
+        "sha256": "42bb8d649648b0ec374ebf6b667bce231e7aad839f8dbfb2bc514446d05a1bdc"
+      }
+    },
+    "r3-algebraic-current": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 74.29053333399861,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 873127936,
+      "peak_host_workers": 44,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-algebraic-current/command.log",
+        "bytes": 40,
+        "sha256": "7a46e8020a5076628cc441f87ff55249fb766458dbdba890c2844a0b6917f8b1"
+      }
+    },
+    "r3-algebraic-delta": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 42.265525145998254,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 213639168,
+      "peak_host_workers": 44,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-algebraic-delta/command.log",
+        "bytes": 18,
+        "sha256": "b6dfded82d4722157934010b2aa771770c94e1bcd706f17de1290a862fe158d0"
+      }
+    },
+    "r3-spatial-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 2.4214251009980217,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 169861120,
+      "peak_host_workers": 43,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-spatial-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-spatial-steady": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 1024.5899576369993,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 7958175744,
+      "peak_host_workers": 48,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-spatial-steady/command.log",
+        "bytes": 2108,
+        "sha256": "1c44423d3baf97471bb83acf0b37f0ab35575f3c90a26251815a9ecdeb6bff1f"
+      }
+    },
+    "r3-spatial-current": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 141.04231867899944,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1831907328,
+      "peak_host_workers": 43,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-spatial-current/command.log",
+        "bytes": 40,
+        "sha256": "7a46e8020a5076628cc441f87ff55249fb766458dbdba890c2844a0b6917f8b1"
+      }
+    },
+    "r3-spatial-delta": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 83.59288778200062,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 295190528,
+      "peak_host_workers": 41,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-spatial-delta/command.log",
+        "bytes": 22,
+        "sha256": "01769a70fd7189de1c2af8be5c2ab5a1b04a5464b5e36bc9e3c5b2cc820cd407"
+      }
+    },
+    "r3-localize-h": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 7.247959325999545,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 236314624,
+      "peak_host_workers": 40,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-localize-h/command.log",
+        "bytes": 2926,
+        "sha256": "30c60f926ffde0e16399a14cb513b164ab6fc449c17a01be62f5ebeedab30f94"
+      }
+    },
+    "r3-streamwise-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.139817512001173,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 233164800,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-streamwise-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-streamwise-steady": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 916.2029064630005,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 7886090240,
+      "peak_host_workers": 50,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-streamwise-steady/command.log",
+        "bytes": 2122,
+        "sha256": "91b46b69323d67631002918fb215f2738792f2db696f2b3345e13c74584686cb"
+      }
+    },
+    "r3-streamwise-current": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 127.24865666599726,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1912864768,
+      "peak_host_workers": 44,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-streamwise-current/command.log",
+        "bytes": 40,
+        "sha256": "7a46e8020a5076628cc441f87ff55249fb766458dbdba890c2844a0b6917f8b1"
+      }
+    },
+    "r3-streamwise-delta-base": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 75.535874702,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 306475008,
+      "peak_host_workers": 44,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-streamwise-delta-base/command.log",
+        "bytes": 22,
+        "sha256": "01769a70fd7189de1c2af8be5c2ab5a1b04a5464b5e36bc9e3c5b2cc820cd407"
+      }
+    },
+    "r3-streamwise-delta-nested": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 123.60524039300071,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 341061632,
+      "peak_host_workers": 45,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-streamwise-delta-nested/command.log",
+        "bytes": 22,
+        "sha256": "01769a70fd7189de1c2af8be5c2ab5a1b04a5464b5e36bc9e3c5b2cc820cd407"
+      }
+    },
+    "r3-axis-redistribution-design": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 5.1916450380012975,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 87793664,
+      "peak_host_workers": 44,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-axis-redistribution-design/command.log",
+        "bytes": 30,
+        "sha256": "8a34c49df2a6c26c317d3a7c1e1c1b44bc3dccef5243180aa8241e0d5ad72671"
+      }
+    },
+    "r3-redesign-projection-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.7029238299983263,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 108761088,
+      "peak_host_workers": 42,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-redesign-projection-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-redesign-projection-native": {
+      "status": "FAIL",
+      "phase": "science",
+      "seconds": 18.87183369000195,
+      "exit": -15,
+      "reason": "HOST_WORKER_LIMIT",
+      "peak_tree_rss_bytes": 2099818496,
+      "peak_host_workers": 74,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-redesign-projection-native/command.log",
+        "bytes": 139,
+        "sha256": "504e163c9174d06a36d829cf5890f80ee8e5c787e71a6e01dcbad822b512ac75"
+      }
+    },
+    "r3-worker-classification-audit": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 7.964219180001237,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 20422656,
+      "peak_host_workers": 37,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-worker-classification-audit/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-redesign-projection-inputs-retry": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.6911856289989373,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 103124992,
+      "peak_host_workers": 37,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-redesign-projection-inputs-retry/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-redesign-projection-native-retry": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 41.25142148799932,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 2209329152,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-redesign-projection-native-retry/command.log",
+        "bytes": 2190,
+        "sha256": "899730e294c1ccc10ad4efb3da15c464fabad9493af8ff4fd687c8bcf635e424"
+      }
+    },
+    "r3-redesign-projection-independent": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 2.398396093998599,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 168222720,
+      "peak_host_workers": 36,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-redesign-projection-independent/command.log",
+        "bytes": 698,
+        "sha256": "2b8e5ce3c6298d9735375b1aa499cae8e91b5fd4ca4f50734b14701d27e2f365"
+      }
+    },
+    "r3-redesign-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.118852555002377,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 231710720,
+      "peak_host_workers": 37,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-redesign-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-redesign-steady": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 738.9067624169984,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 7826935808,
+      "peak_host_workers": 40,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-redesign-steady/command.log",
+        "bytes": 2123,
+        "sha256": "41047a5223ec3e94d30a204056e0e7762f045ee3a6b2d3fed8a5a08c00f356d4"
+      }
+    },
+    "r3-redesign-current": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 116.76998827499847,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1800065024,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-redesign-current/command.log",
+        "bytes": 40,
+        "sha256": "7a46e8020a5076628cc441f87ff55249fb766458dbdba890c2844a0b6917f8b1"
+      }
+    },
+    "r3-redesign-delta": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 143.52312856199933,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 351965184,
+      "peak_host_workers": 37,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-redesign-delta/command.log",
+        "bytes": 22,
+        "sha256": "01769a70fd7189de1c2af8be5c2ab5a1b04a5464b5e36bc9e3c5b2cc820cd407"
+      }
+    },
+    "r3-redesign-localization": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 13.00808705399686,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 274296832,
+      "peak_host_workers": 37,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-redesign-localization/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-lowq-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 2.460919773999194,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 239923200,
+      "peak_host_workers": 37,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-lowq-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-lowq-steady": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 51.85494948899941,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 2714800128,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-lowq-steady/command.log",
+        "bytes": 2093,
+        "sha256": "5a6f970b852dbd2e98b25168fff6aa51ed1bcf4b9dfeae00e9104c3c06165332"
+      }
+    },
+    "r3-lowq-current": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 117.47119653799746,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1799872512,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-lowq-current/command.log",
+        "bytes": 40,
+        "sha256": "7a46e8020a5076628cc441f87ff55249fb766458dbdba890c2844a0b6917f8b1"
+      }
+    },
+    "r3-lowq-delta": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 77.0218262649978,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 305172480,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-lowq-delta/command.log",
+        "bytes": 18,
+        "sha256": "b6dfded82d4722157934010b2aa771770c94e1bcd706f17de1290a862fe158d0"
+      }
+    },
+    "r3-outlet-refine-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.1185861699996167,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 225144832,
+      "peak_host_workers": 36,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-outlet-refine-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-outlet-refine-steady": {
+      "status": "FAIL",
+      "phase": "science",
+      "seconds": 178.81475096499707,
+      "exit": -15,
+      "reason": "RSS_LIMIT",
+      "peak_tree_rss_bytes": 8593043456,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-outlet-refine-steady/command.log",
+        "bytes": 549,
+        "sha256": "399f4bbde3acea8995409b8743adc0306a392dd7ec8b7423b96016d403c2d86a"
+      }
+    },
+    "r3-outlet-lean-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.1182277660009277,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 230699008,
+      "peak_host_workers": 36,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-outlet-lean-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-outlet-lean-steady": {
+      "status": "FAIL",
+      "phase": "science",
+      "seconds": 182.20942841599754,
+      "exit": -15,
+      "reason": "RSS_LIMIT",
+      "peak_tree_rss_bytes": 8634007552,
+      "peak_host_workers": 39,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-outlet-lean-steady/command.log",
+        "bytes": 549,
+        "sha256": "399f4bbde3acea8995409b8743adc0306a392dd7ec8b7423b96016d403c2d86a"
+      }
+    },
+    "r3-outlet-reallocation-design": {
+      "status": "FAIL",
+      "phase": "analysis",
+      "seconds": 1.0131944550012122,
+      "exit": 2,
+      "reason": null,
+      "peak_tree_rss_bytes": 385024,
+      "peak_host_workers": 36,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-outlet-reallocation-design/command.log",
+        "bytes": 260,
+        "sha256": "a6ba6292878421b110c56d4bf9418e8c4ff6b87d8b3331e7ba2a2b80310922e8"
+      }
+    },
+    "r3-outlet-reallocation-design-v2": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 1.009795359997952,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 204800,
+      "peak_host_workers": 37,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-outlet-reallocation-design-v2/command.log",
+        "bytes": 29,
+        "sha256": "f98283fcd7f5052b3fd7f6ff7c0e8a6cf135a83c85dc188304292ab5691e8c72"
+      }
+    },
+    "r3-outlet-reallocation-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.12368589000107,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 231157760,
+      "peak_host_workers": 37,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-outlet-reallocation-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-outlet-reallocation-steady": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 436.82043031399735,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 7934345216,
+      "peak_host_workers": 40,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-outlet-reallocation-steady/command.log",
+        "bytes": 2162,
+        "sha256": "0b97829cce35737d9d10df8a85123b280a80ac59e9aa462d5522d4bf8196d4a4"
+      }
+    },
+    "r3-outlet-reallocation-current": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 119.15607504699801,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1855516672,
+      "peak_host_workers": 36,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-outlet-reallocation-current/command.log",
+        "bytes": 40,
+        "sha256": "7a46e8020a5076628cc441f87ff55249fb766458dbdba890c2844a0b6917f8b1"
+      }
+    },
+    "r3-outlet-reallocation-delta": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 89.64826756099865,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 334114816,
+      "peak_host_workers": 36,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-outlet-reallocation-delta/command.log",
+        "bytes": 22,
+        "sha256": "01769a70fd7189de1c2af8be5c2ab5a1b04a5464b5e36bc9e3c5b2cc820cd407"
+      }
+    },
+    "r3-outlet-terminal-localization": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 8.764290884999355,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 270635008,
+      "peak_host_workers": 35,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-outlet-terminal-localization/command.log",
+        "bytes": 1129,
+        "sha256": "e3640e26dbe582611c8ca6f4f95af009a763e8358c59c36b41babed139686cf1"
+      }
+    },
+    "r3-terminal-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.1483660630001395,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 223059968,
+      "peak_host_workers": 36,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-terminal-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-terminal-steady": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 376.657592896001,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 8005373952,
+      "peak_host_workers": 38,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-terminal-steady/command.log",
+        "bytes": 2152,
+        "sha256": "0c73418cbcf84ccf5275b231f5cc065c7aa9bd83f9cf7fc371b229581414dd18"
+      }
+    },
+    "r3-terminal-current": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 124.25449685700005,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1955991552,
+      "peak_host_workers": 47,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-terminal-current/command.log",
+        "bytes": 40,
+        "sha256": "7a46e8020a5076628cc441f87ff55249fb766458dbdba890c2844a0b6917f8b1"
+      }
+    },
+    "r3-terminal-delta": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 94.25242758799868,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 342401024,
+      "peak_host_workers": 48,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-terminal-delta/command.log",
+        "bytes": 22,
+        "sha256": "01769a70fd7189de1c2af8be5c2ab5a1b04a5464b5e36bc9e3c5b2cc820cd407"
+      }
+    },
+    "r3-corner-owner-witness": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 5.9643157410027925,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 429715456,
+      "peak_host_workers": 47,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-corner-owner-witness/command.log",
+        "bytes": 940,
+        "sha256": "c3d031cdec60460fc630999f9dafd3718b335e9b17564992f6088607338ceeba"
+      }
+    },
+    "r3-corner-inputs": {
+      "status": "FAIL",
+      "phase": "analysis",
+      "seconds": 0.3983430740008771,
+      "exit": null,
+      "reason": "shared worker limit at admission",
+      "peak_tree_rss_bytes": 0,
+      "peak_host_workers": 69,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-corner-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-outlet-pencil": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 6.286671624002338,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 208244736,
+      "peak_host_workers": 70,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-outlet-pencil/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "r3-before-radial-publication": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 15.648352151001745,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 376619008,
+      "peak_host_workers": 72,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-before-radial-publication/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s0-baseline": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 5.501212240000314,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 218357760,
+      "peak_host_workers": 60,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s0-baseline/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s1-spatial-replay": {
+      "status": "FAIL",
+      "phase": "analysis",
+      "seconds": 68.71893384600116,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 321986560,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s1-spatial-replay/command.log",
+        "bytes": 971,
+        "sha256": "dbcda43914306d4aceb70e8b6c00d547c7262b40a41f4d185350bdeae8817c8e"
+      }
+    },
+    "s1-spatial-replay-corrected": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 63.35468937300175,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 289021952,
+      "peak_host_workers": 62,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s1-spatial-replay-corrected/command.log",
+        "bytes": 25,
+        "sha256": "279bbc1f25bf88a4074a132ed3d5a99250a056ddf7c727f1c6ad5af83d41f63d"
+      }
+    },
+    "s1-boundary-and-admissibility": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 39.87341522100178,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 485220352,
+      "peak_host_workers": 62,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s1-boundary-and-admissibility/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s1-wedge-and-fit": {
+      "status": "FAIL",
+      "phase": "analysis",
+      "seconds": 7.0745099220002885,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 234807296,
+      "peak_host_workers": 59,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s1-wedge-and-fit/command.log",
+        "bytes": 1708,
+        "sha256": "98919b612648bf3b12047a559c4e34dd4fd2a2b01acce4105a10a675b833a981"
+      }
+    },
+    "s1-wedge-and-fit-serialization-retry": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 7.273516597000707,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 226082816,
+      "peak_host_workers": 59,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s1-wedge-and-fit-serialization-retry/command.log",
+        "bytes": 65,
+        "sha256": "bd478ad3b0fd402cd44d6ed17e7744addd381b30851c3e317ee0f25daf9fecba"
+      }
+    },
+    "s1-publish": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 1.1105502499995055,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 196608,
+      "peak_host_workers": 59,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s1-publish/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-radial-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.3945645880012307,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 229892096,
+      "peak_host_workers": 59,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-radial-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-radial-steady": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 489.9567909749967,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 8391999488,
+      "peak_host_workers": 64,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-radial-steady/command.log",
+        "bytes": 2143,
+        "sha256": "154cfe3a096188c09eb34a6a604b6345dc542000c3c74597d4f66641852527dd"
+      }
+    },
+    "s2-radial-current": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 136.62640508499317,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 2007961600,
+      "peak_host_workers": 62,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-radial-current/command.log",
+        "bytes": 40,
+        "sha256": "7a46e8020a5076628cc441f87ff55249fb766458dbdba890c2844a0b6917f8b1"
+      }
+    },
+    "s2-radial-terminal-pair": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 67.97195053000178,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 317829120,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-radial-terminal-pair/command.log",
+        "bytes": 29,
+        "sha256": "440590299e4fb341e27b20ac95909566d6ef1ab1b945d001a1657a996342c83a"
+      }
+    },
+    "s2-radial-parent-pair": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 65.57875425300153,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 297451520,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-radial-parent-pair/command.log",
+        "bytes": 29,
+        "sha256": "10b54e8410e0a0951ecdc05bf5c2025ca7a5d26158effe0ed4dda9aca17d8d19"
+      }
+    },
+    "s2-radial-local": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 29.096902997000143,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 418828288,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-radial-local/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-radial-wedge": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 7.094793498006766,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 225280000,
+      "peak_host_workers": 59,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-radial-wedge/command.log",
+        "bytes": 65,
+        "sha256": "bd478ad3b0fd402cd44d6ed17e7744addd381b30851c3e317ee0f25daf9fecba"
+      }
+    },
+    "s2-joint-design": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 31.981587772002968,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 187387904,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-joint-design/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-joint-admission": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 1.0876190030030557,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 401408,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-joint-admission/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-joint-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.342894341003557,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 232267776,
+      "peak_host_workers": 59,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-joint-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-joint-steady": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 770.1825000690005,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 8216969216,
+      "peak_host_workers": 63,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-joint-steady/command.log",
+        "bytes": 2138,
+        "sha256": "5b0c9dfaf3e8d59368ffe7e03886ea0e00a23f331c5692ebf3ac576ca9c9748c"
+      }
+    },
+    "s2-joint-current": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 132.51675871299813,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1952518144,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-joint-current/command.log",
+        "bytes": 40,
+        "sha256": "7a46e8020a5076628cc441f87ff55249fb766458dbdba890c2844a0b6917f8b1"
+      }
+    },
+    "s2-joint-radial-pair": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 69.5354108659958,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 317009920,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-joint-radial-pair/command.log",
+        "bytes": 30,
+        "sha256": "3120cb1c0deea9610b178ab8d6c4cfeefa9c1bd507c85246a8b1c793321485b5"
+      }
+    },
+    "s2-joint-terminal-pair": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 68.09373349999078,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 334225408,
+      "peak_host_workers": 62,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-joint-terminal-pair/command.log",
+        "bytes": 30,
+        "sha256": "3120cb1c0deea9610b178ab8d6c4cfeefa9c1bd507c85246a8b1c793321485b5"
+      }
+    },
+    "s2-joint-local": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 28.531913447994157,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 419770368,
+      "peak_host_workers": 60,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-joint-local/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-joint-wedge": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 7.194560753996484,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 212848640,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-joint-wedge/command.log",
+        "bytes": 97,
+        "sha256": "276812a55d3ee0493f6b3be2f1ccab6b3f5f5e851eb33d3fe3595aac241a1a04"
+      }
+    },
+    "s2-radial-projection": {
+      "status": "FAIL",
+      "phase": "analysis",
+      "seconds": 1.1679275369970128,
+      "exit": 2,
+      "reason": null,
+      "peak_tree_rss_bytes": 438272,
+      "peak_host_workers": 59,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-radial-projection/command.log",
+        "bytes": 238,
+        "sha256": "d493a56cce2ae67a1d4983d2ac27cc012c8e9d3ba0bcd31925ee5571cea497d3"
+      }
+    },
+    "s2-radial-projection-retry": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.3940620089997537,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 236625920,
+      "peak_host_workers": 60,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-radial-projection-retry/command.log",
+        "bytes": 698,
+        "sha256": "5a8d372990e05588dede5f8eebfd7dc5c79fc00a2117a6bd5899f3310f74a492"
+      }
+    },
+    "s2-joint-projection": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.393538479998824,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 228102144,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-joint-projection/command.log",
+        "bytes": 704,
+        "sha256": "34f7c5d23802baf4672f0ed31e76870309d9cc79c9c2f28c09d3339e61cec77b"
+      }
+    },
+    "s2-tip-layout": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.376090457997634,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 232456192,
+      "peak_host_workers": 60,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-layout/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-tip-admission": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 1.1584941330074798,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 380928,
+      "peak_host_workers": 60,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-admission/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-tip-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.4707614820072195,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 225492992,
+      "peak_host_workers": 60,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-tip-steady": {
+      "status": "FAIL",
+      "phase": "science",
+      "seconds": 222.9780568790011,
+      "exit": -15,
+      "reason": "RSS_LIMIT",
+      "peak_tree_rss_bytes": 8592818176,
+      "peak_host_workers": 62,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-steady/command.log",
+        "bytes": 549,
+        "sha256": "399f4bbde3acea8995409b8743adc0306a392dd7ec8b7423b96016d403c2d86a"
+      }
+    },
+    "s2-tip-lean-layout": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 32.0241873949999,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 220581888,
+      "peak_host_workers": 62,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-lean-layout/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-tip-lean-admission": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 1.1284938679891638,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 421888,
+      "peak_host_workers": 59,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-lean-admission/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-tip-lean-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 4.1627956690063,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 254078976,
+      "peak_host_workers": 60,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-lean-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-tip-lean-steady": {
+      "status": "FAIL",
+      "phase": "science",
+      "seconds": 1065.5767842739879,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 8131780608,
+      "peak_host_workers": 63,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-lean-steady/command.log",
+        "bytes": 660,
+        "sha256": "6576e62d87e8adf0e713c3b1c244fbb469264be7fbc8af9e3aff902748191810"
+      }
+    },
+    "s2-tip-resume-admission": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 2.559992056005285,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 179499008,
+      "peak_host_workers": 59,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-resume-admission/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-tip-resume-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.3695457319990965,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 205152256,
+      "peak_host_workers": 59,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-resume-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-tip-resume-steady": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 425.6514504200022,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 8078295040,
+      "peak_host_workers": 63,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-resume-steady/command.log",
+        "bytes": 2163,
+        "sha256": "c164480647a79fdc61ec60f1e7122e156a7e1a17b2288dede2e2f7eb4d20b7ec"
+      }
+    },
+    "s2-tip-resume-current": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 130.67717325600097,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 1935785984,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-resume-current/command.log",
+        "bytes": 40,
+        "sha256": "7a46e8020a5076628cc441f87ff55249fb766458dbdba890c2844a0b6917f8b1"
+      }
+    },
+    "s2-tip-resume-radial-pair": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 66.66575908099185,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 319197184,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-resume-radial-pair/command.log",
+        "bytes": 29,
+        "sha256": "93c5b5694f3ad1b00ac1f900125b8e04ddf5bd94828d781a91c0b917b08c4c84"
+      }
+    },
+    "s2-tip-resume-joint-pair": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 67.15686422899307,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 307744768,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-resume-joint-pair/command.log",
+        "bytes": 30,
+        "sha256": "3120cb1c0deea9610b178ab8d6c4cfeefa9c1bd507c85246a8b1c793321485b5"
+      }
+    },
+    "s2-tip-resume-local": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 28.147316135000437,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 455610368,
+      "peak_host_workers": 60,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-resume-local/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-tip-resume-wedge": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 7.132772714001476,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 215552000,
+      "peak_host_workers": 60,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-resume-wedge/command.log",
+        "bytes": 97,
+        "sha256": "276812a55d3ee0493f6b3be2f1ccab6b3f5f5e851eb33d3fe3595aac241a1a04"
+      }
+    },
+    "s2-tip-resume-near": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 7.9248620569997,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 218648576,
+      "peak_host_workers": 60,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-resume-near/command.log",
+        "bytes": 88,
+        "sha256": "3fa3e0cb887ac8d830808943c5859e8922725d35df09237bdcbcea8e3280f8de"
+      }
+    },
+    "s2-tip-resume-projection": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.3917873540049186,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 238362624,
+      "peak_host_workers": 59,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-tip-resume-projection/command.log",
+        "bytes": 700,
+        "sha256": "7cffad4682a96c32b5a9e62e4afb213494cb064b72165117f7d9a1aa06f9c732"
+      }
+    },
+    "s2-nested-admission": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 1.1512156870012404,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 434176,
+      "peak_host_workers": 59,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-nested-admission/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-nested-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 4.08332992400392,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 256331776,
+      "peak_host_workers": 59,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-nested-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-nested-steady": {
+      "status": "FAIL",
+      "phase": "science",
+      "seconds": 1015.9194005589961,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 8400969728,
+      "peak_host_workers": 63,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-nested-steady/command.log",
+        "bytes": 660,
+        "sha256": "6576e62d87e8adf0e713c3b1c244fbb469264be7fbc8af9e3aff902748191810"
+      }
+    },
+    "s2-nested-resume-admission": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 2.5115882380050607,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 206270464,
+      "peak_host_workers": 59,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-nested-resume-admission/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-nested-resume-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.392974493006477,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 210939904,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-nested-resume-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-nested-resume-steady": {
+      "status": "FAIL",
+      "phase": "science",
+      "seconds": 770.353118700994,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 8424374272,
+      "peak_host_workers": 63,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-nested-resume-steady/command.log",
+        "bytes": 660,
+        "sha256": "6576e62d87e8adf0e713c3b1c244fbb469264be7fbc8af9e3aff902748191810"
+      }
+    },
+    "s2-nested-finish-admission": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 2.6136981260060566,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 185077760,
+      "peak_host_workers": 59,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-nested-finish-admission/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-nested-finish-inputs": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.522188544011442,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 230154240,
+      "peak_host_workers": 59,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-nested-finish-inputs/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-nested-finish-steady": {
+      "status": "PASS",
+      "phase": "science",
+      "seconds": 267.50396493499284,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 8374493184,
+      "peak_host_workers": 63,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-nested-finish-steady/command.log",
+        "bytes": 2178,
+        "sha256": "f4ed5236238206f8df734228b9fa3f8cb6d3bce67910a709521942700ffea750"
+      }
+    },
+    "s2-nested-finish-current": {
+      "status": "FAIL",
+      "phase": "analysis",
+      "seconds": 3.3687944970006356,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 230756352,
+      "peak_host_workers": 60,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-nested-finish-current/command.log",
+        "bytes": 1552,
+        "sha256": "d9573350ccf576411852cc5a177223c6abf9eae533bdecf4f5e201909059c276"
+      }
+    },
+    "s2-topology-replay": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 65.64490006498818,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 334671872,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-topology-replay/command.log",
+        "bytes": 25,
+        "sha256": "279bbc1f25bf88a4074a132ed3d5a99250a056ddf7c727f1c6ad5af83d41f63d"
+      }
+    },
+    "s2-nested-finish-current-retry": {
+      "status": "FAIL",
+      "phase": "analysis",
+      "seconds": 4.151706069998909,
+      "exit": 1,
+      "reason": null,
+      "peak_tree_rss_bytes": 224428032,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-nested-finish-current-retry/command.log",
+        "bytes": 1552,
+        "sha256": "d9573350ccf576411852cc5a177223c6abf9eae533bdecf4f5e201909059c276"
+      }
+    },
+    "s2-nested-finish-current-verified-path": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 135.77576909899653,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 2012291072,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-nested-finish-current-verified-path/command.log",
+        "bytes": 40,
+        "sha256": "7a46e8020a5076628cc441f87ff55249fb766458dbdba890c2844a0b6917f8b1"
+      }
+    },
+    "s2-nested-finish-pair": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 65.6252248929959,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 318468096,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-nested-finish-pair/command.log",
+        "bytes": 29,
+        "sha256": "93c5b5694f3ad1b00ac1f900125b8e04ddf5bd94828d781a91c0b917b08c4c84"
+      }
+    },
+    "s2-nested-finish-local": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 28.376805164996767,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 444133376,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-nested-finish-local/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "s2-nested-finish-wedge": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 7.078606896000565,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 237543424,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-nested-finish-wedge/command.log",
+        "bytes": 97,
+        "sha256": "276812a55d3ee0493f6b3be2f1ccab6b3f5f5e851eb33d3fe3595aac241a1a04"
+      }
+    },
+    "s2-nested-finish-near": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 7.089408618994639,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 238067712,
+      "peak_host_workers": 60,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-nested-finish-near/command.log",
+        "bytes": 88,
+        "sha256": "3fa3e0cb887ac8d830808943c5859e8922725d35df09237bdcbcea8e3280f8de"
+      }
+    },
+    "s2-nested-finish-projection": {
+      "status": "PASS",
+      "phase": "analysis",
+      "seconds": 3.310102060000645,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 240553984,
+      "peak_host_workers": 59,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-nested-finish-projection/command.log",
+        "bytes": 700,
+        "sha256": "9b282ccc297713ffa0675dd6050981b6e5c47b7d914bfcce4916886665cdc631"
+      }
+    },
+    "s2-publish": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 8.553044673011755,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 119095296,
+      "peak_host_workers": 60,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s2-publish/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "allocations": [
+    {
+      "seconds": 1500.0,
+      "live_before": {
+        "charged_seconds": 26497.09994232384,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 13102.90005767616,
+        "tranche_remaining": 1786.1907772810937
+      },
+      "measured_forecast": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-directional-admission.json",
+        "bytes": 1107,
+        "sha256": "cdd1bb1c31172658fa4f9715f61eb89b2b931503e1ed8351533806f650bfa9cd"
+      }
+    },
+    {
+      "seconds": 1750.0,
+      "live_before": {
+        "charged_seconds": 27748.024083097844,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 11851.975916902158,
+        "tranche_remaining": 2035.2666365070927
+      },
+      "measured_forecast": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-redesigned-admission.json",
+        "bytes": 1155,
+        "sha256": "afeb69e328a2d56a6c21aca25b8d0f3c557f17b686ad4fadf1af55d754a4a9f1"
+      }
+    },
+    {
+      "seconds": 1000.0,
+      "live_before": {
+        "charged_seconds": 29455.323757069826,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 10144.676242930176,
+        "tranche_remaining": 2077.9669625351107
+      },
+      "measured_forecast": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-outlet-reallocation-admission.json",
+        "bytes": 1133,
+        "sha256": "c6cb3ed067ed8070d56c98b3d56e4246f302ee570af8dc9f9d04e597bf8e1d0a"
+      }
+    },
+    {
+      "seconds": 850.0,
+      "live_before": {
+        "charged_seconds": 30717.11370591182,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 8882.886294088179,
+        "tranche_remaining": 1816.1770136931136
+      },
+      "measured_forecast": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-corner-radial-admission.json",
+        "bytes": 1963,
+        "sha256": "47f2e76cffc93af8454c7931d85276c50a424d55b09c1d35221a8dc2559f8d6f"
+      }
+    },
+    {
+      "seconds": 45.0,
+      "live_before": {
+        "charged_seconds": 30932.353900209833,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 8667.646099790169,
+        "tranche_remaining": 2450.936819395103
+      },
+      "measured_forecast": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/task2rs-s2-first-forecast.json",
+        "bytes": 4524,
+        "sha256": "f2e2dd5277eba25ec57e834fbcbba12a48d293c8dc68dae1553373d16761d37c"
+      }
+    },
+    {
+      "seconds": 720.0,
+      "live_before": {
+        "charged_seconds": 31765.14326891084,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 7834.856731089161,
+        "tranche_remaining": 1663.1474506940958
+      },
+      "measured_forecast": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/task2rs-s2-joint-forecast.json",
+        "bytes": 3062,
+        "sha256": "dca5e19ad8517c3d4430a10fca1086ac7c86709987fa966ef42601af62e086fd"
+      }
+    },
+    {
+      "seconds": 970.0,
+      "live_before": {
+        "charged_seconds": 32857.03115321882,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 6742.968846781181,
+        "tranche_remaining": 1291.2595663861157
+      },
+      "measured_forecast": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/task2rs-s2-tip-forecast.json",
+        "bytes": 2393,
+        "sha256": "c341597366990410a593e671580297331f9acd21ecd5d38afd2041bb4769d267"
+      }
+    },
+    {
+      "seconds": 420.0,
+      "live_before": {
+        "charged_seconds": 33116.63265284282,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 6483.367347157184,
+        "tranche_remaining": 2001.6580667621183
+      },
+      "measured_forecast": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/task2rs-s2-tip-lean-forecast.json",
+        "bytes": 2297,
+        "sha256": "8b68284637976809ed7fe66f5fe732c4d85d7d8122f48d676f5db8bf78509934"
+      }
+    },
+    {
+      "seconds": 870.0,
+      "live_before": {
+        "charged_seconds": 34188.93222484182,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 5411.067775158184,
+        "tranche_remaining": 1349.3584947631189
+      },
+      "measured_forecast": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/task2rs-s2-tip-resume-forecast.json",
+        "bytes": 2132,
+        "sha256": "3186bfcb0cd0e3f3ad99e185ac314a977ef66dcf752cc757f4f92c9b1a184aae"
+      }
+    },
+    {
+      "seconds": 700.0,
+      "live_before": {
+        "charged_seconds": 34930.20097150681,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 4669.799028493189,
+        "tranche_remaining": 1478.089748098124
+      },
+      "measured_forecast": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/task2rs-s2-nested-forecast.json",
+        "bytes": 2394,
+        "sha256": "c66e0dee14deb6cbc042dbe9e54b7c964a3d370f2a23c41f1e6281f729ee698d"
+      }
+    },
+    {
+      "seconds": 790.0,
+      "live_before": {
+        "charged_seconds": 35952.71529022782,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 3647.284709772184,
+        "tranche_remaining": 1155.5754293771188
+      },
+      "measured_forecast": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/task2rs-s2-nested-resume-forecast.json",
+        "bytes": 2982,
+        "sha256": "591ae19d845ed63432e751db83ed09cfb3cdd434efc86767355dc29553503a7e"
+      }
+    },
+    {
+      "seconds": 650.0,
+      "live_before": {
+        "charged_seconds": 36729.075081547824,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 2870.9249184521777,
+        "tranche_remaining": 1169.2156380571123
+      },
+      "measured_forecast": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/task2rs-s2-nested-finish-forecast.json",
+        "bytes": 3003,
+        "sha256": "2195dcad63c5796fda6a708b016bd9c641812ca12ab1d9a319ab617e18323004"
+      }
+    }
+  ]
+}
