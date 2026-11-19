@@ -139,8 +139,11 @@ def phase_forecast(root, design_path, case, out, parity_path):
         attempts={case_dir(root,case).name:timings["native"]}
         estimate,limit=8*GIB,10*GIB
         audit,comparison=timings["audit"],timings["comparison"]
-        operation_cost=(cap["parity_native_and_preparation"]+cap["parity_audit_and_comparison"]+
-                        cap["parity_verification"])
+        science_disk=180_000_000
+        reservations=dict(admission=cap["parity_admission"],
+            preparations_and_native=cap["parity_native_and_preparation"],
+            independent_audit=audit+GRACE,direct_comparisons=comparison+GRACE,
+            parity_verification=cap["parity_verification"])
     else:
         require(case==design["case"] and parity_path is not None, "unregistered extended case")
         parity=read(parity_path)
@@ -151,13 +154,19 @@ def phase_forecast(root, design_path, case, out, parity_path):
         attempts=design["attempts"]
         estimate,limit=design["forecast_peak_tree_rss_bytes"],design["rss_limit_bytes"]
         audit,comparison=cap["extent_audit"]-GRACE,cap["extent_comparison"]-GRACE
-        operation_cost=(cap["extent_native_and_preparations"]+cap["extent_audit"]+
-                        cap["extent_comparison"]+cap["extent_uncertainty"])
+        science_disk=design["footprint"]["science"]-180_000_000
+        reservations=dict(admission=cap["extent_admission"],
+            preparations_and_native=cap["extent_native_and_preparations"],
+            independent_audit=cap["extent_audit"],direct_comparisons=cap["extent_comparison"],
+            extent_uncertainty=cap["extent_uncertainty"])
     live=balance(read(root/"accounting.json"))
     memory=memory_snapshot()
-    admission=cap["parity_admission" if is_parity else "extent_admission"]
-    required=operation_cost+admission+cap["checkpoint_publication"]+PUBLICATION_SECONDS
-    require(required<=live["nonprotected_remaining"] and memory_headroom(memory)>=limit+2*GIB,
+    disk=storage(root)
+    reservations.update(checkpoint_publication=cap["checkpoint_publication"],final_evidence=PUBLICATION_SECONDS)
+    required=sum(reservations.values())
+    require(required<=live["nonprotected_remaining"] and memory_headroom(memory)>=limit+2*GIB
+            and disk["science_bytes"]+science_disk<=8*GIB and disk["free_bytes"]-science_disk>=15*GIB
+            and disk["source_build_runtime_bytes"]<=8*GIB,
             "extent resources changed before the named admission")
     atomic(out,dict(schema="WJH27FlatQualificationForecastV1",status="FITS",blockers=[],
         case=case,base=design["selected_case"],comparison_bases=[design["selected_case"]],
@@ -168,8 +177,9 @@ def phase_forecast(root, design_path, case, out, parity_path):
         cells=[len(x)-1,len(design["physical_z_edges"])-1],
         forecast_peak_tree_rss_bytes=estimate,rss_limit_bytes=limit,anchors=design["anchors"],
         quadrature=design["quadrature"],tolerances=design["tolerances"],attempts=attempts,
-        required_seconds=required,reservation_caps=dict(admission=admission),
+        required_seconds=required,reservation_caps=reservations,
         diagnostic_cap_seconds=0,audit_cap_seconds=audit,compare_cap_seconds=comparison,
+        forecast_additional_science_bytes=science_disk,storage=disk,
         campaign_amendment=identity(ev/f"{CAMPAIGN_AMENDMENT}.json"),live=live,memory=memory))
 
 

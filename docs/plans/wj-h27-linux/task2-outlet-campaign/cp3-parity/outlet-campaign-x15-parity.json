@@ -1,0 +1,87 @@
+{
+  "status": "PASS",
+  "original": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bf-continue-2/state.result.json",
+    "bytes": 76986400,
+    "sha256": "23ee2191573f48a4312352ea5549fb1b37b76a44347eb102f17593b000e85782"
+  },
+  "replay": {
+    "state": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bp1/state.result.json",
+      "bytes": 76943718,
+      "sha256": "5c9eabb47747fc727787124927f82fe032cd8b3ddb8ae42019e7a3420c0230a5"
+    },
+    "mesh": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bf-continue-1/geometry.xml",
+      "bytes": 1675595,
+      "sha256": "3a14dd102a8f1c829b7a5331bc7d5bedc35664c3a3d736caa6c0bc3bcd0b0ff4"
+    },
+    "source": "5ba17be8c2d6e8261abdb3b515f855dbeffb02bda2a772d7e835f77500206541",
+    "executable": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-campaign-extent/IncNavierStokesSolver",
+      "bytes": 9997280,
+      "sha256": "1b3dbec9af4513f006b1a4afa70d42ea1bd8e12678b4733598e247ad55fd2164"
+    },
+    "inputs": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bp1/inputs.json",
+      "bytes": 6251,
+      "sha256": "f31b827f658a118a43c658d41e9391f234f2c67753177ac465fa2a3297b573af"
+    },
+    "operation": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bp1-steady/receipt.json",
+      "bytes": 7472,
+      "sha256": "2b51e4fb33f4398222f8863dfb762b41599738ac7171c27053a162a944be7aaf"
+    },
+    "admission": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-bp1-admission.json",
+      "bytes": 11533,
+      "sha256": "dee7763663bc229a27eaf602324d6f7c7e262c5a1a81266a82915680df436c40"
+    },
+    "coefficient_sha256": "8b3ab1a3d5de68f9ce43803cca97e19dd7a8faf6f2c41f4f8a969195390fe6ee",
+    "signature": "5128146f138ad11af6ca7b043f6fea65809601084b9e650ca2bd46d4e0ef7672",
+    "outlet_identity": "a5bc691bd4b67be3f626981e673789b8d3a8c70519cebd9d99bfac5085542635",
+    "policy": "ZeroTransverseV1",
+    "cells": [
+      111,
+      92
+    ],
+    "quadrature": [
+      6,
+      8
+    ],
+    "tolerances": [
+      1e-12,
+      1e-10
+    ]
+  },
+  "application": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-campaign-extent/IncNavierStokesSolver",
+    "bytes": 9997280,
+    "sha256": "1b3dbec9af4513f006b1a4afa70d42ea1bd8e12678b4733598e247ad55fd2164"
+  },
+  "audit": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-Bp1-audit.json",
+    "bytes": 1150316,
+    "sha256": "6aa6de1597f46d9008358816f3be0ec7e79a9edb1bb8896c34b4b90dd428f9b9"
+  },
+  "comparison": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-Bp1-Bf.json",
+    "bytes": 1445582,
+    "sha256": "e1004d934fda0e60614f7b8f0721dbad50ffc78d6e08a0a3a74ec1461f736d79"
+  },
+  "coefficient_sha256": "8b3ab1a3d5de68f9ce43803cca97e19dd7a8faf6f2c41f4f8a969195390fe6ee",
+  "native_residuals": [
+    5.9415704233679665e-12,
+    5.7033550660742616e-12,
+    0,
+    3.019173553159602e-11,
+    7.32229598638711e-12,
+    0
+  ],
+  "independent_residuals": {
+    "momentum": 2.6358233569717976e-10,
+    "continuity": 5.70336598472931e-12,
+    "k": 3.919028999975896e-10,
+    "epsilon": 3.6164977115135486e-10
+  }
+}

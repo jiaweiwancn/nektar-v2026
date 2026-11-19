@@ -1,0 +1,9 @@
+# CP3 native and independent x=15 parity
+
+The isolated Linux Release build uses four compiler jobs and the ext4 MPI installation. It took 317.559 s and peaked at 4.26 GiB and 70 shared host workers. The bound diagnostic source SHA-256 is `5ba17be8c2d6e8261abdb3b515f855dbeffb02bda2a772d7e835f77500206541`. The executable SHA-256 is `1b3dbec9af4513f006b1a4afa70d42ea1bd8e12678b4733598e247ad55fd2164`. [Runtime and compiled source inventory](wj-h27-linux/task2-outlet-campaign/cp3-parity/outlet-campaign-extent-runtime.json) · [Measured build and solver commands](wj-h27-linux/task2-outlet-campaign/cp3-parity/operations.json)
+
+Bp1 imported the qualified Bf packet on the same 111×92 x=15 geometry, rebuilt lifts and histories and accepted at zero time with zero Newton updates. Native replay took 100.881 s and peaked at 3.96 GiB. The independent audit and signed comparison took 208.722 and 105.429 s. The coefficient hash `8b3ab1a3d5de68f9ce43803cca97e19dd7a8faf6f2c41f4f8a969195390fe6ee`, all native and independent residuals and every signed observation matched. All 690 original rows and the fixed-window rows have zero difference. [Parity manifest](wj-h27-linux/task2-outlet-campaign/cp3-parity/outlet-campaign-x15-parity.json) · [Signed replay](wj-h27-linux/task2-outlet-campaign/cp3-parity/outlet-qual-Bp1-Bf.json)
+
+The current Be1 phase forecast binds the replay packet to the 118×92 x=17.5 mesh. It reserves 3,862 s for native preparation, solve, audit, signed comparisons, uncertainty and publication. The 13 GiB named allowance and rechecked disk footprint fit after the verified replay. The amended phase record carries the individual reservations and science-byte forecast into any typed readmission. [Full Be1 phase forecast](wj-h27-linux/task2-outlet-campaign/cp3-parity/outlet-qual-be1-forecast-v2.json)
+
+**CP2 MET. CP3 parity MET and matched extent pending. TASK2_COMPLETE=NO. TASK3_READY=NO.**
