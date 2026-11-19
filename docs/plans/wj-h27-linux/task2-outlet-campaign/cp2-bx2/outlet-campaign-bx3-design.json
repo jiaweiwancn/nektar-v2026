@@ -1,0 +1,136 @@
+{
+  "case": "Bx3",
+  "base": "Bf",
+  "comparison_bases": [
+    "Bf"
+  ],
+  "x_columns": [
+    [
+      -10,
+      -9.84375
+    ],
+    [
+      -3.125,
+      -2.5
+    ],
+    [
+      -2.5,
+      -2.1875
+    ],
+    [
+      -1.5625,
+      -1.25
+    ],
+    [
+      -1.25,
+      -0.9375
+    ],
+    [
+      -0.3125,
+      0
+    ],
+    [
+      0,
+      0.3125
+    ],
+    [
+      0.9375,
+      1.5625
+    ],
+    [
+      1.875,
+      2.5
+    ],
+    [
+      2.5,
+      2.875
+    ],
+    [
+      3.625,
+      4
+    ],
+    [
+      4,
+      4.75
+    ],
+    [
+      4.75,
+      4.9375
+    ],
+    [
+      4.9375,
+      5.125
+    ],
+    [
+      5.125,
+      5.3125
+    ],
+    [
+      5.3125,
+      5.5
+    ],
+    [
+      5.5,
+      5.75
+    ],
+    [
+      5.75,
+      6
+    ],
+    [
+      6,
+      6.25
+    ],
+    [
+      6.25,
+      6.5
+    ],
+    [
+      6.5,
+      6.75
+    ],
+    [
+      6.75,
+      7
+    ],
+    [
+      7,
+      7.25
+    ],
+    [
+      7.25,
+      7.5
+    ],
+    [
+      7.5,
+      7.8125
+    ],
+    [
+      7.8125,
+      8.125
+    ],
+    [
+      14.9951171875,
+      14.998779296875
+    ],
+    [
+      14.998779296875,
+      14.9993896484375
+    ]
+  ],
+  "change": "staged streamwise owners",
+  "extra_cost_cases": [
+    "Br3",
+    "Br4",
+    "Bx2"
+  ],
+  "extra_analysis_seconds": 0,
+  "hypothesis": "Btip and Bx1 have nearly equal terminal weak residuals despite different upstream meshes. Staging the narrowest terminal cell separately holds the Bf radial mesh while testing all 25 experimental columns, the inlet, the preceding third terminal column and the first of the two required terminal columns. The two children of the penultimate Bf owner contribute at least 44.72% of Bx1's measured squared momentum. Bx2 passed all independent gates at 7.964606286e-10 momentum and all signed comparisons. Use the measured one-, two- and two-update Bx1 native segments to budget Bx3.",
+  "predicted_effect": "A passing single-final-column Bx2 and a passing Bx3 would cover all 29 x owners directly and at base numerical settings. Predict independent momentum under 1e-9 when the final column is held at Bf resolution.",
+  "streamwise_timing_anchor": "Bx1",
+  "source_evidence": [
+    "outlet-campaign-bx1-residual-probe.json",
+    "outlet-qual-Bx2-Bf.json",
+    "outlet-Bx2-audit.json"
+  ]
+}

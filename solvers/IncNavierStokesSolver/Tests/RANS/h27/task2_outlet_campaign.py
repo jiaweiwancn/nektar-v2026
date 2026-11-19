@@ -223,6 +223,42 @@ def diagnostic_anchor(root, base, case, probe_name):
     return dict(case=base,binding=prior,audit=identity(audit_path),probe=identity(probe_path))
 
 
+def streamwise_schedule(root, case, anchor, x, z, quadrature, tolerances, data):
+    require(campaign_case(case) and case[1]=="x" and campaign_case(anchor)
+            and anchor[1]=="x" and case!=anchor,
+            "segmented timing requires a previous measured streamwise case")
+    audit_path = root/"evidence"/f"outlet-{anchor}-audit.json"
+    binding = read(audit_path)["provenance"]
+    mx,mz,_ = mesh_axes(verified(binding["mesh"]))
+    require(identity(accepted_path(root,anchor))==binding["state"] and set(x)<=set(mx) and z==mz
+            and binding["quadrature"]==quadrature and binding["tolerances"]==tolerances,
+            "timing anchor must enclose the staged mesh at its exact radial and numerical settings")
+    dims,_,peak,operations = native_cost_chain(root,binding)
+    count = (len(x)-1)*(len(z)-1)
+    scale = count/math.prod(dims)
+    measured, attempts, reports = [], {}, []
+    for i,link in enumerate(reversed(operations)):
+        receipt = read(verified(link))
+        session = Path(receipt["request"]["command"][-1])
+        path = session.parent/"state.steady.json"
+        report = read(path)
+        steps = report["accepted_newton_steps"]
+        require(steps in (1,2) and report["best_from_accepted_iterate"],
+                "timing anchor must expose short useful Newton segments")
+        wall = receipt["result"]["seconds"]
+        cap = math.ceil(1.22*wall*max(1.,scale))
+        # Allow the accepted packet and native inventories to finish writing
+        # after the solver's cooperative Newton deadline.
+        attempts[case_dir(root,case,i).name] = planned_attempt(cap,cap+244,steps)
+        measured.append(dict(steps=steps,seconds=wall,peak_tree_rss_bytes=receipt["result"]["peak_tree_rss_bytes"]))
+        reports.append(identity(path))
+        data["disk"] = max(data["disk"],math.ceil(1.10*3*size(session.parent)*scale))
+    data["peak"] = max(data["peak"],math.ceil(peak*scale*data["margin"]))
+    data["anchors"].extend([identity(audit_path),*operations,*reports])
+    return attempts,dict(anchor=anchor,measured=measured,mesh=binding["mesh"],
+                         cell_factor=scale,watch_gap_seconds=244)
+
+
 def freeze(root, design_path, out):
     design = read(design_path)
     case, base = design["case"], design["base"]
@@ -252,6 +288,10 @@ def freeze(root, design_path, out):
     attempts = {case_dir(root,case,i).name:planned_attempt(seconds,seconds+115,n)
                 for i,(seconds,n) in enumerate(((data["first"],1),(data["continuation"],50),
                                                  (data["retry"],50)))}
+    schedule = None
+    if design.get("streamwise_timing_anchor"):
+        attempts,schedule = streamwise_schedule(root,case,design["streamwise_timing_anchor"],
+                                                new_x,new_z,quadrature,tolerances,data)
     volume_scale = math.prod(cells)/(111*92)
     audit_seconds = math.ceil(254*max(1,volume_scale))
     compare_seconds = math.ceil(147*max(1,volume_scale))
@@ -286,7 +326,7 @@ def freeze(root, design_path, out):
         memory_estimate_inputs=dict(margin=data["margin"],bytes_per_cell=data["densities"],
             extra_quadrature_points=data["extra_quadrature_points"],extra_bytes_per_point=2048),
         measured_native_times=data["timings"],quadrature_cost_factor=data["quadrature_cost_factor"],
-        readmission=retry,equation_diagnostic=diagnostic,
+        readmission=retry,equation_diagnostic=diagnostic,segmented_timing=schedule,
         anchors=data["anchors"],attempts=attempts,audit_cap_seconds=audit_seconds,
         compare_cap_seconds=compare_seconds,required_seconds=required,reservation_caps=caps,
         diagnostic_cap_seconds=max(0,extra_analysis-GRACE),live=live,memory=memory,
