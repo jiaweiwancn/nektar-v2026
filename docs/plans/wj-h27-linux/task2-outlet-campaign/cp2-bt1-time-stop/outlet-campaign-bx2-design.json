@@ -1,0 +1,26 @@
+{
+  "case": "Bx2",
+  "base": "Bf",
+  "comparison_bases": [
+    "Bf"
+  ],
+  "x_columns": [
+    [
+      14.9993896484375,
+      15
+    ]
+  ],
+  "change": "staged streamwise owners",
+  "extra_cost_cases": [
+    "Br3",
+    "Br4"
+  ],
+  "extra_analysis_seconds": 0,
+  "hypothesis": "Bisect only the final Bf column and keep the immediately preceding terminal column and all radial owners unchanged. This isolates the thinnest case from the other terminal bisection that contributed to the localized Bx1 defect. The top-20 owner inventory in the Bx1 q30 audit accounts for 51.70% of total squared momentum in the two children of this final Bf owner. The identical-mesh tolerance diagnostic reduced the native residual on its first update, then exhausted its continuation reservation before an independently evaluable tight result.",
+  "predicted_effect": "If each coarse terminal owner largely contributes independently, Bx1's measured final-owner share implies a residual around 8e-10 once the preceding owner is held at Bf resolution. Require the actual independent residual <=1e-9 and all 690 and fixed-region rows to pass.",
+  "source_evidence": [
+    "outlet-campaign-bx1-residual-probe.json",
+    "outlet-qual-bt1-admission.json",
+    "outlet-campaign-bt1-stop.json"
+  ]
+}
