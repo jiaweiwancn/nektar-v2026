@@ -289,7 +289,16 @@ def freeze(root, design_path, out):
                 for i,(seconds,n) in enumerate(((data["first"],1),(data["continuation"],50),
                                                  (data["retry"],50)))}
     schedule = None
-    if design.get("streamwise_timing_anchor"):
+    if design.get("bounded_newton_pair"):
+        require(case[1] in ("h","q","t") and not retry and not diagnostic,
+                "short two-update segments apply to new interface or final equation controls")
+        duration = max(data["continuation"],math.ceil(2.6*data["first"]))
+        attempts = {case_dir(root,case,i).name:planned_attempt(duration,duration+244,2)
+                    for i in range(2)}
+        data["disk"] = math.ceil(data["disk"]*len(attempts)/3)
+        schedule = dict(method="two measured bounded segments",newton_updates_per_segment=2,
+                        watch_gap_seconds=244)
+    elif design.get("streamwise_timing_anchor"):
         attempts,schedule = streamwise_schedule(root,case,design["streamwise_timing_anchor"],
                                                 new_x,new_z,quadrature,tolerances,data)
     volume_scale = math.prod(cells)/(111*92)

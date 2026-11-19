@@ -1,0 +1,28 @@
+{
+  "case": "Bh1",
+  "base": "Bf",
+  "comparison_bases": [
+    "Bf"
+  ],
+  "change": "H radial owners",
+  "radial_bands": [
+    [
+      0.14481812942817,
+      0.15232189736084
+    ]
+  ],
+  "extra_cost_cases": [
+    "Bfl",
+    "Br3",
+    "Br4"
+  ],
+  "extra_analysis_seconds": 0,
+  "hypothesis": "With Bf streamwise and blend resolution pinned, bisecting the lower and upper H owners isolates the approximation of one-sided upward traction and k diffusion across the model interface.",
+  "predicted_effect": "Direct signed changes stay inside the ordinary 690 and fixed-region limits. Both measured one-sided differences are the first pair in the frozen H contraction test.",
+  "bounded_newton_pair": true,
+  "source_evidence": [
+    "outlet-qual-Bx2-Bf.json",
+    "outlet-qual-Bx3-Bf.json",
+    "outlet-campaign-bx3-direction-probe.json"
+  ]
+}
