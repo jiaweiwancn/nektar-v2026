@@ -10,10 +10,11 @@ import physical_oracle as po
 from resources import atomic, identity
 from task2_outlet_baseline import mesh_axes, read, verified
 from task2_outlet_qualification import (GRACE, HIGHER_QUADRATURE, PLAN, PUBLICATION_SECONDS,
-    QUADRATURE, SHIFT, TIGHTER_TOLERANCES, TOLERANCES, case_dir, pass_audit, planned_attempt)
+    QUADRATURE, SHIFT, TIGHTER_TOLERANCES, TOLERANCES, case_dir, pass_audit, planned_attempt,
+    retry_before_checkpoint)
 from task2r_run import GIB, balance, memory_headroom, memory_snapshot, require, workers
 
-CONTROLS = ("B4", "Bw", "Bw2", "Btip", "Bq", "Bt")
+CONTROLS = ("B4", "Bn", "Bn2", "Bf", "Bw", "Bw2", "Btip", "Bq", "Bt")
 
 
 def audit_binding(root, case):
@@ -35,18 +36,57 @@ def adjacent_H(zs):
     return [zs[j-1]-SHIFT,zs[j+1]-SHIFT]
 
 
-def horizontal_owners(xs):
+def station_columns(xs, positions):
+    return {(a,b) for a,b in zip(xs,xs[1:])
+            if any(a-1e-12<=x<=b+1e-12 for x in positions)}
+
+
+def horizontal_owners(xs, base, comparison, capacity):
     stations = [x for x in po.STATIONS if -2.5 <= x <= 8.]
-    columns = [(a,b) for a,b in zip(xs,xs[1:])
-               if a>=xs[-3] or any(a-1e-12<=x<=b+1e-12 for x in stations)]
-    return sorted(xs+[(a+b)/2 for a,b in columns]), columns
+    tip = set(zip(xs[-3:-1],xs[-2:]))
+    full = tip | station_columns(xs,stations)
+    if len(full) <= capacity:
+        selected = full
+    else:
+        require(comparison is not None,"bounded x witness needs measured peak-owner evidence")
+        paired = read(comparison)["comparison"]
+        require(base in (paired["first"]["state"],paired["second"]["state"]),
+                "bounded streamwise control is missing a direct comparison with its base")
+        # Preserve paired station sides and cover the locations of the main
+        # stress, pressure, shear and gradient peaks in the experimental strip.
+        observed = (paired["interior_rows"]["interior/whole/"+f]
+                    for f in ("R","Pi","traction","G"))
+        peaks = [r["component_locations"][r["component_MAX"].index(r["MAX"])]["x"]
+                 for r in observed]
+        sentinels = [-2.5,0.,3.75,5.,6.25,7.25,8.,*peaks]
+        selected = tip | station_columns(xs,sentinels)
+        if len(selected) <= capacity:
+            for x in sorted(stations, key=lambda x:
+                    min(abs(x-v) for v in sentinels), reverse=True):
+                expanded = selected | station_columns(xs,[x])
+                if len(expanded) <= capacity:
+                    selected = expanded
+                    sentinels.append(x)
+    coverage = {f"{x:g}":dict(challenged=len(station_columns(xs,[x]) & selected),
+                            total=len(station_columns(xs,[x]))) for x in stations}
+    added = [(a+b)/2 for a,b in sorted(selected)]
+    return sorted(xs+added), sorted(selected), dict(full_columns=sorted(full), stations=coverage,
+                full_coverage=selected==full, allowable_insertions=capacity)
 
 
 def native_chain(root, case):
     binding,audit = audit_binding(root,case)
-    path = Path(binding["state"]["path"]).parent
+    cells,seconds,peak,anchors = native_cost_chain(root,binding)
+    return cells, seconds, peak, anchors+[audit]
+
+
+def native_cost_chain(root, binding):
+    path = verified(binding["state"]).parent
     anchors, seconds, peak = [], 0., 0
+    visited = set()
     while True:
+        require(path not in visited,"cyclic accepted Newton provenance")
+        visited.add(path)
         manifest = read(path/"inputs.json")
         op = root/"operations"/(path.name+"-steady")/"receipt.json"
         receipt = read(op)["result"]
@@ -59,7 +99,7 @@ def native_chain(root, case):
             break
         require(guess.parent.parent == root/"science","unexpected Newton seed location")
         path = guess.parent
-    return binding["cells"], seconds, peak, anchors+[audit]
+    return binding["cells"], seconds, peak, anchors
 
 
 def controlling_bands(comparison_path):
@@ -68,13 +108,39 @@ def controlling_bands(comparison_path):
             "repeated broad-band test requires an observed miss on Bw")
     admission = read(verified(report["comparison"]["second"]["admission"]))
     points = [row["peak"] for rows in report["failed_components"].values() for row in rows]
-    bands = []
-    for lo, hi in admission["radial_bands"]:
-        if any(lo-1e-12 <= p["owner_bounds"][1][2]
-               and p["owner_bounds"][1][3] <= hi+1e-12 for p in points):
-            bands.append([lo,hi])
+    parents = {tuple(p["owner_bounds"][0][2:4]) for p in points
+               if p["owner_bounds"][0][2:4] != p["owner_bounds"][1][2:4]}
+    bands = sorted((lo,hi) for lo,hi in parents
+                   if any(a-1e-12 <= lo < hi <= b+1e-12 for a,b in admission["radial_bands"]))
     require(bands,"no failed owner was in the newly split radial bands")
     return bands
+
+
+def terminal_control(root, xs, binding, comparison_path):
+    require(comparison_path is not None,"terminal control needs a measured Bn2 outlet peak")
+    report = read(comparison_path)
+    require(report["cases"]==["Bn","Bn2"] and report["comparison"]["second"]["state"]==binding["state"]
+            and report["comparison"]["failures"] and not report["fixed_region_failures"]
+            and all(abs(r["peak"]["x"]-15.)<1e-12
+                    for rows in report["failed_components"].values() for r in rows),
+            "terminal-only control requires localized outlet misses")
+    old = [("B0","outlet-b0-continue-1-steady"),("B1","outlet-b1-steady")]
+    densities,anchors = {},[]
+    for case,label in old:
+        audit,witness = audit_binding(root,case)
+        path = root/"operations"/label/"receipt.json"
+        result = read(path)["result"]
+        require(result["reason"] is None and result["peak_tree_rss_bytes"]>0,
+                "original streamwise resource anchor differs")
+        densities[case] = result["peak_tree_rss_bytes"]/math.prod(audit["cells"])
+        anchors.extend((witness,identity(path)))
+    spread = max(densities.values())/min(densities.values())-1
+    factor = max(1.04,1+spread)
+    columns = list(zip(xs[-3:-1],xs[-2:]))
+    nodes = sorted(xs+[(a+b)/2 for a,b in columns])
+    return nodes,columns,factor,anchors,dict(scope="TWO_TERMINAL_COLUMNS",
+        full_experimental_coverage=False, original_x_mesh_bytes_per_cell=densities,
+        original_x_normalized_rss_spread=spread)
 
 
 def freeze(root, case, base, out, previous_comparison):
@@ -86,7 +152,19 @@ def freeze(root, case, base, out, previous_comparison):
     saved_x,saved_z = xs,zs
     patch = plan["meshes"]["full"]["support_r"]
     bands,columns = [],[]
+    x_coverage = None
     q,tol = QUADRATURE,TOLERANCES
+    b3,wall,peak,anchors = native_chain(root,"B3")
+    b2,_,peak_b2,anchors_b2 = native_chain(root,"B2")
+    densities = {"B3":peak/math.prod(b3),"B2":peak_b2/math.prod(b2)}
+    margin = 1.10
+    plan_anchors = anchors+anchors_b2
+    if base not in ("B2","B3"):
+        base_cells,base_wall,base_peak,base_anchors = native_chain(root,base)
+        densities[base] = base_peak/math.prod(base_cells)
+        wall = max(wall,base_wall*math.prod(b3)/math.prod(base_cells))
+        plan_anchors += base_anchors
+    rss_per_cell = max(densities.values())
     if case == "Bw":
         bands = [[.05,patch[0]],[patch[1],.11541061001735],adjacent_H(zs)]
         zs = split_bands(zs,bands)
@@ -101,8 +179,77 @@ def freeze(root, case, base, out, previous_comparison):
                 "B4 requires the exact preceding collar comparison")
         bands = [patch]
         zs = split_bands(zs,bands)
+    elif case == "Bn":
+        require(base=="B4" and previous_comparison is not None,
+                "neighbor control requires the measured lower-patch comparison")
+        observed = read(previous_comparison)["comparison"]
+        peak = observed["rows"]["x=15/whole/traction"]["peak"]
+        lo,hi = .06875,patch[0]
+        require(observed["second"]["state"]==binding["state"]
+                and abs(peak["r"]-hi)<1e-12 and observed["failures"],
+                "neighbor control requires the measured lower collar-edge shear peak")
+        first_split = split_bands(zs,[[lo,hi]])
+        mid = (lo+hi)/2
+        zs = split_bands(first_split,[[mid,hi]])
+        bands = [[lo,hi]]
+    elif case == "Bn2":
+        require(base=="Bn" and previous_comparison is not None,
+                "repeat of the lower neighbor requires the accepted Bn comparison")
+        observed = read(previous_comparison)
+        require(observed["cases"]==["B4","Bn"]
+                and observed["comparison"]["second"]["state"]==binding["state"]
+                and observed["comparison"]["failures"], "repeat needs measured neighbor sensitivity")
+        lo,hi = .06875,patch[0]
+        peaks = [r["peak"]["r"] for rows in observed["failed_components"].values() for r in rows]
+        require(any(lo-1e-12<=r<=hi+1e-12 for r in peaks),
+                "no failed maximum lies on the repeated radial support")
+        bands = [[lo,hi]]
+        zs = split_bands(zs,bands)
+        class4,_,peak4,anchors4 = native_chain(root,"B4")
+        densities["B4"] = peak4/math.prod(class4)
+        plan_anchors += anchors4
+        rss_per_cell = max(densities.values())
+        # An empirical margin for the same lower-neighbor support, using
+        # twice the observed peak-per-cell spread across the measured ladder.
+        margin = max(1.05,1+2*(rss_per_cell/min(densities.values())-1))
+    elif case == "Bf":
+        require(base=="Bn2" and previous_comparison is not None,
+                "paired flank test needs its accepted Bn2 base and the terminal control")
+        x_test = read(previous_comparison)
+        lower_test_path = evidence/"outlet-qual-Bn2-Bn.json"
+        lower = read(lower_test_path)["comparison"]
+        peak = lower["rows"]["x=15/whole/traction"]["peak"]
+        edge = peak["r"]
+        require(x_test["cases"]==["Bn2","Btip"]
+                and x_test["comparison"]["first"]["state"]==binding["state"]
+                and lower["second"]["state"]==binding["state"] and abs(edge-.06875)<1e-12,
+                "paired flank test does not bind the measured controlling edge")
+        i, = [i for i,z in enumerate(zs) if abs(z-SHIFT-edge)<1e-12]
+        bands = [[zs[i-1]-SHIFT,zs[i+1]-SHIFT]]
+        zs = split_bands(zs,bands)
+        require(len(zs)==len(saved_z)+2,"expected one division on each side of the flank")
+        # Retain the terminal case as a cost measurement even when its
+        # independent audit limits its use to a diagnostic comparison.
+        tip_audit_path = evidence/"outlet-Btip-audit.json"
+        tip_audit = read(tip_audit_path)
+        tip_binding = x_test["comparison"]["second"]
+        require(tip_audit["name"]=="Btip" and tip_binding==tip_audit["provenance"],
+                "terminal resource record and independent audit must bind the same native state")
+        xtip,_,xtip_peak,xtip_anchors = native_cost_chain(root,tip_binding)
+        densities["Btip"] = xtip_peak/math.prod(xtip)
+        plan_anchors += [identity(lower_test_path),identity(tip_audit_path),*xtip_anchors]
+        rss_per_cell = max(densities.values())
+        # One added element on either side of the face. Cover the complete
+        # observed density spread from the audited radial and x controls.
+        margin = max(1.04,rss_per_cell/min(densities.values()))
     elif case == "Btip":
-        xs,columns = horizontal_owners(xs)
+        if base=="Bn2":
+            xs,columns,margin,x_anchors,x_coverage = terminal_control(root,xs,binding,previous_comparison)
+            plan_anchors += x_anchors
+        else:
+            max_nx = math.floor(12*GIB/(1.10*rss_per_cell*(len(zs)-1)))
+            xs,columns,x_coverage = horizontal_owners(xs,binding["state"],previous_comparison,
+                                                      max_nx-(len(xs)-1))
     elif case == "Bq":
         q = HIGHER_QUADRATURE
     else:
@@ -112,14 +259,10 @@ def freeze(root, case, base, out, previous_comparison):
 
     dims = [len(xs)-1,len(zs)-1]
     count = math.prod(dims)
-    b3,wall,peak,anchors = native_chain(root,"B3")
-    b2,_,peak_b2,anchors_b2 = native_chain(root,"B2")
     from_b3 = count / math.prod(b3)
-    base_peak_estimate = max(peak * from_b3, peak_b2 * count / math.prod(b2))
     predicted_time = math.ceil(wall * from_b3)
-    plan_anchors = anchors+anchors_b2
     reserve_points = count*(math.prod(q)-math.prod(QUADRATURE))
-    peak_estimate = math.ceil(base_peak_estimate*1.10 + reserve_points*2048)
+    peak_estimate = math.ceil(margin*rss_per_cell*count + reserve_points*2048)
     if case == "B4" and peak_estimate > 12*GIB:
         # Preserve both sides of every lower-face peak with the affordable lower patch variant.
         radii = [p["peak"]["r"] for rows in read(previous_comparison)["failed_components"].values() for p in rows]
@@ -131,8 +274,12 @@ def freeze(root, case, base, out, previous_comparison):
         count = math.prod(dims)
         from_b3 = count/math.prod(b3)
         predicted_time = math.ceil(wall*from_b3)
-        peak_estimate = math.ceil(max(peak*from_b3,peak_b2*count/math.prod(b2))*1.10)
-    if case in ("Bq","Bt"):
+        peak_estimate = math.ceil(margin*rss_per_cell*count)
+    if case == "Bf":
+        observed = max(read(verified(item))["result"]["seconds"] for item in base_anchors+xtip_anchors
+                       if item["path"].endswith("-steady/receipt.json"))
+        proposed = [(240,1),(math.ceil(1.12*observed),50),(350,50)]
+    elif case in ("Bq","Bt"):
         anchor = root/"operations"/("r3-quadrature-steady" if case=="Bq" else "r3-algebraic-steady")/"receipt.json"
         rec = read(anchor)
         xx,zz,_ = mesh_axes(Path(rec["request"]["command"][-1]))
@@ -165,15 +312,43 @@ def freeze(root, case, base, out, previous_comparison):
         status="FITS" if not blockers else "DEFERRED", blockers=blockers, case=case, base=base,
         prior_state=binding["state"], prior_mesh=binding["mesh"], prior_audit=accepted_audit,
         x_edges=xs, physical_z_edges=zs, cells=dims, radial_bands=bands, x_columns=columns,
+        x_owner_coverage=x_coverage,
         quadrature=q, tolerances=tol, source=plan["source"], application=plan["application"],
         forecast_peak_tree_rss_bytes=peak_estimate, rss_limit_bytes=limit,
-        memory_estimate_inputs=dict(refinement_margin=1.10, extra_native_points=reserve_points,
+        memory_estimate_inputs=dict(refinement_margin=margin, measured_bytes_per_cell=densities,
+            extra_native_points=reserve_points,
             bytes_per_extra_point=2048), anchors=plan_anchors, native_wall_anchor_scaled_seconds=predicted_time,
         attempts=attempts, audit_cap_seconds=audit_cap, compare_cap_seconds=compare_cap,
         reservation_caps=spends,required_seconds=required,memory=memory,live=live,
         prior_comparison=identity(previous_comparison) if previous_comparison else None,
         admission_plan=identity(plan_path)))
     print(case,base,dims,"seconds",required,"RSS GiB",peak_estimate/GIB,blockers,flush=True)
+
+
+def recover_flank(root, admission, out):
+    original = read(admission)
+    first = case_dir(root,"Bf").name
+    path = root/"operations"/f"{first}-steady"/"receipt.json"
+    stop = read(path)
+    require(original["case"]=="Bf" and original["status"]=="ADMITTED"
+            and stop["request"]["label"]==f"{first}-steady"
+            and stop["result"]["status"]=="FAIL" and retry_before_checkpoint(stop["result"])
+            and not (case_dir(root,"Bf")/"state.steady-candidate.json").exists()
+            and not (case_dir(root,"Bf")/"state.result.json").exists(),
+            "flank readmission requires an interrupted launch with no typed state")
+    expected = original["attempts"]
+    require(list(expected)==[case_dir(root,"Bf",i).name for i in range(3)],
+            "flank launch recovery may be staged once")
+    attempts = {case_dir(root,"Bf",i).name:a for i,a in enumerate(expected.values(),start=1)}
+    live = balance(read(root/"accounting.json"))
+    memory = memory_snapshot()
+    blockers = [name for name, fits in (
+        ("wall_time",original["required_seconds"]<=live["nonprotected_remaining"]),
+        ("live_job_headroom",memory_headroom(memory)>=original["rss_limit_bytes"]+2*GIB)) if not fits]
+    atomic(out,dict(original,schema="WJH27FlatQualificationForecastV1",
+        status="FITS" if not blockers else "DEFERRED",blockers=blockers, attempts=attempts,
+        previous_admission=identity(admission),interruption=identity(path),memory=memory,live=live))
+    print("Bf launch recovery",original["required_seconds"],stop["result"]["seconds"],blockers,flush=True)
 
 
 def admit(root, forecast, out):
@@ -202,9 +377,14 @@ def main():
     admission = sub.add_parser("admit")
     admission.add_argument("forecast",type=Path)
     admission.add_argument("out",type=Path)
+    recovery = sub.add_parser("recover-flank")
+    recovery.add_argument("admission",type=Path)
+    recovery.add_argument("out",type=Path)
     args = parser.parse_args()
     if args.mode=="freeze":
         freeze(args.root,args.case,args.base,args.out,args.comparison)
+    elif args.mode=="recover-flank":
+        recover_flank(args.root,args.admission,args.out)
     else:
         admit(args.root,args.forecast,args.out)
 

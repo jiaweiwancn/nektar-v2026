@@ -180,7 +180,14 @@ def audit(root,name,out,seconds):
 
 def audit_state(state,binding,table,name,out):
     projection_file = out.with_name(out.stem+"-inlet.json")
-    projection(table,Path(binding["state"]["path"]),projection_file)
+    if projection_file.is_file():
+        cached = read(projection_file)
+        require(cached["initial"] == binding["state"] and cached["H"] == state.ref.H
+                and cached["d0"] == state.ref.d0 and cached["basis"] == "Independent Modified_A"
+                and cached["limits"] == {"U":1e-5,"k":1e-4,"G":1e-3},
+                "prior inlet projection belongs to a different state or audit recipe")
+    else:
+        projection(table,Path(binding["state"]["path"]),projection_file)
     core = state.assemble()
     boundary = state.boundary_checks()
     interfaces = state.interfaces()

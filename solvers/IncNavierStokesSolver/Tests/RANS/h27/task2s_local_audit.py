@@ -34,6 +34,13 @@ def continuity(state):
     volume_map = np.outer(weights,weights).ravel()
     mass, weak = po.SparseMass(state.np),np.zeros(state.np)
     pressure_shift = np.zeros((2,state.n))
+    # Integrate each Modified_A mode on the unit cell. Its derivative
+    # integral is its signed endpoint increment. The affine Jacobian
+    # cancels the width in the differentiation direction exactly.
+    mode_integrals = [.5,.5,1./6.,0.]
+    derivative_integrals = [-1.,1.,0.,0.]
+    mean_dx = np.outer(mode_integrals,derivative_integrals).ravel()
+    mean_dr = np.outer(derivative_integrals,mode_integrals).ravel()
     volume, absolute, squared, maximum = np.zeros(4)
     location = None
     for element in state.elements:
@@ -43,14 +50,15 @@ def continuity(state):
         r = np.tile(rl+(rr-rl)*points,len(points))
         q = volume_map*(xr-xl)*(rr-rl)
         p = polynomial_basis(element,"p",x,r)[0]
-        b, dx, dr = polynomial_basis(element,"u",x,r)
+        _, dx, dr = polynomial_basis(element,"u",x,r)
         ids = np.asarray(element["u"])
         divergence = dx@state.s["flow"][ids]+dr@state.s["flow"][state.n+ids]
         pid = np.asarray(element["p"])
         mass.add(pid,p.T@(q[:,None]*p))
         weak[pid] += p.T@(q*divergence)
-        pressure_shift[0,ids] -= q@dx
-        pressure_shift[1,ids] -= q@dr
+        signs = np.asarray(element["us"])
+        pressure_shift[0,ids] -= (rr-rl)*mean_dx*signs
+        pressure_shift[1,ids] -= (xr-xl)*mean_dr*signs
         volume += float(q.sum())
         absolute += float(q@abs(divergence))
         squared += float(q@(divergence*divergence))

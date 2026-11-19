@@ -31,7 +31,8 @@ OUTLET_WORKER_AUTHORIZATION = (
 OUTLET_QUAL_AUTHORIZATION = "52982518e25a333b9d4f25d7917be24a0f7963cc3f01285ed7fe47885b60cf01"
 OUTLET_CP4_SETTLEMENT = "f1c3c623e6ce17262872b313d132b7305dd585fbdc3580bfe9499ac31b0dcc45"
 QUAL_CASES = {
-    "B3": "b3", "B4": "b4", "Bw": "bw", "Bw2": "bw2", "Btip": "btip",
+    "B3": "b3", "B4": "b4", "Bn": "bn", "Bn2": "bn2", "Bf": "bf",
+    "Bw": "bw", "Bw2": "bw2", "Btip": "btip",
     "Bq": "bq", "Bt": "bt",
 }
 WORK = ("simpleFoam", "IncNavierStokes", "RANS", "WJ", "python", "cc1",
@@ -363,6 +364,27 @@ def choose_rank_cpu():
                 sampled_idle_fraction=idle[cpu], sample_seconds=1.)
 
 
+def observe_rank_affinity(groups, executable, cpu, observed):
+    candidates = groups if observed is None else (observed["pid"],)
+    for pid in candidates:
+        try:
+            if Path(f"/proc/{pid}/exe").readlink() != executable:
+                continue
+            cpus = sorted(os.sched_getaffinity(pid))
+            if observed is None:
+                observed = dict(pid=pid, startup_cpus=cpus, allowed_cpus=cpus)
+            if cpus != [cpu]:
+                require("rebound_from_cpus" not in observed, "native rank affinity differs after one recovery")
+                os.sched_setaffinity(pid, {cpu})
+                actual = sorted(os.sched_getaffinity(pid))
+                observed.update(rebound_from_cpus=cpus, allowed_cpus=actual)
+                require(actual == [cpu], "native rank affinity differs")
+            return observed
+        except (FileNotFoundError, ProcessLookupError):
+            continue
+    return observed
+
+
 def initialize(root, book, began):
     baseline = root / "inputs" / "settled-pre-migration.json"
     old = json.loads(baseline.read_text())
@@ -523,19 +545,9 @@ def run(root, book, args, began):
                         if suspended_at is not None:
                             signal_groups(child_groups-groups, signal.SIGSTOP)
                         groups |= child_groups
-                        if affinity and rank_affinity is None:
-                            for pid in child_groups:
-                                try:
-                                    executable = Path(f"/proc/{pid}/exe").readlink()
-                                    if executable == Path(command[3]):
-                                        cpus = sorted(os.sched_getaffinity(pid))
-                                        rank_affinity = dict(pid=pid, allowed_cpus=cpus)
-                                        require(cpus == [affinity["cpu"]], "native rank affinity differs")
-                                        break
-                                except FileNotFoundError:
-                                    continue
-                                except ProcessLookupError:
-                                    continue
+                        if affinity:
+                            rank_affinity = observe_rank_affinity(
+                                child_groups, Path(command[3]), affinity["cpu"], rank_affinity)
                         peak = max(peak, rss)
                         if pause_policy and pause_policy.get("count_stopped_ownership"):
                             observed_workers, _, owned, stopped = worker_census(groups | {child.pid})
@@ -581,6 +593,9 @@ def run(root, book, args, began):
                         require(log_path.stat().st_size <= 32 * 1024 ** 2, "LOG_LIMIT")
                         time.sleep(.5)
                     code = child.returncode
+                    if affinity and code == 0:
+                        require(rank_affinity is not None and rank_affinity["allowed_cpus"] == [affinity["cpu"]],
+                                "verified native rank affinity is missing")
                 except (RuntimeError, OSError, KeyboardInterrupt) as error:
                     code, reason = terminate(child, groups, suspended_at is not None), str(error)
         except (RuntimeError, OSError, KeyboardInterrupt) as error:

@@ -1,0 +1,157 @@
+{
+  "schema": "WJH27TerminalPressureProofV1",
+  "method": "Exact signed tensor cell derivative moments",
+  "prior_failure": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-btip-pressure-diagnosis.json",
+    "bytes": 209,
+    "sha256": "7c320b6f56536c1ee501432253855db2069f5de6bcfe1d7e560a77d1c8075816"
+  },
+  "cases": {
+    "Bn2": {
+      "provenance": {
+        "state": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bn2-continue-1/state.result.json",
+          "bytes": 75445071,
+          "sha256": "ebd2c4926571c6b4dd18ae01d37cbfdbe357068e454a53ddb61f7cff0a15b2b3"
+        },
+        "mesh": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bn2/geometry.xml",
+          "bytes": 1636902,
+          "sha256": "c732c972af9c36b08d67c1937ec44a982720a4786e03504f33aa730f145fabf2"
+        },
+        "source": "54b2f4268a5903fcf894f032b968bbfcb42a3e999a9c0409d032e999114894a8",
+        "executable": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+          "bytes": 9997280,
+          "sha256": "3e8db421575122676808adc6c9783f0c897136e9d9d283b9d0cb200c5ec2df45"
+        },
+        "inputs": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bn2-continue-1/inputs.json",
+          "bytes": 6134,
+          "sha256": "3f0befb9214d12ec0f8fc5ae5b58d0b7de643a44c5720191cac394e39ab76f17"
+        },
+        "operation": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bn2-continue-1-steady/receipt.json",
+          "bytes": 7506,
+          "sha256": "7a0b137fd7f0eff8f4d0c3e6756d505899a761c43d62fcc2afb5689b444dfd97"
+        },
+        "admission": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-bn2-admission.json",
+          "bytes": 12772,
+          "sha256": "19d991c004e47ae162ee82059f8baf666b2257a3a59338eb9d819566f762eae4"
+        },
+        "coefficient_sha256": "8222d7f8ae368b1cf29b0ae65766bcc613970fa62ff68d9a1634770a1528cdc6",
+        "signature": "51bc53055ecfad1e2de8d8c94523735d75e7f99f00f8cd28b22d9d0788496e29",
+        "outlet_identity": "a5bc691bd4b67be3f626981e673789b8d3a8c70519cebd9d99bfac5085542635",
+        "policy": "ZeroTransverseV1",
+        "cells": [
+          111,
+          90
+        ],
+        "quadrature": [
+          6,
+          8
+        ],
+        "tolerances": [
+          1e-12,
+          1e-10
+        ]
+      },
+      "continuity": {
+        "pressure_tested_dual": 1.226495469625772e-14,
+        "pressure_tested_Riesz_RMS": 2.7365213897283166e-13,
+        "pressure_test_action_MAX": 5.069406370569206e-15,
+        "strong_L1_over_area": 3.340595833438238e-06,
+        "strong_RMS": 0.00013056042646978377,
+        "strong_interior_Gauss_MAX": 0.01232327541153629,
+        "strong_interior_peak": {
+          "owner": 2997,
+          "x": -9.940517123912748,
+          "r": 0.06029544587536121
+        },
+        "area": 497.812500000002
+      },
+      "pressure_action": [
+        3.7500000000000018,
+        0.0
+      ],
+      "volume_minus_face": [
+        1.3322676295501878e-15,
+        0.0
+      ]
+    },
+    "Btip": {
+      "provenance": {
+        "state": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-btip-continue-1/state.result.json",
+          "bytes": 76792333,
+          "sha256": "db14483ee7ab007b2d1dfe94c519edb374880fdbe8b26c7ce20dc839dc59f563"
+        },
+        "mesh": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-btip/geometry.xml",
+          "bytes": 1669897,
+          "sha256": "b1e76c5c2dfe6c96635e1415c796d5d73eda5a99ed1cda5dc4c389855c14e9d3"
+        },
+        "source": "54b2f4268a5903fcf894f032b968bbfcb42a3e999a9c0409d032e999114894a8",
+        "executable": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+          "bytes": 9997280,
+          "sha256": "3e8db421575122676808adc6c9783f0c897136e9d9d283b9d0cb200c5ec2df45"
+        },
+        "inputs": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-btip-continue-1/inputs.json",
+          "bytes": 6188,
+          "sha256": "a4261d13b5b2ea16c18c02f18b5743f4812547908beeb1f74d1dcd2c33dbacef"
+        },
+        "operation": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-btip-continue-1-steady/receipt.json",
+          "bytes": 7518,
+          "sha256": "188e155ce03d4aec1f011a730b3579a63a64eb686070db8a9d5cce0d5e76f5d4"
+        },
+        "admission": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-btip-admission.json",
+          "bytes": 13348,
+          "sha256": "87e7da88fd129ba68fc1382a368e80f153fd2d463f3e36faae360f03020058ed"
+        },
+        "coefficient_sha256": "40085fc33c76191fecbf3194c53632737f9c71b0d2d6129f0a905d7b1f45d692",
+        "signature": "4ad2e9073cb645b90618c596bfb3d20a429e83907df856bdea213c5f42c2053d",
+        "outlet_identity": "a5bc691bd4b67be3f626981e673789b8d3a8c70519cebd9d99bfac5085542635",
+        "policy": "ZeroTransverseV1",
+        "cells": [
+          113,
+          90
+        ],
+        "quadrature": [
+          6,
+          8
+        ],
+        "tolerances": [
+          1e-12,
+          1e-10
+        ]
+      },
+      "continuity": {
+        "pressure_tested_dual": 5.022286388864474e-15,
+        "pressure_tested_Riesz_RMS": 1.1205580834850095e-13,
+        "pressure_test_action_MAX": 1.3567798641051966e-15,
+        "strong_L1_over_area": 3.340594747943107e-06,
+        "strong_RMS": 0.00013056042464582425,
+        "strong_interior_Gauss_MAX": 0.013261013028713305,
+        "strong_interior_peak": {
+          "owner": 3276,
+          "x": 14.999989695665619,
+          "r": 0.06885551638405758
+        },
+        "area": 497.81250000000205
+      },
+      "pressure_action": [
+        3.7500000000000018,
+        0.0
+      ],
+      "volume_minus_face": [
+        1.3322676295501878e-15,
+        0.0
+      ]
+    }
+  }
+}
