@@ -1,0 +1,9 @@
+# Br1 broad radial witness memory stop
+
+Br1 prepares the direct 111×128 radial challenge to Bf. Its nested bisection covers the full blend and both flanks from r=.05 through .11541061001735. The original x and H owners, reference, seed, quadrature and tolerances carry forward. The Bfl lower-band gate is already met. [Established Bf lower-band result](wj-h27-task2-outlet-campaign-bfl.md) · [Br1 admission](wj-h27-linux/task2-outlet-campaign/cp2-br1/outlet-qual-br1-admission.json)
+
+The first single-rank segment crossed the 17 GiB watchdog limit at 17.090 GiB after 446.222 charged seconds. The native process had written neither an accepted solve nor a usable Newton packet. The peak shared census was 66. The spatial comparison therefore remains open, with no new rows for this attempt. The time and exact solver inputs are retained. [Br1 stop and session evidence](wj-h27-linux/task2-outlet-campaign/cp2-br1/operations.json)
+
+Br2 retains the exact Br1 axes and the Bf typed seed. Its memory forecast applies the largest measured first-segment-to-converged RSS increase from Btip and Bfl to the observed Br1 stop, then adds the observed-density margin. The Btip receipts provide resource measurements. Its independent momentum gate remains open. The resulting 19.57 GiB forecast supports a named 20 GiB cap with live headroom. The first wall limit also grows from the observed time at interruption. The complete readmission forecasts 4,026 s, including continuations, the independent audit, all 690 signed rows, owner probes and publication. The unchanged directional hypothesis is that the lower-band result extends across the blend and flanks. [Br2 retry design](wj-h27-linux/task2-outlet-campaign/cp2-br1/outlet-campaign-br2-design.json) · [Measured cost, peak and interruption binding](wj-h27-linux/task2-outlet-campaign/cp2-br1/outlet-qual-br2-forecast.json)
+
+**Campaign OPEN. TASK2_COMPLETE=NO. TASK3_READY=NO.**

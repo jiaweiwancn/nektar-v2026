@@ -1,0 +1,509 @@
+{
+  "schema": "WJH27FlatQualificationForecastV1",
+  "case": "Br2",
+  "base": "Bf",
+  "source": "54b2f4268a5903fcf894f032b968bbfcb42a3e999a9c0409d032e999114894a8",
+  "application": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+    "bytes": 9997280,
+    "sha256": "3e8db421575122676808adc6c9783f0c897136e9d9d283b9d0cb200c5ec2df45"
+  },
+  "prior_state": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bf-continue-2/state.result.json",
+    "bytes": 76986400,
+    "sha256": "23ee2191573f48a4312352ea5549fb1b37b76a44347eb102f17593b000e85782"
+  },
+  "prior_mesh": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bf-continue-1/geometry.xml",
+    "bytes": 1675595,
+    "sha256": "3a14dd102a8f1c829b7a5331bc7d5bedc35664c3a3d736caa6c0bc3bcd0b0ff4"
+  },
+  "prior_audit": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-Bf-audit.json",
+    "bytes": 1150332,
+    "sha256": "b8fc0a91511352bf6911766f2a6403e74326f53143ad49681e6595c2eac7df2a"
+  },
+  "design": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-campaign-br2-design.json",
+    "bytes": 711,
+    "sha256": "a58581805507f990bd34cfbed6a4639e5efe19e26a976030cda3a53a389e9ce5"
+  },
+  "campaign_amendment": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-campaign-amendment.json",
+    "bytes": 1484,
+    "sha256": "84c5897b3086535239b61122542b047e3524875d4dfc16ae5cb0ce717e748cac"
+  },
+  "cells": [
+    111,
+    128
+  ],
+  "x_edges": [
+    -10.0,
+    -9.84375,
+    -9.6875,
+    -9.53125,
+    -9.375,
+    -9.21875,
+    -9.0625,
+    -8.90625,
+    -8.75,
+    -8.59375,
+    -8.4375,
+    -8.28125,
+    -8.125,
+    -7.96875,
+    -7.8125,
+    -7.65625,
+    -7.5,
+    -6.875,
+    -6.40625,
+    -6.25,
+    -6.09375,
+    -5.9375,
+    -5.78125,
+    -5.625,
+    -5.46875,
+    -5.3125,
+    -5.15625,
+    -5.0,
+    -4.375,
+    -3.75,
+    -3.125,
+    -2.5,
+    -2.1875,
+    -1.875,
+    -1.5625,
+    -1.25,
+    -0.9375,
+    -0.625,
+    -0.3125,
+    0.0,
+    0.3125,
+    0.625,
+    0.9375,
+    1.5625,
+    1.875,
+    2.5,
+    2.875,
+    3.625,
+    4.0,
+    4.75,
+    4.9375,
+    5.125,
+    5.3125,
+    5.5,
+    5.75,
+    6.0,
+    6.25,
+    6.5,
+    6.75,
+    7.0,
+    7.25,
+    7.5,
+    7.8125,
+    8.125,
+    8.4375,
+    8.75,
+    8.90625,
+    9.0625,
+    9.21875,
+    9.375,
+    9.53125,
+    9.6875,
+    9.84375,
+    10.0,
+    10.15625,
+    10.3125,
+    10.46875,
+    10.625,
+    10.78125,
+    10.9375,
+    11.09375,
+    11.25,
+    11.5625,
+    11.875,
+    12.1875,
+    12.5,
+    12.65625,
+    12.8125,
+    12.96875,
+    13.125,
+    13.28125,
+    13.4375,
+    13.59375,
+    13.75,
+    13.90625,
+    14.0625,
+    14.21875,
+    14.375,
+    14.453125,
+    14.53125,
+    14.609375,
+    14.6875,
+    14.765625,
+    14.84375,
+    14.921875,
+    14.9609375,
+    14.98046875,
+    14.990234375,
+    14.9951171875,
+    14.998779296875,
+    14.9993896484375,
+    15.0
+  ],
+  "physical_z_edges": [
+    0.0875,
+    0.08753124999999999,
+    0.08756249999999999,
+    0.08775,
+    0.088,
+    0.0885,
+    0.089,
+    0.0895,
+    0.09,
+    0.09075,
+    0.0915,
+    0.0925,
+    0.09343749999999999,
+    0.094375,
+    0.09578125,
+    0.0971875,
+    0.0990625,
+    0.1009375,
+    0.1028125,
+    0.105625,
+    0.10830248728872,
+    0.11189603217824999,
+    0.11539365466540999,
+    0.11981492373232999,
+    0.12570994915487999,
+    0.13160497457744,
+    0.1375,
+    0.14250000000000002,
+    0.1475,
+    0.14968749999999997,
+    0.15187499999999998,
+    0.1540625,
+    0.15625,
+    0.15703125,
+    0.1578125,
+    0.15859374999999998,
+    0.159375,
+    0.1609375,
+    0.1625,
+    0.16328125,
+    0.1640625,
+    0.16484375,
+    0.16562500000000002,
+    0.16640625000000003,
+    0.16718750000000002,
+    0.16796875,
+    0.16875,
+    0.1693359375,
+    0.169921875,
+    0.17050781250000002,
+    0.17109375000000002,
+    0.1716796875,
+    0.17226562500000003,
+    0.17285156250000003,
+    0.17343750000000002,
+    0.17402343750000002,
+    0.174609375,
+    0.1751953125,
+    0.17578125,
+    0.1763671875,
+    0.176953125,
+    0.1775390625,
+    0.178125,
+    0.1787109375,
+    0.17929687500000002,
+    0.17988281250000002,
+    0.18046875,
+    0.1810546875,
+    0.181640625,
+    0.1822265625,
+    0.1828125,
+    0.18339843749999998,
+    0.18398437499999998,
+    0.1845703125,
+    0.18515625,
+    0.1857421875,
+    0.186328125,
+    0.1869140625,
+    0.1875,
+    0.18790054853556376,
+    0.1883010970711275,
+    0.18870164560669123,
+    0.189102194142255,
+    0.18950274267781875,
+    0.1899032912133825,
+    0.19030383974894627,
+    0.19070438828451,
+    0.19110493682007373,
+    0.1915054853556375,
+    0.19190603389120126,
+    0.19230658242676502,
+    0.19270713096232878,
+    0.1931076794978925,
+    0.19350822803345624,
+    0.19390877656902,
+    0.19695438828451,
+    0.19999999999999998,
+    0.20145530500867498,
+    0.20291061001735,
+    0.21677251771268,
+    0.22195438828451,
+    0.22713625885634,
+    0.23231812942816998,
+    0.2375,
+    0.23982189736084,
+    0.24214379472168,
+    0.24446569208252,
+    0.24678758944336,
+    0.2491094868042,
+    0.25143138416503996,
+    0.28777239568814,
+    0.33531822089025,
+    0.38286404609237,
+    0.45976573390020004,
+    0.5685606588607,
+    0.69386848341232,
+    0.88181570021374,
+    1.132445869343,
+    1.4437552272093699,
+    1.88255041353034,
+    2.50699865254159,
+    3.2573137371062098,
+    4.25706834866648,
+    5.633160254623171,
+    7.50781177399869,
+    10.00390588699935,
+    12.5,
+    16.25,
+    20.0
+  ],
+  "x_columns": [],
+  "quadrature": [
+    6,
+    8
+  ],
+  "tolerances": [
+    1e-12,
+    1e-10
+  ],
+  "comparison_bases": [
+    "Bf"
+  ],
+  "forecast_peak_tree_rss_bytes": 21014595662,
+  "rss_limit_bytes": 21474836480,
+  "memory_estimate_inputs": {
+    "margin": 1.04,
+    "bytes_per_cell": {
+      "Bn2": 1208627.0974974975,
+      "Bf": 1194486.9753231492,
+      "Bfl": 1164836.9990415948
+    },
+    "extra_quadrature_points": 0,
+    "extra_bytes_per_point": 2048
+  },
+  "measured_native_times": {
+    "Bn2": {
+      "cells": [
+        111,
+        90
+      ],
+      "native_seconds": [
+        896.7781255629961,
+        299.796823658995
+      ],
+      "peak_tree_rss_bytes": 12074184704
+    },
+    "Bf": {
+      "cells": [
+        111,
+        92
+      ],
+      "native_seconds": [
+        766.9033375849976,
+        292.5776788229996
+      ],
+      "peak_tree_rss_bytes": 12198100992
+    },
+    "Bfl": {
+      "cells": [
+        111,
+        94
+      ],
+      "native_seconds": [
+        792.6932594760001,
+        299.9276169639925
+      ],
+      "peak_tree_rss_bytes": 12153909248
+    }
+  },
+  "quadrature_cost_factor": 1.0,
+  "readmission": {
+    "stop": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-br1-steady/receipt.json",
+      "bytes": 6541,
+      "sha256": "9e027c2416fd68537bd6bb1794613f51fc6acc676a7d5239a96e135c34e36b71"
+    },
+    "observed_peak_tree_rss_bytes": 18350690304,
+    "observed_wall_seconds": 446.2224854870001,
+    "observed_factor_growth": {
+      "outlet-qual-btip": 1.1011216279768248,
+      "outlet-qual-bfl": 1.066606493393521
+    },
+    "memory_growth_factor": 1.1011216279768248,
+    "runtime_overrun_factor": 1.0465427260994709
+  },
+  "anchors": [
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bn2-continue-1-steady/receipt.json",
+      "bytes": 7506,
+      "sha256": "7a0b137fd7f0eff8f4d0c3e6756d505899a761c43d62fcc2afb5689b444dfd97"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bn2-steady/receipt.json",
+      "bytes": 6488,
+      "sha256": "e031efbf7e3fc833a64e4be8c103c3c787090cbf37f56fa6f4f8a673e7d4ff16"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-Bn2-audit.json",
+      "bytes": 1142909,
+      "sha256": "7d00d475c62b0f05d51f3f9f15fa438f6314e2237b00d08808d182a4db4023ac"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bf-continue-2-steady/receipt.json",
+      "bytes": 7589,
+      "sha256": "0c6b63973ebc62ec6a34dc5c2e362d0f532543fd4bd3a23690cceb48599deec9"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bf-continue-1-steady/receipt.json",
+      "bytes": 6662,
+      "sha256": "53079e07b0b29b4290f9ea161fc71235158b75173f22064d6cfde92d4b3114dc"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-Bf-audit.json",
+      "bytes": 1150332,
+      "sha256": "b8fc0a91511352bf6911766f2a6403e74326f53143ad49681e6595c2eac7df2a"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bfl-continue-1-steady/receipt.json",
+      "bytes": 7597,
+      "sha256": "3615bf618718f4139ff7fccf7b7522fef9a2f4249b661d472183720f2f905e8b"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bfl-steady/receipt.json",
+      "bytes": 6531,
+      "sha256": "d3a69dab32dafb47fd7279dcdc3992f9a45a8cedbe729b6dae8ffbf9dadd155d"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-Bfl-audit.json",
+      "bytes": 1157435,
+      "sha256": "dc41e0e5519491e5d65e0255b81cd0f0d0c0d6cc74c1e46563d2b60f3703e1ab"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-btip-steady/receipt.json",
+      "bytes": 6500,
+      "sha256": "51642b49c1d11da6fd11a3da5a6811d57c64296bca4fd7ae7637155b7bb9ff13"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-btip-continue-1-steady/receipt.json",
+      "bytes": 7518,
+      "sha256": "188e155ce03d4aec1f011a730b3579a63a64eb686070db8a9d5cce0d5e76f5d4"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bfl-steady/receipt.json",
+      "bytes": 6531,
+      "sha256": "d3a69dab32dafb47fd7279dcdc3992f9a45a8cedbe729b6dae8ffbf9dadd155d"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bfl-continue-1-steady/receipt.json",
+      "bytes": 7597,
+      "sha256": "3615bf618718f4139ff7fccf7b7522fef9a2f4249b661d472183720f2f905e8b"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-br1-steady/receipt.json",
+      "bytes": 6541,
+      "sha256": "9e027c2416fd68537bd6bb1794613f51fc6acc676a7d5239a96e135c34e36b71"
+    }
+  ],
+  "attempts": {
+    "outlet-qual-br2": {
+      "native_seconds": 514,
+      "watch_seconds": 629,
+      "newton_iterations": 1,
+      "preparation_seconds": 18
+    },
+    "outlet-qual-br2-continue-1": {
+      "native_seconds": 1510,
+      "watch_seconds": 1625,
+      "newton_iterations": 50,
+      "preparation_seconds": 18
+    },
+    "outlet-qual-br2-continue-2": {
+      "native_seconds": 514,
+      "watch_seconds": 629,
+      "newton_iterations": 50,
+      "preparation_seconds": 18
+    }
+  },
+  "audit_cap_seconds": 354,
+  "compare_cap_seconds": 205,
+  "required_seconds": 4026,
+  "reservation_caps": {
+    "admission": 27,
+    "preparations_and_native": 2979,
+    "independent_audit": 361,
+    "direct_comparisons": 212,
+    "diagnostic_evidence": 90,
+    "checkpoint_publication": 57,
+    "final_evidence": 300
+  },
+  "diagnostic_cap_seconds": 83,
+  "live": {
+    "charged_seconds": 61226.419844829754,
+    "reserved_seconds": 49.0,
+    "nonprotected_remaining": 43124.580155170246,
+    "tranche_remaining": 3215.8708747751807
+  },
+  "memory": {
+    "mem_available_bytes": 401743687680,
+    "mem_total_bytes": 540840640512,
+    "job_cgroup": "/user.slice/user-1000.slice/session-968.scope",
+    "ancestor_limits": [
+      {
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-968.scope",
+        "current": 417476608,
+        "memory.max": null,
+        "memory.high": null
+      },
+      {
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+        "current": 284605382656,
+        "memory.max": null,
+        "memory.high": null
+      },
+      {
+        "path": "/sys/fs/cgroup/user.slice",
+        "current": 284892921856,
+        "memory.max": null,
+        "memory.high": null
+      },
+      {
+        "path": "/sys/fs/cgroup",
+        "memory.max": null,
+        "memory.high": null
+      }
+    ]
+  },
+  "storage": {
+    "science_bytes": 4590081541,
+    "source_build_runtime_bytes": 266581583,
+    "free_bytes": 3560866066432
+  },
+  "forecast_additional_science_bytes": 751228953,
+  "status": "FITS",
+  "blockers": []
+}

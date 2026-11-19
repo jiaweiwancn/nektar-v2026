@@ -124,7 +124,45 @@ def measure(root, cases, cells, quadrature):
     disk = math.ceil(1.10*max(disk_rates)*count*3)
     return dict(peak=peak,first=first,continuation=again,retry=retry,disk=disk,
                 anchors=anchors,timings=timings,densities=densities,margin=margin,
-                extra_quadrature_points=extra,quadrature_cost_factor=scale_q)
+                extra_quadrature_points=extra,quadrature_cost_factor=scale_q,
+                scaled_first_charge=max(startup,default=300))
+
+
+def readmit_memory_stop(root, previous, base, x, z, q, t, data):
+    """Reforecast the same mesh from an observed, charged RSS interruption."""
+    stopped = case_dir(root,previous)
+    receipt = root/"operations"/f"{stopped.name}-steady"/"receipt.json"
+    event = read(receipt)["result"]
+    inputs = read(stopped/"inputs.json")
+    admission = read(verified(inputs["admission"]))
+    require(event["status"]=="FAIL" and event["reason"]=="RSS_LIMIT"
+            and event["peak_tree_rss_bytes"]>event["rss_limit_bytes"]
+            and not (stopped/"state.result.json").exists()
+            and not (stopped/"state.steady-candidate.json").exists()
+            and base==admission["base"] and [x,z]==[inputs["x_edges"],inputs["physical_z_edges"]]
+            and [q,t]==[inputs["quadrature"],inputs["tolerances"]],
+            "RSS retry must preserve the stopped unqualified mesh and numerical recipe")
+    operations = root/"operations"
+    growth_anchors = ("outlet-qual-btip", "outlet-qual-bfl")
+    increases = {}
+    for label in growth_anchors:
+        anchors = [operations/f"{label}{suffix}-steady"/"receipt.json"
+                   for suffix in ("","-continue-1")]
+        first,final = (read(a)["result"] for a in anchors)
+        require(first["reason"] is None and final["status"]=="PASS"
+                and first["peak_tree_rss_bytes"]>0, "measured factor growth anchor differs")
+        increases[label] = final["peak_tree_rss_bytes"]/first["peak_tree_rss_bytes"]
+        data["anchors"].extend(identity(a) for a in anchors)
+    memory_growth = max(1.,*increases.values())
+    measured_overrun = max(1.,event["seconds"]/data["scaled_first_charge"])
+    data["peak"] = math.ceil(event["peak_tree_rss_bytes"]*memory_growth*data["margin"])
+    data["first"] = max(data["first"],math.ceil(event["seconds"]*1.15))
+    data["continuation"] = math.ceil(data["continuation"]*measured_overrun)
+    data["retry"] = max(data["retry"],data["first"])
+    data["anchors"].append(identity(receipt))
+    return dict(stop=identity(receipt),observed_peak_tree_rss_bytes=event["peak_tree_rss_bytes"],
+        observed_wall_seconds=event["seconds"],observed_factor_growth=increases,
+        memory_growth_factor=memory_growth,runtime_overrun_factor=measured_overrun)
 
 
 def freeze(root, design_path, out):
@@ -139,6 +177,10 @@ def freeze(root, design_path, out):
     for comparator in design.get("comparison_bases",[base]):
         pass_audit(root,comparator)
     data = measure(root, ["Bn2","Bf",base,*design.get("extra_cost_cases",[])], cells, quadrature)
+    retry = None
+    if design.get("readmit_after_rss"):
+        retry = readmit_memory_stop(root,design["readmit_after_rss"],base,new_x,new_z,
+                                    quadrature,tolerances,data)
     attempts = {case_dir(root,case,i).name:planned_attempt(seconds,seconds+115,n)
                 for i,(seconds,n) in enumerate(((data["first"],1),(data["continuation"],50),
                                                  (data["retry"],50)))}
@@ -176,6 +218,7 @@ def freeze(root, design_path, out):
         memory_estimate_inputs=dict(margin=data["margin"],bytes_per_cell=data["densities"],
             extra_quadrature_points=data["extra_quadrature_points"],extra_bytes_per_point=2048),
         measured_native_times=data["timings"],quadrature_cost_factor=data["quadrature_cost_factor"],
+        readmission=retry,
         anchors=data["anchors"],attempts=attempts,audit_cap_seconds=audit_seconds,
         compare_cap_seconds=compare_seconds,required_seconds=required,reservation_caps=caps,
         diagnostic_cap_seconds=max(0,extra_analysis-GRACE),live=live,memory=memory,
