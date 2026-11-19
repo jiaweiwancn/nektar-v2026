@@ -60,10 +60,11 @@ def accepted_directory(root, case):
 
 
 def create_session(session, geometry, table, policy, *, seconds=0, initial_fields="",
-                   initial_source="", restart="", export_actions=False):
+                   initial_source="", restart="", export_actions=False,
+                   quadrature=(6, 8), tolerances=(1e-12, 1e-10)):
     fixtures.generate(session, table, session.parent/"state", mode="Physical", template=geometry,
-                      dt=.05, steps=0, quadrature_x=6, quadrature_r=8, linear=1e-12,
-                      nonlinear=1e-10, backend="FastFull3DV1",
+                      dt=.05, steps=0, quadrature_x=quadrature[0], quadrature_r=quadrature[1],
+                      linear=tolerances[0], nonlinear=tolerances[1], backend="FastFull3DV1",
                       solve="SteadyReference" if seconds else "Advance", steady_seconds=seconds,
                       initial_fields=initial_fields, initial_source_identity=initial_source,
                       restart=restart, outlet_policy=policy, check_outlet_actions=export_actions,

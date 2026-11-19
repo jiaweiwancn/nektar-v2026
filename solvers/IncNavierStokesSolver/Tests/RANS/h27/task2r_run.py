@@ -28,6 +28,12 @@ S2_ACCOUNT = "dec44571419200acdb94c9e63c94c6a9a490f78caff158e0b31f92e5b933a784"
 OUTLET_WORKER_AUTHORIZATION = (
     "You are now allowed to employ 8 workers at most in addition to the current 72 worker limit. Resume"
 )
+OUTLET_QUAL_AUTHORIZATION = "52982518e25a333b9d4f25d7917be24a0f7963cc3f01285ed7fe47885b60cf01"
+OUTLET_CP4_SETTLEMENT = "f1c3c623e6ce17262872b313d132b7305dd585fbdc3580bfe9499ac31b0dcc45"
+QUAL_CASES = {
+    "B3": "b3", "B4": "b4", "Bw": "bw", "Bw2": "bw2", "Btip": "btip",
+    "Bq": "bq", "Bt": "bt",
+}
 WORK = ("simpleFoam", "IncNavierStokes", "RANS", "WJ", "python", "cc1",
         "c++", "g++", "gcc", "clang", "gfortran", "f951", "lto1",
         "orted", "mpirun", "mpiexec", "ninja", "make", "cmake")
@@ -174,6 +180,50 @@ def amend_outlet_workers(root, book, authorization, began):
     require(json.loads(receipt.read_text()) == event, "worker amendment receipt differs")
 
 
+def amend_outlet_qualification(root, book, authorization, began):
+    name = "outlet-qual-amendment"
+    receipt = root / "evidence" / (name + ".json")
+    mandate = identity(authorization)
+    prior = root / "operations/outlet-cp4-publish/receipt.json"
+    settlement = identity(prior)
+    require(mandate["sha256"] == OUTLET_QUAL_AUTHORIZATION
+            and settlement["sha256"] == OUTLET_CP4_SETTLEMENT,
+            "flat qualification authorization or CP4 settlement differs")
+    ledger = json.loads(book.read_text())
+    old = json.loads(prior.read_text())
+    require(ledger["entries"]["outlet-cp4-publish"] == old["result"]
+            and ledger["entries"]["outlet-worker-amendment"]["worker_limit"] == 80,
+            "CP4 settlement or shared-host allowance differs")
+    if name in ledger["entries"]:
+        event = ledger["entries"][name]
+        require(ledger["ceiling"] == 64800 and event["authorization"] == mandate
+                and event["settlement"] == settlement, "existing qualification amendment differs")
+    else:
+        before = balance(ledger)
+        require(not ledger["closed"] and before["reserved_seconds"] == 0
+                and ledger["ceiling"] == 54000 and ledger["protected_seconds"] == 3600
+                and before["charged_seconds"] >= old["balance"]["charged_seconds"],
+                "qualification amendment requires a reconciled CP4 account")
+        require(not receipt.exists(), "unexpected qualification amendment receipt")
+
+        def amend(value):
+            require(value == ledger, "ledger changed during qualification amendment")
+            opening = identity(book)
+            value["ceiling"] += 10800
+            value["entries"][name] = event = dict(
+                status="PASS", phase="accounting", seconds=time.monotonic() - began,
+                authorization=mandate, settlement=settlement, opening_ledger=opening,
+                prior_ceiling=54000, added_seconds=10800, ceiling=value["ceiling"],
+                protected_seconds=value["protected_seconds"], later_publication_hold=300,
+                before=before)
+            event["after"] = balance(value)
+
+        event = update(book, amend)["entries"][name]
+    if not receipt.exists():
+        atomic(receipt, event)
+    require(json.loads(receipt.read_text()) == event, "qualification amendment receipt differs")
+
+
 def memory_snapshot(pid="self"):
     mem = {line.split(":")[0]: line.split()[1] for line in
            Path("/proc/meminfo").read_text().splitlines()}
@@ -211,9 +261,58 @@ def memory_headroom(snapshot):
         for limit in ("memory.max", "memory.high") if group[limit] is not None])
 
 
-def outlet_solve(root, ledger, label, command):
+def qualification_solve(root, ledger, label, cap, session, info, parameters):
+    require("outlet-qual-amendment" in ledger["entries"], "missing qualification authorization")
+    manifest = json.loads((session.parent / "inputs.json").read_text())
+    slug = QUAL_CASES[manifest["case"]]
+    base = f"outlet-qual-{slug}"
+    require(re.fullmatch(base + r"(?:-continue-[1-9][0-9]*)?-steady", label),
+            "qualification label differs from admitted case")
+    admission_path = Path(manifest["admission"]["path"])
+    require(admission_path.parent == root / "evidence" and
+            re.fullmatch(base + r"-admission(?:-[1-9][0-9]*)?\.json", admission_path.name),
+            "qualification forecast is outside the admitted evidence path")
+    admission = json.loads(admission_path.read_text())
+    attempt = admission["attempts"][label.removesuffix("-steady")]
+    require(admission["schema"] == "WJH27FlatQualificationAdmissionV1"
+            and admission["status"] == "ADMITTED" and admission["case"] == manifest["case"]
+            and identity(admission_path) == manifest["admission"]
+            and cap == attempt["watch_seconds"], "qualification attempt or cap differs from forecast")
+    require(admission["quadrature"] == manifest["quadrature"] ==
+                [int(parameters["WJQuadratureX"]), int(parameters["WJQuadratureR"])]
+            and admission["tolerances"] == manifest["tolerances"] ==
+                [float(parameters["WJLinearTolerance"]), float(parameters["WJCoupledTolerance"])]
+            and attempt["native_seconds"] == float(parameters["WJSteadySeconds"])
+            and attempt["newton_iterations"] == int(parameters["WJSteadyNewtonIterations"])
+            and info["WJConstitutiveBackend"] == "FastFull3DV1"
+            and info["WJStressSplit"] == "PositiveShearV1"
+            and info["WJSteadyVelocityPC"] == "FullGradientV1"
+            and int(parameters["WJSteadyKrylovDimension"]) == 64
+            and float(parameters["Time"]) == 0. and float(parameters["Kinvis"]) == 6.423173803526447e-5
+            and "WJRestart" not in info, "qualification changed the declared numerical recipe")
+    require(manifest["session"] == identity(session)
+            and manifest["options"] == identity(Path(str(session) + ".opt"))
+            and manifest["application"] == admission["application"] == identity(
+                root / "runtime-outlet-v1/IncNavierStokesSolver")
+            and info["WJInitialFields"] == manifest["initial_guess"]["path"]
+            and manifest["initial_guess"] == identity(Path(info["WJInitialFields"]))
+            and info["WJInitialSourceIdentity"] == manifest["source"] == admission["source"]
+            and [manifest["x_edges"], manifest["physical_z_edges"]] ==
+                [admission["x_edges"], admission["physical_z_edges"]],
+            "qualification executable, axes or typed seed binding differs")
+    limit = admission["rss_limit_bytes"]
+    estimate = admission["forecast_peak_tree_rss_bytes"]
+    require(limit in (10 * GIB, 12 * GIB) and estimate <= limit
+            and (limit == 10 * GIB or estimate > 10 * GIB),
+            "RSS exception requires an individually measured forecast")
+    return dict(forecast=manifest["admission"], rss_limit_bytes=limit)
+
+
+def outlet_solve(root, ledger, label, command, cap):
     require("outlet-cp0-amendment" in ledger["entries"], "missing outlet authorization")
-    match = re.fullmatch(r"(outlet-(?:b0|b1|a1c|b1c|b2|bx))(?:-continue-[1-9][0-9]*)?-steady", label)
+    slugs = "|".join(QUAL_CASES.values())
+    match = re.fullmatch(r"(outlet-(?:b0|b1|a1c|b1c|b2|bx|qual-(?:" + slugs +
+                         r")))(?:-continue-[1-9][0-9]*)?-steady", label)
     require(match and len(command) == 7 and command[:3] == ["mpirun", "-np", "1"],
             "RSS amendment is limited to named single-rank outlet solves")
     runtime = root / "runtime-outlet-v1/IncNavierStokesSolver"
@@ -232,7 +331,36 @@ def outlet_solve(root, ledger, label, command):
             and info["WJOutputPrefix"] == str(session.parent / "state")
             and info["WJOutletPolicy"] == policy and float(parameters["NumSteps"]) == 0
             and float(parameters["WJSteadySeconds"]) > 0, "session does not match amended diagnostic")
-    return memory_snapshot()
+    qualified = (qualification_solve(root, ledger, label, cap, session, info, parameters)
+                 if label.startswith("outlet-qual-") else None)
+    return memory_snapshot(), qualified
+
+
+def choose_rank_cpu():
+    allowed = os.sched_getaffinity(0)
+    base = min(allowed)
+    node, = sorted((Path("/sys/devices/system/cpu") / f"cpu{base}").glob("node[0-9]*"))
+    candidates = [cpu for cpu in allowed if
+                  (Path("/sys/devices/system/cpu") / f"cpu{cpu}" / node.name).exists()]
+
+    def snapshot():
+        ticks = {}
+        for line in Path("/proc/stat").read_text().splitlines():
+            name, *columns = line.split()
+            if name.startswith("cpu") and name[3:].isdigit():
+                times = list(map(int, columns[:8]))
+                ticks[int(name[3:])] = sum(times), times[3]
+        return ticks
+
+    before = snapshot()
+    time.sleep(1.)
+    after = snapshot()
+    idle = {cpu: (after[cpu][1] - before[cpu][1]) / max(1, after[cpu][0] - before[cpu][0])
+            for cpu in candidates}
+    cpu = max(candidates, key=lambda i: (idle[i], -i))
+    require(idle[cpu] >= .9, "no quiet permitted CPU on the launcher's NUMA node")
+    return dict(cpu=cpu, reference_cpu=base, numa_node=node.name,
+                sampled_idle_fraction=idle[cpu], sample_seconds=1.)
 
 
 def initialize(root, book, began):
@@ -291,7 +419,8 @@ def run(root, book, args, began):
     require(not ledger["closed"] and label not in ledger["entries"], "closed account or repeated label")
     remaining = balance(ledger)
     if "outlet_evidence_floor" in ledger:
-        final_publication = phase == "evidence" and label.startswith("outlet-cp4-publish")
+        final_publication = phase == "evidence" and label.startswith(
+            ("outlet-cp4-publish", "outlet-qual-cp3-publish"))
         hold = 0 if final_publication else 300
     else:
         hold = 0 if phase == "evidence" else max(0, ledger["initial_evidence_seconds"] - evidence_spend(ledger))
@@ -317,14 +446,26 @@ def run(root, book, args, began):
         limits[phase] = 14  # Previous four-job Make build peaked 11 above admission.
     if phase == "build" and label == "outlet-configure" and command[:2] == ["cmake", "-S"]:
         limits[phase] = 8  # Serial generator and compiler-detection probes.
-    memory = outlet_solve(root, ledger, label, command) if phase == "outlet-science" else None
+    memory, qualification = (outlet_solve(root, ledger, label, command, args.seconds)
+                             if phase == "outlet-science" else (None, None))
     rss_limit = (16 if phase == "build" else 8) * GIB
     if memory:
         available = memory_headroom(memory)
         require(available >= 10 * GIB, "outlet diagnostic memory pressure at admission")
         rss_limit = (10 if available >= 12 * GIB else 8) * GIB
     pause_policy = None
-    if phase == "outlet-science" and worker_limit == 80 and label.startswith("outlet-b2-continue-"):
+    affinity = None
+    if qualification:
+        require(worker_limit == 80, "qualification needs the recorded shared-host allowance")
+        rss_limit = qualification["rss_limit_bytes"]
+        require(memory_headroom(memory) >= rss_limit + 2 * GIB, "qualification memory headroom")
+        affinity = choose_rank_cpu()
+        host, helpers = workers()
+        limits[phase] = 8
+        pause_policy = dict(trigger_workers=78, resume_workers=76, quiet_seconds=4.,
+                            maximum_paused_seconds=55., admission=qualification["forecast"],
+                            count_stopped_ownership=True)
+    elif phase == "outlet-science" and worker_limit == 80 and label.startswith("outlet-b2-continue-"):
         admission = root / "evidence/outlet-b2-worker80-admission.json"
         require(label in json.loads(admission.read_text())["steady_labels"],
                 "missing scoped worker rescheduling record")
@@ -353,6 +494,11 @@ def run(root, book, args, began):
                    worker_limit=worker_limit, worker_admission_margin=limits[phase],
                    input_files=[identity(p) for p in command
                                 if p.startswith("/") and "\n" not in p and Path(p).is_file()])
+    launched = command
+    if affinity:
+        launched = ["taskset", "--cpu-list", str(affinity["cpu"]), *command]
+        request["launch"] = dict(command=launched, affinity=affinity,
+                                 mpi_binding_environment={"OMPI_MCA_hwloc_base_binding_policy": "none"})
     operation.mkdir()
     atomic(operation / "request.json", request)
     update(book, lambda ledger: ledger["entries"].update(
@@ -361,13 +507,16 @@ def run(root, book, args, began):
     job_memory, lowest_headroom = None, None
     pauses, suspended_at, quiet_at, suspended_seconds = [], None, None, 0.
     owned_peak = 0
+    rank_affinity = None
     env = dict(os.environ, **THREADS, PYTHONDONTWRITEBYTECODE="1",
                TMPDIR=str(root / "tmp"), H27_ROOT=str(root), H27_OPERATION=str(operation))
+    if affinity:
+        env.update(request["launch"]["mpi_binding_environment"])
     log_path = operation / "command.log"
     with log_path.open("x") as log:
         try:
             check_storage(info)
-            with subprocess.Popen(command, cwd=root, env=env, stdout=log,
+            with subprocess.Popen(launched, cwd=root, env=env, stdout=log,
                                   stderr=subprocess.STDOUT, start_new_session=True) as child:
                 try:
                     while child.poll() is None:
@@ -375,6 +524,19 @@ def run(root, book, args, began):
                         if suspended_at is not None:
                             signal_groups(child_groups-groups, signal.SIGSTOP)
                         groups |= child_groups
+                        if affinity and rank_affinity is None:
+                            for pid in child_groups:
+                                try:
+                                    executable = Path(f"/proc/{pid}/exe").readlink()
+                                    if executable == Path(command[3]):
+                                        cpus = sorted(os.sched_getaffinity(pid))
+                                        require(cpus == [affinity["cpu"]], "native rank affinity differs")
+                                        rank_affinity = dict(pid=pid, allowed_cpus=cpus)
+                                        break
+                                except FileNotFoundError:
+                                    continue
+                                except ProcessLookupError:
+                                    continue
                         peak = max(peak, rss)
                         if pause_policy and pause_policy.get("count_stopped_ownership"):
                             observed_workers, _, owned, stopped = worker_census(groups | {child.pid})
@@ -445,6 +607,8 @@ def run(root, book, args, began):
                  worker_pauses=pauses, worker_paused_seconds=suspended_seconds)
     if output_files is not None:
         event["output_files"] = output_files
+    if affinity:
+        event["rank_affinity"] = rank_affinity
     ledger = update(book, lambda ledger: ledger["entries"].update({label: event}))
     atomic(operation / "receipt.json", dict(request=request, result=event,
                                             balance=balance(ledger), storage=storage(root)))
@@ -463,6 +627,8 @@ def main():
     amendment.add_argument("authorization", type=Path)
     workers_amendment = modes.add_parser("amend-outlet-workers")
     workers_amendment.add_argument("authorization", type=Path)
+    qualification_amendment = modes.add_parser("amend-outlet-qualification")
+    qualification_amendment.add_argument("authorization", type=Path)
     extend = modes.add_parser("allocate")
     extend.add_argument("seconds", type=float)
     extend.add_argument("forecast", type=Path)
@@ -487,6 +653,8 @@ def main():
             amend_outlet(root, book, args.authorization, began)
         elif args.action == "amend-outlet-workers":
             amend_outlet_workers(root, book, args.authorization, began)
+        elif args.action == "amend-outlet-qualification":
+            amend_outlet_qualification(root, book, args.authorization, began)
         elif args.action == "allocate":
             def allocate(ledger):
                 live = balance(ledger)

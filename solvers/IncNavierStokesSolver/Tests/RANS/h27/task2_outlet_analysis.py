@@ -175,8 +175,12 @@ def audit(root,name,out,seconds):
     context = get_context(root)
     ref = po.load_reference(context[2])
     state,binding = open_case(root,name,context,ref,24,time.monotonic()+seconds)
+    audit_state(state,binding,context[2],name,out)
+
+
+def audit_state(state,binding,table,name,out):
     projection_file = out.with_name(out.stem+"-inlet.json")
-    projection(context[2],Path(binding["state"]["path"]),projection_file)
+    projection(table,Path(binding["state"]["path"]),projection_file)
     core = state.assemble()
     boundary = state.boundary_checks()
     interfaces = state.interfaces()
