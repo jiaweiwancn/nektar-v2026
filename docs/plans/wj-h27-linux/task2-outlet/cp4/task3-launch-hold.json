@@ -1,0 +1,123 @@
+{
+  "schema": "WJH27OutletFlatLaunchHoldV1",
+  "status": "NOT_READY_DO_NOT_LAUNCH",
+  "TASK2_COMPLETE": "NO",
+  "TASK3_READY": "NO",
+  "reason": "Flat spatial and final recipe qualification remain open",
+  "recommendation": "Advance B for further flat qualification",
+  "simulation_time_advanced": 0.0,
+  "checkpoints": {
+    "CP0": "a9882692b2eb2efcf4836161d80bb296dafae709",
+    "CP1": "097341dba98bf82cf74ba3d5e3ea421666bbc66d",
+    "CP2": "dacf6a372beb43fa958cd78951474d8ad8708acf",
+    "CP3": "e44a2a3db2fbccd1902e4b44c227c2599eec3b35"
+  },
+  "scientific": {
+    "A": {
+      "policy": "FullTractionV1",
+      "default": true,
+      "corner_screen_misses": 16,
+      "first_collar_misses": 180,
+      "latest_audited_case": "A1c",
+      "latest_state": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-a1c-continue-1/state.result.json",
+        "bytes": 56150418,
+        "sha256": "df1f073d30604cfe4ef6d981ff6fcb202fc6bf9c184fa3ff602abe3dcf0c0605"
+      },
+      "latest_mesh": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-a1c/geometry.xml",
+        "bytes": 1172927,
+        "sha256": "72f5bb7b7ec02b62945a5bf6cc421754d46e47c3d6b45ce2989529ce68c65269"
+      },
+      "current_and_physical_gates": {
+        "independent_current": "MET",
+        "weak_accounting": "MET",
+        "boundary": "MET",
+        "shared_interface_flux": "MET",
+        "physical": "MET",
+        "inlet_projection": "MET",
+        "native_guards": "MET"
+      },
+      "latest_audit": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-A1c-audit.json",
+        "bytes": 1030083,
+        "sha256": "627c9ab1544d2549b443fb888e1d257558507636fda604dde9ff2bc9aa645f1a"
+      }
+    },
+    "B": {
+      "policy": "ZeroTransverseV1",
+      "default": false,
+      "corner_screen_misses": 0,
+      "first_collar_misses": 180,
+      "latest_audited_case": "B2",
+      "latest_state": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-b2-continue-4/state.result.json",
+        "bytes": 59229950,
+        "sha256": "6f24675d13794526389c6c1e0d9e229cff3654ba1b3e4aa0f54d7aa21eb0446b"
+      },
+      "latest_mesh": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-b2/geometry.xml",
+        "bytes": 1247655,
+        "sha256": "f96b904354c69ad5fda06c5f6dbbb9d2b0729755b284e3d059b63c638bb0e898"
+      },
+      "current_and_physical_gates": {
+        "independent_current": "MET",
+        "weak_accounting": "MET",
+        "boundary": "MET",
+        "shared_interface_flux": "MET",
+        "physical": "MET",
+        "inlet_projection": "MET",
+        "native_guards": "MET"
+      },
+      "latest_audit": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-B2-audit.json",
+        "bytes": 1066119,
+        "sha256": "538f7760349ee2686e06e55bf079ac8b7fbaaa27453fe3e073eff570730e0f91"
+      },
+      "second_collar_misses": 122,
+      "second_collar_comparison": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-second-collar-result.json",
+        "bytes": 2508781,
+        "sha256": "f7cbb17be04c5c2deec3f06d9c1de626b5611e6d7fc73da29de96974e536ab51"
+      }
+    }
+  },
+  "second_collar_decision": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-second-collar-decision.json",
+    "bytes": 34040,
+    "sha256": "5fec340a616ecedae551a041bfe8bc08faab3ef3418140104f2943c4e8e76dfa"
+  },
+  "native_source": "54b2f4268a5903fcf894f032b968bbfcb42a3e999a9c0409d032e999114894a8",
+  "application": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+    "bytes": 9997280,
+    "sha256": "3e8db421575122676808adc6c9783f0c897136e9d9d283b9d0cb200c5ec2df45"
+  },
+  "reference": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+    "bytes": 139982,
+    "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+  },
+  "outlet_location": {
+    "status": "DEFERRED",
+    "forecast": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-location-eligibility.json",
+      "bytes": 8870,
+      "sha256": "b0cae3fefcf323e05e2261372b0bfb8f58f1b0492eb08dcf8d90b07192db2fc1"
+    }
+  },
+  "pending_gates": {
+    "final_spatial": "OPEN",
+    "higher_quadrature": "NOT_RUN",
+    "tighter_algebraic": "NOT_RUN",
+    "three_timestep": "NOT_RUN",
+    "stock": "NOT_RUN",
+    "operational_restart": "NOT_RUN",
+    "advancing_cost": "NOT_RUN",
+    "hill_wake_and_separation": "LATER_APPLICATION"
+  },
+  "qualified_recipe": null,
+  "initial_state_for_task3": null,
+  "restart_for_task3": null,
+  "launch_commands": []
+}

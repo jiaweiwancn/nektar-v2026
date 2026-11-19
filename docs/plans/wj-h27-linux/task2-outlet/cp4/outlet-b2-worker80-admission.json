@@ -1,0 +1,91 @@
+{
+  "schema": "WJH27B2WorkerCapacityScheduleV2",
+  "worker_amendment": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-worker-amendment.json",
+    "bytes": 1135,
+    "sha256": "a5ae3f3104277aa1ac3e9f4d0a1de60357d7b1188995ea6305e70c22fdfaf094"
+  },
+  "worker_census": [
+    74,
+    108
+  ],
+  "memory": {
+    "mem_available_bytes": 403636105216,
+    "mem_total_bytes": 540840640512,
+    "job_cgroup": "/user.slice/user-1000.slice/session-712.scope",
+    "ancestor_limits": [
+      {
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-712.scope",
+        "current": 54386688,
+        "memory.max": null,
+        "memory.high": null
+      },
+      {
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+        "current": 264846163968,
+        "memory.max": null,
+        "memory.high": null
+      },
+      {
+        "path": "/sys/fs/cgroup/user.slice",
+        "current": 265133703168,
+        "memory.max": null,
+        "memory.high": null
+      },
+      {
+        "path": "/sys/fs/cgroup",
+        "memory.max": null,
+        "memory.high": null
+      }
+    ]
+  },
+  "complete_caps_with_grace": {
+    "fresh_input": 25,
+    "first_solve": 772,
+    "continued_input": 25,
+    "continued_solve": 682,
+    "final_input": 25,
+    "final_solve": 602,
+    "independent_audit": 189,
+    "collar_comparison": 103,
+    "final_publication": 300
+  },
+  "required_seconds": 2723,
+  "live_with_admission_reservation": {
+    "charged_seconds": 47559.426618403784,
+    "reserved_seconds": 22.0,
+    "nonprotected_remaining": 2818.5733815962158,
+    "tranche_remaining": 2805.8641012011503
+  },
+  "steady_labels": [
+    "outlet-b2-continue-3-steady",
+    "outlet-b2-continue-4-steady",
+    "outlet-b2-continue-5-steady"
+  ],
+  "native_seconds": [
+    650,
+    570,
+    490
+  ],
+  "watch_seconds": [
+    765,
+    675,
+    595
+  ],
+  "accepted_B1c_newton_history": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-b1c/state.steady.json",
+    "bytes": 11964017,
+    "sha256": "75874d89cea0646bcabbe516d5be9576b960ab971d8cd758de02da9df7a41bbf"
+  },
+  "B1c_continuation_anchor": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-b1c-continue-1-steady/receipt.json",
+    "bytes": 5857,
+    "sha256": "12eef72467bb1b27c45d4d0b50e5fa2bebe68c5a4e09cf5fd4b8c6eae129f989"
+  },
+  "linear_check_records_by_newton": {
+    "0": 3,
+    "1": 38,
+    "2": 274
+  },
+  "reason": "Use the same operator and acceptance gates. Stage short native attempts to retain accepted iterates before the tight third linear solve or a host interruption."
+}

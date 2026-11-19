@@ -1,0 +1,71 @@
+{
+  "schema": "WJH27OutletRankAffinityV1",
+  "operations": {
+    "outlet-b2-continue-3-steady": {
+      "record": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-b2-continue-3-steady/cpu-affinity-change.json",
+        "bytes": 781,
+        "sha256": "2613e4ed841a71a9f42f03bf9429b4de87079f2466ff3c22449c408d96332f84"
+      },
+      "observation": {
+        "schema": "WJH27SingleRankAffinityV1",
+        "operation": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-b2-continue-3-steady/request.json",
+          "bytes": 3822,
+          "sha256": "559b878347e2296d589d7ed8409b32d6dbac5bd70ad2762477647e38d21f10fb"
+        },
+        "rank_pid": 241771,
+        "threads": [
+          241771,
+          241775,
+          241776
+        ],
+        "from_cpu": 0,
+        "to_cpu": 14,
+        "old_same_numa_idle_fraction": 0.0,
+        "new_core_minimum_idle_fraction": 1.0,
+        "new_core_siblings": [
+          14
+        ],
+        "worker_census": [
+          75,
+          113
+        ],
+        "reason": "The registered rank shared CPU 0 with competing active work. The replacement CPU is on the same NUMA node. This operation is within the running solve's charged time."
+      }
+    },
+    "outlet-b2-continue-4-steady": {
+      "record": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-b2-continue-4-steady/cpu-affinity-change.json",
+        "bytes": 781,
+        "sha256": "13dec07d863280c07c77d6ff4064fc9ba96562c6e484c1b8547f262e3a1a582e"
+      },
+      "observation": {
+        "schema": "WJH27SingleRankAffinityV1",
+        "operation": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-b2-continue-4-steady/request.json",
+          "bytes": 3823,
+          "sha256": "459756f2c01d743ad789b30dc0b4a2b3806d3585a4cacd7dbcf02cb45e4748a8"
+        },
+        "rank_pid": 245020,
+        "threads": [
+          245020,
+          245021,
+          245022
+        ],
+        "from_cpu": 0,
+        "to_cpu": 15,
+        "old_same_numa_idle_fraction": 0.0,
+        "new_core_minimum_idle_fraction": 1.0,
+        "new_core_siblings": [
+          15
+        ],
+        "worker_census": [
+          68,
+          110
+        ],
+        "reason": "The registered rank shared CPU 0 with competing active work. The replacement CPU is on the same NUMA node. This operation is within the running solve's charged time."
+      }
+    }
+  }
+}

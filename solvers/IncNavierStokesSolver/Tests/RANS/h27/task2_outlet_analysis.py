@@ -71,8 +71,18 @@ def open_case(root, name, context, ref, order, deadline):
         case = path.parent
         manifest = read(case/"inputs.json")
         _, mesh, policy = CASES[name]
-        expected_geometry = (baseline["cases"][mesh]["geometry"] if mesh != "M1c" else
-                             read((root/"science/outlet-a1c/inputs.json"))["geometry"])
+        if mesh=="M1cc":
+            plan = root/"evidence/outlet-second-collar-plan.json"
+            expected_geometry = read(root/"science/outlet-b2/inputs.json")["geometry"]
+            require(manifest["refinement_plan"]==identity(plan),"second collar refinement plan differs")
+            x,z,_ = mesh_axes(verified(expected_geometry))
+            coordinates = read(plan)
+            require(x==coordinates["x_edges"] and z==coordinates["physical_z_edges"],
+                    "second collar native mesh differs from frozen coordinates")
+        elif mesh=="M1c":
+            expected_geometry = read(root/"science/outlet-a1c/inputs.json")["geometry"]
+        else:
+            expected_geometry = baseline["cases"][mesh]["geometry"]
         require(manifest["case"] == name and manifest["policy"] == policy and
                 manifest["source"] == runtime["source"] and manifest["application"] == runtime["application"] and
                 manifest["table"] == baseline["table"] and manifest["geometry"] == expected_geometry and
@@ -339,5 +349,6 @@ if __name__ == "__main__":
     elif args.mode=="collar-effect":
         collar_effect(args.root,args.out,args.seconds)
     else:
-        require(args.case in ("A","B"),"collar comparison needs a policy")
-        collar(args.root,args.case+"1",args.case+"1c",args.out,args.seconds)
+        require(args.case in ("A","B","B2"),"collar comparison needs a policy and level")
+        cases = ("B1c","B2") if args.case=="B2" else (args.case+"1",args.case+"1c")
+        collar(args.root,*cases,args.out,args.seconds)

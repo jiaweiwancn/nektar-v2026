@@ -25,6 +25,9 @@ LIMITS = {"analysis": 900, "build": 1800, "science": 7200, "evidence": 900,
 OUTLET_AUTHORIZATION = "9356a31fab90117bf05438281dcf6deef4805b7c18f3323df088e684c94c0037"
 S2_SETTLEMENT = "f2ae3f2c814d22dfa4161e976cd1792e2968b7303cbbe597186421383b52b64e"
 S2_ACCOUNT = "dec44571419200acdb94c9e63c94c6a9a490f78caff158e0b31f92e5b933a784"
+OUTLET_WORKER_AUTHORIZATION = (
+    "You are now allowed to employ 8 workers at most in addition to the current 72 worker limit. Resume"
+)
 WORK = ("simpleFoam", "IncNavierStokes", "RANS", "WJ", "python", "cc1",
         "c++", "g++", "gcc", "clang", "gfortran", "f951", "lto1",
         "orted", "mpirun", "mpiexec", "ninja", "make", "cmake")
@@ -35,13 +38,12 @@ def require(condition, message):
         raise RuntimeError(message)
 
 
-def workers():
+def worker_census(owned_groups=()):
     rows = subprocess.check_output(
-        ["ps", "-eLo", "pid=,tid=,state=,wchan=,comm="], text=True)
-    counted = []
-    helpers = 0
+        ["ps", "-eLo", "pid=,tid=,pgid=,state=,wchan=,comm="], text=True)
+    counted = helpers = owned = stopped = 0
     for row in rows.splitlines():
-        pid, tid, state, wait, comm = row.split(None, 4)
+        pid, tid, group, state, wait, comm = row.split(None, 5)
         if state in ("X", "Z") or comm.startswith("kworker"):
             continue
         rank_event = comm.startswith(("simpleFoam", "IncNavierStokes", "WJ")) and wait in ("do_pol", "ep_pol")
@@ -52,8 +54,15 @@ def workers():
             helpers += 1
             continue
         if state in ("R", "D") or comm.startswith(WORK):
-            counted.append(comm)
-    return len(counted), helpers
+            counted += 1
+            if owned_groups and int(group) in owned_groups:
+                owned += 1
+                stopped += state in ("T", "t")
+    return counted, helpers, owned, stopped
+
+
+def workers():
+    return worker_census()[:2]
 
 
 def storage(root):
@@ -128,6 +137,41 @@ def amend_outlet(root, book, authorization, began):
     ledger = update(book, amend)
     atomic(receipt, ledger["entries"][name])
     return ledger["entries"][name]["after"]
+
+
+def amend_outlet_workers(root, book, authorization, began):
+    name = "outlet-worker-amendment"
+    receipt = root / "evidence" / (name + ".json")
+    require(authorization.read_text().strip() == OUTLET_WORKER_AUTHORIZATION,
+            "outlet worker authorization differs")
+    mandate = identity(authorization)
+    ledger = json.loads(book.read_text())
+    require("outlet-cp0-amendment" in ledger["entries"], "missing outlet resource account")
+    if name in ledger["entries"]:
+        event = ledger["entries"][name]
+        require(event["authorization"] == mandate, "existing worker amendment binding differs")
+    else:
+        before = balance(ledger)
+        require(not ledger["closed"] and before["reserved_seconds"] == 0,
+                "worker amendment requires a settled outlet account")
+        require(not receipt.exists(), "unexpected worker amendment receipt")
+
+        def amend(value):
+            require(value == ledger, "ledger changed during outlet worker amendment")
+            opening_ledger = identity(book)
+            host = workers()[0]
+            value["entries"][name] = event = dict(
+                status="PASS", phase="accounting", seconds=time.monotonic()-began,
+                authorization=mandate, opening_ledger=opening_ledger,
+                prior_worker_limit=72, added_workers=8, worker_limit=80,
+                ceiling=value["ceiling"], protected_seconds=value["protected_seconds"],
+                before=before, workers_at_amendment=host)
+            event["after"] = balance(value)
+
+        event = update(book, amend)["entries"][name]
+    if not receipt.exists():
+        atomic(receipt, event)
+    require(json.loads(receipt.read_text()) == event, "worker amendment receipt differs")
 
 
 def memory_snapshot(pid="self"):
@@ -218,20 +262,23 @@ def initialize(root, book, began):
     return event
 
 
-def terminate(child, groups):
-    for group in groups | {child.pid}:
+def signal_groups(groups, signal_number):
+    for group in groups:
         try:
-            os.killpg(group, signal.SIGTERM)
+            os.killpg(group, signal_number)
         except ProcessLookupError:
             pass
+
+
+def terminate(child, groups, suspended=False):
+    owned = groups | {child.pid}
+    signal_groups(owned, signal.SIGTERM)
+    if suspended:
+        signal_groups(owned, signal.SIGCONT)
     try:
         return child.wait(timeout=4)
     except subprocess.TimeoutExpired:
-        for group in groups | {child.pid}:
-            try:
-                os.killpg(group, signal.SIGKILL)
-            except ProcessLookupError:
-                pass
+        signal_groups(owned, signal.SIGKILL)
         return child.wait()
 
 
@@ -254,8 +301,10 @@ def run(root, book, args, began):
             "operation cap exceeds live tranche or parent allowance")
     operation = root / "operations" / label
     host, helpers = workers()
-    # Evidence commands run serially with a buffer for the process census.
-    # The shared 72-worker watchdog also applies after admission.
+    amendment = ledger["entries"].get("outlet-worker-amendment") if label.startswith("outlet-") else None
+    worker_limit = 72 if amendment is None else amendment["worker_limit"]
+    require(worker_limit == 72 or (worker_limit == 80 and amendment["status"] == "PASS"),
+            "invalid worker ceiling")
     limits = {"build": 16, "science": 10, "analysis": 6, "evidence": 3, "outlet-science": 10}
     if phase == "build" and label.startswith("outlet-") and command[:2] == ["cmake", "--build"]:
         require(command[2:5] == [str(root / "build-outlet-v1"), "--parallel", "4"],
@@ -274,12 +323,34 @@ def run(root, book, args, began):
         available = memory_headroom(memory)
         require(available >= 10 * GIB, "outlet diagnostic memory pressure at admission")
         rss_limit = (10 if available >= 12 * GIB else 8) * GIB
-    require(host + limits[phase] <= 72, "shared worker limit at admission")
+    pause_policy = None
+    if phase == "outlet-science" and worker_limit == 80 and label.startswith("outlet-b2-continue-"):
+        admission = root / "evidence/outlet-b2-worker80-admission.json"
+        require(label in json.loads(admission.read_text())["steady_labels"],
+                "missing scoped worker rescheduling record")
+        anchor = root / "operations/outlet-b1c-continue-1-steady/receipt.json"
+        prior = json.loads(anchor.read_text())
+        require(prior["result"]["status"] == "PASS"
+                and prior["request"]["command"][:3] == command[:3]
+                and prior["result"]["peak_host_workers"] - prior["request"]["workers_before"] <= 6,
+                "paired single-rank worker anchor differs")
+        limits[phase] = 8
+        pause_policy = dict(trigger_workers=79, resume_workers=77, quiet_seconds=4.,
+                            maximum_paused_seconds=55., admission=identity(admission),
+                            count_stopped_ownership=True, worker_anchor=identity(anchor))
+    elif phase == "outlet-science" and label in ("outlet-b2-continue-2-steady", "outlet-b2-continue-3-steady"):
+        admission = root / "evidence/outlet-b2-final-admission.json"
+        require(json.loads(admission.read_text())["worker_pause_admitted"] is True,
+                "missing scoped worker rescheduling record")
+        pause_policy = dict(trigger_workers=68, resume_workers=66, quiet_seconds=5.,
+                            maximum_paused_seconds=55., admission=identity(admission))
+    require(host + limits[phase] <= worker_limit, "shared worker limit at admission")
     info = storage(root)
     request = dict(label=label, phase=phase, command=command, cap_seconds=args.seconds,
                    reserved_seconds=cap, workers_before=host, idle_mpi_event_helpers=helpers,
                    threads=THREADS, storage_before=info, runner=identity(__file__),
-                   rss_limit_bytes=rss_limit, memory_before=memory,
+                   rss_limit_bytes=rss_limit, memory_before=memory, worker_pause_policy=pause_policy,
+                   worker_limit=worker_limit, worker_admission_margin=limits[phase],
                    input_files=[identity(p) for p in command
                                 if p.startswith("/") and "\n" not in p and Path(p).is_file()])
     operation.mkdir()
@@ -288,6 +359,8 @@ def run(root, book, args, began):
         {label: {"status": "RESERVED", "phase": phase, "reserved_seconds": cap}}))
     peak, peak_workers, code, reason, groups = 0, host, None, None, set()
     job_memory, lowest_headroom = None, None
+    pauses, suspended_at, quiet_at, suspended_seconds = [], None, None, 0.
+    owned_peak = 0
     env = dict(os.environ, **THREADS, PYTHONDONTWRITEBYTECODE="1",
                TMPDIR=str(root / "tmp"), H27_ROOT=str(root), H27_OPERATION=str(operation))
     log_path = operation / "command.log"
@@ -299,9 +372,18 @@ def run(root, book, args, began):
                 try:
                     while child.poll() is None:
                         rss, child_groups = tree(child.pid)
+                        if suspended_at is not None:
+                            signal_groups(child_groups-groups, signal.SIGSTOP)
                         groups |= child_groups
                         peak = max(peak, rss)
-                        peak_workers = max(peak_workers, workers()[0])
+                        if pause_policy and pause_policy.get("count_stopped_ownership"):
+                            observed_workers, _, owned, stopped = worker_census(groups | {child.pid})
+                            if suspended_at is None:
+                                owned_peak = max(owned_peak, owned)
+                            projected_workers = observed_workers-stopped+owned_peak
+                        else:
+                            observed_workers = projected_workers = workers()[0]
+                        peak_workers = max(peak_workers, observed_workers)
                         require(peak <= rss_limit, "RSS_LIMIT")
                         if memory:
                             current = memory_snapshot()
@@ -313,14 +395,33 @@ def run(root, book, args, began):
                             lowest_headroom = min(available, lowest_headroom if lowest_headroom is not None else available)
                             require(available >= 2 * GIB + max(0, rss_limit - rss),
                                     "outlet diagnostic memory pressure during run")
-                        require(peak_workers <= 72, "HOST_WORKER_LIMIT")
+                        now = time.monotonic()
+                        if pause_policy:
+                            if suspended_at is None and observed_workers >= pause_policy["trigger_workers"]:
+                                signal_groups(groups | {child.pid}, signal.SIGSTOP)
+                                suspended_at, quiet_at = now, None
+                                pauses.append(dict(start_seconds=now-began, workers_at_stop=observed_workers))
+                            elif suspended_at is not None:
+                                require(suspended_seconds+now-suspended_at < pause_policy["maximum_paused_seconds"],
+                                        "HOST_PRESSURE_REMAINS")
+                                if projected_workers <= pause_policy["resume_workers"]:
+                                    quiet_at = now if quiet_at is None else quiet_at
+                                    if now-quiet_at >= pause_policy["quiet_seconds"]:
+                                        signal_groups(groups | {child.pid}, signal.SIGCONT)
+                                        suspended_seconds += now-suspended_at
+                                        pauses[-1].update(end_seconds=now-began, workers_at_resume=observed_workers,
+                                                          projected_workers_at_resume=projected_workers)
+                                        suspended_at, quiet_at = None, None
+                                else:
+                                    quiet_at = None
+                        require(observed_workers <= worker_limit or suspended_at is not None, "HOST_WORKER_LIMIT")
                         require(time.monotonic() - began < args.seconds, "TIME_LIMIT")
                         check_storage(storage(root))
                         require(log_path.stat().st_size <= 32 * 1024 ** 2, "LOG_LIMIT")
                         time.sleep(.5)
                     code = child.returncode
                 except (RuntimeError, OSError, KeyboardInterrupt) as error:
-                    code, reason = terminate(child, groups), str(error)
+                    code, reason = terminate(child, groups, suspended_at is not None), str(error)
         except (RuntimeError, OSError, KeyboardInterrupt) as error:
             reason = str(error)
     output_files = None
@@ -331,11 +432,17 @@ def run(root, book, args, began):
                             ("result.json", "steady.json", "final.bin")]
         except OSError as error:
             reason = f"cannot seal accepted outlet output: {error}"
+    if suspended_at is not None:
+        now = time.monotonic()
+        suspended_seconds += now-suspended_at
+        pauses[-1]["settled_seconds"] = now-began
     event = dict(status="PASS" if code == 0 and reason is None else "FAIL", phase=phase,
                  seconds=time.monotonic() - began, exit=code, reason=reason,
                  peak_tree_rss_bytes=peak, peak_host_workers=peak_workers, log=identity(log_path),
                  rss_limit_bytes=rss_limit, job_memory=job_memory,
-                 minimum_memory_headroom_bytes=lowest_headroom)
+                 minimum_memory_headroom_bytes=lowest_headroom,
+                 worker_limit=worker_limit, peak_owned_workers=owned_peak,
+                 worker_pauses=pauses, worker_paused_seconds=suspended_seconds)
     if output_files is not None:
         event["output_files"] = output_files
     ledger = update(book, lambda ledger: ledger["entries"].update({label: event}))
@@ -354,6 +461,8 @@ def main():
     modes.add_parser("balance")
     amendment = modes.add_parser("amend-outlet")
     amendment.add_argument("authorization", type=Path)
+    workers_amendment = modes.add_parser("amend-outlet-workers")
+    workers_amendment.add_argument("authorization", type=Path)
     extend = modes.add_parser("allocate")
     extend.add_argument("seconds", type=float)
     extend.add_argument("forecast", type=Path)
@@ -376,6 +485,8 @@ def main():
             print(json.dumps(initialize(root, book, began), indent=2))
         elif args.action == "amend-outlet":
             amend_outlet(root, book, args.authorization, began)
+        elif args.action == "amend-outlet-workers":
+            amend_outlet_workers(root, book, args.authorization, began)
         elif args.action == "allocate":
             def allocate(ledger):
                 live = balance(ledger)

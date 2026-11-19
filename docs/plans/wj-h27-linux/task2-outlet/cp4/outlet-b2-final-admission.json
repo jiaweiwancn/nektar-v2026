@@ -1,0 +1,76 @@
+{
+  "schema": "WJH27B2WorkerCapacityScheduleV1",
+  "prior_stops": [
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-b2-steady/receipt.json",
+      "bytes": 4890,
+      "sha256": "6fe22bc59da9cab502b7fdcb7f143c4349b5d43a988d71c1dfd0af9d10f228db"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-b2-continue-1-steady/receipt.json",
+      "bytes": 4952,
+      "sha256": "3c0292fbae249ebdf7f7ffce32e1f3fbe48077d556be274b1629b1aadd8be0ba"
+    }
+  ],
+  "operator_limits": {
+    "shared_worker_ceiling": 72,
+    "suspend_at": 68,
+    "resume_at_or_below": 66,
+    "quiet_seconds": 5,
+    "maximum_suspended_wall_seconds": 55
+  },
+  "worker_pause_admitted": true,
+  "worker_census": [
+    62,
+    102
+  ],
+  "memory": {
+    "mem_available_bytes": 402259218432,
+    "mem_total_bytes": 540840640512,
+    "job_cgroup": "/user.slice/user-1000.slice/session-712.scope",
+    "ancestor_limits": [
+      {
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-712.scope",
+        "current": 30269440,
+        "memory.max": null,
+        "memory.high": null
+      },
+      {
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+        "current": 261852631040,
+        "memory.max": null,
+        "memory.high": null
+      },
+      {
+        "path": "/sys/fs/cgroup/user.slice",
+        "current": 262141218816,
+        "memory.max": null,
+        "memory.high": null
+      },
+      {
+        "path": "/sys/fs/cgroup",
+        "memory.max": null,
+        "memory.high": null
+      }
+    ]
+  },
+  "required_seconds": 2980,
+  "cases": [
+    "outlet-b2-continue-2",
+    "outlet-b2-continue-3"
+  ],
+  "caps_with_grace": {
+    "fresh_guess_and_1675s_native_bound": 1834,
+    "native_continuation_if_required": 554,
+    "independent_action_and_physical_audit": 189,
+    "same_patch_comparison": 103,
+    "final_publication": 300
+  },
+  "live_with_admission_reservation": {
+    "charged_seconds": 47379.781936726795,
+    "reserved_seconds": 27.0,
+    "nonprotected_remaining": 2993.218063273205,
+    "tranche_remaining": 2896.5087828781398
+  },
+  "additional_staging": 83.49121712186025
+}

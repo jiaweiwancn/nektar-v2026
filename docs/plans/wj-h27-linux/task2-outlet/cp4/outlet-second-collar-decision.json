@@ -1,0 +1,1222 @@
+{
+  "schema": "WJH27OutletSecondCollarDecisionV1",
+  "attempts": [
+    {
+      "label": "outlet-b2-steady",
+      "receipt": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-b2-steady/receipt.json",
+        "bytes": 4890,
+        "sha256": "6fe22bc59da9cab502b7fdcb7f143c4349b5d43a988d71c1dfd0af9d10f228db"
+      },
+      "inputs": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-b2/inputs.json",
+        "bytes": 2930,
+        "sha256": "95bb6ca6918fb07064db1a8f652d5de2931eb3676ba6b6bcbf2eba33fb79c484"
+      },
+      "watchdog_status": "FAIL",
+      "watchdog_reason": "HOST_WORKER_LIMIT",
+      "seconds": 441.7846756759973,
+      "peak_tree_rss_bytes": 9168998400,
+      "peak_shared_worker_census": 95,
+      "worker_ceiling": 72
+    },
+    {
+      "label": "outlet-b2-continue-1-steady",
+      "receipt": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-b2-continue-1-steady/receipt.json",
+        "bytes": 4952,
+        "sha256": "3c0292fbae249ebdf7f7ffce32e1f3fbe48077d556be274b1629b1aadd8be0ba"
+      },
+      "inputs": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-b2-continue-1/inputs.json",
+        "bytes": 2986,
+        "sha256": "234e1b35bd907a3e8fa4528d0b698102c91e862bf799fbb8b189f3cb0eb611bf"
+      },
+      "watchdog_status": "FAIL",
+      "watchdog_reason": "HOST_WORKER_LIMIT",
+      "seconds": 919.1678488110047,
+      "peak_tree_rss_bytes": 9298935808,
+      "peak_shared_worker_census": 75,
+      "worker_ceiling": 72
+    },
+    {
+      "label": "outlet-b2-continue-2-steady",
+      "receipt": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-b2-continue-2-steady/receipt.json",
+        "bytes": 5628,
+        "sha256": "bcf82b482f4d925e07f71567f6092fec02ef9388b033cf807080ff4b1465d142"
+      },
+      "inputs": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-b2-continue-2/inputs.json",
+        "bytes": 2986,
+        "sha256": "494d5c7ff1bc28cd03dbdc74a1645e5cb54021bb182cf237bb056f499ebb7978"
+      },
+      "watchdog_status": "FAIL",
+      "watchdog_reason": "HOST_PRESSURE_REMAINS",
+      "seconds": 174.65950491999683,
+      "peak_tree_rss_bytes": 6173446144,
+      "peak_shared_worker_census": 76,
+      "worker_ceiling": 72
+    },
+    {
+      "label": "outlet-b2-continue-3-steady",
+      "receipt": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-b2-continue-3-steady/receipt.json",
+        "bytes": 6351,
+        "sha256": "bf65e1d39f4c3e4c68d069a6adddec3d188b24b3b292c4cc89230f462b24817f"
+      },
+      "inputs": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-b2-continue-3/inputs.json",
+        "bytes": 2985,
+        "sha256": "1bb3d37a8b743846c9c9e6188838342d0cf19b13a8fae40378ac97e4da0e575d"
+      },
+      "watchdog_status": "FAIL",
+      "watchdog_reason": null,
+      "seconds": 761.2085534989892,
+      "peak_tree_rss_bytes": 9107935232,
+      "peak_shared_worker_census": 81,
+      "worker_ceiling": 80,
+      "affinity": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-b2-continue-3-steady/cpu-affinity-change.json",
+        "bytes": 781,
+        "sha256": "2613e4ed841a71a9f42f03bf9429b4de87079f2466ff3c22449c408d96332f84"
+      },
+      "steady": {
+        "detail": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-b2-continue-3/state.steady.json",
+          "bytes": 12338820,
+          "sha256": "0decaa0bb66f654664525371310ab738363f7522367629d3c1eef6d5cc38d797"
+        },
+        "reason": "DEADLINE: finite steady-solve wall budget exhausted",
+        "native_seconds": 650.601805107,
+        "residual": 9.248067325609142e-08,
+        "accepted_newton_steps": 1,
+        "converged": false,
+        "best_from_accepted_iterate": true
+      },
+      "typed_continuation_guess": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-b2-continue-3/state.steady-candidate.json",
+        "bytes": 46934561,
+        "sha256": "12b0164a3914decb4be2a4fa87e13ce8fff5e57282c0b24de27548d543822032"
+      }
+    },
+    {
+      "label": "outlet-b2-continue-4-steady",
+      "receipt": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-b2-continue-4-steady/receipt.json",
+        "bytes": 6825,
+        "sha256": "38ddab4cfeec0c4054bf276b542b4631130dc28e2614b02a3817e4ef748f599d"
+      },
+      "inputs": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-b2-continue-4/inputs.json",
+        "bytes": 2982,
+        "sha256": "9dd86fab2d43f6bb15208b24b38c260ecfaf94142404db67f65f021a424db4f4"
+      },
+      "watchdog_status": "PASS",
+      "watchdog_reason": null,
+      "seconds": 595.4852488790057,
+      "peak_tree_rss_bytes": 9064734720,
+      "peak_shared_worker_census": 74,
+      "worker_ceiling": 80,
+      "affinity": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-b2-continue-4-steady/cpu-affinity-change.json",
+        "bytes": 781,
+        "sha256": "13dec07d863280c07c77d6ff4064fc9ba96562c6e484c1b8547f262e3a1a582e"
+      },
+      "steady": {
+        "detail": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-b2-continue-4/state.steady.json",
+          "bytes": 12293103,
+          "sha256": "7a55e916a73bb2dbee317edd5913d26627f523e1219314af806fc002d01b7fa1"
+        },
+        "reason": "current true steady residual meets caller acceptance norm",
+        "native_seconds": 530.143736852,
+        "residual": 3.498139562707665e-11,
+        "accepted_newton_steps": 3,
+        "converged": true,
+        "best_from_accepted_iterate": true
+      }
+    }
+  ],
+  "B2_audit": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-B2-audit.json",
+    "bytes": 1066119,
+    "sha256": "538f7760349ee2686e06e55bf079ac8b7fbaaa27453fe3e073eff570730e0f91"
+  },
+  "spatial_status": "NOT_MET",
+  "comparison": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-second-collar-result.json",
+    "bytes": 2508781,
+    "sha256": "f7cbb17be04c5c2deec3f06d9c1de626b5611e6d7fc73da29de96974e536ab51"
+  },
+  "spatial_misses": 122,
+  "misses_by_field": {
+    "Pi": 60,
+    "R": 58,
+    "traction": 4
+  },
+  "first_misses_by_field": {
+    "G": 58,
+    "Pi": 60,
+    "R": 58,
+    "traction": 4
+  },
+  "contracted_row_counts": {
+    "RMS": 680,
+    "MAX": 680
+  },
+  "reported_rows": {
+    "whole/G": {
+      "first_bisection": {
+        "RMS": 0.00012841677149976865,
+        "MAX": 0.014687290249469465,
+        "limits": [
+          0.01,
+          0.01
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Ur",
+          "x": -9.939670769620442,
+          "r": 0.10001100931813471,
+          "coarse_owner": 3330,
+          "fine_owner": 3441,
+          "owner_bounds": [
+            [
+              -10.0,
+              -9.843749999999998,
+              0.09999999999999998,
+              0.10640877656902004
+            ],
+            [
+              -10.0,
+              -9.843749999999998,
+              0.09999999999999998,
+              0.10320438828451
+            ]
+          ],
+          "signed_difference": -0.014687290249469465,
+          "included_with_quadrature_weight": true,
+          "first_raw_value": 1.223243271084783,
+          "second_raw_value": 1.2085559808353135
+        }
+      },
+      "second_bisection": {
+        "RMS": 2.7635244058567324e-05,
+        "MAX": 0.0032353954185347323,
+        "limits": [
+          0.01,
+          0.01
+        ],
+        "status": "MET"
+      },
+      "ratio": {
+        "RMS": 0.21519964826881752,
+        "MAX": 0.22028538713270146
+      }
+    },
+    "whole/Pi": {
+      "first_bisection": {
+        "RMS": 0.00012538097655315732,
+        "MAX": 0.009157000326377398,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Pi",
+          "x": -10.0,
+          "r": 0.10000000000000003,
+          "coarse_owner": 3219,
+          "fine_owner": 3330,
+          "owner_bounds": [
+            [
+              -10.0,
+              -9.843749999999998,
+              0.08125000000000002,
+              0.10000000000000003
+            ],
+            [
+              -10.0,
+              -9.843749999999998,
+              0.09062499999999998,
+              0.10000000000000003
+            ]
+          ],
+          "signed_difference": -0.009157000326377398,
+          "included_with_quadrature_weight": false,
+          "first_raw_value": 0.0002023187219564244,
+          "second_raw_value": 0.0001785013641075168
+        }
+      },
+      "second_bisection": {
+        "RMS": 2.195454692357768e-05,
+        "MAX": 0.0013530197295163208,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Pi",
+          "x": 14.999467061796123,
+          "r": 0.08377310903390667,
+          "coarse_owner": 3329,
+          "fine_owner": 3329,
+          "owner_bounds": [
+            [
+              14.999389648437498,
+              15.0,
+              0.08125000000000002,
+              0.09062500000000004
+            ],
+            [
+              14.999389648437498,
+              15.0,
+              0.08125000000000002,
+              0.08593750000000006
+            ]
+          ],
+          "signed_difference": -0.0013530197295163208,
+          "included_with_quadrature_weight": true,
+          "first_raw_value": -0.0012703720238168355,
+          "second_raw_value": -0.0012738912281333075
+        }
+      },
+      "ratio": {
+        "RMS": 0.1751026952184384,
+        "MAX": 0.14775796453985596
+      }
+    },
+    "whole/R": {
+      "first_bisection": {
+        "RMS": 7.606432991929942e-05,
+        "MAX": 0.012256962137648339,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Rxx",
+          "x": 15.0,
+          "r": 0.09999999999999998,
+          "coarse_owner": 3440,
+          "fine_owner": 3551,
+          "owner_bounds": [
+            [
+              14.999389648437498,
+              15.0,
+              0.09999999999999998,
+              0.10640877656902004
+            ],
+            [
+              14.999389648437498,
+              15.0,
+              0.09999999999999998,
+              0.10320438828451
+            ]
+          ],
+          "signed_difference": 0.012256962137648339,
+          "included_with_quadrature_weight": false,
+          "first_raw_value": 0.0077166109427491475,
+          "second_raw_value": 0.007748491301269171
+        }
+      },
+      "second_bisection": {
+        "RMS": 1.6171333619023037e-05,
+        "MAX": 0.002187826405076612,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Rxr",
+          "x": 15.0,
+          "r": 0.08125000000000002,
+          "coarse_owner": 3329,
+          "fine_owner": 3329,
+          "owner_bounds": [
+            [
+              14.999389648437498,
+              15.0,
+              0.08125000000000002,
+              0.09062500000000004
+            ],
+            [
+              14.999389648437498,
+              15.0,
+              0.08125000000000002,
+              0.08593750000000006
+            ]
+          ],
+          "signed_difference": 0.002187826405076612,
+          "included_with_quadrature_weight": false,
+          "first_raw_value": -0.0025127510465630066,
+          "second_raw_value": -0.0025070605100834024
+        }
+      },
+      "ratio": {
+        "RMS": 0.21260075039351614,
+        "MAX": 0.1784966275090718
+      }
+    },
+    "whole/U": {
+      "first_bisection": {
+        "RMS": 1.966170110853356e-07,
+        "MAX": 1.4823833951627119e-05,
+        "limits": [
+          0.0001,
+          0.0001
+        ],
+        "status": "MET"
+      },
+      "second_bisection": {
+        "RMS": 2.4234239640720875e-08,
+        "MAX": 1.8123043167839192e-06,
+        "limits": [
+          0.0001,
+          0.0001
+        ],
+        "status": "MET"
+      },
+      "ratio": {
+        "RMS": 0.12325606775805753,
+        "MAX": 0.12225611287186565
+      }
+    },
+    "whole/W": {
+      "first_bisection": {
+        "RMS": 2.2511829650547015e-07,
+        "MAX": 1.835975462377083e-05,
+        "limits": [
+          0.0001,
+          0.0001
+        ],
+        "status": "MET"
+      },
+      "second_bisection": {
+        "RMS": 3.710111564824026e-08,
+        "MAX": 3.0722704340109906e-06,
+        "limits": [
+          0.0001,
+          0.0001
+        ],
+        "status": "MET"
+      },
+      "ratio": {
+        "RMS": 0.16480719792288737,
+        "MAX": 0.16733722737412
+      }
+    },
+    "whole/epsilon": {
+      "first_bisection": {
+        "RMS": 1.9959473721978033e-07,
+        "MAX": 2.191436299843531e-06,
+        "limits": [
+          0.01,
+          0.01
+        ],
+        "status": "MET"
+      },
+      "second_bisection": {
+        "RMS": 8.211927144358881e-09,
+        "MAX": 8.898366774053938e-08,
+        "limits": [
+          0.01,
+          0.01
+        ],
+        "status": "MET"
+      },
+      "ratio": {
+        "RMS": 0.04114300436346906,
+        "MAX": 0.040605181061796246
+      }
+    },
+    "whole/k": {
+      "first_bisection": {
+        "RMS": 5.523123652053759e-07,
+        "MAX": 2.8521412669155104e-05,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "MET"
+      },
+      "second_bisection": {
+        "RMS": 5.4081174935204924e-08,
+        "MAX": 3.063564216044233e-06,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "MET"
+      },
+      "ratio": {
+        "RMS": 0.09791773340996084,
+        "MAX": 0.10741277970979919
+      }
+    },
+    "whole/traction": {
+      "first_bisection": {
+        "RMS": 1.047707097875156e-05,
+        "MAX": 0.008530128558168912,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Vxr",
+          "x": 15.0,
+          "r": 0.10000000000000003,
+          "coarse_owner": 3329,
+          "fine_owner": 3440,
+          "owner_bounds": [
+            [
+              14.999389648437498,
+              15.0,
+              0.08125000000000002,
+              0.10000000000000003
+            ],
+            [
+              14.999389648437498,
+              15.0,
+              0.09062499999999998,
+              0.10000000000000003
+            ]
+          ],
+          "signed_difference": -0.008530128558168912,
+          "included_with_quadrature_weight": false,
+          "first_raw_value": 0.0025840566996275065,
+          "second_raw_value": 0.002561869835247709
+        }
+      },
+      "second_bisection": {
+        "RMS": 1.347035812838895e-06,
+        "MAX": 0.00229998611791422,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Vxr",
+          "x": 15.0,
+          "r": 0.08125000000000002,
+          "coarse_owner": 3329,
+          "fine_owner": 3329,
+          "owner_bounds": [
+            [
+              14.999389648437498,
+              15.0,
+              0.08125000000000002,
+              0.09062500000000004
+            ],
+            [
+              14.999389648437498,
+              15.0,
+              0.08125000000000002,
+              0.08593750000000006
+            ]
+          ],
+          "signed_difference": -0.00229998611791422,
+          "included_with_quadrature_weight": false,
+          "first_raw_value": 0.002610473979897161,
+          "second_raw_value": 0.0026044917160044662
+        }
+      },
+      "ratio": {
+        "RMS": 0.12856988518745407,
+        "MAX": 0.26963088565782856
+      }
+    },
+    "x=15/whole/G": {
+      "first_bisection": {
+        "RMS": 0.00018650394154911526,
+        "MAX": 0.011872377897504283,
+        "limits": [
+          0.01,
+          0.01
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Ur",
+          "x": 15.0,
+          "r": 0.10000000000000003,
+          "coarse_owner": 3329,
+          "fine_owner": 3440,
+          "owner_bounds": [
+            [
+              14.999389648437498,
+              15.0,
+              0.08125000000000002,
+              0.10000000000000003
+            ],
+            [
+              14.999389648437498,
+              15.0,
+              0.09062499999999998,
+              0.10000000000000003
+            ]
+          ],
+          "signed_difference": -0.011872377897504283,
+          "included_with_quadrature_weight": false,
+          "first_raw_value": 1.247938947152969,
+          "second_raw_value": 1.2360665692554647
+        }
+      },
+      "second_bisection": {
+        "RMS": 4.8890262194054535e-05,
+        "MAX": 0.0032451250957118796,
+        "limits": [
+          0.01,
+          0.01
+        ],
+        "status": "MET"
+      },
+      "ratio": {
+        "RMS": 0.26214063782228125,
+        "MAX": 0.2733340467872105
+      }
+    },
+    "x=15/whole/Pi": {
+      "first_bisection": {
+        "RMS": 0.00011947115686061526,
+        "MAX": 0.006851779351245882,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Pi",
+          "x": 15.0,
+          "r": 0.10000000000000003,
+          "coarse_owner": 3329,
+          "fine_owner": 3440,
+          "owner_bounds": [
+            [
+              14.999389648437498,
+              15.0,
+              0.08125000000000002,
+              0.10000000000000003
+            ],
+            [
+              14.999389648437498,
+              15.0,
+              0.09062499999999998,
+              0.10000000000000003
+            ]
+          ],
+          "signed_difference": -0.006851779351245882,
+          "included_with_quadrature_weight": false,
+          "first_raw_value": -0.0002835086702859216,
+          "second_raw_value": -0.00030133014837851216
+        }
+      },
+      "second_bisection": {
+        "RMS": 2.33957406341901e-05,
+        "MAX": 0.0013009234799614424,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Pi",
+          "x": 15.0,
+          "r": 0.0834143909660934,
+          "coarse_owner": 3329,
+          "fine_owner": 3329,
+          "owner_bounds": [
+            [
+              14.999389648437498,
+              15.0,
+              0.08125000000000002,
+              0.09062500000000004
+            ],
+            [
+              14.999389648437498,
+              15.0,
+              0.08125000000000002,
+              0.08593750000000006
+            ]
+          ],
+          "signed_difference": -0.0013009234799614424,
+          "included_with_quadrature_weight": true,
+          "first_raw_value": -0.0013001491817836637,
+          "second_raw_value": -0.0013035328837550434
+        }
+      },
+      "ratio": {
+        "RMS": 0.19582752229883796,
+        "MAX": 0.189866516896066
+      }
+    },
+    "x=15/whole/R": {
+      "first_bisection": {
+        "RMS": 0.00012989807304621172,
+        "MAX": 0.012256962137653342,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Rxx",
+          "x": 15.0,
+          "r": 0.09999999999999998,
+          "coarse_owner": 3440,
+          "fine_owner": 3551,
+          "owner_bounds": [
+            [
+              14.999389648437498,
+              15.0,
+              0.09999999999999998,
+              0.10640877656902004
+            ],
+            [
+              14.999389648437498,
+              15.0,
+              0.09999999999999998,
+              0.10320438828451
+            ]
+          ],
+          "signed_difference": 0.012256962137653342,
+          "included_with_quadrature_weight": false,
+          "first_raw_value": 0.007716610942749183,
+          "second_raw_value": 0.007748491301269219
+        }
+      },
+      "second_bisection": {
+        "RMS": 2.870940595769795e-05,
+        "MAX": 0.0021878264050867826,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Rxr",
+          "x": 15.0,
+          "r": 0.08125000000000002,
+          "coarse_owner": 3329,
+          "fine_owner": 3329,
+          "owner_bounds": [
+            [
+              14.999389648437498,
+              15.0,
+              0.08125000000000002,
+              0.09062500000000004
+            ],
+            [
+              14.999389648437498,
+              15.0,
+              0.08125000000000002,
+              0.08593750000000006
+            ]
+          ],
+          "signed_difference": 0.0021878264050867826,
+          "included_with_quadrature_weight": false,
+          "first_raw_value": -0.002512751046563032,
+          "second_raw_value": -0.0025070605100834015
+        }
+      },
+      "ratio": {
+        "RMS": 0.22101487177168883,
+        "MAX": 0.17849662750982873
+      }
+    },
+    "x=15/whole/U": {
+      "first_bisection": {
+        "RMS": 2.968341432132027e-07,
+        "MAX": 1.4836728132461285e-05,
+        "limits": [
+          0.0001,
+          0.0001
+        ],
+        "status": "MET"
+      },
+      "second_bisection": {
+        "RMS": 3.1453215675153594e-08,
+        "MAX": 1.6817152117543088e-06,
+        "limits": [
+          0.0001,
+          0.0001
+        ],
+        "status": "MET"
+      },
+      "ratio": {
+        "RMS": 0.1059622566820494,
+        "MAX": 0.11334811804463028
+      }
+    },
+    "x=15/whole/W": {
+      "first_bisection": {
+        "RMS": 0.0,
+        "MAX": 0.0,
+        "limits": [
+          0.0001,
+          0.0001
+        ],
+        "status": "MET"
+      },
+      "second_bisection": {
+        "RMS": 0.0,
+        "MAX": 0.0,
+        "limits": [
+          0.0001,
+          0.0001
+        ],
+        "status": "MET"
+      },
+      "ratio": {
+        "RMS": null,
+        "MAX": null
+      }
+    },
+    "x=15/whole/epsilon": {
+      "first_bisection": {
+        "RMS": 2.770327287241932e-07,
+        "MAX": 1.52990459266448e-06,
+        "limits": [
+          0.01,
+          0.01
+        ],
+        "status": "MET"
+      },
+      "second_bisection": {
+        "RMS": 1.1404351271437659e-08,
+        "MAX": 6.27788351787952e-08,
+        "limits": [
+          0.01,
+          0.01
+        ],
+        "status": "MET"
+      },
+      "ratio": {
+        "RMS": 0.04116607927141902,
+        "MAX": 0.041034477234596474
+      }
+    },
+    "x=15/whole/k": {
+      "first_bisection": {
+        "RMS": 6.655703235496843e-07,
+        "MAX": 2.8521442143452493e-05,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "MET"
+      },
+      "second_bisection": {
+        "RMS": 6.14673230863382e-08,
+        "MAX": 3.0635807015013092e-06,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "MET"
+      },
+      "ratio": {
+        "RMS": 0.09235286026353264,
+        "MAX": 0.10741324671075926
+      }
+    },
+    "x=15/whole/traction": {
+      "first_bisection": {
+        "RMS": 0.00013516063474325145,
+        "MAX": 0.008530128558171247,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Vxr",
+          "x": 15.0,
+          "r": 0.10000000000000003,
+          "coarse_owner": 3329,
+          "fine_owner": 3440,
+          "owner_bounds": [
+            [
+              14.999389648437498,
+              15.0,
+              0.08125000000000002,
+              0.10000000000000003
+            ],
+            [
+              14.999389648437498,
+              15.0,
+              0.09062499999999998,
+              0.10000000000000003
+            ]
+          ],
+          "signed_difference": -0.008530128558171247,
+          "included_with_quadrature_weight": false,
+          "first_raw_value": 0.0025840566996274874,
+          "second_raw_value": 0.002561869835247684
+        }
+      },
+      "second_bisection": {
+        "RMS": 2.9822034975430423e-05,
+        "MAX": 0.002299986117924391,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Vxr",
+          "x": 15.0,
+          "r": 0.08125000000000002,
+          "coarse_owner": 3329,
+          "fine_owner": 3329,
+          "owner_bounds": [
+            [
+              14.999389648437498,
+              15.0,
+              0.08125000000000002,
+              0.09062500000000004
+            ],
+            [
+              14.999389648437498,
+              15.0,
+              0.08125000000000002,
+              0.08593750000000006
+            ]
+          ],
+          "signed_difference": -0.002299986117924391,
+          "included_with_quadrature_weight": false,
+          "first_raw_value": 0.0026104739798971867,
+          "second_raw_value": 0.0026044917160044654
+        }
+      },
+      "ratio": {
+        "RMS": 0.22064142442124357,
+        "MAX": 0.26963088565894716
+      }
+    },
+    "interior/whole/G": {
+      "first_bisection": {
+        "RMS": 0.00012830899349988763,
+        "MAX": 0.012733804525438375,
+        "limits": [
+          0.01,
+          0.01
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Ur",
+          "x": -2.5,
+          "r": 0.09999999999999998,
+          "coarse_owner": 3361,
+          "fine_owner": 3472,
+          "owner_bounds": [
+            [
+              -2.5,
+              -2.1874999999999996,
+              0.09999999999999998,
+              0.10640877656902004
+            ],
+            [
+              -2.5,
+              -2.1874999999999996,
+              0.09999999999999998,
+              0.10320438828451
+            ]
+          ],
+          "signed_difference": -0.012733804525438375,
+          "included_with_quadrature_weight": false,
+          "first_raw_value": 1.2452348885025555,
+          "second_raw_value": 1.232501083977117
+        }
+      },
+      "second_bisection": {
+        "RMS": 2.7621927066037204e-05,
+        "MAX": 0.0018226031878905147,
+        "limits": [
+          0.01,
+          0.01
+        ],
+        "status": "MET"
+      },
+      "ratio": {
+        "RMS": 0.21527662490830304,
+        "MAX": 0.1431310795017697
+      }
+    },
+    "interior/whole/Pi": {
+      "first_bisection": {
+        "RMS": 0.00012522052040550598,
+        "MAX": 0.00774010344014494,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Pi",
+          "x": 8.0,
+          "r": 0.10000000000000003,
+          "coarse_owner": 3281,
+          "fine_owner": 3392,
+          "owner_bounds": [
+            [
+              7.812499999999999,
+              8.125,
+              0.08125000000000002,
+              0.10000000000000003
+            ],
+            [
+              7.812499999999999,
+              8.125,
+              0.09062499999999998,
+              0.10000000000000003
+            ]
+          ],
+          "signed_difference": -0.00774010344014494,
+          "included_with_quadrature_weight": false,
+          "first_raw_value": -0.00023224281590401207,
+          "second_raw_value": -0.00025237482495182905
+        }
+      },
+      "second_bisection": {
+        "RMS": 2.1929927933788757e-05,
+        "MAX": 0.0011470151522466373,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Pi",
+          "x": 7.999355806173603,
+          "r": 0.08377310903390667,
+          "coarse_owner": 3281,
+          "fine_owner": 3281,
+          "owner_bounds": [
+            [
+              7.812499999999999,
+              8.125,
+              0.08125000000000002,
+              0.09062500000000004
+            ],
+            [
+              7.812499999999999,
+              8.125,
+              0.08125000000000002,
+              0.08593750000000006
+            ]
+          ],
+          "signed_difference": -0.0011470151522466373,
+          "included_with_quadrature_weight": true,
+          "first_raw_value": -0.001262834314316459,
+          "second_raw_value": -0.0012658177007274524
+        }
+      },
+      "ratio": {
+        "RMS": 0.17513046474150007,
+        "MAX": 0.14819119164448252
+      }
+    },
+    "interior/whole/R": {
+      "first_bisection": {
+        "RMS": 7.600009465157006e-05,
+        "MAX": 0.007226335675561715,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Rrr",
+          "x": 8.0,
+          "r": 0.09999999999999998,
+          "coarse_owner": 3392,
+          "fine_owner": 3503,
+          "owner_bounds": [
+            [
+              7.812499999999999,
+              8.125,
+              0.09999999999999998,
+              0.10640877656902004
+            ],
+            [
+              7.812499999999999,
+              8.125,
+              0.09999999999999998,
+              0.10320438828451
+            ]
+          ],
+          "signed_difference": 0.007226335675561715,
+          "included_with_quadrature_weight": false,
+          "first_raw_value": 0.003930629508362312,
+          "second_raw_value": 0.003949425207454448
+        }
+      },
+      "second_bisection": {
+        "RMS": 1.6159173511502572e-05,
+        "MAX": 0.0011855581379649602,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "NOT_MET",
+        "peak": {
+          "component": "Rrr",
+          "x": 8.0,
+          "r": 0.09062499999999998,
+          "coarse_owner": 3392,
+          "fine_owner": 3503,
+          "owner_bounds": [
+            [
+              7.812499999999999,
+              8.125,
+              0.09062499999999998,
+              0.10000000000000003
+            ],
+            [
+              7.812499999999999,
+              8.125,
+              0.09062499999999998,
+              0.09531250000000002
+            ]
+          ],
+          "signed_difference": 0.0011855581379649602,
+          "included_with_quadrature_weight": false,
+          "first_raw_value": 0.0044825559955061454,
+          "second_raw_value": 0.004485639632222992
+        }
+      },
+      "ratio": {
+        "RMS": 0.21262043929794955,
+        "MAX": 0.16406076207811987
+      }
+    },
+    "interior/whole/U": {
+      "first_bisection": {
+        "RMS": 1.9678408335912257e-07,
+        "MAX": 9.237979725906786e-06,
+        "limits": [
+          0.0001,
+          0.0001
+        ],
+        "status": "MET"
+      },
+      "second_bisection": {
+        "RMS": 2.423091068710001e-08,
+        "MAX": 1.6107819644783916e-06,
+        "limits": [
+          0.0001,
+          0.0001
+        ],
+        "status": "MET"
+      },
+      "ratio": {
+        "RMS": 0.12313450495322648,
+        "MAX": 0.17436517639902913
+      }
+    },
+    "interior/whole/W": {
+      "first_bisection": {
+        "RMS": 2.2493139546312788e-07,
+        "MAX": 1.6016833567344978e-05,
+        "limits": [
+          0.0001,
+          0.0001
+        ],
+        "status": "MET"
+      },
+      "second_bisection": {
+        "RMS": 3.7084054705896976e-08,
+        "MAX": 2.6250656999661417e-06,
+        "limits": [
+          0.0001,
+          0.0001
+        ],
+        "status": "MET"
+      },
+      "ratio": {
+        "RMS": 0.16486829074946108,
+        "MAX": 0.16389417352241892
+      }
+    },
+    "interior/whole/epsilon": {
+      "first_bisection": {
+        "RMS": 2.0297123650046987e-07,
+        "MAX": 1.5691574612245469e-06,
+        "limits": [
+          0.01,
+          0.01
+        ],
+        "status": "MET"
+      },
+      "second_bisection": {
+        "RMS": 8.351215991688604e-09,
+        "MAX": 6.484739511202464e-08,
+        "limits": [
+          0.01,
+          0.01
+        ],
+        "status": "MET"
+      },
+      "ratio": {
+        "RMS": 0.04114482493025198,
+        "MAX": 0.0413262510069695
+      }
+    },
+    "interior/whole/k": {
+      "first_bisection": {
+        "RMS": 5.300467419368297e-07,
+        "MAX": 2.111887748690665e-05,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "MET"
+      },
+      "second_bisection": {
+        "RMS": 5.3754751609243784e-08,
+        "MAX": 2.455678824311695e-06,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "MET"
+      },
+      "ratio": {
+        "RMS": 0.101415115604371,
+        "MAX": 0.11627885174456713
+      }
+    },
+    "interior/whole/traction": {
+      "first_bisection": {
+        "RMS": 1.0377289448784328e-05,
+        "MAX": 0.0008093201051812056,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "MET"
+      },
+      "second_bisection": {
+        "RMS": 1.3304548380952934e-06,
+        "MAX": 0.0001221316390591765,
+        "limits": [
+          0.001,
+          0.001
+        ],
+        "status": "MET"
+      },
+      "ratio": {
+        "RMS": 0.12820831920142237,
+        "MAX": 0.1509064686238474
+      }
+    }
+  },
+  "comparison_row_count": 690
+}

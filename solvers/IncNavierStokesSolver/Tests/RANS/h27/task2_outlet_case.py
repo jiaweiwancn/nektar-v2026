@@ -27,6 +27,7 @@ CASES = {
     "B1": ("outlet-b1", "A1", TRANSVERSE),
     "A1c": ("outlet-a1c", "M1c", FULL),
     "B1c": ("outlet-b1c", "M1c", TRANSVERSE),
+    "B2": ("outlet-b2", "M1cc", TRANSVERSE),
 }
 
 
@@ -126,7 +127,20 @@ def prepare(root, case, seconds, continuation, guess):
     parent = root/"science"/subdir
     out = parent.with_name(f"{subdir}-continue-{continuation}") if continuation else parent
     out.mkdir()
-    if mesh == "M1c":
+    plan = None
+    if mesh == "M1cc":
+        path = root/"evidence/outlet-second-collar-plan.json"
+        plan = identity(path)
+        coords = read(path)
+        if continuation:
+            geometry = verified(read(parent/"inputs.json")["geometry"])
+        else:
+            geometry = out/"geometry.xml"
+            fixtures.mesh(geometry,coords["x_edges"],coords["physical_z_edges"],quadrature=12)
+        xs,zs,_ = mesh_axes(geometry)
+        require(xs == coords["x_edges"] and zs == coords["physical_z_edges"],
+                "second collar bisection changed the frozen axes")
+    elif mesh == "M1c":
         if case == "B1c" or continuation:
             control = read(root/"science/outlet-a1c/inputs.json")
             geometry = verified(control["geometry"])
@@ -147,6 +161,19 @@ def prepare(root, case, seconds, continuation, guess):
         require(source_packet["source_identity"] == baseline["source_identity"],"archive source differs")
         seed = out/"tapered-initial.json"
         seed_state = tapered_guess(source_packet,seed,original)
+    elif guess == "b1c-after-worker-stop":
+        require(case=="B2" and continuation>0,"fresh worker-stop retry requires a bounded B2 retry")
+        previous = parent if continuation==1 else parent.with_name(f"{subdir}-continue-{continuation-1}")
+        failed = read(root/"operations"/(previous.name+"-steady")/"receipt.json")
+        require(failed["result"]["status"]=="FAIL"
+                and failed["result"]["reason"] in ("HOST_WORKER_LIMIT","HOST_PRESSURE_REMAINS")
+                and not (previous/"state.steady-candidate.json").exists(),
+                "a fresh B2 retry requires the recorded worker stop before a native candidate")
+        seed = accepted_directory(root,"B1c")/"state.result.json"
+        seed_state, meta = po.load_native(seed)
+        require(seed_state["source_identity"]==seals["source"] and seed_state["outlet_policy"]==policy
+                and meta["steady_mode"] and meta["steady_solver"]["converged"],
+                "worker-stop retry seed is not an accepted same-source B1c")
     elif continuation:
         prior = parent.with_name(f"{subdir}-continue-{continuation-1}") if continuation > 1 else parent
         seed = prior/"state.steady-candidate.json"
@@ -160,9 +187,9 @@ def prepare(root, case, seconds, continuation, guess):
         seed_state = packet["state"]
         require(seed_state["source_identity"] == seals["source"] and seed_state["outlet_policy"] == policy,
                 "continuation is from a different solver or outlet policy")
-    elif case == "B1c" or guess == "accepted-b0":
-        require(case in ("B1","B1c"),"unexpected nested B guess")
-        previous = "B0" if guess == "accepted-b0" else "B1"
+    elif case in ("B1c","B2") or guess == "accepted-b0":
+        require(case in ("B1","B1c","B2"),"unexpected nested B guess")
+        previous = {"B1":"B0","B1c":"B1","B2":"B1c"}[case]
         seed = accepted_directory(root,previous)/"state.result.json"
         seed_state, meta = po.load_native(seed)
         require(seed_state["source_identity"] == seals["source"] and seed_state["outlet_policy"] == policy
@@ -180,7 +207,7 @@ def prepare(root, case, seconds, continuation, guess):
         geometry=identity(geometry), session=identity(session), options=identity(Path(str(session)+".opt")),
         table=identity(table), initial_guess=identity(seed), initial_coefficient_sha256=seed_state["state_sha256"],
         cells=[len(xs)-1,len(zs)-1], modes=[4,3], quadrature=[6,8], tolerances=[1e-12,1e-10],
-        steady_time=0., initial_guess_method=guess, internal_cap_seconds=seconds,
+        steady_time=0., initial_guess_method=guess, internal_cap_seconds=seconds, refinement_plan=plan,
         command=registered_command(runtime,session)))
 
 
@@ -293,7 +320,8 @@ def main():
     fixture.add_argument("case", choices=CASES)
     fixture.add_argument("seconds", type=float)
     fixture.add_argument("--continuation", type=int, default=0)
-    fixture.add_argument("--guess", choices=("inherited","smooth-outlet-archive","accepted-b0"), default="inherited")
+    fixture.add_argument("--guess", choices=("inherited","smooth-outlet-archive","accepted-b0",
+                                              "b1c-after-worker-stop"), default="inherited")
     args = parser.parse_args()
     if args.mode == "prepare":
         require(args.seconds > 0 and args.continuation >= 0, "invalid steady case cap")
