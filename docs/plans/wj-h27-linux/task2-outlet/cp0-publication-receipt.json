@@ -1,0 +1,69 @@
+{
+  "request": {
+    "label": "outlet-cp0-publish",
+    "phase": "evidence",
+    "command": [
+      "tar",
+      "-cf",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-cp0.tar",
+      "-C",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+      "evidence/outlet-baseline.json",
+      "evidence/outlet-cp0-amendment.json",
+      "operations/outlet-baseline/receipt.json"
+    ],
+    "cap_seconds": 35.0,
+    "reserved_seconds": 42.0,
+    "workers_before": 58,
+    "idle_mpi_event_helpers": 102,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 1401743582,
+      "source_build_runtime_bytes": 138442549,
+      "free_bytes": 3578157441024
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v1/task2r_run.py",
+      "bytes": 19332,
+      "sha256": "63459de8e1f64e99214d9fb838b0a7119613f1601e9e8ab7a0a42da271f909a7"
+    },
+    "rss_limit_bytes": 8589934592,
+    "memory_before": null,
+    "input_files": []
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "evidence",
+    "seconds": 1.1155992949934443,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 413696,
+    "peak_host_workers": 58,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-cp0-publish/command.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "rss_limit_bytes": 8589934592,
+    "job_memory": null,
+    "minimum_memory_headroom_bytes": null
+  },
+  "balance": {
+    "charged_seconds": 37334.27002697882,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 13065.729973021183,
+    "tranche_remaining": 11314.020692626118
+  },
+  "storage": {
+    "science_bytes": 1401743582,
+    "source_build_runtime_bytes": 138442549,
+    "free_bytes": 3578157391872
+  }
+}

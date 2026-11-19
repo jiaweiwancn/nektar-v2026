@@ -1,0 +1,37 @@
+{
+  "schema": "WJH27OutletAdmissionForecastV1",
+  "additional_staging_seconds": 10100,
+  "live_staged_seconds_after_amendment": 1219.202488315119,
+  "available_after_staging_seconds": 11319.202488315119,
+  "expected_wall_seconds": {
+    "past_four_job_build": 260.123,
+    "past_easier_steady_solve_low": 490,
+    "past_easier_steady_solve_high": 770,
+    "past_fine_solve_with_valid_analysis": 2301
+  },
+  "planned_caps_including_reservation_grace_seconds": {
+    "baseline_build_small_fixture_archive_reuse_and_replay": 1850,
+    "B0_steady_continuation_and_independent_analysis": 2450,
+    "B1_steady_continuation_and_independent_analysis": 2450,
+    "A1c_steady_continuation_and_independent_analysis": 2550,
+    "matrix_collar_and_interior_evaluation": 600,
+    "publication_hold": 300
+  },
+  "unassigned_staged_buffer_seconds": 1119.202488315119,
+  "optional_admission": "Reforecast with completed B0, B1, A1c, analyses, receipts and publication provision before staging or admitting B1c, a third nested level, or an extension. Completion of all mandatory solves takes priority.",
+  "resource_controls": {
+    "total_ceiling_seconds": 54000,
+    "protected_seconds": 3600,
+    "build_workers": 4,
+    "shared_workers": 72,
+    "science_ranks": 1,
+    "thread_libraries": 6,
+    "threads_per_library": 1,
+    "named_outlet_solve_maximum_rss_GiB": 10,
+    "other_operations_maximum_rss_GiB": 8,
+    "build_maximum_rss_GiB": 16,
+    "science_and_temp_maximum_GiB": 8,
+    "source_build_runtime_maximum_GiB": 8,
+    "minimum_free_GiB": 15
+  }
+}
