@@ -11,7 +11,7 @@ import numpy as np
 from numpy.polynomial.legendre import leggauss
 
 import physical_oracle as po
-from resources import atomic, identity, size
+from resources import THREADS, atomic, identity, size
 from task2_outlet_analysis import INTERIOR
 from task2_outlet_baseline import mesh_axes, read, source_identity, verified
 from task2_outlet_campaign import measure
@@ -329,11 +329,55 @@ def assess(root, design_path, out, seconds):
     print(case,"ACCEPTABLE" if rows_passed else "OPEN",flush=True)
 
 
+def handoff(root, design_path, assessment_path, out):
+    design = read(design_path)
+    selection = read(verified(design["selection"]))
+    assessed = read(assessment_path)
+    first,second = (assessed["matched_comparison"][part] for part in ("first","second"))
+    parity_path = root/"evidence/outlet-campaign-x15-parity.json"
+    parity = read(parity_path)
+    require(selection["canonical_qualified"] and assessed["status"]=="ACCEPTABLE"
+            and assessed["source"]==identity(design_path) and first==selection["canonical"]
+            and parity["status"]=="PASS" and parity["original"]==first["state"]
+            and parity["application"]==second["executable"]
+            and all(row["decision"]=="MET" for field in design["limits"]
+                    for row in assessed["achieved_within_B_uncertainty"][field].values()),
+            "closure requires the passing qualified selection, exact parity and acceptable matched outlet")
+    witnesses = {}
+    for name,binding in ((design["selected_case"],first),(design["case"],second)):
+        audit,receipt = pass_audit(root,name)
+        require(audit["provenance"]==binding,"handoff audit and tested field differ")
+        data,_ = po.load_native(verified(binding["state"]))
+        require(data["time"]==data["step"]==0 and data["state_sha256"]==binding["coefficient_sha256"],
+                "handoff requires the exact zero-time typed coefficients")
+        manifest = read(verified(binding["inputs"]))
+        witnesses[name] = dict(binding=binding,audit=receipt,table=manifest["table"],
+            session=manifest["session"],options=manifest["options"],command=manifest["command"])
+    reference = witnesses[design["selected_case"]]["table"]
+    require(all(item["table"]==reference for item in witnesses.values()),"matched reference table differs")
+    verified(reference)
+    atomic(out,dict(schema="WJH27SteadyFlatOutletCampaignHandoffV1",campaign_status="CLOSED",
+        recommended_case=design["selected_case"],recommended_outlet_x=design["former_outlet"],
+        farther_tested_outlet_x=design["outlet_x"],shortest_tested_supported_extent=True,
+        physical_time_advanced=0.,gate_matrix=dict(selection["gate_matrix"],outlet_location="MET"),
+        qualified_selection=design["selection"],parity=identity(parity_path),
+        extent_decision=identity(assessment_path),verify_inputs=witnesses,
+        reference=reference,default_outlet_policy="FullTractionV1",
+        linux_host="jay@100.88.70.60",experiment_root=str(root),
+        linux_environment=str(root.parent.parent/"env.sh"),mpi_ranks=1,thread_settings=THREADS,
+        worker_limit=80,protected_seconds=3600,cumulative_ceiling_seconds=108000,
+        advancing_requirements=["physical timestep accuracy","cold restart","matched stock timing",
+                                "complete advancing trajectory cost"],
+        production_cost_ratio=1.25,production_wall_limit_seconds=86400,
+        TASK2_COMPLETE="NO",TASK3_READY="NO"))
+    print("Steady campaign CLOSED",design["selected_case"],design["former_outlet"],flush=True)
+
+
 if __name__=="__main__":
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("root",type=Path)
     action=parser.add_subparsers(dest="mode",required=True)
-    for mode in ("forecast","seal","phase-forecast","verify-parity","assess"):
+    for mode in ("forecast","seal","phase-forecast","verify-parity","assess","handoff"):
         p=action.add_parser(mode)
         p.add_argument("out",type=Path)
         if mode!="seal":
@@ -346,6 +390,8 @@ if __name__=="__main__":
             p.add_argument("--parity",type=Path)
         if mode=="assess":
             p.add_argument("--seconds",type=float,required=True)
+        if mode=="handoff":
+            p.add_argument("assessment",type=Path)
     args=parser.parse_args()
     if args.mode=="forecast":
         forecast(args.root,args.design,args.case,args.exit_x,args.out)
@@ -355,5 +401,7 @@ if __name__=="__main__":
         phase_forecast(args.root,args.design,args.case,args.out,args.parity)
     elif args.mode=="verify-parity":
         verify_parity(args.root,args.case,args.design,args.out)
-    else:
+    elif args.mode=="assess":
         assess(args.root,args.design,args.out,args.seconds)
+    else:
+        handoff(args.root,args.design,args.assessment,args.out)
