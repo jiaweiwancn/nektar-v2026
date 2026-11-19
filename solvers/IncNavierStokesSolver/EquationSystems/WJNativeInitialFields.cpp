@@ -96,6 +96,7 @@ InitialFields::InitialFields(const std::string&path)
     Require(state.get<unsigned long long>("step")==0&&Number(state,"time")==0,
             "fresh initial fields require step=time=0; cold histories cannot be imported here");
     m.basis=state.get<std::string>("basis");Require(m.basis=="Modified_A","only native Modified_A Q3/Q2 initial fields are supported");
+    m.outletPolicy=state.get<std::string>("outlet_policy","FullTractionV1");
     m.model=state.get<std::string>("model");m.sourceIdentity=state.get<std::string>("source_identity");
     m.referenceIdentity=state.get<std::string>("reference_identity");m.mmsVariant=state.get<std::string>("mms_variant");
     m.manufactured=state.get<bool>("manufactured");m.gauge=state.get<bool>("gauge");

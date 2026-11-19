@@ -113,6 +113,7 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     }
     std::string currentActions;m_session->LoadSolverInfo("WJCheckCurrentActions",currentActions,"False");Check(currentActions=="True"||currentActions=="False","invalid current action check switch");options.checkCurrentActions=currentActions=="True";
     m_session->LoadSolverInfo("WJOutletPolicy",options.outletPolicy,"FullTractionV1");
+    m_session->LoadParameter("WJDiagnosticOutletX",options.diagnosticOutletX,15.);
     std::string outletActions;
     m_session->LoadSolverInfo("WJCheckOutletActions",outletActions,"False");
     Check(outletActions=="True"||outletActions=="False","invalid outlet action check switch");
@@ -124,6 +125,7 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadSolverInfo("WJMMSVariant",options.mmsVariant,"Historical");
     m_session->LoadSolverInfo("WJInitialSourceIdentity",options.initialSourceIdentity,WJ_H27_SOURCE_ID);
     std::string solve;m_session->LoadSolverInfo("WJNativeSolve",solve,"Advance");Check(solve=="Advance"||solve=="SteadyReference","unknown WJ native solve mode");m_steadyMode=solve=="SteadyReference";
+    Check(options.diagnosticOutletX==15.||m_steadyMode,"outlet location diagnostic requires steady preparation");
     if(m_steadyMode){Check(m_steps==0,"steady reference preparation requires NumSteps=0");
         m_session->LoadParameter("WJSteadySeconds",m_steadyOptions.maximumSeconds,0.);Check(m_steadyOptions.maximumSeconds>0,"steady reference preparation requires an explicit WJSteadySeconds cap");
         m_steadyOptions.acceptanceNorm=options.nonlinearTolerance;

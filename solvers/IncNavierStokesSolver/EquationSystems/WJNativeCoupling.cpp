@@ -75,6 +75,9 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     Require(!m_zeroTransverseOutlet||(!m_options.manufactured&&
         m_reference->Policy()==ReferencePolicy::ExactInnerFiniteNuV1&&m_reference->Transport()==InnerKTransport::ScalarV2),
         "zero-transverse outlet requires the exact-inner ScalarCdV2 physical model");
+    Require(m_options.diagnosticOutletX==15.||
+        (m_zeroTransverseOutlet&&std::isfinite(m_options.diagnosticOutletX)&&m_options.diagnosticOutletX>15.),
+        "outlet location diagnostic requires a downstream zero-transverse outlet in the supported range");
     m_outletIdentity=D::Hash(m_reference->BoundaryIdentity()+"|"+m_options.outletPolicy);
     Require(m_options.andersonDepth>=0&&m_options.andersonDepth<=8,"Anderson depth must lie in [0,8]");
     Require(m_options.stressSplit=="PositiveShearV1"||m_options.stressSplit=="IsotropicMuV1","unknown numerical stress split");
@@ -109,7 +112,8 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     if(m_options.manufactured)m_mms=std::make_unique<CoupledMMS>(*m_reference,m_geometry,m_top,m_options.mmsBodyAmplitude,
         m_options.mmsVariant=="Historical"?MMSVariant::Historical:MMSVariant::PolynomialScalarsV1);
     else Require(std::abs(m_geometry.d0-m_reference->Parameters().d0)<1e-14&&
-        std::abs(m_top-m_reference->Parameters().topRadius)<1e-12&&std::abs(m_left+10)<1e-12&&std::abs(m_right-15)<1e-12,
+        std::abs(m_top-m_reference->Parameters().topRadius)<1e-12&&std::abs(m_left+10)<1e-12&&
+        std::abs(m_right-m_options.diagnosticOutletX)<1e-12,
         "application geometry differs from the retained physical domain");
     std::ostringstream signature;signature<<std::setprecision(17)<<"WJ-H27-coupled-v2-BDF2-EX2|"<<WallModelV2<<"|CubicCutoffFacePanelsV1|"
         <<m_options.sourceIdentity<<'|'<<m_reference->Identity()<<'|'<<m_options.dt<<'|'<<m_options.manufactured<<'|'
@@ -290,7 +294,7 @@ double Coupling::NativeRadius(double physicalZ)const
 }
 double Coupling::NativeX(double x)const
 {
-    const double left=m_options.manufactured?0.:-10.,right=m_options.manufactured?1.:15.;
+    const double left=m_options.manufactured?0.:-10.,right=m_options.manufactured?1.:m_options.diagnosticOutletX;
     for(double edge:{left,right})if(std::abs(x-edge)<=64*std::numeric_limits<double>::epsilon()*std::max({1.,std::abs(x),std::abs(edge)}))return edge;
     return x;
 }
@@ -369,6 +373,14 @@ CoupledHistory Coupling::ReadInitialFields(const std::string&path,bool allowCand
     const auto &seedReference=m_options.initialReferenceIdentity;
     Require(seedReference.empty()||(allowCandidate&&m_reference->Transport()==InnerKTransport::AuxiliaryHistoricalFixtureV1&&
             seedReference==m_reference->BoundaryIdentity()),"a different reference is allowed only as an explicitly bound v2 steady fixture guess");
+    const double seedRight=initial.GeometryData().right;
+    const bool extendSeed=allowCandidate&&seedRight>=15.&&m_right>seedRight+1e-12;
+    if(extendSeed){
+        Require(m_zeroTransverseOutlet&&initial.Metadata().qualifiedReference&&
+            initial.Metadata().outletPolicy==m_options.outletPolicy,
+            "outlet extension requires a converged short-domain zero-transverse guess");
+        geometry.right=seedRight;
+    }
     initial.ValidateBindings(expectedSource,seedReference.empty()?m_reference->Identity():seedReference,
                              WallModelV2,m_options.manufactured,m_options.mmsVariant,geometry);
     Require(initial.Metadata().gauge==m_flow.Gauge(),"initial-field pressure-gauge binding differs");
@@ -384,11 +396,16 @@ CoupledHistory Coupling::ReadInitialFields(const std::string&path,bool allowCand
     CoupledState state;
     if(same)state={initial.Flow(),initial.K(),initial.Epsilon()};
     else{
+        // Extrapolate the accepted original exit section solely for the
+        // initial projection. Current operators use the actual extended mesh.
+        auto evaluate=[&](unsigned field,double x,double z){
+            return initial.Evaluate(field,extendSeed?std::min(x,geometry.right):x,z);
+        };
         state.flow=Vec::Zero(2*m_flow.VelocitySize()+m_flow.PressureSize());
-        for(int component=0;component<3;++component){auto function=[&](double x,double z){return initial.Evaluate(component<2?component:4,x,z);};auto value=m_flow.Project(function,component);
+        for(int component=0;component<3;++component){auto function=[&](double x,double z){return evaluate(component<2?component:4,x,z);};auto value=m_flow.Project(function,component);
             if(component<2)state.flow.segment(component*m_flow.VelocitySize(),m_flow.VelocitySize())=value;else state.flow.tail(m_flow.PressureSize())=value;}
-        state.k=m_k.Project([&](double x,double z){return initial.Evaluate(2,x,z);});
-        state.epsilon=m_e.Project([&](double x,double z){return initial.Evaluate(3,x,z);});
+        state.k=m_k.Project([&](double x,double z){return evaluate(2,x,z);});
+        state.epsilon=m_e.Project([&](double x,double z){return evaluate(3,x,z);});
     }
     auto history=FreshHistory(state);
     if(!allowCandidate)Require(SteadyResidual(history.current).Maximum()<=m_options.nonlinearTolerance,

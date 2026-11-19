@@ -35,6 +35,8 @@ CAMPAIGN_SETTLEMENT = "4a40999e5914643c0639b584ad7d432aa8c1c729a61b2dd138842e493
 CAMPAIGN_AMENDMENT = "outlet-campaign-amendment"
 CAMPAIGN_CASE_PATTERN = r"B(?:fl|(?:r|x|h|c|q|t|p|e)[1-9][0-9]*)"
 CAMPAIGN_RSS_GIB = 20
+EXTENT_RUNTIME = "runtime-outlet-campaign-extent"
+EXTENT_BINDING = "outlet-campaign-extent-runtime.json"
 QUAL_CASES = {
     "B3": "b3", "B4": "b4", "Bn": "bn", "Bn2": "bn2", "Bf": "bf",
     "Bw": "bw", "Bw2": "bw2", "Btip": "btip",
@@ -52,6 +54,10 @@ def require(condition, message):
 
 def campaign_case(case):
     return re.fullmatch(CAMPAIGN_CASE_PATTERN, case) is not None
+
+
+def extent_case(case):
+    return campaign_case(case) and case[1] in ("p", "e")
 
 
 def qualification_slug(case):
@@ -320,7 +326,7 @@ def memory_headroom(snapshot):
         for limit in ("memory.max", "memory.high") if group[limit] is not None])
 
 
-def qualification_solve(root, ledger, label, cap, session, info, parameters):
+def qualification_solve(root, ledger, label, cap, runtime, session, info, parameters):
     require("outlet-qual-amendment" in ledger["entries"], "missing qualification authorization")
     manifest = json.loads((session.parent / "inputs.json").read_text())
     case = manifest["case"]
@@ -351,13 +357,26 @@ def qualification_solve(root, ledger, label, cap, session, info, parameters):
             and int(parameters["WJSteadyKrylovDimension"]) == 64
             and float(parameters["Time"]) == 0. and float(parameters["Kinvis"]) == 6.423173803526447e-5
             and "WJRestart" not in info, "qualification changed the declared numerical recipe")
+    seed_source = manifest.get("seed_source", manifest["source"])
+    if extent_case(case):
+        proof_path = root/"evidence"/EXTENT_BINDING
+        ext = json.loads(proof_path.read_text())
+        outlet_x = manifest["x_edges"][-1]
+        require(admission["extent_runtime"] == identity(proof_path)
+                and manifest["application"] == ext["application"] and manifest["source"] == ext["source"]
+                and outlet_x == admission["outlet_x"] == float(parameters["WJDiagnosticOutletX"])
+                and seed_source in (admission["seed_source"],manifest["source"]),
+                "extent runtime, geometry or typed seed scope differs")
+    else:
+        require(seed_source == manifest["source"] and float(parameters.get("WJDiagnosticOutletX",15.))==15.,
+                "same-domain qualification requires its pinned source and exit")
     require(manifest["session"] == identity(session)
             and manifest["options"] == identity(Path(str(session) + ".opt"))
-            and manifest["application"] == admission["application"] == identity(
-                root / "runtime-outlet-v1/IncNavierStokesSolver")
+            and manifest["application"] == admission["application"] == identity(runtime)
             and info["WJInitialFields"] == manifest["initial_guess"]["path"]
             and manifest["initial_guess"] == identity(Path(info["WJInitialFields"]))
-            and info["WJInitialSourceIdentity"] == manifest["source"] == admission["source"]
+            and info["WJInitialSourceIdentity"] == seed_source
+            and manifest["source"] == admission["source"]
             and [manifest["x_edges"], manifest["physical_z_edges"]] ==
                 [admission["x_edges"], admission["physical_z_edges"]],
             "qualification executable, axes or typed seed binding differs")
@@ -384,7 +403,8 @@ def outlet_solve(root, ledger, label, command, cap):
                          r")))(?:-continue-[1-9][0-9]*)?-steady", label)
     require(match and len(command) == 7 and command[:3] == ["mpirun", "-np", "1"],
             "RSS amendment is limited to named single-rank outlet solves")
-    runtime = root / "runtime-outlet-v1/IncNavierStokesSolver"
+    mode = EXTENT_RUNTIME if re.fullmatch(r"outlet-qual-b[pe][1-9][0-9]*",match[1]) else "runtime-outlet-v1"
+    runtime = root / mode / "IncNavierStokesSolver"
     session = Path(command[-1])
     require(Path(command[3]) == runtime and command[4:6] == ["--use-opt-file", str(session) + ".opt"] and
             session == root / "science" / label.removesuffix("-steady") / "run.xml",
@@ -400,7 +420,7 @@ def outlet_solve(root, ledger, label, command, cap):
             and info["WJOutputPrefix"] == str(session.parent / "state")
             and info["WJOutletPolicy"] == policy and float(parameters["NumSteps"]) == 0
             and float(parameters["WJSteadySeconds"]) > 0, "session does not match amended diagnostic")
-    qualified = (qualification_solve(root, ledger, label, cap, session, info, parameters)
+    qualified = (qualification_solve(root, ledger, label, cap, runtime, session, info, parameters)
                  if label.startswith("outlet-qual-") else None)
     return memory_snapshot(), qualified
 
@@ -526,7 +546,9 @@ def run(root, book, args, began):
             "invalid worker ceiling")
     limits = {"build": 16, "science": 10, "analysis": 6, "evidence": 3, "outlet-science": 10}
     if phase == "build" and label.startswith("outlet-") and command[:2] == ["cmake", "--build"]:
-        require(command[2:5] == [str(root / "build-outlet-v1"), "--parallel", "4"],
+        build_path = ("build-outlet-campaign-extent" if label=="outlet-campaign-extent-build"
+                      else "build-outlet-v1")
+        require(command[2:5] == [str(root / build_path), "--parallel", "4"],
                 "outlet build requires the four-job isolated target")
         anchor = json.loads((root / "operations/r2-native-build/receipt.json").read_text())
         require(anchor["request"]["command"][3:5] == ["--parallel", "4"]
@@ -534,7 +556,7 @@ def run(root, book, args, began):
                 and anchor["result"]["peak_host_workers"] - anchor["request"]["workers_before"] <= 11,
                 "outlet build worker anchor differs")
         limits[phase] = 14  # Previous four-job Make build peaked 11 above admission.
-    if phase == "build" and label == "outlet-configure" and command[:2] == ["cmake", "-S"]:
+    if phase == "build" and label in ("outlet-configure","outlet-campaign-extent-configure") and command[:2] == ["cmake", "-S"]:
         limits[phase] = 8  # Serial generator and compiler-detection probes.
     memory, qualification = (outlet_solve(root, ledger, label, command, args.seconds)
                              if phase == "outlet-science" else (None, None))

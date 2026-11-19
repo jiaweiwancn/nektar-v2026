@@ -20,7 +20,7 @@ struct InitialFieldGeometry
 struct InitialFieldMetadata
 {
     std::string schema,stateSchema,model,sourceIdentity,referenceIdentity;
-    std::string basis,mmsVariant,packetSha256,stateSha256;
+    std::string basis,mmsVariant,packetSha256,stateSha256,outletPolicy;
     bool manufactured=false,gauge=false,qualifiedReference=false;
     InitialFieldRole role=InitialFieldRole::Candidate;
 };

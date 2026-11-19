@@ -200,7 +200,8 @@ def compare(first,second,quiet=(),*,interior=None,reverse=False,detailed=False):
     local = Rows(reverse,detailed)
     edges = sorted({e["bounds"][i]
                     for model in (first,second) for e in model.elements for i in (0,1)})
-    multiplicity = {x:2 if -10. < x < 15. and any(abs(x-edge)<1e-12 for edge in edges) else 1
+    domain = (max(first.left,second.left),min(first.right,second.right))
+    multiplicity = {x:2 if domain[0] < x < domain[1] and any(abs(x-edge)<1e-12 for edge in edges) else 1
                     for x in oracle.STATIONS}
     for e,f,bounds in common_cells(first,second):
         first.clock()
@@ -243,7 +244,7 @@ def compare(first,second,quiet=(),*,interior=None,reverse=False,detailed=False):
         group, field = key.split("/")[-2:]
         if field == "epsilon":
             group = "outer"
-        measure = expected[group] * (1 if key.startswith("x=") else 25.)
+        measure = expected[group] * (1 if key.startswith("x=") else domain[1]-domain[0])
         weight_error = max(weight_error,abs(row["measure"]-measure)/measure)
     oracle.require(len(result) == 690 and weight_error < 1e-10, "original row inventory or station measure changed")
     local_rows = local.finish()

@@ -138,9 +138,10 @@ def raw_points(state, e, x, r):
 
 def off_vertex(state):
     groups = {}
+    right = state.right
     last = [e for e,side in state.faces["u"] if side==1]
     ground = [e for e,side in state.faces["u"] if side==2]
-    near = [e for e in state.elements if e["bounds"][1]>=15.-max(FAR_RADII)
+    near = [e for e in state.elements if e["bounds"][1]>=right-max(FAR_RADII)
             and e["bounds"][2]<=max(FAR_RADII)]
 
     def at(records, x, r, owners, **metadata):
@@ -156,13 +157,13 @@ def off_vertex(state):
         for radius in radii:
             for angle in angles:
                 radians = np.deg2rad(angle)
-                at(records,15.-radius*np.cos(radians),radius*np.sin(radians),
+                at(records,right-radius*np.cos(radians),radius*np.sin(radians),
                    near, angular_degrees=angle, corner_distance_code=radius)
         groups[name] = records
     for name,owners in (("outlet",last),("ground",ground)):
         records = []
         for radius in NEAR_RADII+FAR_RADII:
-            x,r = (15.,radius) if name=="outlet" else (15.-radius,0.)
+            x,r = (right,radius) if name=="outlet" else (right-radius,0.)
             at(records,x,r,owners,corner_distance_code=radius)
         groups[name] = records
     return {name:dict(samples=records, owner_count=len({row["owner"] for row in records}),
@@ -178,7 +179,7 @@ def audit(root,name,out,seconds):
     audit_state(state,binding,context[2],name,out)
 
 
-def audit_state(state,binding,table,name,out):
+def audit_state(state,binding,table,name,out,*,stations=po.STATIONS):
     projection_file = out.with_name(out.stem+"-inlet.json")
     if projection_file.is_file():
         cached = read(projection_file)
@@ -187,11 +188,11 @@ def audit_state(state,binding,table,name,out):
                 and cached["limits"] == {"U":1e-5,"k":1e-4,"G":1e-3},
                 "prior inlet projection belongs to a different state or audit recipe")
     else:
-        projection(table,Path(binding["state"]["path"]),projection_file)
+        projection(table,Path(binding["state"]["path"]),projection_file,outlet_x=state.right)
     core = state.assemble()
     boundary = state.boundary_checks()
     interfaces = state.interfaces()
-    profiles = state.profiles()
+    profiles = state.profiles(stations=stations)
     weak,shift = continuity(state)
     traces = weak_traces(state,shift)
     if state.outlet_policy == TRANSVERSE:

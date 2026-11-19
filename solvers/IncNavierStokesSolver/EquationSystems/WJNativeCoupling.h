@@ -27,6 +27,7 @@ struct CoupledOptions
     bool manufactured=false,recordNonlinearTrace=false,checkCurrentActions=false;
     std::string outletPolicy="FullTractionV1";
     bool checkOutletActions=false;
+    double diagnosticOutletX=15.;
     // Numerical split only; the complete current V is identical in both.
     std::string stressSplit="PositiveShearV1",steadyVelocityPC="FullGradientV1";
     // Equivalent solvers of the same current implicit BDF/EX equations.

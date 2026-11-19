@@ -183,10 +183,10 @@ def reference(table, exact, legacy, out):
                      inlet_cases=len(actual["inlet"]), rejected=actual["rejections"]))
 
 
-def projection(table, native, out):
+def projection(table, native, out, *, outlet_x=15.):
     data, metadata = po.load_native(native)
     ref = po.load_reference(table)
-    oracle = po.PhysicalOracle(data, ref, 28, time.monotonic() + 60)
+    oracle = po.PhysicalOracle(data, ref, 28, time.monotonic() + 60, outlet_x=outlet_x)
     require(data["step"] == 0 and not data["manufactured"], "projection needs the fresh registered state")
     norms = po.Norms()
     samples = []

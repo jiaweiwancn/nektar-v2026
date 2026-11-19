@@ -16,7 +16,8 @@ from resources import atomic, identity
 from task2_outlet_analysis import INTERIOR, audit_state, bind_elements, open_case, pair
 from task2_outlet_baseline import mesh_axes, read, source_identity, verified
 from task2_outlet_case import TRANSVERSE, create_session, get_context, registered_command
-from task2r_run import GIB, balance, memory_headroom, memory_snapshot, qualification_slug, require, workers
+from task2r_run import (EXTENT_BINDING, GIB, balance, extent_case, memory_headroom,
+    memory_snapshot, qualification_slug, require, workers)
 from task2r_verify import edit
 
 
@@ -254,6 +255,9 @@ def recovery_packet(root, case, continuation, time_stops=()):
 def prepare(root, case, continuation, admission_path):
     context = get_context(root)
     _, runtime, table, application = context
+    if extent_case(case):
+        runtime = read(root/"evidence"/EXTENT_BINDING)
+        application = verified(runtime["application"])
     specification = read(admission_path)
     require(specification["status"] == "ADMITTED" and specification["case"] == case
             and specification["source"] == runtime["source"], "qualification case lacks a bound admission")
@@ -263,6 +267,7 @@ def prepare(root, case, continuation, admission_path):
     initial = verified(specification["prior_state"])
     parent_mesh = verified(specification["prior_mesh"])
     compiled = runtime["source"]
+    seed_source = specification.get("seed_source",compiled)
 
     previous = recovery_packet(root,case,continuation,specification.get("time_stops",()))
     if previous is not None:
@@ -279,13 +284,14 @@ def prepare(root, case, continuation, admission_path):
                 "native packet lacks a matching, accepted zero-time Newton checkpoint")
         initial = candidate
         state = packet["state"]
+        seed_source = compiled
         parent_mesh = verified(binding["geometry"])
     else:
         state, _ = po.load_native(initial)
     if target.name == specification.get("recovery_first_label"):
         require(identity(initial) == specification["recovery_checkpoint"],
                 "recovery seed differs from the frozen Newton iterate")
-    require(state["step"] == state["time"] == 0. and state["source_identity"] == compiled
+    require(state["step"] == state["time"] == 0. and state["source_identity"] == seed_source
             and state["outlet_policy"] == TRANSVERSE, "wrong scope for the typed qualification seed")
     target.mkdir()
     x0, z0, _ = mesh_axes(parent_mesh)
@@ -297,11 +303,15 @@ def prepare(root, case, continuation, admission_path):
         require(x == xs and z == zs, "session refinement differs from the admitted axes")
     session = target / "run.xml"
     create_session(session, geometry, table, TRANSVERSE, seconds=attempt["native_seconds"],
-                   initial_fields=initial, initial_source=compiled, quadrature=specification["quadrature"],
+                   initial_fields=initial, initial_source=seed_source, quadrature=specification["quadrature"],
                    tolerances=specification["tolerances"])
-    edit(session, {}, {"WJSteadyNewtonIterations": attempt["newton_iterations"]})
+    parameters = {"WJSteadyNewtonIterations":attempt["newton_iterations"]}
+    if extent_case(case):
+        parameters["WJDiagnosticOutletX"] = specification["outlet_x"]
+    edit(session, {}, parameters)
     atomic(target / "inputs.json", dict(schema="WJH27FlatQualificationInputsV1", case=case,
-        policy=TRANSVERSE, source=compiled, admission=identity(admission_path), application=identity(application),
+        policy=TRANSVERSE, source=compiled, seed_source=seed_source,
+        admission=identity(admission_path), application=identity(application),
         geometry=identity(geometry), x_edges=xs, physical_z_edges=zs,
         session=identity(session), options=identity(Path(str(session)+".opt")), table=identity(table),
         initial_guess=identity(initial), initial_coefficient_sha256=state["state_sha256"], modes=[4,3],
@@ -313,6 +323,9 @@ def load_case(root, name, context, ref, order, deadline):
     if qualification_slug(name) is None:
         return open_case(root, name, context, ref, order, deadline)
     _, runtime, table, application = context
+    if extent_case(name):
+        runtime = read(root/"evidence"/EXTENT_BINDING)
+        application = verified(runtime["application"])
     path = accepted_path(root, name)
     manifest_path = path.parent / "inputs.json"
     manifest = read(manifest_path)
@@ -346,7 +359,7 @@ def load_case(root, name, context, ref, order, deadline):
             and transfer["source_state_sha256"] == manifest["initial_coefficient_sha256"],
             "qualified native field settings or accepted seed provenance differ")
     cells = bind_elements(geometry, data)
-    state = po.PhysicalOracle(data,ref,order,deadline)
+    state = po.PhysicalOracle(data,ref,order,deadline,outlet_x=forecast.get("outlet_x",15.))
     return state, dict(state=witness, mesh=manifest["geometry"], source=runtime["source"],
         executable=manifest["application"], inputs=identity(manifest_path), operation=identity(receipt_path),
         admission=manifest["admission"], coefficient_sha256=data["state_sha256"], signature=data["signature"],
@@ -434,7 +447,8 @@ def audit(root, case, out, seconds):
     context = get_context(root)
     ref = po.load_reference(context[2])
     state,binding = load_case(root,case,context,ref,24,time.monotonic()+seconds)
-    audit_state(state,binding,context[2],case,out)
+    stations = sorted(set([*po.STATIONS,state.right]))
+    audit_state(state,binding,context[2],case,out,stations=stations)
 
 
 def stricter_inner_k(result):

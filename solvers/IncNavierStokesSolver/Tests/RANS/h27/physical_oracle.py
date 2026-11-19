@@ -334,7 +334,7 @@ class Norms:
 
 
 class PhysicalOracle:
-    def __init__(self, data, reference, order, deadline):
+    def __init__(self, data, reference, order, deadline, *, outlet_x=15.):
         self.data, self.ref, self.order, self.deadline = data, reference, order, deadline
         self.n, self.np, self.nk, self.ne = map(int, data['sizes'])
         self.elements, self.geometry = data['elements'], data['geometry']
@@ -349,6 +349,11 @@ class PhysicalOracle:
         require(self.outlet_policy in (FULL_TRACTION, ZERO_TRANSVERSE), 'unknown physical outlet policy')
         require(self.outlet_policy == FULL_TRACTION or reference.exact_inner,
                 'zero-transverse outlet requires the qualified exact-inner reference')
+        require(outlet_x == 15. or (self.outlet_policy == ZERO_TRANSVERSE
+                                    and math.isfinite(outlet_x) and outlet_x > 15.),
+                'a downstream diagnostic requires the explicitly bound B domain')
+        self.left, self.right = -10., outlet_x
+        self.length = self.right-self.left
         self.outlet_identity = outlet_identity(reference.boundary_identity, self.outlet_policy)
         if 'outlet_policy' in data or 'outlet_identity' in data:
             require(data.get('outlet_policy') == self.outlet_policy and
@@ -361,9 +366,11 @@ class PhysicalOracle:
         for key in self.s:
             digest.update(np.asarray(self.s[key], dtype='<f8').tobytes())
         require(digest.hexdigest() == data['state_sha256'], 'native coefficient state hash mismatch')
-        for key, value in dict(d0=reference.d0, H=reference.H, h=reference.h, left=-10., right=15., top=reference.top).items():
+        expected = dict(d0=reference.d0, H=reference.H, h=reference.h,
+                        left=self.left, right=self.right, top=reference.top)
+        for key, value in expected.items():
             require(abs(self.geometry[key]-value) <= 1e-12, 'retained physical geometry changed: '+key)
-        self.volume, self.evolume = 25*reference.top, 25*(reference.top-reference.H)
+        self.volume, self.evolume = self.length*reference.top, self.length*(reference.top-reference.H)
         self.ufree = [np.asarray(v, dtype=int) for v in data['free_velocity_ids']]
         self.free = dict(k=np.asarray(data['k_free_ids'], dtype=int), epsilon=np.asarray(data['epsilon_free_ids'], dtype=int))
         self.owner, self.faces, self.internal = {}, dict(u=[], k=[], epsilon=[]), []
@@ -382,12 +389,12 @@ class PhysicalOracle:
         columns, edges = {}, {}
         for e in self.elements:
             xl, xr, rl, rr = e['bounds']
-            require(xr > xl and rr > rl and xl >= -10-1e-12 and xr <= 15+1e-12 and
+            require(xr > xl and rr > rl and xl >= self.left-1e-12 and xr <= self.right+1e-12 and
                     rl >= -1e-12 and rr <= p.top+1e-12 and not (rl < p.H-1e-12 and rr > p.H+1e-12),
                     'invalid physical rectangle or missing H mesh edge')
             # Snap trusted geometry endpoints only, never a field/state value.
             for j, value in enumerate(e['bounds']):
-                for edge in ((-10., 15.) if j < 2 else (0., p.H, p.top)):
+                for edge in ((self.left, self.right) if j < 2 else (0., p.H, p.top)):
                     if abs(value-edge) <= 64*np.finfo(float).eps*max(p.H, abs(value), abs(edge)):
                         e['bounds'][j] = edge
         x_alias = coordinate_aliases(e['bounds'][i] for e in self.elements for i in (0,1))
@@ -414,11 +421,11 @@ class PhysicalOracle:
                 if key == 'epsilon' and not outer:
                     continue
                 bottom = p.H if key == 'epsilon' else 0.
-                for side, present in enumerate((xl == -10., xr == 15., rl == bottom, rr == p.top)):
+                for side, present in enumerate((xl == self.left, xr == self.right, rl == bottom, rr == p.top)):
                     if present:
                         self.faces[key].append((e, side))
         ordered = sorted(columns)
-        require(abs(ordered[0][0]+10) < 1e-12 and abs(ordered[-1][1]-15) < 1e-12 and
+        require(abs(ordered[0][0]-self.left) < 1e-12 and abs(ordered[-1][1]-self.right) < 1e-12 and
                 all(abs(a[1]-b[0]) < 1e-12 for a, b in zip(ordered[:-1], ordered[1:])), 'x columns overlap or leave gaps')
         for column in columns.values():
             column.sort(key=lambda e: e['bounds'][2])
@@ -777,7 +784,8 @@ class PhysicalOracle:
         bulk_whole = bulk['whole']
         budget = {}
         for key, source in (('k', 'k_source'), ('epsilon', 'epsilon_source')):
-            scale = 25*self.ref.A if key == 'k' else 25*(self.ref.nu*self.ref.A/self.ref.H**2+self.ref.cd*self.ref.Kin**2/(self.ref.se*self.ref.H))
+            scale = self.length*self.ref.A if key == 'k' else self.length*(
+                self.ref.nu*self.ref.A/self.ref.H**2+self.ref.cd*self.ref.Kin**2/(self.ref.se*self.ref.H))
             adv, prescribed, physical, essential = (boundary[key+suffix] for suffix in
                 ('_advection', '_diffusion_prescribed', '_diffusion_actual', '_diffusion_essential'))
             weak = adv+prescribed+reactions[key]-bulk_whole[source]
@@ -796,7 +804,7 @@ class PhysicalOracle:
         energy_free = sum(float(self.s['flow'][component*self.n+ids]@total['flow'][component*self.n+ids])
                           for component, ids in enumerate(self.ufree))
         energy_balance = energy_volume-boundary['traction_prescribed_work']-fixed_work
-        energy_scale = 25*self.ref.tau
+        energy_scale = self.length*self.ref.tau
         stress_identity = bulk_whole['stress_work']-bulk_whole['molecular_work']-bulk_whole['P']-bulk_whole['isotropic_k_divergence']
         budget['mechanical'] = dict(storage=0., steady_defect_only=True,
             kinetic_advection=bulk_whole['kinetic_advection'], kinetic_advective_boundary=boundary['kinetic_advection'],
@@ -1012,12 +1020,12 @@ class PhysicalOracle:
         result['epsilon' if a['outer'] else 'Ew'] = a['E']
         return result
 
-    def profiles(self, *, detailed=False):
+    def profiles(self, *, detailed=False, stations=STATIONS):
         path = Path(__file__).resolve().parents[1]/'cao-tamura-fig3/rough-fig3.csv'
         fig = sorted(set(float(row['y_mm'])/40-self.ref.d0 for row in csv.DictReader(path.open())))
         extra = [0., self.ref.H, self.ref.h, .4*self.ref.H, .75*self.ref.H, .0875, self.ref.top, *fig]
         rows, norms, ground = [], Norms(), []
-        for station in STATIONS:
+        for station in stations:
             self.clock()
             owners = [e for e in self.elements if e['bounds'][0]-1e-12 <= station <= e['bounds'][1]+1e-12]
             widths = len({(e['bounds'][0], e['bounds'][1]) for e in owners})
@@ -1057,7 +1065,7 @@ class PhysicalOracle:
                                        scaled_deviation=float(a['V'][0, 0, 2]/self.ref.tau-1),
                                        scaled_deviation_vs_reference=float((a['V'][0, 0, 2]-self.ref.reference_shear)/self.ref.tau)))
         result = norms.report(ENVELOPES)
-        return dict(stations=STATIONS, norms=result, rows=rows, ground_stations=ground,
+        return dict(stations=stations, norms=result, rows=rows, ground_stations=ground,
             status='MET' if all(v.get('status') == 'MET' for v in result.values()) and all(abs(v['scaled_deviation']) <= .10 for v in ground) else 'NOT_MET',
             comparator=('Exact-inner and retained outer inlet. Ground shear gate uses tau0.'
                         if self.ref.exact_inner else 'Retained imposed historical inlet.'),
