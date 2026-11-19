@@ -1,0 +1,95 @@
+{
+  "schema": "WJH27B1cAdmissionV1",
+  "status": "ADMITTED",
+  "policy": "ZeroTransverseV1",
+  "live_excluding_admission_reservation": {
+    "charged_seconds": 43565.35514766474,
+    "reserved_seconds": 42.0,
+    "nonprotected_remaining": 6792.644852335259,
+    "tranche_remaining": 5040.935571940194
+  },
+  "required_seconds": 3921,
+  "no_new_allocation_needed": true,
+  "complete_cap_breakdown": {
+    "setup_and_possible_continuation_setup": 104,
+    "steady_and_continuation": 2714,
+    "assembly_compare_and_station_witness": 666,
+    "checkpoint3_publication": 137,
+    "final_publication_hold": 300
+  },
+  "original_cost_anchors_seconds": [
+    490,
+    770,
+    2301
+  ],
+  "accepted_anchors": {
+    "B0": {
+      "receipt": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-b0-continue-1-steady/receipt.json",
+        "bytes": 4942,
+        "sha256": "41359f0ac70f80d616a8eca4ee290ad87c29939d67a35ea172714bed86b3d9c5"
+      },
+      "elapsed": 594.4524689480022,
+      "peak_rss": 7759679488
+    },
+    "B1": {
+      "receipt": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-b1-continue-1-steady/receipt.json",
+        "bytes": 4940,
+        "sha256": "b0e2a5f69d2da6281034ea9fcae4ff0402ced82e17e020bd45d250bb41cb758d"
+      },
+      "elapsed": 354.0437125979952,
+      "peak_rss": 7803944960
+    },
+    "A1c": {
+      "receipt": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-a1c-continue-1-steady/receipt.json",
+        "bytes": 5857,
+        "sha256": "436abd5b9eb0ec3ab8d5b93228b8278174e01a329658401128ca351955699f08"
+      },
+      "elapsed": 416.4584662519919,
+      "peak_rss": 8338259968
+    }
+  },
+  "screen": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-matrix.json",
+    "bytes": 8416755,
+    "sha256": "014786512667b4d8b0996681fd255d5729a364bff530450d4b03564454a6c2a9"
+  },
+  "same_M1c_geometry": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-a1c/geometry.xml",
+    "bytes": 1172927,
+    "sha256": "72f5bb7b7ec02b62945a5bf6cc421754d46e47c3d6b45ce2989529ce68c65269"
+  },
+  "host_memory": {
+    "mem_available_bytes": 404418748416,
+    "mem_total_bytes": 540840640512,
+    "job_cgroup": "/user.slice/user-1000.slice/session-636.scope",
+    "ancestor_limits": [
+      {
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-636.scope",
+        "current": 1235419136,
+        "memory.max": null,
+        "memory.high": null
+      },
+      {
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+        "current": 262254653440,
+        "memory.max": null,
+        "memory.high": null
+      },
+      {
+        "path": "/sys/fs/cgroup/user.slice",
+        "current": 262542192640,
+        "memory.max": null,
+        "memory.high": null
+      },
+      {
+        "path": "/sys/fs/cgroup",
+        "memory.max": null,
+        "memory.high": null
+      }
+    ]
+  },
+  "limit_bytes": 10737418240
+}

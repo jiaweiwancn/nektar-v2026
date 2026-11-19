@@ -238,7 +238,8 @@ def pair(first,second,bindings,replay=None):
     return result
 
 
-def station_uncertainty(spatial_a,spatial_b,effect_0,effect_1):
+def station_uncertainty(spatial_a,spatial_b,effect_0,effect_1,
+                        differences=("A1_minus_A0","B1_minus_B0","B0_minus_A0","B1_minus_A1")):
     rows = dict(effect_1["interior_rows"])
     rows.update({k:v for k,v in effect_1["rows"].items() if k.startswith("x=")})
     results = {}
@@ -254,7 +255,7 @@ def station_uncertainty(spatial_a,spatial_b,effect_0,effect_1):
                 mean = [e["component_signed_mean"][i] for e in (e0,e1)]
                 signed = mean if norm=="RMS" else [e["component_locations"][i]["signed_difference"] for e in (e0,e1)]
                 resolved = d0>aa+bb and d1>aa+bb and signed[0]*signed[1]>0.
-                data[comp][norm] = dict(A1_minus_A0=aa,B1_minus_B0=bb,B0_minus_A0=d0,B1_minus_A1=d1,
+                data[comp][norm] = dict(zip(differences,(aa,bb,d0,d1)),
                                        uncertainty_indicator=aa+bb, status="RESOLVED" if resolved else "UNRESOLVED",
                                        effect_directions=signed)
         results[name] = data
@@ -299,10 +300,32 @@ def collar(root,base,fine,out,seconds):
     print(fine+"-"+base,len(result["failures"]),flush=True)
 
 
+def collar_effect(root,out,seconds):
+    context = get_context(root)
+    ref = po.load_reference(context[2])
+    deadline = time.monotonic()+seconds
+    a,pa = open_case(root,"A1c",context,ref,20,deadline)
+    b,pb = open_case(root,"B1c",context,ref,20,deadline)
+    require(pa["mesh"]==pb["mesh"],"A and B collar effects require precisely the same mesh")
+    paths = [root/"evidence"/name for name in ("outlet-a-collar.json","outlet-b-collar.json","outlet-matrix.json")]
+    a_refine,b_refine = (read(path)["comparison"] for path in paths[:2])
+    effect_m1 = read(paths[2])["comparisons"]["B1-A1"]
+    require(a_refine["second"]["state"]==pa["state"] and b_refine["second"]["state"]==pb["state"]
+            and a_refine["first"]["state"]==effect_m1["first"]["state"]
+            and b_refine["first"]["state"]==effect_m1["second"]["state"],
+            "original and radial indicators do not bind the same paired states")
+    effect = pair(a,b,(pa,pb))
+    atomic(out,dict(schema="WJH27OutletCollarBoundaryEffectV1",effect=effect,
+          reference_comparisons=[identity(path) for path in paths],
+          station_uncertainty=station_uncertainty(a_refine,b_refine,effect_m1,effect,
+                ("A1c_minus_A1","B1c_minus_B1","B1_minus_A1","B1c_minus_A1c"))))
+    print("published radial uncertainty on all 29 stations and the fixed interior",flush=True)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("root",type=Path)
-    parser.add_argument("mode",choices=("audit","matrix","collar","station-witness"))
+    parser.add_argument("mode",choices=("audit","matrix","collar","collar-effect","station-witness"))
     parser.add_argument("out",type=Path)
     parser.add_argument("--case")
     parser.add_argument("--seconds",type=float,required=True)
@@ -313,6 +336,8 @@ if __name__ == "__main__":
         write_station_witness(args.root,args.case,args.out,args.seconds)
     elif args.mode=="matrix":
         compare_matrix(args.root,args.out,args.seconds)
+    elif args.mode=="collar-effect":
+        collar_effect(args.root,args.out,args.seconds)
     else:
         require(args.case in ("A","B"),"collar comparison needs a policy")
         collar(args.root,args.case+"1",args.case+"1c",args.out,args.seconds)
