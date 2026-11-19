@@ -1,0 +1,11 @@
+# Bh1 first H-interface refinement
+
+Bh1 keeps every Bf streamwise edge and bisects both original H owners in [0.14481812942817,0.15232189736084]. It retains the base Q3/Q2, native 6×8, stopping tolerances, physical equations and exact reference. Two accepted Newton updates take 685.491 s, reach 2.42132e−11 and peak at 11.61 GiB within the 13 GiB allowance. The independent audit and comparison take 223.602 and 102.241 s. [Exact admission and measured operations](wj-h27-linux/task2-outlet-campaign/cp2-bh1/operations.json)
+
+Independent momentum, continuity, k and outer epsilon pass at 2.63663e−10, 1.71586e−14, 3.91806e−10 and 3.61595e−10. All remaining independent current, physical, boundary, accounting and native guards also pass. The maximum H jump in k diffusion drops from 1.16895e−6 to 2.05633e−7 in A units. The maximum total-traction jump drops from 6.92553e−5 to 3.76379e−5 tau0. Shared mass and k advection match on both traces. [Independent current, physical and H results](wj-h27-linux/task2-outlet-campaign/cp2-bh1/outlet-Bh1-audit.json)
+
+All 690 direct Bh1−Bf rows and the fixed-window rows pass. The largest signed Rrr and Pi changes are +6.71014e−5 and −6.93454e−5 tau0 on the upper H owner near x=14.994. The largest signed shear change is −2.60346e−5 tau0 close to the outlet. The largest signed gradient change is −9.29991e−5 in Ur. The maximum stress change in the fixed window is −4.31466e−7 tau0 on the upper H owner at x=8. [All signed rows and physical owners](wj-h27-linux/task2-outlet-campaign/cp2-bh1/outlet-qual-Bh1-Bf.json)
+
+Bh2 bisects all four Bh1 children on the same support. Its 111×98 design retains the Bh1 streamwise grid and Bf comparison. The 3,732 s forecast includes the three-level H proof, with 12.86 GiB peak expected and a 13 GiB allowance. Under the frozen rule the second one-sided differences should contract to at most 80% of the first or both lie within 1e−5, with final jumps and direct differences within .001. [Bh2 design and prediction](wj-h27-linux/task2-outlet-campaign/cp2-bh1/outlet-campaign-bh2-design.json) · [Complete measured forecast](wj-h27-linux/task2-outlet-campaign/cp2-bh1/outlet-qual-bh2-forecast.json)
+
+**Campaign OPEN. TASK2_COMPLETE=NO. TASK3_READY=NO.**

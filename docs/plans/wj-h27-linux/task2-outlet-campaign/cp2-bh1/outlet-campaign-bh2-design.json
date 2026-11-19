@@ -1,0 +1,27 @@
+{
+  "case": "Bh2",
+  "base": "Bh1",
+  "comparison_bases": [
+    "Bf"
+  ],
+  "change": "H radial owners",
+  "radial_bands": [
+    [
+      0.14481812942817,
+      0.15232189736084
+    ]
+  ],
+  "extra_cost_cases": [
+    "Bfl",
+    "Br3",
+    "Br4"
+  ],
+  "extra_analysis_seconds": 90,
+  "hypothesis": "Bisecting all four H children from Bh1 within the exact original Bf radial support measures successive convergence without changing either streamwise resolution or the rest of the radial mesh. Bh1 passed all gates and decreased the independently measured H jumps before further reduction.",
+  "predicted_effect": "Direct Bf differences and final side jumps meet 1e-3, each one-sided second difference contracts by at least 20% or both differences are <=1e-5, and adjacent mass and k-advection MAX are <=1e-10.",
+  "bounded_newton_pair": true,
+  "source_evidence": [
+    "outlet-Bh1-audit.json",
+    "outlet-qual-Bh1-Bf.json"
+  ]
+}
