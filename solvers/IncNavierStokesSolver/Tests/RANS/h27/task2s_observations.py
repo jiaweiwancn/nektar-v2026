@@ -122,8 +122,10 @@ def common_cells(first, second):
 
 
 class Rows:
-    def __init__(self):
+    def __init__(self, reverse=False, detailed=False):
         self.records = {}
+        self.sign = -1 if reverse else 1
+        self.detailed = detailed
 
     def add(self, groups, left, right, x, r, weights, a, b, ref):
         av, bv = oracle.PhysicalOracle.observable(a), oracle.PhysicalOracle.observable(b)
@@ -132,15 +134,19 @@ class Rows:
                 continue
             scale = (ref.Kin if field == "k" else ref.tau if field in ("R","Pi","traction")
                      else ref.A/r if field == "epsilon" else 1.)
-            delta = ((av[field]-bv[field])/scale).reshape(len(x),-1)
+            delta = (self.sign*(av[field]-bv[field])/scale).reshape(len(x),-1)
             pos = np.argmax(np.abs(delta),axis=0)
             squares = np.einsum("i,ij,ij->j",weights,delta,delta)
+            means = weights@delta if self.detailed else None
             maxima = abs(delta[pos,np.arange(len(pos))])
             for group in groups:
                 row = self.records.setdefault(group+"/"+field, dict(measure=0.,
-                    squares=np.zeros(len(pos)), maxima=np.full(len(pos),-1.), locations=[None]*len(pos)))
+                    squares=np.zeros(len(pos)), means=np.zeros(len(pos)),
+                    maxima=np.full(len(pos),-1.), locations=[None]*len(pos)))
                 row["measure"] += float(np.sum(weights))
                 row["squares"] += squares
+                if self.detailed:
+                    row["means"] += means
                 for i in np.flatnonzero(maxima > row["maxima"]):
                     j = pos[i]
                     row["maxima"][i] = maxima[i]
@@ -148,6 +154,9 @@ class Rows:
                         coarse_owner=left["geometry"], fine_owner=right["geometry"],
                         owner_bounds=[left["bounds"],right["bounds"]], signed_difference=float(delta[j,i]),
                         included_with_quadrature_weight=bool(weights[j]>0))
+                    if self.detailed:
+                        row["locations"][i].update(first_raw_value=float(av[field].reshape(len(x),-1)[j,i]),
+                                                   second_raw_value=float(bv[field].reshape(len(x),-1)[j,i]))
 
     def finish(self):
         records = {}
@@ -160,6 +169,9 @@ class Rows:
             records[name] = dict(RMS=float(np.max(rms)), MAX=float(np.max(maximum)),
                 component_RMS=rms.tolist(), component_MAX=maximum.tolist(), limits=[limit,limit],
                 status=status, measure=row["measure"])
+            if self.detailed:
+                records[name].update(component_signed_mean=(row["means"]/row["measure"]).tolist(),
+                                     component_locations=row["locations"], components=COMPONENTS[field])
             if status == "NOT_MET":
                 worst = int(np.argmax(maximum))
                 integral = int(np.argmax(rms))
@@ -183,9 +195,9 @@ def station_points(a, w, breaks, multiplicity):
     return np.r_[rad,breaks], np.r_[weights,np.zeros(len(breaks))]
 
 
-def compare(first,second,quiet=()):
-    rows, count = Rows(), 0
-    local = Rows()
+def compare(first,second,quiet=(),*,interior=None,reverse=False,detailed=False):
+    rows, count = Rows(reverse,detailed), 0
+    local = Rows(reverse,detailed)
     edges = sorted({e["bounds"][i]
                     for model in (first,second) for e in model.elements for i in (0,1)})
     multiplicity = {x:2 if -10. < x < 15. and any(abs(x-edge)<1e-12 for edge in edges) else 1
@@ -196,15 +208,24 @@ def compare(first,second,quiet=()):
         left,right,bottom,top = bounds
         region = "outer" if e["epsilon"] else "inner"
         oracle.require(bool(e["epsilon"]) == bool(f["epsilon"]), "common cell crossed H")
-        x,r,weights = first.rule(e,bounds,lambda x:second.ref.cutoff(second.trace(f,"k",x)),
-                                 second.cutoff_x_splits(f,bounds))
-        corners = [cuts(first,second,e,f,xe,bottom,top) for xe in (left,right)]
-        extra_radius = np.concatenate(corners)
-        x = np.r_[x,np.repeat([left,right],[len(v) for v in corners])]
-        r = np.r_[r,extra_radius]
-        weights = np.r_[weights,np.zeros(len(extra_radius))]
-        a,b = first.sample(e,x,r),second.sample(f,x,r)
+        def samples(lo, hi):
+            bounds = (lo,hi,bottom,top)
+            x,r,weights = first.rule(e,bounds,lambda x:second.ref.cutoff(second.trace(f,"k",x)),
+                                     second.cutoff_x_splits(f,bounds))
+            corners = [cuts(first,second,e,f,xe,bottom,top) for xe in (lo,hi)]
+            extra_radius = np.concatenate(corners)
+            x = np.r_[x,np.repeat([lo,hi],[len(v) for v in corners])]
+            r = np.r_[r,extra_radius]
+            weights = np.r_[weights,np.zeros(len(extra_radius))]
+            return x,r,weights,first.sample(e,x,r),second.sample(f,x,r)
+
+        x,r,weights,a,b = samples(left,right)
         rows.add(("whole",region),e,f,x,r,weights,a,b,first.ref)
+        if interior:
+            lo,hi = max(left,interior[0]),min(right,interior[1])
+            if hi-lo > 1e-12:
+                values = (x,r,weights,a,b) if (lo,hi)==(left,right) else samples(lo,hi)
+                local.add(("interior/whole","interior/"+region),e,f,*values,first.ref)
         for lo,hi in quiet:
             if lo-1e-12 <= left < right <= hi+1e-12:
                 local.add((f"{lo:g}..{hi:g}/whole",f"{lo:g}..{hi:g}/{region}"),
@@ -226,13 +247,21 @@ def compare(first,second,quiet=()):
         weight_error = max(weight_error,abs(row["measure"]-measure)/measure)
     oracle.require(len(result) == 690 and weight_error < 1e-10, "original row inventory or station measure changed")
     local_rows = local.finish()
-    oracle.require(len(local_rows) == len(quiet)*23, "redistributed x-strip observation missing")
+    oracle.require(len(local_rows) == (len(quiet)+bool(interior))*23, "x-strip observation missing")
+    if interior:
+        for key,row in local_rows.items():
+            group, field = key.split("/")[-2:]
+            target = (interior[1]-interior[0])*expected["outer" if field=="epsilon" else group]
+            oracle.require(abs(row["measure"]-target) <= 1e-10*target, "interior strip measure differs")
     return result,local_rows,dict(common_owner_subcells=count, relative_measure_error=weight_error,
                                  station_multiplicity={str(x):m for x,m in multiplicity.items()})
 
 
 def check_archived(rows, archived):
-    old = archived["norms"]
+    if archived.get("schema") == "WJH27Task2RSOwnerComparisonV1":
+        old = archived["rows"]
+    else:
+        old = archived["norms"]
     oracle.require(old.keys() == rows.keys(), "archived observations differ")
     metrics = ("RMS","MAX","measure","component_RMS","component_MAX")
     difference = max(float(np.max(abs(np.asarray(value[key])-np.asarray(old[name][key]))))

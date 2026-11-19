@@ -70,6 +70,12 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
         m_options.nonlinearTolerance>0&&m_options.nonlinearTolerance<=1e-8&&m_options.maximumIterations>=2,
         "invalid coupled timestep or convergence policy");
     Require(m_options.sourceIdentity.size()==64,"coupled scientific source identity is missing");
+    m_zeroTransverseOutlet=m_options.outletPolicy=="ZeroTransverseV1";
+    Require(m_zeroTransverseOutlet||m_options.outletPolicy=="FullTractionV1","unknown WJ outlet policy");
+    Require(!m_zeroTransverseOutlet||(!m_options.manufactured&&
+        m_reference->Policy()==ReferencePolicy::ExactInnerFiniteNuV1&&m_reference->Transport()==InnerKTransport::ScalarV2),
+        "zero-transverse outlet requires the exact-inner ScalarCdV2 physical model");
+    m_outletIdentity=D::Hash(m_reference->BoundaryIdentity()+"|"+m_options.outletPolicy);
     Require(m_options.andersonDepth>=0&&m_options.andersonDepth<=8,"Anderson depth must lie in [0,8]");
     Require(m_options.stressSplit=="PositiveShearV1"||m_options.stressSplit=="IsotropicMuV1","unknown numerical stress split");
     Require(m_options.steadyVelocityPC=="FullGradientV1"||m_options.steadyVelocityPC=="PositiveFrozenV1","unknown steady velocity preconditioner");
@@ -117,6 +123,7 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
         signature<<'|'<<m_reference->PolicyName()<<'|'<<m_reference->TransportName();
     if(m_reference->Transport()!=InnerKTransport::ScalarV2)
         signature<<'|'<<m_reference->TransportName()<<'|'<<m_reference->BoundaryIdentity();
+    signature<<"|outlet:"<<m_outletIdentity;
     for(const auto&e:m_flow.Elements()){
         signature<<'|'<<e.geometry<<','<<e.xl<<','<<e.xr<<','<<e.rl<<','<<e.rr;
         for(int a:e.u)signature<<','<<a;for(double a:e.us)signature<<','<<a;
@@ -170,9 +177,23 @@ void Coupling::BuildTopology()
         const double expected=side==0?m_left:side==1?m_right:side==2?0.:m_top;
         Require(std::abs(position-expected)<1e-11,"unsupported nonrectangular exterior boundary");
         for(int component=0;component<2;++component){
-            const bool essential=m_options.manufactured||side==0||side==2||(side==3&&component==1);
+            const bool essential=m_options.manufactured||side==0||side==2||
+                (component==1&&(side==3||(side==1&&m_zeroTransverseOutlet)));
             for(int mode:edgeModes[side])Require((free[component].count(e.u[mode])==0)==essential,
                 "native component boundary mask disagrees with the declared physical side law");
+        }
+        if(side==1&&!m_options.manufactured){
+            const bool ground=std::abs(e.rl)<1e-12;
+            const bool top=std::abs(e.rr-m_top)<1e-12;
+            for(int mode:{1,5,9,13}){
+                const bool sharedGround=mode==1&&ground;
+                const bool sharedTop=mode==5&&top;
+                const bool essentialW=m_zeroTransverseOutlet||sharedGround||sharedTop;
+                const int id=e.u[mode];
+                Require((free[0].count(id)==0)==sharedGround&&(free[1].count(id)==0)==essentialW,
+                        "native outlet vertex or edge component does not match the declared law");
+                if(essentialW)m_outletReactionRows.emplace(id,sharedGround||sharedTop);
+            }
         }
     }
     Require(m_flow.Gauge()==m_options.manufactured,
@@ -604,9 +625,16 @@ Coupling::Loads Coupling::Forcing(double time,CoupledTiming&timing,bool freezeMa
         // The application has no manufactured/balance forcing. Body force
         // is exactly zero for this pinned neutral, flat physical case.
         const double topTraction=m_reference->TopTangentialTraction();
+        if(m_options.checkOutletActions)m_outletLoad=Vec::Zero(2*n);
         for(const auto&[index,side]:m_boundaryFaces)if(side==1||side==3){auto r=m_rules.Face(m_flow.Elements()[index],side,20);Vec tx(r.w.size()),tz(tx.size());
-            for(int q=0;q<tx.size();++q){if(side==1){auto t=m_reference->OutletTraction(r.z[q]-m_geometry.d0);tx[q]=t[0];tz[q]=t[1];}else{tx[q]=topTraction;tz[q]=0;}}
-            Add(load.flow,r.u,r.B.transpose()*r.w.asDiagonal()*tx);Add(load.flow,r.u,r.B.transpose()*r.w.asDiagonal()*tz,n);}
+            for(int q=0;q<tx.size();++q){if(side==1){auto t=m_reference->OutletTraction(r.z[q]-m_geometry.d0);tx[q]=t[0];tz[q]=m_zeroTransverseOutlet?0.:t[1];}else{tx[q]=topTraction;tz[q]=0;}}
+            const Vec normal=r.B.transpose()*r.w.asDiagonal()*tx;
+            const Vec transverse=r.B.transpose()*r.w.asDiagonal()*tz;
+            Add(load.flow,r.u,normal);Add(load.flow,r.u,transverse,n);
+            if(side==1&&m_options.checkOutletActions){
+                Add(m_outletLoad,r.u,normal);Add(m_outletLoad,r.u,transverse,n);
+            }
+        }
         load.epsilon+=m_e.NaturalFlux([&](double,double,const Vector&normal){return normal[2]>.5?m_reference->TopEpsilonOutwardFlux():0.;},m_rules);
     }
     timing.forcing+=Clock()-start;if(!m_mms){m_physicalForcing=load;m_hasPhysicalForcing=true;}return load;
@@ -946,12 +974,43 @@ std::array<double,5>Coupling::MMSErrors(const CoupledState&s,double time)const
     }
     for(int i=0;i<5;++i)error[i]=std::sqrt(error[i]/(i==3?outerVolume:m_volume));return error;
 }
+void Coupling::WriteOutletActions(std::ostream&out,const CoupledHistory&h)const
+{
+    Require(h.step==0&&h.time==0,"outlet action export requires a zero-time state");
+    CoupledTiming timing;
+    const auto data=Evaluate(h.current,h.time,false,timing);
+    const auto forcing=Forcing(h.time,timing);
+    const auto advection=Advection(h.current,data.kRules);
+    const auto current=CurrentActions(h.current,data);
+    const int n=m_flow.VelocitySize();
+    out<<",\"outlet_actions\":{\"normal_applied\":";
+    VectorJSON(out,m_outletLoad.head(n));
+    out<<",\"tangent_applied\":";
+    VectorJSON(out,m_outletLoad.tail(n));
+    out<<",\"tangent_reaction\":[";
+    bool first=true;
+    // The unconstrained steady LHS minus prescribed RHS is the additional
+    // outward traction action. A shared corner row belongs to both traces
+    // and is exported once, without assigning it to either face.
+    for(auto [id,shared]:m_outletReactionRows){
+        if(!first)out<<',';
+        first=false;
+        const double reaction=current.flow[n+id]+advection.flow[n+id]-forcing.flow[n+id];
+        out<<"{\"dof\":"<<id<<",\"value\":"<<reaction
+           <<",\"scope\":\""<<(shared?"shared_corner":"outlet")<<"\"}";
+    }
+    out<<"]}";
+}
+
 void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepInfo&info,bool coefficients)const
 {
     out<<std::setprecision(17)<<"{\"schema\":\"WJH27NativeCoupledStateV2\",\"model\":\""<<WallModelV2<<"\",\"signature\":\""<<m_signature<<"\",\"source_identity\":\""<<m_options.sourceIdentity<<"\",\"reference_identity\":\""<<m_reference->Identity()<<"\",\"manufactured\":"<<(m_mms?"true":"false")<<",\"step\":"<<h.step<<",\"time\":"<<h.time<<",\"dt\":"<<h.dt<<",\"state_sha256\":\""<<StateHash(h.current)<<"\",\"previous_sha256\":\""<<StateHash(h.previous)<<"\",\"advection_sha256\":\""<<StateHash(h.advection)<<"\",\"previous_advection_sha256\":\""<<StateHash(h.previousAdvection)<<"\",\"sizes\":["<<m_flow.VelocitySize()<<','<<m_flow.PressureSize()<<','<<m_k.Size()<<','<<m_e.Size()<<"],\"gauge\":"<<(m_flow.Gauge()?"true":"false")<<",\"nonlinear_iterations\":"<<info.nonlinearIterations<<",\"linear_iterations\":["<<info.flowIterations<<','<<info.kIterations<<','<<info.epsilonIterations<<"],\"rebuilds\":"<<info.rebuilds<<",\"retries\":"<<info.retries<<",\"seconds\":"<<info.seconds<<",\"coefficient_drift\":"<<info.coefficientDrift<<",\"residuals\":["<<info.residual.momentum<<','<<info.residual.continuity<<','<<info.residual.gauge<<','<<info.residual.k<<','<<info.residual.epsilon<<','<<info.residual.trace<<"],\"minimum_k\":"<<info.minimumK<<",\"minimum_epsilon\":"<<info.minimumEpsilon<<",\"minimum_covariance_over_k\":"<<info.minimumCovarianceOverK<<",\"minimum_principal_over_mu\":"<<info.minimumPrincipalOverMu<<",\"disjoint_seconds\":{\"constitutive\":"<<info.timing.constitutive<<",\"wall\":"<<info.timing.wall<<",\"assembly\":"<<info.timing.assembly<<",\"flow\":"<<info.timing.flow<<",\"scalar\":"<<info.timing.scalar<<",\"rebuild\":"<<info.timing.rebuild<<",\"guards\":"<<info.timing.guards<<",\"forcing\":"<<info.timing.forcing<<",\"residual\":"<<info.timing.residual<<",\"nonlinear\":"<<info.timing.nonlinear<<",\"io\":"<<info.timing.io<<",\"other\":"<<info.timing.other<<'}';
     out<<",\"quadratureX\":"<<m_options.quadratureX<<",\"quadratureR\":"<<m_options.quadratureR<<",\"linear_tolerance\":"<<m_options.linearTolerance<<",\"nonlinear_tolerance\":"<<m_options.nonlinearTolerance<<",\"maximum_iterations\":"<<m_options.maximumIterations<<",\"mms_body_amplitude\":"<<m_options.mmsBodyAmplitude<<",\"retry_reason\":"<<RANSWallSolveJson::Quote(info.retryReason);
     out<<",\"inner_k_transport\":"<<RANSWallSolveJson::Quote(m_reference->TransportName())
        <<",\"boundary_identity\":"<<RANSWallSolveJson::Quote(m_reference->BoundaryIdentity());
+    out<<",\"outlet_policy\":"<<RANSWallSolveJson::Quote(m_options.outletPolicy)
+       <<",\"outlet_identity\":"<<RANSWallSolveJson::Quote(m_outletIdentity);
+    if(m_options.checkOutletActions)WriteOutletActions(out,h);
     const auto slopes=m_reference->LogCutoffDerivativeBounds();
     out<<",\"scalar_quadrature_policy\":\"CubicCutoffFacePanelsV1\",\"cutoff_radius_range\":["<<m_cutoffRange[0]<<','<<m_cutoffRange[1]
        <<"],\"cutoff_log_slope_bounds\":["<<slopes[0]<<','<<slopes[1]<<']';

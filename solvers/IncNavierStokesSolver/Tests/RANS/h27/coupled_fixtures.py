@@ -13,8 +13,10 @@ def generate(path,table,prefix,mode='Manufactured',nx=2,nr=2,dt=.02,steps=1,
              backend='Historical',mms_body_amplitude=0,mms_variant='Historical',
              solve='Advance',steady_seconds=0,steady_pc_mass=0,steady_seed=0,
              anderson_depth=0,nonlinear_trace=False,maximum_iterations=60,initial_fields='',initial_source_identity='',
-             stress_split='PositiveShearV1',check_current_actions=False):
+             stress_split='PositiveShearV1',check_current_actions=False,
+             outlet_policy='FullTractionV1',check_outlet_actions=False):
     path=Path(path);assert not path.exists() and mode in ('Manufactured','Physical')
+    assert outlet_policy=='FullTractionV1' or (mode=='Physical' and outlet_policy=='ZeroTransverseV1')
     if template:
         import shutil
         shutil.copy2(template,path)
@@ -38,7 +40,8 @@ def generate(path,table,prefix,mode='Manufactured',nx=2,nr=2,dt=.02,steps=1,
                   WJOutputCoefficients='True'if coefficients else'False',Projection='Continuous',
                   WJConstitutiveBackend=backend,WJMMSVariant=mms_variant,WJNativeSolve=solve,
                   WJNonlinearTrace='True'if nonlinear_trace else'False',WJStressSplit=stress_split,
-                  WJCheckCurrentActions='True'if check_current_actions else'False')
+                  WJCheckCurrentActions='True'if check_current_actions else'False',
+                  WJOutletPolicy=outlet_policy,WJCheckOutletActions='True'if check_outlet_actions else'False')
     if restart:settings['WJRestart']=str(restart)
     if initial_fields:settings['WJInitialFields']=str(initial_fields)
     if initial_source_identity:settings['WJInitialSourceIdentity']=str(initial_source_identity)
@@ -84,7 +87,8 @@ def generate(path,table,prefix,mode='Manufactured',nx=2,nr=2,dt=.02,steps=1,
         E.SubElement(regions,'B',ID=str(bid)).text=f'C[{first+bid}]'
         region=E.SubElement(boundary,'REGION',REF=str(bid))
         for name in ('u','v'):
-            essential=mode=='Manufactured'or bid in (0,2)or(bid==3 and name=='v')
+            essential=mode=='Manufactured'or bid in (0,2)or(
+                name=='v' and (bid==3 or (bid==1 and outlet_policy=='ZeroTransverseV1')))
             E.SubElement(region,'D'if essential else'N',VAR=name,VALUE='0')
         for name in ('k','epsilon'):
             E.SubElement(region,'D'if bid==0 else'N',VAR=name,VALUE='0')
@@ -96,6 +100,7 @@ def generate(path,table,prefix,mode='Manufactured',nx=2,nr=2,dt=.02,steps=1,
     E.indent(root);path.write_text(E.tostring(root,encoding='unicode')+'\n')
     Path(str(path)+'.opt').write_text('<NEKTAR><COLLECTIONS DEFAULT="NoCollection"/></NEKTAR>\n')
     return dict(path=str(path),sha256=hashlib.sha256(path.read_bytes()).hexdigest(),mode=mode,
+        outlet_policy=outlet_policy,
         table=dict(path=str(table),sha256=hashlib.sha256(Path(table).read_bytes()).hexdigest()),
         nx=nx,nr=nr,dt=dt,steps=steps,template=str(template)if template else None)
 

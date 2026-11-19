@@ -36,6 +36,8 @@ SCHEMA = 'WJH27IndependentPhysicalOracleV1'
 TABLE_SHA = 'b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d'
 EXACT_TABLE_SHA = '3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1'
 EXACT_SCHEMA = 'WJH27ExactInnerFiniteNuTablesV1'
+FULL_TRACTION = 'FullTractionV1'
+ZERO_TRANSVERSE = 'ZeroTransverseV1'
 SIGNS = dict(u='us', p='ps', k='ks', epsilon='epsilon_signs')
 EDGES = ((0, 4, 8, 12), (1, 5, 9, 13), (0, 1, 2, 3), (4, 5, 6, 7))
 NORMALS = ((-1., 0.), (1., 0.), (0., -1.), (0., 1.))
@@ -57,6 +59,10 @@ def require(condition, reason):
 def identity(path):
     path = Path(path)
     return dict(path=str(path), sha256=hashlib.sha256(path.read_bytes()).hexdigest())
+
+
+def outlet_identity(boundary_identity, policy):
+    return hashlib.sha256(f'{boundary_identity}|{policy}'.encode()).hexdigest()
 
 
 def coordinate_aliases(values, tolerance=1e-12):
@@ -339,6 +345,15 @@ class PhysicalOracle:
                 data.get('boundary_identity', TABLE_SHA) == reference.boundary_identity and
                 data.get('inner_k_transport', 'ScalarCdV2') == reference.inner_k_transport,
                 'native reference, boundary or inner transport identity mismatch')
+        self.outlet_policy = data.get('outlet_policy', FULL_TRACTION)
+        require(self.outlet_policy in (FULL_TRACTION, ZERO_TRANSVERSE), 'unknown physical outlet policy')
+        require(self.outlet_policy == FULL_TRACTION or reference.exact_inner,
+                'zero-transverse outlet requires the qualified exact-inner reference')
+        self.outlet_identity = outlet_identity(reference.boundary_identity, self.outlet_policy)
+        if 'outlet_policy' in data or 'outlet_identity' in data:
+            require(data.get('outlet_policy') == self.outlet_policy and
+                    data.get('outlet_identity') == self.outlet_identity,
+                    'native outlet policy identity mismatch')
         self.s = {key: np.asarray(data['coefficients'][key], dtype=float) for key in ('flow', 'k', 'epsilon')}
         for key, length in zip(self.s, (2*self.n+self.np, self.nk, self.ne)):
             require(self.s[key].shape == (length,) and np.all(np.isfinite(self.s[key])), 'invalid '+key+' coefficients')
@@ -422,14 +437,40 @@ class PhysicalOracle:
                 self.internal.append(owners)
             else:
                 require(owners[0] in self.faces['u'], 'unpaired interior geometry edge')
+        transverse_sides = (0, 1, 2, 3) if self.outlet_policy == ZERO_TRANSVERSE else (0, 2, 3)
         self.fixed = {}
         for key, size, free, sides in (('u', self.n, self.ufree[0], (0, 2)),
-                ('w', self.n, self.ufree[1], (0, 2, 3)), ('k', self.nk, self.free['k'], (0,)),
+                ('w', self.n, self.ufree[1], transverse_sides), ('k', self.nk, self.free['k'], (0,)),
                 ('epsilon', self.ne, self.free['epsilon'], (0, 2))):
             field = 'u' if key == 'w' else key
             fixed = {e[field][j] for e, side in self.faces[field] if side in sides for j in EDGES[side]}
             require(len(set(free)) == len(free) and set(free) == set(range(size))-fixed, 'wrong physical '+key+' essential mask')
             self.fixed[key] = np.asarray(sorted(fixed), dtype=int)
+        outlets = [e for e, side in self.faces['u'] if side == 1]
+        bottom = [e for e in outlets if e['bounds'][2] == 0.]
+        top = [e for e in outlets if e['bounds'][3] == p.top]
+        require(len(bottom) == len(top) == 1, 'wrong shared outlet corner ownership')
+        self.outlet_corners = dict(ground=bottom[0]['u'][EDGES[1][0]], top=top[0]['u'][EDGES[1][1]])
+        trace_ids = {e['u'][j] for e in outlets for j in EDGES[1]}
+        require(trace_ids & set(self.fixed['u']) == {self.outlet_corners['ground']},
+                'wrong axial outlet freedom')
+        fixed_transverse = trace_ids if self.outlet_policy == ZERO_TRANSVERSE else set(self.outlet_corners.values())
+        require(trace_ids & set(self.fixed['w']) == fixed_transverse, 'wrong transverse outlet freedom')
+        self.outlet_ids = np.asarray(sorted(trace_ids), dtype=int)
+        self.outlet_tangent_fixed = np.asarray(sorted(fixed_transverse), dtype=int)
+
+    def outlet_traction(self, r):
+        traction = self.ref.outlet(r)
+        if self.outlet_policy == ZERO_TRANSVERSE:
+            traction[:, 1] = 0.
+        return traction
+
+    def outlet_tangent_reactions(self, full_flow_residual):
+        """Signed coefficient actions of the constrained transverse outlet tests."""
+        corners = set(self.outlet_corners.values())
+        return [dict(dof=int(dof), value=float(full_flow_residual[self.n+dof]),
+                     scope='shared_corner' if dof in corners else 'outlet')
+                for dof in self.outlet_tangent_fixed]
 
     def trace(self, e, key, x, derivative=0):
         owner = self.owner[e['geometry']]
@@ -671,12 +712,20 @@ class PhysicalOracle:
                     ui = np.asarray(e['u']); b = basis(e, 'u', x, r)[0]
                     traction = np.column_stack((nx*(a['V'][:, 0, 0]-a['Pi'])+nr*a['V'][:, 0, 2],
                                                 nx*a['V'][:, 2, 0]+nr*(a['V'][:, 2, 2]-a['Pi'])))
-                    prescribed = self.ref.outlet(r) if side == 1 else np.column_stack((np.full(len(x), self.ref.top_tangent), np.zeros(len(x)))) if side == 3 else np.zeros((len(x), 2))
+                    prescribed = np.zeros((len(x), 2))
+                    if side == 1:
+                        prescribed = self.outlet_traction(r)
+                    elif side == 3:
+                        prescribed[:, 0] = self.ref.top_tangent
                     for component in (0, 1):
                         parts['natural']['flow'][component*self.n+ui] -= b.T@(weight*prescribed[:, component])
                     natural_work = a['U']*prescribed[:, 0]+a['W']*prescribed[:, 1]
                     actual_work = a['U']*traction[:, 0]+a['W']*traction[:, 1]
-                    essential_work = actual_work if side in (0, 2) else a['W']*traction[:, 1] if side == 3 else np.zeros(len(x))
+                    essential_work = np.zeros(len(x))
+                    if side in (0, 2):
+                        essential_work = actual_work
+                    elif side == 3 or (side == 1 and self.outlet_policy == ZERO_TRANSVERSE):
+                        essential_work = a['W']*traction[:, 1]
                     metrics = dict(mass=float(weight@un), kinetic_advection=float(weight@(.5*(a['U']**2+a['W']**2)*un)),
                         traction_actual_work=float(weight@actual_work), traction_prescribed_work=float(weight@natural_work),
                         traction_essential_actual_work=float(weight@essential_work))
@@ -684,10 +733,13 @@ class PhysicalOracle:
                     row.update(metrics, minimum_normal_velocity=float(np.min(un)),
                         actual_traction_integral=(weight@traction).tolist(), prescribed_traction_integral=(weight@prescribed).tolist())
                     if side in (1, 3):
-                        compared = (traction-prescribed)/self.ref.tau
-                        if side == 3: compared = compared[:, :1]
+                        components = 2 if side == 1 and self.outlet_policy == FULL_TRACTION else 1
+                        compared = (traction[:, :components]-prescribed[:, :components])/self.ref.tau
                         row['natural_traction_scaled_RMS'] = float(np.sqrt(np.max(weight@(compared*compared)/weight.sum())))
                         row['natural_traction_scaled_MAX'] = float(np.max(np.abs(compared)))
+                    if side == 1:
+                        row.update(prescribed_normal_work=float(weight@(a['U']*prescribed[:, 0])),
+                                   prescribed_tangential_work=float(weight@(a['W']*prescribed[:, 1])))
                     if side == 2:
                         norms.add('ground', 'shear', (a['V'][:, 0, 2]-self.ref.tau)/self.ref.tau, weight)
                         if self.ref.exact_inner:
@@ -798,12 +850,44 @@ class PhysicalOracle:
         return dict(residuals=residual, residual_limits=RESIDUAL_LIMITS,
                     steady_residual_status='MET' if all(residual[key] <= limit for key, limit in RESIDUAL_LIMITS.items()) else 'NOT_MET',
                     bulk=bulk, boundary=boundary, boundary_faces=face_rows, budgets=budget,
+                    outlet=self.outlet_budget(face_rows),
                     accounting_identity_status='MET' if max(identities) <= 1e-10 else 'NOT_MET',
                     accounting_identity_max_error=max(identities), physical_envelope=envelope,
                     ground_shear_diagnostic=shear_diagnostic.report({}),
                     sampled_minima=minima, maximum_independent_cubic_relative_residual=max_root_error,
                     mutations=mutations, sparse_Riesz_nonzeros={key: matrix.nnz for key, matrix in self.masses.items()},
                     principal_admissibility=dict(status='NOT_MET', reason='Independent continuum principal certification is a separate required gate; sampled covariance is not a substitute'))
+
+    def outlet_budget(self, face_rows):
+        velocity = [row for row in face_rows if row['side'] == 'outlet' and row['field'] == 'u']
+        work = {key: sum(row[key] for row in velocity) for key in (
+            'traction_actual_work', 'traction_essential_actual_work',
+            'prescribed_normal_work', 'prescribed_tangential_work')}
+        rows = self.outlet_tangent_reactions(self.total['flow'])
+        actions = {}
+        for scope in ('outlet', 'shared_corner'):
+            selected = [row for row in rows if row['scope'] == scope]
+            actions[scope] = dict(
+                unit_displacement_action=sum(self.one['u'][row['dof']]*row['value'] for row in selected),
+                coefficient_work=sum(self.s['flow'][self.n+row['dof']]*row['value'] for row in selected))
+        scalar = {}
+        for field in ('k', 'epsilon'):
+            faces = [row for row in face_rows if row['side'] == 'outlet' and row['field'] == field]
+            scalar[field] = dict(
+                advective_outflow=sum(row[field+'_advection'] for row in faces),
+                prescribed_outward_diffusive_flux=sum(row[field+'_diffusion_prescribed'] for row in faces),
+                raw_outward_diffusive_flux=sum(row[field+'_diffusion_actual'] for row in faces))
+        return dict(policy=self.outlet_policy, identity=self.outlet_identity, normal=[1., 0.],
+            component_order=['x', 'r'], mass=sum(row['mass'] for row in velocity),
+            kinetic_advection=sum(row['kinetic_advection'] for row in velocity),
+            sampled_minimum_normal_velocity=min(row['minimum_normal_velocity'] for row in velocity),
+            prescribed_traction_integral=np.sum([row['prescribed_traction_integral'] for row in velocity], axis=0).tolist(),
+            raw_stress_traction_integral=np.sum([row['actual_traction_integral'] for row in velocity], axis=0).tolist(),
+            traction_work=work, scalar_fluxes=scalar,
+            tangent_reaction=dict(sign='Positive outward traction action on the positive signed transverse test',
+                definition='Full constrained steady momentum row after subtraction of applied loads',
+                shared_corner_scope='One assembled row per shared corner, including its ground or top support',
+                shared_corners=self.outlet_corners, rows=rows, actions=actions))
 
     def inlet_norms(self, norms, region, a, r, weight):
         inlet = self.ref.inlet(r)
@@ -857,6 +941,9 @@ class PhysicalOracle:
                 inlet = self.ref.inlet(r)
                 normals.add('inlet', 'U_representation', a['U']-inlet['U'], weight)
                 normals.add('inlet', 'W_essential', a['W'], weight)
+            if side == 1 and self.outlet_policy == ZERO_TRANSVERSE:
+                normals.add('outlet', 'W_essential', a['W'], weight)
+                normals.add('outlet', 'Wr_essential', a['G'][:, 2, 2], weight)
             if side == 2:
                 normals.add('ground', 'U_essential', a['U'], weight)
                 normals.add('ground', 'W_essential', a['W'], weight)
@@ -868,7 +955,8 @@ class PhysicalOracle:
             a = self.sample(e, x, r)
             exact = a['K']**1.5/self.ref.cl/self.ref.H
             trace_max = max(trace_max, float(np.max(np.abs(a['E']-exact)/(self.ref.A/self.ref.H))))
-        result['pointwise_boundary_representation'] = normals.report(dict(U_essential=1e-10, W_essential=1e-10))
+        result['pointwise_boundary_representation'] = normals.report(
+            dict(U_essential=1e-10, W_essential=1e-10, Wr_essential=1e-10))
         result['homogeneous_velocity_boundary_check'] = dict(status='MET' if all(value.get('status', 'MET') == 'MET'
             for value in result['pointwise_boundary_representation'].values()) else 'NOT_MET')
         result['dependent_H_pointwise_representation_error'] = trace_max

@@ -112,6 +112,13 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
         m_session->LoadParameter("WJStepFDStep",options.stepNewton.fdRelativeStep,1e-6);
     }
     std::string currentActions;m_session->LoadSolverInfo("WJCheckCurrentActions",currentActions,"False");Check(currentActions=="True"||currentActions=="False","invalid current action check switch");options.checkCurrentActions=currentActions=="True";
+    m_session->LoadSolverInfo("WJOutletPolicy",options.outletPolicy,"FullTractionV1");
+    std::string outletActions;
+    m_session->LoadSolverInfo("WJCheckOutletActions",outletActions,"False");
+    Check(outletActions=="True"||outletActions=="False","invalid outlet action check switch");
+    options.checkOutletActions=outletActions=="True";
+    Check(!options.checkOutletActions||(!options.manufactured&&m_steps==0),
+          "outlet action export requires the zero-time physical fixture");
     m_session->LoadParameter("WJAndersonDepth",options.andersonDepth,0);std::string trace;m_session->LoadSolverInfo("WJNonlinearTrace",trace,"False");Check(trace=="True"||trace=="False","WJNonlinearTrace must be True/False");options.recordNonlinearTrace=trace=="True";
     m_session->LoadParameter("WJMMSBodyAmplitude",options.mmsBodyAmplitude,0.);
     m_session->LoadSolverInfo("WJMMSVariant",options.mmsVariant,"Historical");

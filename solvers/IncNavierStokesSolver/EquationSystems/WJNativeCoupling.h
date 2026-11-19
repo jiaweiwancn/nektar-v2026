@@ -25,6 +25,8 @@ struct CoupledOptions
     double dt=.005,linearTolerance=1e-12,nonlinearTolerance=1e-10,mmsBodyAmplitude=0;
     int maximumIterations=60,quadratureX=8,quadratureR=12,andersonDepth=0;
     bool manufactured=false,recordNonlinearTrace=false,checkCurrentActions=false;
+    std::string outletPolicy="FullTractionV1";
+    bool checkOutletActions=false;
     // Numerical split only; the complete current V is identical in both.
     std::string stressSplit="PositiveShearV1",steadyVelocityPC="FullGradientV1";
     // Equivalent solvers of the same current implicit BDF/EX equations.
@@ -160,6 +162,7 @@ private:
                              double alpha,double time,CoupledTiming&timing,
                              const CoupledHistory*history=nullptr)const;
     Vec FlowLift(double time)const;
+    void WriteOutletActions(std::ostream&out,const CoupledHistory&history)const;
     Vec PackFree(const CoupledState&state)const;
     CoupledState FromFree(const Vec&free,double time)const;
     Vec UnknownScales()const;
@@ -182,7 +185,9 @@ private:
     std::array<double,2>m_cutoffRange{};
     std::map<double,double>m_cutoffFaceK;
     std::vector<std::pair<int,int>>m_boundaryFaces;
-    std::string m_signature;
+    std::string m_signature,m_outletIdentity;
+    bool m_zeroTransverseOutlet=false;
+    std::map<int,bool>m_outletReactionRows; // Vertical coefficient ID and shared-corner flag.
     Vec m_preconditionerCoefficients;
     Vec m_kPreconditionerCoefficients,m_ePreconditionerCoefficients;
     double m_flowFactorAlpha=-1,m_kFactorAlpha=-1,m_eFactorAlpha=-1;
@@ -198,6 +203,7 @@ private:
     CoupledStepInfo m_lastAttempt;
     bool m_hasInputHistory=false;
     mutable Vec m_bulkBodyAction,m_sampledBodyAction;
+    mutable Vec m_outletLoad;
     mutable Vec m_physicalFlowLift,m_physicalKLift;
     mutable bool m_hasPhysicalForcing=false;
     mutable Loads m_physicalForcing;

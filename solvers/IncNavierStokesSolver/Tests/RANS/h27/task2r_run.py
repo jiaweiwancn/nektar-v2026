@@ -264,6 +264,8 @@ def run(root, book, args, began):
                 and anchor["result"]["peak_host_workers"] - anchor["request"]["workers_before"] <= 11,
                 "outlet build worker anchor differs")
         limits[phase] = 14  # Previous four-job Make build peaked 11 above admission.
+    if phase == "build" and label == "outlet-configure" and command[:2] == ["cmake", "-S"]:
+        limits[phase] = 8  # Serial generator and compiler-detection probes.
     memory = outlet_solve(root, ledger, label, command) if phase == "outlet-science" else None
     rss_limit = (16 if phase == "build" else 8) * GIB
     if memory:
