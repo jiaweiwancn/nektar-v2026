@@ -184,8 +184,10 @@ def outlet_solve(root, ledger, label, command):
     policy = "FullTractionV1" if match[1] == "outlet-a1c" else "ZeroTransverseV1"
     require(info["WJNativeMode"] == "Physical" and info["WJNativeSolve"] == "SteadyReference"
             and info["WJReferencePolicy"] == "ExactInnerFiniteNuV1"
+            and info["WJReferenceTable"] == str(root / "science/r1-qualified/tables-exact-inner-v1.json")
+            and info["WJOutputPrefix"] == str(session.parent / "state")
             and info["WJOutletPolicy"] == policy and float(parameters["NumSteps"]) == 0
-            and parameters["WJSteadySeconds"], "session does not match amended diagnostic")
+            and float(parameters["WJSteadySeconds"]) > 0, "session does not match amended diagnostic")
     return memory_snapshot()
 
 
@@ -321,11 +323,21 @@ def run(root, book, args, began):
                     code, reason = terminate(child, groups), str(error)
         except (RuntimeError, OSError, KeyboardInterrupt) as error:
             reason = str(error)
+    output_files = None
+    if phase == "outlet-science" and code == 0 and reason is None:
+        case = Path(command[-1]).parent
+        try:
+            output_files = [identity(case / f"state.{name}") for name in
+                            ("result.json", "steady.json", "final.bin")]
+        except OSError as error:
+            reason = f"cannot seal accepted outlet output: {error}"
     event = dict(status="PASS" if code == 0 and reason is None else "FAIL", phase=phase,
                  seconds=time.monotonic() - began, exit=code, reason=reason,
                  peak_tree_rss_bytes=peak, peak_host_workers=peak_workers, log=identity(log_path),
                  rss_limit_bytes=rss_limit, job_memory=job_memory,
                  minimum_memory_headroom_bytes=lowest_headroom)
+    if output_files is not None:
+        event["output_files"] = output_files
     ledger = update(book, lambda ledger: ledger["entries"].update({label: event}))
     atomic(operation / "receipt.json", dict(request=request, result=event,
                                             balance=balance(ledger), storage=storage(root)))

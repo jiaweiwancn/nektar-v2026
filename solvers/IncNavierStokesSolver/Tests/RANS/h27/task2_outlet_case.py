@@ -3,6 +3,7 @@
 """Prepare immutable zero-time outlet cases and exercise the registered history path."""
 
 import argparse
+import hashlib
 from pathlib import Path
 import subprocess
 import xml.etree.ElementTree as ET
@@ -70,14 +71,63 @@ def create_session(session, geometry, table, policy, *, seconds=0, initial_field
          {"WJSteadyKrylovDimension":64})
 
 
-def prepare(root, case, seconds, continuation):
+def tapered_guess(state, output, original):
+    # A direct change of the endpoint W coefficient can create a steep
+    # derivative in the last graded column. Only the starting W polynomial
+    # is tapered. The native recipe still rebuilds all lifts and histories.
+    n = state["sizes"][0]
+    before = np.asarray(state["coefficients"]["flow"])
+    transverse = before[n:2*n].copy()
+    axial_nodes = np.array([0.,1.,1./3.,2./3.])
+    bubble = axial_nodes*(1.-axial_nodes)
+    modes = np.array([1.-axial_nodes,axial_nodes,bubble,(4.*axial_nodes-2.)*bubble]).T
+    inverse_bubbles = np.linalg.inv(modes[2:,2:].T)
+    left, right = 14., 15.
+    claims = {}
+    for e in state["elements"]:
+        xl,xr = e["bounds"][:2]
+        if xr <= left:
+            continue
+        x = xl+(xr-xl)*axial_nodes
+        # Quintic matches values and the first two derivatives at both ends.
+        t = np.clip((right-x)/(right-left),0.,1.)
+        taper = t**3*(10.-15.*t+6.*t*t)
+        ids = np.asarray(e["u"]).reshape(4,4)
+        signs = np.asarray(e["us"]).reshape(4,4)
+        local = before[n+ids]*signs
+        values = (local@modes.T)*taper
+        ends = values[:,:2]
+        bubbles = (values[:,2:]-ends@modes[2:,:2].T)@inverse_bubbles
+        changed = np.column_stack((ends,bubbles))*signs
+        for dof,value in zip(ids.flat,changed.flat):
+            require(abs(claims.setdefault(dof,value)-value)<=1e-12,"tapered W has disjoint signed traces")
+    for dof,value in claims.items():
+        transverse[dof] = value
+    flow = before.copy()
+    flow[n:2*n] = transverse
+    coefficients = dict(state["coefficients"],flow=flow.tolist())
+    digest = hashlib.sha256()
+    for field in ("flow","k","epsilon"):
+        digest.update(np.asarray(coefficients[field],dtype="<f8").tobytes())
+    packet = {key:state[key] for key in ("schema","step","time","basis","model","source_identity",
+              "reference_identity","mms_variant","manufactured","gauge","geometry","sizes","elements")}
+    packet.update(coefficients=coefficients,state_sha256=digest.hexdigest())
+    atomic(output,dict(schema="WJH27SteadyCandidateV1",qualified_reference=False,
+        purpose="Smooth W transfer into B; original fields and guards are retained in the governing solve",
+        source_packet=original, taper_band_code=[left,right],
+        tapered_W_dofs=len(claims), maximum_W_coefficient_change=float(np.max(abs(transverse-before[n:2*n]))),
+        state=packet))
+    return packet
+
+
+def prepare(root, case, seconds, continuation, guess):
     baseline, seals, table, runtime = get_context(root)
     subdir, mesh, policy = CASES[case]
     parent = root/"science"/subdir
     out = parent.with_name(f"{subdir}-continue-{continuation}") if continuation else parent
     out.mkdir()
     if mesh == "M1c":
-        if case == "B1c":
+        if case == "B1c" or continuation:
             control = read(root/"science/outlet-a1c/inputs.json")
             geometry = verified(control["geometry"])
         else:
@@ -90,7 +140,14 @@ def prepare(root, case, seconds, continuation):
     else:
         geometry = verified(baseline["cases"][mesh]["geometry"])
         xs, zs, _ = mesh_axes(geometry)
-    if continuation:
+    if guess == "smooth-outlet-archive":
+        require(case in ("B0","B1"),"archive W taper is restricted to the matched B diagnostics")
+        original = baseline["cases"][mesh]["state"]
+        source_packet, _ = po.load_native(verified(original))
+        require(source_packet["source_identity"] == baseline["source_identity"],"archive source differs")
+        seed = out/"tapered-initial.json"
+        seed_state = tapered_guess(source_packet,seed,original)
+    elif continuation:
         prior = parent.with_name(f"{subdir}-continue-{continuation-1}") if continuation > 1 else parent
         seed = prior/"state.steady-candidate.json"
         packet = read(seed)
@@ -103,10 +160,13 @@ def prepare(root, case, seconds, continuation):
         seed_state = packet["state"]
         require(seed_state["source_identity"] == seals["source"] and seed_state["outlet_policy"] == policy,
                 "continuation is from a different solver or outlet policy")
-    elif case == "B1c":
-        seed = accepted_directory(root,"B1")/"state.result.json"
-        seed_state, _ = po.load_native(seed)
-        require(seed_state["source_identity"] == seals["source"] and seed_state["outlet_policy"] == policy,
+    elif case == "B1c" or guess == "accepted-b0":
+        require(case in ("B1","B1c"),"unexpected nested B guess")
+        previous = "B0" if guess == "accepted-b0" else "B1"
+        seed = accepted_directory(root,previous)/"state.result.json"
+        seed_state, meta = po.load_native(seed)
+        require(seed_state["source_identity"] == seals["source"] and seed_state["outlet_policy"] == policy
+                and meta["steady_mode"] and meta["steady_solver"]["converged"],
                 "candidate collar guess is not from the same B application")
     else:
         seed = verified(baseline["cases"][mesh if mesh != "M1c" else "A1"]["state"])
@@ -120,7 +180,8 @@ def prepare(root, case, seconds, continuation):
         geometry=identity(geometry), session=identity(session), options=identity(Path(str(session)+".opt")),
         table=identity(table), initial_guess=identity(seed), initial_coefficient_sha256=seed_state["state_sha256"],
         cells=[len(xs)-1,len(zs)-1], modes=[4,3], quadrature=[6,8], tolerances=[1e-12,1e-10],
-        steady_time=0., internal_cap_seconds=seconds, command=registered_command(runtime,session)))
+        steady_time=0., initial_guess_method=guess, internal_cap_seconds=seconds,
+        command=registered_command(runtime,session)))
 
 
 def check_history(root, out):
@@ -232,10 +293,11 @@ def main():
     fixture.add_argument("case", choices=CASES)
     fixture.add_argument("seconds", type=float)
     fixture.add_argument("--continuation", type=int, default=0)
+    fixture.add_argument("--guess", choices=("inherited","smooth-outlet-archive","accepted-b0"), default="inherited")
     args = parser.parse_args()
     if args.mode == "prepare":
         require(args.seconds > 0 and args.continuation >= 0, "invalid steady case cap")
-        prepare(args.root, args.case, args.seconds, args.continuation)
+        prepare(args.root, args.case, args.seconds, args.continuation, args.guess)
     else:
         {"seal":seal, "probe-history":check_history, "parity":parity}[args.mode](args.root, args.out)
 

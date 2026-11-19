@@ -1012,7 +1012,7 @@ class PhysicalOracle:
         result['epsilon' if a['outer'] else 'Ew'] = a['E']
         return result
 
-    def profiles(self):
+    def profiles(self, *, detailed=False):
         path = Path(__file__).resolve().parents[1]/'cao-tamura-fig3/rough-fig3.csv'
         fig = sorted(set(float(row['y_mm'])/40-self.ref.d0 for row in csv.DictReader(path.open())))
         extra = [0., self.ref.H, self.ref.h, .4*self.ref.H, .75*self.ref.H, .0875, self.ref.top, *fig]
@@ -1041,6 +1041,9 @@ class PhysicalOracle:
                                       [b-1e-8*(b-a) for a, b in zip(cuts[:-1], cuts[1:])]))
                 r = np.asarray(observed); x = np.full(len(r), station)
                 a = self.sample(e, x, r); fields = self.observable(a); inlet = self.ref.inlet(r)
+                if detailed:
+                    fields.update(strong_divergence=a['div'],
+                                  raw_traction_e_x=np.column_stack((a['V'][:,0,0]-a['Pi'],a['V'][:,2,0])))
                 region = 'outer' if a['outer'] else 'inner'
                 self.inlet_norms(norms, f'x={station:g}/{region}', a, r, np.zeros(len(r)))
                 self.inlet_norms(norms, f'x={station:g}/whole', a, r, np.zeros(len(r)))

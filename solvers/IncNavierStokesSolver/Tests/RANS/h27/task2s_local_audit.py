@@ -59,7 +59,9 @@ def continuity(state):
             maximum = float(abs(divergence[peak]))
             location = dict(owner=element["geometry"],x=float(x[peak]),r=float(r[peak]))
     y = splu(mass.finish()).solve(weak)
-    return dict(pressure_tested_dual=math.sqrt(max(0.,float(weak@y)))/volume,
+    dual = math.sqrt(max(0.,float(weak@y)))
+    return dict(pressure_tested_dual=dual/volume,
+                pressure_tested_Riesz_RMS=dual/math.sqrt(volume),
                 pressure_test_action_MAX=float(np.max(abs(weak))),
                 strong_L1_over_area=absolute/volume,strong_RMS=math.sqrt(squared/volume),
                 strong_interior_Gauss_MAX=maximum,strong_interior_peak=location,area=volume),pressure_shift
@@ -83,11 +85,14 @@ def weak_traces(state, shift):
         V = a["V"][:,PLANE,:][:,:,PLANE]
         actual = V@n-a["Pi"][:,None]*n
         if side == 1:
-            reference = state.ref.outlet(r)
+            reference = state.outlet_traction(r)
             for comp in (0,1):
                 prescribed[comp,ids] -= (q*reference[:,comp])@b
                 reproduced[comp,ids] -= (q*actual[:,comp])@b
-            boundary_norms.add("outlet","raw_minus_prescribed_traction",(actual-reference)/state.ref.tau,q)
+            natural_components = 1 if state.outlet_policy == po.ZERO_TRANSVERSE else 2
+            boundary_norms.add("outlet","raw_minus_prescribed_traction",
+                               (actual-reference)[:,:natural_components]/state.ref.tau,q)
+            boundary_norms.add("outlet","raw_transverse_traction",actual[:,1]/state.ref.tau,q)
         boundary_norms.add(po.SIDES[side],"D",a["div"],q)
         if side == 2:
             boundary_norms.add("ground","tangential_derivatives",a["G"][:,PLANE,0],q)
@@ -119,6 +124,7 @@ def weak_traces(state, shift):
         pressure_constant_AWF_derivative="Zero derivative of represented constant at H",
         restricted_prescribed_outlet_residual_action_MAX=natural,
         restricted_raw_traction_minus_prescribed_action_MAX=defect,
+        transverse_traction_comparison_scope="natural tests" if state.outlet_policy == po.FULL_TRACTION else "raw natural comparison active on normal axis only",
         raw_vertex=corner,boundary_norms=boundary_norms.report({}),
         wall_and_outlet_owners=wall_and_outlet_owners)
 
