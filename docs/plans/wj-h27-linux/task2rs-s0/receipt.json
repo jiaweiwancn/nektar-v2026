@@ -1,0 +1,67 @@
+{
+  "request": {
+    "label": "s0-baseline",
+    "phase": "evidence",
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/s-support/h27/task2s_contract.py",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/s0-baseline.json"
+    ],
+    "cap_seconds": 75.0,
+    "reserved_seconds": 82.0,
+    "workers_before": 58,
+    "idle_mpi_event_helpers": 102,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 730641491,
+      "source_build_runtime_bytes": 138442549,
+      "free_bytes": 3584397533184
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/task2r_run-v4.py",
+      "bytes": 11248,
+      "sha256": "815a5603bcab2b1702bb7f92dd25c4dc6c1876cd8f171fe99a2d139cf35ec69e"
+    },
+    "input_files": [
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/s-support/h27/task2s_contract.py",
+        "bytes": 7520,
+        "sha256": "d677c6d8d87ab2a61e2b8ec4e7a4e0250a231d2a45dad8a5eae461b5fbd2fb52"
+      }
+    ]
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "evidence",
+    "seconds": 5.501212240000314,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 218357760,
+    "peak_host_workers": 60,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s0-baseline/command.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "balance": {
+    "charged_seconds": 30744.948285000828,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 8855.051714999174,
+    "tranche_remaining": 2638.3424346041083
+  },
+  "storage": {
+    "science_bytes": 730641491,
+    "source_build_runtime_bytes": 138442549,
+    "free_bytes": 3584397508608
+  }
+}

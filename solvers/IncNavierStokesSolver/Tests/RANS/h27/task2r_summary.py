@@ -128,8 +128,9 @@ def summarize(root, out):
         compiled_artifact=identity(root/"runtime-r2-v1/IncNavierStokesSolver"),
         calibration_policy="ExactInnerFiniteNuV1", inner_transport="ScalarCdV2",
         source_identity="061c48fe6805b1b1bb66a8effffc3bfc28c5f86777c5e669f52afd9f8c0d861f")
-    atomic(out, dict(schema="WJH27Task2RPhysicalQualificationEvidenceV1", geometry=dict(length_unit_m=L0,
-         matching_wall_radius_code=H, matching_height_m=L0*H, original_floor_elevation_m=L0*(D0+H)),
+    atomic(out, dict(schema="WJH27Task2RPhysicalQualificationEvidenceV2", geometry=dict(length_unit_m=L0,
+         matching_wall_radius_code=H, matching_height_m=L0*H,
+         matching_plane_elevation_above_original_floor_m=L0*(D0+H)),
          identities=variants, scientific_runs=cases(root), comparisons=comparisons(root), projection=projection,
          localization=[identity(p) for p in sorted((root/"science").glob("r3-*/*witness.json"))]
          + [identity(p) for p in sorted((root/"science").glob("r3-*/localization.json"))],

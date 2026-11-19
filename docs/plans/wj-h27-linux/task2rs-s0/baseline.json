@@ -1,0 +1,225 @@
+{
+  "schema": "WJH27Task2RSpatialDiagnosisContractV1",
+  "review_git": "366627a734b642788e18b9aebe0561074d72e92b",
+  "compiled_source": "061c48fe6805b1b1bb66a8effffc3bfc28c5f86777c5e669f52afd9f8c0d861f",
+  "native_files": {
+    "solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupled.cpp": "6cfa83857486c4b9943e6c409280fdc412491104c294cade8ab3df6272bca01f",
+    "solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp": "8bc265ca23e95f3df7180603052b3779ae42755e61048c394e44d63035b1dce3",
+    "solvers/IncNavierStokesSolver/EquationSystems/WJNativeReference.cpp": "393089c9985e1d51696c27db1cc417a507832a1a6523ab387f0544ac9aea6c3d",
+    "solvers/IncNavierStokesSolver/EquationSystems/WJNativeReference.h": "34f64c29258ab8e4161d3db320f379c025af444ba1ab969b11718e79e412851a",
+    "solvers/IncNavierStokesSolver/Tests/RANS/h27/CMakeLists.txt": "b16ef56e6fb07f56434358b9ba00176a5ce655a79dd98b51ce38163c1127563d",
+    "solvers/IncNavierStokesSolver/Tests/RANS/h27/coupled_mms_probe.cpp": "b74741fa1c008fb828f9d8e0a7d5b8e3cb7efdade699e918e316e47718bb24b8",
+    "solvers/IncNavierStokesSolver/Tests/RANS/h27/coupled_return_probe.cpp": "2a3317d2254344cc62d401aa85a41a936ed743b3ae1156eaa41a66917b85d5bf",
+    "solvers/IncNavierStokesSolver/Tests/RANS/h27/reference_probe.cpp": "976c11ac09deaab15179ae71770e9b3fd159a7b0de550586502b28fc6f0ce5f9"
+  },
+  "source_manifest": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r2-source.sha256",
+    "bytes": 1057,
+    "sha256": "5a6e9312d1b672e10cfce20873201acc9c00238401eeed7e72ac688c0e2c9d79"
+  },
+  "compiled_source_record": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r2-compiled-source.txt",
+    "bytes": 86,
+    "sha256": "4469246afc51ca1a9f2cc4480b6544fbe3e91fcd4e0590670498f4d22ecd62be"
+  },
+  "artifacts": {
+    "application": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-r2-v1/IncNavierStokesSolver",
+      "bytes": 9985016,
+      "sha256": "7a94420aaa31f41d9d8b6754d20c16f11d1398e894f243eaa6beaa3af7924819"
+    },
+    "table": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+      "bytes": 139982,
+      "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+    },
+    "pre_radial_archive": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/task2r-r3-before-radial.tar.gz",
+      "bytes": 44809328,
+      "sha256": "f4b005465b2ec339fa8af810c6c4b438564cfefefd92608db4686023c1ddcffd"
+    }
+  },
+  "reviewed_states": {
+    "r3-lowq": {
+      "artifact": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-lowq/state.result.json",
+        "bytes": 49900203,
+        "sha256": "2aef745e0f76d61b65682b290c68d4a30a5855bccb8d2cb20bec1f99ce2a08b1"
+      },
+      "session": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-lowq/run.xml",
+        "bytes": 1029058,
+        "sha256": "093f760038cbe27972e47e0e5ec63334bf7f02b5cb5e0827fa6eef1133cceb65"
+      },
+      "coefficient_sha256": "12fcd1f1ea7bdc9643e226e013ea513cfc8c4e39eadd1f29132e50da32c8754b",
+      "cells": [
+        106,
+        60
+      ],
+      "polynomial_degrees": {
+        "velocity_scalars": 3,
+        "pressure": 2
+      },
+      "quadrature": [
+        6,
+        8
+      ],
+      "actual_simulated_time": 0.0,
+      "source": "061c48fe6805b1b1bb66a8effffc3bfc28c5f86777c5e669f52afd9f8c0d861f",
+      "reference": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+    },
+    "r3-outlet-reallocated": {
+      "artifact": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-outlet-reallocated/state.result.json",
+        "bytes": 51348997,
+        "sha256": "8d286ddec3197cba12b1800bf76998bac45e27422da12f169484053434ef56ea"
+      },
+      "session": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-outlet-reallocated/run.xml",
+        "bytes": 1060581,
+        "sha256": "aa5eb243badb9c4b4fcee49fab6f14f020cefedbc63eaf43ce6be0ba877cc7d9"
+      },
+      "coefficient_sha256": "2e2bd68f169c2ab23a2d998b112f00afd6f2a3b8c7b1742a7894fe0e1eea00e9",
+      "cells": [
+        109,
+        60
+      ],
+      "polynomial_degrees": {
+        "velocity_scalars": 3,
+        "pressure": 2
+      },
+      "quadrature": [
+        6,
+        8
+      ],
+      "actual_simulated_time": 0.0,
+      "source": "061c48fe6805b1b1bb66a8effffc3bfc28c5f86777c5e669f52afd9f8c0d861f",
+      "reference": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+    },
+    "r3-terminal-refined": {
+      "artifact": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-terminal-refined/state.result.json",
+        "bytes": 53695676,
+        "sha256": "8f65f3b43e8281a1ed56d29f16997ae257478329da366cc496c748f138bac3d1"
+      },
+      "session": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-terminal-refined/run.xml",
+        "bytes": 1112394,
+        "sha256": "a316c222fa72224fab50789b6f6614600978d3486d406be045882aa0429de4a3"
+      },
+      "coefficient_sha256": "70932345a702403d56391da240ad266932683b7887193fc7c694b3e584ec92b4",
+      "cells": [
+        114,
+        60
+      ],
+      "polynomial_degrees": {
+        "velocity_scalars": 3,
+        "pressure": 2
+      },
+      "quadrature": [
+        6,
+        8
+      ],
+      "actual_simulated_time": 0.0,
+      "source": "061c48fe6805b1b1bb66a8effffc3bfc28c5f86777c5e669f52afd9f8c0d861f",
+      "reference": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+    }
+  },
+  "geometry": {
+    "length_unit_m": 0.04,
+    "wall_elevation_above_original_floor_m": 0.0034999999999999996,
+    "matching_height_m": 0.006,
+    "matching_height_code": 0.15,
+    "matching_plane_elevation_above_original_floor_m": 0.0095,
+    "top_elevation_above_original_floor_m": 0.8,
+    "prior_original_floor_elevation_m_key": "matching_plane_elevation_above_original_floor_m"
+  },
+  "station_inventory": [
+    -10,
+    -7.5,
+    -5,
+    -2.5,
+    -1.25,
+    0,
+    1.25,
+    2.5,
+    3.75,
+    4,
+    4.25,
+    4.5,
+    4.75,
+    5,
+    5.25,
+    5.5,
+    5.75,
+    6.0,
+    6.25,
+    6.5,
+    6.75,
+    7.0,
+    7.25,
+    7.5,
+    7.75,
+    8.0,
+    10,
+    12.5,
+    15
+  ],
+  "numerical_rms_and_max": {
+    "U": 0.0001,
+    "W": 0.0001,
+    "k": 0.001,
+    "epsilon": 0.01,
+    "R": 0.001,
+    "Pi": 0.001,
+    "G": 0.01,
+    "traction": 0.001
+  },
+  "operation_caps_seconds": {
+    "S0": {
+      "baseline_and_publication": 75
+    },
+    "S1": {
+      "replay": 260,
+      "boundary_and_admissibility": 190,
+      "wedge_and_fit": 100,
+      "publication": 85
+    },
+    "S2_first": {
+      "inputs": 45,
+      "steady": 1080,
+      "current": 265,
+      "terminal_compare": 250,
+      "parent_compare": 250,
+      "boundary_fit_and_analysis": 150,
+      "publication": 100
+    }
+  },
+  "limits": {
+    "extra_reservation_per_operation_seconds": 7,
+    "new_evidence_hold_seconds": 300,
+    "one_science_process": true,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "build_workers": 4,
+    "shared_worker_cap": 72,
+    "science_rss_bytes": 8589934592,
+    "build_rss_bytes": 17179869184,
+    "per_category_storage_bytes": 8589934592,
+    "free_reserve_bytes": 16106127360
+  },
+  "ledger_before_s0_charge": {
+    "ceiling": 43200,
+    "carried_charge": 30739.447072760828,
+    "nonprotected_remaining": 8860.552927239172,
+    "staged_remaining": 2643.8436468441087,
+    "protected": 3600,
+    "preexisting_reservations": []
+  }
+}
