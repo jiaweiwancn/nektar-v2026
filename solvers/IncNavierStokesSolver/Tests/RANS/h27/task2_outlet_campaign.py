@@ -10,8 +10,9 @@ import physical_oracle as po
 from resources import atomic, identity, size
 from task2_outlet_baseline import mesh_axes, read, verified
 from task2_outlet_qualification import (GRACE, HIGHER_QUADRATURE, PUBLICATION_SECONDS,
-    QUADRATURE, SHIFT, TIGHTER_TOLERANCES, TOLERANCES, case_dir, pass_audit, planned_attempt)
-from task2_outlet_qual_followup import adjacent_H, admit, native_chain, split_bands, station_columns
+    QUADRATURE, SHIFT, TIGHTER_TOLERANCES, TOLERANCES, accepted_path, case_dir, pass_audit, planned_attempt)
+from task2_outlet_qual_followup import (adjacent_H, admit, native_chain, native_cost_chain,
+    split_bands, station_columns)
 from task2r_run import (CAMPAIGN_AMENDMENT, CAMPAIGN_RSS_GIB, GIB, balance, campaign_case,
     memory_headroom, memory_snapshot, require, storage)
 
@@ -86,13 +87,17 @@ def axes_for(root, design, x, z):
     return new_x, new_z, columns, quadrature, tolerances
 
 
-def measure(root, cases, cells, quadrature):
+def measure(root, cases, cells, quadrature, diagnostic=None):
     """Scale successful checkpoints on the same steady path and preserve each anchor."""
     count = math.prod(cells)
     startup, convergence, total = [], [], []
     densities, disk_rates, anchors, timings = {}, [], [], {}
     for case in dict.fromkeys(cases):
-        dims, charged, peak, chain = native_chain(root,case)
+        if diagnostic and case==diagnostic["case"]:
+            dims,charged,peak,chain = native_cost_chain(root,diagnostic["binding"])
+            chain += [diagnostic["audit"],diagnostic["probe"]]
+        else:
+            dims,charged,peak,chain = native_chain(root,case)
         n = math.prod(dims)
         densities[case] = peak/n
         total.append(charged*count/n)
@@ -200,18 +205,43 @@ def scale_radius_after_stop(root, previous, base, x, z, q, t, data):
         measured_first_to_final_growth=past_growth)
 
 
+def diagnostic_anchor(root, base, case, probe_name):
+    audit_path = root/"evidence"/f"outlet-{base}-audit.json"
+    audit = read(audit_path)
+    prior = audit["provenance"]
+    probe_path = root/"evidence"/probe_name
+    probe = read(probe_path)
+    require(campaign_case(case) and case[1] in ("q","t") and probe_path.parent==root/"evidence"
+            and probe["case"]==base and probe["state"]==prior["state"]
+            and [k for k,v in audit["status"].items() if v!="MET"]==["independent_current"]
+            and audit["core"]["residuals"]["momentum"]>po.RESIDUAL_LIMITS["momentum"]
+            and identity(accepted_path(root,base))==prior["state"],
+            "equation diagnostic seed must be the bound native result of the audited momentum miss")
+    native = read(verified(prior["operation"]))["result"]
+    require(native["status"]=="PASS" and prior["state"] in native["output_files"],
+            "equation diagnostic seed lacks an accepted native receipt")
+    return dict(case=base,binding=prior,audit=identity(audit_path),probe=identity(probe_path))
+
+
 def freeze(root, design_path, out):
     design = read(design_path)
     case, base = design["case"], design["base"]
-    base_audit, audit_receipt = pass_audit(root,base)
-    prior = base_audit["provenance"]
+    diagnostic = None
+    if design.get("equation_diagnostic"):
+        diagnostic = diagnostic_anchor(root,base,case,design["equation_diagnostic"])
+        prior,audit_receipt=diagnostic["binding"],diagnostic["audit"]
+    else:
+        base_audit,audit_receipt=pass_audit(root,base)
+        prior=base_audit["provenance"]
     prior_mesh, prior_state = verified(prior["mesh"]), verified(prior["state"])
     x,z,_ = mesh_axes(prior_mesh)
     new_x,new_z,columns,quadrature,tolerances = axes_for(root,design,x,z)
     cells = [len(new_x)-1,len(new_z)-1]
     for comparator in design.get("comparison_bases",[base]):
-        pass_audit(root,comparator)
-    data = measure(root, ["Bn2","Bf",base,*design.get("extra_cost_cases",[])], cells, quadrature)
+        if not diagnostic or comparator!=base:
+            pass_audit(root,comparator)
+    data = measure(root, ["Bn2","Bf",base,*design.get("extra_cost_cases",[])],
+                   cells,quadrature,diagnostic)
     retry = None
     if design.get("readmit_after_rss"):
         retry = readmit_memory_stop(root,design["readmit_after_rss"],base,new_x,new_z,
@@ -256,7 +286,7 @@ def freeze(root, design_path, out):
         memory_estimate_inputs=dict(margin=data["margin"],bytes_per_cell=data["densities"],
             extra_quadrature_points=data["extra_quadrature_points"],extra_bytes_per_point=2048),
         measured_native_times=data["timings"],quadrature_cost_factor=data["quadrature_cost_factor"],
-        readmission=retry,
+        readmission=retry,equation_diagnostic=diagnostic,
         anchors=data["anchors"],attempts=attempts,audit_cap_seconds=audit_seconds,
         compare_cap_seconds=compare_seconds,required_seconds=required,reservation_caps=caps,
         diagnostic_cap_seconds=max(0,extra_analysis-GRACE),live=live,memory=memory,

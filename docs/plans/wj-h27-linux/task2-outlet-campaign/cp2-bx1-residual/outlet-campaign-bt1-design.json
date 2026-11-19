@@ -1,0 +1,16 @@
+{
+  "case": "Bt1",
+  "base": "Bx1",
+  "change": "tolerance",
+  "equation_diagnostic": "outlet-campaign-bx1-residual-probe.json",
+  "comparison_bases": [
+    "Bx1"
+  ],
+  "extra_cost_cases": [
+    "Br3",
+    "Br4"
+  ],
+  "extra_analysis_seconds": 0,
+  "hypothesis": "The order-eight and order-thirty independent quadratures give nearly the same momentum residual, with over 99.97% of squared residual in the terminal columns. A solve on the identical Q3/Q2 mesh at native 6x8 quadrature isolates the algebraic stopping criterion.",
+  "predicted_effect": "If algebraic stopping dominates, 3e-13 linear and 3e-12 coupled tolerances bring independent momentum below 1e-9, with inner-k RMS and MAX at most 1e-4 and all other signed changes inside their inherited limits."
+}
