@@ -1,0 +1,97 @@
+{
+  "request": {
+    "label": "s1-spatial-replay",
+    "phase": "analysis",
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/s-support/h27/task2s_observations.py",
+      "--table",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+      "--first",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-outlet-reallocated/state.result.json",
+      "--second",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-terminal-refined/state.result.json",
+      "--archived",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-terminal-refined/comparison.json",
+      "--out",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/task2rs-s1/observation-replay.json",
+      "--seconds",
+      "244"
+    ],
+    "cap_seconds": 260.0,
+    "reserved_seconds": 267.0,
+    "workers_before": 58,
+    "idle_mpi_event_helpers": 102,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 730641491,
+      "source_build_runtime_bytes": 138442549,
+      "free_bytes": 3584397467648
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/task2r_run-v4.py",
+      "bytes": 11248,
+      "sha256": "815a5603bcab2b1702bb7f92dd25c4dc6c1876cd8f171fe99a2d139cf35ec69e"
+    },
+    "input_files": [
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/s-support/h27/task2s_observations.py",
+        "bytes": 12310,
+        "sha256": "7c73f544bc0c2fd479b0998964b3342af4b49480de9750064eb5a1250d44197c"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+        "bytes": 139982,
+        "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-outlet-reallocated/state.result.json",
+        "bytes": 51348997,
+        "sha256": "8d286ddec3197cba12b1800bf76998bac45e27422da12f169484053434ef56ea"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-terminal-refined/state.result.json",
+        "bytes": 53695676,
+        "sha256": "8f65f3b43e8281a1ed56d29f16997ae257478329da366cc496c748f138bac3d1"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-terminal-refined/comparison.json",
+        "bytes": 279168,
+        "sha256": "97b54f355f30da017fbf8ed96336af1982a13266bfda8835bfce03f1995f0e03"
+      }
+    ]
+  },
+  "result": {
+    "status": "FAIL",
+    "phase": "analysis",
+    "seconds": 68.71893384600116,
+    "exit": 1,
+    "reason": null,
+    "peak_tree_rss_bytes": 321986560,
+    "peak_host_workers": 61,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s1-spatial-replay/command.log",
+      "bytes": 971,
+      "sha256": "dbcda43914306d4aceb70e8b6c00d547c7262b40a41f4d185350bdeae8817c8e"
+    }
+  },
+  "balance": {
+    "charged_seconds": 30813.66721884683,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 8786.332781153173,
+    "tranche_remaining": 2569.623500758107
+  },
+  "storage": {
+    "science_bytes": 730641491,
+    "source_build_runtime_bytes": 138442549,
+    "free_bytes": 3584397447168
+  }
+}

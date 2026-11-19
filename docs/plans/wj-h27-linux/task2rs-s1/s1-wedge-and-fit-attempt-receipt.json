@@ -1,0 +1,97 @@
+{
+  "request": {
+    "label": "s1-wedge-and-fit",
+    "phase": "analysis",
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/s-support-v2/h27/task2s_wedge.py",
+      "--table",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+      "--native",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-lowq/state.result.json",
+      "--native",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-outlet-reallocated/state.result.json",
+      "--native",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-terminal-refined/state.result.json",
+      "--out",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/task2rs-s1/wedge-fit.json",
+      "--seconds",
+      "90"
+    ],
+    "cap_seconds": 100.0,
+    "reserved_seconds": 107.0,
+    "workers_before": 58,
+    "idle_mpi_event_helpers": 102,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 731182562,
+      "source_build_runtime_bytes": 138442549,
+      "free_bytes": 3584396754944
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/task2r_run-v4.py",
+      "bytes": 11248,
+      "sha256": "815a5603bcab2b1702bb7f92dd25c4dc6c1876cd8f171fe99a2d139cf35ec69e"
+    },
+    "input_files": [
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/s-support-v2/h27/task2s_wedge.py",
+        "bytes": 22630,
+        "sha256": "913fcbd8949ba0416cb9ac0d97815d09cfffc3fbf4c278ce4c5907652f354da6"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+        "bytes": 139982,
+        "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-lowq/state.result.json",
+        "bytes": 49900203,
+        "sha256": "2aef745e0f76d61b65682b290c68d4a30a5855bccb8d2cb20bec1f99ce2a08b1"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-outlet-reallocated/state.result.json",
+        "bytes": 51348997,
+        "sha256": "8d286ddec3197cba12b1800bf76998bac45e27422da12f169484053434ef56ea"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r3-terminal-refined/state.result.json",
+        "bytes": 53695676,
+        "sha256": "8f65f3b43e8281a1ed56d29f16997ae257478329da366cc496c748f138bac3d1"
+      }
+    ]
+  },
+  "result": {
+    "status": "FAIL",
+    "phase": "analysis",
+    "seconds": 7.0745099220002885,
+    "exit": 1,
+    "reason": null,
+    "peak_tree_rss_bytes": 234807296,
+    "peak_host_workers": 59,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s1-wedge-and-fit/command.log",
+      "bytes": 1708,
+      "sha256": "98919b612648bf3b12047a559c4e34dd4fd2a2b01acce4105a10a675b833a981"
+    }
+  },
+  "balance": {
+    "charged_seconds": 30923.969833362833,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 8676.030166637169,
+    "tranche_remaining": 2459.3208862421034
+  },
+  "storage": {
+    "science_bytes": 731188284,
+    "source_build_runtime_bytes": 138442549,
+    "free_bytes": 3584396734464
+  }
+}

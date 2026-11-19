@@ -1,0 +1,67 @@
+{
+  "request": {
+    "label": "s1-publish",
+    "phase": "evidence",
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/s-support-v2/h27/task2s_publish.py",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+      "s1"
+    ],
+    "cap_seconds": 85.0,
+    "reserved_seconds": 92.0,
+    "workers_before": 58,
+    "idle_mpi_event_helpers": 102,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 731722305,
+      "source_build_runtime_bytes": 138442549,
+      "free_bytes": 3584396132352
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/task2r_run-v4.py",
+      "bytes": 11248,
+      "sha256": "815a5603bcab2b1702bb7f92dd25c4dc6c1876cd8f171fe99a2d139cf35ec69e"
+    },
+    "input_files": [
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/s-support-v2/h27/task2s_publish.py",
+        "bytes": 5447,
+        "sha256": "d569e6da1b93ec7a7f8642198c0b8845669ea4b9858a9dfb902e10dac73476ef"
+      }
+    ]
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "evidence",
+    "seconds": 1.1105502499995055,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 196608,
+    "peak_host_workers": 59,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s1-publish/command.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "balance": {
+    "charged_seconds": 30932.353900209833,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 8667.646099790169,
+    "tranche_remaining": 2450.936819395103
+  },
+  "storage": {
+    "science_bytes": 731722305,
+    "source_build_runtime_bytes": 138442549,
+    "free_bytes": 3584395902976
+  }
+}

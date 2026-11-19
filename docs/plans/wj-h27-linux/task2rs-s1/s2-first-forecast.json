@@ -1,0 +1,106 @@
+{
+  "schema": "WJH27Task2RSRadialAdmissionV1",
+  "live_before_publication_charge": {
+    "charged": 30931.243349959834,
+    "staged": 2452.0473696451027,
+    "nonprotected": 8668.756650040168
+  },
+  "capped_operations_seconds": {
+    "inputs": 45,
+    "steady": 1080,
+    "current": 265,
+    "terminal_compare": 250,
+    "parent_compare": 250,
+    "boundary_fit_and_analysis": 150,
+    "publication": 100
+  },
+  "total_reservation_seconds": 2189,
+  "evidence_hold_seconds": 300,
+  "staged_requirement_including_evidence_hold": 2489,
+  "minimum_new_stage_before_publication_charge": 36.95263035489734,
+  "memory": {
+    "measured_terminal_peak": 8005373952,
+    "science_rss_cap": 8589934592,
+    "estimated_peak_bytes": 8540655206,
+    "basis_dimension_previous": 40,
+    "basis_dimension_next": 30,
+    "largest_unknown": "Sparse factor fill and peak coexistence on the changed wall mesh."
+  },
+  "case": {
+    "cells": [
+      114,
+      62
+    ],
+    "polynomial_degrees": [
+      3,
+      2
+    ],
+    "native_quadrature": [
+      6,
+      8
+    ],
+    "terminal_x_width": 0.00244140625,
+    "first_radial_width": 0.000125,
+    "internal_solver_cap": 980,
+    "original_exterior_contract": true,
+    "time_code": 0.0
+  },
+  "evidence": [
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-terminal-steady/receipt.json",
+      "bytes": 2981,
+      "sha256": "eacb1e61ee4dd243a4146369ff9b6c249b5f3000bca8b23920a249bd220835d3"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-terminal-current/receipt.json",
+      "bytes": 3836,
+      "sha256": "b13bedebfbc4828e717898c905fe9ed728b888fde6ebb86e68b19449d5bc72d3"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-outlet-refine-steady/receipt.json",
+      "bytes": 2991,
+      "sha256": "7ee8479bb02bcc345e10f615229348c1c28fdcc840a765a2dd30f95ab3512257"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-outlet-lean-steady/receipt.json",
+      "bytes": 2977,
+      "sha256": "27b559fc6522bd443a905506ac4551256e6ed31fab36eaebf8353bb46c36afc3"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s1-spatial-replay-corrected/receipt.json",
+      "bytes": 4223,
+      "sha256": "fd12eb4aede30c79938b7b592a503a8c396bc43717d4f5029ecd6504bdfc37cd"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s1-boundary-and-admissibility/receipt.json",
+      "bytes": 4663,
+      "sha256": "ba682677cddf70f41ab3d951841db1425440d23ef4fa5182dd9442dd916a3db0"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/s1-wedge-and-fit-serialization-retry/receipt.json",
+      "bytes": 4206,
+      "sha256": "237a3ec0b5ec5e07d2728ac8e1028d19be2098d442ae64c89a742a6639d3a3c7"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/task2rs-s1/observation-replay.json",
+      "bytes": 315860,
+      "sha256": "58b113fcb55bd3060ccf0843bf7bbf44fb5ed25b564407ec66d8e7c554d57f27"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/task2rs-s1/boundary-audit.json",
+      "bytes": 225211,
+      "sha256": "79108f10d3703eb4a801b2d5eb266a243afa21c3e4fce67b92ce3758d94c39aa"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/task2rs-s1/wedge-fit.json",
+      "bytes": 534021,
+      "sha256": "31882686fbdda832d1aab3e1d59efa9ec8d4f3ac5a6b3431fce523aa64e37c01"
+    }
+  ],
+  "interpretation": {
+    "contracting": "Measure all rows against both neighbors and test a bounded sharper x/r level.",
+    "rss_stop": "Use measured quiet strips to fit the local splits, prechecking inlet representation.",
+    "persistent_strong_divergence": "Check near-wall and collar gradients, and require common resolved amplitude before claiming a singular obstruction.",
+    "worker_preflight": "Defer and retry on the same ledger when worker headroom returns."
+  }
+}
