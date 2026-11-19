@@ -1,0 +1,7 @@
+# Bx1 streamwise time stop and typed readmission
+
+Bx1 keeps all 92 Bf radial cells and bisects the 29 pinned streamwise owners on the 140×92 mesh. The first native segment charges 422.962 s and saves an accepted Newton iterate at 2.648e−7. The next segment charges 1,458.619 s and reaches the wall-time watchdog limit. Its peak process-tree RSS is 14.73 GiB under the named 16 GiB allowance. The earlier typed packet remains intact. There is no accepted field or new comparison table from the interrupted continuation. [Frozen full x design](wj-h27-task2-outlet-campaign-br4.md) · [Exact commands and charged time stop](wj-h27-linux/task2-outlet-campaign/cp2-bx1-time-stop/operations.json)
+
+The readmission binds the exact timed-out receipt, the first accepted packet and the unchanged grid, state scope and numerical settings. The next segment permits two Newton updates with a 1,227 s native limit and gives the watchdog an additional 244 s for an in-flight linear solve and checkpoint serialization. The forecast includes two further bounded continuation slots, the current and physical audit, the complete signed comparison and publication. It totals 4,531 s. The prospective outcome is either an accepted field or a newer recoverable iterate on the same x-only experiment. [Readmission and typed packet identity](wj-h27-linux/task2-outlet-campaign/cp2-bx1-time-stop/outlet-qual-bx1-recovery-forecast.json)
+
+**Campaign OPEN. TASK2_COMPLETE=NO. TASK3_READY=NO.**

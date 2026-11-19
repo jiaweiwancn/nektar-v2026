@@ -237,15 +237,17 @@ def retry_before_checkpoint(result):
             or (result["reason"] == "native rank affinity differs" and result["seconds"] < 15.))
 
 
-def recovery_packet(root, case, continuation):
+def recovery_packet(root, case, continuation, time_stops=()):
     for index in range(continuation-1,-1,-1):
         previous = case_dir(root,case,index)
-        receipt = read(root/"operations"/(previous.name+"-steady")/"receipt.json")
+        record = root/"operations"/(previous.name+"-steady")/"receipt.json"
+        receipt = read(record)
         require(receipt["result"]["status"] == "FAIL", "retry expected a settled failed prior segment")
         if (previous/"state.steady-candidate.json").is_file():
             return previous
-        require(retry_before_checkpoint(receipt["result"]),
-                "a sealed iterate or a recorded launch or worker interruption is required for retry")
+        admitted_stop = receipt["result"]["reason"]=="TIME_LIMIT" and identity(record) in time_stops
+        require(retry_before_checkpoint(receipt["result"]) or admitted_stop,
+                "a sealed iterate or a bound recoverable interruption is required for retry")
     return None
 
 
@@ -262,7 +264,7 @@ def prepare(root, case, continuation, admission_path):
     parent_mesh = verified(specification["prior_mesh"])
     compiled = runtime["source"]
 
-    previous = recovery_packet(root,case,continuation)
+    previous = recovery_packet(root,case,continuation,specification.get("time_stops",()))
     if previous is not None:
         binding = read(previous / "inputs.json")
         candidate = previous / "state.steady-candidate.json"
@@ -282,7 +284,7 @@ def prepare(root, case, continuation, admission_path):
         state, _ = po.load_native(initial)
     if target.name == specification.get("recovery_first_label"):
         require(identity(initial) == specification["recovery_checkpoint"],
-                "recovery seed differs from the frozen B3 Newton iterate")
+                "recovery seed differs from the frozen Newton iterate")
     require(state["step"] == state["time"] == 0. and state["source_identity"] == compiled
             and state["outlet_policy"] == TRANSVERSE, "wrong scope for the typed qualification seed")
     target.mkdir()

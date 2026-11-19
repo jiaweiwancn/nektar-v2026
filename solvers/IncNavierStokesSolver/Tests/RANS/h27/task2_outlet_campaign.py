@@ -265,6 +265,54 @@ def freeze(root, design_path, out):
     print(case,base,cells,"seconds",required,"RSS GiB",data["peak"]/GIB,blockers,flush=True)
 
 
+def resume_time(root, admission_path, out):
+    initial = read(admission_path)
+    case = initial["case"]
+    first,later = (case_dir(root,case,i) for i in (0,1))
+    o = root/"operations"
+    start_path = o/f"{first.name}-steady"/"receipt.json"
+    late_path = o/f"{later.name}-steady"/"receipt.json"
+    start,late = (read(p)["result"] for p in (start_path,late_path))
+    earlier_state = first/"state.steady-candidate.json"
+    earlier = read(first/"state.steady.json")
+    require(case=="Bx1" and initial["status"]=="ADMITTED" and late["reason"]=="TIME_LIMIT"
+            and start["reason"] is None and earlier["best_from_accepted_iterate"]
+            and earlier["accepted_newton_steps"]==1 and earlier_state.is_file()
+            and not (later/"state.steady-candidate.json").exists()
+            and not (later/"state.result.json").exists()
+            and read(later/"inputs.json")["initial_guess"]==identity(earlier_state)
+            and read(later/"inputs.json")["admission"]==identity(admission_path)
+            and late["peak_tree_rss_bytes"]<initial["rss_limit_bytes"],
+            "streamwise readmission requires an intact earlier checkpoint and a bound wall stop")
+    first_duration=math.ceil(min(2.9*start["seconds"],.85*late["seconds"]))
+    second_duration=math.ceil(2.2*start["seconds"])
+    backup_duration=math.ceil(1.3*start["seconds"])
+    serial_padding=max(225,math.ceil(late["seconds"]/6))
+    attempts={case_dir(root,case,i).name:planned_attempt(seconds,seconds+serial_padding,steps)
+              for i,(seconds,steps) in enumerate(((first_duration,2),(second_duration,50),
+                                                     (backup_duration,50)),start=2)}
+    caps=dict(initial["reservation_caps"])
+    caps["preparations_and_native"]=sum(a["preparation_seconds"]+a["watch_seconds"]+
+                                         2*GRACE for a in attempts.values())
+    required=sum(caps.values())
+    live=balance(read(root/"accounting.json"))
+    memory=memory_snapshot()
+    disk=storage(root)
+    blockers=[k for k,ok in (
+        ("wall_time",required<=live["nonprotected_remaining"]),
+        ("host_or_cgroup",memory_headroom(memory)>=initial["rss_limit_bytes"]+2*GIB),
+        ("science_storage",disk["science_bytes"]+initial["forecast_additional_science_bytes"]<=8*GIB),
+        ("free_space",disk["free_bytes"]-initial["forecast_additional_science_bytes"]>=15*GIB)) if not ok]
+    atomic(out,dict(initial,schema="WJH27FlatQualificationForecastV1",
+        status="DEFERRED" if blockers else "FITS",blockers=blockers,
+        prior_admission=identity(admission_path),time_stops=[identity(late_path)],
+        recovery_checkpoint=identity(earlier_state),recovery_first_label=case_dir(root,case,2).name,
+        recovery_residual=earlier["true_norm"],early_timing_anchor=identity(start_path),
+        extra_watch_padding_seconds=serial_padding,attempts=attempts,reservation_caps=caps,
+        required_seconds=required,live=live,memory=memory,storage=disk))
+    print(case,"bound readmission from first Newton",required,"seconds",blockers,flush=True)
+
+
 def pin(root, initial_forecast, out):
     ev = root/"evidence"
     hold_path = ev/"outlet-qual-task3-launch-hold.json"
@@ -301,12 +349,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("root",type=Path)
     modes = parser.add_subparsers(dest="mode",required=True)
-    for mode in ("freeze","pin","admit"):
+    for mode in ("freeze","pin","admit","resume-time"):
         task = modes.add_parser(mode)
         task.add_argument("input",type=Path)
         task.add_argument("output",type=Path)
     args=parser.parse_args()
-    {"freeze":freeze,"pin":pin,"admit":admit}[args.mode](args.root,args.input,args.output)
+    {"freeze":freeze,"pin":pin,"admit":admit,"resume-time":resume_time}[args.mode](args.root,args.input,args.output)
 
 
 if __name__ == "__main__":
