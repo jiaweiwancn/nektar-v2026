@@ -30,6 +30,11 @@ OUTLET_WORKER_AUTHORIZATION = (
 )
 OUTLET_QUAL_AUTHORIZATION = "52982518e25a333b9d4f25d7917be24a0f7963cc3f01285ed7fe47885b60cf01"
 OUTLET_CP4_SETTLEMENT = "f1c3c623e6ce17262872b313d132b7305dd585fbdc3580bfe9499ac31b0dcc45"
+CAMPAIGN_AUTHORIZATION = "b1595fa9c7cb3ded49accdb6f126b76e75769db52d31b82b9ce718d84786fd19"
+CAMPAIGN_SETTLEMENT = "4a40999e5914643c0639b584ad7d432aa8c1c729a61b2dd138842e493c2061da"
+CAMPAIGN_AMENDMENT = "outlet-campaign-amendment"
+CAMPAIGN_CASE_PATTERN = r"B(?:fl|(?:r|x|h|c|q|t|p|e)[1-9][0-9]*)"
+CAMPAIGN_RSS_GIB = 20
 QUAL_CASES = {
     "B3": "b3", "B4": "b4", "Bn": "bn", "Bn2": "bn2", "Bf": "bf",
     "Bw": "bw", "Bw2": "bw2", "Btip": "btip",
@@ -43,6 +48,16 @@ WORK = ("simpleFoam", "IncNavierStokes", "RANS", "WJ", "python", "cc1",
 def require(condition, message):
     if not condition:
         raise RuntimeError(message)
+
+
+def campaign_case(case):
+    return re.fullmatch(CAMPAIGN_CASE_PATTERN, case) is not None
+
+
+def qualification_slug(case):
+    if campaign_case(case):
+        return case.lower()
+    return QUAL_CASES.get(case)
 
 
 def worker_census(owned_groups=()):
@@ -225,6 +240,49 @@ def amend_outlet_qualification(root, book, authorization, began):
     require(json.loads(receipt.read_text()) == event, "qualification amendment receipt differs")
 
 
+def amend_outlet_campaign(root, book, authorization, began):
+    receipt = root / "evidence" / f"{CAMPAIGN_AMENDMENT}.json"
+    mandate = identity(authorization)
+    settlement = identity(root / "operations/outlet-qual-cp3-publish/receipt.json")
+    require(mandate["sha256"] == CAMPAIGN_AUTHORIZATION
+            and settlement["sha256"] == CAMPAIGN_SETTLEMENT,
+            "campaign authorization or prior settlement differs")
+    ledger = json.loads(book.read_text())
+    settled = json.loads(Path(settlement["path"]).read_text())
+    require(ledger["entries"]["outlet-qual-cp3-publish"] == settled["result"]
+            and ledger["entries"]["outlet-worker-amendment"]["worker_limit"] == 80
+            and ledger["protected_seconds"] == 3600, "campaign resource anchors differ")
+    if CAMPAIGN_AMENDMENT in ledger["entries"]:
+        event = ledger["entries"][CAMPAIGN_AMENDMENT]
+        require(ledger["ceiling"] == 108000 and event["authorization"] == mandate
+                and event["settlement"] == settlement, "existing campaign amendment differs")
+    else:
+        before = balance(ledger)
+        require(not ledger["closed"] and before["reserved_seconds"] == 0
+                and ledger["ceiling"] == 64800
+                and before["charged_seconds"] >= settled["balance"]["charged_seconds"],
+                "campaign amendment requires the reconciled prior account")
+        require(not receipt.exists(), "unexpected campaign amendment receipt")
+
+        def amend(value):
+            require(value == ledger, "ledger changed during campaign amendment")
+            opening = identity(book)
+            value["ceiling"] += 43200
+            value["entries"][CAMPAIGN_AMENDMENT] = event = dict(
+                status="PASS", phase="accounting", seconds=time.monotonic()-began,
+                authorization=mandate, settlement=settlement, opening_ledger=opening,
+                prior_ceiling=64800, added_seconds=43200, ceiling=value["ceiling"],
+                protected_seconds=value["protected_seconds"], later_publication_hold=300,
+                worker_limit=80, ordinary_rss_gib=10, named_maximum_rss_gib=CAMPAIGN_RSS_GIB,
+                before=before)
+            event["after"] = balance(value)
+
+        event = update(book, amend)["entries"][CAMPAIGN_AMENDMENT]
+    if not receipt.exists():
+        atomic(receipt, event)
+    require(json.loads(receipt.read_text()) == event, "campaign amendment receipt differs")
+
+
 def memory_snapshot(pid="self"):
     mem = {line.split(":")[0]: line.split()[1] for line in
            Path("/proc/meminfo").read_text().splitlines()}
@@ -265,7 +323,9 @@ def memory_headroom(snapshot):
 def qualification_solve(root, ledger, label, cap, session, info, parameters):
     require("outlet-qual-amendment" in ledger["entries"], "missing qualification authorization")
     manifest = json.loads((session.parent / "inputs.json").read_text())
-    slug = QUAL_CASES[manifest["case"]]
+    case = manifest["case"]
+    slug = qualification_slug(case)
+    require(slug is not None, "unknown qualification case")
     base = f"outlet-qual-{slug}"
     require(re.fullmatch(base + r"(?:-continue-[1-9][0-9]*)?-steady", label),
             "qualification label differs from admitted case")
@@ -303,15 +363,23 @@ def qualification_solve(root, ledger, label, cap, session, info, parameters):
             "qualification executable, axes or typed seed binding differs")
     limit = admission["rss_limit_bytes"]
     estimate = admission["forecast_peak_tree_rss_bytes"]
-    require(limit in (10 * GIB, 12 * GIB) and estimate <= limit
-            and (limit == 10 * GIB or estimate > 10 * GIB),
+    if campaign_case(case):
+        event = ledger["entries"].get(CAMPAIGN_AMENDMENT, {})
+        require(event.get("status") == "PASS" and ledger["ceiling"] == 108000
+                and admission["campaign_amendment"] == identity(root / "evidence" / f"{CAMPAIGN_AMENDMENT}.json")
+                and 10 * GIB <= limit <= event["named_maximum_rss_gib"] * GIB
+                and limit % GIB == 0 and limit == max(10 * GIB, ((estimate + GIB-1)//GIB)*GIB)
+                and admission["anchors"], "campaign RSS limit requires its measured named admission")
+    else:
+        require(limit in (10 * GIB, 12 * GIB), "historical qualification RSS ceiling differs")
+    require(0 < estimate <= limit and (limit == 10 * GIB or estimate > 10 * GIB),
             "RSS exception requires an individually measured forecast")
     return dict(forecast=manifest["admission"], rss_limit_bytes=limit)
 
 
 def outlet_solve(root, ledger, label, command, cap):
     require("outlet-cp0-amendment" in ledger["entries"], "missing outlet authorization")
-    slugs = "|".join(QUAL_CASES.values())
+    slugs = "|".join([*QUAL_CASES.values(), CAMPAIGN_CASE_PATTERN.lower()])
     match = re.fullmatch(r"(outlet-(?:b0|b1|a1c|b1c|b2|bx|qual-(?:" + slugs +
                          r")))(?:-continue-[1-9][0-9]*)?-steady", label)
     require(match and len(command) == 7 and command[:3] == ["mpirun", "-np", "1"],
@@ -442,7 +510,7 @@ def run(root, book, args, began):
     remaining = balance(ledger)
     if "outlet_evidence_floor" in ledger:
         final_publication = phase == "evidence" and label.startswith(
-            ("outlet-cp4-publish", "outlet-qual-cp3-publish"))
+            ("outlet-cp4-publish", "outlet-qual-cp3-publish", "outlet-campaign-final-publish"))
         hold = 0 if final_publication else 300
     else:
         hold = 0 if phase == "evidence" else max(0, ledger["initial_evidence_seconds"] - evidence_spend(ledger))
@@ -643,6 +711,8 @@ def main():
     workers_amendment.add_argument("authorization", type=Path)
     qualification_amendment = modes.add_parser("amend-outlet-qualification")
     qualification_amendment.add_argument("authorization", type=Path)
+    campaign_amendment = modes.add_parser("amend-outlet-campaign")
+    campaign_amendment.add_argument("authorization", type=Path)
     extend = modes.add_parser("allocate")
     extend.add_argument("seconds", type=float)
     extend.add_argument("forecast", type=Path)
@@ -669,6 +739,8 @@ def main():
             amend_outlet_workers(root, book, args.authorization, began)
         elif args.action == "amend-outlet-qualification":
             amend_outlet_qualification(root, book, args.authorization, began)
+        elif args.action == "amend-outlet-campaign":
+            amend_outlet_campaign(root, book, args.authorization, began)
         elif args.action == "allocate":
             def allocate(ledger):
                 live = balance(ledger)

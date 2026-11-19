@@ -16,7 +16,7 @@ from resources import atomic, identity
 from task2_outlet_analysis import INTERIOR, audit_state, bind_elements, open_case, pair
 from task2_outlet_baseline import mesh_axes, read, source_identity, verified
 from task2_outlet_case import TRANSVERSE, create_session, get_context, registered_command
-from task2r_run import GIB, QUAL_CASES, balance, memory_headroom, memory_snapshot, require, workers
+from task2r_run import GIB, balance, memory_headroom, memory_snapshot, qualification_slug, require, workers
 from task2r_verify import edit
 
 
@@ -34,7 +34,9 @@ GRACE = 7
 
 
 def slug(case):
-    return "outlet-qual-" + QUAL_CASES[case]
+    name = qualification_slug(case)
+    require(name is not None, f"unknown qualification case {case}")
+    return "outlet-qual-" + name
 
 
 def planned_attempt(native, watch, iterations):
@@ -306,7 +308,7 @@ def prepare(root, case, continuation, admission_path):
 
 
 def load_case(root, name, context, ref, order, deadline):
-    if name not in QUAL_CASES:
+    if qualification_slug(name) is None:
         return open_case(root, name, context, ref, order, deadline)
     _, runtime, table, application = context
     path = accepted_path(root, name)
@@ -449,7 +451,7 @@ def stricter_inner_k(result):
 
 def compare(root, base, fine, out, seconds):
     a,b,result = open_pair(root,base,fine,seconds)
-    if fine in ("Bq","Bt"):
+    if fine[:2] in ("Bq", "Bt") and (len(fine) == 2 or fine[2:].isdigit()):
         require(result["first"]["mesh"] == result["second"]["mesh"],
                 "a final control must use the exact canonical geometry")
         stricter_inner_k(result)
@@ -496,7 +498,7 @@ def main():
     recovery.add_argument("out",type=Path)
     recovery.add_argument("--start",type=int,choices=(2,4,6),default=2)
     inputs = action.add_parser("prepare")
-    inputs.add_argument("case",choices=QUAL_CASES)
+    inputs.add_argument("case")
     inputs.add_argument("admission",type=Path)
     inputs.add_argument("--continuation",type=int,default=0)
     for mode in ("replay","audit","compare","blend-probe"):
