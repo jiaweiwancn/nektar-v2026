@@ -1,0 +1,23 @@
+{
+  "base": "Bf",
+  "comparison_bases": [
+    "Bf"
+  ],
+  "extra_cost_cases": [
+    "Bfl",
+    "Br3",
+    "Br4",
+    "Bh2"
+  ],
+  "extra_analysis_seconds": 0,
+  "case": "Bt2",
+  "change": "native 3e-13 / 3e-12 tolerances",
+  "hypothesis": "On the exact Bf geometry the original 6x8 native quadrature is held. The linear and coupled tolerances alone tighten to 3e-13 and 3e-12.",
+  "predicted_effect": "All inherited signed rows and exact-mesh independent and physical audits must pass. Inner-k RMS and MAX must both be <=1e-4.",
+  "bounded_newton_pair": true,
+  "source_evidence": [
+    "outlet-qual-Bq1-Bf.json",
+    "outlet-Bq1-audit.json",
+    "outlet-campaign-bt1-stop.json"
+  ]
+}

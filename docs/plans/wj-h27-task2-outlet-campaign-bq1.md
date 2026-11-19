@@ -1,0 +1,9 @@
+# Bq1 exact-mesh quadrature control
+
+Bq1 uses the exact 111×92 Bf geometry, the same Q3/Q2 and the base linear and coupled tolerances. Only the native quadrature changes to 8×12. The typed Bf seed converges after one update in 347.804 s, to a native coupled residual of 2.82451e−11. Native peak process-tree RSS is 10.74 GiB against 14 GiB. The independent audit takes 207.908 s and the direct comparison takes 100.302 s. [Bound input and measured commands](wj-h27-linux/task2-outlet-campaign/cp2-bq1/operations.json)
+
+Independent momentum improves from 2.63582e−10 on Bf to 7.92182e−12 on Bq1. Continuity, k and outer epsilon pass at 3.23588e−13, 2.66041e−10 and 2.65246e−10. Every remaining independent gate and every signed comparison row pass. The largest inner-k RMS and MAX across the original inventory are 9.36593e−10 and 1.41709e−9 in Kin units. The MAX is negative on the left owner at x=−5, r=.02439603217825. It remains in MAX with zero RMS weight. In the fixed window inner-k RMS and signed MAX are 2.80652e−10 and +9.53344e−10. The inherited limit for both RMS and MAX is 1e−4. [Independent current and physical audit](wj-h27-linux/task2-outlet-campaign/cp2-bq1/outlet-Bq1-audit.json) · [Signed comparison, both owners and fixed-window results](wj-h27-linux/task2-outlet-campaign/cp2-bq1/outlet-qual-Bq1-Bf.json)
+
+The quadrature control supports retaining the Bf recipe. Bt2 independently uses the exact Bf grid and native 6×8 with 3e−13 linear and 3e−12 coupled tolerances. Each native segment permits two updates with a 244 s output margin. The complete forecast reserves 3,477 s and expects a 12.07 GiB peak within a 13 GiB allowance. [Final tolerance-control design](wj-h27-linux/task2-outlet-campaign/cp2-bq1/outlet-campaign-bt2-design.json) · [Measured Bt2 forecast](wj-h27-linux/task2-outlet-campaign/cp2-bq1/outlet-qual-bt2-forecast.json)
+
+**Campaign OPEN. TASK2_COMPLETE=NO. TASK3_READY=NO.**
