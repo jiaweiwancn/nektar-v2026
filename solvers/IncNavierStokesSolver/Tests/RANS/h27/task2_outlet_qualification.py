@@ -3,6 +3,7 @@
 """Prepare, admit and independently check the flat outlet B qualification ladder."""
 
 import argparse
+import json
 import math
 from pathlib import Path
 import time
@@ -185,6 +186,67 @@ def admit_b3(root, out):
     print("admitted B3",mesh["cells"],estimate,flush=True)
 
 
+def forecast_b3_recovery(root, out, start):
+    evidence = root/"evidence"
+    suffix = {2:"",4:"-1",6:"-2"}[start]
+    first = evidence/f"outlet-qual-b3-admission{suffix}.json"
+    original = read(first)
+    previous = root/"operations"/(case_dir(root,"B3",start-1).name+"-steady")/"receipt.json"
+    stop = read(previous)["result"]
+    native_timeout = start==6
+    packet = case_dir(root,"B3",start-1 if native_timeout else 0)/"state.steady-candidate.json"
+    steady = read(packet.with_name("state.steady.json"))
+    allowed = (stop["reason"] is None and steady["reason"].startswith("DEADLINE")
+               if native_timeout else retry_before_checkpoint(stop))
+    require(allowed and steady["best_from_accepted_iterate"] and steady["accepted_newton_steps"] > 0
+            and packet.is_file(), "recovery forecast needs the sealed B3 iterate and bounded interruption")
+    schedule = [(470,590,1),(560,680,50)]
+    if start==2:
+        schedule.insert(0,(380,500,1))
+    elif native_timeout:
+        require(TOLERANCES[1] < steady["true_norm"] <= 2*TOLERANCES[1],
+                "the short recovery requires an iterate within twice the unchanged acceptance norm")
+        schedule = [(365,480,50)]
+    attempts = {case_dir(root,"B3",i).name:planned_attempt(inner,wall,count)
+                for i,(inner,wall,count) in enumerate(schedule,start=start)}
+    caps = dict(admission=27, preparation_and_native=sum(item["preparation_seconds"]+
+                item["watch_seconds"]+2*GRACE for item in attempts.values()),
+                audit=207,comparison=132,blend_probe=31,checkpoint_evidence=62,
+                final_publication=PUBLICATION_SECONDS)
+    live = balance(read(root/"accounting.json"))
+    memory = memory_snapshot()
+    required = sum(caps.values())
+    blockers = [label for label, fits in (
+        ("wall_time", required<=live["nonprotected_remaining"]),
+        ("live_job_headroom", memory_headroom(memory)>=original["rss_limit_bytes"]+2*GIB)
+        ) if not fits]
+    atomic(out,dict(original,schema="WJH27FlatQualificationForecastV1",
+        status="FITS" if not blockers else "DEFERRED",blockers=blockers,
+        previous_admission=identity(first),interruption=identity(previous),
+        recovery_checkpoint=identity(packet),recovery_residual=steady["true_norm"],
+        recovery_first_label=case_dir(root,"B3",start).name,
+        attempts=attempts,required_seconds=required,reservation_caps=caps,
+        memory=memory,live=live,audit_cap_seconds=200,compare_cap_seconds=125))
+    print("B3 recovery budget",required,"prior stop seconds",stop["seconds"],blockers,flush=True)
+
+
+def retry_before_checkpoint(result):
+    return (result["reason"] in ("HOST_WORKER_LIMIT","HOST_PRESSURE_REMAINS")
+            or (result["reason"] == "native rank affinity differs" and result["seconds"] < 15.))
+
+
+def recovery_packet(root, case, continuation):
+    for index in range(continuation-1,-1,-1):
+        previous = case_dir(root,case,index)
+        receipt = read(root/"operations"/(previous.name+"-steady")/"receipt.json")
+        require(receipt["result"]["status"] == "FAIL", "retry expected a settled failed prior segment")
+        if (previous/"state.steady-candidate.json").is_file():
+            return previous
+        require(retry_before_checkpoint(receipt["result"]),
+                "a sealed iterate or a recorded launch or worker interruption is required for retry")
+    return None
+
+
 def prepare(root, case, continuation, admission_path):
     context = get_context(root)
     _, runtime, table, application = context
@@ -198,31 +260,27 @@ def prepare(root, case, continuation, admission_path):
     parent_mesh = verified(specification["prior_mesh"])
     compiled = runtime["source"]
 
-    if continuation:
-        previous = case_dir(root, case, continuation - 1)
+    previous = recovery_packet(root,case,continuation)
+    if previous is not None:
         binding = read(previous / "inputs.json")
-        receipt = read(root / "operations" / (previous.name + "-steady") / "receipt.json")
-        require(receipt["result"]["status"] == "FAIL", "retry expected a settled failed prior segment")
         candidate = previous / "state.steady-candidate.json"
-        if candidate.is_file():
-            packet = read(candidate)
-            prior = read(previous / "state.steady.json")
-            require(packet["schema"] == "WJH27SteadyCandidateV1" and not packet["qualified_reference"]
-                    and prior["best_from_accepted_iterate"] and prior["accepted_newton_steps"] > 0
-                    and prior["reason"].startswith(("DEADLINE", "NEWTON_NOT_CONVERGED"))
-                    and binding["quadrature"] == specification["quadrature"]
-                    and binding["tolerances"] == specification["tolerances"]
-                    and binding["x_edges"] == xs and binding["physical_z_edges"] == zs,
-                    "native packet lacks a matching, accepted zero-time Newton checkpoint")
-            initial = candidate
-            state = packet["state"]
-            parent_mesh = verified(binding["geometry"])
-        else:
-            require(receipt["result"]["reason"] in ("HOST_WORKER_LIMIT", "HOST_PRESSURE_REMAINS"),
-                    "a fresh reseed requires a recorded worker stop before a Newton checkpoint")
-            state, _ = po.load_native(initial)
+        packet = read(candidate)
+        prior = read(previous / "state.steady.json")
+        require(packet["schema"] == "WJH27SteadyCandidateV1" and not packet["qualified_reference"]
+                and prior["best_from_accepted_iterate"] and prior["accepted_newton_steps"] > 0
+                and prior["reason"].startswith(("DEADLINE", "NEWTON_NOT_CONVERGED"))
+                and binding["quadrature"] == specification["quadrature"]
+                and binding["tolerances"] == specification["tolerances"]
+                and binding["x_edges"] == xs and binding["physical_z_edges"] == zs,
+                "native packet lacks a matching, accepted zero-time Newton checkpoint")
+        initial = candidate
+        state = packet["state"]
+        parent_mesh = verified(binding["geometry"])
     else:
         state, _ = po.load_native(initial)
+    if target.name == specification.get("recovery_first_label"):
+        require(identity(initial) == specification["recovery_checkpoint"],
+                "recovery seed differs from the frozen B3 Newton iterate")
     require(state["step"] == state["time"] == 0. and state["source_identity"] == compiled
             and state["outlet_policy"] == TRANSVERSE, "wrong scope for the typed qualification seed")
     target.mkdir()
@@ -355,10 +413,11 @@ def replay(root, out, seconds):
     a,b,reproduced = open_pair(root,"B1c","B2",seconds)
     reference = root/"evidence/outlet-second-collar-result.json"
     old = read(reference)["comparison"]
-    require(reproduced["first"] == old["first"] and reproduced["second"] == old["second"]
-            and reproduced["rows"] == old["rows"] and reproduced["interior_rows"] == old["interior_rows"]
-            and reproduced["failures"] == old["failures"] and len(reproduced["failures"]) == 122,
-            "replay differed in the archived 690 rows, signed owners or fixed region")
+    # Native owner bounds are tuples in memory and JSON arrays on disk.
+    for part in ("first","second","rows","interior_rows","failures"):
+        require(json.loads(json.dumps(reproduced[part])) == old[part],
+                f"CP4 replay differs in {part}")
+    require(len(reproduced["failures"]) == 122,"CP4 replay has a different failed-row inventory")
     data = locate_failures(a,b,reproduced)
     shear = outlet_shear_split(a,b,reproduced["rows"]["whole/traction"]["peak"])
     atomic(out,dict(schema="WJH27FlatQualificationCP4ReplayV1",status="PASS",old=identity(reference),
@@ -374,11 +433,54 @@ def audit(root, case, out, seconds):
     audit_state(state,binding,context[2],case,out)
 
 
+def stricter_inner_k(result):
+    for group in ("rows","interior_rows"):
+        for name,row in result[group].items():
+            if name.split("/")[-2:] != ["inner","k"]:
+                continue
+            row["limits"] = [1e-4,1e-4]
+            if max(row["RMS"],row["MAX"]) > 1e-4:
+                row["status"] = "NOT_MET"
+                row["peak"] = row["component_locations"][0]
+                row["RMS_controlling_component"] = row["components"][0]
+                row["RMS_component_peak"] = row["peak"]
+    result["failures"] = [name for name,row in result["rows"].items() if row["status"] != "MET"]
+
+
 def compare(root, base, fine, out, seconds):
     a,b,result = open_pair(root,base,fine,seconds)
+    if fine in ("Bq","Bt"):
+        require(result["first"]["mesh"] == result["second"]["mesh"],
+                "a final control must use the exact canonical geometry")
+        stricter_inner_k(result)
+    fixed_misses = [name for name,row in result["interior_rows"].items() if row["status"] != "MET"]
     atomic(out,dict(schema="WJH27FlatQualificationSignedComparisonV1",cases=[base,fine],
-                    comparison=result,failed_components=locate_failures(a,b,result)))
-    print(base,fine,len(result["rows"]),len(result["failures"]),flush=True)
+                    comparison=result,failed_components=locate_failures(a,b,result),
+                    fixed_region_failures=fixed_misses))
+    print(base,fine,len(result["rows"]),len(result["failures"]),len(fixed_misses),flush=True)
+
+
+def blend_probe(root, base, fine, out, seconds):
+    ctx = get_context(root)
+    ref = po.load_reference(ctx[2])
+    deadline = time.monotonic()+seconds
+    a,pa = load_case(root,base,ctx,ref,20,deadline)
+    b,pb = load_case(root,fine,ctx,ref,20,deadline)
+    lo,mid,hi = ctx[0]["M1c"]["original_collar_owner_r"]
+    radii = [.05,.06,.06875,lo,mid,hi,.1125,.11541061001735,ref.H]
+    x_stations = [-10.,-2.5,0.,3.75,5.,8.,15.]
+    data = {}
+    for name,state in ((base,a),(fine,b)):
+        rows = []
+        for x in x_stations:
+            columns = [e for e in state.elements if e["bounds"][0]-1e-12 <= x <= e["bounds"][1]+1e-12]
+            for r in radii:
+                for e in columns:
+                    if e["bounds"][2]-1e-12 <= r <= e["bounds"][3]+1e-12:
+                        rows.append(dict(x=x,r=r,**raw_owner(state,e,x,r)))
+        data[name] = rows
+    atomic(out,dict(schema="WJH27FlatBlendOwnerProbeV1",first=pa,second=pb,
+                    x_stations=x_stations,r_stations=radii,raw_owners=data))
 
 
 def main():
@@ -390,17 +492,20 @@ def main():
     setup.add_argument("context",type=Path)
     admission = action.add_parser("admit-b3")
     admission.add_argument("out",type=Path)
+    recovery = action.add_parser("forecast-b3-recovery")
+    recovery.add_argument("out",type=Path)
+    recovery.add_argument("--start",type=int,choices=(2,4,6),default=2)
     inputs = action.add_parser("prepare")
     inputs.add_argument("case",choices=QUAL_CASES)
     inputs.add_argument("admission",type=Path)
     inputs.add_argument("--continuation",type=int,default=0)
-    for mode in ("replay","audit","compare"):
+    for mode in ("replay","audit","compare","blend-probe"):
         task = action.add_parser(mode)
         task.add_argument("out",type=Path)
         task.add_argument("--seconds",required=True,type=float)
         if mode != "replay":
             task.add_argument("--case",required=True)
-        if mode == "compare":
+        if mode in ("compare","blend-probe"):
             task.add_argument("--base",required=True)
     args = parser.parse_args()
     root = args.root
@@ -408,12 +513,16 @@ def main():
         pin(root,args.out,args.context)
     elif args.mode == "admit-b3":
         admit_b3(root,args.out)
+    elif args.mode == "forecast-b3-recovery":
+        forecast_b3_recovery(root,args.out,args.start)
     elif args.mode == "prepare":
         prepare(root,args.case,args.continuation,args.admission)
     elif args.mode == "replay":
         replay(root,args.out,args.seconds)
     elif args.mode == "audit":
         audit(root,args.case,args.out,args.seconds)
+    elif args.mode == "blend-probe":
+        blend_probe(root,args.base,args.case,args.out,args.seconds)
     else:
         compare(root,args.base,args.case,args.out,args.seconds)
 

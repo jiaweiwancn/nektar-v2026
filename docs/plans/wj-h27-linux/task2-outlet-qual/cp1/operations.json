@@ -1,0 +1,3134 @@
+{
+  "archive": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-cp1.tar.gz",
+    "bytes": 261450442,
+    "sha256": "499d252c6c277c4b8ed4074d3e22b40ead8e086ed8f1e8c6f93969018a883c2c"
+  },
+  "publication": {
+    "request": {
+      "label": "outlet-qual-cp1-publish",
+      "phase": "evidence",
+      "command": [
+        "/bin/bash",
+        "-euc",
+        "\nset -o pipefail\ncd \"$1\"\ntest ! -e evidence/outlet-qual-cp1.tar.gz\npartial=evidence/outlet-qual-cp1.tar.gz.work-$$\ntrap 'rm -f -- \"$partial\"' EXIT\ntar -I 'gzip -1' -cf \"$partial\" evidence/outlet-qual-cp4-replay.json evidence/outlet-qual-b3-admission*.json evidence/outlet-qual-b3-*-forecast.json   evidence/outlet-B3-audit*.json evidence/outlet-qual-B3-B2.json evidence/outlet-qual-b3-blend-probe.json   operations/outlet-qual-cp4-replay* operations/outlet-qual-b3* science/outlet-qual-b3*   tools/outlet-qual-drivers/cp1-* tools/outlet-qual-drivers/b3-* tools/outlet-control-v7 tools/outlet-control-v8 tools/outlet-python-v1{5,6,7,8,9}/h27/task2_outlet*.py accounting.json\ntar -tzf \"$partial\" > /dev/null\nmv -- \"$partial\" evidence/outlet-qual-cp1.tar.gz\n",
+        "outlet-qual",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118"
+      ],
+      "cap_seconds": 55.0,
+      "reserved_seconds": 62.0,
+      "workers_before": 58,
+      "idle_mpi_event_helpers": 102,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "storage_before": {
+        "science_bytes": 2978072973,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3569014681600
+      },
+      "runner": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v8/task2r_run.py",
+        "bytes": 36714,
+        "sha256": "8a71189aa15154697da26a381803d12880f2ea3a5c002fa23a19c6e00e3ed2fe"
+      },
+      "rss_limit_bytes": 8589934592,
+      "memory_before": null,
+      "worker_pause_policy": null,
+      "worker_limit": 80,
+      "worker_admission_margin": 3,
+      "input_files": [
+        {
+          "path": "/usr/bin/bash",
+          "bytes": 1396520,
+          "sha256": "59474588a312b6b6e73e5a42a59bf71e62b55416b6c9d5e4a6e1c630c2a9ecd4"
+        }
+      ]
+    },
+    "result": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 14.292158449999988,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 10506240,
+      "peak_host_workers": 61,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-cp1-publish/command.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "rss_limit_bytes": 8589934592,
+      "job_memory": null,
+      "minimum_memory_headroom_bytes": null,
+      "worker_limit": 80,
+      "peak_owned_workers": 0,
+      "worker_pauses": [],
+      "worker_paused_seconds": 0.0
+    },
+    "balance": {
+      "charged_seconds": 52004.17359782882,
+      "reserved_seconds": 0,
+      "nonprotected_remaining": 9195.82640217118,
+      "tranche_remaining": 976.1171217761148
+    },
+    "storage": {
+      "science_bytes": 2978072973,
+      "source_build_runtime_bytes": 266581583,
+      "free_bytes": 3568753221632
+    }
+  },
+  "operations": {
+    "outlet-qual-cp4-replay": {
+      "request": {
+        "label": "outlet-qual-cp4-replay",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v14/h27/task2_outlet_qualification.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "replay",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-cp4-replay.json",
+          "--seconds",
+          "130"
+        ],
+        "cap_seconds": 140.0,
+        "reserved_seconds": 147.0,
+        "workers_before": 61,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2457566572,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3575609974784
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v7/task2r_run.py",
+          "bytes": 36761,
+          "sha256": "f5d65fc3e05508dd5815be3fc2c7c07e6bb2d7da84a0856f621eac61ec15363e"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v14/h27/task2_outlet_qualification.py",
+            "bytes": 22781,
+            "sha256": "551c3b6fcbbd35cd852345757b0d2fa5ab19bfd339c60c37d6624a9cbf9216be"
+          }
+        ]
+      },
+      "result": {
+        "status": "FAIL",
+        "phase": "analysis",
+        "seconds": 77.51122316300462,
+        "exit": 1,
+        "reason": null,
+        "peak_tree_rss_bytes": 410152960,
+        "peak_host_workers": 66,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-cp4-replay/command.log",
+          "bytes": 1025,
+          "sha256": "cadd9b43ff955278b6b768059bcef61b14124602ab055ef123504d91f927ed01"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 49252.86670257976,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 11947.133297420238,
+        "tranche_remaining": 2759.4240170251724
+      },
+      "storage": {
+        "science_bytes": 2457566572,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3575547584512
+      }
+    },
+    "outlet-qual-cp4-replay-v2": {
+      "request": {
+        "label": "outlet-qual-cp4-replay-v2",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v15/h27/task2_outlet_qualification.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "replay",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-cp4-replay.json",
+          "--seconds",
+          "130"
+        ],
+        "cap_seconds": 140.0,
+        "reserved_seconds": 147.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2457566572,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3575374942208
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v7/task2r_run.py",
+          "bytes": 36761,
+          "sha256": "f5d65fc3e05508dd5815be3fc2c7c07e6bb2d7da84a0856f621eac61ec15363e"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v15/h27/task2_outlet_qualification.py",
+            "bytes": 22772,
+            "sha256": "e5e0aa590989228f7c40b884f4d40c840d694743ec7c2c6d40a10d9762bd2549"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 76.02005523499975,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 394055680,
+        "peak_host_workers": 61,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-cp4-replay-v2/command.log",
+          "bytes": 59,
+          "sha256": "34b89ae8cb92fda24143dee2dbd7651873e9bcac4c126b359ab6af27b9607b7f"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 49328.88675781476,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 11871.113242185238,
+        "tranche_remaining": 2683.4039617901726
+      },
+      "storage": {
+        "science_bytes": 2457566572,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3575372726272
+      }
+    },
+    "outlet-qual-b3-admission": {
+      "request": {
+        "label": "outlet-qual-b3-admission",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v15/h27/task2_outlet_qualification.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "admit-b3",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission.json"
+        ],
+        "cap_seconds": 40.0,
+        "reserved_seconds": 47.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2457566572,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3575372718080
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v7/task2r_run.py",
+          "bytes": 36761,
+          "sha256": "f5d65fc3e05508dd5815be3fc2c7c07e6bb2d7da84a0856f621eac61ec15363e"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v15/h27/task2_outlet_qualification.py",
+            "bytes": 22772,
+            "sha256": "e5e0aa590989228f7c40b884f4d40c840d694743ec7c2c6d40a10d9762bd2549"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 2.0447743749973597,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 90615808,
+        "peak_host_workers": 60,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-admission/command.log",
+          "bytes": 34,
+          "sha256": "71afa1ed30f5f477cd8958b9e9a8bc5534866d563a69e5c711d74fb3c1a90bc5"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 49330.93153218976,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 11869.06846781024,
+        "tranche_remaining": 2681.3591874151753
+      },
+      "storage": {
+        "science_bytes": 2457566572,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3575372697600
+      }
+    },
+    "outlet-qual-b3-recovery-forecast": {
+      "request": {
+        "label": "outlet-qual-b3-recovery-forecast",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v17/h27/task2_outlet_qualification.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "forecast-b3-recovery",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-recovery-forecast.json"
+        ],
+        "cap_seconds": 32.0,
+        "reserved_seconds": 39.0,
+        "workers_before": 69,
+        "idle_mpi_event_helpers": 105,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2607611813,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3573405925376
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v7/task2r_run.py",
+          "bytes": 36761,
+          "sha256": "f5d65fc3e05508dd5815be3fc2c7c07e6bb2d7da84a0856f621eac61ec15363e"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v17/h27/task2_outlet_qualification.py",
+            "bytes": 27502,
+            "sha256": "7842d1d597c554069c64af53bf3b57dba2dea69f72d19f5c84dbdd0477fbae72"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 2.124517223011935,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 124366848,
+        "peak_host_workers": 70,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-recovery-forecast/command.log",
+          "bytes": 64,
+          "sha256": "0b13a6a43bb6f6a871173833b3e9a9bb47415700f266855d3c09fca840dc4106"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 50355.209183416766,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 10844.790816583234,
+        "tranche_remaining": 1657.0815361881687
+      },
+      "storage": {
+        "science_bytes": 2607611813,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3573405876224
+      }
+    },
+    "outlet-qual-b3-recovery-admission": {
+      "request": {
+        "label": "outlet-qual-b3-recovery-admission",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v17/h27/task2_outlet_qual_followup.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "admit",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-recovery-forecast.json",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-1.json"
+        ],
+        "cap_seconds": 20.0,
+        "reserved_seconds": 27.0,
+        "workers_before": 69,
+        "idle_mpi_event_helpers": 105,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2607611813,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3573405814784
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v7/task2r_run.py",
+          "bytes": 36761,
+          "sha256": "f5d65fc3e05508dd5815be3fc2c7c07e6bb2d7da84a0856f621eac61ec15363e"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v17/h27/task2_outlet_qual_followup.py",
+            "bytes": 10066,
+            "sha256": "ed3fd8fdba87363f9b45e8da114e65ce9609750f599e89d4b3e6565799e03de2"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-recovery-forecast.json",
+            "bytes": 7618,
+            "sha256": "62ec3f80b3c6905247931bf7dfa27f8237c7d2b79135313cdaae0c32e4794a4f"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 2.0486971070058644,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 92954624,
+        "peak_host_workers": 71,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-recovery-admission/command.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 50357.25788052377,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 10842.742119476228,
+        "tranche_remaining": 2623.032839081163
+      },
+      "storage": {
+        "science_bytes": 2607611813,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3573405773824
+      }
+    },
+    "outlet-qual-b3-affinity-preflight": {
+      "request": {
+        "label": "outlet-qual-b3-affinity-preflight",
+        "phase": "analysis",
+        "command": [
+          "/bin/bash",
+          "-euc",
+          "\nfor cpu in 0 2 14; do\n  actual=$(mpirun -np 1 --bind-to none taskset --cpu-list \"$cpu\" /bin/sh -c 'awk \"/^Cpus_allowed_list:/ {print \\$2}\" /proc/self/status')\n  test \"$actual\" = \"$cpu\"\n  printf \"Rank wrapper CPU %s verified\\n\" \"$actual\"\ndone"
+        ],
+        "cap_seconds": 18.0,
+        "reserved_seconds": 25.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2610424431,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3569387622400
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v8/task2r_run.py",
+          "bytes": 36714,
+          "sha256": "8a71189aa15154697da26a381803d12880f2ea3a5c002fa23a19c6e00e3ed2fe"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/usr/bin/bash",
+            "bytes": 1396520,
+            "sha256": "59474588a312b6b6e73e5a42a59bf71e62b55416b6c9d5e4a6e1c630c2a9ecd4"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 2.0829723280039616,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 11804672,
+        "peak_host_workers": 59,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-affinity-preflight/command.log",
+          "bytes": 85,
+          "sha256": "0d3e632e86ec37ada1b81c0df6cdfc97c3e17fd81479478efc4b120d3feac6e0"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 50469.59425823479,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 10730.405741765207,
+        "tranche_remaining": 2510.696461370142
+      },
+      "storage": {
+        "science_bytes": 2610424431,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3569387610112
+      }
+    },
+    "outlet-qual-b3-rank-recovery-forecast": {
+      "request": {
+        "label": "outlet-qual-b3-rank-recovery-forecast",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v18/h27/task2_outlet_qualification.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "forecast-b3-recovery",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-rank-recovery-forecast.json",
+          "--start",
+          "4"
+        ],
+        "cap_seconds": 32.0,
+        "reserved_seconds": 39.0,
+        "workers_before": 59,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2610424431,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3569387601920
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v8/task2r_run.py",
+          "bytes": 36714,
+          "sha256": "8a71189aa15154697da26a381803d12880f2ea3a5c002fa23a19c6e00e3ed2fe"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v18/h27/task2_outlet_qualification.py",
+            "bytes": 27907,
+            "sha256": "ce052ec70a2af9e44164dde279651ee230acc253ab37e4f9a4c6ed9cdb768bcd"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 2.067791847992339,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 109555712,
+        "peak_host_workers": 60,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-rank-recovery-forecast/command.log",
+          "bytes": 65,
+          "sha256": "7eeb27ccd0ddff4c93affba1803c0bb1f14c3e572b88a0724184ede17ce30153"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 50471.662050082785,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 10728.337949917215,
+        "tranche_remaining": 2508.6286695221497
+      },
+      "storage": {
+        "science_bytes": 2610424431,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3569387573248
+      }
+    },
+    "outlet-qual-b3-rank-recovery-admission": {
+      "request": {
+        "label": "outlet-qual-b3-rank-recovery-admission",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v18/h27/task2_outlet_qual_followup.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "admit",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-rank-recovery-forecast.json",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-2.json"
+        ],
+        "cap_seconds": 20.0,
+        "reserved_seconds": 27.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2610424431,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3569387569152
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v8/task2r_run.py",
+          "bytes": 36714,
+          "sha256": "8a71189aa15154697da26a381803d12880f2ea3a5c002fa23a19c6e00e3ed2fe"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v18/h27/task2_outlet_qual_followup.py",
+            "bytes": 10066,
+            "sha256": "ed3fd8fdba87363f9b45e8da114e65ce9609750f599e89d4b3e6565799e03de2"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-rank-recovery-forecast.json",
+            "bytes": 9045,
+            "sha256": "6467453884a347e1b58dec477f795c818867a6e8a0917b51f584a069c74c298a"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 2.0631742709956598,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 89939968,
+        "peak_host_workers": 60,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-rank-recovery-admission/command.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 50473.72522435378,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 10726.27477564622,
+        "tranche_remaining": 2506.565495251154
+      },
+      "storage": {
+        "science_bytes": 2610424431,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3569387548672
+      }
+    },
+    "outlet-qual-b3-final-forecast": {
+      "request": {
+        "label": "outlet-qual-b3-final-forecast",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v19/h27/task2_outlet_qualification.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "forecast-b3-recovery",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-final-forecast.json",
+          "--start",
+          "6"
+        ],
+        "cap_seconds": 32.0,
+        "reserved_seconds": 39.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2885089779,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3569110966272
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v8/task2r_run.py",
+          "bytes": 36714,
+          "sha256": "8a71189aa15154697da26a381803d12880f2ea3a5c002fa23a19c6e00e3ed2fe"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v19/h27/task2_outlet_qualification.py",
+            "bytes": 28317,
+            "sha256": "d6df3e2ba0560cfb3b3468ffbc19fbdd082a50c6e9d9df707878d978e8ec4cd8"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 2.071233030001167,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 105582592,
+        "peak_host_workers": 59,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-final-forecast/command.log",
+          "bytes": 64,
+          "sha256": "318eec53a12491938943435b440864f6d1773da985a9555dae2beb38439a6065"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 51399.5108935008,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 9800.489106499197,
+        "tranche_remaining": 1580.7798261041316
+      },
+      "storage": {
+        "science_bytes": 2885089779,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3569110941696
+      }
+    },
+    "outlet-qual-b3-final-admission": {
+      "request": {
+        "label": "outlet-qual-b3-final-admission",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v19/h27/task2_outlet_qual_followup.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "admit",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-final-forecast.json",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-3.json"
+        ],
+        "cap_seconds": 20.0,
+        "reserved_seconds": 27.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2885089779,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3569110937600
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v8/task2r_run.py",
+          "bytes": 36714,
+          "sha256": "8a71189aa15154697da26a381803d12880f2ea3a5c002fa23a19c6e00e3ed2fe"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v19/h27/task2_outlet_qual_followup.py",
+            "bytes": 10066,
+            "sha256": "ed3fd8fdba87363f9b45e8da114e65ce9609750f599e89d4b3e6565799e03de2"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-final-forecast.json",
+            "bytes": 8899,
+            "sha256": "036fd579a05a3d414513717a404300893b11964aff13b0444d02ea20de5fb0f3"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 2.1410041759954765,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 89702400,
+        "peak_host_workers": 60,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-final-admission/command.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 51401.6518976768,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 9798.348102323202,
+        "tranche_remaining": 1578.6388219281362
+      },
+      "storage": {
+        "science_bytes": 2885089779,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3569110917120
+      }
+    },
+    "outlet-qual-b3-audit": {
+      "request": {
+        "label": "outlet-qual-b3-audit",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v19/h27/task2_outlet_qualification.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "audit",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-B3-audit.json",
+          "--case",
+          "B3",
+          "--seconds",
+          "188"
+        ],
+        "cap_seconds": 200.0,
+        "reserved_seconds": 207.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2978072973,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3569017831424
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v8/task2r_run.py",
+          "bytes": 36714,
+          "sha256": "8a71189aa15154697da26a381803d12880f2ea3a5c002fa23a19c6e00e3ed2fe"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v19/h27/task2_outlet_qualification.py",
+            "bytes": 28317,
+            "sha256": "d6df3e2ba0560cfb3b3468ffbc19fbdd082a50c6e9d9df707878d978e8ec4cd8"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 183.7326474260044,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 2572005376,
+        "peak_host_workers": 62,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-audit/command.log",
+          "bytes": 881,
+          "sha256": "976d000cb24907075319338d97b1eb227eb763bcc2a16dce854fadbc374715cd"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 51897.40660109981,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 9302.593398900193,
+        "tranche_remaining": 1082.8841185051278
+      },
+      "storage": {
+        "science_bytes": 2978072973,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3569016696832
+      }
+    },
+    "outlet-qual-b3-compare": {
+      "request": {
+        "label": "outlet-qual-b3-compare",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v19/h27/task2_outlet_qualification.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "compare",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-B3-B2.json",
+          "--base",
+          "B2",
+          "--case",
+          "B3",
+          "--seconds",
+          "113"
+        ],
+        "cap_seconds": 125.0,
+        "reserved_seconds": 132.0,
+        "workers_before": 59,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2978072973,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3569016692736
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v8/task2r_run.py",
+          "bytes": 36714,
+          "sha256": "8a71189aa15154697da26a381803d12880f2ea3a5c002fa23a19c6e00e3ed2fe"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v19/h27/task2_outlet_qualification.py",
+            "bytes": 28317,
+            "sha256": "d6df3e2ba0560cfb3b3468ffbc19fbdd082a50c6e9d9df707878d978e8ec4cd8"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 85.53912665401003,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 431505408,
+        "peak_host_workers": 62,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-compare/command.log",
+          "bytes": 14,
+          "sha256": "81209cf737e16655db7055d26a17c0e285178a92089d5d8c480d50ff8b4a6468"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 51982.94572775382,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 9217.054272246183,
+        "tranche_remaining": 997.3449918511178
+      },
+      "storage": {
+        "science_bytes": 2978072973,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3569015033856
+      }
+    },
+    "outlet-qual-b3-blend-probe": {
+      "request": {
+        "label": "outlet-qual-b3-blend-probe",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v19/h27/task2_outlet_qualification.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "blend-probe",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-blend-probe.json",
+          "--base",
+          "B2",
+          "--case",
+          "B3",
+          "--seconds",
+          "17"
+        ],
+        "cap_seconds": 24.0,
+        "reserved_seconds": 31.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2978072973,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3569015025664
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v8/task2r_run.py",
+          "bytes": 36714,
+          "sha256": "8a71189aa15154697da26a381803d12880f2ea3a5c002fa23a19c6e00e3ed2fe"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v19/h27/task2_outlet_qualification.py",
+            "bytes": 28317,
+            "sha256": "d6df3e2ba0560cfb3b3468ffbc19fbdd082a50c6e9d9df707878d978e8ec4cd8"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 6.935711625003023,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 402317312,
+        "peak_host_workers": 61,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-blend-probe/command.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 51989.88143937882,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 9210.11856062118,
+        "tranche_remaining": 990.4092802261148
+      },
+      "storage": {
+        "science_bytes": 2978072973,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3569014685696
+      }
+    },
+    "outlet-qual-b3-inputs": {
+      "request": {
+        "label": "outlet-qual-b3-inputs",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v15/h27/task2_outlet_qualification.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "prepare",
+          "B3",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission.json",
+          "--continuation",
+          "0"
+        ],
+        "cap_seconds": 18.0,
+        "reserved_seconds": 25.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2457566572,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3575372693504
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v7/task2r_run.py",
+          "bytes": 36761,
+          "sha256": "f5d65fc3e05508dd5815be3fc2c7c07e6bb2d7da84a0856f621eac61ec15363e"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v15/h27/task2_outlet_qualification.py",
+            "bytes": 22772,
+            "sha256": "e5e0aa590989228f7c40b884f4d40c840d694743ec7c2c6d40a10d9762bd2549"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission.json",
+            "bytes": 6619,
+            "sha256": "063124f5729762fd1e46ecbab241f36956e7b13c8e075e589cf08440d7253c42"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 5.256804934004322,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 241950720,
+        "peak_host_workers": 60,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-inputs/command.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 49336.18833712376,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 11863.811662876236,
+        "tranche_remaining": 2676.102382481171
+      },
+      "storage": {
+        "science_bytes": 2460368919,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3575369871360
+      }
+    },
+    "outlet-qual-b3-steady": {
+      "request": {
+        "label": "outlet-qual-b3-steady",
+        "phase": "outlet-science",
+        "command": [
+          "mpirun",
+          "-np",
+          "1",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+          "--use-opt-file",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3/run.xml.opt",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3/run.xml"
+        ],
+        "cap_seconds": 355.0,
+        "reserved_seconds": 362.0,
+        "workers_before": 59,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2460368919,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3575369867264
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v7/task2r_run.py",
+          "bytes": 36761,
+          "sha256": "f5d65fc3e05508dd5815be3fc2c7c07e6bb2d7da84a0856f621eac61ec15363e"
+        },
+        "rss_limit_bytes": 12884901888,
+        "memory_before": {
+          "mem_available_bytes": 404644990976,
+          "mem_total_bytes": 540840640512,
+          "job_cgroup": "/user.slice/user-1000.slice/session-823.scope",
+          "ancestor_limits": [
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-823.scope",
+              "current": 33402880,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+              "current": 264748285952,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice",
+              "current": 265035825152,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup",
+              "memory.max": null,
+              "memory.high": null
+            }
+          ]
+        },
+        "worker_pause_policy": {
+          "trigger_workers": 78,
+          "resume_workers": 76,
+          "quiet_seconds": 4.0,
+          "maximum_paused_seconds": 55.0,
+          "admission": {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission.json",
+            "bytes": 6619,
+            "sha256": "063124f5729762fd1e46ecbab241f36956e7b13c8e075e589cf08440d7253c42"
+          },
+          "count_stopped_ownership": true
+        },
+        "worker_limit": 80,
+        "worker_admission_margin": 8,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+            "bytes": 9997280,
+            "sha256": "3e8db421575122676808adc6c9783f0c897136e9d9d283b9d0cb200c5ec2df45"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3/run.xml.opt",
+            "bytes": 55,
+            "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3/run.xml",
+            "bytes": 1400363,
+            "sha256": "9b03f8669f42c9b9d5086b128a85b9bba75f7521be733f136dfb6209f3f07343"
+          }
+        ],
+        "launch": {
+          "command": [
+            "taskset",
+            "--cpu-list",
+            "0",
+            "mpirun",
+            "-np",
+            "1",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+            "--use-opt-file",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3/run.xml.opt",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3/run.xml"
+          ],
+          "affinity": {
+            "cpu": 0,
+            "reference_cpu": 0,
+            "numa_node": "node0",
+            "sampled_idle_fraction": 1.0,
+            "sample_seconds": 1.0
+          },
+          "mpi_binding_environment": {
+            "OMPI_MCA_hwloc_base_binding_policy": "none"
+          }
+        }
+      },
+      "result": {
+        "status": "FAIL",
+        "phase": "outlet-science",
+        "seconds": 233.6618304769945,
+        "exit": 1,
+        "reason": null,
+        "peak_tree_rss_bytes": 9441320960,
+        "peak_host_workers": 62,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-steady/command.log",
+          "bytes": 1277,
+          "sha256": "2197c696f6cdf0a7ca8091ed1f1d67878cc4dd7aeca08570fa99af21db372e09"
+        },
+        "rss_limit_bytes": 12884901888,
+        "job_memory": {
+          "mem_available_bytes": 404986789888,
+          "mem_total_bytes": 540840640512,
+          "job_cgroup": "/user.slice/user-1000.slice/session-823.scope",
+          "ancestor_limits": [
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-823.scope",
+              "current": 35086336,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+              "current": 264705245184,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice",
+              "current": 264993271808,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup",
+              "memory.max": null,
+              "memory.high": null
+            }
+          ]
+        },
+        "minimum_memory_headroom_bytes": 374578069504,
+        "worker_limit": 80,
+        "peak_owned_workers": 2,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0,
+        "rank_affinity": {
+          "pid": 257743,
+          "allowed_cpus": [
+            0
+          ]
+        }
+      },
+      "balance": {
+        "charged_seconds": 49569.85016760076,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 11630.149832399242,
+        "tranche_remaining": 2442.4405520041764
+      },
+      "storage": {
+        "science_bytes": 2596273642,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3575233908736
+      }
+    },
+    "outlet-qual-b3-continue-1-inputs": {
+      "request": {
+        "label": "outlet-qual-b3-continue-1-inputs",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v15/h27/task2_outlet_qualification.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "prepare",
+          "B3",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission.json",
+          "--continuation",
+          "1"
+        ],
+        "cap_seconds": 18.0,
+        "reserved_seconds": 25.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2596273642,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3575233875968
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v7/task2r_run.py",
+          "bytes": 36761,
+          "sha256": "f5d65fc3e05508dd5815be3fc2c7c07e6bb2d7da84a0856f621eac61ec15363e"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v15/h27/task2_outlet_qualification.py",
+            "bytes": 22772,
+            "sha256": "e5e0aa590989228f7c40b884f4d40c840d694743ec7c2c6d40a10d9762bd2549"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission.json",
+            "bytes": 6619,
+            "sha256": "063124f5729762fd1e46ecbab241f36956e7b13c8e075e589cf08440d7253c42"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 4.533815264003351,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 288698368,
+        "peak_host_workers": 60,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-continue-1-inputs/command.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 49574.38398286476,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 11625.616017135239,
+        "tranche_remaining": 2437.906736740173
+      },
+      "storage": {
+        "science_bytes": 2597679950,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3575232450560
+      }
+    },
+    "outlet-qual-b3-continue-1-steady": {
+      "request": {
+        "label": "outlet-qual-b3-continue-1-steady",
+        "phase": "outlet-science",
+        "command": [
+          "mpirun",
+          "-np",
+          "1",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+          "--use-opt-file",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-1/run.xml.opt",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-1/run.xml"
+        ],
+        "cap_seconds": 855.0,
+        "reserved_seconds": 862.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2597679950,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3575232446464
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v7/task2r_run.py",
+          "bytes": 36761,
+          "sha256": "f5d65fc3e05508dd5815be3fc2c7c07e6bb2d7da84a0856f621eac61ec15363e"
+        },
+        "rss_limit_bytes": 12884901888,
+        "memory_before": {
+          "mem_available_bytes": 405644234752,
+          "mem_total_bytes": 540840640512,
+          "job_cgroup": "/user.slice/user-1000.slice/session-854.scope",
+          "ancestor_limits": [
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-854.scope",
+              "current": 21143552,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+              "current": 265342402560,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice",
+              "current": 265629941760,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup",
+              "memory.max": null,
+              "memory.high": null
+            }
+          ]
+        },
+        "worker_pause_policy": {
+          "trigger_workers": 78,
+          "resume_workers": 76,
+          "quiet_seconds": 4.0,
+          "maximum_paused_seconds": 55.0,
+          "admission": {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission.json",
+            "bytes": 6619,
+            "sha256": "063124f5729762fd1e46ecbab241f36956e7b13c8e075e589cf08440d7253c42"
+          },
+          "count_stopped_ownership": true
+        },
+        "worker_limit": 80,
+        "worker_admission_margin": 8,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+            "bytes": 9997280,
+            "sha256": "3e8db421575122676808adc6c9783f0c897136e9d9d283b9d0cb200c5ec2df45"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-1/run.xml.opt",
+            "bytes": 55,
+            "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-1/run.xml",
+            "bytes": 1400379,
+            "sha256": "2b9b796fb87797df757d20e1341db3c3539a21a17a42ff7d1b8148d345feb9e1"
+          }
+        ],
+        "launch": {
+          "command": [
+            "taskset",
+            "--cpu-list",
+            "0",
+            "mpirun",
+            "-np",
+            "1",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+            "--use-opt-file",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-1/run.xml.opt",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-1/run.xml"
+          ],
+          "affinity": {
+            "cpu": 0,
+            "reference_cpu": 0,
+            "numa_node": "node0",
+            "sampled_idle_fraction": 1.0,
+            "sample_seconds": 1.0
+          },
+          "mpi_binding_environment": {
+            "OMPI_MCA_hwloc_base_binding_policy": "none"
+          }
+        }
+      },
+      "result": {
+        "status": "FAIL",
+        "phase": "outlet-science",
+        "seconds": 778.7006833289925,
+        "exit": 1,
+        "reason": "HOST_PRESSURE_REMAINS",
+        "peak_tree_rss_bytes": 9855774720,
+        "peak_host_workers": 94,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-continue-1-steady/command.log",
+          "bytes": 549,
+          "sha256": "399f4bbde3acea8995409b8743adc0306a392dd7ec8b7423b96016d403c2d86a"
+        },
+        "rss_limit_bytes": 12884901888,
+        "job_memory": {
+          "mem_available_bytes": 405870661632,
+          "mem_total_bytes": 540840640512,
+          "job_cgroup": "/user.slice/user-1000.slice/session-854.scope",
+          "ancestor_limits": [
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-854.scope",
+              "current": 23216128,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+              "current": 265277177856,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice",
+              "current": 265564717056,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup",
+              "memory.max": null,
+              "memory.high": null
+            }
+          ]
+        },
+        "minimum_memory_headroom_bytes": 368737587200,
+        "worker_limit": 80,
+        "peak_owned_workers": 2,
+        "worker_pauses": [
+          {
+            "start_seconds": 721.6142238689936,
+            "workers_at_stop": 86,
+            "settled_seconds": 778.7006615069986
+          }
+        ],
+        "worker_paused_seconds": 57.08643763800501,
+        "rank_affinity": {
+          "pid": 258771,
+          "allowed_cpus": [
+            0
+          ]
+        }
+      },
+      "balance": {
+        "charged_seconds": 50353.084666193754,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 10846.915333806246,
+        "tranche_remaining": 1659.2060534111806
+      },
+      "storage": {
+        "science_bytes": 2607611813,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3574196465664
+      }
+    },
+    "outlet-qual-b3-continue-2-inputs": {
+      "request": {
+        "label": "outlet-qual-b3-continue-2-inputs",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v17/h27/task2_outlet_qualification.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "prepare",
+          "B3",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-1.json",
+          "--continuation",
+          "2"
+        ],
+        "cap_seconds": 18.0,
+        "reserved_seconds": 25.0,
+        "workers_before": 70,
+        "idle_mpi_event_helpers": 105,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2607611813,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3573405712384
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v7/task2r_run.py",
+          "bytes": 36761,
+          "sha256": "f5d65fc3e05508dd5815be3fc2c7c07e6bb2d7da84a0856f621eac61ec15363e"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v17/h27/task2_outlet_qualification.py",
+            "bytes": 27502,
+            "sha256": "7842d1d597c554069c64af53bf3b57dba2dea69f72d19f5c84dbdd0477fbae72"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-1.json",
+            "bytes": 8915,
+            "sha256": "ea2607a0cbbd591ef252b4ba0df7a4406c33ec01904c117d2d20047a4a37c88e"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 3.662406490999274,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 278843392,
+        "peak_host_workers": 71,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-continue-2-inputs/command.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 50360.92028701477,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 10839.079712985229,
+        "tranche_remaining": 2619.3704325901635
+      },
+      "storage": {
+        "science_bytes": 2609018122,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3573384343552
+      }
+    },
+    "outlet-qual-b3-continue-2-steady": {
+      "request": {
+        "label": "outlet-qual-b3-continue-2-steady",
+        "phase": "outlet-science",
+        "command": [
+          "mpirun",
+          "-np",
+          "1",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+          "--use-opt-file",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-2/run.xml.opt",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-2/run.xml"
+        ],
+        "cap_seconds": 500.0,
+        "reserved_seconds": 507.0,
+        "workers_before": 69,
+        "idle_mpi_event_helpers": 105,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2609018122,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3573384265728
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v7/task2r_run.py",
+          "bytes": 36761,
+          "sha256": "f5d65fc3e05508dd5815be3fc2c7c07e6bb2d7da84a0856f621eac61ec15363e"
+        },
+        "rss_limit_bytes": 12884901888,
+        "memory_before": {
+          "mem_available_bytes": 394148093952,
+          "mem_total_bytes": 540840640512,
+          "job_cgroup": "/user.slice/user-1000.slice/session-854.scope",
+          "ancestor_limits": [
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-854.scope",
+              "current": 36294656,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+              "current": 270678630400,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice",
+              "current": 270966169600,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup",
+              "memory.max": null,
+              "memory.high": null
+            }
+          ]
+        },
+        "worker_pause_policy": {
+          "trigger_workers": 78,
+          "resume_workers": 76,
+          "quiet_seconds": 4.0,
+          "maximum_paused_seconds": 55.0,
+          "admission": {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-1.json",
+            "bytes": 8915,
+            "sha256": "ea2607a0cbbd591ef252b4ba0df7a4406c33ec01904c117d2d20047a4a37c88e"
+          },
+          "count_stopped_ownership": true
+        },
+        "worker_limit": 80,
+        "worker_admission_margin": 8,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+            "bytes": 9997280,
+            "sha256": "3e8db421575122676808adc6c9783f0c897136e9d9d283b9d0cb200c5ec2df45"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-2/run.xml.opt",
+            "bytes": 55,
+            "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-2/run.xml",
+            "bytes": 1400378,
+            "sha256": "bdf3224e4cdcf8bdcc9ed7dda69c3e74aff20693fe1738787be7b7ff752e9813"
+          }
+        ],
+        "launch": {
+          "command": [
+            "taskset",
+            "--cpu-list",
+            "0",
+            "mpirun",
+            "-np",
+            "1",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+            "--use-opt-file",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-2/run.xml.opt",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-2/run.xml"
+          ],
+          "affinity": {
+            "cpu": 0,
+            "reference_cpu": 0,
+            "numa_node": "node0",
+            "sampled_idle_fraction": 1.0,
+            "sample_seconds": 1.0
+          },
+          "mpi_binding_environment": {
+            "OMPI_MCA_hwloc_base_binding_policy": "none"
+          }
+        }
+      },
+      "result": {
+        "status": "FAIL",
+        "phase": "outlet-science",
+        "seconds": 98.39744052900642,
+        "exit": 1,
+        "reason": "HOST_PRESSURE_REMAINS",
+        "peak_tree_rss_bytes": 3399663616,
+        "peak_host_workers": 94,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-continue-2-steady/command.log",
+          "bytes": 549,
+          "sha256": "399f4bbde3acea8995409b8743adc0306a392dd7ec8b7423b96016d403c2d86a"
+        },
+        "rss_limit_bytes": 12884901888,
+        "job_memory": {
+          "mem_available_bytes": 394388000768,
+          "mem_total_bytes": 540840640512,
+          "job_cgroup": "/user.slice/user-1000.slice/session-854.scope",
+          "ancestor_limits": [
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-854.scope",
+              "current": 37953536,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+              "current": 271527383040,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice",
+              "current": 271814922240,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup",
+              "memory.max": null,
+              "memory.high": null
+            }
+          ]
+        },
+        "minimum_memory_headroom_bytes": 388225699840,
+        "worker_limit": 80,
+        "peak_owned_workers": 2,
+        "worker_pauses": [
+          {
+            "start_seconds": 41.819984425004805,
+            "workers_at_stop": 87,
+            "settled_seconds": 98.39742732800369
+          }
+        ],
+        "worker_paused_seconds": 56.57744290299888,
+        "rank_affinity": {
+          "pid": 265592,
+          "allowed_cpus": [
+            0
+          ]
+        }
+      },
+      "balance": {
+        "charged_seconds": 50459.31772754378,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 10740.682272456223,
+        "tranche_remaining": 2520.972992061157
+      },
+      "storage": {
+        "science_bytes": 2609018122,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3573076316160
+      }
+    },
+    "outlet-qual-b3-continue-3-inputs": {
+      "request": {
+        "label": "outlet-qual-b3-continue-3-inputs",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v17/h27/task2_outlet_qualification.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "prepare",
+          "B3",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-1.json",
+          "--continuation",
+          "3"
+        ],
+        "cap_seconds": 18.0,
+        "reserved_seconds": 25.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2609018122,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3569390813184
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v7/task2r_run.py",
+          "bytes": 36761,
+          "sha256": "f5d65fc3e05508dd5815be3fc2c7c07e6bb2d7da84a0856f621eac61ec15363e"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v17/h27/task2_outlet_qualification.py",
+            "bytes": 27502,
+            "sha256": "7842d1d597c554069c64af53bf3b57dba2dea69f72d19f5c84dbdd0477fbae72"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-1.json",
+            "bytes": 8915,
+            "sha256": "ea2607a0cbbd591ef252b4ba0df7a4406c33ec01904c117d2d20047a4a37c88e"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 4.506546030999743,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 289275904,
+        "peak_host_workers": 59,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-continue-3-inputs/command.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 50463.82427357478,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 10736.175726425223,
+        "tranche_remaining": 2516.4664460301574
+      },
+      "storage": {
+        "science_bytes": 2610424431,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3569389379584
+      }
+    },
+    "outlet-qual-b3-continue-3-steady": {
+      "request": {
+        "label": "outlet-qual-b3-continue-3-steady",
+        "phase": "outlet-science",
+        "command": [
+          "mpirun",
+          "-np",
+          "1",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+          "--use-opt-file",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-3/run.xml.opt",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-3/run.xml"
+        ],
+        "cap_seconds": 590.0,
+        "reserved_seconds": 597.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2610424431,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3569389371392
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v7/task2r_run.py",
+          "bytes": 36761,
+          "sha256": "f5d65fc3e05508dd5815be3fc2c7c07e6bb2d7da84a0856f621eac61ec15363e"
+        },
+        "rss_limit_bytes": 12884901888,
+        "memory_before": {
+          "mem_available_bytes": 407329927168,
+          "mem_total_bytes": 540840640512,
+          "job_cgroup": "/user.slice/user-1000.slice/session-854.scope",
+          "ancestor_limits": [
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-854.scope",
+              "current": 39583744,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+              "current": 270339035136,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice",
+              "current": 270626574336,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup",
+              "memory.max": null,
+              "memory.high": null
+            }
+          ]
+        },
+        "worker_pause_policy": {
+          "trigger_workers": 78,
+          "resume_workers": 76,
+          "quiet_seconds": 4.0,
+          "maximum_paused_seconds": 55.0,
+          "admission": {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-1.json",
+            "bytes": 8915,
+            "sha256": "ea2607a0cbbd591ef252b4ba0df7a4406c33ec01904c117d2d20047a4a37c88e"
+          },
+          "count_stopped_ownership": true
+        },
+        "worker_limit": 80,
+        "worker_admission_margin": 8,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+            "bytes": 9997280,
+            "sha256": "3e8db421575122676808adc6c9783f0c897136e9d9d283b9d0cb200c5ec2df45"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-3/run.xml.opt",
+            "bytes": 55,
+            "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-3/run.xml",
+            "bytes": 1400378,
+            "sha256": "9f04a85bab822d02bb5431cd0f12d3989413ee71f4a7a6c80419bcb5a736c4ea"
+          }
+        ],
+        "launch": {
+          "command": [
+            "taskset",
+            "--cpu-list",
+            "2",
+            "mpirun",
+            "-np",
+            "1",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+            "--use-opt-file",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-3/run.xml.opt",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-3/run.xml"
+          ],
+          "affinity": {
+            "cpu": 2,
+            "reference_cpu": 0,
+            "numa_node": "node0",
+            "sampled_idle_fraction": 1.0,
+            "sample_seconds": 1.0
+          },
+          "mpi_binding_environment": {
+            "OMPI_MCA_hwloc_base_binding_policy": "none"
+          }
+        }
+      },
+      "result": {
+        "status": "FAIL",
+        "phase": "outlet-science",
+        "seconds": 3.6870123320113635,
+        "exit": 1,
+        "reason": "native rank affinity differs",
+        "peak_tree_rss_bytes": 98304,
+        "peak_host_workers": 59,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-continue-3-steady/command.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "rss_limit_bytes": 12884901888,
+        "job_memory": {
+          "mem_available_bytes": 407570956288,
+          "mem_total_bytes": 540840640512,
+          "job_cgroup": "/user.slice/user-1000.slice/session-854.scope",
+          "ancestor_limits": [
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-854.scope",
+              "current": 41586688,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+              "current": 270372839424,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice",
+              "current": 270660378624,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup",
+              "memory.max": null,
+              "memory.high": null
+            }
+          ]
+        },
+        "minimum_memory_headroom_bytes": 407570956288,
+        "worker_limit": 80,
+        "peak_owned_workers": 1,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0,
+        "rank_affinity": null
+      },
+      "balance": {
+        "charged_seconds": 50467.51128590679,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 10732.488714093211,
+        "tranche_remaining": 2512.779433698146
+      },
+      "storage": {
+        "science_bytes": 2610424431,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3569389359104
+      }
+    },
+    "outlet-qual-b3-continue-4-inputs": {
+      "request": {
+        "label": "outlet-qual-b3-continue-4-inputs",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v18/h27/task2_outlet_qualification.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "prepare",
+          "B3",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-2.json",
+          "--continuation",
+          "4"
+        ],
+        "cap_seconds": 18.0,
+        "reserved_seconds": 25.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2610424431,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3569387544576
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v8/task2r_run.py",
+          "bytes": 36714,
+          "sha256": "8a71189aa15154697da26a381803d12880f2ea3a5c002fa23a19c6e00e3ed2fe"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v18/h27/task2_outlet_qualification.py",
+            "bytes": 27907,
+            "sha256": "ce052ec70a2af9e44164dde279651ee230acc253ab37e4f9a4c6ed9cdb768bcd"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-2.json",
+            "bytes": 9056,
+            "sha256": "36c6a5d28c13eaf14fea2921c3b1c4e3642c55a4221d4f24a6d8aaaf72559bda"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 4.583013212002697,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 290844672,
+        "peak_host_workers": 59,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-continue-4-inputs/command.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 50478.30823756578,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 10721.691762434217,
+        "tranche_remaining": 2501.9824820391514
+      },
+      "storage": {
+        "science_bytes": 2611830740,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3569386119168
+      }
+    },
+    "outlet-qual-b3-continue-4-steady": {
+      "request": {
+        "label": "outlet-qual-b3-continue-4-steady",
+        "phase": "outlet-science",
+        "command": [
+          "mpirun",
+          "-np",
+          "1",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+          "--use-opt-file",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-4/run.xml.opt",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-4/run.xml"
+        ],
+        "cap_seconds": 590.0,
+        "reserved_seconds": 597.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2611830740,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3569386115072
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v8/task2r_run.py",
+          "bytes": 36714,
+          "sha256": "8a71189aa15154697da26a381803d12880f2ea3a5c002fa23a19c6e00e3ed2fe"
+        },
+        "rss_limit_bytes": 12884901888,
+        "memory_before": {
+          "mem_available_bytes": 393475555328,
+          "mem_total_bytes": 540840640512,
+          "job_cgroup": "/user.slice/user-1000.slice/session-854.scope",
+          "ancestor_limits": [
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-854.scope",
+              "current": 44302336,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+              "current": 282508550144,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice",
+              "current": 282801070080,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup",
+              "memory.max": null,
+              "memory.high": null
+            }
+          ]
+        },
+        "worker_pause_policy": {
+          "trigger_workers": 78,
+          "resume_workers": 76,
+          "quiet_seconds": 4.0,
+          "maximum_paused_seconds": 55.0,
+          "admission": {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-2.json",
+            "bytes": 9056,
+            "sha256": "36c6a5d28c13eaf14fea2921c3b1c4e3642c55a4221d4f24a6d8aaaf72559bda"
+          },
+          "count_stopped_ownership": true
+        },
+        "worker_limit": 80,
+        "worker_admission_margin": 8,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+            "bytes": 9997280,
+            "sha256": "3e8db421575122676808adc6c9783f0c897136e9d9d283b9d0cb200c5ec2df45"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-4/run.xml.opt",
+            "bytes": 55,
+            "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-4/run.xml",
+            "bytes": 1400378,
+            "sha256": "2ae227c3606a0d1400d467566217612d731b0c60f9018273ac8fbb7edbbc06bc"
+          }
+        ],
+        "launch": {
+          "command": [
+            "mpirun",
+            "-np",
+            "1",
+            "--bind-to",
+            "none",
+            "taskset",
+            "--cpu-list",
+            "2",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+            "--use-opt-file",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-4/run.xml.opt",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-4/run.xml"
+          ],
+          "affinity": {
+            "cpu": 2,
+            "reference_cpu": 0,
+            "numa_node": "node0",
+            "sampled_idle_fraction": 1.0,
+            "sample_seconds": 1.0
+          }
+        }
+      },
+      "result": {
+        "status": "FAIL",
+        "phase": "outlet-science",
+        "seconds": 256.45362655899953,
+        "exit": 1,
+        "reason": null,
+        "peak_tree_rss_bytes": 9506291712,
+        "peak_host_workers": 63,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-continue-4-steady/command.log",
+          "bytes": 1277,
+          "sha256": "01bed21bcb2ae49fab08f39949256874990c66d284dd1cf2845c8596d2dda19b"
+        },
+        "rss_limit_bytes": 12884901888,
+        "job_memory": {
+          "mem_available_bytes": 379836731392,
+          "mem_total_bytes": 540840640512,
+          "job_cgroup": "/user.slice/user-1000.slice/session-854.scope",
+          "ancestor_limits": [
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-854.scope",
+              "current": 45838336,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+              "current": 288711725056,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice",
+              "current": 289001623552,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup",
+              "memory.max": null,
+              "memory.high": null
+            }
+          ]
+        },
+        "minimum_memory_headroom_bytes": 368693231616,
+        "worker_limit": 80,
+        "peak_owned_workers": 2,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0,
+        "rank_affinity": {
+          "pid": 268696,
+          "allowed_cpus": [
+            2
+          ]
+        }
+      },
+      "balance": {
+        "charged_seconds": 50734.76186412478,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 10465.238135875217,
+        "tranche_remaining": 2245.528855480152
+      },
+      "storage": {
+        "science_bytes": 2747742407,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3569250152448
+      }
+    },
+    "outlet-qual-b3-continue-5-inputs": {
+      "request": {
+        "label": "outlet-qual-b3-continue-5-inputs",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v18/h27/task2_outlet_qualification.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "prepare",
+          "B3",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-2.json",
+          "--continuation",
+          "5"
+        ],
+        "cap_seconds": 18.0,
+        "reserved_seconds": 25.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2747742407,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3569250136064
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v8/task2r_run.py",
+          "bytes": 36714,
+          "sha256": "8a71189aa15154697da26a381803d12880f2ea3a5c002fa23a19c6e00e3ed2fe"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v18/h27/task2_outlet_qualification.py",
+            "bytes": 27907,
+            "sha256": "ce052ec70a2af9e44164dde279651ee230acc253ab37e4f9a4c6ed9cdb768bcd"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-2.json",
+            "bytes": 9056,
+            "sha256": "36c6a5d28c13eaf14fea2921c3b1c4e3642c55a4221d4f24a6d8aaaf72559bda"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 5.374242229008814,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 289480704,
+        "peak_host_workers": 61,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-continue-5-inputs/command.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 50740.13610635379,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 10459.863893646208,
+        "tranche_remaining": 2240.154613251143
+      },
+      "storage": {
+        "science_bytes": 2749148739,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3569248706560
+      }
+    },
+    "outlet-qual-b3-continue-5-steady": {
+      "request": {
+        "label": "outlet-qual-b3-continue-5-steady",
+        "phase": "outlet-science",
+        "command": [
+          "mpirun",
+          "-np",
+          "1",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+          "--use-opt-file",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-5/run.xml.opt",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-5/run.xml"
+        ],
+        "cap_seconds": 680.0,
+        "reserved_seconds": 687.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2749148739,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3569248702464
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v8/task2r_run.py",
+          "bytes": 36714,
+          "sha256": "8a71189aa15154697da26a381803d12880f2ea3a5c002fa23a19c6e00e3ed2fe"
+        },
+        "rss_limit_bytes": 12884901888,
+        "memory_before": {
+          "mem_available_bytes": 409422897152,
+          "mem_total_bytes": 540840640512,
+          "job_cgroup": "/user.slice/user-1000.slice/session-854.scope",
+          "ancestor_limits": [
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-854.scope",
+              "current": 185778176,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+              "current": 270082818048,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice",
+              "current": 270370357248,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup",
+              "memory.max": null,
+              "memory.high": null
+            }
+          ]
+        },
+        "worker_pause_policy": {
+          "trigger_workers": 78,
+          "resume_workers": 76,
+          "quiet_seconds": 4.0,
+          "maximum_paused_seconds": 55.0,
+          "admission": {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-2.json",
+            "bytes": 9056,
+            "sha256": "36c6a5d28c13eaf14fea2921c3b1c4e3642c55a4221d4f24a6d8aaaf72559bda"
+          },
+          "count_stopped_ownership": true
+        },
+        "worker_limit": 80,
+        "worker_admission_margin": 8,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+            "bytes": 9997280,
+            "sha256": "3e8db421575122676808adc6c9783f0c897136e9d9d283b9d0cb200c5ec2df45"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-5/run.xml.opt",
+            "bytes": 55,
+            "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-5/run.xml",
+            "bytes": 1400390,
+            "sha256": "6b0439dfd68c97f929785b8d22514d5733589bb09f587ba850ee0c0fbf94d8f0"
+          }
+        ],
+        "launch": {
+          "command": [
+            "mpirun",
+            "-np",
+            "1",
+            "--bind-to",
+            "none",
+            "taskset",
+            "--cpu-list",
+            "1",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+            "--use-opt-file",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-5/run.xml.opt",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-5/run.xml"
+          ],
+          "affinity": {
+            "cpu": 1,
+            "reference_cpu": 0,
+            "numa_node": "node0",
+            "sampled_idle_fraction": 1.0,
+            "sample_seconds": 1.0
+          }
+        }
+      },
+      "result": {
+        "status": "FAIL",
+        "phase": "outlet-science",
+        "seconds": 657.3035541170102,
+        "exit": 1,
+        "reason": null,
+        "peak_tree_rss_bytes": 10033512448,
+        "peak_host_workers": 64,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-continue-5-steady/command.log",
+          "bytes": 1277,
+          "sha256": "078a331ca8885514616afbdc9ab778c68d0a43fecad16009e0f93d1491a9522f"
+        },
+        "rss_limit_bytes": 12884901888,
+        "job_memory": {
+          "mem_available_bytes": 409638440960,
+          "mem_total_bytes": 540840640512,
+          "job_cgroup": "/user.slice/user-1000.slice/session-854.scope",
+          "ancestor_limits": [
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-854.scope",
+              "current": 187654144,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+              "current": 269917483008,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice",
+              "current": 270205022208,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup",
+              "memory.max": null,
+              "memory.high": null
+            }
+          ]
+        },
+        "minimum_memory_headroom_bytes": 367992160256,
+        "worker_limit": 80,
+        "peak_owned_workers": 2,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0,
+        "rank_affinity": {
+          "pid": 269643,
+          "allowed_cpus": [
+            1
+          ]
+        }
+      },
+      "balance": {
+        "charged_seconds": 51397.4396604708,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 9802.560339529198,
+        "tranche_remaining": 1582.8510591341328
+      },
+      "storage": {
+        "science_bytes": 2885089779,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3569112666112
+      }
+    },
+    "outlet-qual-b3-continue-6-inputs": {
+      "request": {
+        "label": "outlet-qual-b3-continue-6-inputs",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v19/h27/task2_outlet_qualification.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "prepare",
+          "B3",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-3.json",
+          "--continuation",
+          "6"
+        ],
+        "cap_seconds": 18.0,
+        "reserved_seconds": 25.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2885089779,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3569110913024
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v8/task2r_run.py",
+          "bytes": 36714,
+          "sha256": "8a71189aa15154697da26a381803d12880f2ea3a5c002fa23a19c6e00e3ed2fe"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v19/h27/task2_outlet_qualification.py",
+            "bytes": 28317,
+            "sha256": "d6df3e2ba0560cfb3b3468ffbc19fbdd082a50c6e9d9df707878d978e8ec4cd8"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-3.json",
+            "bytes": 8893,
+            "sha256": "4aa29512e535b217efb27a2283e348b6e395cf7e9a608872a65a96b7db5abe87"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 3.7221139339962974,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 292229120,
+        "peak_host_workers": 59,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-continue-6-inputs/command.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 51405.374011610795,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 9794.625988389205,
+        "tranche_remaining": 1574.9167079941399
+      },
+      "storage": {
+        "science_bytes": 2886496111,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3569109483520
+      }
+    },
+    "outlet-qual-b3-continue-6-steady": {
+      "request": {
+        "label": "outlet-qual-b3-continue-6-steady",
+        "phase": "outlet-science",
+        "command": [
+          "mpirun",
+          "-np",
+          "1",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+          "--use-opt-file",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-6/run.xml.opt",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-6/run.xml"
+        ],
+        "cap_seconds": 480.0,
+        "reserved_seconds": 487.0,
+        "workers_before": 58,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 2886496111,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3569109479424
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v8/task2r_run.py",
+          "bytes": 36714,
+          "sha256": "8a71189aa15154697da26a381803d12880f2ea3a5c002fa23a19c6e00e3ed2fe"
+        },
+        "rss_limit_bytes": 12884901888,
+        "memory_before": {
+          "mem_available_bytes": 401656590336,
+          "mem_total_bytes": 540840640512,
+          "job_cgroup": "/user.slice/user-1000.slice/session-854.scope",
+          "ancestor_limits": [
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-854.scope",
+              "current": 328867840,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+              "current": 272588128256,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice",
+              "current": 272875667456,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup",
+              "memory.max": null,
+              "memory.high": null
+            }
+          ]
+        },
+        "worker_pause_policy": {
+          "trigger_workers": 78,
+          "resume_workers": 76,
+          "quiet_seconds": 4.0,
+          "maximum_paused_seconds": 55.0,
+          "admission": {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-qual-b3-admission-3.json",
+            "bytes": 8893,
+            "sha256": "4aa29512e535b217efb27a2283e348b6e395cf7e9a608872a65a96b7db5abe87"
+          },
+          "count_stopped_ownership": true
+        },
+        "worker_limit": 80,
+        "worker_admission_margin": 8,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+            "bytes": 9997280,
+            "sha256": "3e8db421575122676808adc6c9783f0c897136e9d9d283b9d0cb200c5ec2df45"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-6/run.xml.opt",
+            "bytes": 55,
+            "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-6/run.xml",
+            "bytes": 1400390,
+            "sha256": "41b011be595cb9f41ec8c754b80136155a0949317daa9532f98a495ac3d18658"
+          }
+        ],
+        "launch": {
+          "command": [
+            "mpirun",
+            "-np",
+            "1",
+            "--bind-to",
+            "none",
+            "taskset",
+            "--cpu-list",
+            "0",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+            "--use-opt-file",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-6/run.xml.opt",
+            "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-6/run.xml"
+          ],
+          "affinity": {
+            "cpu": 0,
+            "reference_cpu": 0,
+            "numa_node": "node0",
+            "sampled_idle_fraction": 1.0,
+            "sample_seconds": 1.0
+          }
+        }
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "outlet-science",
+        "seconds": 308.2999420630076,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 8968749056,
+        "peak_host_workers": 63,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-b3-continue-6-steady/command.log",
+          "bytes": 2183,
+          "sha256": "4af4edd572a5876fc1bd3b3c461873477f6ee591d3086c3632b8f49b514d787c"
+        },
+        "rss_limit_bytes": 12884901888,
+        "job_memory": {
+          "mem_available_bytes": 403509395456,
+          "mem_total_bytes": 540840640512,
+          "job_cgroup": "/user.slice/user-1000.slice/session-854.scope",
+          "ancestor_limits": [
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-854.scope",
+              "current": 330407936,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+              "current": 271097020416,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup/user.slice",
+              "current": 271384559616,
+              "memory.max": null,
+              "memory.high": null
+            },
+            {
+              "path": "/sys/fs/cgroup",
+              "memory.max": null,
+              "memory.high": null
+            }
+          ]
+        },
+        "minimum_memory_headroom_bytes": 369475260416,
+        "worker_limit": 80,
+        "peak_owned_workers": 2,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0,
+        "output_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-6/state.result.json",
+            "bytes": 65371159,
+            "sha256": "4cea90ce0861e8fcd37532051e2f7ae44d6b5ac8135106292e57553a9d2ea5d6"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-6/state.steady.json",
+            "bytes": 13534789,
+            "sha256": "c4fb18b730eccd10bdd89dbbe2e58a352b2d9cb7e863cf2adbd12db162393cb3"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-b3-continue-6/state.final.bin",
+            "bytes": 9357490,
+            "sha256": "f524896c8d17c962e583490025af5a911974ba57fe7a3e89182c5f2b2b538d47"
+          }
+        ],
+        "rank_affinity": {
+          "pid": 272024,
+          "allowed_cpus": [
+            0
+          ]
+        }
+      },
+      "balance": {
+        "charged_seconds": 51713.6739536738,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 9486.326046326198,
+        "tranche_remaining": 1266.6167659311322
+      },
+      "storage": {
+        "science_bytes": 2978072973,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3569017839616
+      }
+    }
+  }
+}

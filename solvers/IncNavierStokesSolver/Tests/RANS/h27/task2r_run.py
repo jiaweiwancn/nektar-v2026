@@ -496,9 +496,10 @@ def run(root, book, args, began):
                                 if p.startswith("/") and "\n" not in p and Path(p).is_file()])
     launched = command
     if affinity:
-        launched = ["taskset", "--cpu-list", str(affinity["cpu"]), *command]
-        request["launch"] = dict(command=launched, affinity=affinity,
-                                 mpi_binding_environment={"OMPI_MCA_hwloc_base_binding_policy": "none"})
+        # Bind in the rank wrapper, after OpenMPI has placed the launcher child.
+        launched = [*command[:3], "--bind-to", "none", "taskset", "--cpu-list",
+                    str(affinity["cpu"]), *command[3:]]
+        request["launch"] = dict(command=launched, affinity=affinity)
     operation.mkdir()
     atomic(operation / "request.json", request)
     update(book, lambda ledger: ledger["entries"].update(
@@ -510,8 +511,6 @@ def run(root, book, args, began):
     rank_affinity = None
     env = dict(os.environ, **THREADS, PYTHONDONTWRITEBYTECODE="1",
                TMPDIR=str(root / "tmp"), H27_ROOT=str(root), H27_OPERATION=str(operation))
-    if affinity:
-        env.update(request["launch"]["mpi_binding_environment"])
     log_path = operation / "command.log"
     with log_path.open("x") as log:
         try:
@@ -530,8 +529,8 @@ def run(root, book, args, began):
                                     executable = Path(f"/proc/{pid}/exe").readlink()
                                     if executable == Path(command[3]):
                                         cpus = sorted(os.sched_getaffinity(pid))
-                                        require(cpus == [affinity["cpu"]], "native rank affinity differs")
                                         rank_affinity = dict(pid=pid, allowed_cpus=cpus)
+                                        require(cpus == [affinity["cpu"]], "native rank affinity differs")
                                         break
                                 except FileNotFoundError:
                                     continue
