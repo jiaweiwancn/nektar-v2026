@@ -1,0 +1,258 @@
+{
+  "archive": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-campaign-cp2-selection.tar.gz",
+    "bytes": 75064,
+    "sha256": "95de9b5cb816412fb8f0e903bec0cf86e78e4048dfa7f2211a1db73c401b7677"
+  },
+  "publication": {
+    "request": {
+      "label": "outlet-campaign-cp2-selection-publish",
+      "phase": "evidence",
+      "command": [
+        "/bin/bash",
+        "-euc",
+        "set -euo pipefail\ncd \"$1\"\narchive='evidence/outlet-campaign-cp2-selection.tar.gz'\ntest ! -e \"$archive\"\nfor item in 'evidence/outlet-campaign-cp2-selection.json' 'evidence/outlet-campaign-selected-recipe.json' 'operations/outlet-campaign-cp2-select/receipt.json' 'operations/outlet-campaign-cp2-select-v2/receipt.json'; do test -f \"$item\"; done\ntemporary=\"$archive.work-$$\"\ntrap 'rm -f -- \"$temporary\"' EXIT\ntar -I 'gzip -1' -cf \"$temporary\" 'evidence/outlet-campaign-cp2-selection.json' 'evidence/outlet-campaign-selected-recipe.json' 'operations/outlet-campaign-cp2-select' 'operations/outlet-campaign-cp2-select-v2' 'tools/outlet-python-v40/h27/task2_outlet_campaign_decision.py' 'tools/outlet-python-v41/h27/task2_outlet_campaign_decision.py' 'accounting.json'\ntar -tzf \"$temporary\" >/dev/null\nmv -- \"$temporary\" \"$archive\"\nstat -c '%n %s' \"$archive\"",
+        "outlet-campaign",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118"
+      ],
+      "cap_seconds": 50.0,
+      "reserved_seconds": 57.0,
+      "workers_before": 60,
+      "idle_mpi_event_helpers": 102,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "storage_before": {
+        "science_bytes": 7853665652,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3544688447488
+      },
+      "runner": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v13/task2r_run.py",
+        "bytes": 41315,
+        "sha256": "e87123dea068bfa6160e21d84f9b97e764cc3bd75feb4597741e11ff457ffef5"
+      },
+      "rss_limit_bytes": 8589934592,
+      "memory_before": null,
+      "worker_pause_policy": null,
+      "worker_limit": 80,
+      "worker_admission_margin": 3,
+      "input_files": [
+        {
+          "path": "/usr/bin/bash",
+          "bytes": 1396520,
+          "sha256": "59474588a312b6b6e73e5a42a59bf71e62b55416b6c9d5e4a6e1c630c2a9ecd4"
+        }
+      ]
+    },
+    "result": {
+      "status": "PASS",
+      "phase": "evidence",
+      "seconds": 1.302532486995915,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 16384,
+      "peak_host_workers": 60,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-campaign-cp2-selection-publish/command.log",
+        "bytes": 52,
+        "sha256": "8c8fc5ca1fb7c86e679444d0365893eb188d977945557194a3fe96f3fb2c8acd"
+      },
+      "rss_limit_bytes": 8589934592,
+      "job_memory": null,
+      "minimum_memory_headroom_bytes": null,
+      "worker_limit": 80,
+      "peak_owned_workers": 0,
+      "worker_pauses": [],
+      "worker_paused_seconds": 0.0
+    },
+    "balance": {
+      "charged_seconds": 81415.41093059664,
+      "reserved_seconds": 0,
+      "nonprotected_remaining": 22984.58906940336,
+      "tranche_remaining": 2035.8797890082933
+    },
+    "storage": {
+      "science_bytes": 7853665652,
+      "source_build_runtime_bytes": 266581583,
+      "free_bytes": 3544688357376
+    }
+  },
+  "operations": {
+    "outlet-campaign-cp2-select": {
+      "request": {
+        "label": "outlet-campaign-cp2-select",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v40/h27/task2_outlet_campaign_decision.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-campaign-cp2-selection.json",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-campaign-selected-recipe.json"
+        ],
+        "cap_seconds": 55.0,
+        "reserved_seconds": 62.0,
+        "workers_before": 59,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 7853665652,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3544690405376
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v13/task2r_run.py",
+          "bytes": 41315,
+          "sha256": "e87123dea068bfa6160e21d84f9b97e764cc3bd75feb4597741e11ff457ffef5"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v40/h27/task2_outlet_campaign_decision.py",
+            "bytes": 7464,
+            "sha256": "7a99d3f9adcca0afde12ac8247c0dfa75a8315db4af50f998b1d164b3643b23c"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-campaign-cp2-selection.json",
+            "bytes": 1180,
+            "sha256": "e57de4340dd1bdaf28e6e9a5131fb1b4112291e8a1113b6bade845d5d618b312"
+          }
+        ]
+      },
+      "result": {
+        "status": "FAIL",
+        "phase": "analysis",
+        "seconds": 4.550088088988559,
+        "exit": 1,
+        "reason": null,
+        "peak_tree_rss_bytes": 127762432,
+        "peak_host_workers": 60,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-campaign-cp2-select/command.log",
+          "bytes": 1354,
+          "sha256": "cda53e25a2c73377cba456b38d96598bee6322aa26966d2e44e0a6c63dc25580"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 81408.67050184266,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 22991.32949815734,
+        "tranche_remaining": 2042.6202177622763
+      },
+      "storage": {
+        "science_bytes": 7853665652,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3544690393088
+      }
+    },
+    "outlet-campaign-cp2-select-v2": {
+      "request": {
+        "label": "outlet-campaign-cp2-select-v2",
+        "phase": "analysis",
+        "command": [
+          "python3",
+          "-B",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v41/h27/task2_outlet_campaign_decision.py",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-campaign-cp2-selection.json",
+          "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-campaign-selected-recipe.json"
+        ],
+        "cap_seconds": 55.0,
+        "reserved_seconds": 62.0,
+        "workers_before": 59,
+        "idle_mpi_event_helpers": 102,
+        "threads": {
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1",
+          "MKL_NUM_THREADS": "1",
+          "BLIS_NUM_THREADS": "1",
+          "NUMEXPR_NUM_THREADS": "1",
+          "VECLIB_MAXIMUM_THREADS": "1"
+        },
+        "storage_before": {
+          "science_bytes": 7853665652,
+          "source_build_runtime_bytes": 266581583,
+          "free_bytes": 3544688553984
+        },
+        "runner": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-control-v13/task2r_run.py",
+          "bytes": 41315,
+          "sha256": "e87123dea068bfa6160e21d84f9b97e764cc3bd75feb4597741e11ff457ffef5"
+        },
+        "rss_limit_bytes": 8589934592,
+        "memory_before": null,
+        "worker_pause_policy": null,
+        "worker_limit": 80,
+        "worker_admission_margin": 6,
+        "input_files": [
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/outlet-python-v41/h27/task2_outlet_campaign_decision.py",
+            "bytes": 7540,
+            "sha256": "973eba075d9381a428364d86a2d82c320539cf2cb84b7870df2b741f6009dea2"
+          },
+          {
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-campaign-cp2-selection.json",
+            "bytes": 1180,
+            "sha256": "e57de4340dd1bdaf28e6e9a5131fb1b4112291e8a1113b6bade845d5d618b312"
+          }
+        ]
+      },
+      "result": {
+        "status": "PASS",
+        "phase": "analysis",
+        "seconds": 5.437896266987082,
+        "exit": 0,
+        "reason": null,
+        "peak_tree_rss_bytes": 127434752,
+        "peak_host_workers": 61,
+        "log": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-campaign-cp2-select-v2/command.log",
+          "bytes": 41,
+          "sha256": "e377de29ec54d247284fd2e1b076721ce640bf02952d32a7f546944c2052f86d"
+        },
+        "rss_limit_bytes": 8589934592,
+        "job_memory": null,
+        "minimum_memory_headroom_bytes": null,
+        "worker_limit": 80,
+        "peak_owned_workers": 0,
+        "worker_pauses": [],
+        "worker_paused_seconds": 0.0
+      },
+      "balance": {
+        "charged_seconds": 81414.10839810965,
+        "reserved_seconds": 0,
+        "nonprotected_remaining": 22985.891601890355,
+        "tranche_remaining": 2037.1823214952892
+      },
+      "storage": {
+        "science_bytes": 7853665652,
+        "source_build_runtime_bytes": 266581583,
+        "free_bytes": 3544688451584
+      }
+    }
+  }
+}
