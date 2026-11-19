@@ -20,6 +20,26 @@ SHEAR_TRACK = [(15., .06), (15., .06875), (-9.939670769620442, .0599656429959254
 BLEND_SUPPORT = [.05, .11541061001735]
 
 
+def radial_grading(edges, window, ratio):
+    """Bisect the wider neighbor at faces where the frozen ratio is exceeded."""
+    lo,hi = window
+    require(0<=lo<hi and math.isfinite(ratio) and ratio>=2., "invalid dyadic grading prospect")
+    while True:
+        additions = set()
+        for left,face,right in zip(edges,edges[1:],edges[2:]):
+            if not lo-1e-12<=face-SHIFT<=hi+1e-12:
+                continue
+            left_width,right_width = face-left,right-face
+            if left_width>ratio*right_width+1e-12:
+                additions.add((left+face)/2)
+            elif right_width>ratio*left_width+1e-12:
+                additions.add((face+right)/2)
+        if not additions:
+            return edges
+        require(not additions.intersection(edges), "radial grading cannot add a distinct edge")
+        edges = sorted([*edges,*additions])
+
+
 def axes_for(root, design, x, z):
     case = design["case"]
     require(campaign_case(case), "case is outside the outlet campaign")
@@ -33,9 +53,18 @@ def axes_for(root, design, x, z):
         require([new_x,new_z]==[pinned["x_edges"],pinned["physical_z_edges"]]
                 and len(new_x)==112 and len(new_z)==95, "archived 111x94 axes differ")
     elif kind in ("r","c"):
-        new_z = split_bands(z, design["radial_bands"])
+        if design.get("radial_bands"):
+            new_z = split_bands(z, design["radial_bands"])
+        if design.get("radial_grading"):
+            grading = design["radial_grading"]
+            new_z = radial_grading(new_z,grading["faces_r"],grading["max_neighbor_ratio"])
+        require(new_z!=z, "radial witness must refine its declared support")
     elif kind == "h":
-        new_z = split_bands(z, [adjacent_H(z)])
+        lo,hi = adjacent_H(z)
+        support = design.get("radial_bands", [[lo,hi]])
+        require(len(support)==1 and support[0][0]<=lo<.15<hi<=support[0][1],
+                "H support must contain both immediate owners")
+        new_z = split_bands(z, support)
     elif kind == "q":
         quadrature = HIGHER_QUADRATURE
     elif kind == "t":

@@ -18,7 +18,8 @@ from task2r_run import require
 
 
 def modes(t):
-    return (1-t,t,t-t*t,-t+3*t*t-2*t**3), (-1,1,1-2*t,-1+6*t-6*t*t)
+    # The last mode uses the Jacobi P_1^(1,1) normalization.
+    return (1-t,t,t-t*t,-2*t+6*t*t-4*t**3), (-1,1,1-2*t,-2+12*t-12*t*t)
 
 
 def gradient(state, owner, x, r):
@@ -83,7 +84,7 @@ def shear(a, b, reference, radial_side):
         index = 3 if radial_side == "lower" else 2
         row, = [item for item in v["tracked"] if item["x"]==15. and item["r"]==.06
                 and abs(item["raw"]["bounds"][index]-.06)<1e-12]
-        require(row["raw"]["chi"]==0. and not row["raw"]["E_type"]=="transported",
+        require(row["raw"]["chi"]==0. and row["raw"]["E_type"]=="dependent",
                 "wall shear identity is scoped to chi=0 in the inner band")
         q = row["raw"]
         effective = reference.nu+row["nu_A"]
