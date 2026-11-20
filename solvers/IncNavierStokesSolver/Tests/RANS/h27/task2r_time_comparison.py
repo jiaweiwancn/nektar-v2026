@@ -15,11 +15,11 @@ from task2r_advancing_evidence import HASH_KEYS
 from task2s_observations import compare
 
 
-def accepted(case, step):
+def accepted(case, step, allow_interrupted=False):
     index_path = case / "state.science-index.json"
     index = read(index_path)
-    require(index["run_complete"] and step > index["initial_step"],
-            "comparison needs a completed, process-accepted positive-time frame")
+    require((index["run_complete"] or allow_interrupted) and step > index["initial_step"],
+            "comparison needs a process-accepted positive-time frame")
     frame, = (f for f in index["frames"] if f["step"] == step)
     path = verified({k:frame[k] for k in ("path","sha256","bytes")})
     data, _ = po.load_native(path)
@@ -56,10 +56,23 @@ def exact_clock(packet, boundary):
     return all(packet[k] == boundary[k] for k in ("step","time","dt","signature"))
 
 
-def evolution(case, out, seconds, recovered_prefix=None):
+def equation_audit(path, native, table):
+    result = read(path)
+    require(result["schema"] == "WJH27IndependentPhysicalTransientOracleV1"
+            and all(result[name][key] == bound[key] for name,bound in (("native",native),("table",table))
+                    for key in ("path","sha256")), "independent equation audit has different scientific inputs")
+    return dict(artifact=identity(path), equations=result.get("accepted_time_discrete_equations_status","NOT_MET"))
+
+
+def evolution(case, out, seconds, recovered_prefix=None, accepted_audit=None):
     deadline = time.monotonic()+seconds
     index = read(case/"state.science-index.json")
-    plan, final, final_file, index_file = accepted(case,index["final_step"])
+    interrupted = not index["run_complete"]
+    require(not interrupted or (recovered_prefix is not None and accepted_audit is not None),
+            "an interrupted prefix needs a verified recovered start and an audited accepted endpoint")
+    plan, final, final_file, index_file = accepted(case,index["final_step"],allow_interrupted=interrupted)
+    audit = equation_audit(accepted_audit,final_file,plan["table"]) if accepted_audit else None
+    require(not interrupted or audit["equations"] == "MET", "interrupted endpoint audit did not pass")
     role = plan["role"]
     if recovered_prefix is None:
         frame, = (row for row in index["frames"] if row["origin"] == "fresh_initial_observation")
@@ -81,6 +94,7 @@ def evolution(case, out, seconds, recovered_prefix=None):
     rows, window, inventory = compare(after,before,interior=(-2.5,8),detailed=True)
     atomic(out,dict(schema="WJH27R3ObservedEvolutionV1",role=role,
         initial=identity(start),accepted=final_file,scientific_index=index_file,
+        interrupted=interrupted,accepted_equation_audit=audit,
         time=final["time"],inventory=inventory,original_rows=rows,fixed_window_rows=window,
         interpretation="Signed final-minus-initial evolution. Comparison tolerances provide scale "
                        "context for measured evolution and do not govern this change."))
@@ -159,12 +173,7 @@ def cold(uninterrupted, resumed, split, checkpoint, out, seconds, uninterrupted_
     for audit_path, endpoint in ((uninterrupted_audit, pf), (resumed_audit, cf)):
         if audit_path is None:
             continue
-        result = read(audit_path)
-        require(result["schema"] == "WJH27IndependentPhysicalTransientOracleV1"
-                and result["native"] == endpoint and result["table"] == pa["table"],
-                "cold endpoint audit has different scientific inputs")
-        audits.append(dict(artifact=identity(audit_path),
-                           equations=result.get("accepted_time_discrete_equations_status", "NOT_MET")))
+        audits.append(equation_audit(audit_path,endpoint,pa["table"]))
     status = "MET"
     if not histories_ok or not norms_ok or any(row["equations"] != "MET" for row in audits):
         status = "NOT_MET"
@@ -194,6 +203,7 @@ def main():
     cmd.add_argument("out",type=Path)
     cmd.add_argument("--seconds",required=True,type=float)
     cmd.add_argument("--recovered-prefix",type=Path)
+    cmd.add_argument("--accepted-audit",type=Path)
     cmd = sub.add_parser("cold")
     for key in ("uninterrupted","resumed","split","checkpoint","out"):
         cmd.add_argument(key,type=Path)
