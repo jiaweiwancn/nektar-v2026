@@ -16,9 +16,17 @@ from resources import atomic, identity
 
 
 def tensor(x, r):
-    bx, dx = po.modified(3, x)
-    br, dr = po.modified(3, r)
-    combine = lambda a,b: (a[:,:,None]*b[:,None,:]).reshape(len(x),16)
+    def modes(t):
+        bubble = (1-t*t)/4
+        return (np.column_stack(((1-t)/2,(1+t)/2,bubble,2*t*bubble)),
+                np.column_stack((np.full_like(t,-.5),np.full_like(t,.5),-t/2,(1-3*t*t)/2)))
+
+    bx, dx = modes(x)
+    br, dr = modes(r)
+
+    def combine(a, b):
+        return (a[:,:,None]*b[:,None,:]).reshape(len(x),16)
+
     return combine(br,bx), combine(br,dx), combine(dr,bx)
 
 

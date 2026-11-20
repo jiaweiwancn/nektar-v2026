@@ -1,0 +1,163 @@
+{
+  "request": {
+    "label": "r3-audit-scalar-cache-control",
+    "phase": "r3-audit",
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v6/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_scalar_cache_control.py",
+      "--native",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-prefix-quiet-3/state.science-3.json",
+      "--table",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+      "--out",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-scalar-cache-control/result.json",
+      "--seconds",
+      "245"
+    ],
+    "cap_seconds": 260.0,
+    "reserved_seconds": 267.0,
+    "workers_before": 77,
+    "idle_mpi_event_helpers": 108,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 8463861449,
+      "source_build_runtime_bytes": 450312320,
+      "free_bytes": 3526285266944,
+      "r3_science_bytes": 379144111
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v5/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_run.py",
+      "bytes": 48433,
+      "sha256": "a8f19bbfe23d80a9b8387aa5def4efc041f8d5aaaefe4b5f95b283fa8e4c995d"
+    },
+    "rss_limit_bytes": 8589934592,
+    "memory_before": {
+      "mem_available_bytes": 399686918144,
+      "mem_total_bytes": 540840640512,
+      "job_cgroup": "/user.slice/user-1000.slice/session-1232.scope",
+      "ancestor_limits": [
+        {
+          "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1232.scope",
+          "current": 18497536,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+          "current": 317872410624,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup/user.slice",
+          "current": 318159912960,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup",
+          "memory.max": null,
+          "memory.high": null
+        }
+      ]
+    },
+    "worker_pause_policy": null,
+    "worker_limit": 80,
+    "worker_admission_margin": 3,
+    "input_files": [
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v6/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_scalar_cache_control.py",
+        "bytes": 4431,
+        "sha256": "756d4f3e6d87bdbc39225ab9f768c0e0d03345cb5db89d1d25aef71d7ef4b4f0"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-prefix-quiet-3/state.science-3.json",
+        "bytes": 61023594,
+        "sha256": "4d49d2a0421a12cbbbe01c62a447f2cfd9f610c35825e68a8b04bfd83336fae5"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+        "bytes": 139982,
+        "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+      }
+    ],
+    "r3_admission": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-scalar-cache-control/admission.json",
+      "bytes": 2748,
+      "sha256": "1e30785986336502a3752ed2e667324f6d88c66c88eb263a1a8e3c52a54ae5a4"
+    }
+  },
+  "result": {
+    "status": "FAIL",
+    "phase": "r3-audit",
+    "seconds": 3.800030619982863,
+    "exit": 1,
+    "reason": null,
+    "peak_tree_rss_bytes": 217710592,
+    "peak_host_workers": 78,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-scalar-cache-control/command.log",
+      "bytes": 1816,
+      "sha256": "4752c6ef81656a514bc1313336e1d7e6235a53c613122ffcd479929f3eef8205"
+    },
+    "rss_limit_bytes": 8589934592,
+    "job_memory": {
+      "mem_available_bytes": 400034435072,
+      "mem_total_bytes": 540840640512,
+      "job_cgroup": "/user.slice/user-1000.slice/session-1232.scope",
+      "ancestor_limits": [
+        {
+          "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1232.scope",
+          "current": 38600704,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+          "current": 317919600640,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup/user.slice",
+          "current": 318207102976,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup",
+          "memory.max": null,
+          "memory.high": null
+        }
+      ]
+    },
+    "minimum_memory_headroom_bytes": 400034435072,
+    "worker_limit": 80,
+    "peak_owned_workers": 0,
+    "worker_pauses": [],
+    "worker_paused_seconds": 0.0,
+    "child_elapsed_seconds": 2.9021388920082245,
+    "peak_active_host_workers": 78,
+    "peak_r3_science_bytes": 379144111
+  },
+  "balance": {
+    "charged_seconds": 86499.5848080806,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 17900.415191919397,
+    "tranche_remaining": 4783.705911524332
+  },
+  "storage": {
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 450312320,
+    "free_bytes": 3526285242368,
+    "r3_science_bytes": 379144111
+  }
+}
