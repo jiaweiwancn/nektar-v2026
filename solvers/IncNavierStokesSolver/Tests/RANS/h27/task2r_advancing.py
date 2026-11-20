@@ -23,6 +23,7 @@ BASE_SHA = "4b74e7e230bc25fe1e31bc32151228af8dfbeba6"
 BINDING = "r3-bf-binding.json"
 AMENDMENT = "r3-time-amendment"
 OUTLET = "ZeroTransverseV1"
+STEP_PRECONDITIONERS = ("CurrentDataDriftV1", "CurrentDataAMDOrderingV1")
 INFO = dict(WJNativeMode="Physical", WJReferencePolicy="ExactInnerFiniteNuV1",
             WJConstitutiveBackend="FastFull3DV1", WJStressSplit="PositiveShearV1",
             WJOutletPolicy=OUTLET, WJCheckOutletActions="False",
@@ -187,7 +188,7 @@ def bind(root):
 def prepare(root, label, role, dt, steps, cap, step_cap, rss_gib, peak_mib,
             science_stride, recovery_stride, basis_path=None, certificate=None, recovery=None,
             phase="r3-advance", native_seconds=None, initial_step=0, represented_proof=None,
-            maximum_pause=None):
+            maximum_pause=None, step_preconditioner=STEP_PRECONDITIONERS[0]):
     import coupled_fixtures as fixtures
     from task2r_verify import edit
 
@@ -230,7 +231,8 @@ def prepare(root, label, role, dt, steps, cap, step_cap, rss_gib, peak_mib,
                       initial_source_identity=source, restart=recovery or "", outlet_policy=OUTLET,
                       solve="SteadyReference" if parity else "Advance",
                       steady_seconds=native_seconds if parity else 0)
-    info = dict(INFO)
+    require(step_preconditioner in STEP_PRECONDITIONERS,"unrecognized tested advancing preconditioner")
+    info = dict(INFO, WJStepPreconditioner=step_preconditioner)
     parameters = dict(RECIPE, WJStepNewtonSeconds=step_cap)
     if parity:
         info["WJSteadyVelocityPC"] = "FullGradientV1"
@@ -249,6 +251,7 @@ def prepare(root, label, role, dt, steps, cap, step_cap, rss_gib, peak_mib,
     plan = dict(schema="WJH27R3AdmissionV1", label=label, phase=phase, role=role,
                 seconds=cap, peak_new_bytes=peak_mib * 1024 ** 2, rss_limit_bytes=rss_gib * GIB,
                 maximum_paused_seconds=maximum_pause,
+                step_preconditioner=step_preconditioner,
                 cpu=base["affinity"]["cpu"], bf_binding=identity(bound), command=command,
                 timestep=dt, initial_step=initial_step, requested_steps=steps, native_step_cap_seconds=step_cap,
                 science_stride=science_stride, recovery_stride=recovery_stride,
@@ -297,8 +300,10 @@ def admission(root, label, phase, command, cap):
                     and info.get("SpectralVanishingViscosity", "Off") == plan["stock_svv"],
                     "stock admission requires the conventional weak-pressure solver")
         else:
+            step_pc = plan.get("step_preconditioner",STEP_PRECONDITIONERS[0])
+            solver_info = dict(INFO,WJStepPreconditioner=step_pc)
             require(info["SolverType"] == "WJNativeCoupledV2" and info["Driver"] == "Standard"
-                    and all(info.get(k) == v for k, v in INFO.items())
+                    and step_pc in STEP_PRECONDITIONERS and all(info.get(k) == v for k, v in solver_info.items())
                     and all(float(parameters[k]) == v for k, v in RECIPE.items())
                     and info["WJReferenceTable"] == plan["table"]["path"]
                     and plan["table"] == base["inherited"]["table"]
@@ -344,6 +349,7 @@ def main():
     case.add_argument("--initial-step", type=int, default=0)
     case.add_argument("--represented-proof", type=Path)
     case.add_argument("--maximum-pause", type=int)
+    case.add_argument("--step-preconditioner", choices=STEP_PRECONDITIONERS, default=STEP_PRECONDITIONERS[0])
     args = vars(parser.parse_args())
     action = args.pop("action")
     if action == "bind":

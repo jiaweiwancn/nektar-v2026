@@ -98,8 +98,10 @@ Vec Coupling::TimePreconditionerData(const Data &data)const
 void WriteStepPreconditionerFields(std::ostream &out,const CoupledOptions &options,
                                   const CoupledStepInfo &info)
 {
+    const bool amdOrdering=options.stepPreconditioner=="CurrentDataAMDOrderingV1";
     out<<std::setprecision(17)<<",\"preconditioner_policy\":\""<<options.stepPreconditioner
-       <<"\",\"drift_measure\":\""<<(options.stepPreconditioner=="CurrentDataDriftV1"?
+       <<"\",\"mixed_sparse_ordering\":\""<<(amdOrdering?"AMD":"COLAMD")
+       <<"\",\"drift_measure\":\""<<(amdOrdering||options.stepPreconditioner=="CurrentDataDriftV1"?
             "ScaledCurrentQuadratureDataL2V1":"CurrentInverseOperatorFrobeniusV1")
        <<"\",\"relative_drift_limit\":"<<options.stepPCRelativeDrift
        <<",\"maximum_uses\":"<<options.stepPCMaximumUses
@@ -285,7 +287,8 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
                 // EX advection is fixed history, so it has no current-state
                 // transport Jacobian. Alpha is the actual BE/BDF2 coefficient.
                 Sparse flowPC,kPC,ePC;Vec currentTuple;
-                const bool currentDataPolicy=m_options.stepPreconditioner=="CurrentDataDriftV1";
+                const bool amdOrdering=m_options.stepPreconditioner=="CurrentDataAMDOrderingV1";
+                const bool currentDataPolicy=amdOrdering||m_options.stepPreconditioner=="CurrentDataDriftV1";
                 auto assembleInverseOperators=[&] {
                     flowPC=VelocityTangent(data,info.timing);
                     AccountTime timer(info.timing.assembly);
@@ -327,7 +330,7 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
                     if(currentDataPolicy)assembleInverseOperators();
                     {
                         AccountTime timer(info.timing.rebuild);
-                        m_flow.PrepareLinearPreconditioner(m_flow.System(alpha,flowPC,1.));++info.rebuilds;
+                        m_flow.PrepareLinearPreconditioner(m_flow.System(alpha,flowPC,1.),amdOrdering);++info.rebuilds;
                         m_k.PrepareLinearPreconditioner(m_k.System(alpha,kPC));++info.rebuilds;
                         m_e.PrepareLinearPreconditioner(m_e.System(alpha,ePC));++info.rebuilds;
                     }

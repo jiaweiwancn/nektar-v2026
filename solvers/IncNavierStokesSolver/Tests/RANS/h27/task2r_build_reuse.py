@@ -16,7 +16,9 @@ from resources import atomic, identity
 from task2r_advancing import BINDING, read, require, verified
 
 
-TARGETS = ("WJNativeMixedFlow", "IncNavierStokesSolver")
+TARGETS = (Path("h26-kernel/CMakeFiles/WJNativeFlow.dir"),
+           Path("CMakeFiles/WJNativeMixedFlow.dir"),
+           Path("CMakeFiles/IncNavierStokesSolver.dir"))
 
 
 @lru_cache(maxsize=None)
@@ -42,23 +44,25 @@ def compiler(build):
     return Path(row.split("=",1)[1]).resolve(strict=True)
 
 
-def reuse(root, out):
+def reuse(root, out, series, previous):
     began = time.monotonic()
     basis = read(root/"evidence"/BINDING)
     verified(basis["x15_parity"])
-    old_build, new_build = root/"build-outlet-campaign-extent", root/"build-r3"
-    old_source, new_source = root/"source-outlet-campaign-extent", root/"source-r3"
+    old_build, new_build = root/f"build-{previous}", root/f"build-{series}"
+    old_source, new_source = root/f"source-{previous}", root/f"source-{series}"
     driver = compiler(new_build)
     require(driver == compiler(old_build), "configured Release compiler differs")
-    seal = read(root/"evidence/outlet-campaign-extent-runtime.json")
+    seal_name = ("outlet-campaign-extent-runtime.json" if previous=="outlet-campaign-extent"
+                 else "r3-rebuilt-runtime.json")
+    seal = read(root/"evidence"/seal_name)
     executable = verified(seal["application"])
     linked = old_build/"IncNavierStokesSolver"
     require(digest(linked) == digest(executable),
             "build archive does not contain the verified x=15 replay application")
     linked_at = linked.stat().st_mtime_ns
     records = {}
-    for target in TARGETS:
-        sub = Path("CMakeFiles")/f"{target}.dir"
+    for sub in TARGETS:
+        target = sub.name.removesuffix(".dir")
         old, new = old_build/sub, new_build/sub
         require(flags(old,old_source,old_build) == flags(new,new_source,new_build),
                 f"{target} compiler flags differ beyond the declared source fingerprint")
@@ -114,9 +118,9 @@ def reuse(root, out):
     print({target:len(rows) for target,rows in records.items()})
 
 
-def units(root, out):
-    build = root / "build-r3"
-    source = root / "source-r3"
+def units(root, out, series):
+    build = root / f"build-{series}"
+    source = root / f"source-{series}"
     commands = build / "compile_commands.json"
     database = json.loads(commands.read_text())
     planned = {}
@@ -125,9 +129,8 @@ def units(root, out):
         directory = Path(row["directory"])
         filename = Path(row["file"])
         obj = directory / argv[argv.index("-o")+1]
-        if (obj.exists() or directory != build or not filename.is_relative_to(source)
-                or obj.relative_to(build).parts[:2] not in
-                tuple(("CMakeFiles", target+".dir") for target in TARGETS)):
+        if (obj.exists() or not directory.is_relative_to(build) or not filename.is_relative_to(source)
+                or not any(obj.is_relative_to(build/target) for target in TARGETS)):
             continue
         require(argv.count("-c") == 1 and argv.count("-o") == 1
                 and Path(argv[0]).resolve() == compiler(build) and argv[-1] == str(filename),
@@ -135,8 +138,8 @@ def units(root, out):
         # The compile database does not emit dependency files by default.
         # Add the same target and dependency paths as the generated Make rule.
         args = argv[:-2] + ["-MD", "-MT", str(obj.relative_to(build)),
-                            "-MF", str(obj.relative_to(build))+".d", *argv[-2:]]
-        label = "r3-native-unit-"+filename.stem.lower()
+                            "-MF", str(obj)+".d", *argv[-2:]]
+        label = series+"-native-unit-"+filename.stem.lower()
         planned[label] = dict(command=args,directory=str(directory),source=identity(filename),
                               compiler=identity(compiler(build)),object=str(obj))
     require(planned, "all configured application and mixed-flow objects already exist")
@@ -149,6 +152,10 @@ if __name__ == "__main__":
     parser.add_argument("root",type=Path)
     parser.add_argument("out",type=Path)
     parser.add_argument("--units",action="store_true")
+    parser.add_argument("--series",choices=("r3","r3-signed"),default="r3")
+    parser.add_argument("--previous",choices=("outlet-campaign-extent","r3"),default="outlet-campaign-extent")
     args = vars(parser.parse_args())
     action = args.pop("units")
+    if action:
+        args.pop("previous")
     (units if action else reuse)(**args)

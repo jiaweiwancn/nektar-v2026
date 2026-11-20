@@ -352,6 +352,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--mesh-native', type=Path, required=True)
     p.add_argument('--shape', choices=('PrimaryQuartile', 'SecondaryLowerSkew', BF_SHAPE), required=True)
+    p.add_argument('--signs', nargs=3, type=int, choices=(-1,1), metavar=('U','K','E'))
     p.add_argument('--seconds', type=float, required=True)
     p.add_argument('--out', type=Path, required=True)
     args = p.parse_args(); start = time.monotonic()
@@ -365,6 +366,7 @@ def main():
     try:
         require(sys.platform.startswith('linux'), 'numerical certificate requires authoritative Linux')
         require(math.isfinite(args.seconds) and args.seconds > 0, 'explicit finite positive admitted cap required')
+        require(args.signs is None or args.shape == BF_SHAPE, 'signed certificate is scoped to the physical Bf path')
         packet = json.loads(args.mesh_native.read_text())
         out['closed_form_algorithm_controls'] = bound_controls(start+args.seconds)
         normalization, norms = certificate(packet, args.shape, start+args.seconds)
@@ -373,6 +375,7 @@ def main():
                    frozen_layout=normalization['layout'], domain=packet['domain'], x_edges=packet['x_edges'], r_edges=packet['r_edges'])
         if args.shape == BF_SHAPE:
             out['base_state_sha256'] = packet['base_state_sha256']
+            out['signs'] = dict(zip(('velocity','k','epsilon'), args.signs or (1,1,1)))
         passed = all(row[key] for row in norms.values() for key in ('domain_RMS_pass', 'support_RMS_pass', 'half_peak_area_pass'))
         out['status'] = 'PASS_MATHEMATICAL_SHAPE_ONLY' if passed else 'NOT_MET_SHAPE_NORMS'
     except Exception as error:

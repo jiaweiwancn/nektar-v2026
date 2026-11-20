@@ -47,13 +47,13 @@ def dependent_trace(base, new, field_noise):
         max_target_ratio = max(max_target_ratio, float(np.max(abs(ratio-1))))
         cutoff_change = max(cutoff_change, float(np.max(abs(r1-r0))))
         cutoff_noise = max(cutoff_noise, float(np.max(abs(
-            ref.cutoff(k0+ref.Kin*field_noise)-ref.cutoff(k0-ref.Kin*field_noise))))+1e-12*ref.H)
-        i = int(np.argmax((k1-k0)/ref.Kin))
+            ref.cutoff(k0+ref.Kin*field_noise)-ref.cutoff(k0-ref.Kin*field_noise))))+2e-10*ref.H)
+        i = int(np.argmax(abs((k1-k0)/ref.Kin)))
         row = dict(owner=e["geometry"], x=float(x[i]), r=ref.H, K_base=float(k0[i]),
                    K_perturbed=float(k1[i]), delta_K_over_Kin=float((k1[i]-k0[i])/ref.Kin),
                    exact_Ew_ratio=float(ratio[i]), represented_trace_ratio=float(e1[i]/e0[i]),
                    cutoff_base=float(r0[i]), cutoff_perturbed=float(r1[i]))
-        if peak is None or row["delta_K_over_Kin"] > peak["delta_K_over_Kin"]:
+        if peak is None or abs(row["delta_K_over_Kin"]) > abs(peak["delta_K_over_Kin"]):
             peak = row
     return dict(sampled_K_peak=peak, max_target_Ew_relative_change=max_target_ratio,
                 max_represented_trace_relative_change=max_actual_ratio,
@@ -83,10 +83,12 @@ def audit(base_path, native_path, table, proof_path, deadline):
     delta_epsilon_independent = delta["epsilon"]-lift
     normalization = proof["normalization"]
     layout = normalization["layout"]
+    signs = [proof.get("signs",{}).get(k,1) for k in ("velocity","k","epsilon")]
+    require(all(v in (-1,1) for v in signs), "invalid prescribed sign combination")
     packet = dict(elements=data["elements"], sizes=data["sizes"], domain=proof["domain"], H=ref.H,
-        signs=[1,1,1], Kin=ref.Kin, Ain=ref.A, velocity=delta["flow"], k_increment=delta["k"],
+        signs=signs, Kin=ref.Kin, Ain=ref.A, velocity=delta["flow"], k_increment=delta["k"],
         epsilon_independent_increment=delta_epsilon_independent,
-        normalization=dict(streamfunction_coefficient=.001/normalization["unitPeakEstimate"]))
+        normalization=dict(streamfunction_coefficient=signs[0]*.001/normalization["unitPeakEstimate"]))
     norms, diagnostics, norms_ok = checks.represented_norms(packet, proof, deadline, synthetic_base=False)
     divergence = checks.divergence_audit(packet, deadline)
     boundary = dict(base=base.boundary_checks(), perturbed=new.boundary_checks())
@@ -111,13 +113,13 @@ def audit(base_path, native_path, table, proof_path, deadline):
         solenoidal=divergence["pass_"], exterior=max(exterior.values()) <= 1e-12 and pressure == 0.,
         dependent_trace=all(row["status"] == "MET" for row in boundary.values())
             and max(trace["max_target_Ew_relative_change"],trace["max_represented_trace_relative_change"]) <= .02
-            and abs(trace["sampled_K_peak"]["delta_K_over_Kin"]-.01) <= 1e-12,
+            and abs(trace["sampled_K_peak"]["delta_K_over_Kin"]-signs[1]*.01) <= 1e-12,
         resolved_signal=all(norms[k]["global_peak_enclosure"][0] > 10*noise[k] for k in norms)
             and norms["velocity"]["normalized_field_gradient_RMS_enclosure"][0] > 10*gradient_noise
             and trace["largest_cutoff_change"] > 10*trace["cutoff_noise_bound"],
         admissibility=principal["minimum_covariance_over_k"]["value"] > 1e-10
             and principal["minimum_planar_over_mu"]["value"] > max(1e-8, 10*principal["half_step_change"]))
-    return dict(status="MET" if all(gates.values()) else "NOT_MET", gates=gates, layout=layout,
+    return dict(status="MET" if all(gates.values()) else "NOT_MET", gates=gates, layout=layout, signs=signs,
         support_area=support, resolved_intervals=widths, represented_norms=norms,
         polynomial_diagnostics=diagnostics, weak_divergence=divergence, boundary=boundary,
         pressure_increment=pressure, exterior_increment=exterior, current_K_trace_and_cutoff=trace,

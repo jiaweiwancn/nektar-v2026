@@ -163,17 +163,43 @@ SolveInfo MixedFlow::RawResidualNorm(const Vec&residual)const
     info.continuity=std::sqrt(std::max(0.,v.dot(z))/m_volume);
     info.gauge=m_gauge?std::abs(residual[Size()-1])/(.01*m_volume):0;return info;
 }
-double MixedFlow::Prepare(const Sparse&a)
+double MixedFlow::Prepare(const Sparse&a,bool amdOrdering)
 {
     double began=Clock();Sparse factor=a;
     if(m_gauge){int pivot=PressureOffset()+m_pressurePivot,last=Size()-1;std::vector<T>t;for(int c=0;c<a.outerSize();++c)for(Sparse::InnerIterator it(a,c);it;++it)if(it.row()!=pivot&&it.col()!=pivot&&it.row()!=last&&it.col()!=last)t.emplace_back(it.row(),it.col(),it.value());t.emplace_back(pivot,pivot,1);t.emplace_back(last,last,1);factor.setZero();factor.setFromTriplets(t.begin(),t.end());}
-    m_factor=std::make_unique<Eigen::SparseLU<Sparse>>();m_factor->compute(factor);RequireLinear(m_factor->info()==Eigen::Success,"mixed component preconditioner failed");m_initialIterations=m_lastIterations=0;return Clock()-began;
+    ResetPreconditioner();
+    if(amdOrdering)
+    {
+        m_amdFactor=std::make_unique<Eigen::SparseLU<Sparse,Eigen::AMDOrdering<int>>>();
+        m_amdFactor->compute(factor);
+        RequireLinear(m_amdFactor->info()==Eigen::Success,"AMD mixed component preconditioner failed");
+    }
+    else
+    {
+        m_factor=std::make_unique<Eigen::SparseLU<Sparse>>();
+        m_factor->compute(factor);
+        RequireLinear(m_factor->info()==Eigen::Success,"mixed component preconditioner failed");
+    }
+    return Clock()-began;
 }
 Vec MixedFlow::Precondition(const Vec&rhs)const
 {
     Vec b=rhs;double mean=0,lambda=0;
     if(m_gauge){mean=b[Size()-1];lambda=PressureOne().dot(b.segment(PressureOffset(),PressureSize()))/m_volume;b.segment(PressureOffset(),PressureSize())-=PressureMean()*lambda;b[PressureOffset()+m_pressurePivot]=0;b[Size()-1]=0;}
-    Vec x=m_factor->solve(b);RequireLinear(m_factor->info()==Eigen::Success&&x.allFinite(),"mixed component preconditioner application failed");
+    Vec x;
+    if(m_amdFactor)
+    {
+        x=m_amdFactor->solve(b);
+        RequireLinear(m_amdFactor->info()==Eigen::Success&&x.allFinite(),
+                      "AMD mixed component preconditioner application failed");
+    }
+    else
+    {
+        RequireLinear(bool(m_factor),"mixed component preconditioner is not prepared");
+        x=m_factor->solve(b);
+        RequireLinear(m_factor->info()==Eigen::Success&&x.allFinite(),
+                      "mixed component preconditioner application failed");
+    }
     if(m_gauge){x.segment(PressureOffset(),PressureSize())-=PressureOne()*((PressureMean().dot(x.segment(PressureOffset(),PressureSize()))-mean)/m_volume);x[Size()-1]=lambda;}return x;
 }
 SolveInfo MixedFlow::Solve(const Sparse&a,const Vec&b,Vec&x,double change,double tolerance)

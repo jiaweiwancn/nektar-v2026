@@ -251,7 +251,10 @@ Perturbation Perturbation::ReadBfCertificate(const Reference &reference,
     }
     Require(Close(native.epsilonPeakRadius,layout.epsilonPeakRadius),
             "Bf certificate outer peak differs from the native layout");
-    Perturbation result(reference,layout,nativeXEdges,nativeREdges);
+    PerturbationSigns signs{proof.get<int>("signs.velocity",1),
+                            proof.get<int>("signs.k",1),
+                            proof.get<int>("signs.epsilon",1)};
+    Perturbation result(reference,layout,nativeXEdges,nativeREdges,signs);
     PerturbationNormalization normalization;
     normalization.layout=layout;
     normalization.evidenceSha256=sha256;

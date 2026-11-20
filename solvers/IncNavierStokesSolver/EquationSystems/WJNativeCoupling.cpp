@@ -84,7 +84,8 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     Require(m_options.stressSplit=="PositiveShearV1"||m_options.stressSplit=="IsotropicMuV1","unknown numerical stress split");
     Require(m_options.steadyVelocityPC=="FullGradientV1"||m_options.steadyVelocityPC=="PositiveFrozenV1","unknown steady velocity preconditioner");
     Require(m_options.advancement=="PicardV1"||m_options.advancement=="CoupledJFNKV1","unknown implicit coupled solver");
-    Require(m_options.stepPreconditioner=="RebuildEveryNewtonV1"||m_options.stepPreconditioner=="OperatorDriftV1"||m_options.stepPreconditioner=="CurrentDataDriftV1",
+    Require(m_options.stepPreconditioner=="RebuildEveryNewtonV1"||m_options.stepPreconditioner=="OperatorDriftV1"||
+            m_options.stepPreconditioner=="CurrentDataDriftV1"||m_options.stepPreconditioner=="CurrentDataAMDOrderingV1",
         "unknown implicit Newton preconditioner policy");
     Require(std::isfinite(m_options.stepPCRelativeDrift)&&m_options.stepPCRelativeDrift>=0&&m_options.stepPCRelativeDrift<=.25&&
         m_options.stepPCMaximumUses>=1&&m_options.stepPCMaximumUses<=64,"invalid Newton preconditioner refresh policy");

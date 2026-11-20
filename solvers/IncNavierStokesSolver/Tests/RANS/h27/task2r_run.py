@@ -607,25 +607,27 @@ def run(root, book, args, began):
             limits[phase] = 4 if affinity else 3
             host, helpers = workers()
         elif phase == "build":
-            if label.startswith("r3-native-unit-"):
-                path = root / "build-r3" / "r3-unit-plans.json"
+            series = "r3-signed" if label.startswith("r3-signed-") else "r3"
+            build_root = root / f"build-{series}"
+            if label.startswith(f"{series}-native-unit-"):
+                path = build_root / "r3-unit-plans.json"
                 data = json.loads(path.read_text())
                 build_unit = data["units"][label]
                 require(data["schema"] == "WJH27R3ConfiguredUnitPlansV1"
-                        and data["database"] == identity(root / "build-r3" / "compile_commands.json")
+                        and data["database"] == identity(build_root / "compile_commands.json")
                         and command == build_unit["command"]
                         and build_unit["source"] == identity(command[-1])
                         and build_unit["compiler"] == identity(command[0])
-                        and build_unit["directory"] == str(root / "build-r3")
-                        and Path(build_unit["object"]).is_relative_to(root / "build-r3")
+                        and Path(build_unit["directory"]).is_relative_to(build_root)
+                        and Path(build_unit["object"]).is_relative_to(build_root)
                         and command.count("-c") == 1 and not Path(build_unit["object"]).exists(),
                         "single-unit build command differs from its configured admission")
                 build_directory = Path(build_unit["directory"])
                 limits[phase] = 3
                 pause_policy = dict(trigger_workers=78, resume_workers=77, quiet_seconds=3.,
                                     maximum_paused_seconds=260., count_stopped_ownership=True)
-            elif label == "r3-native-link-direct":
-                build_directory = root / "build-r3"
+            elif label == f"{series}-native-link-direct":
+                build_directory = build_root
                 link_recipe = build_directory / "CMakeFiles/IncNavierStokesSolver.dir/link.txt"
                 require(command == shlex.split(link_recipe.read_text())
                         and command[command.index("-o")+1] == "IncNavierStokesSolver"
@@ -636,17 +638,19 @@ def run(root, book, args, began):
                 pause_policy = dict(trigger_workers=78, resume_workers=77, quiet_seconds=3.,
                                     maximum_paused_seconds=135., count_stopped_ownership=True)
             elif command[:2] == ["cmake", "--build"]:
-                require(command[2:4] == [str(root / "build-r3"), "--parallel"]
+                require(command[2:4] == [str(build_root), "--parallel"]
                         and command[4] in ("1", "2", "3", "4"),
                         "R3 build requires its isolated tree and at most four explicit workers")
                 limits[phase] = 14 if command[4] != "1" else 6
             elif command[0] == "make":
-                generated_targets = ("WJNativeMixedFlow", "IncNavierStokesSolver")
-                target = next((name for name in generated_targets if
-                    command == ["make", "-C", str(root / "build-r3"), "-f",
-                                f"CMakeFiles/{name}.dir/build.make", "-j1",
-                                f"CMakeFiles/{name}.dir/build"]), None)
-                require(target and (root/"build-r3/h26-kernel/libWJNativeFlow.a").is_file(),
+                base_target = "h26-kernel/CMakeFiles/WJNativeFlow.dir"
+                generated_targets = (base_target,"CMakeFiles/WJNativeMixedFlow.dir",
+                                     "CMakeFiles/IncNavierStokesSolver.dir")
+                target = next((entry for entry in generated_targets if
+                    command == ["make", "-C", str(build_root), "-f",
+                                f"{entry}/build.make", "-j1", f"{entry}/build"]), None)
+                require(target and (target == base_target or
+                                    (build_root/"h26-kernel/libWJNativeFlow.a").is_file()),
                         "R3 serial resume requires the configured CMake target and completed base library")
                 limits[phase] = 4
                 pause_policy = dict(trigger_workers=78, resume_workers=77, quiet_seconds=3.,

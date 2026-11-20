@@ -43,9 +43,11 @@ public:
      * No time-mass or state-dependent denominator enters this action. */
     SolveInfo RawResidualNorm(const Vec&residual)const;
     const Vec&ResidualRowScale()const{return m_scale;}
-    double PrepareLinearPreconditioner(const Sparse&current){return Prepare(current);}
+    double PrepareLinearPreconditioner(const Sparse&current,bool amdOrdering=false)
+    {return Prepare(current,amdOrdering);}
     Vec ApplyLinearPreconditioner(const Vec&rhs)const{return Precondition(rhs);}
-    void ResetPreconditioner(){m_factor.reset();m_initialIterations=m_lastIterations=0;}
+    void ResetPreconditioner()
+    {m_factor.reset();m_amdFactor.reset();m_initialIterations=m_lastIterations=0;}
     double VelocityDual(const Vec&load)const;
     void SetTransportedKSpace(const MultiRegions::ContFieldSharedPtr&field);
     Vec ProjectTransportedK(const Function&f)const;
@@ -54,7 +56,7 @@ public:
     const MultiRegions::ContFieldSharedPtr&TransportedKField()const{return m_kField;}
 private:
     Vec ProjectNative(const Function&f,const MultiRegions::ContFieldSharedPtr&field)const;
-    double Prepare(const Sparse&current);
+    double Prepare(const Sparse&current,bool amdOrdering=false);
     Vec Precondition(const Vec&rhs)const;
     std::vector<MultiRegions::ContFieldSharedPtr>m_fields;
     Flow m_core;
@@ -68,6 +70,7 @@ private:
     std::array<std::unique_ptr<Eigen::SimplicialLDLT<Sparse>>,2>m_velocityRiesz;
     Eigen::SimplicialLDLT<Sparse>m_pressureRiesz;
     std::unique_ptr<Eigen::SparseLU<Sparse>>m_factor;
+    std::unique_ptr<Eigen::SparseLU<Sparse,Eigen::AMDOrdering<int>>>m_amdFactor;
     MultiRegions::ContFieldSharedPtr m_kField;
     Sparse m_scalarAction;
 };
