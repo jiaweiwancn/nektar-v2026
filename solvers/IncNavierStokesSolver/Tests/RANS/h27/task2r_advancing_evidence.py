@@ -107,6 +107,33 @@ def audit_plan(root, label, native, anchor_label, cap, rss_gib, address_gib, ana
                       "maximum RSS checked separately from inherited virtual memory limits."))
 
 
+def perturbation_plan(root, label, initial_label, parity, certificate, cap, rss_gib, analyzer):
+    artifact = root / "science-r3" / label
+    start = root / "science-r3" / initial_label
+    plan = read(start / "admission.json")
+    receipt = root / "operations" / initial_label / "receipt.json"
+    basis = read(parity)
+    require(plan["phase"] == "r3-initial" and plan["source"] == basis["source"]
+            and read(receipt)["result"]["status"] == "PASS"
+            and plan["initial_fields"] == basis["state"] and plan["certificate"] == identity(certificate)
+            and 0 < rss_gib <= 20 and analyzer.name == "task2r_perturbation_audit.py",
+            "represented perturbation audit requires the named step-zero initialized data")
+    anchor = verified(plan["bf_binding"])
+    bound = read(anchor)
+    base, native = verified(basis["state"]), start / "state.result.json"
+    table = verified(bound["inherited"]["table"])
+    file_inputs = (base, native, table, certificate, receipt, parity, analyzer)
+    command = ["python3", "-B", str(analyzer), "--base", str(base), "--native", str(native),
+               "--table", str(table), "--certificate", str(certificate),
+               "--out", str(artifact / "audit.json"), "--seconds", str(cap-15)]
+    artifact.mkdir()
+    atomic(artifact / "admission.json", dict(schema="WJH27R3AdmissionV1", label=label,
+        phase="r3-audit", role="represented_perturbation", seconds=cap, peak_new_bytes=48*1024**2,
+        cpu=bound["affinity"]["cpu"], bf_binding=identity(anchor), rss_limit_bytes=rss_gib*GIB,
+        command=command, inputs=[identity(p) for p in file_inputs], anchor=identity(receipt),
+        resource_note="Exact rational signed basis and independent dependent-trace and principal checks."))
+
+
 def seal_run(root, label, out):
     import physical_transient_oracle as transient
 
@@ -219,6 +246,8 @@ def main():
         ("layout", (("parity_path", Path), ("out", Path))),
         ("audit-plan", (("label", str), ("native", Path), ("anchor_label", str), ("cap", int),
                         ("rss_gib", int), ("address_gib", int), ("analyzer", Path))),
+        ("perturbation-plan", (("label", str), ("initial_label", str), ("parity", Path),
+                               ("certificate", Path), ("cap", int), ("rss_gib", int), ("analyzer", Path))),
         ("seal", (("label", str), ("out", Path))),
     ):
         mode = modes.add_parser(name)
@@ -226,8 +255,8 @@ def main():
             mode.add_argument(key, type=datatype)
     args = vars(parser.parse_args())
     action = args.pop("action")
-    method = dict(zip(("bind-runtime", "bind-parity", "layout", "audit-plan", "seal"),
-                      (bind_runtime, bind_parity, layout_packet, audit_plan, seal_run)))[action]
+    method = dict(zip(("bind-runtime", "bind-parity", "layout", "audit-plan", "perturbation-plan", "seal"),
+                      (bind_runtime, bind_parity, layout_packet, audit_plan, perturbation_plan, seal_run)))[action]
     method(**args)
 
 
