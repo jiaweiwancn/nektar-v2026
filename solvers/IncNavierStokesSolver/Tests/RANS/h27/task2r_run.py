@@ -22,7 +22,7 @@ BASELINE = "50c57af686e39ab51fd9119eaf126e92264e49dd20f82b90963e2503a9edb016"
 GIB = 1024 ** 3
 LIMITS = {"analysis": 900, "build": 1800, "science": 7200, "evidence": 900,
           "outlet-science": 7200, "r3-advance": 7200, "r3-audit": 3600,
-          "r3-stock": 3600, "r3-restart": 7200, "r3-parity": 900}
+          "r3-stock": 3600, "r3-restart": 7200, "r3-parity": 900, "r3-initial": 600}
 OUTLET_AUTHORIZATION = "9356a31fab90117bf05438281dcf6deef4805b7c18f3323df088e684c94c0037"
 S2_SETTLEMENT = "f2ae3f2c814d22dfa4161e976cd1792e2968b7303cbbe597186421383b52b64e"
 S2_ACCOUNT = "dec44571419200acdb94c9e63c94c6a9a490f78caff158e0b31f92e5b933a784"
@@ -593,20 +593,24 @@ def run(root, book, args, began):
                 cpu = r3_admission["cpu"]
                 require(cpu in os.sched_getaffinity(0), "R3 pinned CPU unavailable")
                 affinity = dict(cpu=cpu, admission=r3_admission["admission"])
-                pause_policy = dict(trigger_workers=78, resume_workers=76, quiet_seconds=4.,
+                pause_policy = dict(trigger_workers=77, resume_workers=76, quiet_seconds=3.,
                                     maximum_paused_seconds=55., count_stopped_ownership=True)
-            limits[phase] = 8
+            # One rank and one MPI launcher, with room for their helpers.
+            limits[phase] = 4 if affinity else 3
+            host, helpers = workers()
         elif phase == "build":
             if command[:2] == ["cmake", "--build"]:
-                require(command[2:5] == [str(root / "build-r3"), "--parallel", "4"],
-                        "R3 build requires four workers and its isolated build tree")
-                limits[phase] = 14
+                require(command[2:4] == [str(root / "build-r3"), "--parallel"]
+                        and command[4] in ("1", "2", "3", "4"),
+                        "R3 build requires its isolated tree and at most four explicit workers")
+                limits[phase] = 14 if command[4] != "1" else 6
             else:
                 require(command[:2] in (["cmake", "-S"], ["cmake", "-E"]),
                         "unexpected R3 build command")
                 limits[phase] = 8
         else:
             require(phase in ("analysis", "evidence"), "unexpected R3 phase")
+            limits[phase] = 3
     elif qualification:
         require(worker_limit == 80, "qualification needs the recorded shared-host allowance")
         rss_limit = qualification["rss_limit_bytes"]
@@ -663,10 +667,12 @@ def run(root, book, args, began):
     update(book, lambda ledger: ledger["entries"].update(
         {label: {"status": "RESERVED", "phase": phase, "reserved_seconds": cap}}))
     peak, peak_workers, code, reason, groups = 0, host, None, None, set()
+    peak_active_workers = host
     job_memory, lowest_headroom = None, None
     pauses, suspended_at, quiet_at, suspended_seconds = [], None, None, 0.
     owned_peak = 0
     rank_affinity = None
+    child_seconds = None
     env = dict(os.environ, **THREADS, PYTHONDONTWRITEBYTECODE="1",
                TMPDIR=str(root / ("tmp-r3" if advancing else "tmp")),
                H27_ROOT=str(root), H27_OPERATION=str(operation))
@@ -674,7 +680,9 @@ def run(root, book, args, began):
     with log_path.open("x") as log:
         try:
             check_storage(info)
-            with subprocess.Popen(launched, cwd=root, env=env, stdout=log,
+            child_began = time.monotonic()
+            child_cwd = Path(command[-1]).parent if r3_admission and affinity else root
+            with subprocess.Popen(launched, cwd=child_cwd, env=env, stdout=log,
                                   stderr=subprocess.STDOUT, start_new_session=True) as child:
                 try:
                     while child.poll() is None:
@@ -693,7 +701,9 @@ def run(root, book, args, began):
                             projected_workers = observed_workers-stopped+owned_peak
                         else:
                             observed_workers = projected_workers = workers()[0]
+                            stopped = 0
                         peak_workers = max(peak_workers, observed_workers)
+                        peak_active_workers = max(peak_active_workers, observed_workers-stopped)
                         require(peak <= rss_limit, "RSS_LIMIT")
                         if memory:
                             current = memory_snapshot()
@@ -724,7 +734,7 @@ def run(root, book, args, began):
                                         suspended_at, quiet_at = None, None
                                 else:
                                     quiet_at = None
-                        require(observed_workers <= worker_limit
+                        require((observed_workers-stopped if advancing else observed_workers) <= worker_limit
                                 or (not advancing and suspended_at is not None), "HOST_WORKER_LIMIT")
                         require(time.monotonic() - began < args.seconds, "TIME_LIMIT")
                         current_storage = storage(root, advancing)
@@ -734,13 +744,14 @@ def run(root, book, args, began):
                             require(peak_r3_bytes - info["r3_science_bytes"] <= r3_admission["peak_new_bytes"],
                                     "R3 operation exceeded its forecast disk allowance")
                         require(log_path.stat().st_size <= 32 * 1024 ** 2, "LOG_LIMIT")
-                        time.sleep(.5)
+                        time.sleep(.25 if advancing and pause_policy else .5)
                     code = child.returncode
                     if affinity and code == 0:
                         require(rank_affinity is not None and rank_affinity["allowed_cpus"] == [affinity["cpu"]],
                                 "verified native rank affinity is missing")
                 except (RuntimeError, OSError, KeyboardInterrupt) as error:
                     code, reason = terminate(child, groups, suspended_at is not None), str(error)
+            child_seconds = time.monotonic() - child_began
         except (RuntimeError, OSError, KeyboardInterrupt) as error:
             reason = str(error)
     output_files = None
@@ -768,6 +779,8 @@ def run(root, book, args, began):
         event["rank_affinity"] = rank_affinity
     settled_storage = storage(root, advancing)
     if advancing:
+        event["child_elapsed_seconds"] = child_seconds
+        event["peak_active_host_workers"] = peak_active_workers
         event["peak_r3_science_bytes"] = max(peak_r3_bytes, settled_storage["r3_science_bytes"])
         try:
             check_storage(settled_storage)
