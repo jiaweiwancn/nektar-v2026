@@ -286,22 +286,44 @@ def seal_run(root, label, out):
 
 
 def time_matrix(root, startup, perturbation, parity_path, represented, preconditioner, out,
-                recovered_prefix=None, coarse_dt=None, selection_evidence=None):
+                recovered_prefix=None, coarse_dt=None, selection_evidence=None, step_cap=None):
     from task2r_advancing import STEP_PRECONDITIONERS
 
     parity = read(parity_path)
     proof = read(represented)
     require(preconditioner in STEP_PRECONDITIONERS and parity["status"] == "MET"
             and proof["status"] == "MET" and proof["base"] == parity["state"]
+            and (step_cap is None or step_cap > 0)
             and all(path.parent == root / "evidence" for path in (startup, perturbation, parity_path, out)),
             "matrix needs a qualified Bf application and represented initial state")
     prefixes = [read(path) for path in (startup, perturbation)]
     levels = []
     for index, (prefix, role) in enumerate(zip(prefixes, ("startup", "perturbed"))):
-        require(prefix["status"] == "PASS", "matrix bracket needs both completed evolving prefixes")
         plan = read(verified(prefix["admission"]))
-        measured = prefix["timing"]
-        step_cost = measured["complete_step_seconds"]
+        trial = plan["timestep"]
+        if index == 0:
+            prefix_dt = trial
+            dt = trial if coarse_dt is None else coarse_dt
+            require(dt in (trial, trial/2) and (dt == trial or selection_evidence is not None),
+                    "a reduced bracket needs a measured prefix result")
+        require(trial == prefix_dt, "the evolving prefixes have different bracket anchors")
+        partial = (prefix["status"] == "FAIL" and role == "perturbed" and dt < trial
+                   and prefix["final_time"] >= 4*dt and recovered_prefix is not None)
+        require(prefix["status"] == "PASS" or partial, "matrix bracket lacks accepted evolving prefix evidence")
+        measured = prefix.get("timing")
+        if partial:
+            # The interrupted process has native step timings. Its setup and
+            # final export use a separately measured identical signed start.
+            init_path = Path(proof["native"]["path"])
+            measured = read(verified(proof["native"]))
+            require(measured["state"]["step"] == 0 and init_path.parent.parent == root/"science-r3",
+                    "matrix timing proxy lacks the signed initialization")
+            recovery_cost = prefixes[0]["timing"]["recovery_seconds"]
+            output_cost = (prefixes[0]["timing"]["scientific_frame_seconds"]+recovery_cost)/prefixes[0]["accepted_steps"]
+            step_cost = [row["seconds"]+output_cost for row in
+                         map(json.loads, verified(prefix["step_log"]).read_text().splitlines())]
+        else:
+            step_cost = measured["complete_step_seconds"]
         hashes = {frame["hashes"]["state_sha256"] for frame in prefix["frames"].values()}
         accepted_steps = prefix["accepted_steps"]
         cost_source = "Observed complete native steps."
@@ -330,22 +352,20 @@ def time_matrix(root, startup, perturbation, parity_path, represented, precondit
                 if step > 1:
                     before = read(verified(before["preceding_anchor"]))
             hashes.add(identity_of_state(verified(first_frame))["state_sha256"])
-            output = (measured["scientific_frame_seconds"] + measured["recovery_seconds"])/accepted_steps
+            output = (output_cost if partial else
+                      (measured["scientific_frame_seconds"] + measured["recovery_seconds"])/accepted_steps)
             step_cost = [*(value+output for value in reversed(early_steps)), *step_cost]
             accepted_steps += len(early_steps)
             cost_source = "Earlier measured accepted engines and an I/O allowance from the completed resumed run."
+            if partial:
+                cost_source = ("Observed accepted step engines, signed-initialization setup and export, and I/O "
+                               "from the completed startup. The accepted BDF2 engine proxies subsequent steps.")
         else:
             require(prefix["role"] == role, "matrix prefix role differs")
-        require(accepted_steps >= 3 and len(hashes) >= 4, "matrix prefix has insufficient evolution")
-        trial = plan["timestep"]
-        if index == 0:
-            prefix_dt = trial
-            dt = trial if coarse_dt is None else coarse_dt
-            require(dt in (trial, trial/2) and (dt == trial or selection_evidence is not None),
-                    "a reduced bracket needs a measured prefix result")
-        require(trial == prefix_dt, "the evolving prefixes have different bracket anchors")
+        require(accepted_steps >= (2 if partial else 3) and len(hashes) >= accepted_steps+1,
+                "matrix prefix has insufficient evolution")
         operation = read(verified(prefix["operation"]))
-        require(operation["result"]["status"] == "PASS", "prefix operation did not pass")
+        require(operation["result"]["status"] == prefix["status"], "prefix operation status differs")
         setup = measured["construction_seconds"] + measured["initialisation_seconds"] + measured["final_export_seconds"]
         pause_fraction = operation["result"]["worker_paused_seconds"] / operation["result"]["seconds"]
         starts = operation["request"]["storage_before"]["r3_science_bytes"]
@@ -353,7 +373,7 @@ def time_matrix(root, startup, perturbation, parity_path, represented, precondit
         peak_mib = max(550, math.ceil(peak / 1024 ** 2) + 150)
         for denominator in (1, 2, 4):
             n = 4 * denominator
-            duration = setup + sum(step_cost[:2]) + (n-2) * max(step_cost[2:])
+            duration = setup + sum(step_cost[:2]) + (n-2) * max(step_cost[2:] or step_cost[1:])
             cap = math.ceil(1.35 * duration + 60)
             require(cap <= 7200, "measured matrix admission exceeds the per-process advancement limit")
             levels.append(dict(role=role, label=f"r3-time-{role}-{denominator}", timestep=dt/denominator,
@@ -361,7 +381,8 @@ def time_matrix(root, startup, perturbation, parity_path, represented, precondit
                 recovery_stride=2*denominator, estimated_elapsed_seconds=duration, cost_source=cost_source,
                 operation_cap_seconds=cap,
                 maximum_pause_seconds=min(cap-1, max(180, min(cap//2, math.ceil(1.2*pause_fraction*cap)))),
-                rss_gib=16, peak_mib=peak_mib, native_step_cap_seconds=plan["native_step_cap_seconds"]))
+                rss_gib=16, peak_mib=peak_mib,
+                native_step_cap_seconds=plan["native_step_cap_seconds"] if step_cap is None else step_cap))
     require(len(levels) == 6 and prefixes[0]["label"] != prefixes[1]["label"], "matrix inventory differs")
     atomic(out, dict(schema="WJH27R3ProspectiveTimeMatrixV1", prefixes=[identity(startup), identity(perturbation)],
         parity=identity(parity_path), represented_perturbation=identity(represented),
@@ -397,6 +418,7 @@ def main():
             mode.add_argument("--recovered-prefix", type=Path)
             mode.add_argument("--coarse-dt", type=float)
             mode.add_argument("--selection-evidence", type=Path)
+            mode.add_argument("--step-cap", type=int)
     args = vars(parser.parse_args())
     action = args.pop("action")
     method = {"bind-runtime": bind_runtime, "bind-parity": bind_parity, "layout": layout_packet,

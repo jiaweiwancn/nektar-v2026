@@ -1,0 +1,88 @@
+{
+  "schema": "WJH27R3FreshFactorReplayV1",
+  "result": "FAIL",
+  "failure": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-prefix-perturbed-fresh-factor/state.failure.json",
+    "bytes": 61024863,
+    "sha256": "83667690066f3944b342c3476161c4c5cfaf609d4f738f20ab01aef16526d3da"
+  },
+  "operation": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-prefix-perturbed-fresh-factor/receipt.json",
+    "bytes": 11941,
+    "sha256": "d3065e08813b6120c788a3709e91390fe8b2f8d8ab1c3c1230248f5369cca5a3"
+  },
+  "restart_anchor": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-perturbed-recovery-2.json",
+    "bytes": 3107,
+    "sha256": "d985bd708d49b241c6a394825f6a2af1b82c6a67c244df56ebc0beb6c78f7d04"
+  },
+  "unchanged_accepted_binary": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-prefix-perturbed-fresh-factor/state.failed-accepted.bin",
+    "bytes": 11014450,
+    "sha256": "182d9c840dd622ad7c5be721059688674254ab4917720e7ddba72d81341942a0"
+  },
+  "accepted_steps": 0,
+  "final_time": 0.08,
+  "reason": "current implicit Newton step failed: DEADLINE: finite steady-solve wall budget exhausted",
+  "failed_attempt": {
+    "nonlinear_iterations": 2,
+    "seconds": 491.70334031799575,
+    "retries": 0,
+    "residuals": [
+      1.5678780880811618e-9,
+      3.67350027812975e-12,
+      0,
+      1.6418890694066468e-8,
+      8.934206444967122e-9,
+      0
+    ],
+    "coupled_krylov_iterations": 36,
+    "coupled_residual_evaluations": 143,
+    "coupled_statistics_complete": true,
+    "coupled_preconditioner_applications": 36,
+    "rebuilds": 3,
+    "disjoint_seconds": {
+      "constitutive": 45.386625232262304,
+      "wall": 18.301738509675488,
+      "assembly": 116.76516622200143,
+      "flow": 50.33070431792294,
+      "scalar": 5.19853039708687,
+      "rebuild": 181.7542347999988,
+      "guards": 12.158806167106377,
+      "forcing": 0.013055666000582278,
+      "residual": 57.63801797913038,
+      "nonlinear": 4.010464088787558,
+      "io": 0,
+      "other": 0.14599693802301772
+    },
+    "acceleration_proposals": 0,
+    "acceleration_accepted": 0,
+    "nonlinear_trace": [],
+    "preconditioner_policy": "CurrentDataDriftV1",
+    "mixed_sparse_ordering": "COLAMD",
+    "drift_measure": "ScaledCurrentQuadratureDataL2V1",
+    "relative_drift_limit": 0.02,
+    "maximum_uses": 8,
+    "refreshes": 1,
+    "reuses": 2,
+    "maximum_used_age": 3,
+    "refresh_reasons": {
+      "cold": 1,
+      "alpha": 0,
+      "drift": 0,
+      "age": 0,
+      "control": 0,
+      "retry": 0,
+      "injected": 0
+    },
+    "preconditioner_events_recorded": false,
+    "preconditioner_events": []
+  },
+  "resources": {
+    "seconds": 597.1968839679903,
+    "worker_paused_seconds": 122.91218730996479,
+    "child_elapsed_seconds": 595.9343428210123,
+    "peak_active_host_workers": 79,
+    "peak_tree_rss_bytes": 10235256832
+  }
+}
