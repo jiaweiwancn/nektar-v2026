@@ -1,0 +1,264 @@
+{
+  "schema": "WJH27R3MiddleStartupFreshFactorV1",
+  "account": {
+    "charged_seconds": 104172.58801358569,
+    "nonprotected_remaining": 20431.411986414314,
+    "reserved_seconds": 0,
+    "tranche_remaining": 4659.702706019249
+  },
+  "cases": {
+    "r3-time-startup-2-recovered": {
+      "accepted_steps": 1,
+      "admission": {
+        "bytes": 4855,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-2-recovered/admission.json",
+        "sha256": "eb6c3e9aefc21bf24090702954b7671e8bc244374132297e4e5c054af408494b"
+      },
+      "failure": {
+        "accepted_residuals": [
+          2.8293633691519873e-12,
+          1.2156801221457503e-14,
+          0,
+          2.2179634144019466e-12,
+          1.8835493091469664e-12,
+          0
+        ],
+        "file": {
+          "bytes": 61108166,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-2-recovered/state.failure.json",
+          "sha256": "5c89f380f5c54f24c1ce77e9a5569a3f2579b8243ebbdf755f3530bc4866b28e"
+        },
+        "header": {
+          "accepted_state_residual_kind": "last accepted complete time-step residual",
+          "elapsed_solve_seconds": 881.5873514800041,
+          "exception_type": "std::runtime_error",
+          "failed_attempt": {
+            "acceleration_accepted": 0,
+            "acceleration_proposals": 0,
+            "coupled_krylov_iterations": 92,
+            "coupled_preconditioner_applications": 92,
+            "coupled_residual_evaluations": 371,
+            "coupled_statistics_complete": true,
+            "disjoint_seconds": {
+              "assembly": 239.43210405294667,
+              "constitutive": 101.79586417871178,
+              "flow": 108.2387074410799,
+              "forcing": 0,
+              "guards": 19.820707154431148,
+              "io": 0,
+              "nonlinear": 11.616521094343625,
+              "other": 0.17778817101498134,
+              "rebuild": 1.0672986260033213,
+              "residual": 110.24065447182511,
+              "scalar": 14.19459673127858,
+              "wall": 45.551596213364974
+            },
+            "drift_measure": "ScaledCurrentQuadratureDataL2V1",
+            "maximum_used_age": 6,
+            "maximum_uses": 8,
+            "mixed_sparse_ordering": "COLAMD",
+            "nonlinear_iterations": 2,
+            "nonlinear_trace": [],
+            "preconditioner_events": [],
+            "preconditioner_events_recorded": false,
+            "preconditioner_policy": "CurrentDataDriftV1",
+            "rebuilds": 0,
+            "refresh_reasons": {
+              "age": 0,
+              "alpha": 0,
+              "cold": 0,
+              "control": 0,
+              "drift": 0,
+              "injected": 0,
+              "retry": 0
+            },
+            "refreshes": 0,
+            "relative_drift_limit": 0.02,
+            "residuals": [
+              5.7758270854732014e-11,
+              1.0447529639433671e-13,
+              0,
+              5.525548505160346e-10,
+              3.2909010490593493e-10,
+              0
+            ],
+            "retries": 0,
+            "reuses": 3,
+            "seconds": 652.1358381350001
+          },
+          "reason": "current implicit Newton step failed: DEADLINE: finite steady-solve wall budget exhausted",
+          "schema": "WJH27CoupledFailureV1",
+          "status": "FAILED_WITH_ACCEPTED_HISTORY_PRESERVED"
+        },
+        "preserved": {
+          "bytes": 11014450,
+          "decoded_history_body_sha256": "61304e33ea589ca8bd806abc3effc3fabdfc2f1dbe5bdba574f4e04a057cbcdc",
+          "dt": 0.01,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-2-recovered/state.failed-accepted.bin",
+          "payload_sha256": "82e37d0e8aaddd37fc42222e9a2edbf9fee7588f66cea222ae9526e0b22f8459",
+          "sha256": "17146d100c29b32a168a78d98e953ae22b780306abdd7d5ac67b73195d44395c",
+          "signature": "308d7fd06bf1188991decfb682111e22fbec8c9f24a321ec0fbd802ec42b990b",
+          "step": 6,
+          "time": 0.06
+        }
+      },
+      "final_time": 0.06,
+      "frames": {
+        "5": {
+          "bytes": 30097196,
+          "hashes": {
+            "advection_sha256": "751ffb45a96165b037d8c9a792cd23d88171b3c8c58333db77357e0d950ffad2",
+            "previous_advection_sha256": "6a1fe44a0753d862c71f1c9aed0cddfcfd476cb62182a5cfeafaf37bcc8c0079",
+            "previous_sha256": "b47e3a9b0b7af1edb09638aa0313c800273ba014c882ed53c301d0297bfe3de9",
+            "state_sha256": "bc26d73400e8b75c6cb474bcfd97c0ac7fbf26c984de02764b82cfa8b12fd529"
+          },
+          "origin": "imported_accepted_history",
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-2-recovered/state.science-5.json",
+          "reason_mask": 8,
+          "sha256": "9e745c1a7a3c9f7efa4f624c80b975bd0757f86b120bac3d0672f82695406022",
+          "step": 5,
+          "time": 0.05,
+          "write_seconds": 1.7908365220064297
+        },
+        "6": {
+          "bytes": 61106246,
+          "hashes": {
+            "advection_sha256": "fa6628fa31209464473cb23dfd93651c67cf2913807f5894207acfd7d3b643bf",
+            "previous_advection_sha256": "751ffb45a96165b037d8c9a792cd23d88171b3c8c58333db77357e0d950ffad2",
+            "previous_sha256": "bc26d73400e8b75c6cb474bcfd97c0ac7fbf26c984de02764b82cfa8b12fd529",
+            "state_sha256": "2495f0bad2c82b6bfb9b1f2fc4e59d5e6e21a9e7f74c14944417bc9c3d719cd0"
+          },
+          "origin": "current_process_accepted_step",
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-2-recovered/state.science-6.json",
+          "reason_mask": 1,
+          "sha256": "ad0bdc92e04c5009f75b6e3b4cb52ccad9a04c28cd6fa0a2c505d4f106c5b1b4",
+          "step": 6,
+          "time": 0.06,
+          "write_seconds": 2.518509877001634
+        }
+      },
+      "label": "r3-time-startup-2-recovered",
+      "operation": {
+        "exit": 1,
+        "peak_active_host_workers": 77,
+        "peak_host_workers": 157,
+        "peak_stopped_host_workers": 80,
+        "peak_tree_rss_bytes": 10286735360,
+        "phase": "r3-restart",
+        "rank_affinity": {
+          "allowed_cpus": [
+            0
+          ],
+          "pid": 546140,
+          "startup_cpus": [
+            0
+          ]
+        },
+        "reason": null,
+        "seconds": 963.877512623003,
+        "status": "FAIL",
+        "worker_limit": 80,
+        "worker_paused_seconds": 0
+      },
+      "receipt": {
+        "bytes": 7175,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-time-startup-2-recovered/receipt.json",
+        "sha256": "d2edcd3a947a802aead13f2dbc2282ff7f170e2efbc564d47554b9292a151c52"
+      },
+      "recipe": {
+        "application": {
+          "bytes": 10067520,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3-timed/IncNavierStokesSolver",
+          "sha256": "fcccad2abd9e2466de2b271c646d7dda10c2165801841c0d2c2abdab3cf1ea8a"
+        },
+        "certificate": null,
+        "fd_step": 0.000001,
+        "initial_fields": null,
+        "native_step_cap_seconds": 650,
+        "represented_proof": null,
+        "requested_steps": 3,
+        "source": "42b0ded162d5fc8fba899542f9cb39c5cf71eedf50b0c1ee686c46ce9f8f9ab9",
+        "step_preconditioner": "CurrentDataDriftV1",
+        "timestep": 0.01
+      },
+      "recoveries": [
+        {
+          "bytes": 11014450,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-2-recovered/state.failed-accepted.bin",
+          "sha256": "17146d100c29b32a168a78d98e953ae22b780306abdd7d5ac67b73195d44395c"
+        },
+        {
+          "bytes": 11014450,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-2-recovered/state.recovery-6.bin",
+          "sha256": "17146d100c29b32a168a78d98e953ae22b780306abdd7d5ac67b73195d44395c"
+        }
+      ],
+      "seal": {
+        "bytes": 4042,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-time-startup-2-recovered.json",
+        "sha256": "9c7c0b60da2d3fed94728bad643ba12a75ccd009c2570795c0489ce5d2c598e8"
+      },
+      "timing": null
+    }
+  },
+  "census": {
+    "active": 72,
+    "owned": 0,
+    "parked_helpers": 108,
+    "stopped": 80,
+    "stopped_owned": 0,
+    "total": 152
+  },
+  "ledger": {
+    "bytes": 714899,
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/accounting.json",
+    "sha256": "771f0451c5f60f936b5c6bad2491b26222faa56dbfa998721ec3bcbc9bd2e692"
+  },
+  "storage": {
+    "free_bytes": 3460585832448,
+    "r3_science_bytes": 2777994534,
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 751264358
+  },
+  "recovery_lineage": {
+    "from_checkpoint": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-2/state.failed-accepted.bin",
+      "sha256": "0662f1ddfccd35e11180b88446cb503eaf59f35f926dde17fc3cdd0d441b349c",
+      "bytes": 11014450,
+      "payload_sha256": "a7aedee950393f0fc70446b1ecb97b2389421d22ccb5c67f8bfa8b69d3a765e0",
+      "signature": "308d7fd06bf1188991decfb682111e22fbec8c9f24a321ec0fbd802ec42b990b",
+      "step": 5,
+      "time": 0.05,
+      "dt": 0.01,
+      "hashes": {
+        "current": "bc26d73400e8b75c6cb474bcfd97c0ac7fbf26c984de02764b82cfa8b12fd529",
+        "previous": "b47e3a9b0b7af1edb09638aa0313c800273ba014c882ed53c301d0297bfe3de9",
+        "advection": "751ffb45a96165b037d8c9a792cd23d88171b3c8c58333db77357e0d950ffad2",
+        "previous_advection": "6a1fe44a0753d862c71f1c9aed0cddfcfd476cb62182a5cfeafaf37bcc8c0079"
+      }
+    },
+    "imported_frame": {
+      "bytes": 30097196,
+      "hashes": {
+        "advection_sha256": "751ffb45a96165b037d8c9a792cd23d88171b3c8c58333db77357e0d950ffad2",
+        "previous_advection_sha256": "6a1fe44a0753d862c71f1c9aed0cddfcfd476cb62182a5cfeafaf37bcc8c0079",
+        "previous_sha256": "b47e3a9b0b7af1edb09638aa0313c800273ba014c882ed53c301d0297bfe3de9",
+        "state_sha256": "bc26d73400e8b75c6cb474bcfd97c0ac7fbf26c984de02764b82cfa8b12fd529"
+      },
+      "origin": "imported_accepted_history",
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-2-recovered/state.science-5.json",
+      "reason_mask": 8,
+      "sha256": "9e745c1a7a3c9f7efa4f624c80b975bd0757f86b120bac3d0672f82695406022",
+      "step": 5,
+      "time": 0.05,
+      "write_seconds": 1.7908365220064297
+    },
+    "all_four_imported_history_hashes_match": true,
+    "scheduled_checkpoint": {
+      "bytes": 11014450,
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-2-recovered/state.recovery-6.bin",
+      "sha256": "17146d100c29b32a168a78d98e953ae22b780306abdd7d5ac67b73195d44395c"
+    },
+    "scheduled_and_failure_checkpoints_byte_identical": true
+  }
+}
