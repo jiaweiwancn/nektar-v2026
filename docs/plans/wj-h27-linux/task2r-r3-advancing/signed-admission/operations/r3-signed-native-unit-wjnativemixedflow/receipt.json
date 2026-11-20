@@ -1,0 +1,221 @@
+{
+  "request": {
+    "label": "r3-signed-native-unit-wjnativemixedflow",
+    "phase": "build",
+    "command": [
+      "/usr/bin/c++",
+      "-DENABLE_NEKTAR_EXCEPTIONS",
+      "-DNEKTAR_MEMORY_POOL_ENABLED",
+      "-DNEKTAR_MPI_TYPE=0",
+      "-DNEKTAR_USE_MPI",
+      "-DNEKTAR_USE_SCOTCH",
+      "-DSOLVER_UTILS_EXPORTS",
+      "-DTIXML_USE_STL",
+      "-DWJ_H27_SOURCE_ID=\"91f52f03e10c80c02fca536284cecde85d5111d9a5cf5ec3cc9eb79e794bd455\"",
+      "-I/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/source-r3-signed/library",
+      "-I/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/source-r3-signed/solvers",
+      "-isystem",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/install/mpi-release/include/nektar++",
+      "-isystem",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/source-r3-signed/solvers/IncNavierStokesSolver/Tests/RANS/h27/include/nektar++",
+      "-isystem",
+      "/usr/lib/x86_64-linux-gnu/openmpi/include",
+      "-isystem",
+      "/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi",
+      "-isystem",
+      "/usr/include/scotch",
+      "-isystem",
+      "/usr/include/eigen3",
+      "-O3",
+      "-DNDEBUG",
+      "-DNEKTAR_USE_MPI",
+      "-pthread",
+      "-O3",
+      "-ffp-contract=off",
+      "-fno-fast-math",
+      "-Wall",
+      "-Wextra",
+      "-Wno-sign-compare",
+      "-std=gnu++17",
+      "-o",
+      "CMakeFiles/WJNativeMixedFlow.dir/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/source-r3-signed/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.cpp.o",
+      "-MD",
+      "-MT",
+      "CMakeFiles/WJNativeMixedFlow.dir/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/source-r3-signed/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.cpp.o",
+      "-MF",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3-signed/CMakeFiles/WJNativeMixedFlow.dir/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/source-r3-signed/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.cpp.o.d",
+      "-c",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/source-r3-signed/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.cpp"
+    ],
+    "cap_seconds": 510.0,
+    "reserved_seconds": 517.0,
+    "workers_before": 74,
+    "idle_mpi_event_helpers": 108,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 8463861449,
+      "source_build_runtime_bytes": 611181549,
+      "free_bytes": 3517885169664,
+      "r3_science_bytes": 877454346
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v13/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_run.py",
+      "bytes": 51384,
+      "sha256": "80a2354c5d25002b1069f3caba3a8a8a5275f50b801d14a82836972d1e311269"
+    },
+    "rss_limit_bytes": 17179869184,
+    "memory_before": null,
+    "worker_pause_policy": {
+      "trigger_workers": 78,
+      "resume_workers": 77,
+      "quiet_seconds": 3.0,
+      "maximum_paused_seconds": 260.0,
+      "count_stopped_ownership": true
+    },
+    "worker_limit": 80,
+    "worker_admission_margin": 3,
+    "input_files": [
+      {
+        "path": "/usr/bin/x86_64-linux-gnu-g++-11",
+        "bytes": 932680,
+        "sha256": "2360901d864cf10bfd6296e261cb2c14053552a80377761ab07146ec9ec9a2c0"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/source-r3-signed/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.cpp",
+        "bytes": 18773,
+        "sha256": "f8e57f5b10340aa643a7cc629b3bf529c511339ff47227b53e90ec57d787fc0a"
+      }
+    ],
+    "configured_unit": {
+      "command": [
+        "/usr/bin/c++",
+        "-DENABLE_NEKTAR_EXCEPTIONS",
+        "-DNEKTAR_MEMORY_POOL_ENABLED",
+        "-DNEKTAR_MPI_TYPE=0",
+        "-DNEKTAR_USE_MPI",
+        "-DNEKTAR_USE_SCOTCH",
+        "-DSOLVER_UTILS_EXPORTS",
+        "-DTIXML_USE_STL",
+        "-DWJ_H27_SOURCE_ID=\"91f52f03e10c80c02fca536284cecde85d5111d9a5cf5ec3cc9eb79e794bd455\"",
+        "-I/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/source-r3-signed/library",
+        "-I/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/source-r3-signed/solvers",
+        "-isystem",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/install/mpi-release/include/nektar++",
+        "-isystem",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/source-r3-signed/solvers/IncNavierStokesSolver/Tests/RANS/h27/include/nektar++",
+        "-isystem",
+        "/usr/lib/x86_64-linux-gnu/openmpi/include",
+        "-isystem",
+        "/usr/lib/x86_64-linux-gnu/openmpi/include/openmpi",
+        "-isystem",
+        "/usr/include/scotch",
+        "-isystem",
+        "/usr/include/eigen3",
+        "-O3",
+        "-DNDEBUG",
+        "-DNEKTAR_USE_MPI",
+        "-pthread",
+        "-O3",
+        "-ffp-contract=off",
+        "-fno-fast-math",
+        "-Wall",
+        "-Wextra",
+        "-Wno-sign-compare",
+        "-std=gnu++17",
+        "-o",
+        "CMakeFiles/WJNativeMixedFlow.dir/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/source-r3-signed/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.cpp.o",
+        "-MD",
+        "-MT",
+        "CMakeFiles/WJNativeMixedFlow.dir/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/source-r3-signed/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.cpp.o",
+        "-MF",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3-signed/CMakeFiles/WJNativeMixedFlow.dir/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/source-r3-signed/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.cpp.o.d",
+        "-c",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/source-r3-signed/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.cpp"
+      ],
+      "directory": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3-signed",
+      "source": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/source-r3-signed/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.cpp",
+        "bytes": 18773,
+        "sha256": "f8e57f5b10340aa643a7cc629b3bf529c511339ff47227b53e90ec57d787fc0a"
+      },
+      "compiler": {
+        "path": "/usr/bin/x86_64-linux-gnu-g++-11",
+        "bytes": 932680,
+        "sha256": "2360901d864cf10bfd6296e261cb2c14053552a80377761ab07146ec9ec9a2c0"
+      },
+      "object": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3-signed/CMakeFiles/WJNativeMixedFlow.dir/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/source-r3-signed/solvers/IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.cpp.o"
+    }
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "build",
+    "seconds": 56.42560316200252,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 1520959488,
+    "peak_host_workers": 79,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-signed-native-unit-wjnativemixedflow/command.log",
+      "bytes": 2424,
+      "sha256": "f397fcce5724f67e113daff1e2c13aec13a3a71a58690d1a6638b000a78bc91c"
+    },
+    "rss_limit_bytes": 17179869184,
+    "job_memory": null,
+    "minimum_memory_headroom_bytes": null,
+    "worker_limit": 80,
+    "peak_owned_workers": 2,
+    "worker_pauses": [
+      {
+        "start_seconds": 7.894125246995827,
+        "workers_at_stop": 79,
+        "end_seconds": 11.927933893020963,
+        "workers_at_resume": 76,
+        "projected_workers_at_resume": 76
+      },
+      {
+        "start_seconds": 15.837242134002736,
+        "workers_at_stop": 78,
+        "end_seconds": 19.732859397016,
+        "workers_at_resume": 76,
+        "projected_workers_at_resume": 76
+      },
+      {
+        "start_seconds": 22.906450274022063,
+        "workers_at_stop": 78,
+        "end_seconds": 26.886351755005307,
+        "workers_at_resume": 76,
+        "projected_workers_at_resume": 76
+      },
+      {
+        "start_seconds": 29.90600930500659,
+        "workers_at_stop": 78,
+        "end_seconds": 39.50285327000893,
+        "workers_at_resume": 76,
+        "projected_workers_at_resume": 76
+      }
+    ],
+    "worker_paused_seconds": 21.50617135502398,
+    "child_elapsed_seconds": 55.7157927909866,
+    "peak_active_host_workers": 79,
+    "peak_r3_science_bytes": 879023114
+  },
+  "balance": {
+    "charged_seconds": 90016.15517958964,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 14383.844820410362,
+    "tranche_remaining": 7467.135540015297
+  },
+  "storage": {
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 611947218,
+    "free_bytes": 3517801484288,
+    "r3_science_bytes": 877454346
+  }
+}

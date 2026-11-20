@@ -95,11 +95,13 @@ def layout_packet(root, parity_path, out):
         layouts={BF_SHAPE: shape}, same_mesh_parity=identity(parity_path)))
 
 
-def audit_plan(root, label, native, anchor_label, cap, rss_gib, address_gib, analyzer):
+def audit_plan(root, label, native, anchor_label, cap, rss_gib, address_gib, analyzer,
+               maximum_pause=None):
     from physical_oracle import load_native
 
     case = root / "science-r3" / label
     require(3 <= rss_gib <= 20 and 0 < address_gib <= 20
+            and (maximum_pause is None or 0 < maximum_pause <= cap)
             and analyzer.name == "physical_transient_oracle.py",
             "invalid independent audit resources")
     anchor = root / "operations" / anchor_label / "receipt.json"
@@ -120,6 +122,7 @@ def audit_plan(root, label, native, anchor_label, cap, rss_gib, address_gib, ana
     atomic(case / "admission.json", dict(schema="WJH27R3AdmissionV1", label=label,
         phase="r3-audit", role="accepted_time_discrete", seconds=cap, peak_new_bytes=192*1024**2,
         rss_limit_bytes=rss_gib*GIB, address_space_gib=address_gib, cpu=bound["affinity"]["cpu"],
+        maximum_paused_seconds=maximum_pause,
         bf_binding=identity(base_path), command=command, anchor=identity(anchor),
         inputs=[identity(p) for p in (native, table, analyzer, anchor)],
         resource_anchors=[bound["x15_parity"], bound["inherited"]["binding"]["operation"]],
@@ -274,6 +277,8 @@ def main():
         mode = modes.add_parser(name)
         for key, datatype in args:
             mode.add_argument(key, type=datatype)
+        if name == "audit-plan":
+            mode.add_argument("--maximum-pause", type=int)
     args = vars(parser.parse_args())
     action = args.pop("action")
     method = dict(zip(("bind-runtime", "bind-parity", "layout", "audit-plan", "perturbation-plan", "seal"),
