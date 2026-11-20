@@ -10,7 +10,7 @@ import physical_oracle as po
 from physical_cache_history_check import binary_history
 from physical_transient_oracle import state_hash
 from resources import atomic, identity
-from task2r_advancing import read, require, verified
+from task2r_advancing import DEFAULT_FD_STEP, read, require, verified
 from task2r_advancing_evidence import HASH_KEYS
 from task2s_observations import compare
 
@@ -38,6 +38,7 @@ def common_time(coarse, fine, coarse_step, fine_step, out, seconds):
     inputs = ("role","source","application","geometry","table","initial_fields","certificate",
               "represented_proof","step_preconditioner")
     require(a["role"] in ("startup","perturbed") and all(a.get(k) == b.get(k) for k in inputs)
+            and a.get("fd_step",DEFAULT_FD_STEP) == b.get("fd_step",DEFAULT_FD_STEP)
             and sa["elements"] == sb["elements"] and a["timestep"] >= b["timestep"]
             and abs(sa["time"]-sb["time"]) <= 2e-13*max(1.,sa["time"]),
             "trajectory or exact common-time binding differs")
@@ -98,6 +99,8 @@ def cold(uninterrupted, resumed, split, checkpoint, out, seconds, uninterrupted_
     initial = ("role", "initial_fields", "certificate", "represented_proof")
     require(p["step"] == c["step"] > s["step"] >= 2 and exact_clock(p,c)
             and all(pa[k] == ca[k] == sa[k] for k in invariant)
+            and pa.get("fd_step",DEFAULT_FD_STEP) == ca.get("fd_step",DEFAULT_FD_STEP)
+            == sa.get("fd_step",DEFAULT_FD_STEP)
             and all(pa.get(k) == sa.get(k) for k in initial)
             and p["signature"] == s["signature"] and ca["restart"] == identity(checkpoint)
             and checkpoint == split/f"state.recovery-{s['step']}.bin"

@@ -1,0 +1,42 @@
+{
+  "schema": "WJH27R3StagedContinuationForecastV1",
+  "matrix": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-time-matrix.json",
+    "bytes": 5498,
+    "sha256": "b23684e5bdc09056b2302c0a2d3596c516b7084e199a33172642079309f3a72b"
+  },
+  "cap": 3150,
+  "available_global": 4651.842498078331,
+  "available_staged": 2145.1332176832657,
+  "additional_internal_allocation_seconds": 1364,
+  "launch": {
+    "role": "perturbed",
+    "label": "r3-time-perturbed-2",
+    "timestep": 0.01,
+    "steps": 8,
+    "common_steps": [
+      4,
+      8
+    ],
+    "science_stride": 4,
+    "recovery_stride": 4,
+    "estimated_elapsed_seconds": 2288.5989618349026,
+    "cost_source": "Observed accepted step engines, signed-initialization setup and export, and I/O from the completed startup. The accepted BDF2 engine proxies subsequent steps.",
+    "operation_cap_seconds": 3150,
+    "maximum_pause_seconds": 718,
+    "rss_gib": 16,
+    "peak_mib": 550,
+    "native_step_cap_seconds": 650
+  },
+  "rationale": "Execute the already frozen .01 signed trajectory after the .02 deadline failure.",
+  "failed_coarsest": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-time-perturbed-1/receipt.json",
+    "bytes": 6972,
+    "sha256": "ac6ab74c0008fb4a2edd734d14f5d5415a1c7ec9c95872742fdcd689aead7457"
+  },
+  "matched_completed_startup": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-time-startup-1/receipt.json",
+    "bytes": 6951,
+    "sha256": "819e6f72ee996f2cc93c529c7f1c026998a65d3888b0b64c879463b605d2e769"
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "schema": "WJH27R3CoarsestSignedFailureV1",
+  "failure": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-1/state.failure.json",
+    "bytes": 61026490,
+    "sha256": "46769f120aca7c690e79f082b5428da9339c03f7359927d90cd8da9e93d8f6a0"
+  },
+  "receipt": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-time-perturbed-1/receipt.json",
+    "bytes": 6972,
+    "sha256": "ac6ab74c0008fb4a2edd734d14f5d5415a1c7ec9c95872742fdcd689aead7457"
+  },
+  "preserved": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-1/state.failed-accepted.bin",
+    "bytes": 11014450,
+    "sha256": "5c182b6971a9b8e36d56695a1bb11bdbaa0b729e9b6aebfd0fcd83e9f33e4d3a"
+  },
+  "last_accepted": {
+    "step": 1,
+    "time": 0.02,
+    "dt": 0.02,
+    "coefficient_sha256": "6725ae86f636d898a1e76f21cd736cb189116624b98c89376e3a93cc92792a5a",
+    "residuals": [
+      3.391891768797035e-11,
+      7.959053625023468e-14,
+      0,
+      1.884077583382665e-11,
+      1.3337632467897327e-11,
+      0
+    ]
+  },
+  "reason": "current implicit Newton step failed: DEADLINE: finite steady-solve wall budget exhausted",
+  "failed_attempt": {
+    "nonlinear_iterations": 2,
+    "seconds": 651.9904806200066,
+    "retries": 0,
+    "residuals": [
+      1.2559476689712712e-9,
+      5.086419806587669e-12,
+      0,
+      6.667212842028513e-9,
+      4.693827510203884e-9,
+      0
+    ],
+    "coupled_krylov_iterations": 93,
+    "coupled_residual_evaluations": 373,
+    "coupled_statistics_complete": true,
+    "coupled_preconditioner_applications": 93,
+    "rebuilds": 3,
+    "disjoint_seconds": {
+      "constitutive": 104.45651620539138,
+      "wall": 36.794328146614134,
+      "assembly": 214.55908385285875,
+      "flow": 71.431379410089,
+      "scalar": 10.148865180992289,
+      "rebuild": 111.4613713970175,
+      "guards": 19.231398001225898,
+      "forcing": 0,
+      "residual": 76.38841160421725,
+      "nonlinear": 7.394679096585605,
+      "io": 0,
+      "other": 0.12444772501476109
+    },
+    "acceleration_proposals": 0,
+    "acceleration_accepted": 0,
+    "nonlinear_trace": [],
+    "preconditioner_policy": "CurrentDataDriftV1",
+    "mixed_sparse_ordering": "COLAMD",
+    "drift_measure": "ScaledCurrentQuadratureDataL2V1",
+    "relative_drift_limit": 0.02,
+    "maximum_uses": 8,
+    "refreshes": 1,
+    "reuses": 2,
+    "maximum_used_age": 3,
+    "refresh_reasons": {
+      "cold": 0,
+      "alpha": 1,
+      "drift": 0,
+      "age": 0,
+      "control": 0,
+      "retry": 0,
+      "injected": 0
+    },
+    "preconditioner_events_recorded": false,
+    "preconditioner_events": []
+  },
+  "resource": {
+    "seconds": 915.0989210330008,
+    "worker_paused_seconds": 0,
+    "peak_active_host_workers": 75,
+    "peak_tree_rss_bytes": 12065050624
+  }
+}
