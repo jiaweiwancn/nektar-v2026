@@ -1,0 +1,82 @@
+{
+  "schema": "WJH27R3AdmissionV1",
+  "label": "r3-stock-coarse-3",
+  "phase": "r3-stock",
+  "role": "conventional_retained_inlet",
+  "seconds": 300,
+  "peak_new_bytes": 134217728,
+  "rss_limit_bytes": 8589934592,
+  "cpu": 0,
+  "bf_binding": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-bf-binding.json",
+    "bytes": 8452,
+    "sha256": "7350dfccdb51114f34aa940ea53e7352717309843d95ff3bcdbd90a69386392a"
+  },
+  "command": [
+    "mpirun",
+    "-np",
+    "1",
+    "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3-timed/IncNavierStokesSolver",
+    "--use-opt-file",
+    "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-3/run.xml.opt",
+    "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-3/run.xml"
+  ],
+  "geometry": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bf-continue-1/geometry.xml",
+    "bytes": 1675595,
+    "sha256": "3a14dd102a8f1c829b7a5331bc7d5bedc35664c3a3d736caa6c0bc3bcd0b0ff4"
+  },
+  "fixture": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-3/run.xml",
+    "bytes": 1772505,
+    "sha256": "35582e20f0da525e39bd40e980c81ae66a104116084f859f3691d91a02a90dfb"
+  },
+  "options": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-3/run.xml.opt",
+    "bytes": 55,
+    "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+  },
+  "application": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3-timed/IncNavierStokesSolver",
+    "bytes": 10067520,
+    "sha256": "fcccad2abd9e2466de2b271c646d7dda10c2165801841c0d2c2abdab3cf1ea8a"
+  },
+  "timestep": 0.02,
+  "requested_steps": 4,
+  "stock_svv": "Off",
+  "recovery_stride": 2,
+  "inputs": [
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-1/admission.json",
+      "bytes": 4219,
+      "sha256": "c0f28c69a4e7d4a5a697a87baed8c8208aba94edfd8c8b21519e9832bf180bc0"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bf-continue-1/geometry.xml",
+      "bytes": 1675595,
+      "sha256": "3a14dd102a8f1c829b7a5331bc7d5bedc35664c3a3d736caa6c0bc3bcd0b0ff4"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+      "bytes": 139982,
+      "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+    }
+  ],
+  "physics": {
+    "viscosity": 6.423173803526447e-05,
+    "order": [
+      3,
+      2
+    ],
+    "gauss": [
+      6,
+      8
+    ],
+    "inlet": "Exact-inner polynomial panels kinematically continued to the retained outer log profile",
+    "transverse": "Zero at inlet, ground, top and exit",
+    "wall_loads": "No-slip ground, zero diffusive axial trace at top and outlet",
+    "pressure": "Zero outlet Dirichlet and weak high-order Neumann data elsewhere",
+    "excluded": "RANS transport, current-K wall cutoff and stress/production/AWF panels",
+    "output": "Native stock velocity/pressure fields and on-cadence checkpoint filter"
+  }
+}

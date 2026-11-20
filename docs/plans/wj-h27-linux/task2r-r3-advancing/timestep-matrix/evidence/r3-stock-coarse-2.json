@@ -1,0 +1,133 @@
+{
+  "schema": "WJH27R3ConventionalCostV1",
+  "status": "MET",
+  "admission": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-2/admission.json",
+    "bytes": 3704,
+    "sha256": "bb6c6b074633f9913c09d65351fad2d7b6b35f1ddaf5d5609e32ce5786c5833e"
+  },
+  "operation": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-stock-coarse-2/receipt.json",
+    "bytes": 7074,
+    "sha256": "9b3f172cdc4cd3ae6a42dcb996b7982ba068461e5d2b6527e5f8cba34f422063"
+  },
+  "solver_status": "PASS",
+  "process_seconds": 22.36785217799479,
+  "step_report": [
+    [
+      1,
+      0.02,
+      6.16051
+    ],
+    [
+      2,
+      0.04,
+      5.27046
+    ],
+    [
+      3,
+      0.06,
+      0.20473
+    ],
+    [
+      4,
+      0.08,
+      0.286938
+    ]
+  ],
+  "field_norms": [
+    [
+      "u",
+      21.5485
+    ],
+    [
+      "u",
+      1.08954
+    ],
+    [
+      "v",
+      0.000331766
+    ],
+    [
+      "v",
+      0.00870474
+    ],
+    [
+      "p",
+      0.0866438
+    ],
+    [
+      "p",
+      0.0168617
+    ]
+  ],
+  "timing": {
+    "regions": {
+      "Execute": {
+        "seconds": 14.5643,
+        "calls": 1
+      },
+      "Advection Terms": {
+        "seconds": 0.202026,
+        "calls": 5
+      },
+      "Pressure BCs": {
+        "seconds": 0.0125606,
+        "calls": 5
+      },
+      "Pressure Forcing": {
+        "seconds": 0.12656,
+        "calls": 4
+      },
+      "Pressure Solve": {
+        "seconds": 1.20965,
+        "calls": 4
+      },
+      "Viscous Forcing": {
+        "seconds": 0.0407194,
+        "calls": 4
+      },
+      "Viscous Solve": {
+        "seconds": 10.2874,
+        "calls": 4
+      }
+    },
+    "checkpoint_seconds": 0.31460255000000004,
+    "disjoint_seconds": {
+      "timed_equations_seconds": 11.878916,
+      "other_integration_seconds": 0.04372199999999893,
+      "driver_output_and_diagnostics_seconds": 0.19740000000000002,
+      "outside_driver_seconds": 7.803552177994792,
+      "checkpoint_seconds": 0.31460255000000004,
+      "initialisation_and_between_steps_seconds": 2.12965945
+    },
+    "equation_share": 0.53302560769466,
+    "inside_driver_fraction": 0.6511264418283385,
+    "integration_seconds": 11.922638,
+    "measured_driver_computation_seconds": 14.3669
+  },
+  "first_bdf2_seconds": 5.27046,
+  "warmed_mean_seconds": 0.245834,
+  "outputs": [
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-2/run.fld",
+      "bytes": 2538797,
+      "sha256": "10c17c1de9bde12895d2128458b440cdc4630c7a7e985c236c6d6ea3f18c85d3"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-2/run_0.chk",
+      "bytes": 69426,
+      "sha256": "f55e22399d5bc41aac90868323ff9234f4702b6d7e8990ef3573dd11ee25168c"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-2/run_1.chk",
+      "bytes": 2994857,
+      "sha256": "af86ac13f37304529d861bca1e240da2ed4c7a015ebaf0e11a6cbf35d2b2a7a9"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-2/run_2.chk",
+      "bytes": 3032449,
+      "sha256": "dc72fa6f0fc331be7693f9d3b828943bdcd3073cf7cd48b843791d7612baccf8"
+    }
+  ]
+}

@@ -269,12 +269,20 @@ The common-time comparison verified the audit for each exact frame, including th
 
 The Linux account settled at 107,653.560 s charged, with 16,950.440 s nonprotected, including 2,954.730 s staged. The next measurement is the matched .02 stock comparison against the fully advanced .02 retained-inlet case. [Exact accounting and forecast](wj-h27-linux/task2r-r3-advancing/timestep-matrix/retained-inlet-first-common-time.json)
 
-| Closure gate | Status after the first common-time comparison |
+### Matched .02 stock timing
+
+Three VCSWeakPressure runs with SVV off completed four steps through t=.08. They used the retained-inlet Bf mesh, timed executable, Q3/Q2 expansions, 6×8 Gauss quadrature, molecular viscosity, one MPI rank on CPU 0, six single-thread settings and two-step checkpoint cadence. Stock uses zero outlet pressure, weak high-order pressure data elsewhere, conventional velocity traces and wall loads, and native velocity/pressure checkpoint payloads. The coupled case evaluates the full current stress and production, outer scalar and wall terms. [Admissions, stock timing and field output identities](wj-h27-linux/task2r-r3-advancing/timestep-matrix/matched-stock-coarse.json)
+
+Stock whole-process times were 22.805, 22.368 and 21.926 s. Each run had zero suspension and peaked at 61 active workers. The coupled time was 623.885 s, or 27.89 times the stock median. The stock median warm mean was .356431 s across accepted steps three and four. The corresponding coupled mean was 114.324 s, or 320.75 times the stock median, including one age refresh. The coupled timing budget attributed 99.04% of whole elapsed time, with 24.10% in equation/model work. The .02 cost result measures the complete retained-inlet interval. The passing common timestep and representative warmed signed costs remain open. [Detailed time scopes and comparison](wj-h27-linux/task2r-r3-advancing/timestep-matrix/matched-stock-coarse.json)
+
+The smaller finite-difference displacement degraded the original .02 BE/EX1 solve. A fourfold displacement increase provides the opposite control on the same signed state. The two-step test uses the original 650 s native step cap and a 1,540 s operation cap, with the same acceptance threshold and all physical guards. The ledger has 16,864.006 s nonprotected, including 2,868.297 s staged. [Cost basis and current accounting](wj-h27-linux/task2r-r3-advancing/timestep-matrix/matched-stock-coarse.json)
+
+| Closure gate | Status after the audited comparison and matched stock runs |
 | --- | --- |
 | CP0 Bf state and admission | MET. Exact Bf replay and independently certified signed initial coefficients and histories bind to the Linux application. |
 | CP1 positive-time equations and costs | Quiet and retained-inlet prefixes accepted three steps at dt=.04. The signed case accepted through t=.08, with independent BE/EX1 and BDF2/EX2 audits met. Sustained signed warm-step cost remains open. |
 | CP2 timestep and recovery | OPEN. The .02 and .01 startup frames pass the independently audited t=.04 comparison. The .01 startup continued through t=.06 after recovery, and the .005 startup reached t=.015. The three frozen signed levels and the smaller-displacement control reached numerical deadlines before their first common frame. The .08 comparison, passing timestep witness and matched cold endpoint remain open. |
-| CP3 affordability and stock | The tested .02 startup projects above the day target under its measured rate. The three stock repeats measure the earlier matched .04 interval. Selected-recipe stock, cold and per-trajectory costs remain open. |
+| CP3 affordability and stock | Stock was repeated at .04 and on the matched .02 retained-inlet interval. The tested .02 startup projects above the day target under its measured rate. Selected-recipe stock, cold and per-trajectory costs remain open. |
 | R4 admission | HELD. A passing R3 scientific recipe and a complete affordable pilot case set remain prerequisites. |
 
 `TASK2_COMPLETE=NO`. `TASK3_READY=NO`.

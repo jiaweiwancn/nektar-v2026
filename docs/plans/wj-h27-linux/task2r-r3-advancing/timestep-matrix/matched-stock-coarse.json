@@ -1,0 +1,739 @@
+{
+  "account": {
+    "charged_seconds": 107739.99357826769,
+    "nonprotected_remaining": 16864.00642173231,
+    "reserved_seconds": 0,
+    "tranche_remaining": 2868.2971413372434
+  },
+  "active_workers": 59,
+  "coupled": {
+    "bytes": 15642,
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-time-startup-1.json",
+    "sha256": "4a014c4342618309e5c5913c6147f58641f3634846125e5a1372384bdde9eeed"
+  },
+  "coupled_attribution_fraction": 0.9904389055090025,
+  "coupled_equation_share": 0.24104503941651814,
+  "coupled_plan": {
+    "bytes": 4219,
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-1/admission.json",
+    "sha256": "c0f28c69a4e7d4a5a697a87baed8c8208aba94edfd8c8b21519e9832bf180bc0"
+  },
+  "coupled_process_seconds": 623.8853488629975,
+  "coupled_warm_mean_seconds": 114.32433146699623,
+  "efficacy_scope": "Same numerical mesh, interval, CPU, single rank and output cadence for the .02 retained inlet. The all-transient selected timestep remains open.",
+  "ledger": {
+    "bytes": 741292,
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/accounting.json",
+    "sha256": "260440cb08e3a86cc2485b9a3e154dbb839f1799f5b285be701282d6ce2d92fd"
+  },
+  "schema": "WJH27R3MatchedCoarseStockV1",
+  "steps": 4,
+  "stock": [
+    {
+      "admission": {
+        "bytes": 3704,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-1/admission.json",
+        "sha256": "0ea421726f13336032c28a5ed666a0d238e512797b5308d2006e888835550bfd"
+      },
+      "label": "r3-stock-coarse-1",
+      "physics": {
+        "excluded": "RANS transport, current-K wall cutoff and stress/production/AWF panels",
+        "gauss": [
+          6,
+          8
+        ],
+        "inlet": "Exact-inner polynomial panels kinematically continued to the retained outer log profile",
+        "order": [
+          3,
+          2
+        ],
+        "output": "Native stock velocity/pressure fields and on-cadence checkpoint filter",
+        "pressure": "Zero outlet Dirichlet and weak high-order Neumann data elsewhere",
+        "transverse": "Zero at inlet, ground, top and exit",
+        "viscosity": 0.00006423173803526447,
+        "wall_loads": "No-slip ground, zero diffusive axial trace at top and outlet"
+      },
+      "receipt": {
+        "bytes": 7075,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-stock-coarse-1/receipt.json",
+        "sha256": "dc4b0cabae36755f200ecb8abc642768f6451fa7ad9740568b5d605c2ef8bd25"
+      },
+      "report": {
+        "bytes": 3543,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-stock-coarse-1.json",
+        "sha256": "96f87f13261ce1956432154336c160b0379625c92efb5468b714ca7932255ee4"
+      },
+      "resource_result": {
+        "child_elapsed_seconds": 22.804865125013748,
+        "exit": 0,
+        "job_memory": {
+          "ancestor_limits": [
+            {
+              "current": 31625216,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1576.scope"
+            },
+            {
+              "current": 393022578688,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice"
+            },
+            {
+              "current": 393304633344,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice"
+            },
+            {
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup"
+            }
+          ],
+          "job_cgroup": "/user.slice/user-1000.slice/session-1576.scope",
+          "mem_available_bytes": 379241975808,
+          "mem_total_bytes": 540840640512
+        },
+        "log": {
+          "bytes": 3110,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-stock-coarse-1/command.log",
+          "sha256": "0fb29363b8b1b6ac74181483647d95c76b383fd88a0eb19a135801070c5ba726"
+        },
+        "minimum_memory_headroom_bytes": 373551882240,
+        "peak_active_host_workers": 61,
+        "peak_host_workers": 141,
+        "peak_owned_workers": 2,
+        "peak_r3_science_bytes": 3095968880,
+        "peak_stopped_host_workers": 80,
+        "peak_tree_rss_bytes": 2470002688,
+        "phase": "r3-stock",
+        "rank_affinity": {
+          "allowed_cpus": [
+            0
+          ],
+          "pid": 567711,
+          "startup_cpus": [
+            0
+          ]
+        },
+        "reason": null,
+        "rss_limit_bytes": 8589934592,
+        "seconds": 23.737974892981583,
+        "status": "PASS",
+        "worker_limit": 80,
+        "worker_paused_seconds": 0,
+        "worker_pauses": []
+      },
+      "result": {
+        "admission": {
+          "bytes": 3704,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-1/admission.json",
+          "sha256": "0ea421726f13336032c28a5ed666a0d238e512797b5308d2006e888835550bfd"
+        },
+        "field_norms": [
+          [
+            "u",
+            21.5485
+          ],
+          [
+            "u",
+            1.08954
+          ],
+          [
+            "v",
+            0.000331766
+          ],
+          [
+            "v",
+            0.00870474
+          ],
+          [
+            "p",
+            0.0866438
+          ],
+          [
+            "p",
+            0.0168617
+          ]
+        ],
+        "first_bdf2_seconds": 5.55734,
+        "operation": {
+          "bytes": 7075,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-stock-coarse-1/receipt.json",
+          "sha256": "dc4b0cabae36755f200ecb8abc642768f6451fa7ad9740568b5d605c2ef8bd25"
+        },
+        "outputs": [
+          {
+            "bytes": 2538797,
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-1/run.fld",
+            "sha256": "0257f7e1c0a94c505451b69aa9aaa913f0375d6601e4e7ca6ebe8d8d170302fb"
+          },
+          {
+            "bytes": 69426,
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-1/run_0.chk",
+            "sha256": "f400c55f61972fb3cd82413d79c47be6f4f2acf60f5e8790569bbfe805c366b7"
+          },
+          {
+            "bytes": 2994857,
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-1/run_1.chk",
+            "sha256": "16ee1e2f8e32082004a340c41b7a6b9a81a2031a16a0f7b15ecd07f87665bbd9"
+          },
+          {
+            "bytes": 3032449,
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-1/run_2.chk",
+            "sha256": "290ecb909a9ff503cf87d4952b48670cf0fee96c809dc1f1747e567211ae6707"
+          }
+        ],
+        "process_seconds": 22.804865125013748,
+        "schema": "WJH27R3ConventionalCostV1",
+        "solver_status": "PASS",
+        "status": "MET",
+        "step_report": [
+          [
+            1,
+            0.02,
+            6.63228
+          ],
+          [
+            2,
+            0.04,
+            5.55734
+          ],
+          [
+            3,
+            0.06,
+            0.376656
+          ],
+          [
+            4,
+            0.08,
+            0.357965
+          ]
+        ],
+        "timing": {
+          "checkpoint_seconds": 0.331055309,
+          "disjoint_seconds": {
+            "checkpoint_seconds": 0.331055309,
+            "driver_output_and_diagnostics_seconds": 0.18019999999999925,
+            "initialisation_and_between_steps_seconds": 2.141703691,
+            "other_integration_seconds": 0.13802990000000115,
+            "outside_driver_seconds": 7.227665125013749,
+            "timed_equations_seconds": 12.7862111
+          },
+          "equation_share": 0.5667317447023142,
+          "inside_driver_fraction": 0.6830647721268033,
+          "integration_seconds": 12.924241,
+          "measured_driver_computation_seconds": 15.397,
+          "regions": {
+            "Advection Terms": {
+              "calls": 5,
+              "seconds": 0.242977
+            },
+            "Execute": {
+              "calls": 1,
+              "seconds": 15.5772
+            },
+            "Pressure BCs": {
+              "calls": 5,
+              "seconds": 0.0197442
+            },
+            "Pressure Forcing": {
+              "calls": 4,
+              "seconds": 0.175052
+            },
+            "Pressure Solve": {
+              "calls": 4,
+              "seconds": 1.24299
+            },
+            "Viscous Forcing": {
+              "calls": 4,
+              "seconds": 0.0597479
+            },
+            "Viscous Solve": {
+              "calls": 4,
+              "seconds": 11.0457
+            }
+          }
+        },
+        "warmed_mean_seconds": 0.3673105
+      }
+    },
+    {
+      "admission": {
+        "bytes": 3704,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-2/admission.json",
+        "sha256": "bb6c6b074633f9913c09d65351fad2d7b6b35f1ddaf5d5609e32ce5786c5833e"
+      },
+      "label": "r3-stock-coarse-2",
+      "physics": {
+        "excluded": "RANS transport, current-K wall cutoff and stress/production/AWF panels",
+        "gauss": [
+          6,
+          8
+        ],
+        "inlet": "Exact-inner polynomial panels kinematically continued to the retained outer log profile",
+        "order": [
+          3,
+          2
+        ],
+        "output": "Native stock velocity/pressure fields and on-cadence checkpoint filter",
+        "pressure": "Zero outlet Dirichlet and weak high-order Neumann data elsewhere",
+        "transverse": "Zero at inlet, ground, top and exit",
+        "viscosity": 0.00006423173803526447,
+        "wall_loads": "No-slip ground, zero diffusive axial trace at top and outlet"
+      },
+      "receipt": {
+        "bytes": 7074,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-stock-coarse-2/receipt.json",
+        "sha256": "9b3f172cdc4cd3ae6a42dcb996b7982ba068461e5d2b6527e5f8cba34f422063"
+      },
+      "report": {
+        "bytes": 3552,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-stock-coarse-2.json",
+        "sha256": "1c8675eb7fb65ec0d223d318bbc980590183532ba2e851f37b446f4e45543239"
+      },
+      "resource_result": {
+        "child_elapsed_seconds": 22.36785217799479,
+        "exit": 0,
+        "job_memory": {
+          "ancestor_limits": [
+            {
+              "current": 42389504,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1576.scope"
+            },
+            {
+              "current": 393099317248,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice"
+            },
+            {
+              "current": 393381371904,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice"
+            },
+            {
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup"
+            }
+          ],
+          "job_cgroup": "/user.slice/user-1000.slice/session-1576.scope",
+          "mem_available_bytes": 376453943296,
+          "mem_total_bytes": 540840640512
+        },
+        "log": {
+          "bytes": 3110,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-stock-coarse-2/command.log",
+          "sha256": "b68a102bc3bb8b4d4d537e979131732d5f01eb1b74b9b47a94f9f0e72cc9140e"
+        },
+        "minimum_memory_headroom_bytes": 376453943296,
+        "peak_active_host_workers": 61,
+        "peak_host_workers": 141,
+        "peak_owned_workers": 2,
+        "peak_r3_science_bytes": 3106380673,
+        "peak_stopped_host_workers": 80,
+        "peak_tree_rss_bytes": 2470072320,
+        "phase": "r3-stock",
+        "rank_affinity": {
+          "allowed_cpus": [
+            0
+          ],
+          "pid": 567827,
+          "startup_cpus": [
+            0
+          ]
+        },
+        "reason": null,
+        "rss_limit_bytes": 8589934592,
+        "seconds": 23.356596283003455,
+        "status": "PASS",
+        "worker_limit": 80,
+        "worker_paused_seconds": 0,
+        "worker_pauses": []
+      },
+      "result": {
+        "admission": {
+          "bytes": 3704,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-2/admission.json",
+          "sha256": "bb6c6b074633f9913c09d65351fad2d7b6b35f1ddaf5d5609e32ce5786c5833e"
+        },
+        "field_norms": [
+          [
+            "u",
+            21.5485
+          ],
+          [
+            "u",
+            1.08954
+          ],
+          [
+            "v",
+            0.000331766
+          ],
+          [
+            "v",
+            0.00870474
+          ],
+          [
+            "p",
+            0.0866438
+          ],
+          [
+            "p",
+            0.0168617
+          ]
+        ],
+        "first_bdf2_seconds": 5.27046,
+        "operation": {
+          "bytes": 7074,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-stock-coarse-2/receipt.json",
+          "sha256": "9b3f172cdc4cd3ae6a42dcb996b7982ba068461e5d2b6527e5f8cba34f422063"
+        },
+        "outputs": [
+          {
+            "bytes": 2538797,
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-2/run.fld",
+            "sha256": "10c17c1de9bde12895d2128458b440cdc4630c7a7e985c236c6d6ea3f18c85d3"
+          },
+          {
+            "bytes": 69426,
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-2/run_0.chk",
+            "sha256": "f55e22399d5bc41aac90868323ff9234f4702b6d7e8990ef3573dd11ee25168c"
+          },
+          {
+            "bytes": 2994857,
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-2/run_1.chk",
+            "sha256": "af86ac13f37304529d861bca1e240da2ed4c7a015ebaf0e11a6cbf35d2b2a7a9"
+          },
+          {
+            "bytes": 3032449,
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-2/run_2.chk",
+            "sha256": "dc72fa6f0fc331be7693f9d3b828943bdcd3073cf7cd48b843791d7612baccf8"
+          }
+        ],
+        "process_seconds": 22.36785217799479,
+        "schema": "WJH27R3ConventionalCostV1",
+        "solver_status": "PASS",
+        "status": "MET",
+        "step_report": [
+          [
+            1,
+            0.02,
+            6.16051
+          ],
+          [
+            2,
+            0.04,
+            5.27046
+          ],
+          [
+            3,
+            0.06,
+            0.20473
+          ],
+          [
+            4,
+            0.08,
+            0.286938
+          ]
+        ],
+        "timing": {
+          "checkpoint_seconds": 0.31460255000000004,
+          "disjoint_seconds": {
+            "checkpoint_seconds": 0.31460255000000004,
+            "driver_output_and_diagnostics_seconds": 0.19740000000000002,
+            "initialisation_and_between_steps_seconds": 2.12965945,
+            "other_integration_seconds": 0.04372199999999893,
+            "outside_driver_seconds": 7.803552177994792,
+            "timed_equations_seconds": 11.878916
+          },
+          "equation_share": 0.53302560769466,
+          "inside_driver_fraction": 0.6511264418283385,
+          "integration_seconds": 11.922638,
+          "measured_driver_computation_seconds": 14.3669,
+          "regions": {
+            "Advection Terms": {
+              "calls": 5,
+              "seconds": 0.202026
+            },
+            "Execute": {
+              "calls": 1,
+              "seconds": 14.5643
+            },
+            "Pressure BCs": {
+              "calls": 5,
+              "seconds": 0.0125606
+            },
+            "Pressure Forcing": {
+              "calls": 4,
+              "seconds": 0.12656
+            },
+            "Pressure Solve": {
+              "calls": 4,
+              "seconds": 1.20965
+            },
+            "Viscous Forcing": {
+              "calls": 4,
+              "seconds": 0.0407194
+            },
+            "Viscous Solve": {
+              "calls": 4,
+              "seconds": 10.2874
+            }
+          }
+        },
+        "warmed_mean_seconds": 0.245834
+      }
+    },
+    {
+      "admission": {
+        "bytes": 3704,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-3/admission.json",
+        "sha256": "528c2105fe3e8feb885276985962d3a9cfc31507eed225052de2c33c33dcc7d8"
+      },
+      "label": "r3-stock-coarse-3",
+      "physics": {
+        "excluded": "RANS transport, current-K wall cutoff and stress/production/AWF panels",
+        "gauss": [
+          6,
+          8
+        ],
+        "inlet": "Exact-inner polynomial panels kinematically continued to the retained outer log profile",
+        "order": [
+          3,
+          2
+        ],
+        "output": "Native stock velocity/pressure fields and on-cadence checkpoint filter",
+        "pressure": "Zero outlet Dirichlet and weak high-order Neumann data elsewhere",
+        "transverse": "Zero at inlet, ground, top and exit",
+        "viscosity": 0.00006423173803526447,
+        "wall_loads": "No-slip ground, zero diffusive axial trace at top and outlet"
+      },
+      "receipt": {
+        "bytes": 7073,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-stock-coarse-3/receipt.json",
+        "sha256": "78c5a744aea0eed4fd0eb88e456aa95c503bab94832d60e25196d7195375f82c"
+      },
+      "report": {
+        "bytes": 3554,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-stock-coarse-3.json",
+        "sha256": "d79e099e8d5dc70942b92e1f4d2fc5cd2bf251ace904d5d3ad1dd5a5219d56e6"
+      },
+      "resource_result": {
+        "child_elapsed_seconds": 21.926154054002836,
+        "exit": 0,
+        "job_memory": {
+          "ancestor_limits": [
+            {
+              "current": 54648832,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1576.scope"
+            },
+            {
+              "current": 393437143040,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice"
+            },
+            {
+              "current": 393719197696,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice"
+            },
+            {
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup"
+            }
+          ],
+          "job_cgroup": "/user.slice/user-1000.slice/session-1576.scope",
+          "mem_available_bytes": 376922501120,
+          "mem_total_bytes": 540840640512
+        },
+        "log": {
+          "bytes": 3111,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-stock-coarse-3/command.log",
+          "sha256": "7dac4239399c88f18e62ba00d364eb8be4a97fee0ea620007aaec856f271a5c1"
+        },
+        "minimum_memory_headroom_bytes": 372503293952,
+        "peak_active_host_workers": 61,
+        "peak_host_workers": 141,
+        "peak_owned_workers": 2,
+        "peak_r3_science_bytes": 3116792466,
+        "peak_stopped_host_workers": 80,
+        "peak_tree_rss_bytes": 2469863424,
+        "phase": "r3-stock",
+        "rank_affinity": {
+          "allowed_cpus": [
+            0
+          ],
+          "pid": 567940,
+          "startup_cpus": [
+            0
+          ]
+        },
+        "reason": null,
+        "rss_limit_bytes": 8589934592,
+        "seconds": 22.902389127993956,
+        "status": "PASS",
+        "worker_limit": 80,
+        "worker_paused_seconds": 0,
+        "worker_pauses": []
+      },
+      "result": {
+        "admission": {
+          "bytes": 3704,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-3/admission.json",
+          "sha256": "528c2105fe3e8feb885276985962d3a9cfc31507eed225052de2c33c33dcc7d8"
+        },
+        "field_norms": [
+          [
+            "u",
+            21.5485
+          ],
+          [
+            "u",
+            1.08954
+          ],
+          [
+            "v",
+            0.000331766
+          ],
+          [
+            "v",
+            0.00870474
+          ],
+          [
+            "p",
+            0.0866438
+          ],
+          [
+            "p",
+            0.0168617
+          ]
+        ],
+        "first_bdf2_seconds": 5.29778,
+        "operation": {
+          "bytes": 7073,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-stock-coarse-3/receipt.json",
+          "sha256": "78c5a744aea0eed4fd0eb88e456aa95c503bab94832d60e25196d7195375f82c"
+        },
+        "outputs": [
+          {
+            "bytes": 2538797,
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-3/run.fld",
+            "sha256": "ad872d52b7cba6f946d19121b77fc1b3dec260ad89b033da2e2d4cbde651f183"
+          },
+          {
+            "bytes": 69426,
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-3/run_0.chk",
+            "sha256": "d95e514703d0003256a23f40363d46e55a7b9ab72b1ea0be2c1bf2a819c1bef7"
+          },
+          {
+            "bytes": 2994857,
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-3/run_1.chk",
+            "sha256": "7ea60e7233d25e679e2b1b15737212f932bc29a11831a24cb41fd8e606fc208b"
+          },
+          {
+            "bytes": 3032449,
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-stock-coarse-3/run_2.chk",
+            "sha256": "7cf9d17b369553239a419452712d9ac13a622e9fed0099a5adbb93b2df8d51f5"
+          }
+        ],
+        "process_seconds": 21.926154054002836,
+        "schema": "WJH27R3ConventionalCostV1",
+        "solver_status": "PASS",
+        "status": "MET",
+        "step_report": [
+          [
+            1,
+            0.02,
+            6.22676
+          ],
+          [
+            2,
+            0.04,
+            5.29778
+          ],
+          [
+            3,
+            0.06,
+            0.363406
+          ],
+          [
+            4,
+            0.08,
+            0.349456
+          ]
+        ],
+        "timing": {
+          "checkpoint_seconds": 0.32472195,
+          "disjoint_seconds": {
+            "checkpoint_seconds": 0.32472195,
+            "driver_output_and_diagnostics_seconds": 0.18839999999999968,
+            "initialisation_and_between_steps_seconds": 2.148976050000001,
+            "other_integration_seconds": 0.05850329999999815,
+            "outside_driver_seconds": 7.026654054002837,
+            "timed_equations_seconds": 12.178898700000001
+          },
+          "equation_share": 0.5581189464353846,
+          "inside_driver_fraction": 0.6795309365839263,
+          "integration_seconds": 12.237402,
+          "measured_driver_computation_seconds": 14.7111,
+          "regions": {
+            "Advection Terms": {
+              "calls": 5,
+              "seconds": 0.20815
+            },
+            "Execute": {
+              "calls": 1,
+              "seconds": 14.8995
+            },
+            "Pressure BCs": {
+              "calls": 5,
+              "seconds": 0.0119021
+            },
+            "Pressure Forcing": {
+              "calls": 4,
+              "seconds": 0.142621
+            },
+            "Pressure Solve": {
+              "calls": 4,
+              "seconds": 1.28061
+            },
+            "Viscous Forcing": {
+              "calls": 4,
+              "seconds": 0.0534156
+            },
+            "Viscous Solve": {
+              "calls": 4,
+              "seconds": 10.4822
+            }
+          }
+        },
+        "warmed_mean_seconds": 0.356431
+      }
+    }
+  ],
+  "stock_process_median": 22.36785217799479,
+  "stock_status": "MET",
+  "stock_warm_median": 0.356431,
+  "storage": {
+    "free_bytes": 3451430633472,
+    "r3_science_bytes": 3107998050,
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 751264358
+  },
+  "time": 0.08,
+  "timestep": 0.02,
+  "warmed_ratio": 320.74744190880205,
+  "whole_ratio": 27.892054359907114
+}
