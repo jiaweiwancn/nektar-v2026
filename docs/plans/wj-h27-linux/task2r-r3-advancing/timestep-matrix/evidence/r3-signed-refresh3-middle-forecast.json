@@ -1,0 +1,42 @@
+{
+  "schema": "WJH27R3SignedRefreshThreeMiddleForecastV1",
+  "inputs": [
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-time-perturbed-2-fd-fourfold.json",
+      "bytes": 2909,
+      "sha256": "968cc106b50e1886bb117e7700830a988217aee2a7034b24879df0e66e46d70e"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-signed-refresh3-uninterrupted.json",
+      "bytes": 15779,
+      "sha256": "9661c051eb803737bc0ba2a90ad04de46e7b0ce4f286b93dbcf728a48147b11a"
+    }
+  ],
+  "admission": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-middle/admission.json",
+    "bytes": 5926,
+    "sha256": "e2ea902b4f1007b7161e26bc888baf25af0bc23d9272a049258ed770a6718ae0"
+  },
+  "ledger": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/accounting.json",
+    "bytes": 790797,
+    "sha256": "30f9866220a6efcad4e53d3645d9d2b3b2514724d18e3813825075bddda3461a"
+  },
+  "account": {
+    "charged_seconds": 116323.05221164363,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 8280.947788356367,
+    "tranche_remaining": 2713.2385079613014
+  },
+  "stage_addition": 836,
+  "operation_cap": 3150,
+  "accepted_warm_base": "Three-use .02 signed run and eight-use .01 pre-deadline steps",
+  "comparison_times": [
+    0.04,
+    0.08
+  ],
+  "step_pc_maximum_uses": 3,
+  "fd_step": 4e-06,
+  "timestep": 0.01,
+  "purpose": "Start step four with a freshly prepared inverse after the prior age-triggered mixed step stopped at the deadline."
+}
