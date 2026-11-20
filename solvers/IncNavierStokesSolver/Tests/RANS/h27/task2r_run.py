@@ -604,6 +604,17 @@ def run(root, book, args, began):
                         and command[4] in ("1", "2", "3", "4"),
                         "R3 build requires its isolated tree and at most four explicit workers")
                 limits[phase] = 14 if command[4] != "1" else 6
+            elif command[0] == "make":
+                generated_targets = ("WJNativeMixedFlow", "IncNavierStokesSolver")
+                target = next((name for name in generated_targets if
+                    command == ["make", "-C", str(root / "build-r3"), "-f",
+                                f"CMakeFiles/{name}.dir/build.make", "-j1",
+                                f"CMakeFiles/{name}.dir/build"]), None)
+                require(target and (root/"build-r3/h26-kernel/libWJNativeFlow.a").is_file(),
+                        "R3 serial resume requires the configured CMake target and completed base library")
+                limits[phase] = 4
+                pause_policy = dict(trigger_workers=78, resume_workers=77, quiet_seconds=3.,
+                                    maximum_paused_seconds=260., count_stopped_ownership=True)
             else:
                 require(command[:2] in (["cmake", "-S"], ["cmake", "-E"]),
                         "unexpected R3 build command")

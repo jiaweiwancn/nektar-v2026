@@ -1,0 +1,80 @@
+{
+  "request": {
+    "label": "r3-native-build-1",
+    "phase": "build",
+    "command": [
+      "cmake",
+      "--build",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3",
+      "--parallel",
+      "1",
+      "--target",
+      "IncNavierStokesSolver"
+    ],
+    "cap_seconds": 1650.0,
+    "reserved_seconds": 1657.0,
+    "workers_before": 74,
+    "idle_mpi_event_helpers": 108,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 8463861449,
+      "source_build_runtime_bytes": 445403537,
+      "free_bytes": 3528560738304,
+      "r3_science_bytes": 307580272
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v4/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_run.py",
+      "bytes": 47595,
+      "sha256": "7845f61d9a0ecb26639a117b02cd9a1bcc4944c054d0734dae73c1a0d653d07c"
+    },
+    "rss_limit_bytes": 17179869184,
+    "memory_before": null,
+    "worker_pause_policy": null,
+    "worker_limit": 80,
+    "worker_admission_margin": 6,
+    "input_files": []
+  },
+  "result": {
+    "status": "FAIL",
+    "phase": "build",
+    "seconds": 126.19111829198664,
+    "exit": -15,
+    "reason": "HOST_WORKER_LIMIT",
+    "peak_tree_rss_bytes": 1674924032,
+    "peak_host_workers": 82,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-native-build-1/command.log",
+      "bytes": 14442,
+      "sha256": "2a06bc660eb60c62e61d0a50306d447d68fd5da8abe0e22c40531764fff2ca09"
+    },
+    "rss_limit_bytes": 17179869184,
+    "job_memory": null,
+    "minimum_memory_headroom_bytes": null,
+    "worker_limit": 80,
+    "peak_owned_workers": 0,
+    "worker_pauses": [],
+    "worker_paused_seconds": 0.0,
+    "child_elapsed_seconds": 125.63053113801288,
+    "peak_active_host_workers": 82,
+    "peak_r3_science_bytes": 309620080
+  },
+  "balance": {
+    "charged_seconds": 85372.90060429863,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 19027.09939570137,
+    "tranche_remaining": 5910.390115306305
+  },
+  "storage": {
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 449915164,
+    "free_bytes": 3528368369664,
+    "r3_science_bytes": 307580272
+  }
+}

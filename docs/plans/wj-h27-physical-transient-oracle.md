@@ -76,8 +76,15 @@ The audit also accepts a standalone coefficient-bearing accepted scientific
 state. Optional `--compare-finer OTHER.result.json` requires the same physical
 time and independently reconstructs that state's time-discrete residual and
 caches. It is a comparison, not a temporal order proof. Outputs are immutable,
-single-threaded, subject to an explicit wall cap and an at-most-8-GiB inherited
-address-space cap. Exceptions preserve a partial `NOT_MET` report.
+single-threaded, with an explicit wall cap and an 8 GiB address-space default.
+A measured case can request up to 20 GiB through `--address-space-gib` under
+its named resource admission, subject to stricter inherited limits and a
+separate live RSS watch. The two orders run sequentially. Only the coarse
+actions and residuals remain during the fine solve. Exactly equal history
+coefficients share independently evaluated transport. All saved caches still
+get their own comparison. The outlet-B reaction rows use the complete
+accepted time-discrete momentum action. Exceptions preserve a partial
+`NOT_MET` report.
 
 No numerical execution occurred on the Mac during source preparation. Overall
 H27 status remains `NOT_MET` regardless of a successful accepted-step equation

@@ -237,9 +237,15 @@ class TransientOracle:
         steady = o.assemble()
         # Keep the instantaneous steady defect as an explicitly separate
         # observation; it cannot qualify or disqualify a transient equation.
-        current = self.transport(o)
-        old = self.transport(self.old_oracle)
-        previous = old if self.scheme['startup'] else self.transport(self.previous_oracle)
+        # The physical samples and the accepted test velocity are identical
+        # for equal coefficient bytes, including the duplicated BE inputs.
+        transported = {}
+        for owner in (o, self.old_oracle, self.previous_oracle):
+            digest = owner.data['state_sha256']
+            if digest not in transported:
+                transported[digest] = self.transport(owner)
+        current, old, previous = (transported[owner.data['state_sha256']]
+            for owner in (o, self.old_oracle, self.previous_oracle))
         f, g = self.scheme['explicit_coefficients']
         explicit = combine(old['total'], f, previous['total'], g)
         mass, storage = self.storage()
