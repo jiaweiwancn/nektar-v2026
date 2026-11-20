@@ -245,11 +245,17 @@ The next step reused the factors three times at a maximum age of six. It reached
 
 The ledger reached 104,172.588 s charged with 20,431.412 s nonprotected, including 4,659.703 s staged, and zero reservations. The 3,600 s protected reserve remains intact. The ext4 R3 science scope occupied 2,777,994,534 bytes. [Ledger and storage snapshot](wj-h27-linux/task2r-r3-advancing/timestep-matrix/middle-startup-fresh-factor.json)
 
-| Closure gate | Status after the fresh-factor continuation |
+### Finest signed level
+
+The frozen dt=.005 signed case reached the BE/EX1 cooperative deadline in 651.592 s. At the stop, the last momentum, k and outer-epsilon residuals were 5.127e−9, 5.664e−9 and 1.077e−8. The step used 75 Krylov iterations, 300 residual evaluations and a cold refresh. The preserved step-zero binary passed its checksum and all four coefficient arrays match the certified signed state. The operation charged 774.948 s at a peak of 76 active workers with zero suspensions. [Native evidence and exact retained state](wj-h27-linux/task2r-r3-advancing/timestep-matrix/finest-signed-failure.json) · [Operation receipt](wj-h27-linux/task2r-r3-advancing/timestep-matrix/operations/r3-time-perturbed-4/receipt.json)
+
+All three frozen signed levels ended before t=.04 under the qualified stops. The remaining .005 retained-inlet level tests the other transient in the frozen matrix. At the signed settlement, 19,650.192 s remained nonprotected, including 5,654.483 s staged. The R3 science scope used 2,882,522,484 bytes. [Ledger and storage](wj-h27-linux/task2r-r3-advancing/timestep-matrix/finest-signed-failure.json)
+
+| Closure gate | Status after the finest signed test |
 | --- | --- |
 | CP0 Bf state and admission | MET. Exact Bf replay and independently certified signed initial coefficients and histories bind to the Linux application. |
 | CP1 positive-time equations and costs | Quiet and retained-inlet prefixes accepted three steps at dt=.04. The signed case accepted through t=.08, with independent BE/EX1 and BDF2/EX2 audits met. Sustained signed warm-step cost remains open. |
-| CP2 timestep and recovery | OPEN. The .02 startup reached both common times. The .01 startup continued through t=.06 after recovery. The signed .02 and .01 baseline attempts and the smaller-displacement control reached their deadlines before their first common frame. The .005 comparison, passing timestep witness and matched cold endpoint remain open. |
+| CP2 timestep and recovery | OPEN. The .02 startup reached both common times. The .01 startup continued through t=.06 after recovery. The three frozen signed levels and the smaller-displacement control reached numerical deadlines before their first common frame. The .005 retained-inlet test, passing timestep witness and matched cold endpoint remain open. |
 | CP3 affordability and stock | The tested .02 startup projects above the day target under its measured rate. The three stock repeats measure the earlier matched .04 interval. Selected-recipe stock, cold and per-trajectory costs remain open. |
 | R4 admission | HELD. A passing R3 scientific recipe and a complete affordable pilot case set remain prerequisites. |
 
