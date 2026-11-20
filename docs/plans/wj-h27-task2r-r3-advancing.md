@@ -212,3 +212,15 @@ The 26.13350407707765 pilot endpoint would take 1,307 steps at .02. One retained
 ### Worker admission deferral
 
 The worker count stayed above the one-rank admissions throughout the first bounded wait. An independent census near 15:11 China Standard Time sampled 86 active shared workers five times, excluding the recorded parked MPI helpers. The limit is 80. The ledger had no reservation for R3. It had charged 100,995.190 s of the 128,204 s ceiling, leaving 23,608.810 s nonprotected and 3,600 s protected. Both the prior and R3 science scopes remained within their separate 8 GiB ceilings. The frozen .01 inlet case and the smaller-displacement repeat are deferred while the shared count is above the admissible level. [Five-sample census, ledger and storage](wj-h27-linux/task2r-r3-advancing/timestep-matrix/admission-census-20261120T071042Z.json)
+
+The second bounded admission wait also expired. All three follow-up samples near 15:36 China Standard Time counted 86 active shared workers, and the ledger and deferred admissions matched the prior snapshot. The Linux account is open with zero reservations. The smallest discriminating continuation is a two-step signed dt=.02 test with the same 2.5e−7 finite-difference displacement. A 1,540 s process cap covers the measured setup, two 650 s native step ceilings and output. It requires one admissible MPI rank on CPU 0. Acceptance at t=.04 would supply the first common-time state for that displacement and justify testing the longer matched interval. [Follow-up census and exact remaining account](wj-h27-linux/task2r-r3-advancing/timestep-matrix/admission-census-20261120T073623Z.json)
+
+| Closure gate | Status at worker deferral |
+| --- | --- |
+| CP0 Bf state and admission | MET. Exact Bf replay and independently certified signed initial coefficients and histories bind to the Linux application. |
+| CP1 positive-time equations and costs | Quiet and retained-inlet prefixes accepted three steps at dt=.04. The signed case accepted through t=.08, with independent BE/EX1 and BDF2/EX2 audits met. Sustained signed warm-step cost remains open. |
+| CP2 timestep and recovery | OPEN. The .02 startup reached both common times. The signed .02 and .01 attempts reached their deadlines before their first common frame. The .005 comparison, passing timestep witness and matched cold endpoint remain open. |
+| CP3 affordability and stock | The tested .02 startup projects above the day target under its measured rate. The three stock repeats measure the earlier matched .04 interval. Selected-recipe stock, cold and per-trajectory costs remain open. |
+| R4 admission | HELD. A passing R3 scientific recipe and a complete affordable pilot case set remain prerequisites. |
+
+`TASK2_COMPLETE=NO`. `TASK3_READY=NO`.
