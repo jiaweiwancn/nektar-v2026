@@ -55,6 +55,13 @@ struct CoupledTiming
            guards=0,forcing=0,residual=0,nonlinear=0,io=0,other=0;
     double Sum()const{return constitutive+wall+assembly+flow+scalar+rebuild+guards+forcing+residual+nonlinear+io+other;}
 };
+struct CoupledStepTimingDetail
+{
+    double momentumAdvection = 0;
+    double scalarAdvection = 0;
+    double scalarMomentumCoupling = 0;
+    double historyMovement = 0;
+};
 struct CoupledStepInfo
 {
     int nonlinearIterations=0,flowIterations=0,kIterations=0,epsilonIterations=0,rebuilds=0,retries=0;
@@ -63,6 +70,7 @@ struct CoupledStepInfo
            minimumCovarianceOverK=0,minimumPrincipalOverMu=0;
     CoupledResidual residual;
     CoupledTiming timing;
+    CoupledStepTimingDetail timingDetail;
     WallEvaluationStats constitutiveStats;
     struct Iteration {CoupledResidual residual;bool accelerated=false;double seconds=0;};
     std::vector<Iteration>nonlinearTrace;
@@ -166,7 +174,8 @@ private:
     Loads CurrentActions(const CoupledState&state,const Data&data)const;
     Vec MomentumAdvection(const CoupledState&state)const;
     Sparse MomentumTransportJacobian(const CoupledState&state)const;
-    CoupledState Advection(const CoupledState&state,const Rules&kRules)const;
+    CoupledState Advection(const CoupledState &state, const Rules &kRules,
+                           CoupledStepTimingDetail *timing = nullptr) const;
     CoupledResidual Residual(const CoupledState&state,const Data&data,const Loads&base,
                              double alpha,double time,CoupledTiming&timing,
                              const CoupledHistory*history=nullptr)const;

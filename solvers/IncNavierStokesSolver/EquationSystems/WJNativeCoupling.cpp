@@ -615,8 +615,21 @@ Vec Coupling::MomentumAdvection(const CoupledState&s)const
     }
     return load;
 }
-CoupledState Coupling::Advection(const CoupledState&s,const Rules&kRules)const
-{return {MomentumAdvection(s),m_k.Advection(kRules,s.flow,s.k),m_e.Advection(m_rules.Static(),s.flow,s.epsilon)};}
+CoupledState Coupling::Advection(const CoupledState &state, const Rules &kRules,
+                                CoupledStepTimingDetail *timing) const
+{
+    const double began = Clock();
+    Vec momentum = MomentumAdvection(state);
+    const double scalarBegan = Clock();
+    Vec k = m_k.Advection(kRules, state.flow, state.k);
+    Vec epsilon = m_e.Advection(m_rules.Static(), state.flow, state.epsilon);
+    if (timing)
+    {
+        timing->momentumAdvection += scalarBegan - began;
+        timing->scalarAdvection += Clock() - scalarBegan;
+    }
+    return {std::move(momentum), std::move(k), std::move(epsilon)};
+}
 
 Sparse Coupling::MomentumTransportJacobian(const CoupledState&s)const
 {
@@ -1063,6 +1076,10 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
 {
     out<<std::setprecision(17)<<"{\"schema\":\"WJH27NativeCoupledStateV2\",\"model\":\""<<WallModelV2<<"\",\"signature\":\""<<m_signature<<"\",\"source_identity\":\""<<m_options.sourceIdentity<<"\",\"reference_identity\":\""<<m_reference->Identity()<<"\",\"manufactured\":"<<(m_mms?"true":"false")<<",\"step\":"<<h.step<<",\"time\":"<<h.time<<",\"dt\":"<<h.dt<<",\"state_sha256\":\""<<StateHash(h.current)<<"\",\"previous_sha256\":\""<<StateHash(h.previous)<<"\",\"advection_sha256\":\""<<StateHash(h.advection)<<"\",\"previous_advection_sha256\":\""<<StateHash(h.previousAdvection)<<"\",\"sizes\":["<<m_flow.VelocitySize()<<','<<m_flow.PressureSize()<<','<<m_k.Size()<<','<<m_e.Size()<<"],\"gauge\":"<<(m_flow.Gauge()?"true":"false")<<",\"nonlinear_iterations\":"<<info.nonlinearIterations<<",\"linear_iterations\":["<<info.flowIterations<<','<<info.kIterations<<','<<info.epsilonIterations<<"],\"rebuilds\":"<<info.rebuilds<<",\"retries\":"<<info.retries<<",\"seconds\":"<<info.seconds<<",\"coefficient_drift\":"<<info.coefficientDrift<<",\"residuals\":["<<info.residual.momentum<<','<<info.residual.continuity<<','<<info.residual.gauge<<','<<info.residual.k<<','<<info.residual.epsilon<<','<<info.residual.trace<<"],\"minimum_k\":"<<info.minimumK<<",\"minimum_epsilon\":"<<info.minimumEpsilon<<",\"minimum_covariance_over_k\":"<<info.minimumCovarianceOverK<<",\"minimum_principal_over_mu\":"<<info.minimumPrincipalOverMu<<",\"disjoint_seconds\":{\"constitutive\":"<<info.timing.constitutive<<",\"wall\":"<<info.timing.wall<<",\"assembly\":"<<info.timing.assembly<<",\"flow\":"<<info.timing.flow<<",\"scalar\":"<<info.timing.scalar<<",\"rebuild\":"<<info.timing.rebuild<<",\"guards\":"<<info.timing.guards<<",\"forcing\":"<<info.timing.forcing<<",\"residual\":"<<info.timing.residual<<",\"nonlinear\":"<<info.timing.nonlinear<<",\"io\":"<<info.timing.io<<",\"other\":"<<info.timing.other<<'}';
     out<<",\"quadratureX\":"<<m_options.quadratureX<<",\"quadratureR\":"<<m_options.quadratureR<<",\"linear_tolerance\":"<<m_options.linearTolerance<<",\"nonlinear_tolerance\":"<<m_options.nonlinearTolerance<<",\"maximum_iterations\":"<<m_options.maximumIterations<<",\"mms_body_amplitude\":"<<m_options.mmsBodyAmplitude<<",\"retry_reason\":"<<RANSWallSolveJson::Quote(info.retryReason);
+    out << ",\"timing_detail_seconds\":{\"momentum_advection\":" << info.timingDetail.momentumAdvection
+        << ",\"scalar_advection\":" << info.timingDetail.scalarAdvection
+        << ",\"scalar_momentum_coupling\":" << info.timingDetail.scalarMomentumCoupling
+        << ",\"history_movement\":" << info.timingDetail.historyMovement << '}';
     out<<",\"inner_k_transport\":"<<RANSWallSolveJson::Quote(m_reference->TransportName())
        <<",\"boundary_identity\":"<<RANSWallSolveJson::Quote(m_reference->BoundaryIdentity());
     out<<",\"outlet_policy\":"<<RANSWallSolveJson::Quote(m_options.outletPolicy)

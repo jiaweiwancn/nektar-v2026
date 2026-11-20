@@ -364,8 +364,12 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
                 }
                 {
                     AccountTime timer(info.timing.flow);
-                    Vec cross=Vec::Zero(2*m_flow.VelocitySize()+m_flow.PressureSize());
-                    cross.head(2*m_flow.VelocitySize())=m_flow.KnownScalarKLoad(dk);
+                    Vec cross;
+                    {
+                        AccountTime coupling(info.timingDetail.scalarMomentumCoupling);
+                        cross = Vec::Zero(2*m_flow.VelocitySize()+m_flow.PressureSize());
+                        cross.head(2*m_flow.VelocitySize()) = m_flow.KnownScalarKLoad(dk);
+                    }
                     result.head(nf)=m_flow.ApplyLinearPreconditioner(rhs.head(nf)+m_flow.Restrict(cross));
                 }
                 Vec trace;
@@ -432,15 +436,18 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
             CoupledState nextAdvection;
             {
                 AccountTime timer(info.timing.assembly);
-                nextAdvection=Advection(state,final.kRules);
+                nextAdvection = Advection(state, final.kRules, &info.timingDetail);
             }
-            auto next=history;
-            next.previous=history.current;next.current=state;
-            next.previousAdvection=history.advection;next.advection=std::move(nextAdvection);
-            ++next.step;next.time=time;
-            CheckHistory(next);
-            checkDeadline();
-            history=std::move(next);
+            {
+                AccountTime movement(info.timingDetail.historyMovement);
+                auto next=history;
+                next.previous=history.current;next.current=state;
+                next.previousAdvection=history.advection;next.advection=std::move(nextAdvection);
+                ++next.step;next.time=time;
+                CheckHistory(next);
+                checkDeadline();
+                history=std::move(next);
+            }
             save();
             return info;
         }

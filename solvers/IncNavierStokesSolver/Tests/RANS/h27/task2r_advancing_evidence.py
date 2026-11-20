@@ -244,15 +244,29 @@ def seal_run(root, label, out):
                 "whole-process timing scopes overlap")
         equation = sum(engine[k] for k in ("constitutive", "wall", "assembly", "flow", "scalar",
                                         "forcing", "residual"))
+        detail = {}
+        if "timing_detail_seconds" in steps[0]:
+            parts = {key: sum(row["timing_detail_seconds"][key] for row in steps)
+                     for key in steps[0]["timing_detail_seconds"]}
+            momentum = parts["momentum_advection"]
+            transport = parts["scalar_advection"]
+            coupling = parts["scalar_momentum_coupling"]
+            movement = parts["history_movement"]
+            require(0 <= momentum+transport <= engine["assembly"] and 0 <= coupling <= engine["flow"]
+                    and 0 <= movement <= engine["other"], "step subscopes overlap")
+            detail = dict(engine, **parts)
+            detail.update(assembly=engine["assembly"]-momentum-transport,
+                          flow=engine["flow"]-coupling, other=engine["other"]-movement)
         evidence.update(result=identity(result), timing=dict(
             process_seconds=process, charge_seconds=receipt["result"]["seconds"],
             construction_seconds=payload["construction_seconds"],
             initialisation_seconds=payload["initialisation_seconds"],
             complete_step_seconds=complete, engine_seconds=engine, scientific_frame_seconds=frames_seconds,
+            detailed_engine_seconds=detail if detail else None,
             active_step_bounds=active_step_bounds(complete,setup,export,receipt["result"],initial_step),
             recovery_seconds=recovery, other_step_seconds=other_step, final_export_seconds=export,
             process_remainder_seconds=remainder,
-            attributed_fraction=1-(other_step+engine["other"]+remainder)/process,
+            attributed_fraction=1-(other_step+(detail or engine)["other"]+remainder)/process,
             equation_share=equation/process,
             warm_step_mean_seconds=statistics.mean(complete[1:]) if len(complete)>1 else None),
             observed=[{k: row[k] for k in ("step", "time", "residuals", "rebuilds", "retries",
@@ -264,7 +278,8 @@ def seal_run(root, label, out):
     atomic(out, evidence)
 
 
-def time_matrix(root, startup, perturbation, parity_path, represented, preconditioner, out):
+def time_matrix(root, startup, perturbation, parity_path, represented, preconditioner, out,
+                recovered_prefix=None):
     from task2r_advancing import STEP_PRECONDITIONERS
 
     parity = read(parity_path)
@@ -276,20 +291,37 @@ def time_matrix(root, startup, perturbation, parity_path, represented, precondit
     prefixes = [read(path) for path in (startup, perturbation)]
     levels = []
     for index, (prefix, role) in enumerate(zip(prefixes, ("startup", "perturbed"))):
-        require(prefix["status"] == "PASS" and prefix["role"] == role and prefix["accepted_steps"] >= 3,
-                "matrix bracket needs both completed evolving prefixes")
-        steps = prefix["observed"]
-        require(len({frame["hashes"]["state_sha256"] for frame in prefix["frames"].values()}) >= 4
-                and all(step["time"] > 0 for step in steps), "matrix prefix has no demonstrated evolution")
+        require(prefix["status"] == "PASS", "matrix bracket needs both completed evolving prefixes")
         plan = read(verified(prefix["admission"]))
+        measured = prefix["timing"]
+        step_cost = measured["complete_step_seconds"]
+        hashes = {frame["hashes"]["state_sha256"] for frame in prefix["frames"].values()}
+        accepted_steps = prefix["accepted_steps"]
+        cost_source = "Observed complete native steps."
+        if role == "perturbed" and recovered_prefix:
+            before = read(recovered_prefix)
+            checkpoint = before["recovery"]
+            accepted = next(frame for frame in prefix["frames"].values() if frame["step"] == checkpoint["step"])
+            require(before["status"] == "MET" and prefix["role"] == "restart"
+                    and plan["restart"] == {k:checkpoint[k] for k in ("path", "sha256", "bytes")}
+                    and checkpoint["step"] == 1 and checkpoint["dt"] == plan["timestep"]
+                    and accepted["origin"] == "imported_accepted_history"
+                    and before["state_hashes"] == accepted["hashes"], "recovered prefix cannot supply a bracket")
+            hashes.add(identity_of_state(verified(before["initial"]))["state_sha256"])
+            first = read(verified(before["step_log"]))
+            output = (measured["scientific_frame_seconds"] + measured["recovery_seconds"])/accepted_steps
+            step_cost = [first["seconds"] + output, *step_cost]
+            accepted_steps += 1
+            cost_source = "Measured BE engine plus subsequent measured I/O per step, followed by measured resumed BDF2 steps."
+        else:
+            require(prefix["role"] == role, "matrix prefix role differs")
+        require(accepted_steps >= 3 and len(hashes) >= 4, "matrix prefix has insufficient evolution")
         trial = plan["timestep"]
         if index == 0:
             dt = trial
         require(trial == dt, "the evolving prefixes have different bracket anchors")
         operation = read(verified(prefix["operation"]))
         require(operation["result"]["status"] == "PASS", "prefix operation did not pass")
-        measured = prefix["timing"]
-        step_cost = measured["complete_step_seconds"]
         setup = measured["construction_seconds"] + measured["initialisation_seconds"] + measured["final_export_seconds"]
         pause_fraction = operation["result"]["worker_paused_seconds"] / operation["result"]["seconds"]
         starts = operation["request"]["storage_before"]["r3_science_bytes"]
@@ -302,12 +334,14 @@ def time_matrix(root, startup, perturbation, parity_path, represented, precondit
             require(cap <= 7200, "measured matrix admission exceeds the per-process advancement limit")
             levels.append(dict(role=role, label=f"r3-time-{role}-{denominator}", timestep=dt/denominator,
                 steps=n, common_steps=[2*denominator, n], science_stride=2*denominator,
-                recovery_stride=2*denominator, estimated_elapsed_seconds=duration, operation_cap_seconds=cap,
+                recovery_stride=2*denominator, estimated_elapsed_seconds=duration, cost_source=cost_source,
+                operation_cap_seconds=cap,
                 maximum_pause_seconds=min(cap-1, max(180, min(cap//2, math.ceil(1.2*pause_fraction*cap)))),
                 rss_gib=16, peak_mib=peak_mib, native_step_cap_seconds=plan["native_step_cap_seconds"]))
     require(len(levels) == 6 and prefixes[0]["label"] != prefixes[1]["label"], "matrix inventory differs")
     atomic(out, dict(schema="WJH27R3ProspectiveTimeMatrixV1", prefixes=[identity(startup), identity(perturbation)],
         parity=identity(parity_path), represented_perturbation=identity(represented),
+        recovered_prefix=identity(recovered_prefix) if recovered_prefix else None,
         preconditioner=preconditioner, timesteps=[dt, dt/2, dt/4], common_times=[2*dt, 4*dt], levels=levels,
         finer_witness="Require D/8 at both common times if D/4 is the first viable timestep.",
         evaluation="Compare the two transients separately at both times across the full owner inventory."))
@@ -334,6 +368,8 @@ def main():
             mode.add_argument(key, type=datatype)
         if name in ("audit-plan", "perturbation-plan"):
             mode.add_argument("--maximum-pause", type=int)
+        if name == "time-matrix":
+            mode.add_argument("--recovered-prefix", type=Path)
     args = vars(parser.parse_args())
     action = args.pop("action")
     method = {"bind-runtime": bind_runtime, "bind-parity": bind_parity, "layout": layout_packet,
