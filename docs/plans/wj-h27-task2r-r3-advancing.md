@@ -285,11 +285,21 @@ Complete steps took 196.238 and 193.391 s, including one cold refresh and one al
 
 The next test holds the larger displacement fixed and requests four dt=.02 steps from the same signed start, with both common times and the scheduled checkpoints. The 1,960 s process cap covers the measured first two steps and setup, two further 650 s native deadlines and bounded output and suspension. This qualification candidate keeps the frozen comparison times. Applying it to timestep selection requires matched runs of both evolving cases and the prescribed finer comparison. [Measured prefix and allocation basis](wj-h27-linux/task2r-r3-advancing/timestep-matrix/fourfold-displacement-control.json)
 
-| Closure gate | Status after the larger displacement control |
+### Four-step signed trajectory with the larger displacement
+
+The dt=.02 four-step signed run wrote the t=.04 and t=.08 frames and scheduled recoveries. The t=.04 accepted frame matches all four history hashes of the two-step control. Its scheduled binary matches that control byte for byte. This supplies a split checkpoint and an uninterrupted comparison case for a cold replay. [Verified positive-time frames and binary identities](wj-h27-linux/task2r-r3-advancing/timestep-matrix/fourfold-signed-coarse.json)
+
+Whole process time was 738.092 s. The complete step times were 190.641, 192.598, 54.060 and 196.809 s. Steps three and four averaged 125.435 s and included one age refresh. The whole-process attribution was 99.08%, with 23.29% in equation/model work and 396.863 s in factor rebuild scopes. The operation charged 739.110 s, peaked at 62 active workers and had zero suspensions. [Timing scopes and exact resource receipt](wj-h27-linux/task2r-r3-advancing/timestep-matrix/fourfold-signed-coarse.json)
+
+The tested .02 rate allows a conditional signed step-only projection. At the measured warm mean, 25,252 steps project to 3,959,342 s with the 1.25 margin. The 1,307-step pilot projects to 204,929 s on the same basis. These estimates precede fixed costs, rejected work, recovery, retention and final assessment. The day target allows at most 2.737 s per step before fixed costs. The measured reuse step took 54.060 s. The .01 signed refinement now uses the same larger displacement, the original physical comparison times and the original matrix deadline. [Warm timings and prospective refinement basis](wj-h27-linux/task2r-r3-advancing/timestep-matrix/fourfold-signed-coarse.json)
+
+The account has charged 108,996.678 s, with 15,607.322 s nonprotected, including 1,611.612 s staged. The next allocation draws on the existing authorized balance. [Exact ledger](wj-h27-linux/task2r-r3-advancing/timestep-matrix/fourfold-signed-coarse.json)
+
+| Closure gate | Status after the four-step signed trajectory |
 | --- | --- |
 | CP0 Bf state and admission | MET. Exact Bf replay and independently certified signed initial coefficients and histories bind to the Linux application. |
-| CP1 positive-time equations and costs | Quiet and retained-inlet prefixes accepted three steps at dt=.04. The signed case accepted through t=.08, with independent BE/EX1 and BDF2/EX2 audits met. Sustained signed warm-step cost remains open. |
-| CP2 timestep and recovery | OPEN. The .02 and .01 startup frames pass the independently audited t=.04 comparison. The .01 startup continued through t=.06 after recovery, and the .005 startup reached t=.015. The default-displacement signed levels and the smaller-displacement control reached numerical deadlines before their first common frame. The larger displacement produced a signed t=.04 frame. The .08 comparison, passing timestep witness and matched cold endpoint remain open. |
+| CP1 positive-time equations and costs | Quiet and retained-inlet prefixes accepted three steps at dt=.04. Earlier signed independent BE/EX1 and BDF2/EX2 audits passed. The larger-displacement .02 signed run supplies a two-step warm timing block. Its adjusted endpoints still require their independent audits. |
+| CP2 timestep and recovery | OPEN. The original .02 and .01 startup frames pass the independently audited t=.04 comparison. The larger displacement produced signed .02 frames at both common times. The same-displacement finer and retained-inlet comparisons, timestep choice and matched cold endpoint remain open. |
 | CP3 affordability and stock | Stock was repeated at .04 and on the matched .02 retained-inlet interval. The tested .02 startup projects above the day target under its measured rate. Selected-recipe stock, cold and per-trajectory costs remain open. |
 | R4 admission | HELD. A passing R3 scientific recipe and a complete affordable pilot case set remain prerequisites. |
 
