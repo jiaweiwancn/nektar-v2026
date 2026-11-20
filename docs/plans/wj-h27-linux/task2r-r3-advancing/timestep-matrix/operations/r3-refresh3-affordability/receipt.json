@@ -1,0 +1,82 @@
+{
+  "request": {
+    "label": "r3-refresh3-affordability",
+    "phase": "analysis",
+    "command": [
+      "python3",
+      "-B",
+      "-c",
+      "\nfrom pathlib import Path\nimport json,math,statistics,sys\nfrom resources import atomic,identity\nfrom task2r_run import balance\n\nroot = Path(sys.argv[1])\nev, sci = root/\"evidence\", root/\"science-r3\"\nledger = root/\"accounting.json\"\ndef read(path):\n    return json.loads(path.read_text())\ndef run_budget(label):\n    seal = ev/(label+\".json\")\n    native = sci/label/\"state.result.json\"\n    data, outcome = read(seal), read(native)\n    measured = data[\"timing\"]\n    rows = [row[\"disjoint_seconds\"] for row in data[\"observed\"]]\n    assert data[\"status\"] == \"PASS\" and data[\"final_time\"] == .08 and len(rows) > 2\n    warm = rows[2:]\n    scopes = {key:statistics.mean(row[key] for row in warm) for key in warm[0]}\n    fixed = sum(measured[key] for key in (\n        \"construction_seconds\",\"initialisation_seconds\",\"final_export_seconds\",\"process_remainder_seconds\"))\n    return dict(seal=identity(seal),native_result=identity(native),steps=len(rows),\n        complete_seconds=measured[\"complete_step_seconds\"],whole_seconds=measured[\"process_seconds\"],\n        attributed_fraction=measured[\"attributed_fraction\"],equation_model_share=measured[\"equation_share\"],\n        disjoint_whole_step_engine_seconds=measured[\"engine_seconds\"],first_engines=[sum(row.values()) for row in rows[:2]],\n        warm_complete_seconds=measured[\"warm_step_mean_seconds\"],warm_engine_seconds=sum(scopes.values()),\n        warm_engine_scopes=scopes,fixed_seconds=fixed,other_per_step=measured[\"other_step_seconds\"]/len(rows),\n        frame_write_seconds=max(v[\"write_seconds\"] for v in data[\"frames\"].values()),\n        frame_bytes=max(v[\"bytes\"] for v in data[\"frames\"].values()),\n        recovery_write_seconds=max(outcome[\"recovery_seconds\"]),\n        recovery_bytes=max(r[\"bytes\"] for r in data[\"recoveries\"]))\n\ncoarse = {role:run_budget(label) for role,label in (\n    (\"developed_quiet\",\"r3-quiet-refresh3\"),(\"retained_inlet\",\"r3-retained-refresh3-coarse\"),\n    (\"certified_signed\",\"r3-signed-refresh3-uninterrupted\"))}\nfiner = {role:run_budget(label) for role,label in (\n    (\"retained_inlet\",\"r3-retained-refresh3-middle\"),(\"certified_signed\",\"r3-signed-refresh3-middle\"))}\ntime_paths=[ev/f\"r3-{role}-refresh3-common-t{stamp}.json\"\n            for role in (\"signed\",\"retained\") for stamp in (\"004\",\"008\")]\nassert all(read(path)[\"status\"]==\"MET\" for path in time_paths)\naudit_names=(\"r3-audit-signed-refresh3-uninterrupted\",\"r3-audit-signed-refresh3-resumed\",\"r3-audit-refresh3-signed-middle-endpoint\",\n    \"r3-audit-refresh3-retained-coarse-endpoint\",\"r3-audit-refresh3-retained-middle-endpoint\")\naudit_files=[sci/name/\"audit.json\" for name in audit_names]\nassert all(read(path)[\"accepted_time_discrete_equations_status\"]==\"MET\" for path in audit_files)\naudit_charge=max(read(root/\"operations\"/name/\"receipt.json\")[\"result\"][\"seconds\"] for name in audit_names)\ncold=ev/\"r3-signed-refresh3-comparison.json\"\nassert read(cold)[\"status\"]==\"MET\"\nresume=ev/\"r3-signed-refresh3-resumed.json\"\nrestart=read(resume)[\"timing\"][\"process_seconds\"]\nfailure_label=\"r3-time-startup-2-recovered\"\nnative_failure=sci/failure_label/\"state.failure.json\"\nwith native_failure.open() as fp:\n    header=fp.read(256*1024).split(\",\\\"state\\\":\",1)[0]\nrejected=json.loads(header+\"}\")[\"failed_attempt\"][\"seconds\"]\nretry=max(max(v[\"complete_seconds\"]) for v in coarse.values())\nhorizon, terminal=505.02466521278404,447.8483832973273\npilot_min=26.13350407707765\nfull_steps=math.ceil(horizon/.02)\npilot_steps=math.ceil(pilot_min/.02)\ndef boundary_steps(t,dt):\n    left=math.floor(t/dt)\n    if math.isclose(t,left*dt,rel_tol=0,abs_tol=1e-12):\n        return {left}\n    return {left,left+1}\ndef model(cases,dt,steps,begin,end,science_stride,recovery_stride):\n    maximum=lambda key:max(row[key] for row in cases.values())\n    chosen=max(cases,key=lambda key:cases[key][\"warm_engine_seconds\"])\n    ref=cases[chosen]\n    frames=set(range(science_stride,steps+1,science_stride))\n    frames.update(boundary_steps(begin,dt),boundary_steps(end,dt),{steps})\n    lo,hi=min(boundary_steps(begin,dt)),max(boundary_steps(end,dt))\n    recoveries=steps//recovery_stride\n    disjoint=dict(fixed=maximum(\"fixed_seconds\"),first_be=max(row[\"first_engines\"][0] for row in cases.values()),\n      first_bdf2=max(row[\"first_engines\"][1] for row in cases.values()),\n      warmed_step_engines=(steps-2)*ref[\"warm_engine_seconds\"],\n      step_orchestration=steps*maximum(\"other_per_step\"),\n      scientific_writes=len(frames)*maximum(\"frame_write_seconds\"),\n      scheduled_recovery_writes=recoveries*maximum(\"recovery_write_seconds\"),\n      one_rejected_native_step=rejected,one_accepted_retry_provision=retry,one_complete_cold_replay=restart,\n      independent_final_assessment=audit_charge)\n    subtotal=sum(disjoint.values())\n    return dict(dt=dt,steps=steps,final_clock=steps*dt,rate_class=chosen,\n                rate_engine_seconds=ref[\"warm_engine_seconds\"],rate_complete_seconds=ref[\"warm_complete_seconds\"],\n                sampled_warm_rebuild_seconds=ref[\"warm_engine_scopes\"][\"rebuild\"],\n                scopes=disjoint,subtotal_seconds=subtotal,margin=1.25,wall_seconds_with_margin=1.25*subtotal,\n                scientific_frames=len(frames),terminal_frames=sum(lo<=index<=hi for index in frames),\n                terminal_brackets_seconds=[[i*dt for i in sorted(boundary_steps(point,dt))] for point in (begin,end)],\n                scheduled_recovery_writes=recoveries,raw_scientific_bytes=len(frames)*maximum(\"frame_bytes\"),\n                raw_recovery_bytes=recoveries*maximum(\"recovery_bytes\"))\nproduction=model(coarse,.02,full_steps,terminal,horizon,2,2)\ncoarse_pilot=model(coarse,.02,pilot_steps,0.,pilot_min,2,435)\nfiner_pilot=model(finer,.01,2*pilot_steps,0.,pilot_min,4,870)\nassert production[\"wall_seconds_with_margin\"]>86400\nroles=(*coarse,\"alternate_signed_shape_or_sign\")\nstock_paths=[ev/f\"r3-stock-coarse-{i}.json\" for i in (1,2,3)]\nstock=[read(path) for path in stock_paths]\nassert all(row[\"status\"]==\"MET\" for row in stock)\nmedian=statistics.median(row[\"process_seconds\"] for row in stock)\nwarm_stock=statistics.median(row[\"warmed_mean_seconds\"] for row in stock)\ncomparison={role:dict(whole_ratio=run[\"whole_seconds\"]/median,warm_ratio=run[\"warm_complete_seconds\"]/warm_stock)\n            for role,run in coarse.items()}\natomic(Path(sys.argv[2]),dict(schema=\"WJH27R3MeasuredAffordabilityV1\", science_recipe={\"timestep\":.02,\"finer_witness\":.01,\n    \"finite_difference_displacement\":4e-6,\"factor_maximum_uses\":3,\"cold\":identity(cold),\"comparisons\":[identity(p) for p in time_paths],\n    \"independent_equation_audits\":[identity(p) for p in audit_files]}, observed_classes=coarse,\n    finer_observed_classes=finer, stock=dict(reports=[identity(p) for p in stock_paths],median_process_seconds=median,\n    median_warm_seconds=warm_stock,coupled_ratios=comparison), production=production,\n    trajectories=[dict(name=role,observed_class_rate=coarse.get(role,{}).get(\"warm_engine_seconds\"),\n       planning_seconds_with_margin=production[\"wall_seconds_with_margin\"]) for role in roles],\n    projected_four_trajectory_seconds_with_margin=4*production[\"wall_seconds_with_margin\"],\n    r4=dict(status=\"HELD\",classes=list(roles),coarse=coarse_pilot,finer=finer_pilot,\n        minimum_endpoint=pilot_min,recovery_times=[8.7,17.4,26.1],unmeasured_coarse_class=roles[-1],\n        unmeasured_finer_classes=[\"developed_quiet\",roles[-1]],\n        conditional_coarse_campaign_seconds=4*coarse_pilot[\"wall_seconds_with_margin\"],\n        conditional_with_four_finer_runs_seconds=4*(coarse_pilot[\"wall_seconds_with_margin\"]+finer_pilot[\"wall_seconds_with_margin\"]),\n        required_before_admission=[\"Independently certify the alternate perturbation.\",\n          \"Measure matching finer trajectories at common physical times.\", \"Retain all three scheduled recovery files.\",\n          \"Verify live worker, memory and disk checks, restart lineage and streamed scientific reduction.\"]),\n    retry_basis=dict(native_failed_attempt=identity(native_failure),rejected_seconds=rejected,\n                     retry_complete_step_seconds=retry,restarted_process=identity(resume),restart_process_seconds=restart),\n    clock_scope=\"One rank on CPU 0 with all six numerical libraries at one thread. Class maxima provide conditional planning rates for the unmeasured classes.\",\n    remaining_costs=[\"Streaming and retention implementation\", \"Production output reduction and terminal assessment cost\",\n                      \"Alternate perturbation cost and representative long-interval rejected-step frequency\"],\n    research_ledger=identity(ledger), research_account=balance(read(ledger)),\n    day_target_seconds=86400, day_status=\"MISSED\", TASK2_COMPLETE=\"NO\", TASK3_READY=\"NO\"))\n",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-refresh3-affordability.json"
+    ],
+    "cap_seconds": 85.0,
+    "reserved_seconds": 92.0,
+    "workers_before": 59,
+    "idle_mpi_event_helpers": 102,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 8463861449,
+      "source_build_runtime_bytes": 751264358,
+      "free_bytes": 3437395955712,
+      "r3_science_bytes": 5934332722
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v28/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_run.py",
+      "bytes": 52854,
+      "sha256": "23c5138b07a96273b6898712aef7bbec85d5880907a3d7aae063459687b1b022"
+    },
+    "rss_limit_bytes": 8589934592,
+    "memory_before": null,
+    "worker_pause_policy": null,
+    "worker_limit": 80,
+    "worker_admission_margin": 3,
+    "input_files": [],
+    "worker_census_policy": "ExcludeStoppedWorkersV1",
+    "stopped_workers_before": 80
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "analysis",
+    "seconds": 12.57513859300525,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 216449024,
+    "peak_host_workers": 140,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-refresh3-affordability/command.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "rss_limit_bytes": 8589934592,
+    "job_memory": null,
+    "minimum_memory_headroom_bytes": null,
+    "worker_limit": 80,
+    "peak_owned_workers": 0,
+    "worker_pauses": [],
+    "worker_paused_seconds": 0.0,
+    "child_elapsed_seconds": 11.76620903899311,
+    "peak_active_host_workers": 60,
+    "peak_stopped_host_workers": 80,
+    "peak_r3_science_bytes": 5934332722
+  },
+  "balance": {
+    "charged_seconds": 123248.16186819374,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 1355.8381318062602,
+    "tranche_remaining": 1102.1288514111948
+  },
+  "storage": {
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 751264358,
+    "free_bytes": 3437395877888,
+    "r3_science_bytes": 5934332722
+  }
+}

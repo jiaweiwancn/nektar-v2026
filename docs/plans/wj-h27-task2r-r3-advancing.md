@@ -375,12 +375,32 @@ Select dt=.02 with the demonstrated .01 witness for both transients. Both common
 
 The three new independent audit charges were 707.035, 709.266 and 711.596 s. The account has charged 123,235.587 s, with 1,368.413 s nonprotected, including 1,114.704 s staged. [Endpoint evidence and exact accounting](wj-h27-linux/task2r-r3-advancing/timestep-matrix/refresh3-matched-endpoint-audits.json)
 
-| Closure gate | Status after the selected timestep audits |
+### Measured R3 affordability and R4 decision
+
+The selected Bf recipe is scientifically qualified at dt=.02 with a .01 witness and an independently verified cold restart. The matched VCSWeakPressure median is 22.368 process s and .356431 s per warm step. The coupled retained-inlet run took 804.648 s, or 35.97 times the stock median. The retained-inlet warm mean is 185.540 s, or 520.55 times the stock warm median. All measurements used the same Bf mesh, timestep, interval, molecular viscosity, CPU placement, single rank and checkpoint cadence. The earlier stock section records the pressure boundary, wall and field-payload differences. [Matched stock records and selected-recipe ratios](wj-h27-linux/task2r-r3-advancing/timestep-matrix/refresh3-affordability-summary.json)
+
+| .02 coupled case | Whole s | Warm s per step | Equation/model share | Time attributed |
+| --- | ---: | ---: | ---: | ---: |
+| Developed quiet | 153.095 | 16.502 | 7.27% | 96.28% |
+| Retained inlet | 804.648 | 185.540 | 20.70% | 99.01% |
+| Certified signed | 842.272 | 175.524 | 20.06% | 99.14% |
+
+The retained-inlet block spent 503.822 s rebuilding factors. Its mean warmed engine used 184.132 s, including 127.697 s in rebuilds. The measured scopes allocate mixed flow and scalar solves, explicit transport, constitutive stress and production, wall work, assembly, Newton/Krylov work, guards, history movement, output, recovery and setup. The two evolving cases are below the 50% equation/model aim and 70% preference. The earlier AMD test increased factorization cost. The larger displacement reduced signed Newton work and the three-use policy recovered repeatable endpoints, with the observed increase in rebuild cost. [Whole-process and warmed scopes](wj-h27-linux/task2r-r3-advancing/timestep-matrix/refresh3-affordability-summary.json)
+
+At dt=.02 the production horizon requires 25,252 steps. Using the largest measured class mean and separate measured setup, BE and BDF2 starts, frame and recovery writes, one rejected step, one retry, one cold replay and an independent final assessment gives 4,687,943.502 s before margin. With the 1.25 margin the scenario is **5,859,929.378 s per trajectory**, or 67.82 days. It exceeds the 86,400 s target. The conditional four-trajectory sum is 23,439,718 s. The alternate class rate and long-interval rejected-work frequency remain unmeasured. The cumulative research charge is kept in the separate live account. [Disjoint trajectory and campaign model](wj-h27-linux/task2r-r3-advancing/timestep-matrix/evidence/r3-refresh3-affordability.json)
+
+The production scenario uses 12,628 native observations and 12,626 scheduled recovery writes. It emits 1,433 frames across the bracketed terminal interval. The brackets are [447.84,447.86] and [505.02,505.04]. Cumulative scientific output is approximately 771.70 GB at the largest measured native frame size. Retained storage, streamed reduction and production assessment cost still require measurement. [Exact frame and recovery accounting](wj-h27-linux/task2r-r3-advancing/timestep-matrix/evidence/r3-refresh3-affordability.json)
+
+R4 remains HELD. Its four classes are the developed quiet control, retained-inlet startup, certified signed perturbation and independently certified alternate sign or shape. A full coarse pilot would reach t=26.14 in 1,307 steps. Its .01 companion uses 2,614 steps at the same physical endpoint, with common-time frame comparisons. The planning cadence writes three recoveries at t=8.70, 17.40 and 26.10 in each run. It requires retained binaries, exercised rotation and recovery, live worker and resource checks, and verified streamed scientific reduction. The conditional per-class coarse and finer costs with margin are 305,714 and 641,064 s. Four coarse and four finer runs give a conditional 3,787,111 s campaign. The alternate rate and the quiet finer rate remain open. [Costed pilot matrix, retention and monitoring checks](wj-h27-linux/task2r-r3-advancing/timestep-matrix/evidence/r3-refresh3-affordability.json)
+
+The affordability calculation charged 12.575 s. Its settlement left 1,355.838 s nonprotected, including 1,102.129 s staged, and 3,600 s protected. A measured two-step .005 signed control fits within the remaining account and tests the previously failing first BDF2 update with the selected factor policy. [Exact model receipt and settlement](wj-h27-linux/task2r-r3-advancing/timestep-matrix/refresh3-affordability-summary.json)
+
+| Closure gate | R3 decision |
 | --- | --- |
 | CP0 Bf state and admission | MET. Exact Bf replay and independently certified signed initial coefficients and histories bind to the Linux application. |
 | CP1 positive-time equations and costs | MET. Three matching .02 warmed blocks, independent BE/EX1 and BDF2/EX2 evidence and observed signed evolution are recorded. |
 | CP2 timestep and recovery | MET for the selected .02 timestep with the .01 witness. Both transients pass at t=.04 and t=.08, the independent endpoint equations pass, and the .02 signed cold restart is exact. |
-| CP3 affordability and stock | The three matched .02 stock repeats, three coupled warm blocks and measured cold costs are recorded. The integrated day and pilot forecasts are pending. |
-| R4 admission | HELD. A passing R3 scientific recipe and a complete affordable pilot case set remain prerequisites. |
+| CP3 affordability and stock | The matched stock comparison and measured timing budgets are complete. The selected recipe misses the one-day target. |
+| R4 admission | HELD by the measured cost. The fourth class, longer-interval representativeness, streamed output and retention checks remain open. |
 
 `TASK2_COMPLETE=NO`. `TASK3_READY=NO`.
