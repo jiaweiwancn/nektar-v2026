@@ -1,0 +1,81 @@
+{
+  "request": {
+    "label": "r3-freeze-fourfold-matrix",
+    "phase": "analysis",
+    "command": [
+      "python3",
+      "-B",
+      "-c",
+      "\nfrom pathlib import Path\nimport json, sys\nfrom resources import atomic, identity\nfrom task2r_run import require\n\nroot = Path(sys.argv[1])\nsource = root / \"evidence/r3-time-matrix.json\"\nrequire(identity(source)[\"sha256\"] == \"b23684e5bdc09056b2302c0a2d3596c516b7084e199a33172642079309f3a72b\",\n        \"frozen physical comparison matrix differs\")\nprior = json.loads(source.read_text())\nproof = root / \"evidence/r3-time-perturbed-1-fd-fourfold.json\"\nvalue = json.loads(proof.read_text())\nrequire(value[\"status\"] == \"PASS\" and value[\"accepted_steps\"] == 4 and value[\"final_time\"] == .08,\n        \"fourfold matrix requires both signed endpoints\")\nlevels = []\nfor row in prior[\"levels\"]:\n    label = row[\"label\"] + \"-fd-fourfold\"\n    updated = dict(row, label=label, fd_step=4e-6)\n    if label == \"r3-time-perturbed-1-fd-fourfold\":\n        updated.update(operation_cap_seconds=1960, maximum_pause_seconds=150)\n    levels.append(updated)\natomic(root / \"evidence/r3-fourfold-matrix.json\", dict(schema=\"WJH27R3FourfoldMatrixV1\",\n    original=identity(source), first_signed=identity(proof), source_binding=identity(root/\"evidence/r3-timed-parity.json\"),\n    represented_signed_state=identity(root/\"science-r3/r3-audit-timed-perturbation/audit.json\"),\n    fd_step=4e-6, common_times=[.04,.08], levels=levels,\n    finer_witness=prior[\"finer_witness\"], evaluation=prior[\"evaluation\"],\n    confirmed_coarse_signed_seconds=value[\"timing\"][\"charge_seconds\"],\n    cost_basis=\"Retain the frozen clock, output and resource limits for the other levels until their measured receipts settle.\"))\n",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118"
+    ],
+    "cap_seconds": 65.0,
+    "reserved_seconds": 72.0,
+    "workers_before": 57,
+    "idle_mpi_event_helpers": 102,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 8463861449,
+      "source_build_runtime_bytes": 751264358,
+      "free_bytes": 3449163218944,
+      "r3_science_bytes": 3602035118
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v28/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_run.py",
+      "bytes": 52854,
+      "sha256": "23c5138b07a96273b6898712aef7bbec85d5880907a3d7aae063459687b1b022"
+    },
+    "rss_limit_bytes": 8589934592,
+    "memory_before": null,
+    "worker_pause_policy": null,
+    "worker_limit": 80,
+    "worker_admission_margin": 3,
+    "input_files": [],
+    "worker_census_policy": "ExcludeStoppedWorkersV1",
+    "stopped_workers_before": 80
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "analysis",
+    "seconds": 1.9578822780167684,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 20480,
+    "peak_host_workers": 139,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-freeze-fourfold-matrix/command.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "rss_limit_bytes": 8589934592,
+    "job_memory": null,
+    "minimum_memory_headroom_bytes": null,
+    "worker_limit": 80,
+    "peak_owned_workers": 0,
+    "worker_pauses": [],
+    "worker_paused_seconds": 0.0,
+    "child_elapsed_seconds": 1.102204664988676,
+    "peak_active_host_workers": 59,
+    "peak_stopped_host_workers": 80,
+    "peak_r3_science_bytes": 3602035118
+  },
+  "balance": {
+    "charged_seconds": 108998.63632666672,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 15605.363673333282,
+    "tranche_remaining": 1609.654392938217
+  },
+  "storage": {
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 751264358,
+    "free_bytes": 3449163202560,
+    "r3_science_bytes": 3602035118
+  }
+}

@@ -295,11 +295,17 @@ The tested .02 rate allows a conditional signed step-only projection. At the mea
 
 The account has charged 108,996.678 s, with 15,607.322 s nonprotected, including 1,611.612 s staged. The next allocation draws on the existing authorized balance. [Exact ledger](wj-h27-linux/task2r-r3-advancing/timestep-matrix/fourfold-signed-coarse.json)
 
-| Closure gate | Status after the four-step signed trajectory |
+### Middle signed refinement with the larger displacement
+
+The revised matrix keeps .02, .01 and .005 with t=.04 and t=.08 and applies `WJStepFDStep=4e-6` to both evolving cases. The .01 signed run accepted BE/EX1 and two BDF2/EX2 updates through t=.03. Its fourth step reached the native deadline in 652.086 s after 87 Krylov iterations, 349 residual evaluations and one age-triggered refresh. Its last k and outer-epsilon residuals were 1.151e−9 and 9.565e−10. The preserved t=.03 binary passed its checksum and clock checks. The operation charged 1,143.805 s with a peak of 62 active workers and zero suspensions. [Revised matrix](wj-h27-linux/task2r-r3-advancing/timestep-matrix/evidence/r3-fourfold-matrix.json) · [Native receipt and retained state](wj-h27-linux/task2r-r3-advancing/timestep-matrix/fourfold-signed-middle.json)
+
+The .02 signed recipe has an independent two-step process whose scheduled t=.04 checkpoint matches the uninterrupted four-step run. Use that checkpoint for a new two-step process and compare both t=.08 endpoints with independent equation and physical checks. The comparison is for the measured .02 signed recipe while finer time qualification remains open. The ledger has 14,455.237 s nonprotected, including 2,402.528 s staged, and a 3,600 s protected reserve. [Exact resource receipt](wj-h27-linux/task2r-r3-advancing/timestep-matrix/fourfold-signed-middle.json)
+
+| Closure gate | Status after the middle signed refinement |
 | --- | --- |
 | CP0 Bf state and admission | MET. Exact Bf replay and independently certified signed initial coefficients and histories bind to the Linux application. |
 | CP1 positive-time equations and costs | Quiet and retained-inlet prefixes accepted three steps at dt=.04. Earlier signed independent BE/EX1 and BDF2/EX2 audits passed. The larger-displacement .02 signed run supplies a two-step warm timing block. Its adjusted endpoints still require their independent audits. |
-| CP2 timestep and recovery | OPEN. The original .02 and .01 startup frames pass the independently audited t=.04 comparison. The larger displacement produced signed .02 frames at both common times. The same-displacement finer and retained-inlet comparisons, timestep choice and matched cold endpoint remain open. |
+| CP2 timestep and recovery | OPEN. The original .02 and .01 startup frames pass the independently audited t=.04 comparison. The larger displacement produced signed .02 frames at both common times and extended .01 to t=.03. The same-displacement finer and retained-inlet comparisons, timestep choice and matched cold endpoint remain open. |
 | CP3 affordability and stock | Stock was repeated at .04 and on the matched .02 retained-inlet interval. The tested .02 startup projects above the day target under its measured rate. Selected-recipe stock, cold and per-trajectory costs remain open. |
 | R4 admission | HELD. A passing R3 scientific recipe and a complete affordable pilot case set remain prerequisites. |
 

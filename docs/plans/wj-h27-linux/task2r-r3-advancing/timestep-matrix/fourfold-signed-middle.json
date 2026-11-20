@@ -1,0 +1,214 @@
+{
+  "schema": "WJH27R3FourfoldSignedMiddleV1",
+  "account": {
+    "charged_seconds": 110148.76288985973,
+    "nonprotected_remaining": 14455.237110140268,
+    "reserved_seconds": 0,
+    "tranche_remaining": 2402.5278297452023
+  },
+  "cases": {
+    "r3-time-perturbed-2-fd-fourfold": {
+      "accepted_steps": 3,
+      "admission": {
+        "bytes": 5927,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-2-fd-fourfold/admission.json",
+        "sha256": "63bec7dce5eee8bf618a2e9a715a2ffbcfa77598b11261c5a7fe16aa0671a039"
+      },
+      "failure": {
+        "accepted_residuals": [
+          3.5389100114266842e-12,
+          1.2125017065334347e-14,
+          0,
+          2.2342369612114487e-12,
+          1.4718122760618483e-12,
+          0
+        ],
+        "file": {
+          "bytes": 61027119,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-2-fd-fourfold/state.failure.json",
+          "sha256": "ba4d72b842cc7889022ad363759604ed6bf9e126a976c621383d71affd755c89"
+        },
+        "header": {
+          "accepted_state_residual_kind": "last accepted complete time-step residual",
+          "elapsed_solve_seconds": 1037.8244565930218,
+          "exception_type": "std::runtime_error",
+          "failed_attempt": {
+            "acceleration_accepted": 0,
+            "acceleration_proposals": 0,
+            "coupled_krylov_iterations": 87,
+            "coupled_preconditioner_applications": 87,
+            "coupled_residual_evaluations": 349,
+            "coupled_statistics_complete": true,
+            "disjoint_seconds": {
+              "assembly": 206.99986012122827,
+              "constitutive": 98.69417378070648,
+              "flow": 75.89419524703408,
+              "forcing": 0,
+              "guards": 18.004086168919457,
+              "io": 0,
+              "nonlinear": 7.469113882194506,
+              "other": 0.1446082079783082,
+              "rebuild": 130.50672770501114,
+              "residual": 69.78324853195227,
+              "scalar": 10.120721243059961,
+              "wall": 34.46933401492424
+            },
+            "drift_measure": "ScaledCurrentQuadratureDataL2V1",
+            "maximum_used_age": 8,
+            "maximum_uses": 8,
+            "mixed_sparse_ordering": "COLAMD",
+            "nonlinear_iterations": 2,
+            "nonlinear_trace": [],
+            "preconditioner_events": [],
+            "preconditioner_events_recorded": false,
+            "preconditioner_policy": "CurrentDataDriftV1",
+            "rebuilds": 3,
+            "refresh_reasons": {
+              "age": 1,
+              "alpha": 0,
+              "cold": 0,
+              "control": 0,
+              "drift": 0,
+              "injected": 0,
+              "retry": 0
+            },
+            "refreshes": 1,
+            "relative_drift_limit": 0.02,
+            "residuals": [
+              1.773071857263426e-10,
+              7.332786380796654e-13,
+              0,
+              1.1508193653228895e-9,
+              9.56532426135945e-10,
+              0
+            ],
+            "retries": 0,
+            "reuses": 2,
+            "seconds": 652.0860689030087
+          },
+          "reason": "current implicit Newton step failed: DEADLINE: finite steady-solve wall budget exhausted",
+          "schema": "WJH27CoupledFailureV1",
+          "status": "FAILED_WITH_ACCEPTED_HISTORY_PRESERVED"
+        },
+        "preserved": {
+          "bytes": 11014450,
+          "decoded_history_body_sha256": "05a161717877b840a764f672a2743603bc1884023be4cdd8100a7ae5b2d88e27",
+          "dt": 0.01,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-2-fd-fourfold/state.failed-accepted.bin",
+          "payload_sha256": "cba54b7cf60aae75ed65b8bf16dc26630c8ee5967b2c5ffc71afd267a9da2638",
+          "sha256": "7aa79653624dbfc43348f1fa6153295922ea6f8f3238c22ad04d173d63c7277f",
+          "signature": "849d529213213e135020ce1cc0e42b8448bfea6b993d5dae4ebe6ac585aa5860",
+          "step": 3,
+          "time": 0.03
+        }
+      },
+      "final_time": 0.03,
+      "frames": {
+        "0": {
+          "bytes": 30800245,
+          "hashes": {
+            "advection_sha256": "0c2ecbb69b0ed00ed68415e33b769501bcc3a2d51b8d92724bff9667981b1c2c",
+            "previous_advection_sha256": "0c2ecbb69b0ed00ed68415e33b769501bcc3a2d51b8d92724bff9667981b1c2c",
+            "previous_sha256": "f79e64e95edae1ff5657435176543e687ec6f3c894333b8130bac34d3cf713f7",
+            "state_sha256": "f79e64e95edae1ff5657435176543e687ec6f3c894333b8130bac34d3cf713f7"
+          },
+          "origin": "fresh_initial_observation",
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-2-fd-fourfold/state.science-0.json",
+          "reason_mask": 8,
+          "sha256": "a5455e3d469a81679a5b98f3dea2bd9a6fe96f735950139a1814696b0266d134",
+          "step": 0,
+          "time": 0,
+          "write_seconds": 1.5505166969960555
+        }
+      },
+      "label": "r3-time-perturbed-2-fd-fourfold",
+      "operation": {
+        "exit": 1,
+        "peak_active_host_workers": 62,
+        "peak_host_workers": 142,
+        "peak_stopped_host_workers": 80,
+        "peak_tree_rss_bytes": 11916296192,
+        "phase": "r3-advance",
+        "rank_affinity": {
+          "allowed_cpus": [
+            0
+          ],
+          "pid": 573834,
+          "startup_cpus": [
+            0
+          ]
+        },
+        "reason": null,
+        "seconds": 1143.8048696629994,
+        "status": "FAIL",
+        "worker_limit": 80,
+        "worker_paused_seconds": 0
+      },
+      "receipt": {
+        "bytes": 7222,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-time-perturbed-2-fd-fourfold/receipt.json",
+        "sha256": "2f585aa98558fea782185f8c1a9be592fbd03d123fb46721ead723f0f2edd8c5"
+      },
+      "recipe": {
+        "application": {
+          "bytes": 10067520,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3-timed/IncNavierStokesSolver",
+          "sha256": "fcccad2abd9e2466de2b271c646d7dda10c2165801841c0d2c2abdab3cf1ea8a"
+        },
+        "certificate": {
+          "bytes": 12561,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-timed-certificate.json",
+          "sha256": "469c6d699524f0bfd30e461fab8c2f7b2f13b8042c7cbcc6e44d30e3286207ee"
+        },
+        "fd_step": 0.000004,
+        "initial_fields": {
+          "bytes": 76943910,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-timed-parity/state.result.json",
+          "sha256": "c2f1b4b6f824f4f13fa8415d26d49b935fc11fc507b25f9c470c2e7baf34a6e5"
+        },
+        "native_step_cap_seconds": 650,
+        "represented_proof": {
+          "bytes": 22509,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-timed-perturbation/audit.json",
+          "sha256": "fa43a862a1fcbe0cceca2e9fdea8346c945de924321d84ece630189387da8941"
+        },
+        "requested_steps": 8,
+        "source": "42b0ded162d5fc8fba899542f9cb39c5cf71eedf50b0c1ee686c46ce9f8f9ab9",
+        "step_preconditioner": "CurrentDataDriftV1",
+        "timestep": 0.01
+      },
+      "recoveries": [
+        {
+          "bytes": 11014450,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-2-fd-fourfold/state.failed-accepted.bin",
+          "sha256": "7aa79653624dbfc43348f1fa6153295922ea6f8f3238c22ad04d173d63c7277f"
+        }
+      ],
+      "seal": {
+        "bytes": 2909,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-time-perturbed-2-fd-fourfold.json",
+        "sha256": "968cc106b50e1886bb117e7700830a988217aee2a7034b24879df0e66e46d70e"
+      },
+      "timing": null
+    }
+  },
+  "census": {
+    "active": 60,
+    "owned": 0,
+    "parked_helpers": 102,
+    "stopped": 80,
+    "stopped_owned": 0,
+    "total": 140
+  },
+  "ledger": {
+    "bytes": 754505,
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/accounting.json",
+    "sha256": "b6bc237fdf6e670dafd123bfdacda72e41887eed4a08fe860074b9f921f8930b"
+  },
+  "storage": {
+    "free_bytes": 3447293198336,
+    "r3_science_bytes": 3706577176,
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 751264358
+  }
+}
