@@ -131,11 +131,12 @@ def prepare(root, label, coupled_path, cap, rss_gib, svv):
 def timing(log, steps, process):
     regions = {}
     for name in TIMERS:
-        row = re.search(rf"^\s*{name}\s+(\S+)\s+\S+\s+\S+\s+(\d+)\s+\d+$", log, re.MULTILINE)
+        row = re.search(rf"^\s*{name}\s+(\S+)\s+\S+\s+\S+\s+(\d+)\s+\d+[ \t]*$", log, re.MULTILINE)
         if row:
             regions[name] = dict(seconds=float(row[1]), calls=int(row[2]))
     driver = DRIVER.search(log)
-    checkpoint = sum(map(float, CHECKPOINT.findall(log)))
+    checkpoint_samples = CHECKPOINT.findall(log)
+    checkpoint = sum(map(float, checkpoint_samples)) if checkpoint_samples else None
     result = dict(regions=regions, checkpoint_seconds=checkpoint)
     if not steps or driver is None or "Execute" not in regions or process is None:
         return result
@@ -146,11 +147,14 @@ def timing(log, steps, process):
     scopes = dict(
         timed_equations_seconds=projected,
         other_integration_seconds=integration-projected,
-        checkpoint_seconds=checkpoint,
-        initialisation_and_between_steps_seconds=compute-integration-checkpoint,
         driver_output_and_diagnostics_seconds=execute-compute,
         outside_driver_seconds=process-execute,
     )
+    if checkpoint is None:
+        scopes["initialisation_and_step_overhead_including_filters_seconds"] = compute-integration
+    else:
+        scopes["checkpoint_seconds"] = checkpoint
+        scopes["initialisation_and_between_steps_seconds"] = compute-integration-checkpoint
     # Single-rank timers printed with decimal rounding can differ at scope boundaries.
     require(process > 0 and all(math.isfinite(v) for v in scopes.values())
             and min(scopes.values()) >= -max(1e-5, 2e-5*process), "stock timing scopes overlap")
@@ -181,7 +185,8 @@ def report(root, label, out):
         admission=identity(case / "admission.json"), operation=identity(operation), solver_status=elapsed["status"],
         process_seconds=process, step_report=steps, field_norms=field_norms,
         timing=timing(log,steps,process),
-        warmed_mean_seconds=statistics.mean(s for _,_,s in steps[1:]) if stable and count>1 else None,
+        first_bdf2_seconds=steps[1][2] if stable and count>1 else None,
+        warmed_mean_seconds=statistics.mean(s for _,_,s in steps[2:]) if stable and count>2 else None,
         outputs=[identity(p) for p in files if p.is_file()]))
 
 

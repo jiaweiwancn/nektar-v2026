@@ -1,0 +1,88 @@
+{
+  "schema": "WJH27R3ProvisionalStockTimingV1",
+  "raw_log": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-stock-provisional-1/command.log",
+    "bytes": 3078,
+    "sha256": "60d474b9098f0c40719ed5f8dc69a0e7962e410865a06432e405bab5f6cd3b69"
+  },
+  "compressed_log_sha256": "8e90a962a9a500790571056a63f69b4b872f6c74679808d1ac5822163fc46bb5",
+  "parser_sha256": "562bf98f2746612e421861ac27e0f61dd648181214451e1d7bd3b793ef9e0d48",
+  "timing": {
+    "regions": {
+      "Execute": {
+        "seconds": 13.848,
+        "calls": 1
+      },
+      "Advection Terms": {
+        "seconds": 0.159345,
+        "calls": 4
+      },
+      "Pressure BCs": {
+        "seconds": 0.00864827,
+        "calls": 4
+      },
+      "Pressure Forcing": {
+        "seconds": 0.105445,
+        "calls": 3
+      },
+      "Pressure Solve": {
+        "seconds": 1.15038,
+        "calls": 3
+      },
+      "Viscous Forcing": {
+        "seconds": 0.0352083,
+        "calls": 3
+      },
+      "Viscous Solve": {
+        "seconds": 9.75398,
+        "calls": 3
+      }
+    },
+    "checkpoint_seconds": null,
+    "disjoint_seconds": {
+      "timed_equations_seconds": 11.213006570000001,
+      "other_integration_seconds": 0.021963429999999562,
+      "driver_output_and_diagnostics_seconds": 0.17330000000000112,
+      "outside_driver_seconds": 6.323808979008346,
+      "initialisation_and_step_overhead_including_filters_seconds": 2.439729999999999
+    },
+    "equation_share": 0.5569639297938819,
+    "inside_driver_fraction": 0.6865026341668625,
+    "integration_seconds": 11.23497,
+    "measured_driver_computation_seconds": 13.6747
+  },
+  "step_seconds": [
+    5.99331,
+    4.95627,
+    0.28539
+  ],
+  "process_seconds": 20.171808979008347,
+  "whole_charge_seconds": 21.02086601901101,
+  "worker_paused_seconds": 0.0,
+  "field_norms": [
+    [
+      "u",
+      21.5485
+    ],
+    [
+      "u",
+      1.08954
+    ],
+    [
+      "v",
+      0.000700213
+    ],
+    [
+      "v",
+      0.0175459
+    ],
+    [
+      "p",
+      0.633826
+    ],
+    [
+      "p",
+      0.151072
+    ]
+  ]
+}
