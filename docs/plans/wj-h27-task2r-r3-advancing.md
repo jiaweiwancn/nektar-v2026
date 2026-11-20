@@ -341,11 +341,17 @@ The .01 signed run with the same three-use control accepted all eight steps thro
 
 The next comparisons use all prescribed owner rows at the two common times, with the same finite-difference displacement and factor-use limit. Their result will inform the matching retained-inlet replays. The time ledger has 6,662.080 s nonprotected, including 1,930.370 s staged. [Exact accounting and output identities](wj-h27-linux/task2r-r3-advancing/timestep-matrix/refresh3-signed-middle.json)
 
-| Closure gate | Status after the completed .01 signed witness |
+### Signed timestep comparison at both common times
+
+The .02 and .01 signed trajectories with the three-use control pass every prescribed RMS and MAX limit at t=.04 and t=.08. Each comparison used all 690 original owner rows and 23 fixed-window rows, with both sides of faces and 29 stations. Across both times the largest original-row U, W and k/Kin differences were 9.514e−7, 5.570e−8 and 2.950e−5. The stress, modified-pressure and traction maxima were 2.313e−4, 2.358e−4 and 4.177e−5. The code-gradient and locally scaled outer-epsilon maxima were 2.567e−4 and 5.083e−4. [Complete comparison inventories and extrema](wj-h27-linux/task2r-r3-advancing/timestep-matrix/refresh3-signed-time-comparison.json)
+
+The two comparisons charged 105.387 and 102.952 s. The matching retained-inlet pair uses the same 4e−6 displacement and three-use factor policy, with four .02 steps and eight .01 steps. The ledger has 6,453.741 s nonprotected, including 1,722.031 s staged. [Run receipts and accounting](wj-h27-linux/task2r-r3-advancing/timestep-matrix/refresh3-signed-time-comparison.json)
+
+| Closure gate | Status after the signed common-time comparisons |
 | --- | --- |
 | CP0 Bf state and admission | MET. Exact Bf replay and independently certified signed initial coefficients and histories bind to the Linux application. |
 | CP1 positive-time equations and costs | Quiet and retained-inlet prefixes accepted three steps at dt=.04. Earlier signed independent BE/EX1 and BDF2/EX2 audits passed. The larger-displacement .02 signed run supplies a two-step warm timing block. Its adjusted endpoints still require their independent audits. |
-| CP2 timestep and recovery | The .02 signed cold restart is MET with the three-use control and both independent audits. Overall CP2 remains OPEN. Both three-use signed levels reached t=.04 and t=.08. Their common-time checks, the matched retained-inlet interval and timestep choice remain open. |
+| CP2 timestep and recovery | The .02 signed cold restart is MET with the three-use control. Both signed time comparisons meet their tolerances. The matching retained-inlet interval and its time comparisons remain open, along with the required independent checks on the new endpoints and the timestep choice. |
 | CP3 affordability and stock | Stock was repeated at .04 and on the matched .02 retained-inlet interval. The tested .02 startup projects above the day target under its measured rate. Selected-recipe stock, cold and per-trajectory costs remain open. |
 | R4 admission | HELD. A passing R3 scientific recipe and a complete affordable pilot case set remain prerequisites. |
 
