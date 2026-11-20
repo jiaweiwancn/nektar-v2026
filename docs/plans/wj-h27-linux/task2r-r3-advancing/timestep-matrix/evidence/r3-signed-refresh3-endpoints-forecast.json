@@ -1,0 +1,58 @@
+{
+  "schema": "WJH27R3SignedColdEndpointsForecastV1",
+  "live_before": {
+    "charged_seconds": 114855.67159365464,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 9748.328406345361,
+    "tranche_remaining": 3665.6191259502957
+  },
+  "ledger": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/accounting.json",
+    "bytes": 782696,
+    "sha256": "0352f91163859e6eb3588238f887231e1d7f5d5b762303a3cfeeb8c4dc447276"
+  },
+  "stage_increase": 515,
+  "limit_seconds": 4180,
+  "inputs": [
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-signed-refresh3-uninterrupted.json",
+      "bytes": 15779,
+      "sha256": "9661c051eb803737bc0ba2a90ad04de46e7b0ce4f286b93dbcf728a48147b11a"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-signed-refresh3-resumed.json",
+      "bytes": 10257,
+      "sha256": "5715ae5efe4e8703e22c5660808d2df27ce1794346b8d618919e516a513c321f"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-signed-refresh3-split.json",
+      "bytes": 10104,
+      "sha256": "b7d6396c6d75ef4040834b826e44da138370df9e4012c19fd744bb19efd8fcd8"
+    }
+  ],
+  "prior_audits": [
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-startup-coarse-first-common/receipt.json",
+      "bytes": 6376,
+      "sha256": "8be041b5c3c8dc811333ff9f537f33ccdbe76d0743904e1dd0ab5002e0d0f708"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-startup-middle-first-common/receipt.json",
+      "bytes": 6376,
+      "sha256": "f645b7ea702f48937acaf0ed3a4c37f21bc4f2d3aa2330a670732bb30c15346c"
+    }
+  ],
+  "endpoint_time": 0.08,
+  "split_time": 0.04,
+  "step": 0.02,
+  "fd_step": 4e-06,
+  "step_pc_maximum_uses": 3,
+  "audit_caps_seconds": [
+    1450,
+    1450
+  ],
+  "compare_cap_seconds": 815,
+  "named_audit_rss_gib": 10,
+  "independent_address_space_gib": 8,
+  "scope": "On-cadence split, separate process, and independently checked signed Bf endpoints."
+}

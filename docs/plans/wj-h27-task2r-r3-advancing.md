@@ -327,11 +327,19 @@ The declared `WJStepPCMaximumUses=3` control used the same timed application and
 
 The uninterrupted process took 842.272 s with a warm mean of 175.524 s, compared with 738.092 and 125.435 s for the eight-use signed run. Rebuilds used 504.058 s. The separate split and replay took 489.074 and 468.139 process seconds. All three operations used one MPI rank on CPU 0, reached a maximum of 66 active workers across their receipts, and recorded zero suspensions. At settlement the account had 9,748.328 s nonprotected, including 3,665.619 s staged. [Observed numerical remedy and costs](wj-h27-linux/task2r-r3-advancing/timestep-matrix/signed-refresh3-native.json)
 
-| Closure gate | Status after the three-use signed native runs |
+### Verified three-use signed cold restart
+
+The tested dt=.02 three-use restart meets the 1e−8 endpoint gate. The separate process imported the scheduled t=.04 binary. All four decoded roles, clocks and t=.08 final bytes match. The physical fields, dependent wall/cutoff/trace reconstruction and advection norms therefore have zero differences. Both independent t=.08 equation and physical audits passed with the same scaled residuals. Momentum was 2.639e−10, continuity 1.868e−14, k 1.448e−10 and outer epsilon 1.117e−10. [Independent verification and exact history identities](wj-h27-linux/task2r-r3-advancing/timestep-matrix/signed-refresh3-restart-verification.json)
+
+The scheduled t=.04 write took .199183 s. The new process read it in .083018 s and rebuilt the history caches in 27.515329 s. The two independent audit charges were 704.456 and 739.203 s. The exact binary and scientific comparison charged 14.440 s. The measured .02 signed warm rate of 175.524 s projects 5,540,410 s of advancing with the 1.25 margin for the 505.02466521278404 trajectory, or 286,762 s for the 26.13350407707765 pilot, before their fixed and recurring costs. The three-use remedy preserves repeatability for this control and increases factorization time. [Restart timing and conditional cost](wj-h27-linux/task2r-r3-advancing/timestep-matrix/signed-refresh3-restart-verification.json)
+
+The ledger reached 116,319.857 s charged, with 8,284.143 s nonprotected, including 2,716.434 s staged. The next signed .01 run applies the same three-use control so the previous incomplete fourth step starts with a fresh inverse. The independent cold result applies to the tested .02 case. The time qualification and selected recipe remain open. [Accounting and exact accepted equation evidence](wj-h27-linux/task2r-r3-advancing/timestep-matrix/signed-refresh3-restart-verification.json)
+
+| Closure gate | Status after the verified three-use restart |
 | --- | --- |
 | CP0 Bf state and admission | MET. Exact Bf replay and independently certified signed initial coefficients and histories bind to the Linux application. |
 | CP1 positive-time equations and costs | Quiet and retained-inlet prefixes accepted three steps at dt=.04. Earlier signed independent BE/EX1 and BDF2/EX2 audits passed. The larger-displacement .02 signed run supplies a two-step warm timing block. Its adjusted endpoints still require their independent audits. |
-| CP2 timestep and recovery | OPEN. The original .02 and .01 startup frames pass the independently audited t=.04 comparison. The larger displacement produced signed .02 frames at both common times and extended .01 and .005 through t=.03 and t=.005. The eight-use cold replay failed the pressure endpoint tolerance. The three-use signed endpoints match byte for byte and await independent audits. The finer signed witness and timestep choice remain open. |
+| CP2 timestep and recovery | The .02 signed cold restart is MET with the three-use control and both independent audits. Overall CP2 remains OPEN. The original .02 and .01 startup frames pass the audited t=.04 comparison. The matching finer signed witness and timestep choice remain open. |
 | CP3 affordability and stock | Stock was repeated at .04 and on the matched .02 retained-inlet interval. The tested .02 startup projects above the day target under its measured rate. Selected-recipe stock, cold and per-trajectory costs remain open. |
 | R4 admission | HELD. A passing R3 scientific recipe and a complete affordable pilot case set remain prerequisites. |
 
