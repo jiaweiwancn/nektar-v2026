@@ -65,8 +65,8 @@ def evolution(case, out, seconds):
     require(initial["step"] == initial["time"] == 0 and initial["elements"] == final["elements"]
             and initial["signature"] == final["signature"], "initial and accepted inventories differ")
     ref = po.load_reference(verified(plan["table"]))
-    a,b = (po.PhysicalOracle(data,ref,20,deadline) for data in (initial,final))
-    rows, window, inventory = compare(a,b,interior=(-2.5,8),detailed=True)
+    before, after = (po.PhysicalOracle(data,ref,20,deadline) for data in (initial,final))
+    rows, window, inventory = compare(after,before,interior=(-2.5,8),detailed=True)
     atomic(out,dict(schema="WJH27R3ObservedEvolutionV1",role=plan["role"],
         initial=identity(start),accepted=final_file,scientific_index=index_file,
         time=final["time"],inventory=inventory,original_rows=rows,fixed_window_rows=window,

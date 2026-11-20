@@ -1,0 +1,78 @@
+{
+  "request": {
+    "label": "r3-verify-perturbed-recovery-1",
+    "phase": "evidence",
+    "command": [
+      "python3",
+      "-B",
+      "-c",
+      "\nimport sys, time\nfrom pathlib import Path\nfrom physical_cache_history_check import binary_history\nfrom resources import atomic, identity\nfrom task2r_advancing import identity_of_state, read, require\nfrom task2r_advancing_evidence import HASH_KEYS\nimport physical_transient_oracle as transient\nr=Path(sys.argv[1])\nc=r/\"science-r3/r3-prefix-perturbed\"\nq=r/\"science-r3/r3-audit-signed-perturbation/audit.json\"\nproof=read(q)\nplan=read(c/\"admission.json\")\noperation=r/\"operations/r3-prefix-perturbed/receipt.json\"\nstatus=read(operation)[\"result\"]\ninitial, frame, binary=(c/n for n in (\"state.science-0.json\",\"state.science-1.json\",\"state.recovery-1.bin\"))\nstart=identity_of_state(initial)\nstep=identity_of_state(frame)\n_, checkpoint=binary_history(binary,step,.04,time.monotonic()+15)\nlog=c/\"state.steps.jsonl\"\njournal=read(log)\nrequire(plan[\"represented_proof\"]==identity(q) and proof[\"status\"]==\"MET\"\n        and status[\"status\"]==\"FAIL\" and status[\"reason\"] in (\"HOST_WORKER_LIMIT\",\"HOST_PRESSURE_REMAINS\",\"TIME_LIMIT\")\n        and start[\"state_sha256\"]==proof[\"state_sha256\"]==step[\"previous_sha256\"]\n        and checkpoint[\"step\"]==step[\"step\"]==journal[\"step\"]==1\n        and step[\"time\"]==checkpoint[\"time\"]==journal[\"time\"]==.04\n        and all(step[key]==journal[key]==checkpoint[\"hashes\"][role] for role,key in HASH_KEYS.items())\n        and all(transient.state_hash(step[\"input_history\"][role])==start[key] for role,key in HASH_KEYS.items())\n        and max(step[\"residuals\"])<=1e-10,\n        \"accepted perturbation and actual recovery histories differ\")\natomic(r/\"evidence/r3-perturbed-recovery-1.json\",dict(schema=\"WJH27R3RecoveredPrefixAnchorV1\",\n    status=\"MET\",initial=identity(initial),accepted=identity(frame),recovery=checkpoint,step_log=identity(log),\n    operation=identity(operation),signed_represented=identity(q),state_hashes={k:step[k] for k in HASH_KEYS.values()}))\n",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118"
+    ],
+    "cap_seconds": 55.0,
+    "reserved_seconds": 62.0,
+    "workers_before": 77,
+    "idle_mpi_event_helpers": 108,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 8463861449,
+      "source_build_runtime_bytes": 632426542,
+      "free_bytes": 3491176255488,
+      "r3_science_bytes": 1256300560
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v15/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_run.py",
+      "bytes": 51427,
+      "sha256": "8c059cb81c1c605742d0c7793460a7530f8761f5b32dc5e752a671051aac795f"
+    },
+    "rss_limit_bytes": 8589934592,
+    "memory_before": null,
+    "worker_pause_policy": null,
+    "worker_limit": 80,
+    "worker_admission_margin": 3,
+    "input_files": []
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "evidence",
+    "seconds": 4.916114555991953,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 341463040,
+    "peak_host_workers": 77,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-verify-perturbed-recovery-1/command.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "rss_limit_bytes": 8589934592,
+    "job_memory": null,
+    "minimum_memory_headroom_bytes": null,
+    "worker_limit": 80,
+    "peak_owned_workers": 0,
+    "worker_pauses": [],
+    "worker_paused_seconds": 0.0,
+    "child_elapsed_seconds": 4.21543308001128,
+    "peak_active_host_workers": 77,
+    "peak_r3_science_bytes": 1256300560
+  },
+  "balance": {
+    "charged_seconds": 94383.57180029267,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 10016.428199707327,
+    "tranche_remaining": 3099.7189193122613
+  },
+  "storage": {
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 632426542,
+    "free_bytes": 3491176222720,
+    "r3_science_bytes": 1256300560
+  }
+}
