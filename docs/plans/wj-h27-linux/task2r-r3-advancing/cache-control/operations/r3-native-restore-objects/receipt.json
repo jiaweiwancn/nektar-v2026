@@ -1,0 +1,84 @@
+{
+  "request": {
+    "label": "r3-native-restore-objects",
+    "phase": "analysis",
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v7/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_build_reuse.py",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-build-object-reuse.json"
+    ],
+    "cap_seconds": 115.0,
+    "reserved_seconds": 122.0,
+    "workers_before": 75,
+    "idle_mpi_event_helpers": 108,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 8463861449,
+      "source_build_runtime_bytes": 450312320,
+      "free_bytes": 3525801033728,
+      "r3_science_bytes": 379154980
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v5/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_run.py",
+      "bytes": 48433,
+      "sha256": "a8f19bbfe23d80a9b8387aa5def4efc041f8d5aaaefe4b5f95b283fa8e4c995d"
+    },
+    "rss_limit_bytes": 8589934592,
+    "memory_before": null,
+    "worker_pause_policy": null,
+    "worker_limit": 80,
+    "worker_admission_margin": 3,
+    "input_files": [
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v7/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_build_reuse.py",
+        "bytes": 5646,
+        "sha256": "34ff30e0d68c8d16db6aa0dbd515aa92bd71995cdb98f7df7eab63263b9e6986"
+      }
+    ]
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "analysis",
+    "seconds": 12.061202437995235,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 36540416,
+    "peak_host_workers": 76,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-native-restore-objects/command.log",
+      "bytes": 55,
+      "sha256": "8e6db584b477a3cb6a396d152b21e28e0d8a6a099360ff16ada21efe194767af"
+    },
+    "rss_limit_bytes": 8589934592,
+    "job_memory": null,
+    "minimum_memory_headroom_bytes": null,
+    "worker_limit": 80,
+    "peak_owned_workers": 0,
+    "worker_pauses": [],
+    "worker_paused_seconds": 0.0,
+    "child_elapsed_seconds": 11.46810947798076,
+    "peak_active_host_workers": 76,
+    "peak_r3_science_bytes": 379154980
+  },
+  "balance": {
+    "charged_seconds": 86568.9519387456,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 17831.048061254405,
+    "tranche_remaining": 4714.33878085934
+  },
+  "storage": {
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 493899022,
+    "free_bytes": 3525754294272,
+    "r3_science_bytes": 379154980
+  }
+}

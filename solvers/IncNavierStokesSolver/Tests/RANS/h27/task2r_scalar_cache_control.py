@@ -7,64 +7,12 @@ from pathlib import Path
 import time
 
 import numpy as np
-from numpy.polynomial.legendre import leggauss
 from scipy.sparse.linalg import splu
 
 import physical_oracle as po
 from physical_transient_oracle import state_hash
 from resources import atomic, identity
-
-
-def tensor(x, r):
-    def modes(t):
-        bubble = (1-t*t)/4
-        return (np.column_stack(((1-t)/2,(1+t)/2,bubble,2*t*bubble)),
-                np.column_stack((np.full_like(t,-.5),np.full_like(t,.5),-t/2,(1-3*t*t)/2)))
-
-    bx, dx = modes(x)
-    br, dr = modes(r)
-
-    def combine(a, b):
-        return (a[:,:,None]*b[:,None,:]).reshape(len(x),16)
-
-    return combine(br,bx), combine(br,dx), combine(dr,bx)
-
-
-def polynomial_transport(model, order, deadline):
-    q, w = (np.asarray(a,dtype=np.longdouble) for a in leggauss(order))
-    x, r = np.meshgrid(q,q)
-    val, dx, dr = tensor(x.ravel(),r.ravel())
-    ww = np.outer(w,w).ravel()
-    edge_values = tuple(tensor(a,b)[0] for a,b in (
-        (np.full_like(q,-1),q), (np.ones_like(q),q),
-        (q,np.full_like(q,-1)), (q,np.ones_like(q))))
-    result = {k:np.zeros_like(model.s[k],dtype=np.longdouble) for k in ("k","epsilon")}
-
-    def local(e,key,shift=0):
-        field = "flow" if key == "u" else key
-        return np.asarray(e[po.SIGNS[key]],dtype=np.longdouble)*model.s[field][shift+np.asarray(e[key])]
-
-    for e in model.elements:
-        po.require(time.monotonic() < deadline,"scalar cache control exhausted its time allocation")
-        xl,xr,rl,rr = e["bounds"]
-        u = val@local(e,"u")
-        v = val@local(e,"u",model.n)
-        for key in result:
-            if not e[key]:
-                continue
-            scalar = val@local(e,key)
-            action = -(rr-rl)/2*(dx.T@(ww*u*scalar))-(xr-xl)/2*(dr.T@(ww*v*scalar))
-            result[key][e[key]] += np.asarray(e[po.SIGNS[key]])*action
-    for key in result:
-        for e, side in model.faces[key]:
-            xl,xr,rl,rr = e["bounds"]
-            b = edge_values[side]
-            shift = model.n if side >= 2 else 0
-            sign = -1 if side in (0,2) else 1
-            length = rr-rl if side < 2 else xr-xl
-            flux = sign*(b@local(e,"u",shift))*(b@local(e,key))
-            result[key][e[key]] += np.asarray(e[po.SIGNS[key]])*(length/2)*(b.T@(w*flux))
-    return result
+from scalar_reference_transport import polynomial_transport
 
 
 def measure(native, table, out, seconds):
@@ -75,7 +23,7 @@ def measure(native, table, out, seconds):
     saved = state["current_advection"]
     po.require(state_hash(saved) == state["advection_sha256"],"invalid native cache checksum")
     model = po.PhysicalOracle(state,ref,20,deadline)
-    old, fine = (polynomial_transport(model,q,deadline) for q in (8,12))
+    old, fine = (polynomial_transport(model,q) for q in (8,12))
     model.build_riesz()
     diagnostics = {}
     for key in fine:

@@ -20,6 +20,7 @@ import time
 import physical_oracle as po
 import numpy as np
 from scipy.sparse.linalg import splu
+import scalar_reference_transport as scalar_transport
 
 SCHEMA = 'WJH27IndependentPhysicalTransientOracleV1'
 KEYS = ('flow', 'k', 'epsilon')
@@ -122,10 +123,13 @@ class TransientOracle:
     def transport(self, o):
         """Conservative scalar/advective velocity forms; current velocity test.
 
-        No constitutive evaluation is needed. Quadrature panels are built from
-        this history state's own H trace and cutoff, not current-state panels.
+        No constitutive evaluation is needed. Velocity/AWF quadrature uses
+        independent physical panels. The conservative scalar integrands are
+        polynomial on complete affine cells and faces.
         """
         adv, awf, nonconservative = o.zeros(), o.zeros(), o.zeros()
+        for key, load in scalar_transport.polynomial_transport(o, o.order).items():
+            adv[key] = np.asarray(load,dtype=float)
         work = {region: dict(domain=0., sampled=0., cross_integration_bulk=0.)
                 for region in ('whole', 'inner', 'outer')}
         boundary = dict(k=0., epsilon=0., cross_kinetic_flux=0., kinetic_flux=0.)
@@ -148,8 +152,7 @@ class TransientOracle:
             awf['flow'][ids] -= b.T@(weight*sampled)
             for key in ('k', 'epsilon'):
                 if not e[key]: continue
-                qb, qx, qr = po.basis(e, key, x, r); qi = np.asarray(e[key])
-                adv[key][qi] -= qx.T@(weight*a['u'][:, 0]*a[key])+qr.T@(weight*a['u'][:, 1]*a[key])
+                qb = po.basis(e, key, x, r)[0]; qi = np.asarray(e[key])
                 nonconservative[key][qi] += qb.T@(weight*np.sum(a['u']*a['grad_'+key], axis=1))
             domain = np.sum(test['u']*conv, axis=1)
             sampled_work = test['u'][:, 0]*sampled
@@ -169,7 +172,6 @@ class TransientOracle:
                     boundary['kinetic_flux'] += float(weight@(un*np.sum(a['u']**2, axis=1)/2))
                 else:
                     flux = un*a[key]
-                    adv[key][e[key]] += po.basis(e, key, x, r)[0].T@(weight*flux)
                     value = float(weight@flux); boundary[key] += value
                     rows.append(dict(field=key, geometry=e['geometry'], side=po.SIDES[side], outward_advection=value))
         return dict(advection=adv, awf=awf, total=combine(adv, 1., awf, 1.),
@@ -249,8 +251,8 @@ class TransientOracle:
         f, g = self.scheme['explicit_coefficients']
         explicit = combine(old['total'], f, previous['total'], g)
         mass, storage = self.storage()
-        total = {key: o.total[key]-o.parts['advection'][key]-o.parts['awf_convection'][key]+
-                       explicit[key]+mass[key] for key in KEYS}
+        spatial = [part for name,part in o.parts.items() if name not in ('advection','awf_convection')]
+        total = {key: sum(part[key] for part in spatial)+explicit[key]+mass[key] for key in KEYS}
         self.total, self.mass, self.explicit = total, mass, explicit
         self.transport_results = dict(current=current, old=old, previous=previous)
         checks = {}
@@ -436,6 +438,7 @@ def main():
     began = time.monotonic()
     report = dict(schema=SCHEMA, status='NOT_MET', full_H27_qualification=False,
         source=po.identity(__file__), steady_oracle_source=po.identity(po.__file__), basis_source=po.identity(po.fixtures.__file__),
+        polynomial_scalar_transport_source=po.identity(scalar_transport.__file__),
         native=po.identity(args.native), table=po.identity(args.table), wall_cap_seconds=args.seconds,
         memory_cap_bytes=cap, workers=1, unresolved_gates=[
             'Whole-state continuum admissibility and finite perturbations remain separate gates',
