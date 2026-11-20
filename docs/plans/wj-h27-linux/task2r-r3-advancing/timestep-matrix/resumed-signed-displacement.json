@@ -1,0 +1,231 @@
+{
+  "schema": "WJH27R3ResumedSignedDisplacementV1",
+  "account": {
+    "charged_seconds": 101773.77065128667,
+    "nonprotected_remaining": 22830.22934871333,
+    "reserved_seconds": 0,
+    "tranche_remaining": 7058.520068318263
+  },
+  "cases": {
+    "r3-fd-quarter-perturbed-2": {
+      "accepted_steps": 0,
+      "admission": {
+        "bytes": 5899,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-fd-quarter-perturbed-2/admission.json",
+        "sha256": "acb9aab82e6587cc86dab927ce2c86ba1f8115bcc2dd4bd645f19ed52e2786d4"
+      },
+      "failure": {
+        "file": {
+          "bytes": 61025481,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-fd-quarter-perturbed-2/state.failure.json",
+          "sha256": "97695396262fafd4704dd6bef7e286c488c24b20f57443e0916473758fa5c7bc"
+        },
+        "header": {
+          "accepted_state_residual_kind": "steady diagnostic of fresh initial state",
+          "elapsed_solve_seconds": 667.218115066993,
+          "exception_type": "std::runtime_error",
+          "failed_attempt": {
+            "acceleration_accepted": 0,
+            "acceleration_proposals": 0,
+            "coupled_krylov_iterations": 83,
+            "coupled_preconditioner_applications": 83,
+            "coupled_residual_evaluations": 335,
+            "coupled_statistics_complete": true,
+            "disjoint_seconds": {
+              "assembly": 202.31947156134993,
+              "constitutive": 94.53898424288491,
+              "flow": 77.11534252588172,
+              "forcing": 0,
+              "guards": 17.40986838293611,
+              "io": 0,
+              "nonlinear": 7.8224584509735,
+              "other": 0.13643294502981007,
+              "rebuild": 133.59100394597044,
+              "residual": 74.10777665115893,
+              "scalar": 10.309124541905476,
+              "wall": 34.46946409888915
+            },
+            "drift_measure": "ScaledCurrentQuadratureDataL2V1",
+            "maximum_used_age": 3,
+            "maximum_uses": 8,
+            "mixed_sparse_ordering": "COLAMD",
+            "nonlinear_iterations": 2,
+            "nonlinear_trace": [],
+            "preconditioner_events": [],
+            "preconditioner_events_recorded": false,
+            "preconditioner_policy": "CurrentDataDriftV1",
+            "rebuilds": 3,
+            "refresh_reasons": {
+              "age": 0,
+              "alpha": 0,
+              "cold": 1,
+              "control": 0,
+              "drift": 0,
+              "injected": 0,
+              "retry": 0
+            },
+            "refreshes": 1,
+            "relative_drift_limit": 0.02,
+            "residuals": [
+              1.586704281544671e-8,
+              3.52902206494809e-11,
+              0,
+              3.228167067170417e-8,
+              5.1072383189260494e-8,
+              0
+            ],
+            "retries": 0,
+            "reuses": 2,
+            "seconds": 651.81992734698
+          },
+          "reason": "current implicit Newton step failed: DEADLINE: finite steady-solve wall budget exhausted",
+          "schema": "WJH27CoupledFailureV1",
+          "status": "FAILED_WITH_ACCEPTED_HISTORY_PRESERVED"
+        },
+        "preserved": {
+          "bytes": 11014450,
+          "decoded_history_body_sha256": "ab2bd4c0f25eb4ae454ebd6615f92a3ef857adcf63679d312e93d9904d9c7493",
+          "dt": 0.02,
+          "history_arrays_sha256": "6da775e4278403c56dd2247e0f9a3167a507f32780ab7871a48a110913a5d005",
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-fd-quarter-perturbed-2/state.failed-accepted.bin",
+          "payload_sha256": "b53186dea9b8e1b63066a636997021f8240242849433f70f6f8fe4d5e16af94f",
+          "sha256": "e184b14d4fd002869b08e431366bccc29575782eb557cdbdecbe047b4a4882bc",
+          "signature": "19aa33ccce7f0670035054bd6e6382459ccc137e21c0314ab3d1a546f74d24db",
+          "step": 0,
+          "time": 0
+        }
+      },
+      "final_time": 0,
+      "frames": {
+        "0": {
+          "bytes": 30800245,
+          "hashes": {
+            "advection_sha256": "0c2ecbb69b0ed00ed68415e33b769501bcc3a2d51b8d92724bff9667981b1c2c",
+            "previous_advection_sha256": "0c2ecbb69b0ed00ed68415e33b769501bcc3a2d51b8d92724bff9667981b1c2c",
+            "previous_sha256": "f79e64e95edae1ff5657435176543e687ec6f3c894333b8130bac34d3cf713f7",
+            "state_sha256": "f79e64e95edae1ff5657435176543e687ec6f3c894333b8130bac34d3cf713f7"
+          },
+          "origin": "fresh_initial_observation",
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-fd-quarter-perturbed-2/state.science-0.json",
+          "reason_mask": 8,
+          "sha256": "45ae172bb94a7cb051342d87d477cf8c5c578a231c346ede8c40396c4140178b",
+          "step": 0,
+          "time": 0,
+          "write_seconds": 1.5891777770011686
+        }
+      },
+      "label": "r3-fd-quarter-perturbed-2",
+      "operation": {
+        "exit": 1,
+        "peak_active_host_workers": 64,
+        "peak_host_workers": 144,
+        "peak_stopped_host_workers": 80,
+        "peak_tree_rss_bytes": 10838876160,
+        "phase": "r3-advance",
+        "rank_affinity": {
+          "allowed_cpus": [
+            0
+          ],
+          "pid": 535290,
+          "startup_cpus": [
+            0
+          ]
+        },
+        "reason": null,
+        "seconds": 772.5215216369834,
+        "status": "FAIL",
+        "worker_limit": 80,
+        "worker_paused_seconds": 0
+      },
+      "receipt": {
+        "bytes": 7158,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-fd-quarter-perturbed-2/receipt.json",
+        "sha256": "39cf74ad2bf3cb7159e0cb5d3a1c6342ce5d877703e438124f068e3bfbdc7346"
+      },
+      "recipe": {
+        "application": {
+          "bytes": 10067520,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3-timed/IncNavierStokesSolver",
+          "sha256": "fcccad2abd9e2466de2b271c646d7dda10c2165801841c0d2c2abdab3cf1ea8a"
+        },
+        "certificate": {
+          "bytes": 12561,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-timed-certificate.json",
+          "sha256": "469c6d699524f0bfd30e461fab8c2f7b2f13b8042c7cbcc6e44d30e3286207ee"
+        },
+        "fd_step": 2.5e-7,
+        "initial_fields": {
+          "bytes": 76943910,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-timed-parity/state.result.json",
+          "sha256": "c2f1b4b6f824f4f13fa8415d26d49b935fc11fc507b25f9c470c2e7baf34a6e5"
+        },
+        "native_step_cap_seconds": 650,
+        "represented_proof": {
+          "bytes": 22509,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-timed-perturbation/audit.json",
+          "sha256": "fa43a862a1fcbe0cceca2e9fdea8346c945de924321d84ece630189387da8941"
+        },
+        "requested_steps": 2,
+        "source": "42b0ded162d5fc8fba899542f9cb39c5cf71eedf50b0c1ee686c46ce9f8f9ab9",
+        "step_preconditioner": "CurrentDataDriftV1",
+        "timestep": 0.02
+      },
+      "recoveries": [
+        {
+          "bytes": 11014450,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-fd-quarter-perturbed-2/state.failed-accepted.bin",
+          "sha256": "e184b14d4fd002869b08e431366bccc29575782eb557cdbdecbe047b4a4882bc"
+        }
+      ],
+      "seal": {
+        "bytes": 2854,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-fd-quarter-perturbed-2.json",
+        "sha256": "765c192d16ee85fd8ba80794068f20a097dcf39eea2d797cb5956e327aca040e"
+      },
+      "timing": null
+    }
+  },
+  "census": {
+    "active": 57,
+    "owned": 0,
+    "parked_helpers": 102,
+    "stopped": 80,
+    "stopped_owned": 0,
+    "total": 137
+  },
+  "ledger": {
+    "bytes": 707153,
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/accounting.json",
+    "sha256": "6785907750d93fe7de6152b6c98b3e1d0d6d7d509221e5d3f69cea23c1d171be"
+  },
+  "storage": {
+    "free_bytes": 3465918754816,
+    "r3_science_bytes": 2433296091,
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 751264358
+  },
+  "independent_history_parity": {
+    "files": [
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-timed-initial/state.final.bin",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-fd-quarter-perturbed-2/state.failed-accepted.bin"
+    ],
+    "sha256": [
+      "c1f05ce5ce0703cc624c4b2a217e91239d8e6f03f959b5b2e5f00b631c4092ef",
+      "e184b14d4fd002869b08e431366bccc29575782eb557cdbdecbe047b4a4882bc"
+    ],
+    "clocks": [
+      [
+        0,
+        0,
+        0.04
+      ],
+      [
+        0,
+        0,
+        0.02
+      ]
+    ],
+    "all_four_history_arrays_byte_identical": true,
+    "history_arrays_sha256": "6da775e4278403c56dd2247e0f9a3167a507f32780ab7871a48a110913a5d005"
+  }
+}
