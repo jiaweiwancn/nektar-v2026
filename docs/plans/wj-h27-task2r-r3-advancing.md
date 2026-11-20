@@ -277,11 +277,19 @@ Stock whole-process times were 22.805, 22.368 and 21.926 s. Each run had zero su
 
 The smaller finite-difference displacement degraded the original .02 BE/EX1 solve. A fourfold displacement increase provides the opposite control on the same signed state. The two-step test uses the original 650 s native step cap and a 1,540 s operation cap, with the same acceptance threshold and all physical guards. The ledger has 16,864.006 s nonprotected, including 2,868.297 s staged. [Cost basis and current accounting](wj-h27-linux/task2r-r3-advancing/timestep-matrix/matched-stock-coarse.json)
 
-| Closure gate | Status after the audited comparison and matched stock runs |
+### Larger centered displacement on the signed start
+
+With `WJStepFDStep=4e-6`, the signed dt=.02 control accepted BE/EX1 and BDF2/EX2 through t=.04. The two steps used six Krylov iterations and 24 residual evaluations each. Maximum native residuals were 8.939e−12 and 3.100e−12. The default-displacement BDF2 attempt had used 93 Krylov iterations and 373 residual evaluations before its deadline at the same step. The admitted source, represented perturbation, linear and coupled tolerances, current equations and guards were identical. [Exact input and step evidence](wj-h27-linux/task2r-r3-advancing/timestep-matrix/fourfold-displacement-control.json)
+
+Complete steps took 196.238 and 193.391 s, including one cold refresh and one alpha refresh across those steps. The operation charged 495.748 s, peaked at 61 active workers and recorded zero suspensions. The t=.04 scheduled recovery and final recovery binary have the same digest. The ledger settled at 108,247.500 s charged, with 16,356.500 s nonprotected, including 2,360.790 s staged. [Linux timings and recovery identities](wj-h27-linux/task2r-r3-advancing/timestep-matrix/fourfold-displacement-control.json)
+
+The next test holds the larger displacement fixed and requests four dt=.02 steps from the same signed start, with both common times and the scheduled checkpoints. The 1,960 s process cap covers the measured first two steps and setup, two further 650 s native deadlines and bounded output and suspension. This qualification candidate keeps the frozen comparison times. Applying it to timestep selection requires matched runs of both evolving cases and the prescribed finer comparison. [Measured prefix and allocation basis](wj-h27-linux/task2r-r3-advancing/timestep-matrix/fourfold-displacement-control.json)
+
+| Closure gate | Status after the larger displacement control |
 | --- | --- |
 | CP0 Bf state and admission | MET. Exact Bf replay and independently certified signed initial coefficients and histories bind to the Linux application. |
 | CP1 positive-time equations and costs | Quiet and retained-inlet prefixes accepted three steps at dt=.04. The signed case accepted through t=.08, with independent BE/EX1 and BDF2/EX2 audits met. Sustained signed warm-step cost remains open. |
-| CP2 timestep and recovery | OPEN. The .02 and .01 startup frames pass the independently audited t=.04 comparison. The .01 startup continued through t=.06 after recovery, and the .005 startup reached t=.015. The three frozen signed levels and the smaller-displacement control reached numerical deadlines before their first common frame. The .08 comparison, passing timestep witness and matched cold endpoint remain open. |
+| CP2 timestep and recovery | OPEN. The .02 and .01 startup frames pass the independently audited t=.04 comparison. The .01 startup continued through t=.06 after recovery, and the .005 startup reached t=.015. The default-displacement signed levels and the smaller-displacement control reached numerical deadlines before their first common frame. The larger displacement produced a signed t=.04 frame. The .08 comparison, passing timestep witness and matched cold endpoint remain open. |
 | CP3 affordability and stock | Stock was repeated at .04 and on the matched .02 retained-inlet interval. The tested .02 startup projects above the day target under its measured rate. Selected-recipe stock, cold and per-trajectory costs remain open. |
 | R4 admission | HELD. A passing R3 scientific recipe and a complete affordable pilot case set remain prerequisites. |
 
