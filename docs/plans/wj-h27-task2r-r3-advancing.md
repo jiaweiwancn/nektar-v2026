@@ -315,11 +315,17 @@ The matched endpoint gate is NOT_MET at 1e−8. The maximum modified-pressure co
 
 The uninterrupted run reused its inverse factors at the first step after t=.04, while the restarted process assembled cold factors at that step. A repeat with the existing maximum-use control set to three will test matched refreshes at the step boundary, since the four accepted .02 steps each used three preconditioner bases. This control keeps the 1e−8 comparison and independent equation thresholds. The earlier .005 signed failure used the default displacement. The next matrix admission tests .005 with 4e−6. The ledger has 12,538.655 s nonprotected, of which 2,611.946 s is staged. [Audit and ledger snapshot](wj-h27-linux/task2r-r3-advancing/timestep-matrix/signed-cold-endpoint-result.json)
 
-| Closure gate | Status after the audited signed cold comparison |
+### Fine signed refinement with the larger displacement
+
+The .005 signed run with 4e−6 accepted its BE/EX1 step at t=.005 with a maximum native residual of 4.756e−12. Its first BDF2/EX2 update reached the native deadline in 652.115 s, with an alpha refresh at the first base, 85 Krylov iterations and 342 residual evaluations. Last k and outer-epsilon residuals were 1.245e−9 and 8.011e−10. The binary retained the accepted t=.005 clock and passed its native checksum. The whole operation charged 951.638 s, peaked at 62 active workers and recorded zero suspensions. [Fine signed residuals, histories and resource receipt](wj-h27-linux/task2r-r3-advancing/timestep-matrix/fourfold-signed-fine.json)
+
+The revised .01 and .005 signed runs improved startup and still ended before t=.04. The .02 three-use refresh control addresses the distinct cold pressure discrepancy. It uses an uninterrupted four-step run, a two-step split and a separate continuation at the same timestep, displacement, tolerances and physical model. The account has 11,580.931 s nonprotected, including 5,498.222 s staged, and the 3,600 s evidence reserve. [Ledger and failed fine-refinement evidence](wj-h27-linux/task2r-r3-advancing/timestep-matrix/fourfold-signed-fine.json)
+
+| Closure gate | Status after the finer signed refinement |
 | --- | --- |
 | CP0 Bf state and admission | MET. Exact Bf replay and independently certified signed initial coefficients and histories bind to the Linux application. |
 | CP1 positive-time equations and costs | Quiet and retained-inlet prefixes accepted three steps at dt=.04. Earlier signed independent BE/EX1 and BDF2/EX2 audits passed. The larger-displacement .02 signed run supplies a two-step warm timing block. Its adjusted endpoints still require their independent audits. |
-| CP2 timestep and recovery | OPEN. The original .02 and .01 startup frames pass the independently audited t=.04 comparison. The larger displacement produced signed .02 frames at both common times and extended .01 to t=.03. The .02 cold replay passed the independent equations and failed the pressure endpoint tolerance. The finest signed refinement, timestep choice and restart remedy remain open. |
+| CP2 timestep and recovery | OPEN. The original .02 and .01 startup frames pass the independently audited t=.04 comparison. The larger displacement produced signed .02 frames at both common times and extended .01 and .005 through t=.03 and t=.005. The .02 cold replay passed the independent equations and failed the pressure endpoint tolerance. The finer signed witness, timestep choice and restart remedy remain open. |
 | CP3 affordability and stock | Stock was repeated at .04 and on the matched .02 retained-inlet interval. The tested .02 startup projects above the day target under its measured rate. Selected-recipe stock, cold and per-trajectory costs remain open. |
 | R4 admission | HELD. A passing R3 scientific recipe and a complete affordable pilot case set remain prerequisites. |
 
