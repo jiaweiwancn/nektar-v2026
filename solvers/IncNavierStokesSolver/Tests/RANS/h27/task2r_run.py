@@ -593,8 +593,8 @@ def run(root, book, args, began):
                 cpu = r3_admission["cpu"]
                 require(cpu in os.sched_getaffinity(0), "R3 pinned CPU unavailable")
                 affinity = dict(cpu=cpu, admission=r3_admission["admission"])
-                pause_policy = dict(trigger_workers=77, resume_workers=76, quiet_seconds=3.,
-                                    maximum_paused_seconds=55., count_stopped_ownership=True)
+                pause_policy = dict(trigger_workers=78, resume_workers=77, quiet_seconds=3.,
+                                    maximum_paused_seconds=135., count_stopped_ownership=True)
             # One rank and one MPI launcher, with room for their helpers.
             limits[phase] = 4 if affinity else 3
             host, helpers = workers()
@@ -607,7 +607,7 @@ def run(root, book, args, began):
             else:
                 require(command[:2] in (["cmake", "-S"], ["cmake", "-E"]),
                         "unexpected R3 build command")
-                limits[phase] = 8
+                limits[phase] = 5
         else:
             require(phase in ("analysis", "evidence"), "unexpected R3 phase")
             limits[phase] = 3

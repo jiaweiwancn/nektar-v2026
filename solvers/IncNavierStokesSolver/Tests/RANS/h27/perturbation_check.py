@@ -68,7 +68,7 @@ def coefficient_bound(a):
     return max(abs(v) for row in pc.bernstein_exact(a) for v in row)
 
 
-def native_shapes(packet, certificate, deadline):
+def native_shapes(packet, certificate, deadline, *, synthetic_base=True):
     layout = certificate['normalization']['layout']; H = layout['H']; a, b = layout['r_knots'][0], layout['r_knots'][-1]
     n = packet['sizes'][0]; kin, Ain = pc.rational(packet['Kin']), pc.rational(packet['Ain'])
     C = pc.rational(packet['normalization']['streamfunction_coefficient']); sk, se = packet['signs'][1:]
@@ -76,11 +76,13 @@ def native_shapes(packet, certificate, deadline):
     pieces = {key: [] for key in states}; error_energy = {key: F(0) for key in states}
     errors = {key: F(0) for key in states}; leaks = errors.copy(); div_bound = F(0)
     gradient_energy = {key: F(0) for key in states}; gradient_bounds = {key: F(0) for key in states}; base_error = F(0)
+    gradient_error_bounds = {key: F(0) for key in states}
     for e in packet['elements']:
         pc.clock(deadline); bounds = e['bounds']; xl, xr, rl, rr = bounds
         up = [polynomial(e, 'u', states['velocity'], c*n) for c in (0, 1)]
         kp = scale(polynomial(e, 'k', states['k']), 1/kin)
-        base_error = max(base_error, coefficient_bound(subtract(scale(polynomial(e, 'k', packet['synthetic_k_base']), 1/kin), [[F(1)]])))
+        if synthetic_base:
+            base_error = max(base_error, coefficient_bound(subtract(scale(polynomial(e, 'k', packet['synthetic_k_base']), 1/kin), [[F(1)]])))
         ep = None
         if e['epsilon']:
             physical = polynomial(e, 'epsilon', states['epsilon'])
@@ -105,6 +107,7 @@ def native_shapes(packet, certificate, deadline):
                 for key, polynomials in native.items():
                     squared = [[F(0)]]; squared_error = [[F(0)]]; component_error = F(0)
                     gradient_squared = [[F(0)]]; gradient_max_squared = F(0)
+                    gradient_error_squared = F(0)
                     for actual, target in zip(polynomials, targets[key]):
                         squared = pc.padd(squared, pc.psquare(actual)); difference = subtract(actual, target)
                         squared_error = pc.padd(squared_error, pc.psquare(difference)); component_error += coefficient_bound(difference)**2
@@ -112,18 +115,26 @@ def native_shapes(packet, certificate, deadline):
                             gradient = derivative(actual, axis, width)
                             gradient_squared = pc.padd(gradient_squared, pc.psquare(gradient))
                             gradient_max_squared += coefficient_bound(gradient)**2
+                            if not synthetic_base:
+                                gradient_error_squared += coefficient_bound(derivative(difference, axis, width))**2
                     errors[key] = max(errors[key], component_error)
                     error_energy[key] += pc.integral(dict(power=squared_error, area=measure))
                     gradient_energy[key] += pc.integral(dict(power=gradient_squared, area=measure))
                     gradient_bounds[key] = max(gradient_bounds[key], gradient_max_squared)
+                    gradient_error_bounds[key] = max(gradient_error_bounds[key], gradient_error_squared)
                     inside = l >= layout['x_knots'][0] and h <= layout['x_knots'][-1] and lo >= (H if key == 'epsilon' else a) and hi <= b
                     if not inside: leaks[key] = max(leaks[key], coefficient_bound(squared))
                     pieces[key].append(dict(bounds=cell, area=measure, power=squared, inside_support=inside))
-    return pieces, dict(global_representation_error_upper={key: pc.sqrt_bounds(v)[1] for key, v in errors.items()},
+    diagnostics = dict(global_representation_error_upper={key: pc.sqrt_bounds(v)[1] for key, v in errors.items()},
         representation_error_energy=error_energy, outside_support_peak_upper={key: pc.sqrt_bounds(v)[1] for key, v in leaks.items()},
         strong_divergence_MAX_upper=pc.directed(div_bound, True), gradient_energy=gradient_energy,
         gradient_MAX_upper={key: pc.sqrt_bounds(v)[1] for key, v in gradient_bounds.items()},
         synthetic_Kbase_constant_error_upper=pc.directed(base_error, True))
+    if not synthetic_base:
+        del diagnostics['synthetic_Kbase_constant_error_upper']
+        diagnostics['gradient_representation_error_upper'] = {
+            key: pc.sqrt_bounds(v)[1] for key, v in gradient_error_bounds.items()}
+    return pieces, diagnostics
 
 
 def basis(e, key, x, r):
@@ -154,9 +165,14 @@ def divergence_audit(packet, deadline):
     mass = sp.csc_matrix((vals, (rows, cols)), shape=(npres, npres)); solve = spla.factorized(mass)
     domain = (packet['domain'][1]-packet['domain'][0])*(packet['domain'][3]-packet['domain'][2])
     norm = lambda v: math.sqrt(max(0., float(v@solve(v)))/domain)
-    difference = action-np.asarray(packet['divergence_action'])
-    return dict(independent_D_action_dual_RMS=norm(action), native_D_action_difference_dual_RMS=norm(difference),
-        native_reported_dual_RMS=packet['native_divergence_dual_RMS'], pass_=norm(action) <= DIVERGENCE_LIMIT and norm(difference) <= DIVERGENCE_LIMIT)
+    residual = norm(action)
+    result = dict(independent_D_action_dual_RMS=residual, pass_=residual <= DIVERGENCE_LIMIT)
+    if 'divergence_action' in packet:
+        difference = norm(action-np.asarray(packet['divergence_action']))
+        result.update(native_D_action_difference_dual_RMS=difference,
+                      native_reported_dual_RMS=packet['native_divergence_dual_RMS'],
+                      pass_=result['pass_'] and difference <= DIVERGENCE_LIMIT)
+    return result
 
 
 def trace_k(packet, x):
@@ -262,29 +278,11 @@ def helper_audit(packet, certificate):
     return dict(reference_scaled_errors=errors, pass_=all(v <= 1e-10 for v in errors.values()))
 
 
-def audit(packet, certificate, table, deadline):
-    pc.require(packet['schema'] == 'WJH27PerturbationNativeProbeV1' and packet['mode'] == 'project', 'wrong native projection ABI')
-    xs, rs = pc.validate_inventory(packet, required_mode='project')
-    pc.require(packet['helper_identity'] == 'WJH27FinitePerturbationB3V1', 'wrong frozen native shape helper')
-    pc.require(packet['layout'] == certificate['normalization']['layout'], 'refinement reselected the frozen layout')
-    for key in ('unitPeakLower', 'unitPeakEstimate', 'unitPeakUpper'):
-        pc.require(packet['normalization'][key] == certificate['normalization'][key], 'native peak normalization differs from certificate')
-    pc.require(packet['normalization']['streamfunction_coefficient'] == packet['signs'][0]*.001/certificate['normalization']['unitPeakEstimate'], 'native streamfunction coefficient/sign differs')
-    pc.require(packet['normalization_load_twice_rejected'] and packet['Gamma_corner_conflict_rejected'], 'native rejection control failed')
-    pc.require(all(v >= 4 for v in packet['support_intervals']) and packet['support_area'] >= 1.5, 'support is too narrow or underresolved')
-    for key, size, count, sign in (('u', packet['sizes'][0], 16, 'us'), ('p', packet['sizes'][1], 9, 'ps'),
-                                  ('k', packet['sizes'][2], 16, 'ks'), ('epsilon', packet['sizes'][3], 16, 'epsilon_signs')):
-        covered = set()
-        for e in packet['elements']:
-            if key == 'epsilon' and not e[key]:
-                pc.require(not e[sign] and e['bounds'][3] <= packet['H']+1e-12, 'wrong epsilon subset'); continue
-            pc.require(len(e[key]) == len(e[sign]) == count and len(set(e[key])) == count and
-                       all(0 <= v < size for v in e[key]) and all(s in (-1., 1.) for s in e[sign]), 'invalid signed native '+key+' map')
-            covered.update(e[key])
-        pc.require(covered == set(range(size)), 'incomplete native '+key+' map')
+def represented_norms(packet, certificate, deadline, *, synthetic_base=True):
     domain = (pc.rational(packet['domain'][1])-pc.rational(packet['domain'][0]))*(pc.rational(packet['domain'][3])-pc.rational(packet['domain'][2]))
     outer_domain = (pc.rational(packet['domain'][1])-pc.rational(packet['domain'][0]))*(pc.rational(packet['domain'][3])-pc.rational(packet['H']))
-    pieces, diagnostics = native_shapes(packet, certificate, deadline); norms = {}; all_ok = True
+    pieces, diagnostics = native_shapes(packet, certificate, deadline, synthetic_base=synthetic_base)
+    norms = {}; all_ok = True
     for field, rows in pieces.items():
         pc.clock(deadline); peak = pc.maximum(rows, deadline, relative_gap=1e-11 if field == 'k' else pc.PEAK_GAP)
         peak_bounds = [pc.sqrt_bounds(pc.rational(peak['lower']))[0], pc.sqrt_bounds(pc.rational(peak['upper']))[1]]
@@ -312,6 +310,30 @@ def audit(packet, certificate, table, deadline):
             normalized_field_gradient_RMS_enclosure=pc.sqrt_bounds(diagnostics['gradient_energy'][field]/area),
             normalized_field_gradient_MAX_upper=diagnostics['gradient_MAX_upper'][field], pass_=bool(good))
     diagnostics.pop('representation_error_energy'); diagnostics.pop('gradient_energy')
+    return norms, diagnostics, all_ok
+
+
+def audit(packet, certificate, table, deadline):
+    pc.require(packet['schema'] == 'WJH27PerturbationNativeProbeV1' and packet['mode'] == 'project', 'wrong native projection ABI')
+    xs, rs = pc.validate_inventory(packet, required_mode='project')
+    pc.require(packet['helper_identity'] == 'WJH27FinitePerturbationB3V1', 'wrong frozen native shape helper')
+    pc.require(packet['layout'] == certificate['normalization']['layout'], 'refinement reselected the frozen layout')
+    for key in ('unitPeakLower', 'unitPeakEstimate', 'unitPeakUpper'):
+        pc.require(packet['normalization'][key] == certificate['normalization'][key], 'native peak normalization differs from certificate')
+    pc.require(packet['normalization']['streamfunction_coefficient'] == packet['signs'][0]*.001/certificate['normalization']['unitPeakEstimate'], 'native streamfunction coefficient/sign differs')
+    pc.require(packet['normalization_load_twice_rejected'] and packet['Gamma_corner_conflict_rejected'], 'native rejection control failed')
+    pc.require(all(v >= 4 for v in packet['support_intervals']) and packet['support_area'] >= 1.5, 'support is too narrow or underresolved')
+    for key, size, count, sign in (('u', packet['sizes'][0], 16, 'us'), ('p', packet['sizes'][1], 9, 'ps'),
+                                  ('k', packet['sizes'][2], 16, 'ks'), ('epsilon', packet['sizes'][3], 16, 'epsilon_signs')):
+        covered = set()
+        for e in packet['elements']:
+            if key == 'epsilon' and not e[key]:
+                pc.require(not e[sign] and e['bounds'][3] <= packet['H']+1e-12, 'wrong epsilon subset'); continue
+            pc.require(len(e[key]) == len(e[sign]) == count and len(set(e[key])) == count and
+                       all(0 <= v < size for v in e[key]) and all(s in (-1., 1.) for s in e[sign]), 'invalid signed native '+key+' map')
+            covered.update(e[key])
+        pc.require(covered == set(range(size)), 'incomplete native '+key+' map')
+    norms, diagnostics, all_ok = represented_norms(packet, certificate, deadline)
     divergence = divergence_audit(packet, deadline); gamma = synthetic_gamma_audit(packet, table); helper = helper_audit(packet, certificate)
     essential = dict(velocity=float(np.max(abs(np.asarray(packet['velocity_essential_lift'])), initial=0.)),
         k=float(np.max(abs(np.asarray(packet['k_essential_lift'])), initial=0.))/packet['Kin'],

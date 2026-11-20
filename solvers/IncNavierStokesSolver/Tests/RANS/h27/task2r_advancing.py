@@ -141,7 +141,9 @@ def amend_time(root, book, forecast_path, began):
 def identity_of_state(path):
     import numpy as np
 
-    state = read(path)["state"]
+    state = json.loads(Path(path).read_text(),
+                       parse_int=lambda token: -0.0 if token == "-0" else int(token))
+    state = state.get("state", state)
     digest = hashlib.sha256()
     for name in ("flow", "k", "epsilon"):
         digest.update(np.asarray(state["coefficients"][name], dtype="<f8").tobytes())
@@ -184,7 +186,7 @@ def bind(root):
 
 def prepare(root, label, role, dt, steps, cap, step_cap, rss_gib, peak_mib,
             science_stride, recovery_stride, basis_path=None, certificate=None, recovery=None,
-            phase="r3-advance", native_seconds=None):
+            phase="r3-advance", native_seconds=None, initial_step=0, represented_proof=None):
     import coupled_fixtures as fixtures
     from task2r_verify import edit
 
@@ -203,10 +205,19 @@ def prepare(root, label, role, dt, steps, cap, step_cap, rss_gib, peak_mib,
     seed = verified(native["state"]) if role in ("quiet", "perturbed", "same-mesh-parity") else ""
     source = native.get("seed_source", native["source"]) if seed else ""
     parity = role == "same-mesh-parity"
-    require((phase == "r3-parity") == parity and (steps == 0 if parity else dt > 0 and steps > 0)
-            and (role == "perturbed") == bool(certificate)
+    initial_only = phase == "r3-initial"
+    require((phase == "r3-parity") == parity and dt > 0
+            and (steps == 0 if parity or initial_only else steps > 0)
+            and (role == "perturbed") == bool(certificate) and (not initial_only or role == "perturbed")
             and (role == "restart") == bool(recovery) and (phase == "r3-restart") == bool(recovery)
+            and (initial_step >= 2 if recovery else initial_step == 0)
             and (parity or not seed or source == native["source"]), "invalid R3 start identity")
+    if certificate and not initial_only:
+        require(represented_proof is not None, "advancement requires independently certified Bf coefficients")
+        proof = read(represented_proof)
+        require(proof["schema"] == "WJH27R3PhysicalBfPerturbationAuditV1" and proof["status"] == "MET"
+                and proof["base"] == native["state"] and proof["certificate"] == identity(certificate),
+                "represented perturbation proof differs from the advancing inputs")
     out = root / "science-r3" / label
     out.mkdir()
     session = out / "run.xml"
@@ -223,22 +234,26 @@ def prepare(root, label, role, dt, steps, cap, step_cap, rss_gib, peak_mib,
         parameters["WJSteadyKrylovDimension"] = 64
     else:
         info["WJTerminalOutput"] = "True"
-        parameters.update(WJTerminalBegin=0., WJTerminalEnd=dt*steps)
+        parameters.update(WJTerminalBegin=dt*initial_step, WJTerminalEnd=dt*(initial_step+max(steps, 1)))
     if certificate:
         info.update(WJPerturbationCertificate=str(certificate),
                     WJPerturbationCertificateSHA256=identity(certificate)["sha256"])
     edit(session, info, parameters)
     opt = Path(str(session) + ".opt")
     command = ["mpirun", "-np", "1", str(runtime), "--use-opt-file", str(opt), str(session)]
-    inputs = [identity(path) for path in (geometry, table, seed, certificate, recovery, basis_path) if path]
+    inputs = [identity(path) for path in
+              (geometry, table, seed, certificate, recovery, basis_path, represented_proof) if path]
     plan = dict(schema="WJH27R3AdmissionV1", label=label, phase=phase, role=role,
                 seconds=cap, peak_new_bytes=peak_mib * 1024 ** 2, rss_limit_bytes=rss_gib * GIB,
                 cpu=base["affinity"]["cpu"], bf_binding=identity(bound), command=command,
-                timestep=dt, requested_steps=steps, native_step_cap_seconds=step_cap,
+                timestep=dt, initial_step=initial_step, requested_steps=steps, native_step_cap_seconds=step_cap,
                 science_stride=science_stride, recovery_stride=recovery_stride,
                 source=native["source"], application=identity(runtime), geometry=identity(geometry),
                 table=identity(table), initial_fields=identity(seed) if seed else None,
                 restart=identity(recovery) if recovery else None, inputs=inputs,
+                certificate=identity(certificate) if certificate else None,
+                represented_proof=identity(represented_proof) if represented_proof else None,
+                resource_anchors=[old["operation"], base["x15_parity"]],
                 fixture=identity(session), options=identity(opt))
     atomic(out / "admission.json", plan)
 
@@ -271,8 +286,11 @@ def admission(root, label, phase, command, cap):
         info = {i.get("PROPERTY"): i.get("VALUE") for i in xml.findall("CONDITIONS/SOLVERINFO/I")}
         parameters = dict(p.text.replace(" ", "").split("=") for p in xml.findall("CONDITIONS/PARAMETERS/P"))
         if phase == "r3-stock":
-            require(info["SolverType"] == "VelocityCorrectionSchemeWeakPressure"
-                    and info["Driver"] == "Standard" and int(parameters["NumSteps"]) > 0,
+            require(info["SolverType"] == "VCSWeakPressure" and info["Driver"] == "Standard"
+                    and int(parameters["NumSteps"]) == plan["requested_steps"] > 0
+                    and float(parameters["TimeStep"]) == plan["timestep"]
+                    and float(parameters["Kinvis"]) == RECIPE["Kinvis"]
+                    and info.get("SpectralVanishingViscosity", "Off") == plan["stock_svv"],
                     "stock admission requires the conventional weak-pressure solver")
         else:
             require(info["SolverType"] == "WJNativeCoupledV2" and info["Driver"] == "Standard"
@@ -283,11 +301,16 @@ def admission(root, label, phase, command, cap):
                     and info.get("WJInitialFields") == (plan["initial_fields"] or {}).get("path")
                     and info.get("WJRestart") == (plan["restart"] or {}).get("path"),
                     "R3 changed the frozen coupled recipe or start")
-            zero = phase == "r3-parity"
-            require(info["WJNativeSolve"] == ("SteadyReference" if zero else "Advance")
+            parity = phase == "r3-parity"
+            zero = parity or phase == "r3-initial"
+            certificate = plan.get("certificate")
+            require(info["WJNativeSolve"] == ("SteadyReference" if parity else "Advance")
                     and int(parameters["NumSteps"]) == plan["requested_steps"]
                     and float(parameters["TimeStep"]) == plan["timestep"]
                     and (plan["requested_steps"] == 0 if zero else plan["requested_steps"] > 0)
+                    and info.get("WJPerturbationCertificate") == (certificate or {}).get("path")
+                    and info.get("WJPerturbationCertificateSHA256") == (certificate or {}).get("sha256")
+                    and (phase != "r3-advance" or certificate is None or plan.get("represented_proof"))
                     and (phase == "r3-restart") == bool(plan["restart"]),
                     "R3 timeline, start history or zero-time scope differs")
     return dict(plan, admission=identity(path))
@@ -314,6 +337,8 @@ def main():
     case.add_argument("--recovery", type=Path)
     case.add_argument("--phase", default="r3-advance")
     case.add_argument("--native-seconds", type=float)
+    case.add_argument("--initial-step", type=int, default=0)
+    case.add_argument("--represented-proof", type=Path)
     args = vars(parser.parse_args())
     action = args.pop("action")
     if action == "bind":

@@ -6,6 +6,7 @@
 #include <IncNavierStokesSolver/EquationSystems/WJNativeAdmissibility.h>
 #include <IncNavierStokesSolver/EquationSystems/WJNativeInitialFields.h>
 #include <IncNavierStokesSolver/EquationSystems/WJNativeFlowTangent.h>
+#include <IncNavierStokesSolver/EquationSystems/WJNativePerturbation.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
 #include <Eigen/Eigenvalues>
 #include <Eigen/QR>
@@ -412,6 +413,36 @@ CoupledHistory Coupling::ReadInitialFields(const std::string&path,bool allowCand
         "imported reference is not stationary for this native recipe; prepare a current reference first");
     m_initialPacketSha=initial.Metadata().packetSha256;m_initialSourceStateSha=initial.Metadata().stateSha256;
     m_initialProjected=!same;m_initialCandidate=!initial.Metadata().qualifiedReference;return history;
+}
+
+CoupledHistory Coupling::PerturbInitialHistory(const CoupledHistory&base,const std::string&certificate,
+                                               const std::string&sha256)
+{
+    Require(!m_mms&&m_zeroTransverseOutlet&&
+            m_reference->Policy()==ReferencePolicy::ExactInnerFiniteNuV1&&
+            !m_initialPacketSha.empty()&&!m_initialProjected&&!m_initialCandidate&&
+            base.step==0&&base.time==0,
+            "Bf perturbation requires a qualified same-mesh physical initial state");
+    std::set<double> xEdges,rEdges;
+    for(const auto &cell:m_flow.Elements())
+    {
+        xEdges.insert(cell.xl);xEdges.insert(cell.xr);
+        rEdges.insert(cell.rl);rEdges.insert(cell.rr);
+    }
+    const auto shape=Perturbation::ReadBfCertificate(*m_reference,{xEdges.begin(),xEdges.end()},
+        {rEdges.begin(),rEdges.end()},certificate,sha256,m_options.sourceIdentity,StateHash(base.current));
+    CoupledState state=base.current;
+    for(int component=0;component<2;++component)
+    {
+        const auto delta=m_flow.Project([&](double x,double z){
+            return shape.Velocity(x,z)[component==0?0:2];
+        },component);
+        state.flow.segment(component*m_flow.VelocitySize(),m_flow.VelocitySize())+=delta;
+    }
+    state.k+=m_k.Project([&](double x,double z){return shape.KIncrement(x,z).value;});
+    state.epsilon+=m_e.Project([&](double x,double z){return shape.IndependentEpsilonIncrement(x,z).value;});
+    // Rebuild essential traces from current K before creating either explicit history.
+    return FreshHistory(state);
 }
 
 Vec Coupling::PackFree(const CoupledState&s)const

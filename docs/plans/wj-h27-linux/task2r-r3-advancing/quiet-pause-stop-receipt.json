@@ -1,0 +1,232 @@
+{
+  "request": {
+    "label": "r3-prefix-quiet-2",
+    "phase": "r3-advance",
+    "command": [
+      "mpirun",
+      "-np",
+      "1",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+      "--use-opt-file",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-prefix-quiet-2/run.xml.opt",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-prefix-quiet-2/run.xml"
+    ],
+    "cap_seconds": 550.0,
+    "reserved_seconds": 557.0,
+    "workers_before": 74,
+    "idle_mpi_event_helpers": 108,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 8463861449,
+      "source_build_runtime_bytes": 394931219,
+      "free_bytes": 3529699377152,
+      "r3_science_bytes": 5052529
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v3/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_run.py",
+      "bytes": 47594,
+      "sha256": "39463cfea138459afbf533a24cf79aca0f1ce7c8095cdac0d2cb7aed12353583"
+    },
+    "rss_limit_bytes": 17179869184,
+    "memory_before": {
+      "mem_available_bytes": 406386581504,
+      "mem_total_bytes": 540840640512,
+      "job_cgroup": "/user.slice/user-1000.slice/session-1174.scope",
+      "ancestor_limits": [
+        {
+          "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1174.scope",
+          "current": 23482368,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+          "current": 313267851264,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup/user.slice",
+          "current": 313555353600,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup",
+          "memory.max": null,
+          "memory.high": null
+        }
+      ]
+    },
+    "worker_pause_policy": {
+      "trigger_workers": 77,
+      "resume_workers": 76,
+      "quiet_seconds": 3.0,
+      "maximum_paused_seconds": 55.0,
+      "count_stopped_ownership": true
+    },
+    "worker_limit": 80,
+    "worker_admission_margin": 4,
+    "input_files": [
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+        "bytes": 9997280,
+        "sha256": "3e8db421575122676808adc6c9783f0c897136e9d9d283b9d0cb200c5ec2df45"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-prefix-quiet-2/run.xml.opt",
+        "bytes": 55,
+        "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-prefix-quiet-2/run.xml",
+        "bytes": 1680432,
+        "sha256": "b367df197f3fc34fa8ef1357bc45628bd7ff0bc49da584dddc350c2f210f94af"
+      }
+    ],
+    "r3_admission": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-prefix-quiet-2/admission.json",
+      "bytes": 4409,
+      "sha256": "86c827d371520a312cc4c4bfa21a4c30f3403f43ce3098bc8122bdb845f64d4f"
+    },
+    "launch": {
+      "command": [
+        "mpirun",
+        "-np",
+        "1",
+        "--bind-to",
+        "none",
+        "taskset",
+        "--cpu-list",
+        "0",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/runtime-outlet-v1/IncNavierStokesSolver",
+        "--use-opt-file",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-prefix-quiet-2/run.xml.opt",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-prefix-quiet-2/run.xml"
+      ],
+      "affinity": {
+        "cpu": 0,
+        "admission": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-prefix-quiet-2/admission.json",
+          "bytes": 4409,
+          "sha256": "86c827d371520a312cc4c4bfa21a4c30f3403f43ce3098bc8122bdb845f64d4f"
+        }
+      }
+    }
+  },
+  "result": {
+    "status": "FAIL",
+    "phase": "r3-advance",
+    "seconds": 68.26521380300983,
+    "exit": 1,
+    "reason": "HOST_PRESSURE_REMAINS",
+    "peak_tree_rss_bytes": 851730432,
+    "peak_host_workers": 83,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-prefix-quiet-2/command.log",
+      "bytes": 319,
+      "sha256": "2231c0596d2c4787b040dd3bc66edc70c3fdd71877b75a8eb45a38f6a003f0f3"
+    },
+    "rss_limit_bytes": 17179869184,
+    "job_memory": {
+      "mem_available_bytes": 405049913344,
+      "mem_total_bytes": 540840640512,
+      "job_cgroup": "/user.slice/user-1000.slice/session-1174.scope",
+      "ancestor_limits": [
+        {
+          "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1174.scope",
+          "current": 26279936,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+          "current": 315873251328,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup/user.slice",
+          "current": 316163112960,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup",
+          "memory.max": null,
+          "memory.high": null
+        }
+      ]
+    },
+    "minimum_memory_headroom_bytes": 399776415744,
+    "worker_limit": 80,
+    "peak_owned_workers": 2,
+    "worker_pauses": [
+      {
+        "start_seconds": 1.724902418005513,
+        "workers_at_stop": 77,
+        "end_seconds": 7.610857744002715,
+        "workers_at_resume": 81,
+        "projected_workers_at_resume": 76
+      },
+      {
+        "start_seconds": 10.807102986989776,
+        "workers_at_stop": 78,
+        "end_seconds": 32.71874350000871,
+        "workers_at_resume": 81,
+        "projected_workers_at_resume": 76
+      },
+      {
+        "start_seconds": 33.359815923991846,
+        "workers_at_stop": 77,
+        "end_seconds": 44.364650520990836,
+        "workers_at_resume": 81,
+        "projected_workers_at_resume": 76
+      },
+      {
+        "start_seconds": 47.53809185800492,
+        "workers_at_stop": 78,
+        "end_seconds": 63.181767626985675,
+        "workers_at_resume": 81,
+        "projected_workers_at_resume": 76
+      },
+      {
+        "start_seconds": 66.42591977500706,
+        "workers_at_stop": 77,
+        "settled_seconds": 68.26521057300852
+      }
+    ],
+    "worker_paused_seconds": 56.28539700299734,
+    "rank_affinity": {
+      "pid": 449349,
+      "startup_cpus": [
+        0
+      ],
+      "allowed_cpus": [
+        0
+      ]
+    },
+    "child_elapsed_seconds": 67.37710536899976,
+    "peak_active_host_workers": 78,
+    "peak_r3_science_bytes": 13846946
+  },
+  "balance": {
+    "charged_seconds": 84993.13284476465,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 19406.867155235348,
+    "tranche_remaining": 6290.157874840283
+  },
+  "storage": {
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 394931219,
+    "free_bytes": 3529615962112,
+    "r3_science_bytes": 5052529
+  }
+}

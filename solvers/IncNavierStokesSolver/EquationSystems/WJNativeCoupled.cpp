@@ -143,6 +143,12 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadParameter("WJTerminalBegin",m_terminalBegin,0.);m_session->LoadParameter("WJTerminalEnd",m_terminalEnd,0.);
     if(m_terminalOutput)Check(!m_steadyMode&&m_coefficients&&std::isfinite(m_terminalBegin)&&std::isfinite(m_terminalEnd)&&m_terminalBegin>=0&&m_terminalEnd>m_terminalBegin,"terminal output requires advancement, complete coefficients and a finite increasing nonnegative interval");
     m_session->LoadSolverInfo("WJInitialFields",m_initialFields,"");Check(m_initialFields.empty()||m_restart.empty(),"initial fields and cold restart are separate mutually exclusive inputs");
+    m_session->LoadSolverInfo("WJPerturbationCertificate",m_perturbationCertificate,"");
+    m_session->LoadSolverInfo("WJPerturbationCertificateSHA256",m_perturbationSha256,"");
+    Check(m_perturbationCertificate.empty()==m_perturbationSha256.empty()&&
+          (m_perturbationCertificate.empty()||(!options.manufactured&&!m_steadyMode&&
+                                               !m_initialFields.empty()&&m_restart.empty())),
+          "physical perturbation requires a certified initial-field import and fresh histories");
     std::vector<MultiRegions::ContFieldSharedPtr>fields(5);
     for(int i:{0,1,2,4}){fields[i]=MemoryManager<MultiRegions::ContField>::AllocateSharedPtr(m_session,m_graph,m_session->GetVariable(i),true,false);m_fields[i]=fields[i];}
     std::vector<unsigned int>outer;
@@ -163,6 +169,8 @@ void WJNativeCoupled::v_DoInitialise(bool dump)
         if(!m_restart.empty())m_history=m_coupling->ReadHistory(m_restart);
         else if(!m_initialFields.empty())m_history=m_coupling->ReadInitialFields(m_initialFields,m_steadyMode);
         else m_history=m_coupling->Initialise();
+        if(!m_perturbationCertificate.empty())m_history=m_coupling->PerturbInitialHistory(
+            m_history,m_perturbationCertificate,m_perturbationSha256);
         if(m_steadySeed){Check(m_restart.empty(),"steady seed cannot modify a restart");auto seed=m_history.current;const auto&p=m_coupling->ReferenceModel().Parameters();
             for(int id:m_coupling->KKernel().FreeIds())seed.k[id]+=m_steadySeed*p.KIn*std::sin(.7*(id+1));
             for(int id:m_coupling->EpsilonKernel().FreeIds())seed.epsilon[id]+=m_steadySeed*m_coupling->ReferenceModel().Amplitude(p.KIn)/p.H*std::cos(.9*(id+1));

@@ -28,6 +28,7 @@ private:
     WJNative::CoupledHistory m_history;
     WJNative::CoupledStepInfo m_last;
     std::string m_prefix,m_restart,m_initialFields;
+    std::string m_perturbationCertificate,m_perturbationSha256;
     int m_infoStride=20,m_recoveryStride=200,m_scienceStride=200,m_injectRetryStep=-1;
     double m_initialisationSeconds=0,m_constructionSeconds=0,m_completeAdvanceSeconds=0;
     bool m_coefficients=false;

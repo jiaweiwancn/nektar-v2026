@@ -239,7 +239,7 @@ class TransientOracle:
         # observation; it cannot qualify or disqualify a transient equation.
         current = self.transport(o)
         old = self.transport(self.old_oracle)
-        previous = self.transport(self.previous_oracle)
+        previous = old if self.scheme['startup'] else self.transport(self.previous_oracle)
         f, g = self.scheme['explicit_coefficients']
         explicit = combine(old['total'], f, previous['total'], g)
         mass, storage = self.storage()
@@ -336,6 +336,13 @@ class TransientOracle:
             sampled_roughness_work=total_awf,
             scope='Discrete current-velocity BDF/EX identity; no instantaneous or reference P=E constraint')
         budgets['mass'] = steady['budgets']['mass']
+        essential_actions = o.outlet_tangent_reactions(total['flow'])
+        outlet = dict(policy=o.outlet_policy,
+                      natural_traction=steady['outlet']['prescribed_traction_integral'],
+                      natural_traction_work=steady['outlet']['traction_work'],
+                      essential_transverse_reaction_rows=essential_actions,
+                      essential_transverse_reaction_work=sum(
+                          o.s['flow'][o.n+row['dof']]*row['value'] for row in essential_actions))
         identities.extend((steady['accounting_identity_max_error'],))
         # Nonzero fixture tests these controls; actual physical states may make
         # a particular term invisible, which is explicitly not a positive pass.
@@ -363,6 +370,7 @@ class TransientOracle:
         return dict(residuals=residual, residual_limits=po.RESIDUAL_LIMITS,
             transient_residual_status='MET' if all(residual[key] <= limit for key, limit in po.RESIDUAL_LIMITS.items()) else 'NOT_MET',
             history_cache_checks=cache_checks, storage_by_region=storage, budgets=budgets,
+            accepted_discrete_outlet=outlet,
             sampled_history_minima={key: value['sampled_minima'] for key, value in self.transport_results.items()},
             accounting_identity_max_error=max(identities), accounting_identity_status='MET' if max(identities) <= 1e-10 else 'NOT_MET',
             explicit_boundary_faces=[dict(**row, extrapolation_coefficient=coefficient, history_role=role)
@@ -378,10 +386,12 @@ class TransientOracle:
 
 def audit(data, reference, order, refine_order, deadline):
     first = TransientOracle(data, reference, order, deadline)
-    coarse = first.assemble()
+    coarse_residuals = first.assemble()['residuals']
+    coarse_total = first.total
+    del first
     final = TransientOracle(data, reference, refine_order, deadline)
     fine = final.assemble()
-    difference = final.current.dual(combine(final.total, 1., first.total, -1.))
+    difference = final.current.dual(combine(final.total, 1., coarse_total, -1.))
     quadrature_ok = all(difference[key] <= .2*limit for key, limit in po.RESIDUAL_LIMITS.items())
     boundaries = final.boundary_checks()
     boundary_ok = all(row['status'] == 'MET' for row in boundaries.values())
@@ -390,7 +400,7 @@ def audit(data, reference, order, refine_order, deadline):
             current_sha256=state_hash(final.old), previous_sha256=state_hash(final.previous),
             advection_sha256=state_hash(final.cached), previous_advection_sha256=state_hash(final.cached_previous),
             provenance='Input current and advection bind the accepted output previous hashes. Earlier input state is evaluated and hashed here; cross-packet lineage requires its earlier artifact.'),
-        core=fine, coarse_quadrature_residual=coarse['residuals'],
+        core=fine, coarse_quadrature_residual=coarse_residuals,
         quadrature_difference_dual=difference, independent_orders=[order, refine_order],
         independent_quadrature_status='MET' if quadrature_ok else 'NOT_MET', boundary_checks=boundaries,
         accepted_history_boundary_status='MET' if boundary_ok else 'NOT_MET')
@@ -407,13 +417,15 @@ def main():
     parser.add_argument('--order', type=int, default=20)
     parser.add_argument('--refine-order', type=int, default=24)
     parser.add_argument('--compare-finer', type=Path)
+    parser.add_argument('--address-space-gib', type=int, default=8)
     args = parser.parse_args()
     po.require(sys.platform.startswith('linux'), 'numerical transient oracle execution is Linux-only')
     po.require(math.isfinite(args.seconds) and args.seconds > 0, 'explicit finite wall cap required')
     po.require(20 <= args.order < args.refine_order <= 48, 'independent quadrature orders must satisfy 20 <= order < refined <= 48')
     po.require(not args.out.exists(), 'immutable transient oracle output already exists')
+    po.require(0 < args.address_space_gib <= 20, 'invalid case-specific address-space cap')
     soft, hard = resource.getrlimit(resource.RLIMIT_AS)
-    cap = min([8*1024**3]+[v for v in (soft, hard) if v != resource.RLIM_INFINITY])
+    cap = min([args.address_space_gib*1024**3]+[v for v in (soft, hard) if v != resource.RLIM_INFINITY])
     resource.setrlimit(resource.RLIMIT_AS, (cap, hard))
     began = time.monotonic()
     report = dict(schema=SCHEMA, status='NOT_MET', full_H27_qualification=False,

@@ -10,7 +10,7 @@
 
 namespace Nektar::WJNative
 {
-enum class PerturbationShape { PrimaryQuartile=0, SecondaryLowerSkew=1 };
+enum class PerturbationShape { PrimaryQuartile=0, SecondaryLowerSkew=1, BfQuartileV1=2 };
 
 /** Select once on the admitted base mesh, serialize, and reuse unchanged on
  * refinements. Coordinates are x and wall distance r, not physical z.
@@ -66,6 +66,11 @@ public:
         const std::vector<double> &nativeXEdges,
         const std::vector<double> &nativeREdges, double H,
         PerturbationShape shape=PerturbationShape::PrimaryQuartile);
+
+    static Perturbation ReadBfCertificate(const Reference &reference,
+        const std::vector<double> &nativeXEdges,const std::vector<double> &nativeREdges,
+        const std::string &path,const std::string &sha256,const std::string &source,
+        const std::string &baseState);
 
     Perturbation(const Reference &reference, const PerturbationLayout &layout,
                  const std::vector<double> &nativeXEdges,

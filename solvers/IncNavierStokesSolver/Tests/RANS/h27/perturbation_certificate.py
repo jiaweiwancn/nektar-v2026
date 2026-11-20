@@ -27,6 +27,8 @@ PEAK_GAP = 5e-9
 AREA_REFINEMENTS = (.01, .003, .001)
 MIN_HALF_AREA = .05
 FIXED_X = [-2.5, -1.25, 0., 1.25, 2.5]
+BF_X = [-1.875, -.9375, 0., .9375, 1.875]
+BF_SHAPE = 'BfQuartileV1'
 
 
 def require(ok, message):
@@ -258,11 +260,14 @@ def shape_pieces(layout, field):
     return result
 
 
-def validate_inventory(packet, required_mode='layout'):
+def validate_inventory(packet, required_mode='layout', *, bf=False):
     require(packet['schema'] == 'WJH27PerturbationNativeProbeV1' and packet['mode'] == required_mode, 'wrong native geometry export')
-    require((len(packet['elements']) == 700 if required_mode == 'layout' else len(packet['elements']) >= 700) and
-            packet['tensor_inventory_verified'] is True, 'missing retained native tensor inventory')
     xs, rs = packet['x_edges'], packet['r_edges']; cells = set()
+    count = len(packet['elements'])
+    require(packet['tensor_inventory_verified'] is True and
+            (count == 111*92 and [len(xs), len(rs)] == [112, 93] if bf else
+             count == 700 if required_mode == 'layout' else count >= 700),
+            'missing retained native tensor inventory')
     require(all(math.isfinite(v) for v in xs+rs) and all(a < b for a, b in zip(xs[:-1], xs[1:])) and
             all(a < b for a, b in zip(rs[:-1], rs[1:])), 'invalid native edge ordering')
     require(abs(xs[0]+10) < 1e-12 and abs(xs[-1]-15) < 1e-12 and abs(rs[0]) < 1e-12 and
@@ -280,8 +285,14 @@ def validate_inventory(packet, required_mode='layout'):
 
 
 def independent_layout(xs, rs, H, shape):
-    for x in FIXED_X: require(any(abs(v-x) < 1e-12 for v in xs), 'fixed x knot absent')
-    candidates = [r for r in rs if .075 <= r <= .45]
+    bf = shape == BF_SHAPE
+    x_knots = BF_X if bf else FIXED_X
+    for x in x_knots: require(any(abs(v-x) < 1e-12 for v in xs), 'fixed x knot absent')
+    candidates = [r for r in rs if .075 <= r <= (.5 if bf else .45)]
+    if bf:
+        outer = next(i for i, r in enumerate(candidates)
+                     if (r-candidates[0])*(x_knots[-1]-x_knots[0]) >= 1.5)
+        candidates = candidates[:outer+1]
     require(len(candidates) >= 5 and candidates[-1]-candidates[0] >= .3, 'unsupported radial layout')
     a, b = candidates[0], candidates[-1]
     def select(target, exclude=None):
@@ -292,15 +303,15 @@ def independent_layout(xs, rs, H, shape):
             rows.append((sum(((v-a)/(b-a)-t)**2 for v, t in zip(knots, target)), trial))
         require(rows, 'no distinct secondary shape'); return min(rows, key=lambda v: v[0])[1]
     primary = select([.25, .5, .75])
-    radial = primary if shape == 'PrimaryQuartile' else select([.2, .4, .65], primary)
-    fraction = .5 if shape == 'PrimaryQuartile' else .65
+    radial = select([.2, .4, .65], primary) if shape == 'SecondaryLowerSkew' else primary
+    fraction = .65 if shape == 'SecondaryLowerSkew' else .5
     eligible = [r for r in rs if H+1e-12 < r < b-1e-12]
     peak = min(eligible, key=lambda r: abs(r-(H+fraction*(b-H))))
-    return dict(shape=shape, x_knots=FIXED_X, r_knots=radial, H=H, epsilon_peak_radius=peak)
+    return dict(shape=shape, x_knots=x_knots, r_knots=radial, H=H, epsilon_peak_radius=peak)
 
 
 def certificate(packet, shape, deadline):
-    xs, rs = validate_inventory(packet); layout = packet['layouts'][shape]
+    xs, rs = validate_inventory(packet, bf=shape == BF_SHAPE); layout = packet['layouts'][shape]
     require(layout == independent_layout(xs, rs, packet['H'], shape), 'native layout differs from independent selection')
     def index(edges, value):
         found = [i for i, v in enumerate(edges) if abs(v-value) < 1e-12]
@@ -340,7 +351,7 @@ def certificate(packet, shape, deadline):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--mesh-native', type=Path, required=True)
-    p.add_argument('--shape', choices=('PrimaryQuartile', 'SecondaryLowerSkew'), required=True)
+    p.add_argument('--shape', choices=('PrimaryQuartile', 'SecondaryLowerSkew', BF_SHAPE), required=True)
     p.add_argument('--seconds', type=float, required=True)
     p.add_argument('--out', type=Path, required=True)
     args = p.parse_args(); start = time.monotonic()
@@ -360,6 +371,8 @@ def main():
         out.update(normalization=normalization, target_shape_norms=norms, mesh_xml_sha256=packet['mesh_xml_sha256'],
                    source_identity=packet['source_identity'], reference_identity=packet['reference_identity'],
                    frozen_layout=normalization['layout'], domain=packet['domain'], x_edges=packet['x_edges'], r_edges=packet['r_edges'])
+        if args.shape == BF_SHAPE:
+            out['base_state_sha256'] = packet['base_state_sha256']
         passed = all(row[key] for row in norms.values() for key in ('domain_RMS_pass', 'support_RMS_pass', 'half_peak_area_pass'))
         out['status'] = 'PASS_MATHEMATICAL_SHAPE_ONLY' if passed else 'NOT_MET_SHAPE_NORMS'
     except Exception as error:

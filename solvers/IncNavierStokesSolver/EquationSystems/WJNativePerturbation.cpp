@@ -1,8 +1,13 @@
 // SPDX-License-Identifier: MIT
 #include <IncNavierStokesSolver/EquationSystems/WJNativePerturbation.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
+#include <boost/property_tree/json_parser.hpp>
 #include <algorithm>
 #include <cmath>
+#include <filesystem>
+#include <fstream>
 #include <limits>
+#include <sstream>
 #include <stdexcept>
 
 namespace Nektar::WJNative
@@ -10,6 +15,7 @@ namespace Nektar::WJNative
 namespace
 {
 constexpr std::array<double,5> FixedX{-2.5,-1.25,0.,1.25,2.5};
+constexpr std::array<double,5> BfX{-1.875,-.9375,0.,.9375,1.875};
 constexpr double EdgeTolerance=1e-12;
 
 void Require(bool value,const char *message)
@@ -44,7 +50,7 @@ int EdgeIndex(const std::vector<double> &edges,double value)
 void CheckShape(PerturbationShape shape)
 {
     Require(shape==PerturbationShape::PrimaryQuartile||
-            shape==PerturbationShape::SecondaryLowerSkew,
+            shape==PerturbationShape::SecondaryLowerSkew||shape==PerturbationShape::BfQuartileV1,
             "unsupported prospective perturbation shape");
 }
 
@@ -137,19 +143,27 @@ PerturbationLayout Perturbation::SelectLayout(const std::vector<double> &nativeX
     CheckShape(shape);
     Require(std::isfinite(H)&&H>.075&&H<.45,"interface lies outside prospective perturbation window");
     const auto x=Edges(nativeXEdges),r=Edges(nativeREdges);
-    for(double knot:FixedX)EdgeIndex(x,knot);
+    const bool bf=shape==PerturbationShape::BfQuartileV1;
+    const auto &knots=bf?BfX:FixedX;
+    for(double knot:knots)EdgeIndex(x,knot);
     EdgeIndex(r,H);
     std::vector<double> candidates;
-    for(double edge:r)if(edge>=.075&&edge<=.45)candidates.push_back(edge);
+    for(double edge:r)
+    {
+        if(edge<.075)continue;
+        if(edge>(bf?.5:.45))break;
+        candidates.push_back(edge);
+        if(bf&&(edge-candidates.front())*(knots.back()-knots.front())>=1.5)break;
+    }
     Require(candidates.size()>=5&&candidates.back()-candidates.front()>=.3&&
                 candidates.front()<H&&candidates.back()>H,
             "native radial edges cannot support the pinned broad cross-interface perturbation");
     const auto primary=SelectRadial(candidates,{.25,.5,.75},nullptr);
-    PerturbationLayout layout;layout.xKnots=FixedX;layout.H=H;layout.shape=shape;
-    layout.rKnots=shape==PerturbationShape::PrimaryQuartile?primary:
+    PerturbationLayout layout;layout.xKnots=knots;layout.H=H;layout.shape=shape;
+    layout.rKnots=shape!=PerturbationShape::SecondaryLowerSkew?primary:
         SelectRadial(candidates,{.2,.4,.65},&primary);
     layout.epsilonPeakRadius=PeakEdge(r,H,layout.rKnots.back(),
-        shape==PerturbationShape::PrimaryQuartile?.5:.65);
+        shape!=PerturbationShape::SecondaryLowerSkew?.5:.65);
     return layout;
 }
 
@@ -162,14 +176,15 @@ Perturbation::Perturbation(const Reference &reference,const PerturbationLayout &
     Require((signs.velocity==1||signs.velocity==-1)&&
                 (signs.k==1||signs.k==-1)&&(signs.epsilon==1||signs.epsilon==-1),
             "perturbation signs must each be +1 or -1");
-    Require(layout.xKnots==FixedX&&layout.H==p.H,
+    const bool bf=layout.shape==PerturbationShape::BfQuartileV1;
+    Require(layout.xKnots==(bf?BfX:FixedX)&&layout.H==p.H,
             "frozen perturbation streamwise knots/interface differ from the pinned shape");
     for(int i=0;i<5;++i)
     {
         Require(std::isfinite(layout.rKnots[i])&&(i==0||layout.rKnots[i]>layout.rKnots[i-1]),
                 "perturbation B3 radial knots are not finite and strictly increasing");
     }
-    Require(layout.rKnots.front()>=.075&&layout.rKnots.back()<=.45&&
+    Require(layout.rKnots.front()>=.075&&layout.rKnots.back()<=(bf?.5:.45)&&
                 layout.rKnots.back()-layout.rKnots.front()>=.3&&
                 layout.rKnots.front()<p.H&&p.H<layout.epsilonPeakRadius&&
                 layout.epsilonPeakRadius<layout.rKnots.back(),
@@ -191,6 +206,60 @@ Perturbation::Perturbation(const Reference &reference,const PerturbationLayout &
     m_domainArea=(x.back()-x.front())*(r.back()-r.front());
     m_outerDomainArea=(x.back()-x.front())*(r.back()-p.H);
     Require(SupportArea()>=1.5,"perturbation support area in physical code units is below 1.5");
+}
+
+Perturbation Perturbation::ReadBfCertificate(const Reference &reference,
+    const std::vector<double> &nativeXEdges,const std::vector<double> &nativeREdges,
+    const std::string &path,const std::string &sha256,const std::string &source,
+    const std::string &baseState)
+{
+    Require(std::filesystem::is_regular_file(path)&&std::filesystem::file_size(path)<=1024*1024,
+            "Bf perturbation certificate is missing or too large");
+    std::ifstream input(path,std::ios::binary);
+    Require(bool(input),"cannot open Bf perturbation certificate");
+    const std::string bytes((std::istreambuf_iterator<char>(input)),{});
+    Require(!input.bad()&&RANSWallR3::Hash(bytes)==sha256,"Bf perturbation certificate digest differs");
+    std::istringstream json(bytes);
+    boost::property_tree::ptree proof;
+    boost::property_tree::read_json(json,proof);
+    Require(proof.get<std::string>("schema")=="WJH27PerturbationPeakCertificateV1"&&
+            proof.get<std::string>("status")=="PASS_MATHEMATICAL_SHAPE_ONLY"&&
+            proof.get<std::string>("shape")=="BfQuartileV1"&&
+            proof.get<std::string>("source_identity")==source&&
+            proof.get<std::string>("reference_identity")==reference.Identity()&&
+            proof.get<std::string>("base_state_sha256")==baseState,
+            "Bf perturbation certificate belongs to a different reference or base state");
+    const auto &record=proof.get_child("normalization");
+    const auto &shape=record.get_child("layout");
+    PerturbationLayout layout;
+    layout.shape=PerturbationShape::BfQuartileV1;
+    layout.H=shape.get<double>("H");
+    layout.epsilonPeakRadius=shape.get<double>("epsilon_peak_radius");
+    auto readKnots=[&](const char *name,std::array<double,5> &knots){
+        const auto &values=shape.get_child(name);
+        Require(values.size()==knots.size(),"Bf perturbation knot count differs");
+        std::transform(values.begin(),values.end(),knots.begin(),
+            [](const auto &item){return item.second.template get_value<double>();});
+    };
+    readKnots("x_knots",layout.xKnots);
+    readKnots("r_knots",layout.rKnots);
+    const auto native=SelectLayout(nativeXEdges,nativeREdges,reference.Parameters().H,layout.shape);
+    for(int i=0;i<5;++i)
+    {
+        Require(Close(native.xKnots[i],layout.xKnots[i])&&Close(native.rKnots[i],layout.rKnots[i]),
+                "Bf certificate knots differ from the native layout");
+    }
+    Require(Close(native.epsilonPeakRadius,layout.epsilonPeakRadius),
+            "Bf certificate outer peak differs from the native layout");
+    Perturbation result(reference,layout,nativeXEdges,nativeREdges);
+    PerturbationNormalization normalization;
+    normalization.layout=layout;
+    normalization.evidenceSha256=sha256;
+    normalization.unitPeakLower=record.get<double>("unitPeakLower");
+    normalization.unitPeakEstimate=record.get<double>("unitPeakEstimate");
+    normalization.unitPeakUpper=record.get<double>("unitPeakUpper");
+    result.SetNormalization(normalization);
+    return result;
 }
 
 double Perturbation::SupportArea()const

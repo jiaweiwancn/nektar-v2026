@@ -95,6 +95,8 @@ public:
     CoupledHistory Initialise()const;
     CoupledHistory FreshHistory(const CoupledState&state)const;
     CoupledHistory ReadInitialFields(const std::string&path,bool allowCandidate=false);
+    CoupledHistory PerturbInitialHistory(const CoupledHistory&base,const std::string&certificate,
+                                        const std::string&sha256);
     CoupledHistory SteadyCandidateHistory(const Vec&unknowns)const;
     CoupledStepInfo AuditSteadyState(const CoupledState&state,double time=0);
     CoupledStepInfo Advance(CoupledHistory&history,bool injectRetry=false);
