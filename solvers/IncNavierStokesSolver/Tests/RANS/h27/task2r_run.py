@@ -663,6 +663,11 @@ def run(root, book, args, began):
         else:
             require(phase in ("analysis", "evidence"), "unexpected R3 phase")
             limits[phase] = 3
+            if (phase == "analysis" and command[:2] == ["python3", "-B"] and len(command) > 2
+                    and Path(command[2]).name == "task2r_time_comparison.py"):
+                pause_policy = dict(trigger_workers=78, resume_workers=77, quiet_seconds=3.,
+                                    maximum_paused_seconds=min(300., .6*args.seconds),
+                                    count_stopped_ownership=True)
     elif qualification:
         require(worker_limit == 80, "qualification needs the recorded shared-host allowance")
         rss_limit = qualification["rss_limit_bytes"]
