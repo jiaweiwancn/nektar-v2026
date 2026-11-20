@@ -21,7 +21,8 @@ UUID = "cb7dc460-f22f-4533-8329-245d10620f47"
 BASELINE = "50c57af686e39ab51fd9119eaf126e92264e49dd20f82b90963e2503a9edb016"
 GIB = 1024 ** 3
 LIMITS = {"analysis": 900, "build": 1800, "science": 7200, "evidence": 900,
-          "outlet-science": 7200}
+          "outlet-science": 7200, "r3-advance": 7200, "r3-audit": 3600,
+          "r3-stock": 3600, "r3-restart": 7200, "r3-parity": 900}
 OUTLET_AUTHORIZATION = "9356a31fab90117bf05438281dcf6deef4805b7c18f3323df088e684c94c0037"
 S2_SETTLEMENT = "f2ae3f2c814d22dfa4161e976cd1792e2968b7303cbbe597186421383b52b64e"
 S2_ACCOUNT = "dec44571419200acdb94c9e63c94c6a9a490f78caff158e0b31f92e5b933a784"
@@ -93,19 +94,26 @@ def workers():
     return worker_census()[:2]
 
 
-def storage(root):
-    return {
+def storage(root, advancing=False):
+    info = {
         "science_bytes": size(root / "science") + size(root / "tmp"),
         "source_build_runtime_bytes": sum(size(p) for p in root.iterdir()
                                           if p.is_dir() and p.name.startswith(("source", "build", "runtime"))),
         "free_bytes": shutil.disk_usage(root).free,
     }
+    if advancing:
+        info["r3_science_bytes"] = size(root / "science-r3") + size(root / "tmp-r3")
+    return info
 
 
 def check_storage(info):
     require(info["free_bytes"] >= 15 * GIB, "free-space limit")
     require(info["science_bytes"] <= 8 * GIB, "science storage limit")
     require(info["source_build_runtime_bytes"] <= 8 * GIB, "build storage limit")
+    if "r3_science_bytes" in info:
+        require(info["r3_science_bytes"] <= 8 * GIB
+                and info["r3_science_bytes"] + info["science_bytes"] <= 16 * GIB,
+                "R3 science storage limit")
 
 
 def balance(book):
@@ -526,12 +534,17 @@ def run(root, book, args, began):
     require(command and label and label.replace("-", "").isalnum(), "invalid command or label")
     require(0 < args.seconds <= LIMITS[phase], "invalid duration cap")
     ledger = json.loads(book.read_text())
+    advancing = label.startswith("r3-")
+    if advancing:
+        require(ledger["entries"].get("r3-scope", {}).get("status") == "PASS",
+                "missing R3 resource admission")
+    require(advancing or not phase.startswith("r3-"), "R3 operation needs its own label")
     require(not ledger["closed"] and label not in ledger["entries"], "closed account or repeated label")
     remaining = balance(ledger)
     if "outlet_evidence_floor" in ledger:
         final_publication = phase == "evidence" and label.startswith(
             ("outlet-cp4-publish", "outlet-qual-cp3-publish", "outlet-campaign-final-publish"))
-        hold = 0 if final_publication else 300
+        hold = 0 if final_publication or (advancing and phase == "evidence") else 300
     else:
         hold = 0 if phase == "evidence" else max(0, ledger["initial_evidence_seconds"] - evidence_spend(ledger))
     cap = args.seconds + 7  # Allow bounded startup, monitoring and signal grace.
@@ -540,7 +553,8 @@ def run(root, book, args, began):
             "operation cap exceeds live tranche or parent allowance")
     operation = root / "operations" / label
     host, helpers = workers()
-    amendment = ledger["entries"].get("outlet-worker-amendment") if label.startswith("outlet-") else None
+    amendment = (ledger["entries"].get("outlet-worker-amendment")
+                 if advancing or label.startswith("outlet-") else None)
     worker_limit = 72 if amendment is None else amendment["worker_limit"]
     require(worker_limit == 72 or (worker_limit == 80 and amendment["status"] == "PASS"),
             "invalid worker ceiling")
@@ -567,7 +581,33 @@ def run(root, book, args, began):
         rss_limit = (10 if available >= 12 * GIB else 8) * GIB
     pause_policy = None
     affinity = None
-    if qualification:
+    r3_admission = None
+    if advancing:
+        from task2r_advancing import admission
+        if phase.startswith("r3-"):
+            r3_admission = admission(root, label, phase, command, args.seconds)
+            memory = memory_snapshot()
+            rss_limit = r3_admission["rss_limit_bytes"]
+            require(memory_headroom(memory) >= rss_limit + 2 * GIB, "R3 memory headroom")
+            if phase != "r3-audit":
+                cpu = r3_admission["cpu"]
+                require(cpu in os.sched_getaffinity(0), "R3 pinned CPU unavailable")
+                affinity = dict(cpu=cpu, admission=r3_admission["admission"])
+                pause_policy = dict(trigger_workers=78, resume_workers=76, quiet_seconds=4.,
+                                    maximum_paused_seconds=55., count_stopped_ownership=True)
+            limits[phase] = 8
+        elif phase == "build":
+            if command[:2] == ["cmake", "--build"]:
+                require(command[2:5] == [str(root / "build-r3"), "--parallel", "4"],
+                        "R3 build requires four workers and its isolated build tree")
+                limits[phase] = 14
+            else:
+                require(command[:2] in (["cmake", "-S"], ["cmake", "-E"]),
+                        "unexpected R3 build command")
+                limits[phase] = 8
+        else:
+            require(phase in ("analysis", "evidence"), "unexpected R3 phase")
+    elif qualification:
         require(worker_limit == 80, "qualification needs the recorded shared-host allowance")
         rss_limit = qualification["rss_limit_bytes"]
         require(memory_headroom(memory) >= rss_limit + 2 * GIB, "qualification memory headroom")
@@ -598,7 +638,11 @@ def run(root, book, args, began):
         pause_policy = dict(trigger_workers=68, resume_workers=66, quiet_seconds=5.,
                             maximum_paused_seconds=55., admission=identity(admission))
     require(host + limits[phase] <= worker_limit, "shared worker limit at admission")
-    info = storage(root)
+    info = storage(root, advancing)
+    if r3_admission:
+        require(info["r3_science_bytes"] + r3_admission["peak_new_bytes"] <= 8 * GIB,
+                "R3 peak overlap exceeds remaining storage")
+    peak_r3_bytes = info.get("r3_science_bytes", 0)
     request = dict(label=label, phase=phase, command=command, cap_seconds=args.seconds,
                    reserved_seconds=cap, workers_before=host, idle_mpi_event_helpers=helpers,
                    threads=THREADS, storage_before=info, runner=identity(__file__),
@@ -606,6 +650,8 @@ def run(root, book, args, began):
                    worker_limit=worker_limit, worker_admission_margin=limits[phase],
                    input_files=[identity(p) for p in command
                                 if p.startswith("/") and "\n" not in p and Path(p).is_file()])
+    if r3_admission:
+        request["r3_admission"] = r3_admission["admission"]
     launched = command
     if affinity:
         # Bind in the rank wrapper, after OpenMPI has placed the launcher child.
@@ -622,7 +668,8 @@ def run(root, book, args, began):
     owned_peak = 0
     rank_affinity = None
     env = dict(os.environ, **THREADS, PYTHONDONTWRITEBYTECODE="1",
-               TMPDIR=str(root / "tmp"), H27_ROOT=str(root), H27_OPERATION=str(operation))
+               TMPDIR=str(root / ("tmp-r3" if advancing else "tmp")),
+               H27_ROOT=str(root), H27_OPERATION=str(operation))
     log_path = operation / "command.log"
     with log_path.open("x") as log:
         try:
@@ -677,9 +724,15 @@ def run(root, book, args, began):
                                         suspended_at, quiet_at = None, None
                                 else:
                                     quiet_at = None
-                        require(observed_workers <= worker_limit or suspended_at is not None, "HOST_WORKER_LIMIT")
+                        require(observed_workers <= worker_limit
+                                or (not advancing and suspended_at is not None), "HOST_WORKER_LIMIT")
                         require(time.monotonic() - began < args.seconds, "TIME_LIMIT")
-                        check_storage(storage(root))
+                        current_storage = storage(root, advancing)
+                        check_storage(current_storage)
+                        peak_r3_bytes = max(peak_r3_bytes, current_storage.get("r3_science_bytes", 0))
+                        if r3_admission:
+                            require(peak_r3_bytes - info["r3_science_bytes"] <= r3_admission["peak_new_bytes"],
+                                    "R3 operation exceeded its forecast disk allowance")
                         require(log_path.stat().st_size <= 32 * 1024 ** 2, "LOG_LIMIT")
                         time.sleep(.5)
                     code = child.returncode
@@ -713,10 +766,20 @@ def run(root, book, args, began):
         event["output_files"] = output_files
     if affinity:
         event["rank_affinity"] = rank_affinity
+    settled_storage = storage(root, advancing)
+    if advancing:
+        event["peak_r3_science_bytes"] = max(peak_r3_bytes, settled_storage["r3_science_bytes"])
+        try:
+            check_storage(settled_storage)
+            if r3_admission:
+                require(event["peak_r3_science_bytes"] - info["r3_science_bytes"]
+                        <= r3_admission["peak_new_bytes"], "R3 operation exceeded its forecast disk allowance")
+        except RuntimeError as error:
+            event.update(status="FAIL", reason=str(error))
     ledger = update(book, lambda ledger: ledger["entries"].update({label: event}))
     atomic(operation / "receipt.json", dict(request=request, result=event,
-                                            balance=balance(ledger), storage=storage(root)))
-    print(label, event["status"], event["seconds"], reason, flush=True)
+                                            balance=balance(ledger), storage=settled_storage))
+    print(label, event["status"], event["seconds"], event["reason"], flush=True)
     return int(event["status"] != "PASS")
 
 
@@ -735,6 +798,10 @@ def main():
     qualification_amendment.add_argument("authorization", type=Path)
     campaign_amendment = modes.add_parser("amend-outlet-campaign")
     campaign_amendment.add_argument("authorization", type=Path)
+    r3 = modes.add_parser("admit-r3-scope")
+    r3.add_argument("authorization", type=Path)
+    r3_amendment = modes.add_parser("amend-r3-time")
+    r3_amendment.add_argument("forecast", type=Path)
     extend = modes.add_parser("allocate")
     extend.add_argument("seconds", type=float)
     extend.add_argument("forecast", type=Path)
@@ -763,6 +830,12 @@ def main():
             amend_outlet_qualification(root, book, args.authorization, began)
         elif args.action == "amend-outlet-campaign":
             amend_outlet_campaign(root, book, args.authorization, began)
+        elif args.action in ("admit-r3-scope", "amend-r3-time"):
+            from task2r_advancing import amend_time, admit_scope
+            if args.action == "admit-r3-scope":
+                admit_scope(root, book, args.authorization, began)
+            else:
+                amend_time(root, book, args.forecast, began)
         elif args.action == "allocate":
             def allocate(ledger):
                 live = balance(ledger)
