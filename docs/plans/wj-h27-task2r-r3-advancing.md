@@ -179,3 +179,30 @@ The .01 signed run reached the native deadline during BE/EX1. The failed solve s
 The measured forecast covers 22,673 charged seconds of corrective and qualification work. Its inputs include the completed retained-inlet case, the two signed deadlines, the 100.180 s full-owner analysis and the 748.877 s independent signed audit. The ledger applied the one-time 20,204 s amendment under the execution lock, raising the parent ceiling from 108,000 to 128,204 s. The 3,600 s protected reserve remains intact. Immediately after the change, 24,071.245 s remained nonprotected and 8,299.536 s was staged. The next control uses `WJStepFDStep=2.5e-7` in place of the default `1e-6` on the same dt=.02 signed initial state. The discrete equations and qualified acceptance thresholds remain fixed. [Forecast](wj-h27-linux/task2r-r3-advancing/timestep-matrix/evidence/r3-measured-time-amendment-forecast.json) · [Ledger amendment](wj-h27-linux/task2r-r3-advancing/timestep-matrix/evidence/r3-time-amendment.json)
 
 The first smaller-displacement control charged 458.453 s and stopped when the shared-host worker count reached 86. It had written the fresh initial observation and had zero accepted steps. Peak owned process-tree RSS was 10,672,222,208 bytes. This run leaves the numerical effect of the displacement open. The next dispatch waits for worker headroom under the same ceiling, then runs the predeclared .01 retained-inlet level and repeats the same displacement control. [Control admission and watchdog receipt](wj-h27-linux/task2r-r3-advancing/timestep-matrix/operations/r3-fd-quarter-perturbed/receipt.json)
+
+### Provisional cost and R4 admission
+
+At dt=.04 both the three-step retained-inlet case and the three stock controls used the same Bf mesh, executable, CPU and checkpoint cadence. Coupled process time was 925.064 s. Stock median process time was 25.757 s, giving a measured whole-process ratio of 35.92 under their respective shared-host load. That coupled execution included 373.397 s of suspension. Stock suspend time ranged from 0 to 7.737 s. Its warm third step ranged from .285 to .556 s, while the corresponding coupled step took 142.118 s including suspension and had a 57.728 s active-time bound. [Coupled case](wj-h27-linux/task2r-r3-advancing/startup-accepted/evidence/r3-prefix-startup-2.json) · [Stock repetitions](wj-h27-linux/task2r-r3-advancing/stock-provisional/evidence)
+
+The unsuspended .02 retained-inlet case measures the following disjoint whole-process budget. The native sources count the complete current stress, production and wall work in their kernel scopes.
+
+| Scope | Seconds |
+| --- | ---: |
+| Construction and initialization | 60.843 |
+| Mixed flow solve and scalar solves | 23.432 |
+| Momentum advection, scalar advection and scalar-to-momentum load | .723 |
+| Constitutive kernels and wall work | 43.479 |
+| Remaining assembly | 61.141 |
+| Current residual and forcing | 21.609 |
+| Newton and Krylov orchestration | 3.254 |
+| Factor rebuilds | 341.249 |
+| Physical guards | 53.398 |
+| Accepted history movement | .028 |
+| Scientific frame writes, checkpoint writes and final export | 8.763 |
+| Remaining time in the step and process scopes | 5.965 |
+
+The measured timing assignments cover 99.04% of the 623.885 s process. Equation/model share is 24.10% against the 50% aim and 70% preference. [Unrounded timing scopes and refresh counters](wj-h27-linux/task2r-r3-advancing/timestep-matrix/evidence/r3-time-startup-1.json)
+
+As a .02 output-cost scenario, retain the measured two-step checkpoint and scientific cadence. The requested horizon needs 12,626 scheduled recovery writes and 12,628 scientific frames including the exact terminal brackets. The interval from 447.8483832973273 to 505.02466521278404 has 1,433 of those frames including its bracketing observations. Applying the largest observed frame size, 61,109,626 bytes, gives 771.69 GB of cumulative raw scientific data before reduction. The largest frame write was 2.382 s and the two measured recovery writes averaged .678 s. This scenario uses the current native periodic output behavior throughout the horizon. It requires measured streaming and retention before a launch fits the scientific storage allowance. [Frame sizes and write clocks](wj-h27-linux/task2r-r3-advancing/timestep-matrix/science-r3/r3-time-startup-1/state.science-index.json)
+
+The 26.13350407707765 pilot endpoint would take 1,307 steps at .02. One retained-inlet pilot at the measured warm mean gives 186,777 s for advancing with the 1.25 provision, before restart, retry, recurring output and final assessment. A representative signed warm rate, the alternate-sign or alternate-shape rate, and matched finer rates are open. The eventual R4 matrix requires the developed quiet control, retained-inlet startup, certified signed perturbation and an independently certified opposite sign or second shape, all with that minimum endpoint. It also requires common-time finer resolution, three actual scheduled recovery writes, usable retained restart files and monitoring. R4 admission is held. R3 time accuracy, the matched restart, and the complete per-trajectory and campaign costs remain open.
