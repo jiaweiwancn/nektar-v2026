@@ -55,19 +55,30 @@ def exact_clock(packet, boundary):
     return all(packet[k] == boundary[k] for k in ("step","time","dt","signature"))
 
 
-def evolution(case, out, seconds):
+def evolution(case, out, seconds, recovered_prefix=None):
     deadline = time.monotonic()+seconds
     index = read(case/"state.science-index.json")
     plan, final, final_file, index_file = accepted(case,index["final_step"])
-    frame, = (row for row in index["frames"] if row["origin"] == "fresh_initial_observation")
-    start = verified({k:frame[k] for k in ("path","sha256","bytes")})
+    role = plan["role"]
+    if recovered_prefix is None:
+        frame, = (row for row in index["frames"] if row["origin"] == "fresh_initial_observation")
+        start = verified({k:frame[k] for k in ("path","sha256","bytes")})
+    else:
+        anchor = read(recovered_prefix)
+        checkpoint = anchor["recovery"]
+        require(anchor["schema"] == "WJH27R3RecoveredPrefixAnchorV1" and anchor["status"] == "MET"
+                and role == "restart" and checkpoint["step"] == index["initial_step"]
+                and plan["restart"] == {k:checkpoint[k] for k in ("path","sha256","bytes")},
+                "evolution and recovered prefix anchors differ")
+        start = verified(anchor["initial"])
+        role = "perturbed"
     initial, _ = po.load_native(start)
     require(initial["step"] == initial["time"] == 0 and initial["elements"] == final["elements"]
             and initial["signature"] == final["signature"], "initial and accepted inventories differ")
     ref = po.load_reference(verified(plan["table"]))
     before, after = (po.PhysicalOracle(data,ref,20,deadline) for data in (initial,final))
     rows, window, inventory = compare(after,before,interior=(-2.5,8),detailed=True)
-    atomic(out,dict(schema="WJH27R3ObservedEvolutionV1",role=plan["role"],
+    atomic(out,dict(schema="WJH27R3ObservedEvolutionV1",role=role,
         initial=identity(start),accepted=final_file,scientific_index=index_file,
         time=final["time"],inventory=inventory,original_rows=rows,fixed_window_rows=window,
         interpretation="Signed final-minus-initial evolution. Comparison tolerances provide scale "
@@ -179,6 +190,7 @@ def main():
     cmd.add_argument("case",type=Path)
     cmd.add_argument("out",type=Path)
     cmd.add_argument("--seconds",required=True,type=float)
+    cmd.add_argument("--recovered-prefix",type=Path)
     cmd = sub.add_parser("cold")
     for key in ("uninterrupted","resumed","split","checkpoint","out"):
         cmd.add_argument(key,type=Path)
