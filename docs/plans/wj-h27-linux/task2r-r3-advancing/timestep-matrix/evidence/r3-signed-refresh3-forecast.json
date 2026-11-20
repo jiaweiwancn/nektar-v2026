@@ -1,0 +1,47 @@
+{
+  "schema": "WJH27R3SignedRefreshThreeForecastV1",
+  "account": {
+    "charged_seconds": 113023.06882719471,
+    "reserved_seconds": 72.0,
+    "nonprotected_remaining": 11508.931172805285,
+    "tranche_remaining": 5426.22189241022
+  },
+  "ledger": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/accounting.json",
+    "bytes": 770182,
+    "sha256": "4bb18e45a6f8c8df8a58f9165009f6899684b5cf3ac131dd1d250027e5b7ab06"
+  },
+  "basis": [
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-time-perturbed-1-fd-fourfold.json",
+      "bytes": 15743,
+      "sha256": "eb781e11768f9d61cdeafcabf2a76a6a1f4a23c76a4fd6b1197cd3930e687ef3"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-signed-cold-comparison.json",
+      "bytes": 15502,
+      "sha256": "d722105f3b62bc72e6be840ecf36a2f2c6ba816342505259bc71253675d8722a"
+    }
+  ],
+  "timestep": 0.02,
+  "fd_step": 4e-06,
+  "step_pc_maximum_uses": 3,
+  "split_time": 0.04,
+  "endpoint_time": 0.08,
+  "numerical_step_cap": 650,
+  "proposed_fresh_caps": [
+    2250,
+    1490
+  ],
+  "proposed_restart_cap": 1650,
+  "independent_endpoint_audit_cap": 1450,
+  "compare_cap": 815,
+  "rationale": "Three preconditioner bases per measured step give a fresh first base at the scheduled split in both branches.",
+  "measured_rebuild_seconds": 396.8633616180159,
+  "measured_complete_steps_seconds": [
+    190.64120227101375,
+    192.59790948100272,
+    54.05991852498846,
+    196.80923309299396
+  ]
+}

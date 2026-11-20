@@ -1,0 +1,623 @@
+{
+  "schema": "WJH27R3ThreeUseSignedNativeV1",
+  "account": {
+    "charged_seconds": 114855.67159365464,
+    "nonprotected_remaining": 9748.328406345361,
+    "reserved_seconds": 0,
+    "tranche_remaining": 3665.6191259502957
+  },
+  "cases": {
+    "r3-signed-refresh3-resumed": {
+      "accepted_steps": 2,
+      "admission": {
+        "bytes": 4883,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-resumed/admission.json",
+        "sha256": "80c6613e6f84aa6ceeda39e79ddbcc665fe8411cd69a5b9c8b4946641fdabbea"
+      },
+      "failure": null,
+      "final_time": 0.08,
+      "frames": {
+        "2": {
+          "bytes": 30060526,
+          "hashes": {
+            "advection_sha256": "04d98936dc21158f5c713e54f7bdb5f9474916808bdf5130686877bc65154046",
+            "previous_advection_sha256": "c1c0291af12d87be32e1a2a439bf0e7d75f42a27695512ebbf3a39dd05dd5fac",
+            "previous_sha256": "d22cc45520272d26340ce7df2898292961da00ecc03332a6a8584dfecd7ac081",
+            "state_sha256": "bfda8b6a28144f4d4adeb3ed3f92dc16ddb24ad96e3ea5341313ce7d7fdd0d0e"
+          },
+          "origin": "imported_accepted_history",
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-resumed/state.science-2.json",
+          "reason_mask": 8,
+          "sha256": "d08307ae2ee778751f27dabb0040270daa2b3fc811156ec9adb5ada3af77aae0",
+          "step": 2,
+          "time": 0.04,
+          "write_seconds": 1.454115948989056
+        },
+        "4": {
+          "bytes": 61023597,
+          "hashes": {
+            "advection_sha256": "c9413ff9d19b63a767afc4e052d82ec2f7de053bccb9cda4667083dd0410e35b",
+            "previous_advection_sha256": "fe34df7940061cffe19960acab4eef17a2501484a4bf00639026d61405dca915",
+            "previous_sha256": "2288ce2113ad0f21e5136ac8b40f4df716e683f4dae48c6c612a1843aac3da60",
+            "state_sha256": "ccc3ea09de813051c784f18c93f3b8ef44a5bd15842e93159fcc21c837cff67a"
+          },
+          "origin": "current_process_accepted_step",
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-resumed/state.science-4.json",
+          "reason_mask": 193,
+          "sha256": "75ea9a926604c52b3ffba003d567006a977d8cc01da840eab280e0a57cdb270b",
+          "step": 4,
+          "time": 0.08,
+          "write_seconds": 2.806662635994144
+        }
+      },
+      "label": "r3-signed-refresh3-resumed",
+      "operation": {
+        "exit": 0,
+        "peak_active_host_workers": 66,
+        "peak_host_workers": 146,
+        "peak_stopped_host_workers": 80,
+        "peak_tree_rss_bytes": 11126800384,
+        "phase": "r3-restart",
+        "rank_affinity": {
+          "allowed_cpus": [
+            0
+          ],
+          "pid": 594596,
+          "startup_cpus": [
+            0
+          ]
+        },
+        "reason": null,
+        "seconds": 469.15725386099075,
+        "status": "PASS",
+        "worker_limit": 80,
+        "worker_paused_seconds": 0
+      },
+      "receipt": {
+        "bytes": 7172,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-signed-refresh3-resumed/receipt.json",
+        "sha256": "7ee0021e7b480fd5b29a68057e319ae890cab2ea977d3aff0f73a9fa11581305"
+      },
+      "recipe": {
+        "application": {
+          "bytes": 10067520,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3-timed/IncNavierStokesSolver",
+          "sha256": "fcccad2abd9e2466de2b271c646d7dda10c2165801841c0d2c2abdab3cf1ea8a"
+        },
+        "certificate": null,
+        "fd_step": 0.000004,
+        "initial_fields": null,
+        "native_step_cap_seconds": 650,
+        "represented_proof": null,
+        "requested_steps": 2,
+        "source": "42b0ded162d5fc8fba899542f9cb39c5cf71eedf50b0c1ee686c46ce9f8f9ab9",
+        "step_pc_maximum_uses": 3,
+        "step_preconditioner": "CurrentDataDriftV1",
+        "timestep": 0.02
+      },
+      "recoveries": [
+        {
+          "bytes": 11014450,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-resumed/state.final.bin",
+          "sha256": "39bb24a430dac9beaf67c4077fc054aa734e2009d0eaa3e47b10a1067278841d"
+        },
+        {
+          "bytes": 11014450,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-resumed/state.recovery-4.bin",
+          "sha256": "39bb24a430dac9beaf67c4077fc054aa734e2009d0eaa3e47b10a1067278841d"
+        }
+      ],
+      "seal": {
+        "bytes": 10257,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-signed-refresh3-resumed.json",
+        "sha256": "5715ae5efe4e8703e22c5660808d2df27ce1794346b8d618919e516a513c321f"
+      },
+      "timing": {
+        "active_step_bounds": [
+          {
+            "active_lower_seconds": 192.85829146098695,
+            "active_upper_seconds": 192.85829146098695,
+            "complete_seconds": 192.85829146098695,
+            "step": 3
+          },
+          {
+            "active_lower_seconds": 197.0994321909966,
+            "active_upper_seconds": 197.0994321909966,
+            "complete_seconds": 197.0994321909966,
+            "step": 4
+          }
+        ],
+        "attributed_fraction": 0.9867552930401016,
+        "charge_seconds": 469.15725386099075,
+        "complete_step_seconds": [
+          192.85829146098695,
+          197.0994321909966
+        ],
+        "construction_seconds": 44.18086717202095,
+        "detailed_engine_seconds": {
+          "assembly": 35.565684408298694,
+          "constitutive": 17.80378733307589,
+          "flow": 12.52859652589541,
+          "forcing": 0.009973363019526005,
+          "guards": 27.036037873855093,
+          "history_movement": 0.010910020006122068,
+          "io": 0,
+          "momentum_advection": 0.1764495370152872,
+          "nonlinear": 1.8605745561653748,
+          "other": 0.23141886893427,
+          "rebuild": 268.25505137699656,
+          "residual": 14.302945785049815,
+          "scalar": 1.4507335519592743,
+          "scalar_advection": 0.1655841179890558,
+          "scalar_momentum_coupling": 0.09614722695550881,
+          "wall": 5.893641895789187
+        },
+        "engine_seconds": {
+          "assembly": 35.90771806330304,
+          "constitutive": 17.80378733307589,
+          "flow": 12.624743752850918,
+          "forcing": 0.009973363019526005,
+          "guards": 27.036037873855093,
+          "io": 0,
+          "nonlinear": 1.8605745561653748,
+          "other": 0.24232888894039206,
+          "rebuild": 268.25505137699656,
+          "residual": 14.302945785049815,
+          "scalar": 1.4507335519592743,
+          "wall": 5.893641895789187
+        },
+        "equation_share": 0.18796440033455733,
+        "final_export_seconds": 0.49162344899377786,
+        "initialisation_seconds": 27.657138809998287,
+        "other_step_seconds": 0.11689209099858999,
+        "process_remainder_seconds": 5.8520583610225,
+        "process_seconds": 468.13941144401906,
+        "recovery_seconds": 0.19251653499668464,
+        "scientific_frame_seconds": 4.2607785849832,
+        "warm_active_mean_bounds_seconds": [
+          197.0994321909966,
+          197.0994321909966
+        ],
+        "warm_step_mean_seconds": 197.0994321909966
+      }
+    },
+    "r3-signed-refresh3-split": {
+      "accepted_steps": 2,
+      "admission": {
+        "bytes": 5921,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-split/admission.json",
+        "sha256": "8daae79e1f91acd808eb1a3726443489571621472df88135e5e0c21588430560"
+      },
+      "failure": null,
+      "final_time": 0.04,
+      "frames": {
+        "0": {
+          "bytes": 30800245,
+          "hashes": {
+            "advection_sha256": "0c2ecbb69b0ed00ed68415e33b769501bcc3a2d51b8d92724bff9667981b1c2c",
+            "previous_advection_sha256": "0c2ecbb69b0ed00ed68415e33b769501bcc3a2d51b8d92724bff9667981b1c2c",
+            "previous_sha256": "f79e64e95edae1ff5657435176543e687ec6f3c894333b8130bac34d3cf713f7",
+            "state_sha256": "f79e64e95edae1ff5657435176543e687ec6f3c894333b8130bac34d3cf713f7"
+          },
+          "origin": "fresh_initial_observation",
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-split/state.science-0.json",
+          "reason_mask": 8,
+          "sha256": "5896baa17a5a331a374b098b39ec5672983c5be9144e82a5d1ec8b4bbb049064",
+          "step": 0,
+          "time": 0,
+          "write_seconds": 1.5952177179860882
+        },
+        "2": {
+          "bytes": 61024928,
+          "hashes": {
+            "advection_sha256": "04d98936dc21158f5c713e54f7bdb5f9474916808bdf5130686877bc65154046",
+            "previous_advection_sha256": "c1c0291af12d87be32e1a2a439bf0e7d75f42a27695512ebbf3a39dd05dd5fac",
+            "previous_sha256": "d22cc45520272d26340ce7df2898292961da00ecc03332a6a8584dfecd7ac081",
+            "state_sha256": "bfda8b6a28144f4d4adeb3ed3f92dc16ddb24ad96e3ea5341313ce7d7fdd0d0e"
+          },
+          "origin": "current_process_accepted_step",
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-split/state.science-2.json",
+          "reason_mask": 193,
+          "sha256": "91d484112788c678cb25407c4fca7406471b18a68ae1a143cddfdca328694a20",
+          "step": 2,
+          "time": 0.04,
+          "write_seconds": 2.406046026007971
+        }
+      },
+      "label": "r3-signed-refresh3-split",
+      "operation": {
+        "exit": 0,
+        "peak_active_host_workers": 62,
+        "peak_host_workers": 142,
+        "peak_stopped_host_workers": 80,
+        "peak_tree_rss_bytes": 12087898112,
+        "phase": "r3-advance",
+        "rank_affinity": {
+          "allowed_cpus": [
+            0
+          ],
+          "pid": 592937,
+          "startup_cpus": [
+            0
+          ]
+        },
+        "reason": null,
+        "seconds": 490.06705381098436,
+        "status": "PASS",
+        "worker_limit": 80,
+        "worker_paused_seconds": 0
+      },
+      "receipt": {
+        "bytes": 7151,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-signed-refresh3-split/receipt.json",
+        "sha256": "41a42787d1bc10c7b430722f112732d0e4c6b5106d6abda05c305d4254430a11"
+      },
+      "recipe": {
+        "application": {
+          "bytes": 10067520,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3-timed/IncNavierStokesSolver",
+          "sha256": "fcccad2abd9e2466de2b271c646d7dda10c2165801841c0d2c2abdab3cf1ea8a"
+        },
+        "certificate": {
+          "bytes": 12561,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-timed-certificate.json",
+          "sha256": "469c6d699524f0bfd30e461fab8c2f7b2f13b8042c7cbcc6e44d30e3286207ee"
+        },
+        "fd_step": 0.000004,
+        "initial_fields": {
+          "bytes": 76943910,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-timed-parity/state.result.json",
+          "sha256": "c2f1b4b6f824f4f13fa8415d26d49b935fc11fc507b25f9c470c2e7baf34a6e5"
+        },
+        "native_step_cap_seconds": 650,
+        "represented_proof": {
+          "bytes": 22509,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-timed-perturbation/audit.json",
+          "sha256": "fa43a862a1fcbe0cceca2e9fdea8346c945de924321d84ece630189387da8941"
+        },
+        "requested_steps": 2,
+        "source": "42b0ded162d5fc8fba899542f9cb39c5cf71eedf50b0c1ee686c46ce9f8f9ab9",
+        "step_pc_maximum_uses": 3,
+        "step_preconditioner": "CurrentDataDriftV1",
+        "timestep": 0.02
+      },
+      "recoveries": [
+        {
+          "bytes": 11014450,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-split/state.final.bin",
+          "sha256": "86e5181065c503573f4d3bfb9fe84a5921cbbcd5b86b858ffe3e106a542c86f4"
+        },
+        {
+          "bytes": 11014450,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-split/state.recovery-2.bin",
+          "sha256": "86e5181065c503573f4d3bfb9fe84a5921cbbcd5b86b858ffe3e106a542c86f4"
+        }
+      ],
+      "seal": {
+        "bytes": 10104,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-signed-refresh3-split.json",
+        "sha256": "b7d6396c6d75ef4040834b826e44da138370df9e4012c19fd744bb19efd8fcd8"
+      },
+      "timing": {
+        "active_step_bounds": [
+          {
+            "active_lower_seconds": 191.141808225977,
+            "active_upper_seconds": 191.141808225977,
+            "complete_seconds": 191.141808225977,
+            "step": 1
+          },
+          {
+            "active_lower_seconds": 193.914947983023,
+            "active_upper_seconds": 193.914947983023,
+            "complete_seconds": 193.914947983023,
+            "step": 2
+          }
+        ],
+        "attributed_fraction": 0.9859611557667523,
+        "charge_seconds": 490.06705381098436,
+        "complete_step_seconds": [
+          191.141808225977,
+          193.914947983023
+        ],
+        "construction_seconds": 44.50585930599482,
+        "detailed_engine_seconds": {
+          "assembly": 34.626069952879334,
+          "constitutive": 17.83132599495002,
+          "flow": 12.518456468911609,
+          "forcing": 0,
+          "guards": 26.93793256211211,
+          "history_movement": 0.018580300005851313,
+          "io": 0,
+          "momentum_advection": 0.14676677901297808,
+          "nonlinear": 1.8910373532562517,
+          "other": 0.21260095495381393,
+          "rebuild": 264.83007620298304,
+          "residual": 14.081009241839638,
+          "scalar": 1.4256004919006955,
+          "scalar_advection": 0.1943768369674217,
+          "scalar_momentum_coupling": 0.099948547052918,
+          "wall": 5.860125106148189
+        },
+        "engine_seconds": {
+          "assembly": 34.967213568859734,
+          "constitutive": 17.83132599495002,
+          "flow": 12.618405015964527,
+          "forcing": 0,
+          "guards": 26.93793256211211,
+          "io": 0,
+          "nonlinear": 1.8910373532562517,
+          "other": 0.23118125495966524,
+          "rebuild": 264.83007620298304,
+          "residual": 14.081009241839638,
+          "scalar": 1.4256004919006955,
+          "wall": 5.860125106148189
+        },
+        "equation_share": 0.17744485058754714,
+        "final_export_seconds": 0.46279817799222656,
+        "initialisation_seconds": 52.577648272999795,
+        "other_step_seconds": 0.18240268202498555,
+        "process_remainder_seconds": 6.471031377994223,
+        "process_seconds": 489.0740933439811,
+        "recovery_seconds": 0.1991829900071025,
+        "scientific_frame_seconds": 4.001263743994059,
+        "warm_active_mean_bounds_seconds": null,
+        "warm_step_mean_seconds": null
+      }
+    },
+    "r3-signed-refresh3-uninterrupted": {
+      "accepted_steps": 4,
+      "admission": {
+        "bytes": 5961,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-uninterrupted/admission.json",
+        "sha256": "e3bf93e162b1c241c9867511a0a6cfd6bb9409e9a38b398c94575361f6b84b80"
+      },
+      "failure": null,
+      "final_time": 0.08,
+      "frames": {
+        "0": {
+          "bytes": 30800245,
+          "hashes": {
+            "advection_sha256": "0c2ecbb69b0ed00ed68415e33b769501bcc3a2d51b8d92724bff9667981b1c2c",
+            "previous_advection_sha256": "0c2ecbb69b0ed00ed68415e33b769501bcc3a2d51b8d92724bff9667981b1c2c",
+            "previous_sha256": "f79e64e95edae1ff5657435176543e687ec6f3c894333b8130bac34d3cf713f7",
+            "state_sha256": "f79e64e95edae1ff5657435176543e687ec6f3c894333b8130bac34d3cf713f7"
+          },
+          "origin": "fresh_initial_observation",
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-uninterrupted/state.science-0.json",
+          "reason_mask": 8,
+          "sha256": "5896baa17a5a331a374b098b39ec5672983c5be9144e82a5d1ec8b4bbb049064",
+          "step": 0,
+          "time": 0,
+          "write_seconds": 1.6080033119942527
+        },
+        "2": {
+          "bytes": 61024925,
+          "hashes": {
+            "advection_sha256": "04d98936dc21158f5c713e54f7bdb5f9474916808bdf5130686877bc65154046",
+            "previous_advection_sha256": "c1c0291af12d87be32e1a2a439bf0e7d75f42a27695512ebbf3a39dd05dd5fac",
+            "previous_sha256": "d22cc45520272d26340ce7df2898292961da00ecc03332a6a8584dfecd7ac081",
+            "state_sha256": "bfda8b6a28144f4d4adeb3ed3f92dc16ddb24ad96e3ea5341313ce7d7fdd0d0e"
+          },
+          "origin": "current_process_accepted_step",
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-uninterrupted/state.science-2.json",
+          "reason_mask": 1,
+          "sha256": "b7bf163f5051cccc966b8651a02f3007d2dd9f37e79c75692420afb6de7b7c8d",
+          "step": 2,
+          "time": 0.04,
+          "write_seconds": 2.4080911579949316
+        },
+        "4": {
+          "bytes": 61023724,
+          "hashes": {
+            "advection_sha256": "c9413ff9d19b63a767afc4e052d82ec2f7de053bccb9cda4667083dd0410e35b",
+            "previous_advection_sha256": "fe34df7940061cffe19960acab4eef17a2501484a4bf00639026d61405dca915",
+            "previous_sha256": "2288ce2113ad0f21e5136ac8b40f4df716e683f4dae48c6c612a1843aac3da60",
+            "state_sha256": "ccc3ea09de813051c784f18c93f3b8ef44a5bd15842e93159fcc21c837cff67a"
+          },
+          "origin": "current_process_accepted_step",
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-uninterrupted/state.science-4.json",
+          "reason_mask": 193,
+          "sha256": "fd9bf3e4711cd35530848ce2b4611fbb9073b78e4fb29ec628026f9b21c27b64",
+          "step": 4,
+          "time": 0.08,
+          "write_seconds": 2.4359167699876707
+        }
+      },
+      "label": "r3-signed-refresh3-uninterrupted",
+      "operation": {
+        "exit": 0,
+        "peak_active_host_workers": 63,
+        "peak_host_workers": 143,
+        "peak_stopped_host_workers": 80,
+        "peak_tree_rss_bytes": 11806093312,
+        "phase": "r3-advance",
+        "rank_affinity": {
+          "allowed_cpus": [
+            0
+          ],
+          "pid": 590231,
+          "startup_cpus": [
+            0
+          ]
+        },
+        "reason": null,
+        "seconds": 843.4135830799933,
+        "status": "PASS",
+        "worker_limit": 80,
+        "worker_paused_seconds": 0
+      },
+      "receipt": {
+        "bytes": 7229,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-signed-refresh3-uninterrupted/receipt.json",
+        "sha256": "3e9887eb25120069f3d655a69a8f2237fbb67cdfc41ed684b8ba154cc16a63d0"
+      },
+      "recipe": {
+        "application": {
+          "bytes": 10067520,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3-timed/IncNavierStokesSolver",
+          "sha256": "fcccad2abd9e2466de2b271c646d7dda10c2165801841c0d2c2abdab3cf1ea8a"
+        },
+        "certificate": {
+          "bytes": 12561,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-timed-certificate.json",
+          "sha256": "469c6d699524f0bfd30e461fab8c2f7b2f13b8042c7cbcc6e44d30e3286207ee"
+        },
+        "fd_step": 0.000004,
+        "initial_fields": {
+          "bytes": 76943910,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-timed-parity/state.result.json",
+          "sha256": "c2f1b4b6f824f4f13fa8415d26d49b935fc11fc507b25f9c470c2e7baf34a6e5"
+        },
+        "native_step_cap_seconds": 650,
+        "represented_proof": {
+          "bytes": 22509,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-timed-perturbation/audit.json",
+          "sha256": "fa43a862a1fcbe0cceca2e9fdea8346c945de924321d84ece630189387da8941"
+        },
+        "requested_steps": 4,
+        "source": "42b0ded162d5fc8fba899542f9cb39c5cf71eedf50b0c1ee686c46ce9f8f9ab9",
+        "step_pc_maximum_uses": 3,
+        "step_preconditioner": "CurrentDataDriftV1",
+        "timestep": 0.02
+      },
+      "recoveries": [
+        {
+          "bytes": 11014450,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-uninterrupted/state.final.bin",
+          "sha256": "39bb24a430dac9beaf67c4077fc054aa734e2009d0eaa3e47b10a1067278841d"
+        },
+        {
+          "bytes": 11014450,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-uninterrupted/state.recovery-2.bin",
+          "sha256": "86e5181065c503573f4d3bfb9fe84a5921cbbcd5b86b858ffe3e106a542c86f4"
+        },
+        {
+          "bytes": 11014450,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-uninterrupted/state.recovery-4.bin",
+          "sha256": "39bb24a430dac9beaf67c4077fc054aa734e2009d0eaa3e47b10a1067278841d"
+        }
+      ],
+      "seal": {
+        "bytes": 15779,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-signed-refresh3-uninterrupted.json",
+        "sha256": "9661c051eb803737bc0ba2a90ad04de46e7b0ce4f286b93dbcf728a48147b11a"
+      },
+      "timing": {
+        "active_step_bounds": [
+          {
+            "active_lower_seconds": 189.54550844797632,
+            "active_upper_seconds": 189.54550844797632,
+            "complete_seconds": 189.54550844797632,
+            "step": 1
+          },
+          {
+            "active_lower_seconds": 197.48499161499785,
+            "active_upper_seconds": 197.48499161499785,
+            "complete_seconds": 197.48499161499785,
+            "step": 2
+          },
+          {
+            "active_lower_seconds": 174.571840582008,
+            "active_upper_seconds": 174.571840582008,
+            "complete_seconds": 174.571840582008,
+            "step": 3
+          },
+          {
+            "active_lower_seconds": 176.4758158310142,
+            "active_upper_seconds": 176.4758158310142,
+            "complete_seconds": 176.4758158310142,
+            "step": 4
+          }
+        ],
+        "attributed_fraction": 0.9913736067722229,
+        "charge_seconds": 843.4135830799933,
+        "complete_step_seconds": [
+          189.54550844797632,
+          197.48499161499785,
+          174.571840582008,
+          176.4758158310142
+        ],
+        "construction_seconds": 44.276875581999775,
+        "detailed_engine_seconds": {
+          "assembly": 68.19891989885946,
+          "constitutive": 35.60215715316008,
+          "flow": 23.45408799589495,
+          "forcing": 0,
+          "guards": 53.77698055683868,
+          "history_movement": 0.02922073399531655,
+          "io": 0,
+          "momentum_advection": 0.2685136770014651,
+          "nonlinear": 3.6374885766708758,
+          "other": 0.4112381530285347,
+          "rebuild": 504.05804737698054,
+          "residual": 26.88940732597257,
+          "scalar": 2.7414461481384933,
+          "scalar_advection": 0.4057563879759982,
+          "scalar_momentum_coupling": 0.1762495601142291,
+          "wall": 11.258564313320676
+        },
+        "engine_seconds": {
+          "assembly": 68.87318996383692,
+          "constitutive": 35.60215715316008,
+          "flow": 23.63033755600918,
+          "forcing": 0,
+          "guards": 53.77698055683868,
+          "io": 0,
+          "nonlinear": 3.6374885766708758,
+          "other": 0.4404588870238513,
+          "rebuild": 504.05804737698054,
+          "residual": 26.88940732597257,
+          "scalar": 2.7414461481384933,
+          "wall": 11.258564313320676
+        },
+        "equation_share": 0.2006418885986371,
+        "final_export_seconds": 0.45490094801061787,
+        "initialisation_seconds": 52.95333717801259,
+        "other_step_seconds": 0.34551657605334185,
+        "process_remainder_seconds": 6.509017226984724,
+        "process_seconds": 842.2722874110041,
+        "recovery_seconds": 0.37255080201430246,
+        "scientific_frame_seconds": 6.452011239976855,
+        "warm_active_mean_bounds_seconds": [
+          175.5238282065111,
+          175.5238282065111
+        ],
+        "warm_step_mean_seconds": 175.5238282065111
+      }
+    }
+  },
+  "census": {
+    "active": 61,
+    "owned": 0,
+    "parked_helpers": 102,
+    "stopped": 80,
+    "stopped_owned": 0,
+    "total": 141
+  },
+  "ledger": {
+    "bytes": 782696,
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/accounting.json",
+    "sha256": "0352f91163859e6eb3588238f887231e1d7f5d5b762303a3cfeeb8c4dc447276"
+  },
+  "storage": {
+    "free_bytes": 3444085800960,
+    "r3_science_bytes": 4701277181,
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 751264358
+  },
+  "lineage": {
+    "same_four_split_histories": true,
+    "matched_endpoint_binary": true,
+    "final_binary_sha256": "39bb24a430dac9beaf67c4077fc054aa734e2009d0eaa3e47b10a1067278841d",
+    "checkpoint_sha256": "86e5181065c503573f4d3bfb9fe84a5921cbbcd5b86b858ffe3e106a542c86f4",
+    "equation_audits": "PENDING"
+  },
+  "step_only_scenarios": {
+    "warm_mean": 175.5238282065111,
+    "trajectory_steps": 25252,
+    "pilot_steps": 1307,
+    "margin": 1.25,
+    "trajectory_seconds": 5540409.637338523,
+    "pilot_seconds": 286762.0543323875
+  }
+}

@@ -25,6 +25,7 @@ AMENDMENT = "r3-time-amendment"
 OUTLET = "ZeroTransverseV1"
 STEP_PRECONDITIONERS = ("CurrentDataDriftV1", "CurrentDataAMDOrderingV1")
 DEFAULT_FD_STEP = 1e-6
+DEFAULT_STEP_PC_MAXIMUM_USES = 8
 INFO = dict(WJNativeMode="Physical", WJReferencePolicy="ExactInnerFiniteNuV1",
             WJConstitutiveBackend="FastFull3DV1", WJStressSplit="PositiveShearV1",
             WJOutletPolicy=OUTLET, WJCheckOutletActions="False",
@@ -33,7 +34,7 @@ INFO = dict(WJNativeMode="Physical", WJReferencePolicy="ExactInnerFiniteNuV1",
 RECIPE = dict(WJQuadratureX=6, WJQuadratureR=8, WJLinearTolerance=1e-12,
               WJCoupledTolerance=1e-10, WJDiagnosticOutletX=15, Time=0,
               Kinvis=6.423173803526447e-5, WJStepPCRelativeDrift=.02,
-              WJStepPCMaximumUses=8)
+              WJStepPCMaximumUses=DEFAULT_STEP_PC_MAXIMUM_USES)
 
 
 def read(path):
@@ -189,7 +190,8 @@ def bind(root):
 def prepare(root, label, role, dt, steps, cap, step_cap, rss_gib, peak_mib,
             science_stride, recovery_stride, basis_path=None, certificate=None, recovery=None,
             phase="r3-advance", native_seconds=None, initial_step=0, represented_proof=None,
-            maximum_pause=None, step_preconditioner=STEP_PRECONDITIONERS[0], fd_step=DEFAULT_FD_STEP):
+            maximum_pause=None, step_preconditioner=STEP_PRECONDITIONERS[0], fd_step=DEFAULT_FD_STEP,
+            step_pc_maximum_uses=DEFAULT_STEP_PC_MAXIMUM_USES):
     import coupled_fixtures as fixtures
     from task2r_verify import edit
 
@@ -212,6 +214,8 @@ def prepare(root, label, role, dt, steps, cap, step_cap, rss_gib, peak_mib,
     require(maximum_pause is None or 0 < maximum_pause < cap,
             "pause allowance must fit inside the charged operation cap")
     require(math.isfinite(fd_step) and fd_step >= 1e-12, "invalid finite-difference displacement")
+    require(type(step_pc_maximum_uses) is int and 1 <= step_pc_maximum_uses <= 64,
+            "invalid native preconditioner maximum uses")
     require((phase == "r3-parity") == parity and dt > 0
             and (steps == 0 if parity or initial_only else steps > 0)
             and (role == "perturbed") == bool(certificate) and (not initial_only or role == "perturbed")
@@ -235,7 +239,8 @@ def prepare(root, label, role, dt, steps, cap, step_cap, rss_gib, peak_mib,
                       steady_seconds=native_seconds if parity else 0)
     require(step_preconditioner in STEP_PRECONDITIONERS,"unrecognized tested advancing preconditioner")
     info = dict(INFO, WJStepPreconditioner=step_preconditioner)
-    parameters = dict(RECIPE, WJStepNewtonSeconds=step_cap, WJStepFDStep=fd_step)
+    parameters = dict(RECIPE, WJStepNewtonSeconds=step_cap, WJStepFDStep=fd_step,
+                      WJStepPCMaximumUses=step_pc_maximum_uses)
     if parity:
         info["WJSteadyVelocityPC"] = "FullGradientV1"
         parameters["WJSteadyKrylovDimension"] = 64
@@ -254,6 +259,7 @@ def prepare(root, label, role, dt, steps, cap, step_cap, rss_gib, peak_mib,
                 seconds=cap, peak_new_bytes=peak_mib * 1024 ** 2, rss_limit_bytes=rss_gib * GIB,
                 maximum_paused_seconds=maximum_pause,
                 step_preconditioner=step_preconditioner, fd_step=fd_step,
+                step_pc_maximum_uses=step_pc_maximum_uses,
                 cpu=base["affinity"]["cpu"], bf_binding=identity(bound), command=command,
                 timestep=dt, initial_step=initial_step, requested_steps=steps, native_step_cap_seconds=step_cap,
                 science_stride=science_stride, recovery_stride=recovery_stride,
@@ -304,10 +310,14 @@ def admission(root, label, phase, command, cap):
                     "stock admission requires the conventional weak-pressure solver")
         else:
             step_pc = plan.get("step_preconditioner",STEP_PRECONDITIONERS[0])
+            maximum_uses = plan.get("step_pc_maximum_uses", DEFAULT_STEP_PC_MAXIMUM_USES)
+            require(type(maximum_uses) is int and 1 <= maximum_uses <= 64,
+                    "invalid admitted preconditioner maximum uses")
+            recipe = dict(RECIPE, WJStepPCMaximumUses=maximum_uses)
             solver_info = dict(INFO,WJStepPreconditioner=step_pc)
             require(info["SolverType"] == "WJNativeCoupledV2" and info["Driver"] == "Standard"
                     and step_pc in STEP_PRECONDITIONERS and all(info.get(k) == v for k, v in solver_info.items())
-                    and all(float(parameters[k]) == v for k, v in RECIPE.items())
+                    and all(float(parameters[k]) == v for k, v in recipe.items())
                     and float(parameters["WJStepNewtonSeconds"]) == plan["native_step_cap_seconds"]
                     and float(parameters.get("WJStepFDStep",DEFAULT_FD_STEP)) == plan.get("fd_step",DEFAULT_FD_STEP)
                     and info["WJReferenceTable"] == plan["table"]["path"]
@@ -356,6 +366,7 @@ def main():
     case.add_argument("--maximum-pause", type=int)
     case.add_argument("--step-preconditioner", choices=STEP_PRECONDITIONERS, default=STEP_PRECONDITIONERS[0])
     case.add_argument("--fd-step", type=float, default=DEFAULT_FD_STEP)
+    case.add_argument("--step-pc-maximum-uses", type=int, default=DEFAULT_STEP_PC_MAXIMUM_USES)
     args = vars(parser.parse_args())
     action = args.pop("action")
     if action == "bind":

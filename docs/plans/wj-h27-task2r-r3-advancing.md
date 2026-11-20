@@ -321,11 +321,17 @@ The .005 signed run with 4e−6 accepted its BE/EX1 step at t=.005 with a maximu
 
 The revised .01 and .005 signed runs improved startup and still ended before t=.04. The .02 three-use refresh control addresses the distinct cold pressure discrepancy. It uses an uninterrupted four-step run, a two-step split and a separate continuation at the same timestep, displacement, tolerances and physical model. The account has 11,580.931 s nonprotected, including 5,498.222 s staged, and the 3,600 s evidence reserve. [Ledger and failed fine-refinement evidence](wj-h27-linux/task2r-r3-advancing/timestep-matrix/fourfold-signed-fine.json)
 
-| Closure gate | Status after the finer signed refinement |
+### Three-use signed restart control
+
+The declared `WJStepPCMaximumUses=3` control used the same timed application and 4e−6 displacement. The uninterrupted signed process accepted four .02 steps and refreshed at the beginning of each step following t=.04. The separate split process ended at t=.04 after writing its scheduled binary. Its checkpoint and all four coefficient and explicit history hashes match the uninterrupted split point. A third process imported that checkpoint and advanced through t=.08. All four endpoint hashes and the final binary agree byte for byte. Independent audits of both endpoint files are in the verification stage. [Three process admissions, lineage and exact timings](wj-h27-linux/task2r-r3-advancing/timestep-matrix/signed-refresh3-native.json)
+
+The uninterrupted process took 842.272 s with a warm mean of 175.524 s, compared with 738.092 and 125.435 s for the eight-use signed run. Rebuilds used 504.058 s. The separate split and replay took 489.074 and 468.139 process seconds. All three operations used one MPI rank on CPU 0, reached a maximum of 66 active workers across their receipts, and recorded zero suspensions. At settlement the account had 9,748.328 s nonprotected, including 3,665.619 s staged. [Observed numerical remedy and costs](wj-h27-linux/task2r-r3-advancing/timestep-matrix/signed-refresh3-native.json)
+
+| Closure gate | Status after the three-use signed native runs |
 | --- | --- |
 | CP0 Bf state and admission | MET. Exact Bf replay and independently certified signed initial coefficients and histories bind to the Linux application. |
 | CP1 positive-time equations and costs | Quiet and retained-inlet prefixes accepted three steps at dt=.04. Earlier signed independent BE/EX1 and BDF2/EX2 audits passed. The larger-displacement .02 signed run supplies a two-step warm timing block. Its adjusted endpoints still require their independent audits. |
-| CP2 timestep and recovery | OPEN. The original .02 and .01 startup frames pass the independently audited t=.04 comparison. The larger displacement produced signed .02 frames at both common times and extended .01 and .005 through t=.03 and t=.005. The .02 cold replay passed the independent equations and failed the pressure endpoint tolerance. The finer signed witness, timestep choice and restart remedy remain open. |
+| CP2 timestep and recovery | OPEN. The original .02 and .01 startup frames pass the independently audited t=.04 comparison. The larger displacement produced signed .02 frames at both common times and extended .01 and .005 through t=.03 and t=.005. The eight-use cold replay failed the pressure endpoint tolerance. The three-use signed endpoints match byte for byte and await independent audits. The finer signed witness and timestep choice remain open. |
 | CP3 affordability and stock | Stock was repeated at .04 and on the matched .02 retained-inlet interval. The tested .02 startup projects above the day target under its measured rate. Selected-recipe stock, cold and per-trajectory costs remain open. |
 | R4 admission | HELD. A passing R3 scientific recipe and a complete affordable pilot case set remain prerequisites. |
 

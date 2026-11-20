@@ -10,7 +10,7 @@ import physical_oracle as po
 from physical_cache_history_check import binary_history
 from physical_transient_oracle import state_hash
 from resources import atomic, identity
-from task2r_advancing import DEFAULT_FD_STEP, read, require, verified
+from task2r_advancing import DEFAULT_FD_STEP, DEFAULT_STEP_PC_MAXIMUM_USES, read, require, verified
 from task2r_advancing_evidence import HASH_KEYS
 from task2s_observations import compare
 
@@ -39,6 +39,8 @@ def common_time(coarse, fine, coarse_step, fine_step, out, seconds, coarse_audit
               "represented_proof","step_preconditioner")
     require(a["role"] in ("startup","perturbed") and all(a.get(k) == b.get(k) for k in inputs)
             and a.get("fd_step",DEFAULT_FD_STEP) == b.get("fd_step",DEFAULT_FD_STEP)
+            and a.get("step_pc_maximum_uses", DEFAULT_STEP_PC_MAXIMUM_USES)
+            == b.get("step_pc_maximum_uses", DEFAULT_STEP_PC_MAXIMUM_USES)
             and sa["elements"] == sb["elements"] and a["timestep"] >= b["timestep"]
             and abs(sa["time"]-sb["time"]) <= 2e-13*max(1.,sa["time"]),
             "trajectory or exact common-time binding differs")
