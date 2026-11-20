@@ -1,0 +1,771 @@
+{
+  "schema": "WJH27R3PhysicalBfPerturbationAuditV1",
+  "status": "MET",
+  "base": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-parity/state.result.json",
+    "bytes": 76943802,
+    "sha256": "77c29e2e1bfb2b943020f46aa6565fee7da956d09f6cebe240fb66931694a8d1"
+  },
+  "native": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-initial/state.result.json",
+    "bytes": 30800988,
+    "sha256": "95ccbcb44860763d82d86b2d47ef0d4478ed33101dcb6fa862a944800469af69"
+  },
+  "table": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+    "bytes": 139982,
+    "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+  },
+  "certificate": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-signed-certificate.json",
+    "bytes": 12561,
+    "sha256": "59bebfc2bd68f8f6d788d5f6f4497fe549902463c286f0649687215d55f7e900"
+  },
+  "analyzer": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v13/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_perturbation_audit.py",
+    "bytes": 8757,
+    "sha256": "e98f1d9cb80378db6d193597d3fc6146ce8b3badfe7fe75e37e6212fc7edb6fc"
+  },
+  "gates": {
+    "norms": true,
+    "support": true,
+    "kinetic_energy": true,
+    "solenoidal": true,
+    "exterior": true,
+    "dependent_trace": true,
+    "resolved_signal": true,
+    "admissibility": true
+  },
+  "layout": {
+    "shape": "BfQuartileV1",
+    "x_knots": [
+      -1.875,
+      -0.9375,
+      0.0,
+      0.9375,
+      1.875
+    ],
+    "r_knots": [
+      0.07500000000000001,
+      0.16393138416503997,
+      0.29536404609237,
+      0.3722657339002,
+      0.48106065886069993
+    ],
+    "H": 0.15,
+    "epsilon_peak_radius": 0.29536404609237
+  },
+  "signs": [
+    1,
+    -1,
+    1
+  ],
+  "support_area": 1.5227274707276246,
+  "resolved_intervals": [
+    11,
+    46,
+    11
+  ],
+  "represented_norms": {
+    "velocity": {
+      "global_peak_enclosure": [
+        0.0009999999989216525,
+        0.0010000000010782864
+      ],
+      "peak_subdivision": {
+        "lower": 9.999999978433056e-07,
+        "upper": 1.0000000021565723e-06,
+        "subdivisions": 48,
+        "active_boxes": 3850,
+        "relative_gap": 4.313266689024903e-09
+      },
+      "peak_deviation_limit": 1.0000000000000001e-11,
+      "peak_pass": true,
+      "representation_pass": true,
+      "domain_RMS_enclosure": [
+        1.655446659234776e-05,
+        1.6554466592347768e-05
+      ],
+      "support_RMS_enclosure": [
+        0.0002993208701943591,
+        0.0002993208701943592
+      ],
+      "energy_enclosure": [
+        1.364256969069853e-07,
+        1.3642569690698535e-07
+      ],
+      "support_area_enclosure": [
+        1.5227274707276326,
+        1.522727470727633
+      ],
+      "half_peak_area_refinement": [
+        {
+          "relative_support_uncertainty_target": 0.01,
+          "lower": 0.19127922635929068,
+          "upper": 0.20649550721255983,
+          "unresolved_area_upper": 0.015216280853269096,
+          "subdivisions": 869,
+          "active_boxes": 379
+        },
+        {
+          "relative_support_uncertainty_target": 0.003,
+          "lower": 0.19668710587381924,
+          "upper": 0.201253379458071,
+          "unresolved_area_upper": 0.0045662735842517295,
+          "subdivisions": 2986,
+          "active_boxes": 1248
+        },
+        {
+          "relative_support_uncertainty_target": 0.001,
+          "lower": 0.19820160518381033,
+          "upper": 0.19972428491696156,
+          "unresolved_area_upper": 0.0015226797331511779,
+          "subdivisions": 8964,
+          "active_boxes": 3731
+        }
+      ],
+      "representation_error_RMS_enclosure": [
+        9.568785833903441e-19,
+        9.568785833903445e-19
+      ],
+      "normalized_field_gradient_RMS_enclosure": [
+        0.0003244703512064186,
+        0.0003244703512064187
+      ],
+      "normalized_field_gradient_MAX_upper": 0.027161579527766225,
+      "pass_": true
+    },
+    "k": {
+      "global_peak_enclosure": [
+        0.00999999999999992,
+        0.009999999999999952
+      ],
+      "peak_subdivision": {
+        "lower": 9.999999999999845e-05,
+        "upper": 9.9999999999999e-05,
+        "subdivisions": 0,
+        "active_boxes": 3806,
+        "relative_gap": 5.556536133988296e-15
+      },
+      "peak_deviation_limit": 1e-12,
+      "peak_pass": true,
+      "representation_pass": true,
+      "domain_RMS_enclosure": [
+        0.0001750291189714842,
+        0.00017502911897148424
+      ],
+      "support_RMS_enclosure": [
+        0.003164696845267952,
+        0.0031646968452679527
+      ],
+      "energy_enclosure": [
+        1.5250581760399631e-05,
+        1.5250581760399634e-05
+      ],
+      "support_area_enclosure": [
+        1.5227274707276326,
+        1.522727470727633
+      ],
+      "half_peak_area_refinement": [
+        {
+          "relative_support_uncertainty_target": 0.01,
+          "lower": 0.20993829960658633,
+          "upper": 0.2251606887839589,
+          "unresolved_area_upper": 0.015222389177372507,
+          "subdivisions": 510,
+          "active_boxes": 221
+        },
+        {
+          "relative_support_uncertainty_target": 0.003,
+          "lower": 0.2151016297399886,
+          "upper": 0.21966789130704037,
+          "unresolved_area_upper": 0.004566261567051711,
+          "subdivisions": 1612,
+          "active_boxes": 659
+        },
+        {
+          "relative_support_uncertainty_target": 0.001,
+          "lower": 0.2166099784233707,
+          "upper": 0.2181323787591493,
+          "unresolved_area_upper": 0.001522400335778533,
+          "subdivisions": 4694,
+          "active_boxes": 1918
+        }
+      ],
+      "representation_error_RMS_enclosure": [
+        1.6916638318268295e-18,
+        1.69166383182683e-18
+      ],
+      "normalized_field_gradient_RMS_enclosure": [
+        0.0020086469821712456,
+        0.0020086469821712465
+      ],
+      "normalized_field_gradient_MAX_upper": 0.20004982905174096,
+      "pass_": true
+    },
+    "epsilon": {
+      "global_peak_enclosure": [
+        0.010000009549712988,
+        0.010000009549726527
+      ],
+      "peak_subdivision": {
+        "lower": 0.00010000019099435097,
+        "upper": 0.00010000019099462172,
+        "subdivisions": 48,
+        "active_boxes": 80,
+        "relative_gap": 2.70751870403165e-12
+      },
+      "peak_deviation_limit": 1e-05,
+      "peak_pass": true,
+      "representation_pass": true,
+      "domain_RMS_enclosure": [
+        0.00015862698945251215,
+        0.0001586269894525122
+      ],
+      "support_RMS_enclosure": [
+        0.003164452684147399,
+        0.0031644526841474
+      ],
+      "energy_enclosure": [
+        1.243185841829852e-05,
+        1.2431858418298524e-05
+      ],
+      "support_area_enclosure": [
+        1.2414774707276273,
+        1.2414774707276277
+      ],
+      "half_peak_area_refinement": [
+        {
+          "relative_support_uncertainty_target": 0.01,
+          "lower": 0.1708082811128583,
+          "upper": 0.1831801271540558,
+          "unresolved_area_upper": 0.01237184604119743,
+          "subdivisions": 524,
+          "active_boxes": 219
+        },
+        {
+          "relative_support_uncertainty_target": 0.003,
+          "lower": 0.17525346048059715,
+          "upper": 0.1789755694829224,
+          "unresolved_area_upper": 0.0037221090023251925,
+          "subdivisions": 1784,
+          "active_boxes": 744
+        },
+        {
+          "relative_support_uncertainty_target": 0.001,
+          "lower": 0.1765377858310812,
+          "upper": 0.17777884069367772,
+          "unresolved_area_upper": 0.0012410548625964536,
+          "subdivisions": 5318,
+          "active_boxes": 2199
+        }
+      ],
+      "representation_error_RMS_enclosure": [
+        8.218981137108696e-08,
+        8.218981137108699e-08
+      ],
+      "normalized_field_gradient_RMS_enclosure": [
+        0.0017470586209326635,
+        0.001747058620932664
+      ],
+      "normalized_field_gradient_MAX_upper": 0.10797876814989554,
+      "pass_": true
+    }
+  },
+  "polynomial_diagnostics": {
+    "global_representation_error_upper": {
+      "velocity": 5.267012352373977e-17,
+      "k": 1.122575091367157e-16,
+      "epsilon": 6.023691762625024e-05
+    },
+    "outside_support_peak_upper": {
+      "velocity": 5.205505964914625e-32,
+      "k": 6.303395605847976e-32,
+      "epsilon": 1.4224003641310807e-19
+    },
+    "strong_divergence_MAX_upper": 3.2890558892787064e-16,
+    "gradient_MAX_upper": {
+      "velocity": 0.027161579527766225,
+      "k": 0.20004982905174096,
+      "epsilon": 0.10797876814989554
+    },
+    "gradient_representation_error_upper": {
+      "velocity": 5.572965554054942e-14,
+      "k": 2.341057207016394e-13,
+      "epsilon": 0.0034962123380351956
+    }
+  },
+  "weak_divergence": {
+    "independent_D_action_dual_RMS": 4.9542116369693735e-18,
+    "pass_": true
+  },
+  "boundary": {
+    "base": {
+      "k_essential_coefficient_error": {
+        "value": 1.4964977724951126e-15,
+        "limit": 1e-10,
+        "status": "MET",
+        "projection": "Endpoint constrained physical Gauss16 per fixed material panel; basis independent of native operators"
+      },
+      "epsilon_essential_coefficient_error": {
+        "value": 1.2563190799090249e-15,
+        "limit": 1e-10,
+        "status": "MET",
+        "projection": "Endpoint constrained physical Gauss16 per fixed material panel; basis independent of native operators"
+      },
+      "pointwise_boundary_representation": {
+        "inlet/U_representation": {
+          "RMS": 1.294831935213725e-06,
+          "MAX": 3.1787487431156336e-06,
+          "component_RMS": [
+            1.294831935213725e-06
+          ],
+          "component_MAX": [
+            3.1787487431156336e-06
+          ],
+          "measure": 19.912500000000016
+        },
+        "inlet/W_essential": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 19.912500000000016,
+          "limits": [
+            1e-10,
+            1e-10
+          ],
+          "status": "MET"
+        },
+        "ground/U_essential": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.00000000000014,
+          "limits": [
+            1e-10,
+            1e-10
+          ],
+          "status": "MET"
+        },
+        "ground/W_essential": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.00000000000014,
+          "limits": [
+            1e-10,
+            1e-10
+          ],
+          "status": "MET"
+        },
+        "outlet/W_essential": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 19.912500000000016,
+          "limits": [
+            1e-10,
+            1e-10
+          ],
+          "status": "MET"
+        },
+        "outlet/Wr_essential": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 19.912500000000016,
+          "limits": [
+            1e-10,
+            1e-10
+          ],
+          "status": "MET"
+        },
+        "top/W_essential": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.00000000000014,
+          "limits": [
+            1e-10,
+            1e-10
+          ],
+          "status": "MET"
+        }
+      },
+      "homogeneous_velocity_boundary_check": {
+        "status": "MET"
+      },
+      "dependent_H_pointwise_representation_error": 8.220306349999655e-09,
+      "dependent_H_note": "Algebraic condition is the current endpoint-constrained projection; nonzero pointwise projection error is a spatial error, not an extra boundary equation.",
+      "velocity_essential_coefficient_error": {
+        "value": 0.0,
+        "limit": 1e-10,
+        "status": "MET",
+        "scope": "Actual coefficients versus exported fresh native lift; historical pointwise comparison above is independent"
+      },
+      "status": "MET"
+    },
+    "perturbed": {
+      "k_essential_coefficient_error": {
+        "value": 1.4964977724951126e-15,
+        "limit": 1e-10,
+        "status": "MET",
+        "projection": "Endpoint constrained physical Gauss16 per fixed material panel; basis independent of native operators"
+      },
+      "epsilon_essential_coefficient_error": {
+        "value": 1.2563190799090249e-15,
+        "limit": 1e-10,
+        "status": "MET",
+        "projection": "Endpoint constrained physical Gauss16 per fixed material panel; basis independent of native operators"
+      },
+      "pointwise_boundary_representation": {
+        "inlet/U_representation": {
+          "RMS": 1.294831935213725e-06,
+          "MAX": 3.1787487431156336e-06,
+          "component_RMS": [
+            1.294831935213725e-06
+          ],
+          "component_MAX": [
+            3.1787487431156336e-06
+          ],
+          "measure": 19.912500000000016
+        },
+        "inlet/W_essential": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 19.912500000000016,
+          "limits": [
+            1e-10,
+            1e-10
+          ],
+          "status": "MET"
+        },
+        "ground/U_essential": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.00000000000014,
+          "limits": [
+            1e-10,
+            1e-10
+          ],
+          "status": "MET"
+        },
+        "ground/W_essential": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.00000000000014,
+          "limits": [
+            1e-10,
+            1e-10
+          ],
+          "status": "MET"
+        },
+        "outlet/W_essential": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 19.912500000000016,
+          "limits": [
+            1e-10,
+            1e-10
+          ],
+          "status": "MET"
+        },
+        "outlet/Wr_essential": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 19.912500000000016,
+          "limits": [
+            1e-10,
+            1e-10
+          ],
+          "status": "MET"
+        },
+        "top/W_essential": {
+          "RMS": 0.0,
+          "MAX": 0.0,
+          "component_RMS": [
+            0.0
+          ],
+          "component_MAX": [
+            0.0
+          ],
+          "measure": 25.00000000000014,
+          "limits": [
+            1e-10,
+            1e-10
+          ],
+          "status": "MET"
+        }
+      },
+      "homogeneous_velocity_boundary_check": {
+        "status": "MET"
+      },
+      "dependent_H_pointwise_representation_error": 3.7715329390610434e-08,
+      "dependent_H_note": "Algebraic condition is the current endpoint-constrained projection; nonzero pointwise projection error is a spatial error, not an extra boundary equation.",
+      "velocity_essential_coefficient_error": {
+        "value": 0.0,
+        "limit": 1e-10,
+        "status": "MET",
+        "scope": "Actual coefficients versus exported fresh native lift; historical pointwise comparison above is independent"
+      },
+      "status": "MET"
+    }
+  },
+  "pressure_increment": 0.0,
+  "exterior_increment": {
+    "U": 0.0,
+    "W": 0.0,
+    "k": 0.0,
+    "independent_epsilon": 0.0
+  },
+  "current_K_trace_and_cutoff": {
+    "sampled_K_peak": {
+      "owner": 7475,
+      "x": 0.0,
+      "r": 0.15,
+      "K_base": 0.008744885560160454,
+      "K_perturbed": 0.008656795408705302,
+      "delta_K_over_Kin": -0.009999999999999924,
+      "exact_Ew_ratio": 0.9849281154197234,
+      "represented_trace_ratio": 0.9849281154197234,
+      "cutoff_base": 0.02443968036782651,
+      "cutoff_perturbed": 0.02450052331438602
+    },
+    "max_target_Ew_relative_change": 0.01507188458027664,
+    "max_represented_trace_relative_change": 0.01507188458027664,
+    "max_pointwise_ratio_projection_error": 3.8125646528719415e-08,
+    "largest_cutoff_change": 6.084294655950978e-05,
+    "cutoff_noise_bound": 3.0000010408340856e-11,
+    "total_epsilon_increment": {
+      "outer/total_epsilon_increment": {
+        "RMS": 0.00015974202715638558,
+        "MAX": 0.014829748088869478,
+        "component_RMS": [
+          0.00015974202715638558
+        ],
+        "component_MAX": [
+          0.014829748088869478
+        ],
+        "measure": 494.06250000000176
+      }
+    }
+  },
+  "admissibility": {
+    "pointwise_sample_only": true,
+    "points": 114588,
+    "regions": {
+      "whole": {
+        "points": 114588,
+        "minimum_planar_over_mu": {
+          "value": 0.001031434355551395,
+          "x": 0.0,
+          "r": 0.3722657339002001,
+          "owner": 8474,
+          "D": 2.6558329443225723e-07,
+          "k": 0.008791456846984909,
+          "E": 0.0009442641952241022,
+          "K": 0.008656795408705302
+        },
+        "direction": 1.716332939268819,
+        "half_step_change": 4.061653895159889e-10,
+        "minimum_covariance_over_k": {
+          "value": 0.2781855486570578,
+          "x": 0.0,
+          "r": 0.3722657339002001,
+          "owner": 8475,
+          "D": 6.893285611420856e-07,
+          "k": 0.008791456846984909,
+          "E": 0.0009442641952241022,
+          "K": 0.008656795408705302
+        },
+        "largest_sampled_D": {
+          "value": -0.0033445056462585564,
+          "x": -9.843749999999998,
+          "r": 0.06437499999999999,
+          "owner": 3108,
+          "D": -0.0033445056462585564,
+          "k": 0.009173759412747867,
+          "E": 0.005395459545560006,
+          "K": 0.008809084469137727
+        }
+      },
+      "lower_aux": {
+        "points": 37062,
+        "minimum_planar_over_mu": {
+          "value": 0.04977288824693389,
+          "x": -8.671875,
+          "r": 0.06,
+          "owner": 2894,
+          "D": 0.0014670242949256181,
+          "k": 0.00918093390083719,
+          "E": 0.005796871287125401,
+          "K": 0.008817191186437482
+        },
+        "direction": 0.7853981633974484,
+        "half_step_change": 0.0,
+        "minimum_covariance_over_k": {
+          "value": 0.38803461902623027,
+          "x": -7.1875,
+          "r": 0.06,
+          "owner": 2902,
+          "D": 0.0014509281576594079,
+          "k": 0.009013354183969908,
+          "E": 0.005760661862163948,
+          "K": 0.008780435873889674
+        },
+        "largest_sampled_D": {
+          "value": -0.002956871031141721,
+          "x": 14.993489583333334,
+          "r": 0.06,
+          "owner": 3104,
+          "D": -0.002956871031141721,
+          "k": 0.009033997866500738,
+          "E": 0.0057151401773721175,
+          "K": 0.008734118452135153
+        }
+      },
+      "corner_box": {
+        "points": 7310,
+        "minimum_planar_over_mu": {
+          "value": 0.07290880778300547,
+          "x": 14.960937500000002,
+          "r": 0.0391924533919733,
+          "owner": 2768,
+          "D": -0.00036641804704397286,
+          "k": 0.009556566797636725,
+          "E": 0.008751610323656152,
+          "K": 0.008735624029687151
+        },
+        "direction": 0.7853981633974484,
+        "half_step_change": 0.0,
+        "minimum_covariance_over_k": {
+          "value": 0.41163906705329134,
+          "x": 14.991861979166666,
+          "r": 0.0391924533919733,
+          "owner": 2771,
+          "D": 8.626078021243438e-05,
+          "k": 0.009553100680974954,
+          "E": 0.008749598076920799,
+          "K": 0.00873428493101638
+        },
+        "largest_sampled_D": {
+          "value": 0.0012926878407417896,
+          "x": 14.980468749999998,
+          "r": 0.020802487288720015,
+          "owner": 2215,
+          "D": 0.0012926878407417896,
+          "k": 0.010860373520466851,
+          "E": 0.014029602609556303,
+          "K": 0.0087352006049994
+        }
+      },
+      "outlet_collar": {
+        "points": 9480,
+        "minimum_planar_over_mu": {
+          "value": 0.04790537933711447,
+          "x": 14.980468750000002,
+          "r": 0.11492550834779167,
+          "owner": 6876,
+          "D": -0.00011325968932409105,
+          "k": 0.008725185641900763,
+          "E": 0.002984299541635869,
+          "K": 0.0087352006049994
+        },
+        "direction": 1.706546545226463,
+        "half_step_change": 3.934681747086444e-11,
+        "minimum_covariance_over_k": {
+          "value": 0.2868735753754689,
+          "x": 14.970703125,
+          "r": 0.11492550834779167,
+          "owner": 6876,
+          "D": -3.272792343888105e-05,
+          "k": 0.008725382427408262,
+          "E": 0.002984474524949145,
+          "K": 0.0087355420585266
+        },
+        "largest_sampled_D": {
+          "value": 0.0002390957495025552,
+          "x": 15.0,
+          "r": 0.11492550834779167,
+          "owner": 6881,
+          "D": 0.0002390957495025552,
+          "k": 0.00872358355453317,
+          "E": 0.0029835116095428037,
+          "K": 0.00873366299174355
+        }
+      }
+    },
+    "native_reports": {
+      "minimum_covariance_over_k": 0,
+      "minimum_principal_over_mu": 0
+    },
+    "auxiliary_shear_covariance_reserve_over_k_min": {
+      "value": 0.3880346190262302,
+      "x": -7.1875,
+      "r": 0.06,
+      "owner": 2902
+    }
+  },
+  "state_sha256": "f79e64e95edae1ff5657435176543e687ec6f3c894333b8130bac34d3cf713f7",
+  "elapsed_seconds": 398.68961581599433
+}

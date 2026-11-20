@@ -1,0 +1,119 @@
+{
+  "request": {
+    "label": "r3-plan-prefix-perturbed",
+    "phase": "analysis",
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v14/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_advancing.py",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+      "prepare",
+      "r3-prefix-perturbed",
+      "perturbed",
+      "--dt",
+      ".04",
+      "--steps",
+      "3",
+      "--cap",
+      "1775",
+      "--step-cap",
+      "490",
+      "--maximum-pause",
+      "430",
+      "--recovery-stride",
+      "1",
+      "--basis-path",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-signed-parity.json",
+      "--certificate",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-signed-certificate.json",
+      "--represented-proof",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-signed-perturbation/audit.json"
+    ],
+    "cap_seconds": 55.0,
+    "reserved_seconds": 62.0,
+    "workers_before": 74,
+    "idle_mpi_event_helpers": 108,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 8463861449,
+      "source_build_runtime_bytes": 632426542,
+      "free_bytes": 3516061499392,
+      "r3_science_bytes": 1065157311
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v14/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_run.py",
+      "bytes": 51360,
+      "sha256": "74112e88f0b2f7ac9f78b0767b6c6ee4afb7f3a4f29064dc030872d63f1964e7"
+    },
+    "rss_limit_bytes": 8589934592,
+    "memory_before": null,
+    "worker_pause_policy": null,
+    "worker_limit": 80,
+    "worker_admission_margin": 3,
+    "input_files": [
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v14/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_advancing.py",
+        "bytes": 19625,
+        "sha256": "3b82cf43c6fc4a99a26d5e7c727eb40d838ac6bc1920e7bc08e5ec3b57b0225d"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-signed-parity.json",
+        "bytes": 1842,
+        "sha256": "27eb0329c9feb6f1c0a60c4240f9361925783335921d3d6aa785becd2fdf11d8"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-signed-certificate.json",
+        "bytes": 12561,
+        "sha256": "59bebfc2bd68f8f6d788d5f6f4497fe549902463c286f0649687215d55f7e900"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-signed-perturbation/audit.json",
+        "bytes": 22512,
+        "sha256": "866a2afa897911c22a11a37238582572e8eb064c3fc4c22877fa53ec61f06f3c"
+      }
+    ]
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "analysis",
+    "seconds": 2.793685454991646,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 111636480,
+    "peak_host_workers": 75,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-plan-prefix-perturbed/command.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "rss_limit_bytes": 8589934592,
+    "job_memory": null,
+    "minimum_memory_headroom_bytes": null,
+    "worker_limit": 80,
+    "peak_owned_workers": 0,
+    "worker_pauses": [],
+    "worker_paused_seconds": 0.0,
+    "child_elapsed_seconds": 2.073572786001023,
+    "peak_active_host_workers": 75,
+    "peak_r3_science_bytes": 1066843970
+  },
+  "balance": {
+    "charged_seconds": 90865.94532169864,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 13534.054678301356,
+    "tranche_remaining": 6617.345397906291
+  },
+  "storage": {
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 632426542,
+    "free_bytes": 3516059779072,
+    "r3_science_bytes": 1066843970
+  }
+}
