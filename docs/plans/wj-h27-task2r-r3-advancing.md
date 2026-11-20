@@ -261,13 +261,19 @@ The frozen dt=.005 retained-inlet case accepted BE/EX1 plus two BDF2/EX2 steps t
 | .01 | .05 in the original run and .06 after fresh-factor recovery | Certified initial state |
 | .005 | .015 before the fourth step deadline | Certified initial state |
 
-The .02 and .01 retained-inlet runs produced accepted t=.04 observations. Independent audits of those two frames and a common-time comparison can measure the first half of the requested interval. The .08 paired comparison and passing timestep remain open.
+### Independently audited first common time
 
-| Closure gate | Status after the frozen matrix attempts |
+The .02 and .01 retained-inlet frames at t=.04 passed the independent BDF2/EX2 equation and physical checks. Both audits used Gauss orders 20 and 24. The reported momentum residuals were 2.636e−10 for dt=.02 and 2.629e−10 for dt=.01. The largest scaled continuity, k and outer-epsilon residuals across the two audits were 1.953e−14, 1.451e−10 and 1.118e−10. The audit charges were 710.017 and 704.701 s. Each used the separate 8 GiB address-space cap. [Audits and exact frame bindings](wj-h27-linux/task2r-r3-advancing/timestep-matrix/retained-inlet-first-common-time.json)
+
+The common-time comparison verified the audit for each exact frame, including the .01 frame preserved by the interrupted run. The 29 stations, 690 original rows and 23 rows in the fixed experimental window passed every RMS and MAX limit. In the original inventory, maximum U and W differences were 1.184e−6 and 9.764e−7. The maxima for k/Kin, stress, modified pressure and traction were 7.253e−7, 2.594e−4, 2.050e−4 and 2.724e−4 in their prescribed units. The gradient and outer-epsilon maxima were 1.817e−3 and 7.611e−6. The comparison charged 101.882 s. The result covers t=.04 for the retained inlet. The second common time, signed comparison and passing timestep remain open. [Complete inventory, tolerances and extrema](wj-h27-linux/task2r-r3-advancing/timestep-matrix/retained-inlet-first-common-time.json)
+
+The Linux account settled at 107,653.560 s charged, with 16,950.440 s nonprotected, including 2,954.730 s staged. The next measurement is the matched .02 stock comparison against the fully advanced .02 retained-inlet case. [Exact accounting and forecast](wj-h27-linux/task2r-r3-advancing/timestep-matrix/retained-inlet-first-common-time.json)
+
+| Closure gate | Status after the first common-time comparison |
 | --- | --- |
 | CP0 Bf state and admission | MET. Exact Bf replay and independently certified signed initial coefficients and histories bind to the Linux application. |
 | CP1 positive-time equations and costs | Quiet and retained-inlet prefixes accepted three steps at dt=.04. The signed case accepted through t=.08, with independent BE/EX1 and BDF2/EX2 audits met. Sustained signed warm-step cost remains open. |
-| CP2 timestep and recovery | OPEN. The .02 startup reached both common times. The .01 startup continued through t=.06 after recovery, and the .005 startup reached t=.015. The three frozen signed levels and the smaller-displacement control reached numerical deadlines before their first common frame. The passing timestep witness and matched cold endpoint remain open. |
+| CP2 timestep and recovery | OPEN. The .02 and .01 startup frames pass the independently audited t=.04 comparison. The .01 startup continued through t=.06 after recovery, and the .005 startup reached t=.015. The three frozen signed levels and the smaller-displacement control reached numerical deadlines before their first common frame. The .08 comparison, passing timestep witness and matched cold endpoint remain open. |
 | CP3 affordability and stock | The tested .02 startup projects above the day target under its measured rate. The three stock repeats measure the earlier matched .04 interval. Selected-recipe stock, cold and per-trajectory costs remain open. |
 | R4 admission | HELD. A passing R3 scientific recipe and a complete affordable pilot case set remain prerequisites. |
 

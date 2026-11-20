@@ -31,10 +31,10 @@ def accepted(case, step, allow_interrupted=False):
     return read(case/"admission.json"), data, identity(path), identity(index_path)
 
 
-def common_time(coarse, fine, coarse_step, fine_step, out, seconds):
+def common_time(coarse, fine, coarse_step, fine_step, out, seconds, coarse_audit=None, fine_audit=None):
     deadline = time.monotonic()+seconds
-    a, sa, ba, ia = accepted(coarse,coarse_step)
-    b, sb, bb, ib = accepted(fine,fine_step)
+    a, sa, ba, ia = accepted(coarse,coarse_step,allow_interrupted=coarse_audit is not None)
+    b, sb, bb, ib = accepted(fine,fine_step,allow_interrupted=fine_audit is not None)
     inputs = ("role","source","application","geometry","table","initial_fields","certificate",
               "represented_proof","step_preconditioner")
     require(a["role"] in ("startup","perturbed") and all(a.get(k) == b.get(k) for k in inputs)
@@ -42,14 +42,24 @@ def common_time(coarse, fine, coarse_step, fine_step, out, seconds):
             and sa["elements"] == sb["elements"] and a["timestep"] >= b["timestep"]
             and abs(sa["time"]-sb["time"]) <= 2e-13*max(1.,sa["time"]),
             "trajectory or exact common-time binding differs")
+    audits = {}
+    for role, path, frame, plan in (("coarse",coarse_audit,ba,a), ("fine",fine_audit,bb,b)):
+        if path is not None:
+            audit = equation_audit(path,frame,plan["table"])
+            require(audit["equations"] == "MET", f"{role} common-time frame failed its independent audit")
+            audits[role] = audit
     reference = po.load_reference(verified(a["table"]))
     p,q = (po.PhysicalOracle(state,reference,20,deadline) for state in (sa,sb))
     rows, interior, inventory = compare(p,q,interior=(-2.5,8),detailed=True)
     failures = [key for group in (rows,interior) for key,row in group.items() if row["status"] != "MET"]
-    atomic(out,dict(schema="WJH27R3TimeComparisonV1",status="MET" if not failures else "NOT_MET",
+    result = dict(schema="WJH27R3TimeComparisonV1",status="MET" if not failures else "NOT_MET",
         role=a["role"],time=sa["time"],timesteps=[sa["dt"],sb["dt"]],steps=[coarse_step,fine_step],
         frame_hashes=[ba,bb],indices=[ia,ib],table=a["table"],inventory=inventory,independent_order=20,
-        original_rows=rows,fixed_window_rows=interior,failures=failures))
+        original_rows=rows,fixed_window_rows=interior,failures=failures)
+    if audits:
+        result["endpoint_equation_audits"] = audits
+        result["complete_intervals"] = [read(verified(index))["run_complete"] for index in (ia,ib)]
+    atomic(out,result)
 
 
 def exact_clock(packet, boundary):
@@ -198,6 +208,8 @@ def main():
     for key,kind in (("coarse",Path),("fine",Path),("coarse_step",int),("fine_step",int),("out",Path)):
         cmd.add_argument(key,type=kind)
     cmd.add_argument("--seconds",required=True,type=float)
+    cmd.add_argument("--coarse-audit", type=Path)
+    cmd.add_argument("--fine-audit", type=Path)
     cmd = sub.add_parser("evolution")
     cmd.add_argument("case",type=Path)
     cmd.add_argument("out",type=Path)

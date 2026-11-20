@@ -1,0 +1,71 @@
+{
+  "schema": "WJH27R3FirstCommonTimeForecastV1",
+  "accounting": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/accounting.json",
+    "bytes": 723159,
+    "sha256": "05cfe340f04ec15c4e212290b7d1c046092366b8df2efe6819b4c887439680ba"
+  },
+  "live_before": {
+    "charged_seconds": 106130.76256692465,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 18473.237433075352,
+    "tranche_remaining": 4477.528152680286
+  },
+  "staged_increase": 0,
+  "operations": [
+    [
+      "r3-plan-audit-startup-coarse-first-common",
+      65
+    ],
+    [
+      "r3-audit-startup-coarse-first-common",
+      1450
+    ],
+    [
+      "r3-plan-audit-startup-middle-first-common",
+      65
+    ],
+    [
+      "r3-audit-startup-middle-first-common",
+      1450
+    ],
+    [
+      "r3-startup-first-common-time",
+      365
+    ]
+  ],
+  "existing_hold_seconds": 300,
+  "time": 0.04,
+  "steps": [
+    2,
+    4
+  ],
+  "timesteps": [
+    0.02,
+    0.01
+  ],
+  "inputs": [
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-time-startup-1.json",
+      "bytes": 15642,
+      "sha256": "4a014c4342618309e5c5913c6147f58641f3634846125e5a1372384bdde9eeed"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-time-startup-2.json",
+      "bytes": 3940,
+      "sha256": "fab9f9ee9b2e0b5fd1bea7e4aa0eb283c8e42adf164f7c35478581d1d221856f"
+    }
+  ],
+  "cost_basis": {
+    "prior_audit": "Independent signed BDF2 replay",
+    "charged_seconds": 748.877,
+    "ordered_gauss": [
+      20,
+      24
+    ],
+    "peak_tree_rss_bytes": 4479021056,
+    "address_gib": 8,
+    "observed_owner_comparison_seconds": 100.18
+  },
+  "interpretation": "The middle trajectory preserved an accepted frame at the first common time. Independently audit both endpoint equations and compare the exact frames."
+}

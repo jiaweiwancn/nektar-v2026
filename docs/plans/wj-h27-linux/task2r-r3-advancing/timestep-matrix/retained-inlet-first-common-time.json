@@ -1,0 +1,943 @@
+{
+  "account": {
+    "charged_seconds": 107653.56043365967,
+    "nonprotected_remaining": 16950.439566340327,
+    "reserved_seconds": 0,
+    "tranche_remaining": 2954.730285945261
+  },
+  "audits": {
+    "coarse": {
+      "admission": {
+        "bytes": 3597,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-startup-coarse-first-common/admission.json",
+        "sha256": "c0740256d26942eab951ee25867e6692730881a0d88871b12ca0c5c356b17bb3"
+      },
+      "artifact": {
+        "bytes": 48845225,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-startup-coarse-first-common/audit.json",
+        "sha256": "23d0675047c10b18e76df660c9dd06c6ccb7118a7d60e5b854e5e2263bf00658"
+      },
+      "boundary_status": {
+        "accepted": "MET",
+        "input_current": "MET",
+        "input_previous": "MET"
+      },
+      "core": {
+        "accounting_identity_max_error": 6.161280533469656e-14,
+        "accounting_identity_status": "MET",
+        "budgets": {
+          "combined_mechanical_plus_k": {
+            "current_destruction": 0.06690256999676711,
+            "current_molecular_work": 0.00479251340644666,
+            "current_pressure_and_isotropic_k_divergence": 1.294067392168037e-11,
+            "explicit_momentum_work_plus_scalar_outflow": 0.000001990780391127142,
+            "raw_current_production_cancels_algebraically": true,
+            "reaction_balance": 3.369670860515307e-13,
+            "sampled_roughness_work": -0.000007081214109661343,
+            "scope": "Discrete current-velocity BDF/EX identity; no instantaneous or reference P=E constraint",
+            "storage": 0.00048387548725670307
+          },
+          "epsilon": {
+            "actual_production_minus_destruction_not_constrained": true,
+            "all_owner_gradient_balance": 1.4143719480439083e-8,
+            "assembly_identity_error_over_scale": 1.2240420827773728e-15,
+            "current_owner_gradient_outward_diffusion_all": -0.0008824799177325588,
+            "current_owner_gradient_outward_diffusion_essential": -0.0008890292756253843,
+            "current_prescribed_outward_diffusion": 0.000006534992023718559,
+            "current_source": -0.0008611195540753098,
+            "essential_outward_diffusion_reaction": -0.0008890290534579583,
+            "essential_reaction_scope": "combined inlet and H; corner reactions are not uniquely separable",
+            "explicit_advective_outflow": 1.6148824587576397e-8,
+            "fixed_scale": 0.0008921218172888306,
+            "free_test_action": 1.779836349126445e-14,
+            "mixed_physical_balance": -2.2214962660214999e-10,
+            "reaction_balance": 1.7799455485911775e-14,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage": 0.000021358358552141873
+          },
+          "k": {
+            "actual_production_minus_destruction_not_constrained": true,
+            "all_owner_gradient_balance": -9.69734973395416e-9,
+            "assembly_identity_error_over_scale": 5.352588590497958e-15,
+            "current_owner_gradient_outward_diffusion_all": 3.844321671163543e-9,
+            "current_owner_gradient_outward_diffusion_essential": 8.978915039351897e-9,
+            "current_prescribed_outward_diffusion": 0,
+            "current_source": -0.0000013125288663438713,
+            "essential_outward_diffusion_reaction": 1.3541884922342252e-8,
+            "essential_reaction_scope": "inlet",
+            "explicit_advective_outflow": -6.374277425336139e-10,
+            "fixed_scale": 0.008683215205497202,
+            "free_test_action": 2.1356370228575496e-13,
+            "mixed_physical_balance": -4.562756365765689e-9,
+            "reaction_balance": 2.1351722460711718e-13,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage": -0.0000013254331100064553
+          },
+          "mass": {
+            "assembly_identity_error": 2.563298836341652e-18,
+            "boundary_outflow": 7.016609515630989e-14,
+            "integrated_divergence": 6.889005295434356e-14,
+            "strong_divergence_RMS": 0.00002738139538425436,
+            "weak_continuity": 1.644703582436042e-14
+          },
+          "mechanical": {
+            "G_energy_definition": "|u|^2/2 for BE; (|u_n|^2+|2u_n-u_(n-1)|^2)/4 for BDF2",
+            "G_energy_rate": 0.0004852009185490902,
+            "advection_note": "Current velocity tests explicit old-state advection; history kinetic-energy outflow is not substituted for this work",
+            "all_owner_gradient_balance": -0.000002618759788020064,
+            "assembly_identity_error_over_scale": 3.83561439708432e-15,
+            "cross_advection_integration_identity_error_over_scale": 6.161280533469656e-14,
+            "current_all_owner_gradient_traction_work": 0.07219066319937147,
+            "current_essential_owner_gradient_traction_work": 0.0426294447736401,
+            "current_full_stress_work": 0.0716937708872882,
+            "current_isotropic_k_divergence_work": 1.2940675624191766e-11,
+            "current_modified_pressure_divergence_work": -1.7025113956689604e-18,
+            "current_molecular_work": 0.00479251340644666,
+            "current_pressure_and_known_k_roughness_work": -0.00000677218330798433,
+            "current_raw_turbulent_production_work": 0.06690125746790049,
+            "discrete_time_energy_identity_error_over_scale": 1.8001824557750914e-17,
+            "essential_traction_reaction_work": 0.04262946027665396,
+            "explicit_cross_integration_boundary": 0.000003987403252025956,
+            "explicit_cross_integration_bulk": 0.0000019959854291499083,
+            "explicit_domain_advection_current_velocity_test_work": 0.0000019914178188696756,
+            "explicit_history_kinetic_advective_flux": 0.0000019920434262132858,
+            "explicit_sampled_convective_roughness_work": -3.0903080167701353e-7,
+            "fixed_scale": 0.06502499999999997,
+            "free_velocity_test_action": 1.232004506182431e-13,
+            "mixed_physical_balance": 1.5503137308636727e-8,
+            "nonnegative_BDF_dissipation": 1.8176204678291284e-12,
+            "physical_kinetic_energy_BDF_rate": 0.00048520094193604303,
+            "prescribed_boundary_traction_work": 0.02955858416280604,
+            "reaction_balance": 1.234498614444135e-13,
+            "sampled_roughness_work": -0.000007081214109661343,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage_velocity_test_work": 0.0004852009203667095
+          }
+        },
+        "history_cache_checks": {
+          "comparisons": {
+            "accepted_current": {
+              "all_coefficient_dual": {
+                "epsilon": 1.5722539077678178e-13,
+                "k": 1.6011737909060496e-13,
+                "momentum": 6.324047984302189e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.5707585856457563e-13,
+                "k": 1.599890678192275e-13,
+                "momentum": 6.31397775405963e-14
+              }
+            },
+            "input_current": {
+              "all_coefficient_dual": {
+                "epsilon": 1.6046547955985172e-13,
+                "k": 1.5470988334319173e-13,
+                "momentum": 6.3280973819811e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.603057185365134e-13,
+                "k": 1.5456922789850922e-13,
+                "momentum": 6.31802422534089e-14
+              }
+            },
+            "input_previous": {
+              "all_coefficient_dual": {
+                "epsilon": 1.5877282418466962e-13,
+                "k": 1.585907565533506e-13,
+                "momentum": 6.325111817681629e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.5862928556051336e-13,
+                "k": 1.584561736322002e-13,
+                "momentum": 6.315032324458085e-14
+              }
+            }
+          },
+          "limit": 1e-10,
+          "scope": "Every signed global coefficient, including constrained rows; independent reconstruction enters equations instead of caches",
+          "status": "MET"
+        },
+        "residuals": {
+          "continuity": 1.644703582436042e-14,
+          "epsilon": 1.1171766865586262e-10,
+          "k": 1.450590171615207e-10,
+          "momentum": 2.635550606583447e-10
+        },
+        "sampled_history_minima": {
+          "current": {
+            "k": 0.008808960031462839,
+            "outer_epsilon": 0.00001745066794080737
+          },
+          "old": {
+            "k": 0.008808990753228019,
+            "outer_epsilon": 0.000017450667936650614
+          },
+          "previous": {
+            "k": 0.008809015145515188,
+            "outer_epsilon": 0.00001745066792516171
+          }
+        },
+        "transient_residual_status": "MET"
+      },
+      "operation": {
+        "child_elapsed_seconds": 709.0929401269823,
+        "exit": 0,
+        "job_memory": {
+          "ancestor_limits": [
+            {
+              "current": 44187648,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1571.scope"
+            },
+            {
+              "current": 393412071424,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice"
+            },
+            {
+              "current": 393688383488,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice"
+            },
+            {
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup"
+            }
+          ],
+          "job_cgroup": "/user.slice/user-1000.slice/session-1571.scope",
+          "mem_available_bytes": 378540945408,
+          "mem_total_bytes": 540840640512
+        },
+        "log": {
+          "bytes": 268,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-startup-coarse-first-common/command.log",
+          "sha256": "ddc753bf76df8610817290ec598cbe47dae82745266cc031bb0055b7fffa1124"
+        },
+        "minimum_memory_headroom_bytes": 365273718784,
+        "peak_active_host_workers": 61,
+        "peak_host_workers": 141,
+        "peak_owned_workers": 1,
+        "peak_r3_science_bytes": 3027904548,
+        "peak_stopped_host_workers": 80,
+        "peak_tree_rss_bytes": 4496429056,
+        "phase": "r3-audit",
+        "reason": null,
+        "rss_limit_bytes": 10737418240,
+        "seconds": 710.0172470760008,
+        "status": "PASS",
+        "worker_limit": 80,
+        "worker_paused_seconds": 0,
+        "worker_pauses": []
+      },
+      "profiles_status": "MET",
+      "receipt": {
+        "bytes": 6376,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-startup-coarse-first-common/receipt.json",
+        "sha256": "8be041b5c3c8dc811333ff9f537f33ccdbe76d0743904e1dd0ab5002e0d0f708"
+      },
+      "result": {
+        "accepted_history_boundary_status": "MET",
+        "accepted_time_discrete_equations_status": "MET",
+        "coarse_quadrature_residual": {
+          "continuity": 1.6444047239822384e-14,
+          "epsilon": 1.1175557177755358e-10,
+          "k": 1.450549361765258e-10,
+          "momentum": 2.631509775941943e-10
+        },
+        "elapsed_seconds": 702.2774451769947,
+        "independent_orders": [
+          20,
+          24
+        ],
+        "independent_quadrature_status": "MET",
+        "input_history_identity": {
+          "advection_sha256": "97a418429fdb2bc7df372ed50d2b026847562481c6fd368f0493a9e372d2a900",
+          "current_sha256": "eca6046a04378042ba32bdbc455e54e72165b34f82788477139a548798c4cddd",
+          "previous_advection_sha256": "06e3e05bbf9329a4d9b5980f14da99dacee76562e7f5d6e15374e39d111f3526",
+          "previous_sha256": "97cf9601506deb489fd96e0e039a9b3cb18c8c35d22c804101324f1169d0cf1f",
+          "provenance": "Input current and advection bind the accepted output previous hashes. Earlier input state is evaluated and hashed here; cross-packet lineage requires its earlier artifact.",
+          "step": 1,
+          "time": 0.02
+        },
+        "maximum_resident_bytes": 4495601664,
+        "memory_cap_bytes": 8589934592,
+        "native": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-1/state.science-2.json",
+          "sha256": "55992a1be883151f6ad0e14cb6ab0c9ccd1ee58073f6798dcd4a823aecf7de98"
+        },
+        "polynomial_scalar_transport_source": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/scalar_reference_transport.py",
+          "sha256": "422716e50056ce4214bf1dd5b616ff2f9520779620b92fe75cece407f1c357a3"
+        },
+        "quadrature_difference_dual": {
+          "continuity": 3.9551446824201314e-16,
+          "epsilon": 4.913171934909722e-13,
+          "k": 9.790490228949546e-13,
+          "momentum": 1.4659453439224671e-12
+        },
+        "reason": "Accepted-step independent equations, caches, and budgets recorded; full H27 qualification remains NOT_MET.",
+        "scheme": {
+          "alpha": 75,
+          "dt": 0.02,
+          "explicit_coefficients": [
+            2,
+            -1
+          ],
+          "mass_coefficients": [
+            1.5,
+            -2,
+            0.5
+          ],
+          "name": "BDF2_EX2",
+          "startup": false
+        },
+        "source": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py",
+          "sha256": "b8fa6a4676ae39865abb14d75d9b27bd8ff3795542f6dc0eedb7747ebcda9631"
+        },
+        "status": "NOT_MET",
+        "table": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+          "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+        }
+      }
+    },
+    "fine": {
+      "admission": {
+        "bytes": 3597,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-startup-middle-first-common/admission.json",
+        "sha256": "2e3fcc67ca344ae1795ecfc243ba1faf7c4b5b3e2211f7698c40546d25782a41"
+      },
+      "artifact": {
+        "bytes": 48854526,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-startup-middle-first-common/audit.json",
+        "sha256": "8bee12182fff54d4bf32c643845a80683a13ffc4e37ed49206c51961da5d0d95"
+      },
+      "boundary_status": {
+        "accepted": "MET",
+        "input_current": "MET",
+        "input_previous": "MET"
+      },
+      "core": {
+        "accounting_identity_max_error": 2.4059670815816377e-14,
+        "accounting_identity_status": "MET",
+        "budgets": {
+          "combined_mechanical_plus_k": {
+            "current_destruction": 0.0669025907059321,
+            "current_molecular_work": 0.00479251333411538,
+            "current_pressure_and_isotropic_k_divergence": 1.3278410982664033e-11,
+            "explicit_momentum_work_plus_scalar_outflow": 0.0000019998893527693495,
+            "raw_current_production_cancels_algebraically": true,
+            "reaction_balance": -1.2181098673444033e-13,
+            "sampled_roughness_work": -0.000007076741717487821,
+            "scope": "Discrete current-velocity BDF/EX identity; no instantaneous or reference P=E constraint",
+            "storage": 0.00048378851542529226
+          },
+          "epsilon": {
+            "actual_production_minus_destruction_not_constrained": true,
+            "all_owner_gradient_balance": 1.2398038213038906e-8,
+            "assembly_identity_error_over_scale": 5.528195317107011e-16,
+            "current_owner_gradient_outward_diffusion_all": -0.0008823954002292002,
+            "current_owner_gradient_outward_diffusion_essential": -0.0008889447580357568,
+            "current_prescribed_outward_diffusion": 0.000006534992023718559,
+            "current_source": -0.0008611233235368148,
+            "essential_outward_diffusion_reaction": -0.0008889427902877316,
+            "essential_reaction_scope": "combined inlet and H; corner reactions are not uniquely separable",
+            "explicit_advective_outflow": 1.5960636035283445e-8,
+            "fixed_scale": 0.0008921218172888306,
+            "free_test_action": 3.399673250766528e-15,
+            "mixed_physical_balance": -1.9677446250112446e-9,
+            "reaction_balance": 3.4001664331317905e-15,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage": 0.000021268514094563093
+          },
+          "k": {
+            "actual_production_minus_destruction_not_constrained": true,
+            "all_owner_gradient_balance": -9.864125645115213e-9,
+            "assembly_identity_error_over_scale": 1.790906465236736e-15,
+            "current_owner_gradient_outward_diffusion_all": 3.3017865542808464e-9,
+            "current_owner_gradient_outward_diffusion_essential": 8.478428504928616e-9,
+            "current_prescribed_outward_diffusion": 0,
+            "current_source": -0.0000013289400162209055,
+            "essential_outward_diffusion_reaction": 1.3165958503930863e-8,
+            "essential_reaction_scope": "inlet",
+            "explicit_advective_outflow": -6.944926508878346e-10,
+            "fixed_scale": 0.008683215205497202,
+            "free_test_action": 4.6320085595674564e-14,
+            "mixed_physical_balance": -4.6874836944676485e-9,
+            "reaction_balance": 4.6304534769424e-14,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage": -0.0000013414114357694139
+          },
+          "mass": {
+            "assembly_identity_error": 4.214642126734684e-18,
+            "boundary_outflow": 7.016609515630989e-14,
+            "integrated_divergence": 7.2264196690025e-14,
+            "strong_divergence_RMS": 0.00002699153602028089,
+            "weak_continuity": 1.9531300596710935e-14
+          },
+          "mechanical": {
+            "G_energy_definition": "|u|^2/2 for BE; (|u_n|^2+|2u_n-u_(n-1)|^2)/4 for BDF2",
+            "G_energy_rate": 0.00048512992667774945,
+            "advection_note": "Current velocity tests explicit old-state advection; history kinetic-energy outflow is not substituted for this work",
+            "all_owner_gradient_balance": -0.000002615640297465305,
+            "assembly_identity_error_over_scale": 2.481323813186975e-15,
+            "cross_advection_integration_identity_error_over_scale": 1.2914787224785827e-14,
+            "current_all_owner_gradient_traction_work": 0.07219059800603111,
+            "current_essential_owner_gradient_traction_work": 0.04262937972838098,
+            "current_full_stress_work": 0.07169377511330968,
+            "current_isotropic_k_divergence_work": 1.3278412756645181e-11,
+            "current_modified_pressure_divergence_work": -1.773981147704293e-18,
+            "current_molecular_work": 0.00479251333411538,
+            "current_pressure_and_known_k_roughness_work": -0.000006782050571481109,
+            "current_raw_turbulent_production_work": 0.0669012617659157,
+            "discrete_time_energy_identity_error_over_scale": 3.717341149713815e-17,
+            "essential_traction_reaction_work": 0.042629398255594586,
+            "explicit_cross_integration_boundary": 0.0000040023838829839065,
+            "explicit_cross_integration_bulk": 0.000002001800038403453,
+            "explicit_domain_advection_current_velocity_test_work": 0.0000020005838454202373,
+            "explicit_history_kinetic_advective_flux": 0.000002001182917599209,
+            "explicit_sampled_convective_roughness_work": -2.946911460067116e-7,
+            "fixed_scale": 0.06502499999999997,
+            "free_velocity_test_action": -1.682768695848168e-13,
+            "mixed_physical_balance": 1.8527045488048177e-8,
+            "nonnegative_BDF_dissipation": 1.833098240534248e-13,
+            "physical_kinetic_energy_BDF_rate": 0.00048512993330247653,
+            "prescribed_boundary_traction_work": 0.029558584110307175,
+            "reaction_balance": -1.6811552150386433e-13,
+            "sampled_roughness_work": -0.000007076741717487821,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage_velocity_test_work": 0.0004851299268610617
+          }
+        },
+        "history_cache_checks": {
+          "comparisons": {
+            "accepted_current": {
+              "all_coefficient_dual": {
+                "epsilon": 1.5671366615943654e-13,
+                "k": 1.5202888621606842e-13,
+                "momentum": 6.321511974213965e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.56558629742917e-13,
+                "k": 1.5189898835733985e-13,
+                "momentum": 6.311461292289154e-14
+              }
+            },
+            "input_current": {
+              "all_coefficient_dual": {
+                "epsilon": 1.554851651247236e-13,
+                "k": 1.5487159978366e-13,
+                "momentum": 6.324609185630435e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.5531327625653697e-13,
+                "k": 1.5473221974337243e-13,
+                "momentum": 6.314543238428222e-14
+              }
+            },
+            "input_previous": {
+              "all_coefficient_dual": {
+                "epsilon": 1.5301434549036088e-13,
+                "k": 1.549490493241785e-13,
+                "momentum": 6.327743813071468e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.5286787519880193e-13,
+                "k": 1.5482251588352252e-13,
+                "momentum": 6.317680270960357e-14
+              }
+            }
+          },
+          "limit": 1e-10,
+          "scope": "Every signed global coefficient, including constrained rows; independent reconstruction enters equations instead of caches",
+          "status": "MET"
+        },
+        "residuals": {
+          "continuity": 1.9531300596710935e-14,
+          "epsilon": 1.1179335373389169e-10,
+          "k": 1.446905967473222e-10,
+          "momentum": 2.629458624317106e-10
+        },
+        "sampled_history_minima": {
+          "current": {
+            "k": 0.008808963682269456,
+            "outer_epsilon": 0.000017450667940948557
+          },
+          "old": {
+            "k": 0.008808979687163305,
+            "outer_epsilon": 0.000017450667939162327
+          },
+          "previous": {
+            "k": 0.008808994042567382,
+            "outer_epsilon": 0.000017450667936826966
+          }
+        },
+        "transient_residual_status": "MET"
+      },
+      "operation": {
+        "child_elapsed_seconds": 703.7942936239997,
+        "exit": 0,
+        "job_memory": {
+          "ancestor_limits": [
+            {
+              "current": 92205056,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1571.scope"
+            },
+            {
+              "current": 394887241728,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice"
+            },
+            {
+              "current": 395169296384,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice"
+            },
+            {
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup"
+            }
+          ],
+          "job_cgroup": "/user.slice/user-1000.slice/session-1571.scope",
+          "mem_available_bytes": 374495862784,
+          "mem_total_bytes": 540840640512
+        },
+        "log": {
+          "bytes": 268,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-startup-middle-first-common/command.log",
+          "sha256": "57207cb62f306b291f88f574d0d1e551bc8ee51712a76ec2a3e24c6803a3ad24"
+        },
+        "minimum_memory_headroom_bytes": 365028966400,
+        "peak_active_host_workers": 61,
+        "peak_host_workers": 141,
+        "peak_owned_workers": 1,
+        "peak_r3_science_bytes": 3076762671,
+        "peak_stopped_host_workers": 80,
+        "peak_tree_rss_bytes": 4496334848,
+        "phase": "r3-audit",
+        "reason": null,
+        "rss_limit_bytes": 10737418240,
+        "seconds": 704.7009885030275,
+        "status": "PASS",
+        "worker_limit": 80,
+        "worker_paused_seconds": 0,
+        "worker_pauses": []
+      },
+      "profiles_status": "MET",
+      "receipt": {
+        "bytes": 6376,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-startup-middle-first-common/receipt.json",
+        "sha256": "f645b7ea702f48937acaf0ed3a4c37f21bc4f2d3aa2330a670732bb30c15346c"
+      },
+      "result": {
+        "accepted_history_boundary_status": "MET",
+        "accepted_time_discrete_equations_status": "MET",
+        "coarse_quadrature_residual": {
+          "continuity": 1.954894876141101e-14,
+          "epsilon": 1.1179619451167683e-10,
+          "k": 1.4475699640254716e-10,
+          "momentum": 2.628433645156054e-10
+        },
+        "elapsed_seconds": 696.1722883539915,
+        "independent_orders": [
+          20,
+          24
+        ],
+        "independent_quadrature_status": "MET",
+        "input_history_identity": {
+          "advection_sha256": "c62a770d2f728bdbd76515029f146e78c040e089a37a6448330984a61029c106",
+          "current_sha256": "149c73e69a7081f9e6018caaa21fa0fa134542c9d54a3475dd87c192c510dc6a",
+          "previous_advection_sha256": "9c4aa57377c74532655ff5a29e8207267407487b7a7d5d060756fd49531732fc",
+          "previous_sha256": "d0828a07387e63adbbe449306b15a52a3edb6fcb4110fd92075c39be86d242e7",
+          "provenance": "Input current and advection bind the accepted output previous hashes. Earlier input state is evaluated and hashed here; cross-packet lineage requires its earlier artifact.",
+          "step": 3,
+          "time": 0.03
+        },
+        "maximum_resident_bytes": 4493959168,
+        "memory_cap_bytes": 8589934592,
+        "native": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-2/state.science-4.json",
+          "sha256": "8cb90fc3bc68377309ee342e1b8e86db91202abfef296856e5e5c456d2d49fe4"
+        },
+        "polynomial_scalar_transport_source": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/scalar_reference_transport.py",
+          "sha256": "422716e50056ce4214bf1dd5b616ff2f9520779620b92fe75cece407f1c357a3"
+        },
+        "quadrature_difference_dual": {
+          "continuity": 3.812907769712147e-16,
+          "epsilon": 4.805678055264397e-13,
+          "k": 8.454070055151121e-13,
+          "momentum": 1.3086560874010418e-12
+        },
+        "reason": "Accepted-step independent equations, caches, and budgets recorded; full H27 qualification remains NOT_MET.",
+        "scheme": {
+          "alpha": 150,
+          "dt": 0.01,
+          "explicit_coefficients": [
+            2,
+            -1
+          ],
+          "mass_coefficients": [
+            1.5,
+            -2,
+            0.5
+          ],
+          "name": "BDF2_EX2",
+          "startup": false
+        },
+        "source": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py",
+          "sha256": "b8fa6a4676ae39865abb14d75d9b27bd8ff3795542f6dc0eedb7747ebcda9631"
+        },
+        "status": "NOT_MET",
+        "table": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+          "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+        }
+      }
+    }
+  },
+  "census": {
+    "active": 57,
+    "owned": 0,
+    "parked_helpers": 102,
+    "stopped": 80,
+    "stopped_owned": 0,
+    "total": 137
+  },
+  "comparison": {
+    "artifact": {
+      "bytes": 1444465,
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-startup-first-common-time.json",
+      "sha256": "adce0450404578ae99e5a8ddb0ce4618998befa74d5fc3c73549368a4e30dbea"
+    },
+    "fields": {
+      "fixed_window_rows": {
+        "exact_extrema": {
+          "G": {
+            "MAX": 0.00006554506809630656,
+            "MAX_row": "interior/outer/G",
+            "RMS": 0.00000962955295636603,
+            "RMS_row": "interior/inner/G",
+            "failures": 0,
+            "limits": [
+              0.01,
+              0.01
+            ]
+          },
+          "Pi": {
+            "MAX": 0.00003107494018700486,
+            "MAX_row": "interior/outer/Pi",
+            "RMS": 0.000004337978995197163,
+            "RMS_row": "interior/inner/Pi",
+            "failures": 0,
+            "limits": [
+              0.001,
+              0.001
+            ]
+          },
+          "R": {
+            "MAX": 0.000030266951462419788,
+            "MAX_row": "interior/outer/R",
+            "RMS": 0.000004277002793744685,
+            "RMS_row": "interior/inner/R",
+            "failures": 0,
+            "limits": [
+              0.001,
+              0.001
+            ]
+          },
+          "U": {
+            "MAX": 2.0075565282384744e-7,
+            "MAX_row": "interior/outer/U",
+            "RMS": 3.657868747427485e-8,
+            "RMS_row": "interior/inner/U",
+            "failures": 0,
+            "limits": [
+              0.0001,
+              0.0001
+            ]
+          },
+          "W": {
+            "MAX": 2.6918368164589554e-8,
+            "MAX_row": "interior/inner/W",
+            "RMS": 3.0527722373049277e-9,
+            "RMS_row": "interior/inner/W",
+            "failures": 0,
+            "limits": [
+              0.0001,
+              0.0001
+            ]
+          },
+          "epsilon": {
+            "MAX": 0.000006344901969992104,
+            "MAX_row": "interior/outer/epsilon",
+            "RMS": 1.865542308538873e-7,
+            "RMS_row": "interior/outer/epsilon",
+            "failures": 0,
+            "limits": [
+              0.01,
+              0.01
+            ]
+          },
+          "k": {
+            "MAX": 4.5678348220543e-7,
+            "MAX_row": "interior/inner/k",
+            "RMS": 1.6029518489662823e-7,
+            "RMS_row": "interior/inner/k",
+            "failures": 0,
+            "limits": [
+              0.001,
+              0.001
+            ]
+          },
+          "traction": {
+            "MAX": 0.000006635482368622564,
+            "MAX_row": "interior/inner/traction",
+            "RMS": 0.0000010392520933485116,
+            "RMS_row": "interior/inner/traction",
+            "failures": 0,
+            "limits": [
+              0.001,
+              0.001
+            ]
+          }
+        },
+        "rows": 23
+      },
+      "original_rows": {
+        "exact_extrema": {
+          "G": {
+            "MAX": 0.001817418896956191,
+            "MAX_row": "inner/G",
+            "RMS": 0.00020217806644785014,
+            "RMS_row": "x=15/inner/G",
+            "failures": 0,
+            "limits": [
+              0.01,
+              0.01
+            ]
+          },
+          "Pi": {
+            "MAX": 0.0002050164204689491,
+            "MAX_row": "inner/Pi",
+            "RMS": 0.00017767326087018742,
+            "RMS_row": "x=-10/inner/Pi",
+            "failures": 0,
+            "limits": [
+              0.001,
+              0.001
+            ]
+          },
+          "R": {
+            "MAX": 0.0002594496558883161,
+            "MAX_row": "x=15/inner/R",
+            "RMS": 0.00003055046076180896,
+            "RMS_row": "x=15/inner/R",
+            "failures": 0,
+            "limits": [
+              0.001,
+              0.001
+            ]
+          },
+          "U": {
+            "MAX": 0.0000011842553816476808,
+            "MAX_row": "x=15/inner/U",
+            "RMS": 2.865454012259517e-7,
+            "RMS_row": "x=15/inner/U",
+            "failures": 0,
+            "limits": [
+              0.0001,
+              0.0001
+            ]
+          },
+          "W": {
+            "MAX": 9.763718780430044e-7,
+            "MAX_row": "inner/W",
+            "RMS": 6.620052627003618e-9,
+            "RMS_row": "inner/W",
+            "failures": 0,
+            "limits": [
+              0.0001,
+              0.0001
+            ]
+          },
+          "epsilon": {
+            "MAX": 0.000007611057255959187,
+            "MAX_row": "outer/epsilon",
+            "RMS": 1.8656123350645548e-7,
+            "RMS_row": "outer/epsilon",
+            "failures": 0,
+            "limits": [
+              0.01,
+              0.01
+            ]
+          },
+          "k": {
+            "MAX": 7.253486656387197e-7,
+            "MAX_row": "x=15/inner/k",
+            "RMS": 2.141220524040302e-7,
+            "RMS_row": "x=15/inner/k",
+            "failures": 0,
+            "limits": [
+              0.001,
+              0.001
+            ]
+          },
+          "traction": {
+            "MAX": 0.0002724270277413657,
+            "MAX_row": "x=15/inner/traction",
+            "RMS": 0.00003191516293359869,
+            "RMS_row": "x=15/inner/traction",
+            "failures": 0,
+            "limits": [
+              0.001,
+              0.001
+            ]
+          }
+        },
+        "rows": 690
+      }
+    },
+    "receipt": {
+      "bytes": 4647,
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-startup-first-common-time/receipt.json",
+      "sha256": "52620c36bf445334a8dd56918929f4cb2d709102f6b5a3f1941ba9cc5241832e"
+    },
+    "result": {
+      "complete_intervals": [
+        true,
+        false
+      ],
+      "endpoint_equation_audits": {
+        "coarse": {
+          "artifact": {
+            "bytes": 48845225,
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-startup-coarse-first-common/audit.json",
+            "sha256": "23d0675047c10b18e76df660c9dd06c6ccb7118a7d60e5b854e5e2263bf00658"
+          },
+          "equations": "MET"
+        },
+        "fine": {
+          "artifact": {
+            "bytes": 48854526,
+            "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-startup-middle-first-common/audit.json",
+            "sha256": "8bee12182fff54d4bf32c643845a80683a13ffc4e37ed49206c51961da5d0d95"
+          },
+          "equations": "MET"
+        }
+      },
+      "failures": [],
+      "frame_hashes": [
+        {
+          "bytes": 55851552,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-1/state.science-2.json",
+          "sha256": "55992a1be883151f6ad0e14cb6ab0c9ccd1ee58073f6798dcd4a823aecf7de98"
+        },
+        {
+          "bytes": 61101641,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-2/state.science-4.json",
+          "sha256": "8cb90fc3bc68377309ee342e1b8e86db91202abfef296856e5e5c456d2d49fe4"
+        }
+      ],
+      "independent_order": 20,
+      "indices": [
+        {
+          "bytes": 1782,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-1/state.science-index.json",
+          "sha256": "ef1a19d824b9d344987fc0d45f78b844b586c73822f50500bfa06e9663c9fb38"
+        },
+        {
+          "bytes": 1399,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-startup-2/state.science-index.json",
+          "sha256": "bb16e7296e8083bd53ea8e2b138ec64e5f0947f88a954055548bfa2b5368e42d"
+        }
+      ],
+      "inventory": {
+        "common_owner_subcells": 10212,
+        "relative_measure_error": 1.2397490441647582e-14,
+        "station_multiplicity": {
+          "0": 2,
+          "4": 2,
+          "5": 1,
+          "10": 2,
+          "15": 1,
+          "-1.25": 2,
+          "-10": 1,
+          "-2.5": 2,
+          "-5": 2,
+          "-7.5": 2,
+          "1.25": 1,
+          "12.5": 2,
+          "2.5": 2,
+          "3.75": 1,
+          "4.25": 1,
+          "4.5": 1,
+          "4.75": 2,
+          "5.25": 1,
+          "5.5": 2,
+          "5.75": 2,
+          "6.0": 2,
+          "6.25": 2,
+          "6.5": 2,
+          "6.75": 2,
+          "7.0": 2,
+          "7.25": 2,
+          "7.5": 2,
+          "7.75": 1,
+          "8.0": 1
+        }
+      },
+      "role": "startup",
+      "status": "MET",
+      "steps": [
+        2,
+        4
+      ],
+      "time": 0.04,
+      "timesteps": [
+        0.02,
+        0.01
+      ]
+    }
+  },
+  "forecast": {
+    "bytes": 1994,
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-startup-first-common-time-forecast.json",
+    "sha256": "77ca41e436e777f96036385a901758c26711bee32510150f6782de8252bc4dea"
+  },
+  "ledger": {
+    "bytes": 729765,
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/accounting.json",
+    "sha256": "40c5dc64ce144882c7f45a74e0bbdb36d854888d540cb58c078fffdaa81550da"
+  },
+  "schema": "WJH27R3FirstCommonTimeEvidenceV1",
+  "storage": {
+    "free_bytes": 3451462266880,
+    "r3_science_bytes": 3076762671,
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 751264358
+  }
+}
