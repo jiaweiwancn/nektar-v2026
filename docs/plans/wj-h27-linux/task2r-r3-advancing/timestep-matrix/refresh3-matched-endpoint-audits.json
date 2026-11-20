@@ -1,0 +1,888 @@
+{
+  "account": {
+    "charged_seconds": 123235.58672960073,
+    "nonprotected_remaining": 1368.4132703992655,
+    "reserved_seconds": 0,
+    "tranche_remaining": 1114.7039900042
+  },
+  "audits": {
+    "retained-coarse": {
+      "admission": {
+        "bytes": 3649,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-refresh3-retained-coarse-endpoint/admission.json",
+        "sha256": "334998f2e83a373bf71d5f0a033c014e92e950066e46dc3b4398fb7aed4bb1bb"
+      },
+      "artifact": {
+        "bytes": 48854847,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-refresh3-retained-coarse-endpoint/audit.json",
+        "sha256": "19d70a5b126f061c56bbaa1d86e26e34a35459da28c4f47d3f10af426a4ed688"
+      },
+      "boundary_status": {
+        "accepted": "MET",
+        "input_current": "MET",
+        "input_previous": "MET"
+      },
+      "core": {
+        "accounting_identity_max_error": 1.0226066920846006e-13,
+        "accounting_identity_status": "MET",
+        "budgets": {
+          "combined_mechanical_plus_k": {
+            "current_destruction": 0.06690307423939917,
+            "current_molecular_work": 0.004792499440007972,
+            "current_pressure_and_isotropic_k_divergence": 1.3212574281473775e-11,
+            "explicit_momentum_work_plus_scalar_outflow": 0.000003999740688372201,
+            "raw_current_production_cancels_algebraically": true,
+            "reaction_balance": 6.337708860285876e-13,
+            "sampled_roughness_work": -0.00000751162762512309,
+            "scope": "Discrete current-velocity BDF/EX identity; no instantaneous or reference P=E constraint",
+            "storage": 0.0004824255625164536
+          },
+          "epsilon": {
+            "actual_production_minus_destruction_not_constrained": true,
+            "all_owner_gradient_balance": 1.5655358462829568e-8,
+            "assembly_identity_error_over_scale": 1.6590513624994333e-16,
+            "current_owner_gradient_outward_diffusion_all": -0.0008812864960883983,
+            "current_owner_gradient_outward_diffusion_essential": -0.0008878358001989169,
+            "current_prescribed_outward_diffusion": 0.000006534992023718559,
+            "current_source": -0.0008613644076538836,
+            "essential_outward_diffusion_reaction": -0.0008878371434473406,
+            "essential_reaction_scope": "combined inlet and H; corner reactions are not uniquely separable",
+            "explicit_advective_outflow": 3.065946750427091e-8,
+            "fixed_scale": 0.0008921218172888306,
+            "free_test_action": 2.32389666181144e-14,
+            "mixed_physical_balance": 1.3432716628467359e-9,
+            "reaction_balance": 2.3239114625706048e-14,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage": 0.000019907084325473278
+          },
+          "k": {
+            "actual_production_minus_destruction_not_constrained": true,
+            "all_owner_gradient_balance": -1.3718377764964383e-8,
+            "assembly_identity_error_over_scale": 2.3508816526356527e-15,
+            "current_owner_gradient_outward_diffusion_all": 9.09820908712575e-9,
+            "current_owner_gradient_outward_diffusion_essential": 1.8964476720663976e-8,
+            "current_prescribed_outward_diffusion": 0,
+            "current_source": -0.000001977290348863046,
+            "essential_outward_diffusion_reaction": 2.2816899546477377e-8,
+            "essential_reaction_scope": "inlet",
+            "explicit_advective_outflow": -1.6667639907153031e-9,
+            "fixed_scale": 0.008683215205497202,
+            "free_test_action": 3.127148005183048e-13,
+            "mixed_physical_balance": -3.852110131425846e-9,
+            "reaction_balance": 3.1269438730699233e-13,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage": -0.0000019984401717244206
+          },
+          "mass": {
+            "assembly_identity_error": 4.585218527247171e-18,
+            "boundary_outflow": 7.016609515630989e-14,
+            "integrated_divergence": 7.244867425440513e-14,
+            "strong_divergence_RMS": 0.000026799510713049954,
+            "weak_continuity": 1.7889128687977898e-14
+          },
+          "mechanical": {
+            "G_energy_definition": "|u|^2/2 for BE; (|u_n|^2+|2u_n-u_(n-1)|^2)/4 for BDF2",
+            "G_energy_rate": 0.0004844240021671454,
+            "advection_note": "Current velocity tests explicit old-state advection; history kinetic-energy outflow is not substituted for this work",
+            "all_owner_gradient_balance": -0.0000026735108489966963,
+            "assembly_identity_error_over_scale": 4.557239035684338e-15,
+            "cross_advection_integration_identity_error_over_scale": 1.0226066920846006e-13,
+            "current_all_owner_gradient_traction_work": 0.07219220695088514,
+            "current_essential_owner_gradient_traction_work": 0.04263092858898321,
+            "current_full_stress_work": 0.07169359640227048,
+            "current_isotropic_k_divergence_work": 1.3212575880484675e-11,
+            "current_modified_pressure_divergence_work": -1.5990109003386726e-18,
+            "current_molecular_work": 0.004792499440007972,
+            "current_pressure_and_known_k_roughness_work": -0.000006940019968253869,
+            "current_raw_turbulent_production_work": 0.06690109694905039,
+            "discrete_time_energy_identity_error_over_scale": 3.128355619877368e-17,
+            "essential_traction_reaction_work": 0.04263094434635023,
+            "explicit_cross_integration_boundary": 0.000008005133488531158,
+            "explicit_cross_integration_bulk": 0.000004003726029518742,
+            "explicit_domain_advection_current_velocity_test_work": 0.000004001407452362916,
+            "explicit_history_kinetic_advective_flux": 0.000004002275597159155,
+            "explicit_sampled_convective_roughness_work": -5.71607656869221e-7,
+            "fixed_scale": 0.06502499999999997,
+            "free_velocity_test_action": 3.2137283318989065e-13,
+            "mixed_physical_balance": 1.575768809880529e-8,
+            "nonnegative_BDF_dissipation": 5.210306185733376e-13,
+            "physical_kinetic_energy_BDF_rate": 0.00048442402066376736,
+            "prescribed_boundary_traction_work": 0.029558589093364836,
+            "reaction_balance": 3.2107649872159527e-13,
+            "sampled_roughness_work": -0.00000751162762512309,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage_velocity_test_work": 0.00048442400268817803
+          }
+        },
+        "history_cache_checks": {
+          "comparisons": {
+            "accepted_current": {
+              "all_coefficient_dual": {
+                "epsilon": 1.5563960718031198e-13,
+                "k": 1.538885611543607e-13,
+                "momentum": 6.327291770733471e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.5548287746503854e-13,
+                "k": 1.537534209885175e-13,
+                "momentum": 6.317237616149862e-14
+              }
+            },
+            "input_current": {
+              "all_coefficient_dual": {
+                "epsilon": 1.5653063372114503e-13,
+                "k": 1.523603281156631e-13,
+                "momentum": 6.328530246642264e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.5639007596693705e-13,
+                "k": 1.5222143906303623e-13,
+                "momentum": 6.318474189450845e-14
+              }
+            },
+            "input_previous": {
+              "all_coefficient_dual": {
+                "epsilon": 1.6233216562131844e-13,
+                "k": 1.6311608139063065e-13,
+                "momentum": 6.320635988383709e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.6218965539780211e-13,
+                "k": 1.6300588656701815e-13,
+                "momentum": 6.310563196577427e-14
+              }
+            }
+          },
+          "limit": 1e-10,
+          "scope": "Every signed global coefficient, including constrained rows; independent reconstruction enters equations instead of caches",
+          "status": "MET"
+        },
+        "residuals": {
+          "continuity": 1.7889128687977898e-14,
+          "epsilon": 1.1205276946548092e-10,
+          "k": 1.4497460307586628e-10,
+          "momentum": 2.633657335870362e-10
+        },
+        "transient_residual_status": "MET"
+      },
+      "frame": {
+        "bytes": 61109876,
+        "hashes": {
+          "advection_sha256": "f0d1f3c9a0ffafee95c28d984fea1487daf6f7398a04603d4aaa2f0b39446c28",
+          "previous_advection_sha256": "cfc117def4c3cd9e194fcf3ac1170576f1f570dfa901392030c216c91a3f8e99",
+          "previous_sha256": "4aa428847c060c95b69d0a9564af09148e314e8e60508c0ba5dc45ab2ac60b54",
+          "state_sha256": "53fc1facc1478cc0e22b8e21d6221fd33ed64529c689f685c0b7c3ccc4e4877e"
+        },
+        "origin": "current_process_accepted_step",
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-retained-refresh3-coarse/state.science-4.json",
+        "reason_mask": 193,
+        "sha256": "8e3434b0ddd6f9b3e65adac1adc49ce6d52b4ca83eb79352374e84100bcfdbc9",
+        "step": 4,
+        "time": 0.08,
+        "write_seconds": 2.3922023540071677
+      },
+      "operation": {
+        "child_elapsed_seconds": 708.2514218750002,
+        "exit": 0,
+        "job_memory": {
+          "ancestor_limits": [
+            {
+              "current": 93675520,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1679.scope"
+            },
+            {
+              "current": 409617014784,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice"
+            },
+            {
+              "current": 409899069440,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice"
+            },
+            {
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup"
+            }
+          ],
+          "job_cgroup": "/user.slice/user-1000.slice/session-1679.scope",
+          "mem_available_bytes": 372810846208,
+          "mem_total_bytes": 540840640512
+        },
+        "log": {
+          "bytes": 267,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-refresh3-retained-coarse-endpoint/command.log",
+          "sha256": "5d778b1e11f43f37982e270cf1f60eef6569b88c0acf1bb96e8e755277bae9bc"
+        },
+        "minimum_memory_headroom_bytes": 369190580224,
+        "peak_active_host_workers": 61,
+        "peak_host_workers": 141,
+        "peak_owned_workers": 1,
+        "peak_r3_science_bytes": 5885479256,
+        "peak_stopped_host_workers": 80,
+        "peak_tree_rss_bytes": 4496699392,
+        "phase": "r3-audit",
+        "reason": null,
+        "rss_limit_bytes": 10737418240,
+        "seconds": 709.265604663,
+        "status": "PASS",
+        "worker_limit": 80,
+        "worker_paused_seconds": 0,
+        "worker_pauses": []
+      },
+      "profiles_status": "MET",
+      "receipt": {
+        "bytes": 6416,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-refresh3-retained-coarse-endpoint/receipt.json",
+        "sha256": "5d44b2f81458726f7eb6810770b933e3ffe6749514b99022059cbdb6b72b65ab"
+      },
+      "report": {
+        "accepted_history_boundary_status": "MET",
+        "accepted_time_discrete_equations_status": "MET",
+        "elapsed_seconds": 700.572484777018,
+        "independent_orders": [
+          20,
+          24
+        ],
+        "independent_quadrature_status": "MET",
+        "input_history_identity": {
+          "advection_sha256": "cfc117def4c3cd9e194fcf3ac1170576f1f570dfa901392030c216c91a3f8e99",
+          "current_sha256": "4aa428847c060c95b69d0a9564af09148e314e8e60508c0ba5dc45ab2ac60b54",
+          "previous_advection_sha256": "0c7e84aadec70af772ed225522de2e9bf5fb47bf7e384f4cf89a1af0ec9611dd",
+          "previous_sha256": "2cf27b3781a6f771f96a4699abb577a885613d10b9c901d8ea78d60960848113",
+          "provenance": "Input current and advection bind the accepted output previous hashes. Earlier input state is evaluated and hashed here; cross-packet lineage requires its earlier artifact.",
+          "step": 3,
+          "time": 0.06
+        },
+        "maximum_resident_bytes": 4493701120,
+        "memory_cap_bytes": 8589934592,
+        "reason": "Accepted-step independent equations, caches, and budgets recorded; full H27 qualification remains NOT_MET.",
+        "scheme": {
+          "alpha": 75,
+          "dt": 0.02,
+          "explicit_coefficients": [
+            2,
+            -1
+          ],
+          "mass_coefficients": [
+            1.5,
+            -2,
+            0.5
+          ],
+          "name": "BDF2_EX2",
+          "startup": false
+        },
+        "source": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py",
+          "sha256": "b8fa6a4676ae39865abb14d75d9b27bd8ff3795542f6dc0eedb7747ebcda9631"
+        },
+        "status": "NOT_MET"
+      }
+    },
+    "retained-middle": {
+      "admission": {
+        "bytes": 3649,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-refresh3-retained-middle-endpoint/admission.json",
+        "sha256": "2a93c1f63c748a07c14f86d4732716d9e2f91f74273040c78e3a6c94a58149a7"
+      },
+      "artifact": {
+        "bytes": 48849817,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-refresh3-retained-middle-endpoint/audit.json",
+        "sha256": "4f0cd8230721762a4d111dd01dbfcc52a75d4b5c05dd12c38686c01a1441be0b"
+      },
+      "boundary_status": {
+        "accepted": "MET",
+        "input_current": "MET",
+        "input_previous": "MET"
+      },
+      "core": {
+        "accounting_identity_max_error": 5.868361494971878e-14,
+        "accounting_identity_status": "MET",
+        "budgets": {
+          "combined_mechanical_plus_k": {
+            "current_destruction": 0.0669030882578829,
+            "current_molecular_work": 0.004792499380529428,
+            "current_pressure_and_isotropic_k_divergence": 1.3116458976604617e-11,
+            "explicit_momentum_work_plus_scalar_outflow": 0.000004002400523128563,
+            "raw_current_production_cancels_algebraically": true,
+            "reaction_balance": -3.71132964872091e-13,
+            "sampled_roughness_work": -0.0000075117303374199876,
+            "scope": "Discrete current-velocity BDF/EX identity; no instantaneous or reference P=E constraint",
+            "storage": 0.0004824062263316721
+          },
+          "epsilon": {
+            "actual_production_minus_destruction_not_constrained": true,
+            "all_owner_gradient_balance": 1.5004380344196995e-8,
+            "assembly_identity_error_over_scale": 2.2662900655101307e-15,
+            "current_owner_gradient_outward_diffusion_all": -0.0008812731228398469,
+            "current_owner_gradient_outward_diffusion_essential": -0.0008878224268164897,
+            "current_prescribed_outward_diffusion": 0.000006534992023718559,
+            "current_source": -0.0008613668704284116,
+            "essential_outward_diffusion_reaction": -0.0008878231192410389,
+            "essential_reaction_scope": "combined inlet and H; corner reactions are not uniquely separable",
+            "explicit_advective_outflow": 3.0552640940725287e-8,
+            "fixed_scale": 0.0008921218172888306,
+            "free_test_action": 2.872772319118865e-15,
+            "mixed_physical_balance": 6.924274198721186e-10,
+            "reaction_balance": 2.8707505123071186e-15,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage": 0.00001989070415083882
+          },
+          "k": {
+            "actual_production_minus_destruction_not_constrained": true,
+            "all_owner_gradient_balance": -1.4149323056793437e-8,
+            "assembly_identity_error_over_scale": 5.856378239709734e-17,
+            "current_owner_gradient_outward_diffusion_all": 8.60399308184849e-9,
+            "current_owner_gradient_outward_diffusion_essential": 1.8514995424219705e-8,
+            "current_prescribed_outward_diffusion": 0,
+            "current_source": -0.0000019881712030302053,
+            "essential_outward_diffusion_reaction": 2.2753349827686216e-8,
+            "essential_reaction_scope": "inlet",
+            "explicit_advective_outflow": -1.8543630173062375e-9,
+            "fixed_scale": 0.008683215205497202,
+            "free_test_action": 3.3689552897686405e-14,
+            "mixed_physical_balance": -4.2383207144223e-9,
+            "reaction_balance": 3.36890443757606e-14,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage": -0.000002009070156151541
+          },
+          "mass": {
+            "assembly_identity_error": 1.1648527732213437e-18,
+            "boundary_outflow": 7.549516567451064e-14,
+            "integrated_divergence": 7.49152874033414e-14,
+            "strong_divergence_RMS": 0.00002672270284411644,
+            "weak_continuity": 1.7730344063402217e-14
+          },
+          "mechanical": {
+            "G_energy_definition": "|u|^2/2 for BE; (|u_n|^2+|2u_n-u_(n-1)|^2)/4 for BDF2",
+            "G_energy_rate": 0.00048441529643200956,
+            "advection_note": "Current velocity tests explicit old-state advection; history kinetic-energy outflow is not substituted for this work",
+            "all_owner_gradient_balance": -0.0000026804173602762438,
+            "assembly_identity_error_over_scale": 2.1171591563737528e-15,
+            "cross_advection_integration_identity_error_over_scale": 5.868361494971878e-14,
+            "current_all_owner_gradient_traction_work": 0.0721922111793975,
+            "current_essential_owner_gradient_traction_work": 0.042630933144251565,
+            "current_full_stress_work": 0.07169359948032585,
+            "current_isotropic_k_divergence_work": 1.3116460855139262e-11,
+            "current_modified_pressure_divergence_work": -1.878534645476082e-18,
+            "current_molecular_work": 0.004792499380529428,
+            "current_pressure_and_known_k_roughness_work": -0.0000069433427162783685,
+            "current_raw_turbulent_production_work": 0.06690110008667978,
+            "discrete_time_energy_identity_error_over_scale": 1.9993201316200818e-17,
+            "essential_traction_reaction_work": 0.042630941694708296,
+            "explicit_cross_integration_boundary": 0.000008010388103940613,
+            "explicit_cross_integration_bulk": 0.000004006133213978842,
+            "explicit_domain_advection_current_velocity_test_work": 0.000004004254886145869,
+            "explicit_history_kinetic_advective_flux": 0.000004005088637626386,
+            "explicit_sampled_convective_roughness_work": -5.683876211416186e-7,
+            "fixed_scale": 0.06502499999999997,
+            "free_velocity_test_action": -4.049596775219948e-13,
+            "mixed_physical_balance": 8.550051909528289e-9,
+            "nonnegative_BDF_dissipation": 5.581277726033469e-14,
+            "physical_kinetic_energy_BDF_rate": 0.0004844153007722533,
+            "prescribed_boundary_traction_work": 0.029558589067733752,
+            "reaction_balance": -4.048220092478516e-13,
+            "sampled_roughness_work": -0.0000075117303374199876,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage_velocity_test_work": 0.00048441529648782363
+          }
+        },
+        "history_cache_checks": {
+          "comparisons": {
+            "accepted_current": {
+              "all_coefficient_dual": {
+                "epsilon": 1.583215685397716e-13,
+                "k": 1.5697687772157875e-13,
+                "momentum": 6.324799928180521e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.5815707254179823e-13,
+                "k": 1.5682058531591928e-13,
+                "momentum": 6.314758240918985e-14
+              }
+            },
+            "input_current": {
+              "all_coefficient_dual": {
+                "epsilon": 1.5048082733590277e-13,
+                "k": 1.564781535677644e-13,
+                "momentum": 6.322922863596999e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.5030899403467538e-13,
+                "k": 1.5634590286789664e-13,
+                "momentum": 6.312842502432245e-14
+              }
+            },
+            "input_previous": {
+              "all_coefficient_dual": {
+                "epsilon": 1.526200847602469e-13,
+                "k": 1.5548636867157198e-13,
+                "momentum": 6.323452833716393e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.5247065313315041e-13,
+                "k": 1.5534972182704542e-13,
+                "momentum": 6.313395114187664e-14
+              }
+            }
+          },
+          "limit": 1e-10,
+          "scope": "Every signed global coefficient, including constrained rows; independent reconstruction enters equations instead of caches",
+          "status": "MET"
+        },
+        "residuals": {
+          "continuity": 1.7730344063402217e-14,
+          "epsilon": 1.1176862476252049e-10,
+          "k": 1.4487721805833462e-10,
+          "momentum": 2.6325061451247603e-10
+        },
+        "transient_residual_status": "MET"
+      },
+      "frame": {
+        "bytes": 61109949,
+        "hashes": {
+          "advection_sha256": "ae7c0a5fc8a79876e4c894269cc2d2977f8afb3bd0c6d586ea44877478d923de",
+          "previous_advection_sha256": "0024d2cd38d37eab5e8710ff66d6b0f3208c7ff19f9a0a5a8b5b1ac7987c24f5",
+          "previous_sha256": "3707291067de3e80828296609a5298bb7914eb5b4733679be2e87778433b5825",
+          "state_sha256": "8874e07b75f9e6d8e92e17e1439d3bced6b3458ee1ad169556b89136832e0c52"
+        },
+        "origin": "current_process_accepted_step",
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-retained-refresh3-middle/state.science-8.json",
+        "reason_mask": 193,
+        "sha256": "780a8d9d158fef2e309b399df59ef477968433b1de22b1c0e54668b26efc41fe",
+        "step": 8,
+        "time": 0.08,
+        "write_seconds": 2.449298280989751
+      },
+      "operation": {
+        "child_elapsed_seconds": 710.7079217510181,
+        "exit": 0,
+        "job_memory": {
+          "ancestor_limits": [
+            {
+              "current": 147222528,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1679.scope"
+            },
+            {
+              "current": 406606376960,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice"
+            },
+            {
+              "current": 406888431616,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice"
+            },
+            {
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup"
+            }
+          ],
+          "job_cgroup": "/user.slice/user-1000.slice/session-1679.scope",
+          "mem_available_bytes": 376229715968,
+          "mem_total_bytes": 540840640512
+        },
+        "log": {
+          "bytes": 268,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-refresh3-retained-middle-endpoint/command.log",
+          "sha256": "d08b2bf21ccae282d8c142233ba789a3e35c75276f4aea5c1208f2ff22b8c10b"
+        },
+        "minimum_memory_headroom_bytes": 363824914432,
+        "peak_active_host_workers": 61,
+        "peak_host_workers": 141,
+        "peak_owned_workers": 1,
+        "peak_r3_science_bytes": 5934332722,
+        "peak_stopped_host_workers": 80,
+        "peak_tree_rss_bytes": 4478726144,
+        "phase": "r3-audit",
+        "reason": null,
+        "rss_limit_bytes": 10737418240,
+        "seconds": 711.5961356400221,
+        "status": "PASS",
+        "worker_limit": 80,
+        "worker_paused_seconds": 0,
+        "worker_pauses": []
+      },
+      "profiles_status": "MET",
+      "receipt": {
+        "bytes": 6420,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-refresh3-retained-middle-endpoint/receipt.json",
+        "sha256": "9008ca5729cee4ccd0b6cad3ef2d2709abb00cd7f44a79b3c04ef8c77763c5be"
+      },
+      "report": {
+        "accepted_history_boundary_status": "MET",
+        "accepted_time_discrete_equations_status": "MET",
+        "elapsed_seconds": 703.5458860499784,
+        "independent_orders": [
+          20,
+          24
+        ],
+        "independent_quadrature_status": "MET",
+        "input_history_identity": {
+          "advection_sha256": "0024d2cd38d37eab5e8710ff66d6b0f3208c7ff19f9a0a5a8b5b1ac7987c24f5",
+          "current_sha256": "3707291067de3e80828296609a5298bb7914eb5b4733679be2e87778433b5825",
+          "previous_advection_sha256": "909f2c9cf511a9be22d8ffdb68fc24917a8292639d7f0a3130a3a7bf48db87f2",
+          "previous_sha256": "ac24ea2328ca78dc7dddad6137747de545cc0ef0984f0191736713566ba66d74",
+          "provenance": "Input current and advection bind the accepted output previous hashes. Earlier input state is evaluated and hashed here; cross-packet lineage requires its earlier artifact.",
+          "step": 7,
+          "time": 0.07
+        },
+        "maximum_resident_bytes": 4476190720,
+        "memory_cap_bytes": 8589934592,
+        "reason": "Accepted-step independent equations, caches, and budgets recorded; full H27 qualification remains NOT_MET.",
+        "scheme": {
+          "alpha": 150,
+          "dt": 0.01,
+          "explicit_coefficients": [
+            2,
+            -1
+          ],
+          "mass_coefficients": [
+            1.5,
+            -2,
+            0.5
+          ],
+          "name": "BDF2_EX2",
+          "startup": false
+        },
+        "source": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py",
+          "sha256": "b8fa6a4676ae39865abb14d75d9b27bd8ff3795542f6dc0eedb7747ebcda9631"
+        },
+        "status": "NOT_MET"
+      }
+    },
+    "signed-middle": {
+      "admission": {
+        "bytes": 3637,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-refresh3-signed-middle-endpoint/admission.json",
+        "sha256": "30a04a2357c8f72abe4f29d66637bc9724bef7985d5311493cf496e42df07812"
+      },
+      "artifact": {
+        "bytes": 48830541,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-refresh3-signed-middle-endpoint/audit.json",
+        "sha256": "2f71d7b6c1c7c3c9913d905f6ce411ff4ece171063af16e9e8de6ebd5b04838e"
+      },
+      "boundary_status": {
+        "accepted": "MET",
+        "input_current": "MET",
+        "input_previous": "MET"
+      },
+      "core": {
+        "accounting_identity_max_error": 2.543127291905869e-13,
+        "accounting_identity_status": "MET",
+        "budgets": {
+          "combined_mechanical_plus_k": {
+            "current_destruction": 0.06668282872914098,
+            "current_molecular_work": 0.0047393512579334465,
+            "current_pressure_and_isotropic_k_divergence": 1.2591858325237095e-11,
+            "explicit_momentum_work_plus_scalar_outflow": 0.001514792663604833,
+            "raw_current_production_cancels_algebraically": true,
+            "reaction_balance": -5.545558239708286e-13,
+            "sampled_roughness_work": -0.00008262737268622722,
+            "scope": "Discrete current-velocity BDF/EX identity; no instantaneous or reference P=E constraint",
+            "storage": 0.000003929823320144539
+          },
+          "epsilon": {
+            "actual_production_minus_destruction_not_constrained": true,
+            "all_owner_gradient_balance": 1.3298142114825245e-8,
+            "assembly_identity_error_over_scale": 5.279341289896364e-16,
+            "current_owner_gradient_outward_diffusion_all": -0.0008508246567528305,
+            "current_owner_gradient_outward_diffusion_essential": -0.0008573730899684544,
+            "current_prescribed_outward_diffusion": 0.000006534992023718559,
+            "current_source": -0.0008569439286195215,
+            "essential_outward_diffusion_reaction": -0.0008573729469180032,
+            "essential_reaction_scope": "combined inlet and H; corner reactions are not uniquely separable",
+            "explicit_advective_outflow": 6.338530258025334e-7,
+            "fixed_scale": 0.0008921218172888306,
+            "free_test_action": 6.611837854672294e-16,
+            "mixed_physical_balance": -1.4304979043758964e-10,
+            "reaction_balance": 6.607128039126664e-16,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage": -0.000006739826750378701
+          },
+          "k": {
+            "actual_production_minus_destruction_not_constrained": true,
+            "all_owner_gradient_balance": 9.171405259988657e-8,
+            "assembly_identity_error_over_scale": 1.6351700799278933e-15,
+            "current_owner_gradient_outward_diffusion_all": 2.703788421704479e-7,
+            "current_owner_gradient_outward_diffusion_essential": 1.7831671898639118e-7,
+            "current_prescribed_outward_diffusion": 0,
+            "current_source": -0.000006116700781317545,
+            "essential_outward_diffusion_reaction": 1.7866478574086865e-7,
+            "essential_reaction_scope": "inlet",
+            "explicit_advective_outflow": -0.000013041271510971786,
+            "fixed_scale": 0.008683215205497202,
+            "free_test_action": -3.815494071818106e-15,
+            "mixed_physical_balance": -3.48070584169732e-10,
+            "reaction_balance": -3.82969260551971e-15,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage": 0.00000674590594008368
+          },
+          "mass": {
+            "assembly_identity_error": 2.021705297633717e-18,
+            "boundary_outflow": 7.105427357601002e-14,
+            "integrated_divergence": 7.20607037444883e-14,
+            "strong_divergence_RMS": 0.000026244805863649044,
+            "weak_continuity": 1.8273082227585022e-14
+          },
+          "mechanical": {
+            "G_energy_definition": "|u|^2/2 for BE; (|u_n|^2+|2u_n-u_(n-1)|^2)/4 for BDF2",
+            "G_energy_rate": -0.0000028160827476708533,
+            "advection_note": "Current velocity tests explicit old-state advection; history kinetic-energy outflow is not substituted for this work",
+            "all_owner_gradient_balance": -0.000006878922518854802,
+            "assembly_identity_error_over_scale": 2.067479952442687e-15,
+            "cross_advection_integration_identity_error_over_scale": 2.543127291905869e-13,
+            "current_all_owner_gradient_traction_work": 0.07303058744658594,
+            "current_essential_owner_gradient_traction_work": 0.04346532618812695,
+            "current_full_stress_work": 0.07141606329888499,
+            "current_isotropic_k_divergence_work": 1.2591861222176124e-11,
+            "current_modified_pressure_divergence_work": -2.896939029848472e-18,
+            "current_molecular_work": 0.0047393512579334465,
+            "current_pressure_and_known_k_roughness_work": -0.000013328044146573636,
+            "current_raw_turbulent_production_work": 0.06667671202835977,
+            "discrete_time_energy_identity_error_over_scale": 1.5685936422001563e-20,
+            "essential_traction_reaction_work": 0.04346531427417129,
+            "explicit_cross_integration_boundary": 0.003055668548167745,
+            "explicit_cross_integration_bulk": 0.0015278346130684767,
+            "explicit_domain_advection_current_velocity_test_work": 0.0015278339351158048,
+            "explicit_history_kinetic_advective_flux": 0.0015278342726023908,
+            "explicit_sampled_convective_roughness_work": -0.00006929932853965359,
+            "fixed_scale": 0.06502499999999997,
+            "free_velocity_test_action": -5.505916934814013e-13,
+            "mixed_physical_balance": -1.1914506388432944e-8,
+            "nonnegative_BDF_dissipation": 1.2773171149917727e-13,
+            "physical_kinetic_energy_BDF_rate": -0.0000028160759722778612,
+            "prescribed_boundary_traction_work": 0.029558394250446526,
+            "reaction_balance": -5.507261313653089e-13,
+            "sampled_roughness_work": -0.00008262737268622722,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage_velocity_test_work": -0.0000028160826199391408
+          }
+        },
+        "history_cache_checks": {
+          "comparisons": {
+            "accepted_current": {
+              "all_coefficient_dual": {
+                "epsilon": 1.5770826824304552e-13,
+                "k": 1.553737822734871e-13,
+                "momentum": 6.321824676230884e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.575509115754162e-13,
+                "k": 1.5523875055466273e-13,
+                "momentum": 6.311754770622171e-14
+              }
+            },
+            "input_current": {
+              "all_coefficient_dual": {
+                "epsilon": 1.565404780106302e-13,
+                "k": 1.5454003172322456e-13,
+                "momentum": 6.324516008043142e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.563932762078944e-13,
+                "k": 1.5439611719520113e-13,
+                "momentum": 6.314458106559547e-14
+              }
+            },
+            "input_previous": {
+              "all_coefficient_dual": {
+                "epsilon": 1.558655073009644e-13,
+                "k": 1.5411032657683094e-13,
+                "momentum": 6.326612038829999e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.5571828356993858e-13,
+                "k": 1.5397280644362075e-13,
+                "momentum": 6.316573051955861e-14
+              }
+            }
+          },
+          "limit": 1e-10,
+          "scope": "Every signed global coefficient, including constrained rows; independent reconstruction enters equations instead of caches",
+          "status": "MET"
+        },
+        "residuals": {
+          "continuity": 1.8273082227585022e-14,
+          "epsilon": 1.1179023179224814e-10,
+          "k": 1.4460518818388204e-10,
+          "momentum": 2.6382510344968064e-10
+        },
+        "transient_residual_status": "MET"
+      },
+      "frame": {
+        "bytes": 61025017,
+        "hashes": {
+          "advection_sha256": "00326191162d70a2c75c5a692f1905be6f1be40d7da27126ab5c86a2e84110c4",
+          "previous_advection_sha256": "e782359c9ecd5f8cddbbd8f59acf6edbda31fa75095eb18ac24f812933019ad8",
+          "previous_sha256": "3efc855ce08bea3bb9e203ed038f26e88b12d0ed244d11ce2fc4048b3de3130e",
+          "state_sha256": "b91b901618668fd457f7754ab33c1966aea2199a69f266ef73bcd3f6a4a98bd8"
+        },
+        "origin": "current_process_accepted_step",
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-signed-refresh3-middle/state.science-8.json",
+        "reason_mask": 193,
+        "sha256": "56c35af55546d199cc33aef092f260b59a5ba43504ebb6246e32496f79697dcb",
+        "step": 8,
+        "time": 0.08,
+        "write_seconds": 2.3966955360083375
+      },
+      "operation": {
+        "child_elapsed_seconds": 706.009130401013,
+        "exit": 0,
+        "job_memory": {
+          "ancestor_limits": [
+            {
+              "current": 42885120,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1679.scope"
+            },
+            {
+              "current": 407648231424,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice"
+            },
+            {
+              "current": 407930286080,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice"
+            },
+            {
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup"
+            }
+          ],
+          "job_cgroup": "/user.slice/user-1000.slice/session-1679.scope",
+          "mem_available_bytes": 373683732480,
+          "mem_total_bytes": 540840640512
+        },
+        "log": {
+          "bytes": 268,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-refresh3-signed-middle-endpoint/command.log",
+          "sha256": "8e177dc126de5ca4cb83bddfccf7e87706b1ad1f1957a699e8f63871664338c2"
+        },
+        "minimum_memory_headroom_bytes": 365576929280,
+        "peak_active_host_workers": 60,
+        "peak_host_workers": 140,
+        "peak_owned_workers": 1,
+        "peak_r3_science_bytes": 5836620760,
+        "peak_stopped_host_workers": 80,
+        "peak_tree_rss_bytes": 4497080320,
+        "phase": "r3-audit",
+        "reason": null,
+        "rss_limit_bytes": 10737418240,
+        "seconds": 707.0353582730168,
+        "status": "PASS",
+        "worker_limit": 80,
+        "worker_paused_seconds": 0,
+        "worker_pauses": []
+      },
+      "profiles_status": "MET",
+      "receipt": {
+        "bytes": 6407,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-refresh3-signed-middle-endpoint/receipt.json",
+        "sha256": "fff7f5a0ab4d0931916fd5b5e047cf3d40202104052793078ca336bd5abe97e4"
+      },
+      "report": {
+        "accepted_history_boundary_status": "MET",
+        "accepted_time_discrete_equations_status": "MET",
+        "elapsed_seconds": 699.4226350770041,
+        "independent_orders": [
+          20,
+          24
+        ],
+        "independent_quadrature_status": "MET",
+        "input_history_identity": {
+          "advection_sha256": "e782359c9ecd5f8cddbbd8f59acf6edbda31fa75095eb18ac24f812933019ad8",
+          "current_sha256": "3efc855ce08bea3bb9e203ed038f26e88b12d0ed244d11ce2fc4048b3de3130e",
+          "previous_advection_sha256": "4599f3282e3d04daa3c5111b9d80993736587efc17fff219731ab80bb49a0800",
+          "previous_sha256": "3c4c6548dc2050741c391e1231418631c1e97ac34f2f707f4b73523d0d456ba1",
+          "provenance": "Input current and advection bind the accepted output previous hashes. Earlier input state is evaluated and hashed here; cross-packet lineage requires its earlier artifact.",
+          "step": 7,
+          "time": 0.07
+        },
+        "maximum_resident_bytes": 4494536704,
+        "memory_cap_bytes": 8589934592,
+        "reason": "Accepted-step independent equations, caches, and budgets recorded; full H27 qualification remains NOT_MET.",
+        "scheme": {
+          "alpha": 150,
+          "dt": 0.01,
+          "explicit_coefficients": [
+            2,
+            -1
+          ],
+          "mass_coefficients": [
+            1.5,
+            -2,
+            0.5
+          ],
+          "name": "BDF2_EX2",
+          "startup": false
+        },
+        "source": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py",
+          "sha256": "b8fa6a4676ae39865abb14d75d9b27bd8ff3795542f6dc0eedb7747ebcda9631"
+        },
+        "status": "NOT_MET"
+      }
+    }
+  },
+  "census": {
+    "active": 58,
+    "owned": 0,
+    "parked_helpers": 102,
+    "stopped": 80,
+    "stopped_owned": 0,
+    "total": 138
+  },
+  "forecast": {
+    "bytes": 3374,
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-refresh3-matrix-endpoints-forecast.json",
+    "sha256": "906543c742de5cf8006f2c4fa7274c27e525a32de3f8f4784eccbecabf732cdb"
+  },
+  "ledger": {
+    "bytes": 823934,
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/accounting.json",
+    "sha256": "ab4e4f2563fed17adcbb2d4bd21465d4869c0e5bae0288f1784fa488f1965541"
+  },
+  "schema": "WJH27R3AuditedMatrixEndpointsV1",
+  "status": "MET",
+  "storage": {
+    "free_bytes": 3437399752704,
+    "r3_science_bytes": 5934332722,
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 751264358
+  }
+}

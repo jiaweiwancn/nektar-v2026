@@ -367,12 +367,20 @@ Independent sampling of the signed trajectory from its fresh initial observation
 
 The account has charged 121,096.366 s, with 3,507.634 s nonprotected and 1,119.925 s staged. [Exact live balance](wj-h27-linux/task2r-r3-advancing/timestep-matrix/refresh3-quiet-and-signed-evolution.json)
 
-| Closure gate | Status after the quiet and signed evolution measurements |
+### Selected timestep and matched endpoint audits
+
+The .01 signed and both retained-inlet t=.08 endpoint files independently pass the BDF2/EX2 equation and physical checks at Gauss orders 20 and 24. Across these audits the maximum scaled momentum, continuity, k and outer-epsilon residuals were 2.638e−10, 1.827e−14, 1.450e−10 and 1.121e−10. The exact .02 signed endpoint and cold replay have their own passing audits. Each audit binds its accepted input histories, state coefficients and prescribed wall, trace, flux and budget checks. [Exact frames, residuals and independent audit receipts](wj-h27-linux/task2r-r3-advancing/timestep-matrix/refresh3-matched-endpoint-audits.json)
+
+Select dt=.02 with the demonstrated .01 witness for both transients. Both common-time comparisons and the .02 signed cold endpoint meet their limits. The .02 runs took 804.648 s for the retained inlet and 842.272 s for the signed perturbation. The respective .01 runs took 1,635.934 and 1,610.064 s. The selected Bf recipe uses the .02 physical step, 4e−6 centered displacement, a three-use inverse-factor maximum, Q3/Q2 on the 111×92 mesh at x=15, outlet `ZeroTransverseV1`, native 6×8 panels and the qualified linear and coupled stops. [Signed time witness](wj-h27-linux/task2r-r3-advancing/timestep-matrix/refresh3-signed-time-comparison.json) · [Retained-inlet time witness](wj-h27-linux/task2r-r3-advancing/timestep-matrix/refresh3-retained-time-comparison.json) · [Cold restart](wj-h27-linux/task2r-r3-advancing/timestep-matrix/signed-refresh3-restart-verification.json)
+
+The three new independent audit charges were 707.035, 709.266 and 711.596 s. The account has charged 123,235.587 s, with 1,368.413 s nonprotected, including 1,114.704 s staged. [Endpoint evidence and exact accounting](wj-h27-linux/task2r-r3-advancing/timestep-matrix/refresh3-matched-endpoint-audits.json)
+
+| Closure gate | Status after the selected timestep audits |
 | --- | --- |
 | CP0 Bf state and admission | MET. Exact Bf replay and independently certified signed initial coefficients and histories bind to the Linux application. |
-| CP1 positive-time equations and costs | The quiet, retained and signed .02 runs furnish three matching warmed blocks. Signed initial-to-.08 evolution and the .02 signed endpoint audit pass their checks. Earlier BE/EX1 and BDF2/EX2 audits cover the startup schemes. The final matched .01 signed and two retained-inlet audits are pending. |
-| CP2 timestep and recovery | The .02 signed cold restart is MET. Both transients meet all .02 to .01 comparisons at t=.04 and t=.08. The new independent t=.08 endpoint audits remain pending for the timestep selection. |
-| CP3 affordability and stock | Stock was repeated at .04 and on the matched .02 retained-inlet interval. The tested .02 startup projects above the day target under its measured rate. Selected-recipe stock, cold and per-trajectory costs remain open. |
+| CP1 positive-time equations and costs | MET. Three matching .02 warmed blocks, independent BE/EX1 and BDF2/EX2 evidence and observed signed evolution are recorded. |
+| CP2 timestep and recovery | MET for the selected .02 timestep with the .01 witness. Both transients pass at t=.04 and t=.08, the independent endpoint equations pass, and the .02 signed cold restart is exact. |
+| CP3 affordability and stock | The three matched .02 stock repeats, three coupled warm blocks and measured cold costs are recorded. The integrated day and pilot forecasts are pending. |
 | R4 admission | HELD. A passing R3 scientific recipe and a complete affordable pilot case set remain prerequisites. |
 
 `TASK2_COMPLETE=NO`. `TASK3_READY=NO`.

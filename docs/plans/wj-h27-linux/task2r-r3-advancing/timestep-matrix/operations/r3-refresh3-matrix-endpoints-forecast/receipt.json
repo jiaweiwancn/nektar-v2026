@@ -1,0 +1,82 @@
+{
+  "request": {
+    "label": "r3-refresh3-matrix-endpoints-forecast",
+    "phase": "analysis",
+    "command": [
+      "python3",
+      "-B",
+      "-c",
+      "\nfrom pathlib import Path\nimport json,sys\nfrom resources import atomic,identity\nfrom task2r_run import balance\nroot=Path(sys.argv[1])\nbook=root/\"accounting.json\"\nnames=(\"r3-signed-refresh3-middle\",\"r3-retained-refresh3-coarse\",\"r3-retained-refresh3-middle\")\ncases=[root/\"evidence\"/(name+\".json\") for name in names]\nassert all(json.loads(path.read_text())[\"final_time\"]==.08 for path in cases)\ncomparisons=[root/\"evidence\"/f\"r3-{role}-refresh3-common-t{stamp}.json\" for role in (\"signed\",\"retained\") for stamp in (\"004\",\"008\")]\nassert all(json.loads(path.read_text())[\"status\"]==\"MET\" for path in comparisons)\natomic(Path(sys.argv[2]),dict(schema=\"WJH27R3MatrixEndpointForecastV1\",audit_refs=[identity(root/\"operations\"/name/\"receipt.json\")\n     for name in (\"r3-audit-signed-refresh3-uninterrupted\",\"r3-audit-signed-refresh3-resumed\")],\n     cases=[identity(path) for path in cases], comparisons=[identity(path) for path in comparisons],\n     cpu_threads=1, native_gauss_orders=[6,8], independent_orders=[20,24], audit_cap=1450,\n     rss_gib=10, address_gib=8, account=balance(json.loads(book.read_text())),ledger=identity(book),\n     purpose=\"Complete matched t=.08 independent equation and physical audits for the selected-recipe candidates.\"))\n",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-refresh3-matrix-endpoints-forecast.json"
+    ],
+    "cap_seconds": 65.0,
+    "reserved_seconds": 72.0,
+    "workers_before": 57,
+    "idle_mpi_event_helpers": 102,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 8463861449,
+      "source_build_runtime_bytes": 751264358,
+      "free_bytes": 3437568425984,
+      "r3_science_bytes": 5787786582
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v28/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_run.py",
+      "bytes": 52854,
+      "sha256": "23c5138b07a96273b6898712aef7bbec85d5880907a3d7aae063459687b1b022"
+    },
+    "rss_limit_bytes": 8589934592,
+    "memory_before": null,
+    "worker_pause_policy": null,
+    "worker_limit": 80,
+    "worker_admission_margin": 3,
+    "input_files": [],
+    "worker_census_policy": "ExcludeStoppedWorkersV1",
+    "stopped_workers_before": 80
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "analysis",
+    "seconds": 1.9493945369904395,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 16384,
+    "peak_host_workers": 138,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-refresh3-matrix-endpoints-forecast/command.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "rss_limit_bytes": 8589934592,
+    "job_memory": null,
+    "minimum_memory_headroom_bytes": null,
+    "worker_limit": 80,
+    "peak_owned_workers": 0,
+    "worker_pauses": [],
+    "worker_paused_seconds": 0.0,
+    "child_elapsed_seconds": 1.1365393759915605,
+    "peak_active_host_workers": 58,
+    "peak_stopped_host_workers": 80,
+    "peak_r3_science_bytes": 5787786582
+  },
+  "balance": {
+    "charged_seconds": 121098.31498367971,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 3505.6850163202907,
+    "tranche_remaining": 1117.9757359252253
+  },
+  "storage": {
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 751264358,
+    "free_bytes": 3437568413696,
+    "r3_science_bytes": 5787786582
+  }
+}
