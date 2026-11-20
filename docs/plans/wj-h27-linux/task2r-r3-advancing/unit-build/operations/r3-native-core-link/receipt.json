@@ -1,0 +1,86 @@
+{
+  "request": {
+    "label": "r3-native-core-link",
+    "phase": "build",
+    "command": [
+      "make",
+      "-C",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3",
+      "-f",
+      "CMakeFiles/WJNativeMixedFlow.dir/build.make",
+      "-j1",
+      "CMakeFiles/WJNativeMixedFlow.dir/build"
+    ],
+    "cap_seconds": 110.0,
+    "reserved_seconds": 117.0,
+    "workers_before": 75,
+    "idle_mpi_event_helpers": 108,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 8463861449,
+      "source_build_runtime_bytes": 497079330,
+      "free_bytes": 3523696922624,
+      "r3_science_bytes": 427992807
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v9/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_run.py",
+      "bytes": 49781,
+      "sha256": "a00358c931eccaf9ac52a1a99bac5e4ffc58fbb0fa2925c27d25a17bb7a86263"
+    },
+    "rss_limit_bytes": 17179869184,
+    "memory_before": null,
+    "worker_pause_policy": {
+      "trigger_workers": 78,
+      "resume_workers": 77,
+      "quiet_seconds": 3.0,
+      "maximum_paused_seconds": 260.0,
+      "count_stopped_ownership": true
+    },
+    "worker_limit": 80,
+    "worker_admission_margin": 4,
+    "input_files": []
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "build",
+    "seconds": 1.330321109999204,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 303104,
+    "peak_host_workers": 75,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-native-core-link/command.log",
+      "bytes": 326,
+      "sha256": "299f85a25a806b4e3d2d0b615cfb44c3f8b91eb23cc909be9ba88a7260dc636d"
+    },
+    "rss_limit_bytes": 17179869184,
+    "job_memory": null,
+    "minimum_memory_headroom_bytes": null,
+    "worker_limit": 80,
+    "peak_owned_workers": 0,
+    "worker_pauses": [],
+    "worker_paused_seconds": 0.0,
+    "child_elapsed_seconds": 0.7023273990198504,
+    "peak_active_host_workers": 75,
+    "peak_r3_science_bytes": 427992807
+  },
+  "balance": {
+    "charged_seconds": 87607.9424605006,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 16792.057539499394,
+    "tranche_remaining": 3675.3482591043285
+  },
+  "storage": {
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 503532645,
+    "free_bytes": 3523690442752,
+    "r3_science_bytes": 427992807
+  }
+}

@@ -8,6 +8,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
 import shutil
 import signal
 import subprocess
@@ -583,6 +584,8 @@ def run(root, book, args, began):
     affinity = None
     r3_admission = None
     build_unit = None
+    build_directory = None
+    link_recipe = None
     if advancing:
         from task2r_advancing import admission
         if phase.startswith("r3-"):
@@ -613,9 +616,21 @@ def run(root, book, args, began):
                         and Path(build_unit["object"]).is_relative_to(root / "build-r3")
                         and command.count("-c") == 1 and not Path(build_unit["object"]).exists(),
                         "single-unit build command differs from its configured admission")
+                build_directory = Path(build_unit["directory"])
                 limits[phase] = 3
                 pause_policy = dict(trigger_workers=78, resume_workers=77, quiet_seconds=3.,
                                     maximum_paused_seconds=260., count_stopped_ownership=True)
+            elif label == "r3-native-link-direct":
+                build_directory = root / "build-r3"
+                link_recipe = build_directory / "CMakeFiles/IncNavierStokesSolver.dir/link.txt"
+                require(command == shlex.split(link_recipe.read_text())
+                        and command[command.index("-o")+1] == "IncNavierStokesSolver"
+                        and (build_directory/"libWJNativeMixedFlow.a").is_file()
+                        and all((build_directory / item).is_file() for item in command if item.endswith(".o")),
+                        "direct link must use the configured normal-main objects and command")
+                limits[phase] = 3
+                pause_policy = dict(trigger_workers=78, resume_workers=77, quiet_seconds=3.,
+                                    maximum_paused_seconds=135., count_stopped_ownership=True)
             elif command[:2] == ["cmake", "--build"]:
                 require(command[2:4] == [str(root / "build-r3"), "--parallel"]
                         and command[4] in ("1", "2", "3", "4"),
@@ -686,6 +701,8 @@ def run(root, book, args, began):
         request["r3_admission"] = r3_admission["admission"]
     if build_unit:
         request["configured_unit"] = build_unit
+    if link_recipe:
+        request["configured_link"] = identity(link_recipe)
     launched = command
     if affinity:
         # Bind in the rank wrapper, after OpenMPI has placed the launcher child.
@@ -711,7 +728,7 @@ def run(root, book, args, began):
         try:
             check_storage(info)
             child_began = time.monotonic()
-            child_cwd = (Path(build_unit["directory"]) if build_unit else
+            child_cwd = (build_directory if build_directory else
                          Path(command[-1]).parent if r3_admission and affinity else root)
             with subprocess.Popen(launched, cwd=child_cwd, env=env, stdout=log,
                                   stderr=subprocess.STDOUT, start_new_session=True) as child:
