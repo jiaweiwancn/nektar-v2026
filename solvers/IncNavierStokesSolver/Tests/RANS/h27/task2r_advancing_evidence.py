@@ -302,17 +302,31 @@ def time_matrix(root, startup, perturbation, parity_path, represented, precondit
             before = read(recovered_prefix)
             checkpoint = before["recovery"]
             accepted = next(frame for frame in prefix["frames"].values() if frame["step"] == checkpoint["step"])
-            require(before["status"] == "MET" and prefix["role"] == "restart"
+            require(prefix["role"] == "restart"
                     and plan["restart"] == {k:checkpoint[k] for k in ("path", "sha256", "bytes")}
-                    and checkpoint["step"] == 1 and checkpoint["dt"] == plan["timestep"]
+                    and checkpoint["dt"] == plan["timestep"]
                     and accepted["origin"] == "imported_accepted_history"
                     and before["state_hashes"] == accepted["hashes"], "recovered prefix cannot supply a bracket")
-            hashes.add(identity_of_state(verified(before["initial"]))["state_sha256"])
-            first = read(verified(before["step_log"]))
+            first_frame = before["initial"]
+            early_steps = []
+            for step in range(checkpoint["step"], 0, -1):
+                require(before["schema"] == "WJH27R3RecoveredPrefixAnchorV1" and before["status"] == "MET"
+                        and before["recovery"]["step"] == step and before["initial"] == first_frame,
+                        "recovered accepted steps are discontinuous")
+                verified(before["accepted"])
+                rows = map(json.loads, verified(before["step_log"]).read_text().splitlines())
+                earlier, = (row for row in rows if row["step"] == step)
+                require(all(earlier[key] == before["state_hashes"][key] for key in HASH_KEYS.values()),
+                        "recovered accepted history and step log disagree")
+                hashes.add(earlier["state_sha256"])
+                early_steps.append(earlier["seconds"])
+                if step > 1:
+                    before = read(verified(before["preceding_anchor"]))
+            hashes.add(identity_of_state(verified(first_frame))["state_sha256"])
             output = (measured["scientific_frame_seconds"] + measured["recovery_seconds"])/accepted_steps
-            step_cost = [first["seconds"] + output, *step_cost]
-            accepted_steps += 1
-            cost_source = "Measured BE engine plus subsequent measured I/O per step, followed by measured resumed BDF2 steps."
+            step_cost = [*(value+output for value in reversed(early_steps)), *step_cost]
+            accepted_steps += len(early_steps)
+            cost_source = "Earlier measured accepted engines and an I/O allowance from the completed resumed run."
         else:
             require(prefix["role"] == role, "matrix prefix role differs")
         require(accepted_steps >= 3 and len(hashes) >= 4, "matrix prefix has insufficient evolution")
