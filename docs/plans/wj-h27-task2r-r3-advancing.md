@@ -359,10 +359,18 @@ The same-recipe .02 and .01 retained-inlet frames satisfy every RMS and MAX limi
 
 The .02 candidate has passed both transients against the completed .01 witness at both times and the audited cold restart. The new independent endpoint audits and the quiet timing control complete the remaining evidence for this comparison. The account has 3,776.952 s nonprotected, including 1,389.242 s staged. [Run receipts and exact budget](wj-h27-linux/task2r-r3-advancing/timestep-matrix/refresh3-retained-time-comparison.json)
 
-| Closure gate | Status after the complete common-time comparisons |
+### Quiet timing and signed physical evolution
+
+The matched quiet .02 control completed four steps through t=.08 and reproduced the initial Bf coefficient digest at every observed time. Whole time was 153.095 s and the warmed mean was 16.502 s. The disjoint time budget attributed 96.28% of whole elapsed time, with 7.27% in equation/model work. The other two matched .02 warm blocks measured 185.540 s for the retained inlet and 175.524 s for the signed perturbation. [Quiet, retained and signed time evidence](wj-h27-linux/task2r-r3-advancing/timestep-matrix/refresh3-quiet-and-signed-evolution.json)
+
+Independent sampling of the signed trajectory from its fresh initial observation to its audited t=.08 frame found maximum whole-domain changes of 6.531e−5 in U, 1.038e−5 in W, 1.564e−3 in k/Kin and 8.392e−3 in stress/tau0. The sample included all 690 original rows and all 23 fixed-window rows. The comparison binds the exact initial and accepted frames and measured 104.378 charged seconds. The next independent equation audits target the .01 signed endpoint and both matching retained-inlet endpoints. [Observed evolution and exact metadata](wj-h27-linux/task2r-r3-advancing/timestep-matrix/refresh3-quiet-and-signed-evolution.json)
+
+The account has charged 121,096.366 s, with 3,507.634 s nonprotected and 1,119.925 s staged. [Exact live balance](wj-h27-linux/task2r-r3-advancing/timestep-matrix/refresh3-quiet-and-signed-evolution.json)
+
+| Closure gate | Status after the quiet and signed evolution measurements |
 | --- | --- |
 | CP0 Bf state and admission | MET. Exact Bf replay and independently certified signed initial coefficients and histories bind to the Linux application. |
-| CP1 positive-time equations and costs | Quiet and retained-inlet prefixes accepted three steps at dt=.04. Earlier signed independent BE/EX1 and BDF2/EX2 audits passed. The larger-displacement .02 signed run supplies a two-step warm timing block. Its adjusted endpoints still require their independent audits. |
+| CP1 positive-time equations and costs | The quiet, retained and signed .02 runs furnish three matching warmed blocks. Signed initial-to-.08 evolution and the .02 signed endpoint audit pass their checks. Earlier BE/EX1 and BDF2/EX2 audits cover the startup schemes. The final matched .01 signed and two retained-inlet audits are pending. |
 | CP2 timestep and recovery | The .02 signed cold restart is MET. Both transients meet all .02 to .01 comparisons at t=.04 and t=.08. The new independent t=.08 endpoint audits remain pending for the timestep selection. |
 | CP3 affordability and stock | Stock was repeated at .04 and on the matched .02 retained-inlet interval. The tested .02 startup projects above the day target under its measured rate. Selected-recipe stock, cold and per-trajectory costs remain open. |
 | R4 admission | HELD. A passing R3 scientific recipe and a complete affordable pilot case set remain prerequisites. |
