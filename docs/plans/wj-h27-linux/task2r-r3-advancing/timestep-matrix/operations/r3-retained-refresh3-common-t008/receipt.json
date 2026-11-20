@@ -1,0 +1,99 @@
+{
+  "request": {
+    "label": "r3-retained-refresh3-common-t008",
+    "phase": "analysis",
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v31/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_time_comparison.py",
+      "common-time",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-retained-refresh3-coarse",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-retained-refresh3-middle",
+      "4",
+      "8",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-retained-refresh3-common-t008.json",
+      "--seconds",
+      "340"
+    ],
+    "cap_seconds": 365.0,
+    "reserved_seconds": 372.0,
+    "workers_before": 57,
+    "idle_mpi_event_helpers": 102,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 8463861449,
+      "source_build_runtime_bytes": 751264358,
+      "free_bytes": 3437828345856,
+      "r3_science_bytes": 5535262410
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v28/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_run.py",
+      "bytes": 52854,
+      "sha256": "23c5138b07a96273b6898712aef7bbec85d5880907a3d7aae063459687b1b022"
+    },
+    "rss_limit_bytes": 8589934592,
+    "memory_before": null,
+    "worker_pause_policy": {
+      "trigger_workers": 78,
+      "resume_workers": 77,
+      "quiet_seconds": 3.0,
+      "maximum_paused_seconds": 219.0,
+      "count_stopped_ownership": true
+    },
+    "worker_limit": 80,
+    "worker_admission_margin": 3,
+    "input_files": [
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v31/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_time_comparison.py",
+        "bytes": 13490,
+        "sha256": "735d1768059ff27480e5d21429ccd876e6685bb9bd93d233976c600e8de33403"
+      }
+    ],
+    "worker_census_policy": "ExcludeStoppedWorkersV1",
+    "stopped_workers_before": 80
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "analysis",
+    "seconds": 104.68955556099536,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 381935616,
+    "peak_host_workers": 141,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-retained-refresh3-common-t008/command.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "rss_limit_bytes": 8589934592,
+    "job_memory": null,
+    "minimum_memory_headroom_bytes": null,
+    "worker_limit": 80,
+    "peak_owned_workers": 1,
+    "worker_pauses": [],
+    "worker_paused_seconds": 0.0,
+    "child_elapsed_seconds": 103.88704262097599,
+    "peak_active_host_workers": 61,
+    "peak_stopped_host_workers": 80,
+    "peak_r3_science_bytes": 5535262410
+  },
+  "balance": {
+    "charged_seconds": 120827.04836705071,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 3776.951632949291,
+    "tranche_remaining": 1389.2423525542254
+  },
+  "storage": {
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 751264358,
+    "free_bytes": 3437826801664,
+    "r3_science_bytes": 5535262410
+  }
+}
