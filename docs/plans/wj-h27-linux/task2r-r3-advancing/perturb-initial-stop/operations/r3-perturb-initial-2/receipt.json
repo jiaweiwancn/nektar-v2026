@@ -1,0 +1,262 @@
+{
+  "request": {
+    "label": "r3-perturb-initial-2",
+    "phase": "r3-initial",
+    "command": [
+      "mpirun",
+      "-np",
+      "1",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3/IncNavierStokesSolver",
+      "--use-opt-file",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-perturb-initial-2/run.xml.opt",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-perturb-initial-2/run.xml"
+    ],
+    "cap_seconds": 590.0,
+    "reserved_seconds": 597.0,
+    "workers_before": 75,
+    "idle_mpi_event_helpers": 108,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 8463861449,
+      "source_build_runtime_bytes": 513578714,
+      "free_bytes": 3521791299584,
+      "r3_science_bytes": 540833001
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_run.py",
+      "bytes": 51126,
+      "sha256": "b9d4e3349cc78c1e96e0f4a04144adc5c4442cfb8f9e59230a441a8d51c06e92"
+    },
+    "rss_limit_bytes": 17179869184,
+    "memory_before": {
+      "mem_available_bytes": 400479117312,
+      "mem_total_bytes": 540840640512,
+      "job_cgroup": "/user.slice/user-1000.slice/session-1280.scope",
+      "ancestor_limits": [
+        {
+          "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1280.scope",
+          "current": 25317376,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+          "current": 322083495936,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup/user.slice",
+          "current": 322368909312,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup",
+          "memory.max": null,
+          "memory.high": null
+        }
+      ]
+    },
+    "worker_pause_policy": {
+      "trigger_workers": 78,
+      "resume_workers": 77,
+      "quiet_seconds": 3.0,
+      "maximum_paused_seconds": 390,
+      "count_stopped_ownership": true
+    },
+    "worker_limit": 80,
+    "worker_admission_margin": 4,
+    "input_files": [
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3/IncNavierStokesSolver",
+        "bytes": 10046064,
+        "sha256": "95275f6efeedb0d0a315260416d582796d3e4ff83cd9182163e0b39c560b7f0b"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-perturb-initial-2/run.xml.opt",
+        "bytes": 55,
+        "sha256": "d0a1a8f047349af45a886256b0961be426f8a20706522a843fbd897484666b01"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-perturb-initial-2/run.xml",
+        "bytes": 1680746,
+        "sha256": "101f1286b6dd3a0f2ccf2b6e06faa6da0184bad0316ac3aa6522024415b2c330"
+      }
+    ],
+    "r3_admission": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-perturb-initial-2/admission.json",
+      "bytes": 5237,
+      "sha256": "44f2f39ce3bead875821d49ffc7eb5b5e2625268c2eb0a250c27abc4700759c4"
+    },
+    "launch": {
+      "command": [
+        "mpirun",
+        "-np",
+        "1",
+        "--bind-to",
+        "none",
+        "taskset",
+        "--cpu-list",
+        "0",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3/IncNavierStokesSolver",
+        "--use-opt-file",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-perturb-initial-2/run.xml.opt",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-perturb-initial-2/run.xml"
+      ],
+      "affinity": {
+        "cpu": 0,
+        "admission": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-perturb-initial-2/admission.json",
+          "bytes": 5237,
+          "sha256": "44f2f39ce3bead875821d49ffc7eb5b5e2625268c2eb0a250c27abc4700759c4"
+        }
+      }
+    }
+  },
+  "result": {
+    "status": "FAIL",
+    "phase": "r3-initial",
+    "seconds": 163.5944092250138,
+    "exit": 1,
+    "reason": null,
+    "peak_tree_rss_bytes": 4247724032,
+    "peak_host_workers": 84,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-perturb-initial-2/command.log",
+      "bytes": 1871,
+      "sha256": "8cb8c7970525947602193768396df3305435a11f71b64bd1997ade47762163e9"
+    },
+    "rss_limit_bytes": 17179869184,
+    "job_memory": {
+      "mem_available_bytes": 400843579392,
+      "mem_total_bytes": 540840640512,
+      "job_cgroup": "/user.slice/user-1000.slice/session-1280.scope",
+      "ancestor_limits": [
+        {
+          "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1280.scope",
+          "current": 26345472,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+          "current": 321999667200,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup/user.slice",
+          "current": 322287693824,
+          "memory.max": null,
+          "memory.high": null
+        },
+        {
+          "path": "/sys/fs/cgroup",
+          "memory.max": null,
+          "memory.high": null
+        }
+      ]
+    },
+    "minimum_memory_headroom_bytes": 370470612992,
+    "worker_limit": 80,
+    "peak_owned_workers": 2,
+    "worker_pauses": [
+      {
+        "start_seconds": 4.124928196019027,
+        "workers_at_stop": 78,
+        "end_seconds": 15.00691082602134,
+        "workers_at_resume": 81,
+        "projected_workers_at_resume": 76
+      },
+      {
+        "start_seconds": 27.18396479700459,
+        "workers_at_stop": 78,
+        "end_seconds": 31.46296294001513,
+        "workers_at_resume": 82,
+        "projected_workers_at_resume": 77
+      },
+      {
+        "start_seconds": 34.29359489900526,
+        "workers_at_stop": 78,
+        "end_seconds": 38.576492735010106,
+        "workers_at_resume": 81,
+        "projected_workers_at_resume": 76
+      },
+      {
+        "start_seconds": 52.80250088201137,
+        "workers_at_stop": 78,
+        "end_seconds": 61.30747518601129,
+        "workers_at_resume": 81,
+        "projected_workers_at_resume": 76
+      },
+      {
+        "start_seconds": 69.04958223699941,
+        "workers_at_stop": 78,
+        "end_seconds": 76.31376254500356,
+        "workers_at_resume": 82,
+        "projected_workers_at_resume": 77
+      },
+      {
+        "start_seconds": 107.42313026002375,
+        "workers_at_stop": 78,
+        "end_seconds": 111.7895039730065,
+        "workers_at_resume": 81,
+        "projected_workers_at_resume": 76
+      },
+      {
+        "start_seconds": 121.68232851300854,
+        "workers_at_stop": 78,
+        "end_seconds": 130.31424608602538,
+        "workers_at_resume": 81,
+        "projected_workers_at_resume": 76
+      },
+      {
+        "start_seconds": 140.14364642900182,
+        "workers_at_stop": 78,
+        "end_seconds": 144.37941512500402,
+        "workers_at_resume": 81,
+        "projected_workers_at_resume": 76
+      },
+      {
+        "start_seconds": 149.99058183300076,
+        "workers_at_stop": 78,
+        "end_seconds": 156.60100653901463,
+        "workers_at_resume": 82,
+        "projected_workers_at_resume": 77
+      }
+    ],
+    "worker_paused_seconds": 59.057517909037415,
+    "rank_affinity": {
+      "pid": 467752,
+      "startup_cpus": [
+        0
+      ],
+      "allowed_cpus": [
+        0
+      ]
+    },
+    "child_elapsed_seconds": 162.53867654601345,
+    "peak_active_host_workers": 78,
+    "peak_r3_science_bytes": 549627418
+  },
+  "balance": {
+    "charged_seconds": 88351.13624658863,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 16048.863753411366,
+    "tranche_remaining": 2932.1544730163005
+  },
+  "storage": {
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 513578714,
+    "free_bytes": 3521551691776,
+    "r3_science_bytes": 540833001
+  }
+}
