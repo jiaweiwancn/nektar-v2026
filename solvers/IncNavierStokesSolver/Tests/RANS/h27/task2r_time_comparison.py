@@ -54,6 +54,25 @@ def exact_clock(packet, boundary):
     return all(packet[k] == boundary[k] for k in ("step","time","dt","signature"))
 
 
+def evolution(case, out, seconds):
+    deadline = time.monotonic()+seconds
+    index = read(case/"state.science-index.json")
+    plan, final, final_file, index_file = accepted(case,index["final_step"])
+    frame, = (row for row in index["frames"] if row["origin"] == "fresh_initial_observation")
+    start = verified({k:frame[k] for k in ("path","sha256","bytes")})
+    initial, _ = po.load_native(start)
+    require(initial["step"] == initial["time"] == 0 and initial["elements"] == final["elements"]
+            and initial["signature"] == final["signature"], "initial and accepted inventories differ")
+    ref = po.load_reference(verified(plan["table"]))
+    a,b = (po.PhysicalOracle(data,ref,20,deadline) for data in (initial,final))
+    rows, window, inventory = compare(a,b,interior=(-2.5,8),detailed=True)
+    atomic(out,dict(schema="WJH27R3ObservedEvolutionV1",role=plan["role"],
+        initial=identity(start),accepted=final_file,scientific_index=index_file,
+        time=final["time"],inventory=inventory,original_rows=rows,fixed_window_rows=window,
+        interpretation="Signed final-minus-initial evolution. Comparison tolerances provide scale "
+                       "context for measured evolution and do not govern this change."))
+
+
 def cold(uninterrupted, resumed, split, checkpoint, out, seconds):
     deadline = time.monotonic()+seconds
     parent = read(uninterrupted/"state.science-index.json")
@@ -132,13 +151,17 @@ def main():
     for key,kind in (("coarse",Path),("fine",Path),("coarse_step",int),("fine_step",int),("out",Path)):
         cmd.add_argument(key,type=kind)
     cmd.add_argument("--seconds",required=True,type=float)
+    cmd = sub.add_parser("evolution")
+    cmd.add_argument("case",type=Path)
+    cmd.add_argument("out",type=Path)
+    cmd.add_argument("--seconds",required=True,type=float)
     cmd = sub.add_parser("cold")
     for key in ("uninterrupted","resumed","split","checkpoint","out"):
         cmd.add_argument(key,type=Path)
     cmd.add_argument("--seconds",required=True,type=float)
     args=vars(parser.parse_args())
     action=args.pop("action")
-    (common_time if action=="common-time" else cold)(**args)
+    {"common-time":common_time,"cold":cold,"evolution":evolution}[action](**args)
 
 
 if __name__=="__main__":

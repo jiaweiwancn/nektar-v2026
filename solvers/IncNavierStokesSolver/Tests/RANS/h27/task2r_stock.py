@@ -11,11 +11,10 @@ import xml.etree.ElementTree as ET
 import numpy as np
 from numpy.polynomial.chebyshev import cheb2poly
 
-import coupled_fixtures as fixtures
 import physical_oracle as po
 from physical_cost_screen import STEP
 from resources import atomic, identity
-from task2r_advancing import BINDING, OUTLET, read, require, verified
+from task2r_advancing import read, require, verified
 from task2r_run import GIB
 from task2r_verify import edit
 
@@ -101,7 +100,8 @@ def prepare(root, label, coupled_path, cap, rss_gib, svv):
     numerical = dict(CheckAbortSteps=1)
     if svv == "ExpKernel":
         numerical.update(SVVDiffCoeff=.01, SVVCutoffRatio=.8)
-    edit(session,dict(SolverType="VCSWeakPressure",SpectralVanishingViscosity=svv),numerical)
+    stock_switch = "False" if svv == "Off" else svv
+    edit(session,dict(SolverType="VCSWeakPressure",SpectralVanishingViscosity=stock_switch),numerical)
     opt = out / "run.xml.opt"
     opt.write_bytes(option.read_bytes())
     command = ["mpirun", "-np", "1", str(app), "--use-opt-file", str(opt), str(session)]

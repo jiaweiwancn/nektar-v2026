@@ -17,6 +17,26 @@ HASH_KEYS = dict(zip(ROLES, ("state_sha256", "previous_sha256", "advection_sha25
                             "previous_advection_sha256")))
 
 
+def active_step_bounds(steps, setup, export, operation, initial_step):
+    """Locate each native scope up to the full unassigned operation time."""
+    gap = operation["seconds"] - setup - sum(steps) - export
+    require(gap >= 0, "native timing scopes exceed the charged operation")
+    pauses = [(row["start_seconds"],row.get("end_seconds",row.get("settled_seconds",operation["seconds"])))
+              for row in operation["worker_pauses"]]
+    def overlap(left,right):
+        return sum(max(0.,min(right,b)-max(left,a)) for a,b in pauses)
+
+    out = []
+    start = setup
+    for step, duration in enumerate(steps,initial_step+1):
+        end = start+duration
+        out.append(dict(step=step,complete_seconds=duration,
+            active_lower_seconds=max(0.,duration-overlap(start,end+gap)),
+            active_upper_seconds=duration-overlap(start+gap,end)))
+        start = end
+    return out
+
+
 def bind_runtime(root, executable, source_root, out):
     from task2_outlet_baseline import source_identity
 
@@ -222,6 +242,7 @@ def seal_run(root, label, out):
             construction_seconds=payload["construction_seconds"],
             initialisation_seconds=payload["initialisation_seconds"],
             complete_step_seconds=complete, engine_seconds=engine, scientific_frame_seconds=frames_seconds,
+            active_step_bounds=active_step_bounds(complete,setup,export,receipt["result"],initial_step),
             recovery_seconds=recovery, other_step_seconds=other_step, final_export_seconds=export,
             process_remainder_seconds=remainder,
             attributed_fraction=1-(other_step+engine["other"]+remainder)/process,

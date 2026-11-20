@@ -293,11 +293,12 @@ def admission(root, label, phase, command, cap):
         info = {i.get("PROPERTY"): i.get("VALUE") for i in xml.findall("CONDITIONS/SOLVERINFO/I")}
         parameters = dict(p.text.replace(" ", "").split("=") for p in xml.findall("CONDITIONS/PARAMETERS/P"))
         if phase == "r3-stock":
+            stock_switch = "False" if plan["stock_svv"] == "Off" else plan["stock_svv"]
             require(info["SolverType"] == "VCSWeakPressure" and info["Driver"] == "Standard"
                     and int(parameters["NumSteps"]) == plan["requested_steps"] > 0
                     and float(parameters["TimeStep"]) == plan["timestep"]
                     and float(parameters["Kinvis"]) == RECIPE["Kinvis"]
-                    and info.get("SpectralVanishingViscosity", "Off") == plan["stock_svv"],
+                    and info.get("SpectralVanishingViscosity") == stock_switch,
                     "stock admission requires the conventional weak-pressure solver")
         else:
             step_pc = plan.get("step_preconditioner",STEP_PRECONDITIONERS[0])

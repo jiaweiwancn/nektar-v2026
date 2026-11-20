@@ -1,0 +1,310 @@
+{
+  "audit": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-startup-be/audit.json",
+    "bytes": 48854692,
+    "sha256": "6088461d9a5677bd20a54d49dfdaa22de6a8fd41a77e6177ba42aed94d04d150"
+  },
+  "status": "NOT_MET",
+  "scheme": {
+    "startup": true,
+    "dt": 0.04,
+    "alpha": 25.0,
+    "mass_coefficients": [
+      1.0,
+      -1.0,
+      0.0
+    ],
+    "explicit_coefficients": [
+      1.0,
+      0.0
+    ],
+    "name": "BE_EX1_STARTUP"
+  },
+  "source": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py",
+    "sha256": "b8fa6a4676ae39865abb14d75d9b27bd8ff3795542f6dc0eedb7747ebcda9631"
+  },
+  "native": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-prefix-startup-2/state.science-1.json",
+    "sha256": "9defc49a5344d6cba031779f2527d78be7f543bb5117ee38481aceacb831ab55"
+  },
+  "table": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+    "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+  },
+  "memory_cap_bytes": 8589934592,
+  "maximum_resident_bytes": 4494757888,
+  "elapsed_seconds": 570.7682826980017,
+  "accepted_time_discrete_equations_status": "MET",
+  "input_history_identity": {
+    "step": 0,
+    "time": 0,
+    "current_sha256": "97cf9601506deb489fd96e0e039a9b3cb18c8c35d22c804101324f1169d0cf1f",
+    "previous_sha256": "97cf9601506deb489fd96e0e039a9b3cb18c8c35d22c804101324f1169d0cf1f",
+    "advection_sha256": "06e3e05bbf9329a4d9b5980f14da99dacee76562e7f5d6e15374e39d111f3526",
+    "previous_advection_sha256": "06e3e05bbf9329a4d9b5980f14da99dacee76562e7f5d6e15374e39d111f3526",
+    "provenance": "Input current and advection bind the accepted output previous hashes. Earlier input state is evaluated and hashed here; cross-packet lineage requires its earlier artifact."
+  },
+  "independent_orders": [
+    20,
+    24
+  ],
+  "polynomial_scalar_transport_source": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/scalar_reference_transport.py",
+    "sha256": "422716e50056ce4214bf1dd5b616ff2f9520779620b92fe75cece407f1c357a3"
+  },
+  "coarse_quadrature_residual": {
+    "momentum": 2.631269252272642e-10,
+    "continuity": 1.8381687062250445e-14,
+    "k": 1.4497757083360008e-10,
+    "epsilon": 1.1138024275079131e-10
+  },
+  "quadrature_difference_dual": {
+    "momentum": 9.045556220956466e-13,
+    "continuity": 3.3342518436526014e-16,
+    "k": 9.616330296898785e-13,
+    "epsilon": 4.731094716410713e-13
+  },
+  "independent_quadrature_status": "MET",
+  "accepted_history_boundary_status": "MET",
+  "core": {
+    "residuals": {
+      "momentum": 2.631625243934308e-10,
+      "continuity": 1.8402388046007253e-14,
+      "k": 1.449796468498086e-10,
+      "epsilon": 1.1131606858627346e-10
+    },
+    "transient_residual_status": "MET",
+    "history_cache_checks": {
+      "status": "MET",
+      "limit": 1e-10,
+      "comparisons": {
+        "input_current": {
+          "free_dual": {
+            "momentum": 6.315032324458085e-14,
+            "continuity": 0.0,
+            "k": 1.584561736322002e-13,
+            "epsilon": 1.5862928556051336e-13
+          },
+          "all_coefficient_dual": {
+            "momentum": 6.325111817681629e-14,
+            "k": 1.585907565533506e-13,
+            "epsilon": 1.5877282418466962e-13,
+            "pressure_load_MAX": 0.0
+          }
+        },
+        "input_previous": {
+          "free_dual": {
+            "momentum": 6.315032324458085e-14,
+            "continuity": 0.0,
+            "k": 1.584561736322002e-13,
+            "epsilon": 1.5862928556051336e-13
+          },
+          "all_coefficient_dual": {
+            "momentum": 6.325111817681629e-14,
+            "k": 1.585907565533506e-13,
+            "epsilon": 1.5877282418466962e-13,
+            "pressure_load_MAX": 0.0
+          }
+        },
+        "accepted_current": {
+          "free_dual": {
+            "momentum": 6.313715214810962e-14,
+            "continuity": 0.0,
+            "k": 1.518984181807427e-13,
+            "epsilon": 1.579437122721718e-13
+          },
+          "all_coefficient_dual": {
+            "momentum": 6.323783900382536e-14,
+            "k": 1.5203638509814183e-13,
+            "epsilon": 1.5809537090922459e-13,
+            "pressure_load_MAX": 0.0
+          }
+        }
+      },
+      "scope": "Every signed global coefficient, including constrained rows; independent reconstruction enters equations instead of caches"
+    },
+    "accounting_identity_max_error": 7.744618282049512e-14,
+    "accounting_identity_status": "MET",
+    "sampled_history_minima": {
+      "current": {
+        "k": 0.008808952564697159,
+        "outer_epsilon": 1.7450667941577317e-05
+      },
+      "old": {
+        "k": 0.008809015145515188,
+        "outer_epsilon": 1.745066792516171e-05
+      },
+      "previous": {
+        "k": 0.008809015145515188,
+        "outer_epsilon": 1.745066792516171e-05
+      }
+    }
+  },
+  "profiles": "MET",
+  "operation": {
+    "request": {
+      "label": "r3-audit-startup-be",
+      "phase": "r3-audit",
+      "command": [
+        "python3",
+        "-B",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py",
+        "--native",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-prefix-startup-2/state.science-1.json",
+        "--table",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+        "--out",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-startup-be/audit.json",
+        "--seconds",
+        "1115",
+        "--address-space-gib",
+        "8"
+      ],
+      "cap_seconds": 1130.0,
+      "reserved_seconds": 1137.0,
+      "workers_before": 74,
+      "idle_mpi_event_helpers": 108,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "storage_before": {
+        "science_bytes": 8463861449,
+        "source_build_runtime_bytes": 513578714,
+        "free_bytes": 3519088709632,
+        "r3_science_bytes": 828596110
+      },
+      "runner": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v11/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_run.py",
+        "bytes": 51126,
+        "sha256": "b9d4e3349cc78c1e96e0f4a04144adc5c4442cfb8f9e59230a441a8d51c06e92"
+      },
+      "rss_limit_bytes": 10737418240,
+      "memory_before": {
+        "mem_available_bytes": 400891310080,
+        "mem_total_bytes": 540840640512,
+        "job_cgroup": "/user.slice/user-1000.slice/session-1314.scope",
+        "ancestor_limits": [
+          {
+            "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1314.scope",
+            "current": 20889600,
+            "memory.max": null,
+            "memory.high": null
+          },
+          {
+            "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+            "current": 330766528512,
+            "memory.max": null,
+            "memory.high": null
+          },
+          {
+            "path": "/sys/fs/cgroup/user.slice",
+            "current": 331057963008,
+            "memory.max": null,
+            "memory.high": null
+          },
+          {
+            "path": "/sys/fs/cgroup",
+            "memory.max": null,
+            "memory.high": null
+          }
+        ]
+      },
+      "worker_pause_policy": null,
+      "worker_limit": 80,
+      "worker_admission_margin": 3,
+      "input_files": [
+        {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py",
+          "bytes": 31248,
+          "sha256": "b8fa6a4676ae39865abb14d75d9b27bd8ff3795542f6dc0eedb7747ebcda9631"
+        },
+        {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-prefix-startup-2/state.science-1.json",
+          "bytes": 48472698,
+          "sha256": "9defc49a5344d6cba031779f2527d78be7f543bb5117ee38481aceacb831ab55"
+        },
+        {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+          "bytes": 139982,
+          "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+        }
+      ],
+      "r3_admission": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-startup-be/admission.json",
+        "bytes": 3540,
+        "sha256": "ccecfddb0e69c109e5289f49e33b02e2d63ad46f2f95a4ec1d5bf74115e6c40d"
+      }
+    },
+    "result": {
+      "status": "PASS",
+      "phase": "r3-audit",
+      "seconds": 578.4191840910062,
+      "exit": 0,
+      "reason": null,
+      "peak_tree_rss_bytes": 4495536128,
+      "peak_host_workers": 78,
+      "log": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-startup-be/command.log",
+        "bytes": 268,
+        "sha256": "9d9a64c3c6d09951f5de1aeb69ebdcf5d2696cfcd18dcf40748feea216f69931"
+      },
+      "rss_limit_bytes": 10737418240,
+      "job_memory": {
+        "mem_available_bytes": 399997739008,
+        "mem_total_bytes": 540840640512,
+        "job_cgroup": "/user.slice/user-1000.slice/session-1314.scope",
+        "ancestor_limits": [
+          {
+            "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1314.scope",
+            "current": 41017344,
+            "memory.max": null,
+            "memory.high": null
+          },
+          {
+            "path": "/sys/fs/cgroup/user.slice/user-1000.slice",
+            "current": 327118286848,
+            "memory.max": null,
+            "memory.high": null
+          },
+          {
+            "path": "/sys/fs/cgroup/user.slice",
+            "current": 327406051328,
+            "memory.max": null,
+            "memory.high": null
+          },
+          {
+            "path": "/sys/fs/cgroup",
+            "memory.max": null,
+            "memory.high": null
+          }
+        ]
+      },
+      "minimum_memory_headroom_bytes": 370140422144,
+      "worker_limit": 80,
+      "peak_owned_workers": 0,
+      "worker_pauses": [],
+      "worker_paused_seconds": 0.0,
+      "child_elapsed_seconds": 577.4791379180097,
+      "peak_active_host_workers": 78,
+      "peak_r3_science_bytes": 877450802
+    },
+    "balance": {
+      "charged_seconds": 89893.15141122462,
+      "reserved_seconds": 0,
+      "nonprotected_remaining": 14506.848588775378,
+      "tranche_remaining": 7590.139308380312
+    },
+    "storage": {
+      "science_bytes": 8463861449,
+      "source_build_runtime_bytes": 513578714,
+      "free_bytes": 3518072070144,
+      "r3_science_bytes": 877450802
+    }
+  }
+}
