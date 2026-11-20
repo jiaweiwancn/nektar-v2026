@@ -5,6 +5,7 @@
 import argparse
 from functools import lru_cache
 import hashlib
+import json
 from pathlib import Path
 import re
 import shlex
@@ -113,8 +114,41 @@ def reuse(root, out):
     print({target:len(rows) for target,rows in records.items()})
 
 
+def units(root, out):
+    build = root / "build-r3"
+    source = root / "source-r3"
+    commands = build / "compile_commands.json"
+    database = json.loads(commands.read_text())
+    planned = {}
+    for row in database:
+        argv = shlex.split(row["command"])
+        directory = Path(row["directory"])
+        filename = Path(row["file"])
+        obj = directory / argv[argv.index("-o")+1]
+        if (obj.exists() or directory != build or not filename.is_relative_to(source)
+                or obj.relative_to(build).parts[:2] not in
+                tuple(("CMakeFiles", target+".dir") for target in TARGETS)):
+            continue
+        require(argv.count("-c") == 1 and argv.count("-o") == 1
+                and Path(argv[0]).resolve() == compiler(build) and argv[-1] == str(filename),
+                "unexpected configured single-translation-unit command")
+        # The compile database does not emit dependency files by default.
+        # Add the same target and dependency paths as the generated Make rule.
+        args = argv[:-2] + ["-MD", "-MT", str(obj.relative_to(build)),
+                            "-MF", str(obj.relative_to(build))+".d", *argv[-2:]]
+        label = "r3-native-unit-"+filename.stem.lower()
+        planned[label] = dict(command=args,directory=str(directory),source=identity(filename),
+                              compiler=identity(compiler(build)),object=str(obj))
+    require(planned, "all configured application and mixed-flow objects already exist")
+    atomic(out,dict(schema="WJH27R3ConfiguredUnitPlansV1",database=identity(commands),units=planned))
+    print(list(planned))
+
+
 if __name__ == "__main__":
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("root",type=Path)
     parser.add_argument("out",type=Path)
-    reuse(**vars(parser.parse_args()))
+    parser.add_argument("--units",action="store_true")
+    args = vars(parser.parse_args())
+    action = args.pop("units")
+    (units if action else reuse)(**args)

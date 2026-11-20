@@ -582,6 +582,7 @@ def run(root, book, args, began):
     pause_policy = None
     affinity = None
     r3_admission = None
+    build_unit = None
     if advancing:
         from task2r_advancing import admission
         if phase.startswith("r3-"):
@@ -599,7 +600,23 @@ def run(root, book, args, began):
             limits[phase] = 4 if affinity else 3
             host, helpers = workers()
         elif phase == "build":
-            if command[:2] == ["cmake", "--build"]:
+            if label.startswith("r3-native-unit-"):
+                path = root / "build-r3" / "r3-unit-plans.json"
+                data = json.loads(path.read_text())
+                build_unit = data["units"][label]
+                require(data["schema"] == "WJH27R3ConfiguredUnitPlansV1"
+                        and data["database"] == identity(root / "build-r3" / "compile_commands.json")
+                        and command == build_unit["command"]
+                        and build_unit["source"] == identity(command[-1])
+                        and build_unit["compiler"] == identity(command[0])
+                        and build_unit["directory"] == str(root / "build-r3")
+                        and Path(build_unit["object"]).is_relative_to(root / "build-r3")
+                        and command.count("-c") == 1 and not Path(build_unit["object"]).exists(),
+                        "single-unit build command differs from its configured admission")
+                limits[phase] = 3
+                pause_policy = dict(trigger_workers=78, resume_workers=77, quiet_seconds=3.,
+                                    maximum_paused_seconds=260., count_stopped_ownership=True)
+            elif command[:2] == ["cmake", "--build"]:
                 require(command[2:4] == [str(root / "build-r3"), "--parallel"]
                         and command[4] in ("1", "2", "3", "4"),
                         "R3 build requires its isolated tree and at most four explicit workers")
@@ -667,6 +684,8 @@ def run(root, book, args, began):
                                 if p.startswith("/") and "\n" not in p and Path(p).is_file()])
     if r3_admission:
         request["r3_admission"] = r3_admission["admission"]
+    if build_unit:
+        request["configured_unit"] = build_unit
     launched = command
     if affinity:
         # Bind in the rank wrapper, after OpenMPI has placed the launcher child.
@@ -692,7 +711,8 @@ def run(root, book, args, began):
         try:
             check_storage(info)
             child_began = time.monotonic()
-            child_cwd = Path(command[-1]).parent if r3_admission and affinity else root
+            child_cwd = (Path(build_unit["directory"]) if build_unit else
+                         Path(command[-1]).parent if r3_admission and affinity else root)
             with subprocess.Popen(launched, cwd=child_cwd, env=env, stdout=log,
                                   stderr=subprocess.STDOUT, start_new_session=True) as child:
                 try:

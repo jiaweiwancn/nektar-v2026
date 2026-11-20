@@ -1,0 +1,93 @@
+{
+  "request": {
+    "label": "r3-oracle-analytic-controls",
+    "phase": "analysis",
+    "command": [
+      "python3",
+      "-B",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle_test.py",
+      "--table",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/docs/plans/wj-h27-linux/native-integration-v2b/science/reference-tables-v1.json",
+      "--out",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-oracle-analytic-controls.json",
+      "--seconds",
+      "85"
+    ],
+    "cap_seconds": 100.0,
+    "reserved_seconds": 107.0,
+    "workers_before": 74,
+    "idle_mpi_event_helpers": 108,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 8463861449,
+      "source_build_runtime_bytes": 493899022,
+      "free_bytes": 3524952174592,
+      "r3_science_bytes": 379154980
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v5/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_run.py",
+      "bytes": 48433,
+      "sha256": "a8f19bbfe23d80a9b8387aa5def4efc041f8d5aaaefe4b5f95b283fa8e4c995d"
+    },
+    "rss_limit_bytes": 8589934592,
+    "memory_before": null,
+    "worker_pause_policy": null,
+    "worker_limit": 80,
+    "worker_admission_margin": 3,
+    "input_files": [
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle_test.py",
+        "bytes": 13462,
+        "sha256": "144db25e07013e4d2f4f6cf7d102adbaa188e7dd36ace95e59543bb989fecb7f"
+      },
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/docs/plans/wj-h27-linux/native-integration-v2b/science/reference-tables-v1.json",
+        "bytes": 92259,
+        "sha256": "b1bac2202d5991865a19c193528182954211f11f954fb5ca9b3f23998262250d"
+      }
+    ]
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "analysis",
+    "seconds": 2.5169912489946,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 67473408,
+    "peak_host_workers": 76,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-oracle-analytic-controls/command.log",
+      "bytes": 56,
+      "sha256": "e021c253b0e68903ac6e2459e4221cb74c97db0e71bb5539d1bf0ca030d30099"
+    },
+    "rss_limit_bytes": 8589934592,
+    "job_memory": null,
+    "minimum_memory_headroom_bytes": null,
+    "worker_limit": 80,
+    "peak_owned_workers": 0,
+    "worker_pauses": [],
+    "worker_paused_seconds": 0.0,
+    "child_elapsed_seconds": 1.8901665279990993,
+    "peak_active_host_workers": 76,
+    "peak_r3_science_bytes": 379154980
+  },
+  "balance": {
+    "charged_seconds": 86860.82413021458,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 17539.175869785424,
+    "tranche_remaining": 4422.466589390358
+  },
+  "storage": {
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 493899022,
+    "free_bytes": 3524952137728,
+    "r3_science_bytes": 379154980
+  }
+}

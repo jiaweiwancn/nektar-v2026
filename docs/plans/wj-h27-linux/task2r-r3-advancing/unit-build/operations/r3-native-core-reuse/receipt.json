@@ -1,0 +1,176 @@
+{
+  "request": {
+    "label": "r3-native-core-reuse",
+    "phase": "build",
+    "command": [
+      "make",
+      "-C",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/build-r3",
+      "-f",
+      "CMakeFiles/WJNativeMixedFlow.dir/build.make",
+      "-j1",
+      "CMakeFiles/WJNativeMixedFlow.dir/build"
+    ],
+    "cap_seconds": 720.0,
+    "reserved_seconds": 727.0,
+    "workers_before": 74,
+    "idle_mpi_event_helpers": 108,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 8463861449,
+      "source_build_runtime_bytes": 493899022,
+      "free_bytes": 3525593018368,
+      "r3_science_bytes": 379154980
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v5/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_run.py",
+      "bytes": 48433,
+      "sha256": "a8f19bbfe23d80a9b8387aa5def4efc041f8d5aaaefe4b5f95b283fa8e4c995d"
+    },
+    "rss_limit_bytes": 17179869184,
+    "memory_before": null,
+    "worker_pause_policy": {
+      "trigger_workers": 78,
+      "resume_workers": 77,
+      "quiet_seconds": 3.0,
+      "maximum_paused_seconds": 260.0,
+      "count_stopped_ownership": true
+    },
+    "worker_limit": 80,
+    "worker_admission_margin": 4,
+    "input_files": []
+  },
+  "result": {
+    "status": "FAIL",
+    "phase": "build",
+    "seconds": 289.3552002199867,
+    "exit": -15,
+    "reason": "HOST_PRESSURE_REMAINS",
+    "peak_tree_rss_bytes": 1582714880,
+    "peak_host_workers": 81,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-native-core-reuse/command.log",
+      "bytes": 9208,
+      "sha256": "c42603669dcf59f66399b29033b1df2251eec05bdc632e86dd1cfa230b053854"
+    },
+    "rss_limit_bytes": 17179869184,
+    "job_memory": null,
+    "minimum_memory_headroom_bytes": null,
+    "worker_limit": 80,
+    "peak_owned_workers": 3,
+    "worker_pauses": [
+      {
+        "start_seconds": 2.275658027996542,
+        "workers_at_stop": 78,
+        "end_seconds": 20.88335323400679,
+        "workers_at_resume": 77,
+        "projected_workers_at_resume": 77
+      },
+      {
+        "start_seconds": 23.021619112987537,
+        "workers_at_stop": 79,
+        "end_seconds": 31.536679777986137,
+        "workers_at_resume": 77,
+        "projected_workers_at_resume": 77
+      },
+      {
+        "start_seconds": 32.996376288996544,
+        "workers_at_stop": 78,
+        "end_seconds": 57.33515290200012,
+        "workers_at_resume": 77,
+        "projected_workers_at_resume": 77
+      },
+      {
+        "start_seconds": 58.05521676898934,
+        "workers_at_stop": 79,
+        "end_seconds": 79.90395243497915,
+        "workers_at_resume": 77,
+        "projected_workers_at_resume": 77
+      },
+      {
+        "start_seconds": 80.59131438698387,
+        "workers_at_stop": 78,
+        "end_seconds": 97.20031800700235,
+        "workers_at_resume": 77,
+        "projected_workers_at_resume": 77
+      },
+      {
+        "start_seconds": 99.34481426799903,
+        "workers_at_stop": 78,
+        "end_seconds": 119.24953363797977,
+        "workers_at_resume": 77,
+        "projected_workers_at_resume": 77
+      },
+      {
+        "start_seconds": 122.84806153998943,
+        "workers_at_stop": 78,
+        "end_seconds": 133.52445976799936,
+        "workers_at_resume": 77,
+        "projected_workers_at_resume": 77
+      },
+      {
+        "start_seconds": 136.33819020498777,
+        "workers_at_stop": 78,
+        "end_seconds": 156.92270805200678,
+        "workers_at_resume": 77,
+        "projected_workers_at_resume": 77
+      },
+      {
+        "start_seconds": 161.9447381820064,
+        "workers_at_stop": 78,
+        "end_seconds": 166.21861810499104,
+        "workers_at_resume": 77,
+        "projected_workers_at_resume": 77
+      },
+      {
+        "start_seconds": 167.64078635699116,
+        "workers_at_stop": 79,
+        "end_seconds": 196.79447911199532,
+        "workers_at_resume": 77,
+        "projected_workers_at_resume": 77
+      },
+      {
+        "start_seconds": 198.8979974130052,
+        "workers_at_stop": 78,
+        "end_seconds": 234.43319151198375,
+        "workers_at_resume": 77,
+        "projected_workers_at_resume": 77
+      },
+      {
+        "start_seconds": 237.91081996497815,
+        "workers_at_stop": 78,
+        "end_seconds": 278.6464143930061,
+        "workers_at_resume": 77,
+        "projected_workers_at_resume": 77
+      },
+      {
+        "start_seconds": 280.077947081998,
+        "workers_at_stop": 78,
+        "settled_seconds": 289.3551926499931
+      }
+    ],
+    "worker_paused_seconds": 260.06051398802083,
+    "child_elapsed_seconds": 288.7222290310019,
+    "peak_active_host_workers": 79,
+    "peak_r3_science_bytes": 379367972
+  },
+  "balance": {
+    "charged_seconds": 86858.30713896558,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 17541.69286103442,
+    "tranche_remaining": 4424.983580639353
+  },
+  "storage": {
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 493899022,
+    "free_bytes": 3525113708544,
+    "r3_science_bytes": 379154980
+  }
+}
