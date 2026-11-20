@@ -229,11 +229,19 @@ With `WJStepFDStep=2.5e-7`, the first BE/EX1 step reached the native cooperative
 
 The account settled this control at 101,773.771 s charged, with 22,830.229 s nonprotected remaining, including 7,058.520 s staged, and 3,600 s protected. The R3 science scope occupied 2,433,296,091 bytes. [Ledger and storage snapshot](wj-h27-linux/task2r-r3-advancing/timestep-matrix/resumed-signed-displacement.json)
 
-| Closure gate | Status after the signed displacement control |
+### Middle-level retained-inlet deadline
+
+The frozen dt=.01 retained-inlet case accepted BE/EX1 and four BDF2/EX2 steps through t=.05 on the same timed Bf application. The largest accepted native residual was 4.325e−12. It wrote the t=.04 observation and scheduled recovery and preserved the last accepted t=.05 state. Independent binary reads verified each checksum, clock and all four coefficient history hashes against the accepted step log. [Linux run, native failure and verified histories](wj-h27-linux/task2r-r3-advancing/timestep-matrix/middle-startup-failure.json)
+
+The sixth step reached its cooperative deadline in 652.010 s. It reused its factors three times at a maximum age of seven. The solve used 100 Krylov iterations and 404 residual evaluations. Its final k and outer-epsilon residuals were 6.124e−10 and 3.603e−10 against the 1e−10 native threshold. No .08 frame was produced. The process charged 1,420.273 s with zero suspension and a peak of 67 active workers. Peak tree RSS was 11,688,787,968 bytes. The observed factor reuse motivates a new process from the verified t=.05 failure recovery, with the same physics, timestep and solver settings. Three accepted steps would reach t=.08. The 2,250 s operation cap covers three 650 s native step deadlines plus setup, output and bounded suspension. The required on-cadence matched cold-restart comparison remains open. [Watchdog receipt](wj-h27-linux/task2r-r3-advancing/timestep-matrix/operations/r3-time-startup-2/receipt.json) · [Preserved state and native timing](wj-h27-linux/task2r-r3-advancing/timestep-matrix/middle-startup-failure.json)
+
+The ledger reached 103,201.171 s charged with 21,402.829 s nonprotected, including 5,631.120 s staged, and 3,600 s protected. The R3 science scope occupied 2,601,963,230 bytes. [Ledger and storage snapshot](wj-h27-linux/task2r-r3-advancing/timestep-matrix/middle-startup-failure.json)
+
+| Closure gate | Status after the middle-level startup run |
 | --- | --- |
 | CP0 Bf state and admission | MET. Exact Bf replay and independently certified signed initial coefficients and histories bind to the Linux application. |
 | CP1 positive-time equations and costs | Quiet and retained-inlet prefixes accepted three steps at dt=.04. The signed case accepted through t=.08, with independent BE/EX1 and BDF2/EX2 audits met. Sustained signed warm-step cost remains open. |
-| CP2 timestep and recovery | OPEN. The .02 startup reached both common times. The signed .02 and .01 baseline attempts and the smaller-displacement control reached their deadlines before their first common frame. The .01 startup, .005 comparison, passing timestep witness and matched cold endpoint remain open. |
+| CP2 timestep and recovery | OPEN. The .02 startup reached both common times. The .01 startup accepted through t=.05. The signed .02 and .01 baseline attempts and the smaller-displacement control reached their deadlines before their first common frame. The .005 comparison, passing timestep witness and matched cold endpoint remain open. |
 | CP3 affordability and stock | The tested .02 startup projects above the day target under its measured rate. The three stock repeats measure the earlier matched .04 interval. Selected-recipe stock, cold and per-trajectory costs remain open. |
 | R4 admission | HELD. A passing R3 scientific recipe and a complete affordable pilot case set remain prerequisites. |
 
