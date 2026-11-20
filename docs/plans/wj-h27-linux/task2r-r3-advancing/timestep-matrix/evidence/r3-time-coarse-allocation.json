@@ -1,0 +1,55 @@
+{
+  "schema": "WJH27R3CoarseStagedAllocationV1",
+  "matrix": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-time-matrix.json",
+    "bytes": 5498,
+    "sha256": "b23684e5bdc09056b2302c0a2d3596c516b7084e199a33172642079309f3a72b"
+  },
+  "admissions": [
+    {
+      "role": "startup",
+      "label": "r3-time-startup-1",
+      "timestep": 0.02,
+      "steps": 4,
+      "common_steps": [
+        2,
+        4
+      ],
+      "science_stride": 2,
+      "recovery_stride": 2,
+      "estimated_elapsed_seconds": 1061.0558865960047,
+      "cost_source": "Observed complete native steps.",
+      "operation_cap_seconds": 1493,
+      "maximum_pause_seconds": 723,
+      "rss_gib": 16,
+      "peak_mib": 550,
+      "native_step_cap_seconds": 650
+    },
+    {
+      "role": "perturbed",
+      "label": "r3-time-perturbed-1",
+      "timestep": 0.02,
+      "steps": 4,
+      "common_steps": [
+        2,
+        4
+      ],
+      "science_stride": 2,
+      "recovery_stride": 2,
+      "estimated_elapsed_seconds": 1213.2790652749343,
+      "cost_source": "Observed accepted step engines, signed-initialization setup and export, and I/O from the completed startup. The accepted BDF2 engine proxies subsequent steps.",
+      "operation_cap_seconds": 1698,
+      "maximum_pause_seconds": 387,
+      "rss_gib": 16,
+      "peak_mib": 550,
+      "native_step_cap_seconds": 650
+    }
+  ],
+  "proposed_staged_seconds": 3805,
+  "additional_internal_allocation_seconds": 1246,
+  "pre_allocation": {
+    "staged": 2558.613938308292,
+    "nonprotected": 6311.323218703357
+  },
+  "note": "First two coarsest admissions and bounded preparation, evidence and comparison work."
+}

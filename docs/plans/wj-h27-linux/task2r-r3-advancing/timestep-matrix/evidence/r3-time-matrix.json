@@ -1,0 +1,164 @@
+{
+  "schema": "WJH27R3ProspectiveTimeMatrixV1",
+  "prefixes": [
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-prefix-startup-2.json",
+      "bytes": 12877,
+      "sha256": "d1ef9977bb18bec92a16623a7ae8ddbfd8a10ab339533cf1029a71c48d209379"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-prefix-perturbed-deadline.json",
+      "bytes": 4034,
+      "sha256": "e5370884418bdabf714e1d21bf5efbb0bd5b2182d0f97914c2dcb1438959fd5d"
+    }
+  ],
+  "parity": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-timed-parity.json",
+    "bytes": 1838,
+    "sha256": "d44673b38170b626a3fe1ad28e2527a2306bfbc8b10b5d94648b173aef4038b0"
+  },
+  "represented_perturbation": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-timed-perturbation/audit.json",
+    "bytes": 22509,
+    "sha256": "fa43a862a1fcbe0cceca2e9fdea8346c945de924321d84ece630189387da8941"
+  },
+  "recovered_prefix": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-perturbed-recovery-1.json",
+    "bytes": 2798,
+    "sha256": "4495fb88210159c5c71899dd07e08f50a06c712fc9247a370402345c14af6d16"
+  },
+  "prefix_timestep": 0.04,
+  "bracket_selection_evidence": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-prefix-perturbed-fresh-factor/state.failure.json",
+    "bytes": 61024863,
+    "sha256": "83667690066f3944b342c3476161c4c5cfaf609d4f738f20ab01aef16526d3da"
+  },
+  "preconditioner": "CurrentDataDriftV1",
+  "timesteps": [
+    0.02,
+    0.01,
+    0.005
+  ],
+  "common_times": [
+    0.04,
+    0.08
+  ],
+  "levels": [
+    {
+      "role": "startup",
+      "label": "r3-time-startup-1",
+      "timestep": 0.02,
+      "steps": 4,
+      "common_steps": [
+        2,
+        4
+      ],
+      "science_stride": 2,
+      "recovery_stride": 2,
+      "estimated_elapsed_seconds": 1061.0558865960047,
+      "cost_source": "Observed complete native steps.",
+      "operation_cap_seconds": 1493,
+      "maximum_pause_seconds": 723,
+      "rss_gib": 16,
+      "peak_mib": 550,
+      "native_step_cap_seconds": 650
+    },
+    {
+      "role": "startup",
+      "label": "r3-time-startup-2",
+      "timestep": 0.01,
+      "steps": 8,
+      "common_steps": [
+        4,
+        8
+      ],
+      "science_stride": 4,
+      "recovery_stride": 4,
+      "estimated_elapsed_seconds": 1629.528157511988,
+      "cost_source": "Observed complete native steps.",
+      "operation_cap_seconds": 2260,
+      "maximum_pause_seconds": 1094,
+      "rss_gib": 16,
+      "peak_mib": 550,
+      "native_step_cap_seconds": 650
+    },
+    {
+      "role": "startup",
+      "label": "r3-time-startup-4",
+      "timestep": 0.005,
+      "steps": 16,
+      "common_steps": [
+        8,
+        16
+      ],
+      "science_stride": 8,
+      "recovery_stride": 8,
+      "estimated_elapsed_seconds": 2766.4726993439544,
+      "cost_source": "Observed complete native steps.",
+      "operation_cap_seconds": 3795,
+      "maximum_pause_seconds": 1837,
+      "rss_gib": 16,
+      "peak_mib": 550,
+      "native_step_cap_seconds": 650
+    },
+    {
+      "role": "perturbed",
+      "label": "r3-time-perturbed-1",
+      "timestep": 0.02,
+      "steps": 4,
+      "common_steps": [
+        2,
+        4
+      ],
+      "science_stride": 2,
+      "recovery_stride": 2,
+      "estimated_elapsed_seconds": 1213.2790652749343,
+      "cost_source": "Observed accepted step engines, signed-initialization setup and export, and I/O from the completed startup. The accepted BDF2 engine proxies subsequent steps.",
+      "operation_cap_seconds": 1698,
+      "maximum_pause_seconds": 387,
+      "rss_gib": 16,
+      "peak_mib": 550,
+      "native_step_cap_seconds": 650
+    },
+    {
+      "role": "perturbed",
+      "label": "r3-time-perturbed-2",
+      "timestep": 0.01,
+      "steps": 8,
+      "common_steps": [
+        4,
+        8
+      ],
+      "science_stride": 4,
+      "recovery_stride": 4,
+      "estimated_elapsed_seconds": 2288.5989618349026,
+      "cost_source": "Observed accepted step engines, signed-initialization setup and export, and I/O from the completed startup. The accepted BDF2 engine proxies subsequent steps.",
+      "operation_cap_seconds": 3150,
+      "maximum_pause_seconds": 718,
+      "rss_gib": 16,
+      "peak_mib": 550,
+      "native_step_cap_seconds": 650
+    },
+    {
+      "role": "perturbed",
+      "label": "r3-time-perturbed-4",
+      "timestep": 0.005,
+      "steps": 16,
+      "common_steps": [
+        8,
+        16
+      ],
+      "science_stride": 8,
+      "recovery_stride": 8,
+      "estimated_elapsed_seconds": 4439.238754954839,
+      "cost_source": "Observed accepted step engines, signed-initialization setup and export, and I/O from the completed startup. The accepted BDF2 engine proxies subsequent steps.",
+      "operation_cap_seconds": 6053,
+      "maximum_pause_seconds": 1379,
+      "rss_gib": 16,
+      "peak_mib": 550,
+      "native_step_cap_seconds": 650
+    }
+  ],
+  "finer_witness": "Require D/8 at both common times if D/4 is the first viable timestep.",
+  "evaluation": "Compare the two transients separately at both times across the full owner inventory."
+}

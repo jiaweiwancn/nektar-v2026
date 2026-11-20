@@ -1,0 +1,263 @@
+{
+  "audit": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-perturbed-recovered-bdf2/audit.json",
+    "bytes": 48832719,
+    "sha256": "89700c943db5972862459c37a30cbac15b6566c2dd15b381685e3cae08f27014"
+  },
+  "operation": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-perturbed-recovered-bdf2/receipt.json",
+    "bytes": 7112,
+    "sha256": "7595b693acacd214d5e08bce0bd4fb507dba73e80f2f0a35bb46375ae7830035"
+  },
+  "status": "NOT_MET",
+  "scheme": {
+    "startup": false,
+    "dt": 0.04,
+    "alpha": 37.5,
+    "mass_coefficients": [
+      1.5,
+      -2,
+      0.5
+    ],
+    "explicit_coefficients": [
+      2,
+      -1
+    ],
+    "name": "BDF2_EX2"
+  },
+  "source": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py",
+    "sha256": "b8fa6a4676ae39865abb14d75d9b27bd8ff3795542f6dc0eedb7747ebcda9631"
+  },
+  "native": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-prefix-perturbed-resume/state.science-2.json",
+    "sha256": "ad9b1b25a42edd9477a450c71c4adc0211b0e1f8ff73b02ea588a24649949225"
+  },
+  "table": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+    "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+  },
+  "memory_cap_bytes": 8589934592,
+  "maximum_resident_bytes": 4476125184,
+  "elapsed_seconds": 739.966965197993,
+  "accepted_time_discrete_equations_status": "MET",
+  "input_history_identity": {
+    "step": 1,
+    "time": 0.04,
+    "current_sha256": "7d72124a2c72f0464d20540051fa068ca682aa5cb69ee75b283752e979d07fc3",
+    "previous_sha256": "f79e64e95edae1ff5657435176543e687ec6f3c894333b8130bac34d3cf713f7",
+    "advection_sha256": "79681fa5056e1e0a57c00bcd72d4ede389312f2b5089a8b238715f70760f8df1",
+    "previous_advection_sha256": "0c2ecbb69b0ed00ed68415e33b769501bcc3a2d51b8d92724bff9667981b1c2c",
+    "provenance": "Input current and advection bind the accepted output previous hashes. Earlier input state is evaluated and hashed here; cross-packet lineage requires its earlier artifact."
+  },
+  "independent_orders": [
+    20,
+    24
+  ],
+  "polynomial_scalar_transport_source": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/scalar_reference_transport.py",
+    "sha256": "422716e50056ce4214bf1dd5b616ff2f9520779620b92fe75cece407f1c357a3"
+  },
+  "coarse_quadrature_residual": {
+    "momentum": 2.651304892153674e-10,
+    "continuity": 3.1680816943687835e-14,
+    "k": 1.4487369214785016e-10,
+    "epsilon": 1.1113232018610145e-10
+  },
+  "quadrature_difference_dual": {
+    "momentum": 9.948994463654694e-13,
+    "continuity": 2.9626039356990013e-16,
+    "k": 1.1188192460286096e-12,
+    "epsilon": 5.48285012122089e-13
+  },
+  "independent_quadrature_status": "MET",
+  "accepted_history_boundary_status": "MET",
+  "reason": "Accepted-step independent equations, caches, and budgets recorded; full H27 qualification remains NOT_MET.",
+  "core": {
+    "residuals": {
+      "momentum": 2.6509644576812444e-10,
+      "continuity": 3.167768596605909e-14,
+      "k": 1.4489375919508495e-10,
+      "epsilon": 1.1106138657555623e-10
+    },
+    "transient_residual_status": "MET",
+    "history_cache_checks": {
+      "status": "MET",
+      "limit": 1e-10,
+      "comparisons": {
+        "input_current": {
+          "free_dual": {
+            "momentum": 6.316377422629194e-14,
+            "continuity": 0,
+            "k": 1.560925297741092e-13,
+            "epsilon": 1.554062505682373e-13
+          },
+          "all_coefficient_dual": {
+            "momentum": 6.326444995301291e-14,
+            "k": 1.5625032437284922e-13,
+            "epsilon": 1.5555405829953717e-13,
+            "pressure_load_MAX": 0
+          }
+        },
+        "input_previous": {
+          "free_dual": {
+            "momentum": 6.313197506353449e-14,
+            "continuity": 0,
+            "k": 1.5635747125371757e-13,
+            "epsilon": 1.540222609855243e-13
+          },
+          "all_coefficient_dual": {
+            "momentum": 6.323254963980468e-14,
+            "k": 1.5649093548702638e-13,
+            "epsilon": 1.5416937148386714e-13,
+            "pressure_load_MAX": 0
+          }
+        },
+        "accepted_current": {
+          "free_dual": {
+            "momentum": 6.31001229063646e-14,
+            "continuity": 0,
+            "k": 1.5555480572336747e-13,
+            "epsilon": 1.5455655665363673e-13
+          },
+          "all_coefficient_dual": {
+            "momentum": 6.320078621030408e-14,
+            "k": 1.5569140680523834e-13,
+            "epsilon": 1.54710277492894e-13,
+            "pressure_load_MAX": 0
+          }
+        }
+      },
+      "scope": "Every signed global coefficient, including constrained rows; independent reconstruction enters equations instead of caches"
+    },
+    "accounting_identity_max_error": 8.390165831521816e-14,
+    "accounting_identity_status": "MET",
+    "sampled_history_minima": {
+      "current": {
+        "k": 0.008665696125862004,
+        "outer_epsilon": 0.000017449688396686682
+      },
+      "old": {
+        "k": 0.008660701299645975,
+        "outer_epsilon": 0.000017449688396688637
+      },
+      "previous": {
+        "k": 0.008654528006254585,
+        "outer_epsilon": 0.00001744968839668971
+      }
+    },
+    "budgets": {
+      "k": {
+        "storage": 0.000006774105123029853,
+        "explicit_advective_outflow": -0.000013041271563041246,
+        "current_prescribed_outward_diffusion": 0,
+        "current_source": -0.000006088510544756859,
+        "essential_outward_diffusion_reaction": 1.786558588522449e-7,
+        "essential_reaction_scope": "inlet",
+        "current_owner_gradient_outward_diffusion_all": 2.7036109260718984e-7,
+        "current_owner_gradient_outward_diffusion_essential": 1.7829895308396467e-7,
+        "reaction_balance": -3.640228868800931e-14,
+        "free_test_action": -3.637761381375143e-14,
+        "assembly_identity_error_over_scale": 2.841674848996093e-15,
+        "mixed_physical_balance": -3.569421705686219e-10,
+        "all_owner_gradient_balance": 9.170519735265583e-8,
+        "fixed_scale": 0.008683215205497202,
+        "actual_production_minus_destruction_not_constrained": true,
+        "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK"
+      },
+      "epsilon": {
+        "storage": -0.0000065008030293015085,
+        "explicit_advective_outflow": 6.338670576863968e-7,
+        "current_prescribed_outward_diffusion": 0.000006534992023718559,
+        "current_source": -0.0008569570435415563,
+        "essential_outward_diffusion_reaction": -0.0008576250995968898,
+        "essential_reaction_scope": "combined inlet and H; corner reactions are not uniquely separable",
+        "current_owner_gradient_outward_diffusion_all": -0.0008510758860900439,
+        "current_owner_gradient_outward_diffusion_essential": -0.0008576243193056778,
+        "reaction_balance": -3.2299466920515663e-15,
+        "free_test_action": -3.2292347242823316e-15,
+        "assembly_identity_error_over_scale": 7.9806115648910195e-16,
+        "mixed_physical_balance": 7.802879820138081e-10,
+        "all_owner_gradient_balance": 1.4221479897359723e-8,
+        "fixed_scale": 0.0008921218172888306,
+        "actual_production_minus_destruction_not_constrained": true,
+        "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK"
+      },
+      "mechanical": {
+        "storage_velocity_test_work": -0.0000028293864349232207,
+        "physical_kinetic_energy_BDF_rate": -0.0000028293035188860524,
+        "G_energy_rate": -0.000002829395078054969,
+        "nonnegative_BDF_dissipation": 8.643131729503655e-12,
+        "discrete_time_energy_identity_error_over_scale": 2.916736910535332e-19,
+        "G_energy_definition": "|u|^2/2 for BE; (|u_n|^2+|2u_n-u_(n-1)|^2)/4 for BDF2",
+        "explicit_domain_advection_current_velocity_test_work": 0.0015278340658629204,
+        "explicit_cross_integration_boundary": 0.003055668768316089,
+        "explicit_cross_integration_bulk": 0.0015278347024586243,
+        "cross_advection_integration_identity_error_over_scale": 8.390165831521816e-14,
+        "explicit_history_kinetic_advective_flux": 0.0015278343862199506,
+        "advection_note": "Current velocity tests explicit old-state advection; history kinetic-energy outflow is not substituted for this work",
+        "current_full_stress_work": 0.07141603548256599,
+        "current_molecular_work": 0.004739351789103161,
+        "current_raw_turbulent_production_work": 0.06667668368083261,
+        "current_isotropic_k_divergence_work": 1.263034384562232e-11,
+        "current_modified_pressure_divergence_work": -3.981839664777682e-18,
+        "explicit_sampled_convective_roughness_work": -0.00006929932677706565,
+        "current_pressure_and_known_k_roughness_work": -0.000013327979584258778,
+        "sampled_roughness_work": -0.00008262730636132443,
+        "prescribed_boundary_traction_work": 0.029558394251889063,
+        "essential_traction_reaction_work": 0.04346527321666145,
+        "current_essential_owner_gradient_traction_work": 0.04346528505048867,
+        "current_all_owner_gradient_traction_work": 0.07303054632309025,
+        "reaction_balance": -1.9520496330471815e-13,
+        "free_velocity_test_action": -1.949437499685394e-13,
+        "assembly_identity_error_over_scale": 4.01712166364876e-15,
+        "fixed_scale": 0.06502499999999997,
+        "mixed_physical_balance": -1.1834022421719492e-8,
+        "all_owner_gradient_balance": -0.000006878854734937434,
+        "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK"
+      },
+      "combined_mechanical_plus_k": {
+        "reaction_balance": -2.3160725199272746e-13,
+        "storage": 0.000003944718688106633,
+        "current_molecular_work": 0.004739351789103161,
+        "current_destruction": 0.06668277219137762,
+        "raw_current_production_cancels_algebraically": true,
+        "current_pressure_and_isotropic_k_divergence": 1.2630339863782655e-11,
+        "explicit_momentum_work_plus_scalar_outflow": 0.0015147927942998792,
+        "sampled_roughness_work": -0.00008262730636132443,
+        "scope": "Discrete current-velocity BDF/EX identity; no instantaneous or reference P=E constraint"
+      },
+      "mass": {
+        "boundary_outflow": 8.704148513061227e-14,
+        "integrated_divergence": 8.675283929646487e-14,
+        "assembly_identity_error": 5.798284176219059e-19,
+        "weak_continuity": 3.167768596605909e-14,
+        "strong_divergence_RMS": 0.00002624449906451767
+      }
+    }
+  },
+  "profiles": {
+    "status": "MET"
+  },
+  "boundary_checks": {
+    "accepted": {
+      "status": "MET"
+    },
+    "input_current": {
+      "status": "MET"
+    },
+    "input_previous": {
+      "status": "MET"
+    }
+  },
+  "operation_result": {
+    "status": "PASS",
+    "seconds": 748.8772794370016,
+    "reason": null,
+    "child_elapsed_seconds": 747.8142640780134,
+    "worker_paused_seconds": 17.3388002809952,
+    "peak_active_host_workers": 78,
+    "peak_tree_rss_bytes": 4479021056,
+    "peak_r3_science_bytes": 1847980163
+  }
+}
