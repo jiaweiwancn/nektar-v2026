@@ -257,18 +257,25 @@ def seal_run(root, label, out):
             detail = dict(engine, **parts)
             detail.update(assembly=engine["assembly"]-momentum-transport,
                           flow=engine["flow"]-coupling, other=engine["other"]-movement)
+        bounds = active_step_bounds(complete,setup,export,receipt["result"],initial_step)
+        # Exclude BE startup, the BDF2 coefficient change and the first
+        # local step after recovery.
+        warm = bounds[1 if initial_step else 2:]
         evidence.update(result=identity(result), timing=dict(
             process_seconds=process, charge_seconds=receipt["result"]["seconds"],
             construction_seconds=payload["construction_seconds"],
             initialisation_seconds=payload["initialisation_seconds"],
             complete_step_seconds=complete, engine_seconds=engine, scientific_frame_seconds=frames_seconds,
             detailed_engine_seconds=detail if detail else None,
-            active_step_bounds=active_step_bounds(complete,setup,export,receipt["result"],initial_step),
+            active_step_bounds=bounds,
             recovery_seconds=recovery, other_step_seconds=other_step, final_export_seconds=export,
             process_remainder_seconds=remainder,
             attributed_fraction=1-(other_step+(detail or engine)["other"]+remainder)/process,
             equation_share=equation/process,
-            warm_step_mean_seconds=statistics.mean(complete[1:]) if len(complete)>1 else None),
+            warm_step_mean_seconds=statistics.mean(row["complete_seconds"] for row in warm) if warm else None,
+            warm_active_mean_bounds_seconds=[
+                statistics.mean(row[key] for row in warm)
+                for key in ("active_lower_seconds", "active_upper_seconds")] if warm else None),
             observed=[{k: row[k] for k in ("step", "time", "residuals", "rebuilds", "retries",
                                            "coupled_newton", "constitutive_calls", "disjoint_seconds")}
                       for row in steps])
@@ -279,7 +286,7 @@ def seal_run(root, label, out):
 
 
 def time_matrix(root, startup, perturbation, parity_path, represented, preconditioner, out,
-                recovered_prefix=None):
+                recovered_prefix=None, coarse_dt=None, selection_evidence=None):
     from task2r_advancing import STEP_PRECONDITIONERS
 
     parity = read(parity_path)
@@ -332,8 +339,11 @@ def time_matrix(root, startup, perturbation, parity_path, represented, precondit
         require(accepted_steps >= 3 and len(hashes) >= 4, "matrix prefix has insufficient evolution")
         trial = plan["timestep"]
         if index == 0:
-            dt = trial
-        require(trial == dt, "the evolving prefixes have different bracket anchors")
+            prefix_dt = trial
+            dt = trial if coarse_dt is None else coarse_dt
+            require(dt in (trial, trial/2) and (dt == trial or selection_evidence is not None),
+                    "a reduced bracket needs a measured prefix result")
+        require(trial == prefix_dt, "the evolving prefixes have different bracket anchors")
         operation = read(verified(prefix["operation"]))
         require(operation["result"]["status"] == "PASS", "prefix operation did not pass")
         setup = measured["construction_seconds"] + measured["initialisation_seconds"] + measured["final_export_seconds"]
@@ -356,6 +366,7 @@ def time_matrix(root, startup, perturbation, parity_path, represented, precondit
     atomic(out, dict(schema="WJH27R3ProspectiveTimeMatrixV1", prefixes=[identity(startup), identity(perturbation)],
         parity=identity(parity_path), represented_perturbation=identity(represented),
         recovered_prefix=identity(recovered_prefix) if recovered_prefix else None,
+        prefix_timestep=prefix_dt, bracket_selection_evidence=identity(selection_evidence) if selection_evidence else None,
         preconditioner=preconditioner, timesteps=[dt, dt/2, dt/4], common_times=[2*dt, 4*dt], levels=levels,
         finer_witness="Require D/8 at both common times if D/4 is the first viable timestep.",
         evaluation="Compare the two transients separately at both times across the full owner inventory."))
@@ -384,6 +395,8 @@ def main():
             mode.add_argument("--maximum-pause", type=int)
         if name == "time-matrix":
             mode.add_argument("--recovered-prefix", type=Path)
+            mode.add_argument("--coarse-dt", type=float)
+            mode.add_argument("--selection-evidence", type=Path)
     args = vars(parser.parse_args())
     action = args.pop("action")
     method = {"bind-runtime": bind_runtime, "bind-parity": bind_parity, "layout": layout_packet,

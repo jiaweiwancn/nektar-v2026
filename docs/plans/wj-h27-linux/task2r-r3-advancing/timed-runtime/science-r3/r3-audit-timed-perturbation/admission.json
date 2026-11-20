@@ -1,0 +1,76 @@
+{
+  "schema": "WJH27R3AdmissionV1",
+  "label": "r3-audit-timed-perturbation",
+  "phase": "r3-audit",
+  "role": "represented_perturbation",
+  "seconds": 1120,
+  "peak_new_bytes": 50331648,
+  "maximum_paused_seconds": 380,
+  "cpu": 0,
+  "bf_binding": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-bf-binding.json",
+    "bytes": 8452,
+    "sha256": "7350dfccdb51114f34aa940ea53e7352717309843d95ff3bcdbd90a69386392a"
+  },
+  "rss_limit_bytes": 10737418240,
+  "command": [
+    "python3",
+    "-B",
+    "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v13/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_perturbation_audit.py",
+    "--base",
+    "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-timed-parity/state.result.json",
+    "--native",
+    "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-timed-initial/state.result.json",
+    "--table",
+    "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+    "--certificate",
+    "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-timed-certificate.json",
+    "--out",
+    "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-timed-perturbation/audit.json",
+    "--seconds",
+    "1105"
+  ],
+  "inputs": [
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-timed-parity/state.result.json",
+      "bytes": 76943910,
+      "sha256": "c2f1b4b6f824f4f13fa8415d26d49b935fc11fc507b25f9c470c2e7baf34a6e5"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-timed-initial/state.result.json",
+      "bytes": 30801107,
+      "sha256": "f0d97d9288c541098104ae0608b2b4d7c89aab82789350df801b8135aaa67a9e"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+      "bytes": 139982,
+      "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-timed-certificate.json",
+      "bytes": 12561,
+      "sha256": "469c6d699524f0bfd30e461fab8c2f7b2f13b8042c7cbcc6e44d30e3286207ee"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-timed-initial/receipt.json",
+      "bytes": 8008,
+      "sha256": "b39c6b575e9165702c12f44903e05c0e0151642e756b105703a20659b2f73ba4"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-timed-parity.json",
+      "bytes": 1838,
+      "sha256": "d44673b38170b626a3fe1ad28e2527a2306bfbc8b10b5d94648b173aef4038b0"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v13/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_perturbation_audit.py",
+      "bytes": 8757,
+      "sha256": "e98f1d9cb80378db6d193597d3fc6146ce8b3badfe7fe75e37e6212fc7edb6fc"
+    }
+  ],
+  "anchor": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-timed-initial/receipt.json",
+    "bytes": 8008,
+    "sha256": "b39c6b575e9165702c12f44903e05c0e0151642e756b105703a20659b2f73ba4"
+  },
+  "resource_note": "Exact rational signed basis and independent dependent-trace and principal checks."
+}
