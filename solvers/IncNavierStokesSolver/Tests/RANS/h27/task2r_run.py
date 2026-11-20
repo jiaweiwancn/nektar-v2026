@@ -597,8 +597,12 @@ def run(root, book, args, began):
                 cpu = r3_admission["cpu"]
                 require(cpu in os.sched_getaffinity(0), "R3 pinned CPU unavailable")
                 affinity = dict(cpu=cpu, admission=r3_admission["admission"])
+                pause_seconds = r3_admission.get("maximum_paused_seconds")
+                if pause_seconds is None:
+                    pause_seconds = min(135., args.seconds)
+                require(0 < pause_seconds <= args.seconds, "invalid admitted suspension time")
                 pause_policy = dict(trigger_workers=78, resume_workers=77, quiet_seconds=3.,
-                                    maximum_paused_seconds=135., count_stopped_ownership=True)
+                                    maximum_paused_seconds=pause_seconds, count_stopped_ownership=True)
             # One rank and one MPI launcher, with room for their helpers.
             limits[phase] = 4 if affinity else 3
             host, helpers = workers()

@@ -186,7 +186,8 @@ def bind(root):
 
 def prepare(root, label, role, dt, steps, cap, step_cap, rss_gib, peak_mib,
             science_stride, recovery_stride, basis_path=None, certificate=None, recovery=None,
-            phase="r3-advance", native_seconds=None, initial_step=0, represented_proof=None):
+            phase="r3-advance", native_seconds=None, initial_step=0, represented_proof=None,
+            maximum_pause=None):
     import coupled_fixtures as fixtures
     from task2r_verify import edit
 
@@ -206,6 +207,8 @@ def prepare(root, label, role, dt, steps, cap, step_cap, rss_gib, peak_mib,
     source = native.get("seed_source", native["source"]) if seed else ""
     parity = role == "same-mesh-parity"
     initial_only = phase == "r3-initial"
+    require(maximum_pause is None or 0 < maximum_pause < cap,
+            "pause allowance must fit inside the charged operation cap")
     require((phase == "r3-parity") == parity and dt > 0
             and (steps == 0 if parity or initial_only else steps > 0)
             and (role == "perturbed") == bool(certificate) and (not initial_only or role == "perturbed")
@@ -245,6 +248,7 @@ def prepare(root, label, role, dt, steps, cap, step_cap, rss_gib, peak_mib,
               (geometry, table, seed, certificate, recovery, basis_path, represented_proof) if path]
     plan = dict(schema="WJH27R3AdmissionV1", label=label, phase=phase, role=role,
                 seconds=cap, peak_new_bytes=peak_mib * 1024 ** 2, rss_limit_bytes=rss_gib * GIB,
+                maximum_paused_seconds=maximum_pause,
                 cpu=base["affinity"]["cpu"], bf_binding=identity(bound), command=command,
                 timestep=dt, initial_step=initial_step, requested_steps=steps, native_step_cap_seconds=step_cap,
                 science_stride=science_stride, recovery_stride=recovery_stride,
@@ -339,6 +343,7 @@ def main():
     case.add_argument("--native-seconds", type=float)
     case.add_argument("--initial-step", type=int, default=0)
     case.add_argument("--represented-proof", type=Path)
+    case.add_argument("--maximum-pause", type=int)
     args = vars(parser.parse_args())
     action = args.pop("action")
     if action == "bind":
