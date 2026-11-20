@@ -1,0 +1,86 @@
+{
+  "schema": "WJH27R3SignedTimestepFailureV1",
+  "failure": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-2/state.failure.json",
+    "bytes": 61025482,
+    "sha256": "6e79b2d1b0e25902ee374068c50e047883ad5f071888d6d3a10318d16d5b422b"
+  },
+  "operation": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-time-perturbed-2/receipt.json",
+    "bytes": 6972,
+    "sha256": "732c1ac702bd8e07650c0ee2d90e09cee9dd5e4641dd12f28aaa106d278c4658"
+  },
+  "index": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-2/state.science-index.json",
+    "bytes": 998,
+    "sha256": "56f8c27f272d18e6910b8ede93727a6bc70bda8bb8dcc1dca77db56538024728"
+  },
+  "last_accepted_time": 0,
+  "accepted_steps": 0,
+  "reason": "current implicit Newton step failed: DEADLINE: finite steady-solve wall budget exhausted",
+  "failed_attempt": {
+    "nonlinear_iterations": 2,
+    "seconds": 651.9610872550111,
+    "retries": 0,
+    "residuals": [
+      9.957349690772241e-9,
+      9.285434487888693e-12,
+      0,
+      1.2995468183319326e-8,
+      2.3927350277119993e-8,
+      0
+    ],
+    "coupled_krylov_iterations": 84,
+    "coupled_residual_evaluations": 340,
+    "coupled_statistics_complete": true,
+    "coupled_preconditioner_applications": 84,
+    "rebuilds": 3,
+    "disjoint_seconds": {
+      "constitutive": 95.64766995079117,
+      "wall": 34.93306994414888,
+      "assembly": 208.62152342646732,
+      "flow": 74.20908553391928,
+      "scalar": 9.944870700303,
+      "rebuild": 129.3281327849836,
+      "guards": 17.688330011907965,
+      "forcing": 0,
+      "residual": 73.64836662597372,
+      "nonlinear": 7.807009486510651,
+      "io": 0,
+      "other": 0.13302879000548273
+    },
+    "acceleration_proposals": 0,
+    "acceleration_accepted": 0,
+    "nonlinear_trace": [],
+    "preconditioner_policy": "CurrentDataDriftV1",
+    "mixed_sparse_ordering": "COLAMD",
+    "drift_measure": "ScaledCurrentQuadratureDataL2V1",
+    "relative_drift_limit": 0.02,
+    "maximum_uses": 8,
+    "refreshes": 1,
+    "reuses": 2,
+    "maximum_used_age": 3,
+    "refresh_reasons": {
+      "cold": 1,
+      "alpha": 0,
+      "drift": 0,
+      "age": 0,
+      "control": 0,
+      "retry": 0,
+      "injected": 0
+    },
+    "preconditioner_events_recorded": false,
+    "preconditioner_events": []
+  },
+  "initial_history": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-2/state.failed-accepted.bin",
+    "bytes": 11014450,
+    "sha256": "61309f866f92dd9859cab1fa745bf21e1300d6b87ef76035463ff8a4f53ba17b"
+  },
+  "resources": {
+    "seconds": 774.7600817600032,
+    "worker_paused_seconds": 0,
+    "peak_active_host_workers": 75,
+    "peak_tree_rss_bytes": 10927280128
+  }
+}

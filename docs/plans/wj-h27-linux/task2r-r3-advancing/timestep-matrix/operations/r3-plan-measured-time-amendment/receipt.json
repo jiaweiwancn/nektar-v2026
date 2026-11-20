@@ -1,0 +1,86 @@
+{
+  "request": {
+    "label": "r3-plan-measured-time-amendment",
+    "phase": "evidence",
+    "command": [
+      "python3",
+      "-B",
+      "-c",
+      "import math,sys\nfrom pathlib import Path\nfrom resources import atomic,identity\nfrom task2r_advancing import read,require,verified\nfrom task2r_run import balance\n\nr=Path(sys.argv[1]); mp=Path(sys.argv[2]); out=Path(sys.argv[3])\nmatrix=read(mp)\nops=r/\"operations\"\nlabels=(\"r3-time-startup-1\",\"r3-time-perturbed-1\",\"r3-time-perturbed-2\")\nrecords=[ops/label/\"receipt.json\" for label in labels]\nmeasured=[read(path)[\"result\"] for path in records]\nrequire(measured[0][\"status\"]==\"PASS\" and measured[1][\"status\"]==\"FAIL\"\n        and measured[1][\"child_elapsed_seconds\"]>=650, \"measured correction need is not bound\")\nstart=read(r/\"evidence/r3-time-startup-1.json\")[\"timing\"]\nsigned_path=r/\"evidence/r3-time-perturbed-2.json\"\nsigned=read(signed_path) if signed_path.exists() else None\nsigned_full=signed is not None and signed[\"status\"]==\"PASS\"\ncompare=ops/\"r3-quantify-coarse-startup/receipt.json\"\naudit=ops/\"r3-audit-perturbed-recovered-bdf2/receipt.json\"\ncompare_seconds=read(compare)[\"result\"][\"seconds\"]\naudit_seconds=read(audit)[\"result\"][\"seconds\"]\nrequire(0<compare_seconds and 0<audit_seconds, \"missing analysis cost anchors\")\n\ndef profile_cost(timing, steps):\n    fixed=sum(timing[k] for k in (\"construction_seconds\",\"initialisation_seconds\",\n                                  \"final_export_seconds\",\"process_remainder_seconds\"))\n    return fixed+sum(timing[\"complete_step_seconds\"][:2])+(steps-2)*timing[\"warm_step_mean_seconds\"]\n\nrows=[]\nfor level in matrix[\"levels\"]:\n    if level[\"steps\"]<=4 or (level[\"label\"]==labels[-1] and signed_full):\n        continue\n    if level[\"role\"]==\"startup\":\n        estimate=profile_cost(start,level[\"steps\"])\n        basis=\"Measured coarsest retained-inlet setup and warm mean.\"\n    elif signed_full:\n        estimate=profile_cost(signed[\"timing\"],level[\"steps\"])\n        basis=\"Measured .01 signed setup and warm mean.\"\n    else:\n        estimate=level[\"estimated_elapsed_seconds\"]\n        basis=\"Frozen signed estimate from the accepted .04 step engines, plus separately itemized corrective work.\"\n    rows.append(dict(label=level[\"label\"],steps=level[\"steps\"],estimate_seconds=estimate,\n                     admitted_scope_estimate_seconds=math.ceil(1.25*estimate+120),basis=basis))\noperations=sum(row[\"admitted_scope_estimate_seconds\"] for row in rows)\ndetails=dict(finite_difference_displacement_control=2250, common_time_comparisons=math.ceil(1.25*8*compare_seconds),\n    equation_witnesses=math.ceil(1.25*5*audit_seconds),\n    cold_branches=math.ceil(1.25*profile_cost(start,8)), stock_and_publication=650)\ncore=operations+details[\"finite_difference_displacement_control\"]+details[\"common_time_comparisons\"]+math.ceil(1.25*2*audit_seconds)\ncomplete=operations+sum(details.values())\nledger=read(r/\"accounting.json\"); a=balance(ledger)\nrequire(ledger[\"ceiling\"]==108000 and ledger[\"protected_seconds\"]==3600,\"original R3 authority differs\")\nleft=a[\"nonprotected_remaining\"]+a[\"reserved_seconds\"]\nrequire(core <= left + 21600,\"paired corrections and time screen exceed the one-time amendment cap\")\nneed=complete if complete <= left+21600 else core\nmilestone=(\"Bounded signed linearization control, remaining nested runs, independent checks, restart and stock comparison\"\n           if need==complete else\n           \"Bounded signed linearization control and nested time suite with two independent endpoint audits\")\nextra=min(21600,max(0,math.ceil(need-left)+1400))\nrequire(need>left and extra>0, \"remaining measured work fits the original parent ceiling\")\ndata=dict(schema=\"WJH27R3TimeNeedV1\",milestone=milestone,remaining_cost_seconds=need,\n    complete_work_forecast_seconds=complete,additional_seconds=extra,\n    measured_prefixes=[identity(p) for p in records],\n    workload_basis=[identity(mp),identity(compare),identity(audit)],\n    settled_prefix_status=[dict(label=label,status=v[\"status\"],charged_seconds=v[\"seconds\"])\n                           for label,v in zip(labels,measured)],\n    paired_remaining_run_estimates=rows,separate_postprocessing_estimates=details,\n    balance_at_forecast=dict(charged=a[\"charged_seconds\"],nonprotected=left),\n    retry_reserve_seconds=extra+left-need,\n    interpretation=\"One-time R3 charged allowances. Per-trajectory affordability and R4 admission remain separate.\")\natomic(out,data)\nprint(data[\"remaining_cost_seconds\"],data[\"additional_seconds\"])\n",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-time-matrix.json",
+      "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-measured-time-amendment-forecast.json"
+    ],
+    "cap_seconds": 80.0,
+    "reserved_seconds": 87.0,
+    "workers_before": 69,
+    "idle_mpi_event_helpers": 105,
+    "threads": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    },
+    "storage_before": {
+      "science_bytes": 8463861449,
+      "source_build_runtime_bytes": 751264358,
+      "free_bytes": 3475034578944,
+      "r3_science_bytes": 2296281192
+    },
+    "runner": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v25/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_run.py",
+      "bytes": 51846,
+      "sha256": "7941ab121fb2b4e216a1f006972f3e49e9755a7acae82619079be54af5a74578"
+    },
+    "rss_limit_bytes": 8589934592,
+    "memory_before": null,
+    "worker_pause_policy": null,
+    "worker_limit": 80,
+    "worker_admission_margin": 3,
+    "input_files": [
+      {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-time-matrix.json",
+        "bytes": 5498,
+        "sha256": "b23684e5bdc09056b2302c0a2d3596c516b7084e199a33172642079309f3a72b"
+      }
+    ]
+  },
+  "result": {
+    "status": "PASS",
+    "phase": "evidence",
+    "seconds": 1.9356851220072713,
+    "exit": 0,
+    "reason": null,
+    "peak_tree_rss_bytes": 458752,
+    "peak_host_workers": 71,
+    "log": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-plan-measured-time-amendment/command.log",
+      "bytes": 12,
+      "sha256": "5ba44623d17de75971012d7d92daf13a3f7c11181f03962dbbd035af70f2b382"
+    },
+    "rss_limit_bytes": 8589934592,
+    "job_memory": null,
+    "minimum_memory_headroom_bytes": null,
+    "worker_limit": 80,
+    "peak_owned_workers": 0,
+    "worker_pauses": [],
+    "worker_paused_seconds": 0.0,
+    "child_elapsed_seconds": 1.1414145790040493,
+    "peak_active_host_workers": 71,
+    "peak_r3_science_bytes": 2296281192
+  },
+  "balance": {
+    "charged_seconds": 100532.70562382569,
+    "reserved_seconds": 0,
+    "nonprotected_remaining": 3867.294376174308,
+    "tranche_remaining": 2724.5850957792427
+  },
+  "storage": {
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 751264358,
+    "free_bytes": 3475034554368,
+    "r3_science_bytes": 2296281192
+  }
+}

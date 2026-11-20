@@ -1,0 +1,101 @@
+{
+  "schema": "WJH27R3TimeNeedV1",
+  "milestone": "Bounded signed linearization control, remaining nested runs, independent checks, restart and stock comparison",
+  "remaining_cost_seconds": 22673,
+  "complete_work_forecast_seconds": 22673,
+  "additional_seconds": 20204,
+  "measured_prefixes": [
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-time-startup-1/receipt.json",
+      "bytes": 6951,
+      "sha256": "819e6f72ee996f2cc93c529c7f1c026998a65d3888b0b64c879463b605d2e769"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-time-perturbed-1/receipt.json",
+      "bytes": 6972,
+      "sha256": "ac6ab74c0008fb4a2edd734d14f5d5415a1c7ec9c95872742fdcd689aead7457"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-time-perturbed-2/receipt.json",
+      "bytes": 6972,
+      "sha256": "732c1ac702bd8e07650c0ee2d90e09cee9dd5e4641dd12f28aaa106d278c4658"
+    }
+  ],
+  "workload_basis": [
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-time-matrix.json",
+      "bytes": 5498,
+      "sha256": "b23684e5bdc09056b2302c0a2d3596c516b7084e199a33172642079309f3a72b"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-quantify-coarse-startup/receipt.json",
+      "bytes": 3360,
+      "sha256": "54ac1b6907251a4daa247a46205e5b12b2305f50f2466c90ff4d5d91978d33f0"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-perturbed-recovered-bdf2/receipt.json",
+      "bytes": 7112,
+      "sha256": "7595b693acacd214d5e08bce0bd4fb507dba73e80f2f0a35bb46375ae7830035"
+    }
+  ],
+  "settled_prefix_status": [
+    {
+      "label": "r3-time-startup-1",
+      "status": "PASS",
+      "charged_seconds": 624.9567494710209
+    },
+    {
+      "label": "r3-time-perturbed-1",
+      "status": "FAIL",
+      "charged_seconds": 915.0989210330008
+    },
+    {
+      "label": "r3-time-perturbed-2",
+      "status": "FAIL",
+      "charged_seconds": 774.7600817600032
+    }
+  ],
+  "paired_remaining_run_estimates": [
+    {
+      "label": "r3-time-startup-2",
+      "steps": 8,
+      "estimate_seconds": 1081.1826747309824,
+      "admitted_scope_estimate_seconds": 1472,
+      "basis": "Measured coarsest retained-inlet setup and warm mean."
+    },
+    {
+      "label": "r3-time-startup-4",
+      "steps": 16,
+      "estimate_seconds": 1995.7773264669522,
+      "admitted_scope_estimate_seconds": 2615,
+      "basis": "Measured coarsest retained-inlet setup and warm mean."
+    },
+    {
+      "label": "r3-time-perturbed-2",
+      "steps": 8,
+      "estimate_seconds": 2288.5989618349026,
+      "admitted_scope_estimate_seconds": 2981,
+      "basis": "Frozen signed estimate from the accepted .04 step engines, plus separately itemized corrective work."
+    },
+    {
+      "label": "r3-time-perturbed-4",
+      "steps": 16,
+      "estimate_seconds": 4439.238754954839,
+      "admitted_scope_estimate_seconds": 5670,
+      "basis": "Frozen signed estimate from the accepted .04 step engines, plus separately itemized corrective work."
+    }
+  ],
+  "separate_postprocessing_estimates": {
+    "finite_difference_displacement_control": 2250,
+    "common_time_comparisons": 1002,
+    "equation_witnesses": 4681,
+    "cold_branches": 1352,
+    "stock_and_publication": 650
+  },
+  "balance_at_forecast": {
+    "charged": 100530.76993870368,
+    "nonprotected": 3869.2300612963154
+  },
+  "retry_reserve_seconds": 1400.2300612963154,
+  "interpretation": "One-time R3 charged allowances. Per-trajectory affordability and R4 admission remain separate."
+}
