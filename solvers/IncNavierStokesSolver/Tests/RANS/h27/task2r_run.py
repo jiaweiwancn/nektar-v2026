@@ -13,6 +13,7 @@ import shutil
 import signal
 import subprocess
 import time
+from typing import NamedTuple
 import xml.etree.ElementTree as ET
 
 from resources import THREADS, atomic, identity, size, tree, update
@@ -68,10 +69,25 @@ def qualification_slug(case):
     return QUAL_CASES.get(case)
 
 
+class WorkerCensus(NamedTuple):
+    total: int
+    parked_helpers: int
+    stopped: int
+    owned: int
+    stopped_owned: int
+
+    @property
+    def active(self):
+        return self.total - self.stopped
+
+    def projected_active(self, owned_peak):
+        return self.active - (self.owned - self.stopped_owned) + max(self.owned, owned_peak)
+
+
 def worker_census(owned_groups=()):
     rows = subprocess.check_output(
         ["ps", "-eLo", "pid=,tid=,pgid=,state=,wchan=,comm="], text=True)
-    counted = helpers = owned = stopped = 0
+    counted = helpers = stopped = owned = stopped_owned = 0
     for row in rows.splitlines():
         pid, tid, group, state, wait, comm = row.split(None, 5)
         if state in ("X", "Z") or comm.startswith("kworker"):
@@ -84,15 +100,18 @@ def worker_census(owned_groups=()):
             helpers += 1
             continue
         if state in ("R", "D") or comm.startswith(WORK):
+            is_stopped = state in ("T", "t")
             counted += 1
+            stopped += is_stopped
             if owned_groups and int(group) in owned_groups:
                 owned += 1
-                stopped += state in ("T", "t")
-    return counted, helpers, owned, stopped
+                stopped_owned += is_stopped
+    return WorkerCensus(counted, helpers, stopped, owned, stopped_owned)
 
 
 def workers():
-    return worker_census()[:2]
+    census = worker_census()
+    return census.total, census.parked_helpers
 
 
 def storage(root, advancing=False):
@@ -553,7 +572,6 @@ def run(root, book, args, began):
     require(cap + hold <= min(remaining["nonprotected_remaining"], remaining["tranche_remaining"]),
             "operation cap exceeds live tranche or parent allowance")
     operation = root / "operations" / label
-    host, helpers = workers()
     amendment = (ledger["entries"].get("outlet-worker-amendment")
                  if advancing or label.startswith("outlet-") else None)
     worker_limit = 72 if amendment is None else amendment["worker_limit"]
@@ -605,7 +623,6 @@ def run(root, book, args, began):
                                 maximum_paused_seconds=pause_seconds, count_stopped_ownership=True)
             # One rank and one MPI launcher, with room for their helpers.
             limits[phase] = 4 if affinity else 3
-            host, helpers = workers()
         elif phase == "build":
             series = next((name for name in ("r3-signed", "r3-timed")
                            if label.startswith(f"{name}-native-")), "r3")
@@ -673,7 +690,6 @@ def run(root, book, args, began):
         rss_limit = qualification["rss_limit_bytes"]
         require(memory_headroom(memory) >= rss_limit + 2 * GIB, "qualification memory headroom")
         affinity = choose_rank_cpu()
-        host, helpers = workers()
         limits[phase] = 8
         pause_policy = dict(trigger_workers=78, resume_workers=76, quiet_seconds=4.,
                             maximum_paused_seconds=55., admission=qualification["forecast"],
@@ -698,19 +714,24 @@ def run(root, book, args, began):
                 "missing scoped worker rescheduling record")
         pause_policy = dict(trigger_workers=68, resume_workers=66, quiet_seconds=5.,
                             maximum_paused_seconds=55., admission=identity(admission))
-    require(host + limits[phase] <= worker_limit, "shared worker limit at admission")
     info = storage(root, advancing)
     if r3_admission:
         require(info["r3_science_bytes"] + r3_admission["peak_new_bytes"] <= 8 * GIB,
                 "R3 peak overlap exceeds remaining storage")
     peak_r3_bytes = info.get("r3_science_bytes", 0)
+    census = worker_census()
+    host = census.active if advancing else census.total
+    require(host + limits[phase] <= worker_limit, "shared worker limit at admission")
     request = dict(label=label, phase=phase, command=command, cap_seconds=args.seconds,
-                   reserved_seconds=cap, workers_before=host, idle_mpi_event_helpers=helpers,
+                   reserved_seconds=cap, workers_before=host, idle_mpi_event_helpers=census.parked_helpers,
                    threads=THREADS, storage_before=info, runner=identity(__file__),
                    rss_limit_bytes=rss_limit, memory_before=memory, worker_pause_policy=pause_policy,
                    worker_limit=worker_limit, worker_admission_margin=limits[phase],
                    input_files=[identity(p) for p in command
                                 if p.startswith("/") and "\n" not in p and Path(p).is_file()])
+    if advancing:
+        request["worker_census_policy"] = "ExcludeStoppedWorkersV1"
+        request["stopped_workers_before"] = census.stopped
     if r3_admission:
         request["r3_admission"] = r3_admission["admission"]
     if build_unit:
@@ -727,8 +748,8 @@ def run(root, book, args, began):
     atomic(operation / "request.json", request)
     update(book, lambda ledger: ledger["entries"].update(
         {label: {"status": "RESERVED", "phase": phase, "reserved_seconds": cap}}))
-    peak, peak_workers, code, reason, groups = 0, host, None, None, set()
-    peak_active_workers = host
+    peak, peak_workers, code, reason, groups = 0, census.total, None, None, set()
+    peak_active_workers, peak_stopped_workers = census.active, census.stopped
     job_memory, lowest_headroom = None, None
     pauses, suspended_at, quiet_at, suspended_seconds = [], None, None, 0.
     owned_peak = 0
@@ -756,16 +777,18 @@ def run(root, book, args, began):
                             rank_affinity = observe_rank_affinity(
                                 child_groups, Path(command[3]), affinity["cpu"], rank_affinity)
                         peak = max(peak, rss)
-                        if pause_policy and pause_policy.get("count_stopped_ownership"):
-                            observed_workers, _, owned, stopped = worker_census(groups | {child.pid})
+                        track_ownership = pause_policy and pause_policy.get("count_stopped_ownership")
+                        census = worker_census(groups | {child.pid} if track_ownership else ())
+                        observed_workers = census.active if advancing else census.total
+                        projected_workers = observed_workers
+                        if track_ownership:
                             if suspended_at is None:
-                                owned_peak = max(owned_peak, owned)
-                            projected_workers = observed_workers-stopped+owned_peak
-                        else:
-                            observed_workers = projected_workers = workers()[0]
-                            stopped = 0
-                        peak_workers = max(peak_workers, observed_workers)
-                        peak_active_workers = max(peak_active_workers, observed_workers-stopped)
+                                owned_peak = max(owned_peak, census.owned)
+                            projected_workers = (census.projected_active(owned_peak) if advancing
+                                                 else census.total - census.stopped_owned + owned_peak)
+                        peak_workers = max(peak_workers, census.total)
+                        peak_active_workers = max(peak_active_workers, census.active)
+                        peak_stopped_workers = max(peak_stopped_workers, census.stopped)
                         require(peak <= rss_limit, "RSS_LIMIT")
                         if memory:
                             current = memory_snapshot()
@@ -796,7 +819,7 @@ def run(root, book, args, began):
                                         suspended_at, quiet_at = None, None
                                 else:
                                     quiet_at = None
-                        require((observed_workers-stopped if advancing else observed_workers) <= worker_limit
+                        require(observed_workers <= worker_limit
                                 or (not advancing and suspended_at is not None), "HOST_WORKER_LIMIT")
                         require(time.monotonic() - began < args.seconds, "TIME_LIMIT")
                         current_storage = storage(root, advancing)
@@ -843,6 +866,7 @@ def run(root, book, args, began):
     if advancing:
         event["child_elapsed_seconds"] = child_seconds
         event["peak_active_host_workers"] = peak_active_workers
+        event["peak_stopped_host_workers"] = peak_stopped_workers
         event["peak_r3_science_bytes"] = max(peak_r3_bytes, settled_storage["r3_science_bytes"])
         try:
             check_storage(settled_storage)

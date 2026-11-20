@@ -215,6 +215,12 @@ The worker count stayed above the one-rank admissions throughout the first bound
 
 The second bounded admission wait also expired. All three follow-up samples near 15:36 China Standard Time counted 86 active shared workers, and the ledger and deferred admissions matched the prior snapshot. The Linux account is open with zero reservations. The smallest discriminating continuation is a two-step signed dt=.02 test with the same 2.5e−7 finite-difference displacement. A 1,540 s process cap covers the measured setup, two 650 s native step ceilings and output. It requires one admissible MPI rank on CPU 0. Acceptance at t=.04 would supply the first common-time state for that displacement and justify testing the longer matched interval. [Follow-up census and exact remaining account](wj-h27-linux/task2r-r3-advancing/timestep-matrix/admission-census-20261120T073623Z.json)
 
+### Corrected R3 worker census
+
+A 24.87 s Linux recheck near 16:09 China Standard Time found 80 stopped threads in each of 17 samples. The legacy census included them in its 136–137 count. The stopped threads consumed zero CPU ticks across the interval. The corrected census counted 56–57 workers, including 48–49 runnable or uninterruptible tasks and eight recognized sleeping workers. Host CPU idle time was 62%. The 48 runnable OpenFOAM ranks consumed approximately 48 cores throughout. The prior receipts were recorded using the legacy census. [Process states, CPU deltas and live checks](wj-h27-linux/task2r-r3-advancing/timestep-matrix/admission-census-correction-20261120T080900Z.json)
+
+R3 admission and the live watchdog now exclude explicit stopped states. Recognized sleeping workers and runnable or uninterruptible tasks still count under the existing MPI-helper rules. When the watchdog pauses an R3 job, its observed worker footprint is included in the projected count before resuming. The 80-worker limit and 4-worker admission margin for a pinned single rank still apply. The worker census tests passed locally and on Linux. A Linux smoke check stopped its own single-process test group, counted 57 active workers while it was stopped and reserved a projected 58 for resumption. [Runner and test identities](wj-h27-linux/task2r-r3-advancing/timestep-matrix/admission-census-correction-20261120T080900Z.json)
+
 | Closure gate | Status at worker deferral |
 | --- | --- |
 | CP0 Bf state and admission | MET. Exact Bf replay and independently certified signed initial coefficients and histories bind to the Linux application. |
