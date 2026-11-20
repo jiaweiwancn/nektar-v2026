@@ -26,6 +26,7 @@ protected:
 private:
     std::unique_ptr<WJNative::Coupling>m_coupling;
     WJNative::CoupledHistory m_history;
+    WJNative::CoupledRecoveryTiming m_recoveryTiming;
     WJNative::CoupledStepInfo m_last;
     std::string m_prefix,m_restart,m_initialFields;
     std::string m_perturbationCertificate,m_perturbationSha256;

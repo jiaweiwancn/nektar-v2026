@@ -166,7 +166,10 @@ void WJNativeCoupled::v_DoInitialise(bool dump)
     (void)dump;const double start=Clock();
     try{
         Check(!std::filesystem::exists(m_prefix+".steps.jsonl")&&!std::filesystem::exists(m_prefix+".result.json")&&!std::filesystem::exists(m_prefix+".science-index.json"),"coupled output prefix already exists");
-        if(!m_restart.empty())m_history=m_coupling->ReadHistory(m_restart);
+        if (!m_restart.empty())
+        {
+            m_history = m_coupling->ReadHistory(m_restart, &m_recoveryTiming);
+        }
         else if(!m_initialFields.empty())m_history=m_coupling->ReadInitialFields(m_initialFields,m_steadyMode);
         else m_history=m_coupling->Initialise();
         if(!m_perturbationCertificate.empty())m_history=m_coupling->PerturbInitialHistory(
@@ -277,7 +280,13 @@ void WJNativeCoupled::v_Output()
         WriteScientificIndex();
         double exportSeconds=Clock()-start;std::ofstream report(m_prefix+".result.json");Check(bool(report),"cannot create coupled result");report<<std::setprecision(17)<<"{\"schema\":\"WJH27RegisteredCoupledRunV2\",\"factory\":\"WJNativeCoupledV2\",\"normal_main\":true,\"qualification\":\"execution evidence; closure gates are assessed independently\",\"construction_seconds\":"<<m_constructionSeconds<<",\"initialisation_seconds\":"<<m_initialisationSeconds<<",\"restart\":"<<(m_restart.empty()?"false":"true")<<",\"complete_advancing_seconds\":"<<m_completeAdvanceSeconds<<",\"final_export_seconds\":"<<exportSeconds<<",\"complete_step_seconds\":[";
         for(int i=0;i<int(m_completeStepSeconds.size());++i){if(i)report<<',';report<<m_completeStepSeconds[i];}report<<"],\"recovery_seconds\":[";for(int i=0;i<int(m_recoverySeconds.size());++i){if(i)report<<',';report<<m_recoverySeconds[i];}report<<"],\"rotated_recovery_count\":"<<m_removedRecovery.size()<<",\"retained_recovery\":[";for(int i=0;i<int(m_recovery.size());++i){if(i)report<<',';report<<'\"'<<m_recovery[i].string()<<'\"';}
-        report<<"],\"scientific_index\":"<<RANSWallSolveJson::Quote(m_prefix+".science-index.json")<<",\"scientific_frame_seconds\":"<<m_scientificFrameSeconds<<",\"scientific_index_seconds\":"<<m_scientificIndexSeconds<<",\"scientific_timing_scope\":\"subsets of complete step/export totals; do not add twice\",\"steady_mode\":"<<(m_steadyMode?"true":"false")<<",\"steady_solver\":";if(m_steadyMode)SteadyJSON(report,m_steadyResult,m_steadyPreconditionerMass);else report<<"null";report<<",\"state\":";m_coupling->Report(report,m_history,m_last,m_coefficients);report<<"}\n"<<std::flush;Check(bool(report),"coupled result write failed");report.close();Check(!report.fail(),"coupled result close failed");
+        report << ']';
+        if (!m_restart.empty())
+        {
+            report << ",\"recovery_load_seconds\":" << m_recoveryTiming.readSeconds
+                   << ",\"recovery_cache_rebuild_seconds\":" << m_recoveryTiming.cacheRebuildSeconds;
+        }
+        report<<",\"scientific_index\":"<<RANSWallSolveJson::Quote(m_prefix+".science-index.json")<<",\"scientific_frame_seconds\":"<<m_scientificFrameSeconds<<",\"scientific_index_seconds\":"<<m_scientificIndexSeconds<<",\"scientific_timing_scope\":\"subsets of complete step/export totals; do not add twice\",\"steady_mode\":"<<(m_steadyMode?"true":"false")<<",\"steady_solver\":";if(m_steadyMode)SteadyJSON(report,m_steadyResult,m_steadyPreconditionerMass);else report<<"null";report<<",\"state\":";m_coupling->Report(report,m_history,m_last,m_coefficients);report<<"}\n"<<std::flush;Check(bool(report),"coupled result write failed");report.close();Check(!report.fail(),"coupled result close failed");
     }catch(const std::exception&e){std::cerr<<"WJ-H27 coupled output: "<<e.what()<<std::endl;throw std::runtime_error(e.what());}
 }
 void WJNativeCoupled::v_GenerateSummary(SolverUtils::SummaryList&summary)

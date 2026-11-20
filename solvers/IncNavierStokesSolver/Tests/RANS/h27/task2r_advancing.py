@@ -214,7 +214,7 @@ def prepare(root, label, role, dt, steps, cap, step_cap, rss_gib, peak_mib,
             and (steps == 0 if parity or initial_only else steps > 0)
             and (role == "perturbed") == bool(certificate) and (not initial_only or role == "perturbed")
             and (role == "restart") == bool(recovery) and (phase == "r3-restart") == bool(recovery)
-            and (initial_step >= 2 if recovery else initial_step == 0)
+            and (initial_step > 0 if recovery else initial_step == 0)
             and (parity or not seed or source == native["source"]), "invalid R3 start identity")
     if certificate and not initial_only:
         require(represented_proof is not None, "advancement requires independently certified Bf coefficients")

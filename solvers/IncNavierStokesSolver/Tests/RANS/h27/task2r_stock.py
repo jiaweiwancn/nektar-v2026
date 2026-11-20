@@ -5,6 +5,7 @@
 import argparse
 import math
 from pathlib import Path
+import re
 import statistics
 import xml.etree.ElementTree as ET
 
@@ -17,6 +18,13 @@ from resources import atomic, identity
 from task2r_advancing import read, require, verified
 from task2r_run import GIB
 from task2r_verify import edit
+
+
+DRIVER = re.compile(r"^Total Computation Time = (\S+)s", re.MULTILINE)
+FIELD_NORMS = re.compile(r"^L (?:2|inf) error \(variable (\w+)\) : (\S+)", re.MULTILINE)
+CHECKPOINT = re.compile(r"^Total filters CPU Time:\s+(\S+)s", re.MULTILINE)
+TIMERS = ("Execute", "Advection Terms", "Pressure BCs", "Pressure Forcing",
+          "Pressure Solve", "Viscous Forcing", "Viscous Solve")
 
 
 def inlet_expression(ref):
@@ -97,7 +105,7 @@ def prepare(root, label, coupled_path, cap, rss_gib, svv):
         check = ET.SubElement(filters,"FILTER",TYPE="Checkpoint")
         ET.SubElement(check,"PARAM",NAME="OutputFrequency").text = str(frequency)
     doc.write(session, encoding="unicode")
-    numerical = dict(CheckAbortSteps=1)
+    numerical = dict(CheckAbortSteps=1, IO_FiltersInfoSteps=1)
     if svv == "ExpKernel":
         numerical.update(SVVDiffCoeff=.01, SVVCutoffRatio=.8)
     stock_switch = "False" if svv == "Off" else svv
@@ -120,6 +128,37 @@ def prepare(root, label, coupled_path, cap, rss_gib, svv):
             output="Native stock velocity/pressure fields and on-cadence checkpoint filter")))
 
 
+def timing(log, steps, process):
+    regions = {}
+    for name in TIMERS:
+        row = re.search(rf"^\s*{name}\s+(\S+)\s+\S+\s+\S+\s+(\d+)\s+\d+$", log, re.MULTILINE)
+        if row:
+            regions[name] = dict(seconds=float(row[1]), calls=int(row[2]))
+    driver = DRIVER.search(log)
+    checkpoint = sum(map(float, CHECKPOINT.findall(log)))
+    result = dict(regions=regions, checkpoint_seconds=checkpoint)
+    if not steps or driver is None or "Execute" not in regions or process is None:
+        return result
+    integration = sum(s for _, _, s in steps)
+    projected = sum(row["seconds"] for name, row in regions.items() if name != "Execute")
+    compute = float(driver[1])
+    execute = regions["Execute"]["seconds"]
+    scopes = dict(
+        timed_equations_seconds=projected,
+        other_integration_seconds=integration-projected,
+        checkpoint_seconds=checkpoint,
+        initialisation_and_between_steps_seconds=compute-integration-checkpoint,
+        driver_output_and_diagnostics_seconds=execute-compute,
+        outside_driver_seconds=process-execute,
+    )
+    # Single-rank timers printed with decimal rounding can differ at scope boundaries.
+    require(process > 0 and all(math.isfinite(v) for v in scopes.values())
+            and min(scopes.values()) >= -max(1e-5, 2e-5*process), "stock timing scopes overlap")
+    result.update(disjoint_seconds=scopes, equation_share=integration/process,
+                  inside_driver_fraction=execute/process, integration_seconds=integration,
+                  measured_driver_computation_seconds=compute)
+    return result
+
 def report(root, label, out):
     case = root / "science-r3" / label
     admission = read(case / "admission.json")
@@ -130,13 +169,18 @@ def report(root, label, out):
     steps = [(int(n),float(t),float(s)) for n,t,s in STEP.findall(log)]
     count, dt = admission["requested_steps"], admission["timestep"]
     files = sorted(case.glob("*.fld")) + sorted(case.glob("*.chk"))
+    field_norms = [(var,float(value)) for var,value in FIELD_NORMS.findall(log)]
     stable = (elapsed["status"] == "PASS" and len(steps) == count
               and all(n == i and abs(t-i*dt) < 1e-6 and math.isfinite(s) and s > 0
                       for i,(n,t,s) in enumerate(steps,1))
+              and sorted(name for name,_ in field_norms) == ["p","p","u","u","v","v"]
+              and all(math.isfinite(value) for _,value in field_norms)
               and any(p.suffix == ".fld" for p in files))
+    process = elapsed.get("child_elapsed_seconds")
     atomic(out, dict(schema="WJH27R3ConventionalCostV1", status="MET" if stable else "NOT_MET",
         admission=identity(case / "admission.json"), operation=identity(operation), solver_status=elapsed["status"],
-        process_seconds=elapsed.get("child_elapsed_seconds"), step_report=steps,
+        process_seconds=process, step_report=steps, field_norms=field_norms,
+        timing=timing(log,steps,process),
         warmed_mean_seconds=statistics.mean(s for _,_,s in steps[1:]) if stable and count>1 else None,
         outputs=[identity(p) for p in files if p.is_file()]))
 

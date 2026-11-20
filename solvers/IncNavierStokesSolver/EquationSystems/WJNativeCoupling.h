@@ -20,6 +20,11 @@ struct CoupledHistory
     double time=0,dt=0;
     CoupledState current,previous,advection,previousAdvection;
 };
+struct CoupledRecoveryTiming
+{
+    double readSeconds = 0;
+    double cacheRebuildSeconds = 0;
+};
 struct CoupledOptions
 {
     double dt=.005,linearTolerance=1e-12,nonlinearTolerance=1e-10,mmsBodyAmplitude=0;
@@ -118,7 +123,8 @@ public:
     double TopRadius()const{return m_top;}
     void Store(const CoupledState&state)const;
     void WriteHistory(const std::filesystem::path&path,const CoupledHistory&history)const;
-    CoupledHistory ReadHistory(const std::filesystem::path&path)const;
+    CoupledHistory ReadHistory(const std::filesystem::path &path,
+                               CoupledRecoveryTiming *recoveryTiming = nullptr) const;
     void Report(std::ostream&out,const CoupledHistory&history,const CoupledStepInfo&info,
                 bool includeCoefficients=false)const;
     std::array<double,5> MMSErrors(const CoupledState&state,double time)const;

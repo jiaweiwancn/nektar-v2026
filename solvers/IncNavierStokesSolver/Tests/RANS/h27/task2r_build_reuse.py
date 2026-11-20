@@ -52,8 +52,11 @@ def reuse(root, out, series, previous):
     old_source, new_source = root/f"source-{previous}", root/f"source-{series}"
     driver = compiler(new_build)
     require(driver == compiler(old_build), "configured Release compiler differs")
-    seal_name = ("outlet-campaign-extent-runtime.json" if previous=="outlet-campaign-extent"
-                 else "r3-rebuilt-runtime.json")
+    seal_name = {
+        "outlet-campaign-extent": "outlet-campaign-extent-runtime.json",
+        "r3": "r3-rebuilt-runtime.json",
+        "r3-signed": "r3-signed-runtime.json",
+    }[previous]
     seal = read(root/"evidence"/seal_name)
     executable = verified(seal["application"])
     linked = old_build/"IncNavierStokesSolver"
@@ -152,8 +155,9 @@ if __name__ == "__main__":
     parser.add_argument("root",type=Path)
     parser.add_argument("out",type=Path)
     parser.add_argument("--units",action="store_true")
-    parser.add_argument("--series",choices=("r3","r3-signed"),default="r3")
-    parser.add_argument("--previous",choices=("outlet-campaign-extent","r3"),default="outlet-campaign-extent")
+    parser.add_argument("--series",choices=("r3","r3-signed","r3-timed"),default="r3")
+    parser.add_argument("--previous",choices=("outlet-campaign-extent","r3","r3-signed"),
+                        default="outlet-campaign-extent")
     args = vars(parser.parse_args())
     action = args.pop("units")
     if action:

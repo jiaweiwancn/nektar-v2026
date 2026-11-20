@@ -993,12 +993,15 @@ void Coupling::WriteHistory(const std::filesystem::path&path,const CoupledHistor
     for(const auto*s:{&h.current,&h.previous,&h.advection,&h.previousAdvection})for(const auto*v:{&s->flow,&s->k,&s->epsilon}){std::uint64_t n=v->size();stream.write(reinterpret_cast<const char*>(&n),sizeof(n));stream.write(reinterpret_cast<const char*>(v->data()),n*sizeof(double));}
     auto payload=stream.str();payload+=D::Hash(payload);auto tmp=path.string()+".tmp";int fd=::open(tmp.c_str(),O_WRONLY|O_CREAT|O_EXCL,0600);D::Check(fd>=0,"coupled checkpoint create");D::WriteAll(fd,payload.data(),payload.size());D::Check(::fsync(fd)==0,"coupled checkpoint sync");::close(fd);std::filesystem::rename(tmp,path);D::SyncDirectory(path);
 }
-CoupledHistory Coupling::ReadHistory(const std::filesystem::path&path)const
+CoupledHistory Coupling::ReadHistory(const std::filesystem::path &path,
+                                    CoupledRecoveryTiming *recoveryTiming) const
 {
+    const double readBegan = Clock();
     std::ifstream file(path,std::ios::binary);std::string bytes((std::istreambuf_iterator<char>(file)),{});Require(bytes.size()>64&&bytes.size()<128*1024*1024,"invalid coupled checkpoint size");auto payload=bytes.substr(0,bytes.size()-64);Require(D::Hash(payload)==bytes.substr(bytes.size()-64),"coupled checkpoint checksum mismatch");std::istringstream stream(payload,std::ios::binary);std::string magic,identity;std::getline(stream,magic);std::getline(stream,identity);Require(magic=="WJ_H27_NATIVE_COUPLED_V2"&&identity==m_signature,"coupled checkpoint scientific identity differs");
     CoupledHistory h;stream.read(reinterpret_cast<char*>(&h.step),sizeof(h.step));stream.read(reinterpret_cast<char*>(&h.time),sizeof(double));stream.read(reinterpret_cast<char*>(&h.dt),sizeof(double));
     for(auto*s:{&h.current,&h.previous,&h.advection,&h.previousAdvection}){int which=0;for(auto*v:{&s->flow,&s->k,&s->epsilon}){std::uint64_t n=0;stream.read(reinterpret_cast<char*>(&n),sizeof(n));const int expected=which==0?2*m_flow.VelocitySize()+m_flow.PressureSize():which==1?m_k.Size():m_e.Size();++which;Require(n==std::uint64_t(expected),"coupled checkpoint vector inventory differs");v->resize(n);stream.read(reinterpret_cast<char*>(v->data()),n*sizeof(double));}}
     Require(stream.good()&&stream.peek()==std::char_traits<char>::eof(),"coupled checkpoint has truncated/trailing bytes");CheckHistory(h);
+    const double rebuildBegan = Clock();
     // Reconstruct scientific derived data and compare the explicit histories.
     // Normal factory cold restarts use a new Coupling instance. External
     // same-instance reloads call ResetPreconditioners for cold inverse setup.
@@ -1006,6 +1009,11 @@ CoupledHistory Coupling::ReadHistory(const std::filesystem::path&path)const
     for(const auto pair:{std::make_pair(&adv.flow,&h.advection.flow),std::make_pair(&adv.k,&h.advection.k),std::make_pair(&adv.epsilon,&h.advection.epsilon)})Require((*pair.first-*pair.second).norm()<=1e-12*std::max(pair.first->norm(),1e-30),"restored explicit history differs from current state");
     auto previous=Evaluate(h.previous,h.step>0?(h.step-1)*h.dt:0,true,timing);auto oldAdv=Advection(h.previous,previous.kRules);
     for(const auto pair:{std::make_pair(&oldAdv.flow,&h.previousAdvection.flow),std::make_pair(&oldAdv.k,&h.previousAdvection.k),std::make_pair(&oldAdv.epsilon,&h.previousAdvection.epsilon)})Require((*pair.first-*pair.second).norm()<=1e-12*std::max(pair.first->norm(),1e-30),"restored previous explicit history differs");
+    if (recoveryTiming)
+    {
+        recoveryTiming->readSeconds = rebuildBegan - readBegan;
+        recoveryTiming->cacheRebuildSeconds = Clock() - rebuildBegan;
+    }
     return h;
 }
 

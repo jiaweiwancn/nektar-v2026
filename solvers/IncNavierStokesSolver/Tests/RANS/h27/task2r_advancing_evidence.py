@@ -4,6 +4,7 @@
 
 import argparse
 import json
+import math
 from pathlib import Path
 import statistics
 
@@ -130,7 +131,8 @@ def audit_plan(root, label, native, anchor_label, cap, rss_gib, address_gib, ana
                       "maximum RSS checked separately from inherited virtual memory limits."))
 
 
-def perturbation_plan(root, label, initial_label, parity, certificate, cap, rss_gib, analyzer):
+def perturbation_plan(root, label, initial_label, parity, certificate, cap, rss_gib, analyzer,
+                      maximum_pause=None):
     artifact = root / "science-r3" / label
     start = root / "science-r3" / initial_label
     plan = read(start / "admission.json")
@@ -139,6 +141,7 @@ def perturbation_plan(root, label, initial_label, parity, certificate, cap, rss_
     require(plan["phase"] == "r3-initial" and plan["source"] == basis["source"]
             and read(receipt)["result"]["status"] == "PASS"
             and plan["initial_fields"] == basis["state"] and plan["certificate"] == identity(certificate)
+            and (maximum_pause is None or 0 < maximum_pause <= cap)
             and 0 < rss_gib <= 20 and analyzer.name == "task2r_perturbation_audit.py",
             "represented perturbation audit requires the named step-zero initialized data")
     anchor = verified(plan["bf_binding"])
@@ -152,6 +155,7 @@ def perturbation_plan(root, label, initial_label, parity, certificate, cap, rss_
     artifact.mkdir()
     atomic(artifact / "admission.json", dict(schema="WJH27R3AdmissionV1", label=label,
         phase="r3-audit", role="represented_perturbation", seconds=cap, peak_new_bytes=48*1024**2,
+        maximum_paused_seconds=maximum_pause,
         cpu=bound["affinity"]["cpu"], bf_binding=identity(anchor), rss_limit_bytes=rss_gib*GIB,
         command=command, inputs=[identity(p) for p in file_inputs], anchor=identity(receipt),
         resource_note="Exact rational signed basis and independent dependent-trace and principal checks."))
@@ -260,6 +264,55 @@ def seal_run(root, label, out):
     atomic(out, evidence)
 
 
+def time_matrix(root, startup, perturbation, parity_path, represented, preconditioner, out):
+    from task2r_advancing import STEP_PRECONDITIONERS
+
+    parity = read(parity_path)
+    proof = read(represented)
+    require(preconditioner in STEP_PRECONDITIONERS and parity["status"] == "MET"
+            and proof["status"] == "MET" and proof["base"] == parity["state"]
+            and all(path.parent == root / "evidence" for path in (startup, perturbation, parity_path, out)),
+            "matrix needs a qualified Bf application and represented initial state")
+    prefixes = [read(path) for path in (startup, perturbation)]
+    levels = []
+    for index, (prefix, role) in enumerate(zip(prefixes, ("startup", "perturbed"))):
+        require(prefix["status"] == "PASS" and prefix["role"] == role and prefix["accepted_steps"] >= 3,
+                "matrix bracket needs both completed evolving prefixes")
+        steps = prefix["observed"]
+        require(len({frame["hashes"]["state_sha256"] for frame in prefix["frames"].values()}) >= 4
+                and all(step["time"] > 0 for step in steps), "matrix prefix has no demonstrated evolution")
+        plan = read(verified(prefix["admission"]))
+        trial = plan["timestep"]
+        if index == 0:
+            dt = trial
+        require(trial == dt, "the evolving prefixes have different bracket anchors")
+        operation = read(verified(prefix["operation"]))
+        require(operation["result"]["status"] == "PASS", "prefix operation did not pass")
+        measured = prefix["timing"]
+        step_cost = measured["complete_step_seconds"]
+        setup = measured["construction_seconds"] + measured["initialisation_seconds"] + measured["final_export_seconds"]
+        pause_fraction = operation["result"]["worker_paused_seconds"] / operation["result"]["seconds"]
+        starts = operation["request"]["storage_before"]["r3_science_bytes"]
+        peak = operation["result"]["peak_r3_science_bytes"] - starts
+        peak_mib = max(550, math.ceil(peak / 1024 ** 2) + 150)
+        for denominator in (1, 2, 4):
+            n = 4 * denominator
+            duration = setup + sum(step_cost[:2]) + (n-2) * max(step_cost[2:])
+            cap = math.ceil(1.35 * duration + 60)
+            require(cap <= 7200, "measured matrix admission exceeds the per-process advancement limit")
+            levels.append(dict(role=role, label=f"r3-time-{role}-{denominator}", timestep=dt/denominator,
+                steps=n, common_steps=[2*denominator, n], science_stride=2*denominator,
+                recovery_stride=2*denominator, estimated_elapsed_seconds=duration, operation_cap_seconds=cap,
+                maximum_pause_seconds=min(cap-1, max(180, min(cap//2, math.ceil(1.2*pause_fraction*cap)))),
+                rss_gib=16, peak_mib=peak_mib, native_step_cap_seconds=plan["native_step_cap_seconds"]))
+    require(len(levels) == 6 and prefixes[0]["label"] != prefixes[1]["label"], "matrix inventory differs")
+    atomic(out, dict(schema="WJH27R3ProspectiveTimeMatrixV1", prefixes=[identity(startup), identity(perturbation)],
+        parity=identity(parity_path), represented_perturbation=identity(represented),
+        preconditioner=preconditioner, timesteps=[dt, dt/2, dt/4], common_times=[2*dt, 4*dt], levels=levels,
+        finer_witness="Require D/8 at both common times if D/4 is the first viable timestep.",
+        evaluation="Compare the two transients separately at both times across the full owner inventory."))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("root", type=Path)
@@ -272,17 +325,20 @@ def main():
                         ("rss_gib", int), ("address_gib", int), ("analyzer", Path))),
         ("perturbation-plan", (("label", str), ("initial_label", str), ("parity", Path),
                                ("certificate", Path), ("cap", int), ("rss_gib", int), ("analyzer", Path))),
+        ("time-matrix", (("startup", Path), ("perturbation", Path), ("parity_path", Path),
+                         ("represented", Path), ("preconditioner", str), ("out", Path))),
         ("seal", (("label", str), ("out", Path))),
     ):
         mode = modes.add_parser(name)
         for key, datatype in args:
             mode.add_argument(key, type=datatype)
-        if name == "audit-plan":
+        if name in ("audit-plan", "perturbation-plan"):
             mode.add_argument("--maximum-pause", type=int)
     args = vars(parser.parse_args())
     action = args.pop("action")
-    method = dict(zip(("bind-runtime", "bind-parity", "layout", "audit-plan", "perturbation-plan", "seal"),
-                      (bind_runtime, bind_parity, layout_packet, audit_plan, perturbation_plan, seal_run)))[action]
+    method = {"bind-runtime": bind_runtime, "bind-parity": bind_parity, "layout": layout_packet,
+              "audit-plan": audit_plan, "perturbation-plan": perturbation_plan,
+              "time-matrix": time_matrix, "seal": seal_run}[action]
     method(**args)
 
 

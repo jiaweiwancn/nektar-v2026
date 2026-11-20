@@ -35,7 +35,8 @@ def common_time(coarse, fine, coarse_step, fine_step, out, seconds):
     deadline = time.monotonic()+seconds
     a, sa, ba, ia = accepted(coarse,coarse_step)
     b, sb, bb, ib = accepted(fine,fine_step)
-    inputs = ("role","source","application","geometry","table","initial_fields","certificate")
+    inputs = ("role","source","application","geometry","table","initial_fields","certificate",
+              "represented_proof","step_preconditioner")
     require(a["role"] in ("startup","perturbed") and all(a.get(k) == b.get(k) for k in inputs)
             and sa["elements"] == sb["elements"] and a["timestep"] >= b["timestep"]
             and abs(sa["time"]-sb["time"]) <= 2e-13*max(1.,sa["time"]),
@@ -73,7 +74,8 @@ def evolution(case, out, seconds):
                        "context for measured evolution and do not govern this change."))
 
 
-def cold(uninterrupted, resumed, split, checkpoint, out, seconds):
+def cold(uninterrupted, resumed, split, checkpoint, out, seconds, uninterrupted_audit=None,
+         resumed_audit=None):
     deadline = time.monotonic()+seconds
     parent = read(uninterrupted/"state.science-index.json")
     child = read(resumed/"state.science-index.json")
@@ -81,10 +83,11 @@ def cold(uninterrupted, resumed, split, checkpoint, out, seconds):
     pa, p, pf, pi = accepted(uninterrupted,parent["final_step"])
     ca, c, cf, ci = accepted(resumed,child["final_step"])
     sa, s, sf, si = accepted(split,first["final_step"])
+    invariant = ("geometry", "table", "application", "source", "step_preconditioner")
+    initial = ("role", "initial_fields", "certificate", "represented_proof")
     require(p["step"] == c["step"] > s["step"] >= 2 and exact_clock(p,c)
-            and pa["geometry"] == ca["geometry"] == sa["geometry"]
-            and pa["initial_fields"] == sa["initial_fields"] and pa.get("certificate") == sa.get("certificate")
-            and pa["source"] == ca["source"] == sa["source"]
+            and all(pa[k] == ca[k] == sa[k] for k in invariant)
+            and all(pa.get(k) == sa.get(k) for k in initial)
             and p["signature"] == s["signature"] and ca["restart"] == identity(checkpoint)
             and checkpoint == split/f"state.recovery-{s['step']}.bin"
             and s["step"] % sa["recovery_stride"] == 0,
@@ -95,10 +98,15 @@ def cold(uninterrupted, resumed, split, checkpoint, out, seconds):
     path = verified({k:imported[k] for k in ("path","bytes","sha256")})
     imported_state, _ = po.load_native(path)
     _, recovery = binary_history(checkpoint,s,s["dt"],deadline)
-    histories_ok = exact_clock(imported_state,s) and all(
+    histories_ok = exact_clock(imported_state,s) and exact_clock(recovery,s) and all(
         recovery["hashes"][role] == s[digest] == imported_state[digest] for role,digest in HASH_KEYS.items())
     run = read(resumed/"state.result.json")
     require(run["restart"] and run["normal_main"] and not run["steady_mode"], "cold branch did not reload in normal main")
+    load = run["recovery_load_seconds"]
+    rebuild = run["recovery_cache_rebuild_seconds"]
+    initialisation = run["initialisation_seconds"]
+    require(load > 0 and rebuild > 0 and load + rebuild <= initialisation,
+            "recovery reader and cache timings are absent or overlap")
     endings = []
     for case, state in ((uninterrupted,p),(resumed,c)):
         final = case/"state.final.bin"
@@ -133,14 +141,30 @@ def cold(uninterrupted, resumed, split, checkpoint, out, seconds):
             and all(value["scaled_MAX"] <= limit for role in ("current","previous")
                     for value in differences[role].values())
             and all(value <= limit for row in caches.values() for value in row.values()))
-    restart_report = dict(schema="WJH27R3ColdRecoveryV1",status="MET" if histories_ok and norms_ok else "NOT_MET",
+    audits = []
+    for audit_path, endpoint in ((uninterrupted_audit, pf), (resumed_audit, cf)):
+        if audit_path is None:
+            continue
+        result = read(audit_path)
+        require(result["schema"] == "WJH27IndependentPhysicalTransientOracleV1"
+                and result["native"] == endpoint and result["table"] == pa["table"],
+                "cold endpoint audit has different scientific inputs")
+        audits.append(dict(artifact=identity(audit_path),
+                           equations=result.get("accepted_time_discrete_equations_status", "NOT_MET")))
+    status = "MET"
+    if not histories_ok or not norms_ok or any(row["equations"] != "MET" for row in audits):
+        status = "NOT_MET"
+    elif len(audits) != 2:
+        status = "OPEN"
+    restart_report = dict(schema="WJH27R3ColdRecoveryV1",status=status,
         state_histories_match_recovery=histories_ok,bitwise_terminal_roles=exact,limit=limit,
         endpoint_time=p["time"],endpoint_step=p["step"],on_cadence_recovery=recovery,
         positive_time_frames=[pf,cf,sf],scientific_indices=[pi,ci,si],imported_frame=identity(path),
         endpoint_histories=[d0,d1],coefficient_changes=differences,dependent_changes=dependent,physical_changes=physical,
-        cache_changes=caches,recovery_initialisation_seconds=run["initialisation_seconds"],
+        cache_changes=caches,recovery_initialisation_seconds=initialisation,
+        recovery_load_seconds=load,recovery_cache_rebuild_seconds=rebuild,
         scheduled_split_write_seconds=read(split/"state.result.json")["recovery_seconds"],
-        independent_equation_audits_required=True)
+        endpoint_equation_audits=audits)
     atomic(out,restart_report)
 
 
@@ -159,6 +183,8 @@ def main():
     for key in ("uninterrupted","resumed","split","checkpoint","out"):
         cmd.add_argument(key,type=Path)
     cmd.add_argument("--seconds",required=True,type=float)
+    cmd.add_argument("--uninterrupted-audit", type=Path)
+    cmd.add_argument("--resumed-audit", type=Path)
     args=vars(parser.parse_args())
     action=args.pop("action")
     {"common-time":common_time,"cold":cold,"evolution":evolution}[action](**args)

@@ -607,7 +607,8 @@ def run(root, book, args, began):
             limits[phase] = 4 if affinity else 3
             host, helpers = workers()
         elif phase == "build":
-            series = "r3-signed" if label.startswith("r3-signed-") else "r3"
+            series = next((name for name in ("r3-signed", "r3-timed")
+                           if label.startswith(f"{name}-native-")), "r3")
             build_root = root / f"build-{series}"
             if label.startswith(f"{series}-native-unit-"):
                 path = build_root / "r3-unit-plans.json"
