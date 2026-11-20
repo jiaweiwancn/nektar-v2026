@@ -1,0 +1,1101 @@
+{
+  "account": {
+    "charged_seconds": 112065.34485540172,
+    "nonprotected_remaining": 12538.655144598277,
+    "reserved_seconds": 0,
+    "tranche_remaining": 2611.9458642032114
+  },
+  "analysis_sources": [
+    {
+      "bytes": 13309,
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v30/solvers/IncNavierStokesSolver/Tests/RANS/h27/task2r_time_comparison.py",
+      "sha256": "a9328cdb9f5e0e29c5f8a41f17c16789a39e2b90fd0427c6ac97bde3d2b9f85f"
+    },
+    {
+      "bytes": 29252,
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v30/solvers/IncNavierStokesSolver/Tests/RANS/h27/implicit_algorithm_check.py",
+      "sha256": "ce3f5953667cd7072e7eef867d58d6273af6ada1b0bd96549c4b9782e1999a24"
+    }
+  ],
+  "artifact": {
+    "bytes": 15502,
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-signed-cold-comparison.json",
+    "sha256": "d722105f3b62bc72e6be840ecf36a2f2c6ba816342505259bc71253675d8722a"
+  },
+  "audits": {
+    "resumed": {
+      "admission": {
+        "bytes": 3669,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-signed-cold-resumed/admission.json",
+        "sha256": "c2961a862293ed156bb6603382b3a27a67885bddd99f130b241dd366455037f6"
+      },
+      "audit": {
+        "bytes": 48836603,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-signed-cold-resumed/audit.json",
+        "sha256": "7dcbcc634d24492492c1384bf31be312ac0a988965337f12413695c9f5365408"
+      },
+      "boundary_status": {
+        "accepted": "MET",
+        "input_current": "MET",
+        "input_previous": "MET"
+      },
+      "core": {
+        "accounting_identity_max_error": 1.4686124929261557e-14,
+        "accounting_identity_status": "MET",
+        "budgets": {
+          "combined_mechanical_plus_k": {
+            "current_destruction": 0.06668281539578526,
+            "current_molecular_work": 0.00473935134966156,
+            "current_pressure_and_isotropic_k_divergence": 1.259885912680792e-11,
+            "explicit_momentum_work_plus_scalar_outflow": 0.0015147926809049533,
+            "raw_current_production_cancels_algebraically": true,
+            "reaction_balance": -3.3458653785799685e-13,
+            "sampled_roughness_work": -0.00008262734468817494,
+            "scope": "Discrete current-velocity BDF/EX identity; no instantaneous or reference P=E constraint",
+            "storage": 0.000003932361753090149
+          },
+          "epsilon": {
+            "actual_production_minus_destruction_not_constrained": true,
+            "all_owner_gradient_balance": 1.3233842777052654e-8,
+            "assembly_identity_error_over_scale": 2.0677408236317943e-15,
+            "current_owner_gradient_outward_diffusion_all": -0.0008509346354598969,
+            "current_owner_gradient_outward_diffusion_essential": -0.0008574830686755212,
+            "current_prescribed_outward_diffusion": 0.000006534992023718559,
+            "current_source": -0.0008569455379775154,
+            "essential_outward_diffusion_reaction": -0.0008574828613262209,
+            "essential_reaction_scope": "combined inlet and H; corner reactions are not uniquely separable",
+            "explicit_advective_outflow": 6.338554696809528e-7,
+            "fixed_scale": 0.0008921218172888306,
+            "free_test_action": 1.7347388060571605e-16,
+            "mixed_physical_balance": -2.0734912875228217e-10,
+            "reaction_balance": 1.7162920390445535e-16,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage": -0.000006631524144522423
+          },
+          "k": {
+            "actual_production_minus_destruction_not_constrained": true,
+            "all_owner_gradient_balance": 9.171246293604595e-8,
+            "assembly_identity_error_over_scale": 2.6388335270910936e-15,
+            "current_owner_gradient_outward_diffusion_all": 2.7037629828711223e-7,
+            "current_owner_gradient_outward_diffusion_essential": 1.783141701006602e-7,
+            "current_prescribed_outward_diffusion": 0,
+            "current_source": -0.000006109039760208284,
+            "essential_outward_diffusion_reaction": 1.7866383651678749e-7,
+            "essential_reaction_scope": "inlet",
+            "explicit_advective_outflow": -0.000013041271521706255,
+            "fixed_scale": 0.008683215205497202,
+            "free_test_action": 1.1428079109549924e-15,
+            "mixed_physical_balance": -3.4966525040567897e-10,
+            "reaction_balance": 1.1657214703622056e-15,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage": 0.000006753567926146904
+          },
+          "mass": {
+            "assembly_identity_error": 3.6038005556688676e-19,
+            "boundary_outflow": 7.72715225139109e-14,
+            "integrated_divergence": 7.745092421032279e-14,
+            "strong_divergence_RMS": 0.000026244842677366723,
+            "weak_continuity": 1.862317250107261e-14
+          },
+          "mechanical": {
+            "G_energy_definition": "|u|^2/2 for BE; (|u_n|^2+|2u_n-u_(n-1)|^2)/4 for BDF2",
+            "G_energy_rate": -0.000002821207346885034,
+            "advection_note": "Current velocity tests explicit old-state advection; history kinetic-energy outflow is not substituted for this work",
+            "all_owner_gradient_balance": -0.000006878931288395451,
+            "assembly_identity_error_over_scale": 6.396675472464546e-16,
+            "cross_advection_integration_identity_error_over_scale": 1.4686124929261557e-14,
+            "current_all_owner_gradient_traction_work": 0.07303057674051609,
+            "current_essential_owner_gradient_traction_work": 0.04346531547836394,
+            "current_full_stress_work": 0.07141605771828592,
+            "current_isotropic_k_divergence_work": 1.2598861928073942e-11,
+            "current_modified_pressure_divergence_work": -2.8012660226940047e-18,
+            "current_molecular_work": 0.00473935134966156,
+            "current_pressure_and_known_k_roughness_work": -0.000013328016704716934,
+            "current_raw_turbulent_production_work": 0.06667670635602539,
+            "discrete_time_energy_identity_error_over_scale": 9.384565833203537e-20,
+            "essential_traction_reaction_work": 0.043465303558791205,
+            "explicit_cross_integration_boundary": 0.003055668579869497,
+            "explicit_cross_integration_bulk": 0.0015278346274418826,
+            "explicit_domain_advection_current_velocity_test_work": 0.0015278339524266596,
+            "explicit_history_kinetic_advective_flux": 0.0015278342847122595,
+            "explicit_sampled_convective_roughness_work": -0.00006929932798345801,
+            "fixed_scale": 0.06502499999999997,
+            "free_velocity_test_action": -3.3579385371061876e-13,
+            "mixed_physical_balance": -1.1919908490809483e-8,
+            "nonnegative_BDF_dissipation": 1.1738282848070894e-12,
+            "physical_kinetic_energy_BDF_rate": -0.0000028211787025420873,
+            "prescribed_boundary_traction_work": 0.029558394250772245,
+            "reaction_balance": -3.3575225932835906e-13,
+            "sampled_roughness_work": -0.00008262734468817494,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage_velocity_test_work": -0.0000028212061730567555
+          }
+        },
+        "history_cache_checks": {
+          "comparisons": {
+            "accepted_current": {
+              "all_coefficient_dual": {
+                "epsilon": 1.5869636710146215e-13,
+                "k": 1.5444684893854596e-13,
+                "momentum": 6.323492251029819e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.5855866231444905e-13,
+                "k": 1.5430174562670303e-13,
+                "momentum": 6.313435190613038e-14
+              }
+            },
+            "input_current": {
+              "all_coefficient_dual": {
+                "epsilon": 1.5569835625286064e-13,
+                "k": 1.5647692222721803e-13,
+                "momentum": 6.32756659562526e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.5554394543733767e-13,
+                "k": 1.5633201048032522e-13,
+                "momentum": 6.317515255236502e-14
+              }
+            },
+            "input_previous": {
+              "all_coefficient_dual": {
+                "epsilon": 1.53510685016469e-13,
+                "k": 1.544410476422617e-13,
+                "momentum": 6.322656319352393e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.533554300718568e-13,
+                "k": 1.543012544211229e-13,
+                "momentum": 6.312593590218562e-14
+              }
+            }
+          },
+          "limit": 1e-10,
+          "scope": "Every signed global coefficient, including constrained rows; independent reconstruction enters equations instead of caches",
+          "status": "MET"
+        },
+        "residuals": {
+          "continuity": 1.862317250107261e-14,
+          "epsilon": 1.11809058643996e-10,
+          "k": 1.4475927431475934e-10,
+          "momentum": 2.635390568159963e-10
+        },
+        "transient_residual_status": "MET"
+      },
+      "operation": {
+        "child_elapsed_seconds": 732.3265627819928,
+        "exit": 0,
+        "job_memory": {
+          "ancestor_limits": [
+            {
+              "current": 93728768,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1599.scope"
+            },
+            {
+              "current": 397887090688,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice"
+            },
+            {
+              "current": 398169145344,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice"
+            },
+            {
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup"
+            }
+          ],
+          "job_cgroup": "/user.slice/user-1000.slice/session-1599.scope",
+          "mem_available_bytes": 379025555456,
+          "mem_total_bytes": 540840640512
+        },
+        "log": {
+          "bytes": 268,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-signed-cold-resumed/command.log",
+          "sha256": "b33924f53a2f843c0132ff4b5e10c047659cc08ffed0bbf03d2661aa6342195f"
+        },
+        "minimum_memory_headroom_bytes": 366643544064,
+        "peak_active_host_workers": 61,
+        "peak_host_workers": 141,
+        "peak_owned_workers": 1,
+        "peak_r3_science_bytes": 3983996701,
+        "peak_stopped_host_workers": 80,
+        "peak_tree_rss_bytes": 4496711680,
+        "phase": "r3-audit",
+        "reason": null,
+        "rss_limit_bytes": 10737418240,
+        "seconds": 733.2454200460052,
+        "status": "PASS",
+        "worker_limit": 80,
+        "worker_paused_seconds": 0,
+        "worker_pauses": []
+      },
+      "profiles_status": "MET",
+      "receipt": {
+        "bytes": 6388,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-signed-cold-resumed/receipt.json",
+        "sha256": "316212c88bf92ef54863d124fd063b16498c7454e13998b5cf67e30a3d093d90"
+      },
+      "result": {
+        "accepted_history_boundary_status": "MET",
+        "accepted_time_discrete_equations_status": "MET",
+        "elapsed_seconds": 724.7216096429911,
+        "independent_orders": [
+          20,
+          24
+        ],
+        "independent_quadrature_status": "MET",
+        "input_history_identity": {
+          "advection_sha256": "fe34df7940061cffe19960acab4eef17a2501484a4bf00639026d61405dca915",
+          "current_sha256": "2288ce2113ad0f21e5136ac8b40f4df716e683f4dae48c6c612a1843aac3da60",
+          "previous_advection_sha256": "04d98936dc21158f5c713e54f7bdb5f9474916808bdf5130686877bc65154046",
+          "previous_sha256": "bfda8b6a28144f4d4adeb3ed3f92dc16ddb24ad96e3ea5341313ce7d7fdd0d0e",
+          "provenance": "Input current and advection bind the accepted output previous hashes. Earlier input state is evaluated and hashed here; cross-packet lineage requires its earlier artifact.",
+          "step": 3,
+          "time": 0.06
+        },
+        "maximum_resident_bytes": 4495147008,
+        "memory_cap_bytes": 8589934592,
+        "native": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-1-fd-fourfold-restart/state.science-4.json",
+          "sha256": "c8b5c065dd66b21bf71db2e5f75ff01e4441e71dedbffdd96b08efccf433b4f0"
+        },
+        "reason": "Accepted-step independent equations, caches, and budgets recorded; full H27 qualification remains NOT_MET.",
+        "scheme": {
+          "alpha": 75,
+          "dt": 0.02,
+          "explicit_coefficients": [
+            2,
+            -1
+          ],
+          "mass_coefficients": [
+            1.5,
+            -2,
+            0.5
+          ],
+          "name": "BDF2_EX2",
+          "startup": false
+        },
+        "source": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py",
+          "sha256": "b8fa6a4676ae39865abb14d75d9b27bd8ff3795542f6dc0eedb7747ebcda9631"
+        },
+        "status": "NOT_MET",
+        "table": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+          "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+        }
+      }
+    },
+    "uninterrupted": {
+      "admission": {
+        "bytes": 3649,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-signed-cold-uninterrupted/admission.json",
+        "sha256": "bbdd004de472808862e7b6ea2db62343a8b1bc77c734c649486c5ad3b12b131d"
+      },
+      "audit": {
+        "bytes": 48836070,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-signed-cold-uninterrupted/audit.json",
+        "sha256": "ad45153c553a3470e046c9b85f05e1bc79afebb6c90387eb9ee39b59eef83d25"
+      },
+      "boundary_status": {
+        "accepted": "MET",
+        "input_current": "MET",
+        "input_previous": "MET"
+      },
+      "core": {
+        "accounting_identity_max_error": 8.378827769587327e-14,
+        "accounting_identity_status": "MET",
+        "budgets": {
+          "combined_mechanical_plus_k": {
+            "current_destruction": 0.06668281539578529,
+            "current_molecular_work": 0.00473935134966156,
+            "current_pressure_and_isotropic_k_divergence": 1.2598804268763456e-11,
+            "explicit_momentum_work_plus_scalar_outflow": 0.0015147926808992279,
+            "raw_current_production_cancels_algebraically": true,
+            "reaction_balance": -5.299122338508848e-13,
+            "sampled_roughness_work": -0.00008262734468381414,
+            "scope": "Discrete current-velocity BDF/EX identity; no instantaneous or reference P=E constraint",
+            "storage": 0.000003932359161609359
+          },
+          "epsilon": {
+            "actual_production_minus_destruction_not_constrained": true,
+            "all_owner_gradient_balance": 1.3233842779329479e-8,
+            "assembly_identity_error_over_scale": 2.946090315559467e-15,
+            "current_owner_gradient_outward_diffusion_all": -0.0008509346354598863,
+            "current_owner_gradient_outward_diffusion_essential": -0.0008574830686755131,
+            "current_prescribed_outward_diffusion": 0.000006534992023718559,
+            "current_source": -0.0008569455379775154,
+            "essential_outward_diffusion_reaction": -0.0008574828613262115,
+            "essential_reaction_scope": "combined inlet and H; corner reactions are not uniquely separable",
+            "explicit_advective_outflow": 6.338554696808715e-7,
+            "fixed_scale": 0.0008921218172888306,
+            "free_test_action": 1.753416775231548e-16,
+            "mixed_physical_balance": -2.073491288607024e-10,
+            "reaction_balance": 1.7271340607694086e-16,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage": -0.0000066315241445305944
+          },
+          "k": {
+            "actual_production_minus_destruction_not_constrained": true,
+            "all_owner_gradient_balance": 9.171245752084912e-8,
+            "assembly_identity_error_over_scale": 4.524390358182566e-15,
+            "current_owner_gradient_outward_diffusion_all": 2.7037629345894486e-7,
+            "current_owner_gradient_outward_diffusion_essential": 1.7831417010922895e-7,
+            "current_prescribed_outward_diffusion": 0,
+            "current_source": -0.000006109039760176314,
+            "essential_outward_diffusion_reaction": 1.78663836532056e-7,
+            "essential_reaction_scope": "inlet",
+            "explicit_advective_outflow": -0.000013041271521761766,
+            "fixed_scale": 0.008683215205497202,
+            "free_test_action": 5.54674423284621e-16,
+            "mixed_physical_balance": -3.496658288665015e-10,
+            "reaction_balance": 5.939606784383968e-16,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage": 0.000006753567925647356
+          },
+          "mass": {
+            "assembly_identity_error": 1.1824972921445488e-18,
+            "boundary_outflow": 6.750155989720952e-14,
+            "integrated_divergence": 6.809022183045523e-14,
+            "strong_divergence_RMS": 0.000026244842677373828,
+            "weak_continuity": 1.9083021569275538e-14
+          },
+          "mechanical": {
+            "G_energy_definition": "|u|^2/2 for BE; (|u_n|^2+|2u_n-u_(n-1)|^2)/4 for BDF2",
+            "G_energy_rate": -0.0000028212099378662916,
+            "advection_note": "Current velocity tests explicit old-state advection; history kinetic-energy outflow is not substituted for this work",
+            "all_owner_gradient_balance": -0.000006878931374437736,
+            "assembly_identity_error_over_scale": 1.8104989048778346e-15,
+            "cross_advection_integration_identity_error_over_scale": 8.378827769587327e-14,
+            "current_all_owner_gradient_traction_work": 0.07303057673800094,
+            "current_essential_owner_gradient_traction_work": 0.04346531547595899,
+            "current_full_stress_work": 0.07141605771828574,
+            "current_isotropic_k_divergence_work": 1.259880696585884e-11,
+            "current_modified_pressure_divergence_work": -2.6970953841146713e-18,
+            "current_molecular_work": 0.00473935134966156,
+            "current_pressure_and_known_k_roughness_work": -0.000013328016700267327,
+            "current_raw_turbulent_production_work": 0.06667670635602563,
+            "discrete_time_energy_identity_error_over_scale": 1.5748827545759257e-19,
+            "essential_traction_reaction_work": 0.04346530355638477,
+            "explicit_cross_integration_boundary": 0.0030556685798401872,
+            "explicit_cross_integration_bulk": 0.001527834627424646,
+            "explicit_domain_advection_current_velocity_test_work": 0.0015278339524209897,
+            "explicit_history_kinetic_advective_flux": 0.001527834284699825,
+            "explicit_sampled_convective_roughness_work": -0.00006929932798354682,
+            "fixed_scale": 0.06502499999999997,
+            "free_velocity_test_action": -5.303884668380336e-13,
+            "mixed_physical_balance": -1.192010472966798e-8,
+            "nonnegative_BDF_dissipation": 1.1738282845577263e-12,
+            "physical_kinetic_energy_BDF_rate": -0.0000028211812935232893,
+            "prescribed_boundary_traction_work": 0.02955839425077224,
+            "reaction_balance": -5.305061945293232e-13,
+            "sampled_roughness_work": -0.00008262734468381414,
+            "status": "OBSERVED_REQUIRES_RESOLUTION_CHECK",
+            "storage_velocity_test_work": -0.000002821208764037997
+          }
+        },
+        "history_cache_checks": {
+          "comparisons": {
+            "accepted_current": {
+              "all_coefficient_dual": {
+                "epsilon": 1.56468859159225e-13,
+                "k": 1.5829626825001977e-13,
+                "momentum": 6.321312075987763e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.5633415917334313e-13,
+                "k": 1.581592136285999e-13,
+                "momentum": 6.311241471857705e-14
+              }
+            },
+            "input_current": {
+              "all_coefficient_dual": {
+                "epsilon": 1.5487642051780257e-13,
+                "k": 1.5196851518298557e-13,
+                "momentum": 6.321450395474537e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.547215707356611e-13,
+                "k": 1.5183682159569924e-13,
+                "momentum": 6.311391733691646e-14
+              }
+            },
+            "input_previous": {
+              "all_coefficient_dual": {
+                "epsilon": 1.53510685016469e-13,
+                "k": 1.544410476422617e-13,
+                "momentum": 6.322656319352393e-14,
+                "pressure_load_MAX": 0
+              },
+              "free_dual": {
+                "continuity": 0,
+                "epsilon": 1.533554300718568e-13,
+                "k": 1.543012544211229e-13,
+                "momentum": 6.312593590218562e-14
+              }
+            }
+          },
+          "limit": 1e-10,
+          "scope": "Every signed global coefficient, including constrained rows; independent reconstruction enters equations instead of caches",
+          "status": "MET"
+        },
+        "residuals": {
+          "continuity": 1.9083021569275538e-14,
+          "epsilon": 1.118153716001154e-10,
+          "k": 1.4542023234350213e-10,
+          "momentum": 2.630705224789846e-10
+        },
+        "transient_residual_status": "MET"
+      },
+      "operation": {
+        "child_elapsed_seconds": 738.249633075,
+        "exit": 0,
+        "job_memory": {
+          "ancestor_limits": [
+            {
+              "current": 41488384,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/session-1599.scope"
+            },
+            {
+              "current": 397659947008,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice"
+            },
+            {
+              "current": 397942001664,
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup/user.slice"
+            },
+            {
+              "memory.high": null,
+              "memory.max": null,
+              "path": "/sys/fs/cgroup"
+            }
+          ],
+          "job_cgroup": "/user.slice/user-1000.slice/session-1599.scope",
+          "mem_available_bytes": 379122995200,
+          "mem_total_bytes": 540840640512
+        },
+        "log": {
+          "bytes": 268,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-signed-cold-uninterrupted/command.log",
+          "sha256": "74c17b16ba484ccfffcdb74c83b7737d4edd9ba59071110fe4421ecdd46cec8c"
+        },
+        "minimum_memory_headroom_bytes": 364887359488,
+        "peak_active_host_workers": 62,
+        "peak_host_workers": 142,
+        "peak_owned_workers": 1,
+        "peak_r3_science_bytes": 3935156429,
+        "peak_stopped_host_workers": 80,
+        "peak_tree_rss_bytes": 4497014784,
+        "phase": "r3-audit",
+        "reason": null,
+        "rss_limit_bytes": 10737418240,
+        "seconds": 739.3601412370044,
+        "status": "PASS",
+        "worker_limit": 80,
+        "worker_paused_seconds": 0,
+        "worker_pauses": []
+      },
+      "profiles_status": "MET",
+      "receipt": {
+        "bytes": 6393,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-audit-signed-cold-uninterrupted/receipt.json",
+        "sha256": "ea0a0e2881fcadbe79e9f32fb560bdb1db8f5c074f172df6692e205b09fd4d8f"
+      },
+      "result": {
+        "accepted_history_boundary_status": "MET",
+        "accepted_time_discrete_equations_status": "MET",
+        "elapsed_seconds": 731.3774810509931,
+        "independent_orders": [
+          20,
+          24
+        ],
+        "independent_quadrature_status": "MET",
+        "input_history_identity": {
+          "advection_sha256": "336fa21e51cddd7a596b9880506daf256b45b929fc277196df893306f1748bb4",
+          "current_sha256": "c0c4964e8d47232d3171238462c8425a3a62689022c5f9c75a40b4338e33c1b8",
+          "previous_advection_sha256": "04d98936dc21158f5c713e54f7bdb5f9474916808bdf5130686877bc65154046",
+          "previous_sha256": "bfda8b6a28144f4d4adeb3ed3f92dc16ddb24ad96e3ea5341313ce7d7fdd0d0e",
+          "provenance": "Input current and advection bind the accepted output previous hashes. Earlier input state is evaluated and hashed here; cross-packet lineage requires its earlier artifact.",
+          "step": 3,
+          "time": 0.06
+        },
+        "maximum_resident_bytes": 4494733312,
+        "memory_cap_bytes": 8589934592,
+        "native": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-1-fd-fourfold/state.science-4.json",
+          "sha256": "eb6dd9eee77fdb3c689184ee18ce618c8455dcf5badd3bedc18d842c4c7145a8"
+        },
+        "reason": "Accepted-step independent equations, caches, and budgets recorded; full H27 qualification remains NOT_MET.",
+        "scheme": {
+          "alpha": 75,
+          "dt": 0.02,
+          "explicit_coefficients": [
+            2,
+            -1
+          ],
+          "mass_coefficients": [
+            1.5,
+            -2,
+            0.5
+          ],
+          "name": "BDF2_EX2",
+          "startup": false
+        },
+        "source": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py",
+          "sha256": "b8fa6a4676ae39865abb14d75d9b27bd8ff3795542f6dc0eedb7747ebcda9631"
+        },
+        "status": "NOT_MET",
+        "table": {
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+          "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+        }
+      }
+    }
+  },
+  "census": {
+    "active": 57,
+    "owned": 0,
+    "parked_helpers": 102,
+    "stopped": 80,
+    "stopped_owned": 0,
+    "total": 137
+  },
+  "comparison_operation": {
+    "child_elapsed_seconds": 88.55260220298078,
+    "exit": 0,
+    "job_memory": null,
+    "log": {
+      "bytes": 0,
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-compare-signed-cold/command.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "minimum_memory_headroom_bytes": null,
+    "peak_active_host_workers": 61,
+    "peak_host_workers": 141,
+    "peak_owned_workers": 1,
+    "peak_r3_science_bytes": 3983996701,
+    "peak_stopped_host_workers": 80,
+    "peak_tree_rss_bytes": 2555006976,
+    "phase": "analysis",
+    "reason": null,
+    "rss_limit_bytes": 8589934592,
+    "seconds": 89.50494711499778,
+    "status": "PASS",
+    "worker_limit": 80,
+    "worker_paused_seconds": 0,
+    "worker_pauses": []
+  },
+  "comparison_receipt": {
+    "bytes": 5242,
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-compare-signed-cold/receipt.json",
+    "sha256": "22e1824c7e38a4a019b1c92ba804681bce13a1b027274480601362063107200d"
+  },
+  "forecast": {
+    "bytes": 2342,
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-signed-cold-endpoints-forecast.json",
+    "sha256": "c7c00a69bcb0c3b1b53ba1cfe8794d05a070231b0b0e08a8b2f73db95d6bb811"
+  },
+  "ledger": {
+    "bytes": 765587,
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/accounting.json",
+    "sha256": "f8bddd5afca290fa72945b381f23efd4a1131eaa7d8060955ccb7662dc831d3c"
+  },
+  "maxima": {
+    "coefficient": 2.2731607974260193e-8,
+    "dependent": 7.08315913597007e-15,
+    "explicit_mass_dual": 3.3868502570239904e-14,
+    "physical": 0.000009550746425065425
+  },
+  "result": {
+    "bitwise_terminal_roles": false,
+    "cache_changes": {
+      "advection": {
+        "U": 1.1110357159725307e-14,
+        "epsilon": 3.1578368715021606e-14,
+        "k": 3.123981775042063e-14
+      },
+      "previous_advection": {
+        "U": 1.3015284735885725e-14,
+        "epsilon": 3.3868502570239904e-14,
+        "k": 3.218500985707535e-14
+      }
+    },
+    "coefficient_changes": {
+      "advection": {
+        "Pi": {
+          "scaled_MAX": 0,
+          "scaled_coefficient_RMS": 0
+        },
+        "U": {
+          "scaled_MAX": 1.1219870417130979e-15,
+          "scaled_coefficient_RMS": 2.127732544347413e-17
+        },
+        "epsilon": {
+          "scaled_MAX": 2.633804303432161e-17,
+          "scaled_coefficient_RMS": 2.0287312514782845e-18
+        },
+        "k": {
+          "scaled_MAX": 1.969259272825728e-15,
+          "scaled_coefficient_RMS": 5.382390955898652e-17
+        }
+      },
+      "current": {
+        "Pi": {
+          "scaled_MAX": 1.5690360143854255e-8,
+          "scaled_coefficient_RMS": 1.7585534160361018e-10
+        },
+        "U": {
+          "scaled_MAX": 2.5094765352969126e-14,
+          "scaled_coefficient_RMS": 9.1523845271795e-16
+        },
+        "epsilon": {
+          "scaled_MAX": 1.5005698486603452e-14,
+          "scaled_coefficient_RMS": 9.702253842549598e-16
+        },
+        "k": {
+          "scaled_MAX": 6.915557729877279e-14,
+          "scaled_coefficient_RMS": 1.6794088092899743e-15
+        }
+      },
+      "previous": {
+        "Pi": {
+          "scaled_MAX": 2.2731607974260193e-8,
+          "scaled_coefficient_RMS": 1.963612286993466e-10
+        },
+        "U": {
+          "scaled_MAX": 2.9134914448376986e-14,
+          "scaled_coefficient_RMS": 8.880558064620411e-16
+        },
+        "epsilon": {
+          "scaled_MAX": 2.3236006854723732e-14,
+          "scaled_coefficient_RMS": 4.148912124467137e-16
+        },
+        "k": {
+          "scaled_MAX": 1.2179983988712645e-14,
+          "scaled_coefficient_RMS": 4.1115220222079223e-16
+        }
+      },
+      "previous_advection": {
+        "Pi": {
+          "scaled_MAX": 0,
+          "scaled_coefficient_RMS": 0
+        },
+        "U": {
+          "scaled_MAX": 1.4436991202447058e-15,
+          "scaled_coefficient_RMS": 2.184002899788786e-17
+        },
+        "epsilon": {
+          "scaled_MAX": 3.219094148639308e-17,
+          "scaled_coefficient_RMS": 1.857326437526963e-18
+        },
+        "k": {
+          "scaled_MAX": 1.969259272825728e-15,
+          "scaled_coefficient_RMS": 5.184846844516109e-17
+        }
+      }
+    },
+    "dependent_changes": {
+      "Ew_over_local_reference": 7.08315913597007e-15,
+      "Gamma_over_epsilon_H": 6.087014390154328e-15,
+      "K_over_Kin": 4.1354444729340285e-15,
+      "cutoff_over_H": 2.0816681711721685e-16,
+      "gate_pass": true,
+      "native_Gamma_pointwise_gap_new": 3.233467481271242e-8,
+      "native_Gamma_pointwise_gap_old": 3.233467500000517e-8,
+      "native_epsilon_H_difference": 5.993368014921184e-15,
+      "pointwise_gap_note": "Diagnostic only: endpoint-constrained native Gamma projection need not equal nonlinear Gamma pointwise; exact projected trace/current equations are separate oracle gates."
+    },
+    "endpoint_equation_audits": [
+      {
+        "artifact": {
+          "bytes": 48836070,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-signed-cold-uninterrupted/audit.json",
+          "sha256": "ad45153c553a3470e046c9b85f05e1bc79afebb6c90387eb9ee39b59eef83d25"
+        },
+        "equations": "MET"
+      },
+      {
+        "artifact": {
+          "bytes": 48836603,
+          "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-signed-cold-resumed/audit.json",
+          "sha256": "7dcbcc634d24492492c1384bf31be312ac0a988965337f12413695c9f5365408"
+        },
+        "equations": "MET"
+      }
+    ],
+    "endpoint_histories": [
+      {
+        "bytes": 11014450,
+        "dt": 0.02,
+        "hashes": {
+          "advection": "7e5ced54e38efb1a79275b9b2ceb570978ffa462396fca7cf9dfb11cc69a4854",
+          "current": "571a9cc8f279a8cedf2546ddae97dc9baf856b7e1691adcb4a4beb9579e89754",
+          "previous": "c0c4964e8d47232d3171238462c8425a3a62689022c5f9c75a40b4338e33c1b8",
+          "previous_advection": "336fa21e51cddd7a596b9880506daf256b45b929fc277196df893306f1748bb4"
+        },
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-1-fd-fourfold/state.final.bin",
+        "payload_sha256": "c7ce3004b8ec82b2561e6a886c66eac58470ccab3ce1cac30ca13bde99817123",
+        "sha256": "56b15f22aaac5c5251cdfcc06dcf8f63b649db75c9574c38d69e0d3f628a5b66",
+        "signature": "c1b486170d60a9a2928c68613ca137b3977d92c0c0ea9a62417d9094beede573",
+        "step": 4,
+        "time": 0.08
+      },
+      {
+        "bytes": 11014450,
+        "dt": 0.02,
+        "hashes": {
+          "advection": "67b88be8324ff18ea7819ed459895e93173408a72c490802d234cd2cfb211406",
+          "current": "bbe182002fba3e8bd2c2c6651885278e7bec95aa5c19d5cf1fdb2ee815d28167",
+          "previous": "2288ce2113ad0f21e5136ac8b40f4df716e683f4dae48c6c612a1843aac3da60",
+          "previous_advection": "fe34df7940061cffe19960acab4eef17a2501484a4bf00639026d61405dca915"
+        },
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-1-fd-fourfold-restart/state.final.bin",
+        "payload_sha256": "28b29eb149c57100d1fe031b5e9625b2c26af23eaa471c496d239f1d2aa75f45",
+        "sha256": "725c57783fa3c62d0546d24fee8061c64a6ced64b937fe770eb9c502387c05d8",
+        "signature": "c1b486170d60a9a2928c68613ca137b3977d92c0c0ea9a62417d9094beede573",
+        "step": 4,
+        "time": 0.08
+      }
+    ],
+    "endpoint_step": 4,
+    "endpoint_time": 0.08,
+    "imported_frame": {
+      "bytes": 30060526,
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-1-fd-fourfold-restart/state.science-2.json",
+      "sha256": "4ee38c4aeb5ba6e433244105a4c93e718469d361a87b8c31f87fe5b3dd71f73e"
+    },
+    "limit": 1e-8,
+    "on_cadence_recovery": {
+      "bytes": 11014450,
+      "dt": 0.02,
+      "hashes": {
+        "advection": "04d98936dc21158f5c713e54f7bdb5f9474916808bdf5130686877bc65154046",
+        "current": "bfda8b6a28144f4d4adeb3ed3f92dc16ddb24ad96e3ea5341313ce7d7fdd0d0e",
+        "previous": "d22cc45520272d26340ce7df2898292961da00ecc03332a6a8584dfecd7ac081",
+        "previous_advection": "c1c0291af12d87be32e1a2a439bf0e7d75f42a27695512ebbf3a39dd05dd5fac"
+      },
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-fd-fourfold-perturbed/state.recovery-2.bin",
+      "payload_sha256": "d0c0bc8b92eee397173a70032ff3bcacd4a83737f423e2d459b9f4f8b6382ef4",
+      "sha256": "eafbfdc651db53d398025eb3ca4b263322ae9fb85b4c6f24410a384c8d871583",
+      "signature": "c1b486170d60a9a2928c68613ca137b3977d92c0c0ea9a62417d9094beede573",
+      "step": 2,
+      "time": 0.04
+    },
+    "physical_changes": {
+      "current": {
+        "gradient_gate": false,
+        "norms": {
+          "outer/epsilon": {
+            "MAX": 1.2406550906380804e-14,
+            "RMS": 1.5774849219004203e-16,
+            "component_MAX": [
+              1.2406550906380804e-14
+            ],
+            "component_RMS": [
+              1.5774849219004203e-16
+            ],
+            "limits": [
+              1e-8,
+              1e-8
+            ],
+            "measure": 494.06250000000176,
+            "status": "MET"
+          },
+          "outer/gradepsilon": {
+            "MAX": 3.322874946205418e-12,
+            "RMS": 9.809296238021439e-15,
+            "component_MAX": [
+              3.322874946205418e-12
+            ],
+            "component_RMS": [
+              9.809296238021439e-15
+            ],
+            "measure": 494.06250000000176
+          },
+          "whole/Pi": {
+            "MAX": 9.691899918296125e-10,
+            "RMS": 2.977704008144735e-11,
+            "component_MAX": [
+              9.691899918296125e-10
+            ],
+            "component_RMS": [
+              2.977704008144735e-11
+            ],
+            "limits": [
+              1e-8,
+              1e-8
+            ],
+            "measure": 497.81250000000193,
+            "status": "MET"
+          },
+          "whole/U": {
+            "MAX": 6.313205542878132e-15,
+            "RMS": 3.5776729688140357e-16,
+            "component_MAX": [
+              6.313205542878132e-15
+            ],
+            "component_RMS": [
+              3.5776729688140357e-16
+            ],
+            "limits": [
+              1e-8,
+              1e-8
+            ],
+            "measure": 497.81250000000193,
+            "status": "MET"
+          },
+          "whole/gradPi": {
+            "MAX": 0.00000807840660518293,
+            "RMS": 7.581379859260619e-9,
+            "component_MAX": [
+              0.00000807840660518293
+            ],
+            "component_RMS": [
+              7.581379859260619e-9
+            ],
+            "measure": 497.81250000000193
+          },
+          "whole/gradU": {
+            "MAX": 1.1676598640760856e-11,
+            "RMS": 1.1717959882120117e-14,
+            "component_MAX": [
+              1.1676598640760856e-11
+            ],
+            "component_RMS": [
+              1.1717959882120117e-14
+            ],
+            "measure": 497.81250000000193
+          },
+          "whole/gradk": {
+            "MAX": 2.7112666602655542e-11,
+            "RMS": 1.3969098825092748e-14,
+            "component_MAX": [
+              2.7112666602655542e-11
+            ],
+            "component_RMS": [
+              1.3969098825092748e-14
+            ],
+            "measure": 497.81250000000193
+          },
+          "whole/k": {
+            "MAX": 1.325850352930178e-14,
+            "RMS": 1.5202437732781994e-16,
+            "component_MAX": [
+              1.325850352930178e-14
+            ],
+            "component_RMS": [
+              1.5202437732781994e-16
+            ],
+            "limits": [
+              1e-8,
+              1e-8
+            ],
+            "measure": 497.81250000000193,
+            "status": "MET"
+          }
+        },
+        "owner_grid": 17,
+        "pressure_alignment": "NONE; native pressure level is retained",
+        "pressure_mean_over_tau": [
+          0.017605854255943694,
+          0.01760585425846434
+        ],
+        "quadrature": 20
+      },
+      "previous": {
+        "gradient_gate": false,
+        "norms": {
+          "outer/epsilon": {
+            "MAX": 1.5511586434431368e-14,
+            "RMS": 7.90341545807353e-17,
+            "component_MAX": [
+              1.5511586434431368e-14
+            ],
+            "component_RMS": [
+              7.90341545807353e-17
+            ],
+            "limits": [
+              1e-8,
+              1e-8
+            ],
+            "measure": 494.06250000000176,
+            "status": "MET"
+          },
+          "outer/gradepsilon": {
+            "MAX": 5.046941422361164e-12,
+            "RMS": 1.4128527171606981e-14,
+            "component_MAX": [
+              5.046941422361164e-12
+            ],
+            "component_RMS": [
+              1.4128527171606981e-14
+            ],
+            "measure": 494.06250000000176
+          },
+          "whole/Pi": {
+            "MAX": 1.3719835891431405e-9,
+            "RMS": 3.7473777306244607e-11,
+            "component_MAX": [
+              1.3719835891431405e-9
+            ],
+            "component_RMS": [
+              3.7473777306244607e-11
+            ],
+            "limits": [
+              1e-8,
+              1e-8
+            ],
+            "measure": 497.81250000000193,
+            "status": "MET"
+          },
+          "whole/U": {
+            "MAX": 6.050715484207103e-15,
+            "RMS": 3.5180697895378347e-16,
+            "component_MAX": [
+              6.050715484207103e-15
+            ],
+            "component_RMS": [
+              3.5180697895378347e-16
+            ],
+            "limits": [
+              1e-8,
+              1e-8
+            ],
+            "measure": 497.81250000000193,
+            "status": "MET"
+          },
+          "whole/gradPi": {
+            "MAX": 0.000009550746425065425,
+            "RMS": 9.54792859219603e-9,
+            "component_MAX": [
+              0.000009550746425065425
+            ],
+            "component_RMS": [
+              9.54792859219603e-9
+            ],
+            "measure": 497.81250000000193
+          },
+          "whole/gradU": {
+            "MAX": 1.79045246532604e-11,
+            "RMS": 1.3524559557771471e-14,
+            "component_MAX": [
+              1.79045246532604e-11
+            ],
+            "component_RMS": [
+              1.3524559557771471e-14
+            ],
+            "measure": 497.81250000000193
+          },
+          "whole/gradk": {
+            "MAX": 2.1370300324002925e-11,
+            "RMS": 1.4215992756200613e-14,
+            "component_MAX": [
+              2.1370300324002925e-11
+            ],
+            "component_RMS": [
+              1.4215992756200613e-14
+            ],
+            "measure": 497.81250000000193
+          },
+          "whole/k": {
+            "MAX": 6.6045735400350926e-15,
+            "RMS": 7.691767673403687e-17,
+            "component_MAX": [
+              6.6045735400350926e-15
+            ],
+            "component_RMS": [
+              7.691767673403687e-17
+            ],
+            "limits": [
+              1e-8,
+              1e-8
+            ],
+            "measure": 497.81250000000193,
+            "status": "MET"
+          }
+        },
+        "owner_grid": 17,
+        "pressure_alignment": "NONE; native pressure level is retained",
+        "pressure_mean_over_tau": [
+          0.017603786543016017,
+          0.0176037865752144
+        ],
+        "quadrature": 20
+      }
+    },
+    "positive_time_frames": [
+      {
+        "bytes": 61024515,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-1-fd-fourfold/state.science-4.json",
+        "sha256": "eb6dd9eee77fdb3c689184ee18ce618c8455dcf5badd3bedc18d842c4c7145a8"
+      },
+      {
+        "bytes": 61023995,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-1-fd-fourfold-restart/state.science-4.json",
+        "sha256": "c8b5c065dd66b21bf71db2e5f75ff01e4441e71dedbffdd96b08efccf433b4f0"
+      },
+      {
+        "bytes": 61024926,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-fd-fourfold-perturbed/state.science-2.json",
+        "sha256": "3bcb139f074c8307bc38cf00cf741e14125be6d46b1fc4d9ad896152c0459c80"
+      }
+    ],
+    "recovery_cache_rebuild_seconds": 27.830398471007356,
+    "recovery_initialisation_seconds": 27.98164437498781,
+    "recovery_load_seconds": 0.08818937197793275,
+    "scheduled_split_write_seconds": [
+      0.24421023498871364
+    ],
+    "schema": "WJH27R3ColdRecoveryV1",
+    "scientific_indices": [
+      {
+        "bytes": 1823,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-1-fd-fourfold/state.science-index.json",
+        "sha256": "13d5b13882dc502e6e8fce8249c3de7fdc2a42c2c4f915b7febc937e5936d30f"
+      },
+      {
+        "bytes": 1500,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-1-fd-fourfold-restart/state.science-index.json",
+        "sha256": "605d99aa7a641efa69d3d1c88687abc4d8b54aa774a697660bba90061b7906e5"
+      },
+      {
+        "bytes": 1787,
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-fd-fourfold-perturbed/state.science-index.json",
+        "sha256": "f3c0f19f86da8a161ef867a6605992fa09894a7b751169b532927d4f581344ea"
+      }
+    ],
+    "state_histories_match_recovery": true,
+    "status": "NOT_MET"
+  },
+  "schema": "WJH27R3AuditedSignedColdComparisonV1",
+  "storage": {
+    "free_bytes": 3446989590528,
+    "r3_science_bytes": 3983996701,
+    "science_bytes": 8463861449,
+    "source_build_runtime_bytes": 751264358
+  }
+}

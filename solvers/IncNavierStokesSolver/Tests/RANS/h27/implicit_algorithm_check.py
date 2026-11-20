@@ -321,7 +321,7 @@ def dependent_delta(a, b, data, owners, ref, deadline):
     return result
 
 
-def cache_duals(old, new, data, ref, deadline):
+def cache_duals(old, new, data, ref, deadline, *, cache_names=CACHE_NAMES):
     sizes = dict(u=data['sizes'][0], k=data['sizes'][2], epsilon=data['sizes'][3])
     masses = {key: po.SparseMass(size) for key, size in sizes.items()}
     for e in data['elements']:
@@ -335,7 +335,7 @@ def cache_duals(old, new, data, ref, deadline):
     volume = (data['geometry']['right']-data['geometry']['left'])*data['geometry']['top']
     evolume = (data['geometry']['right']-data['geometry']['left'])*(data['geometry']['top']-ref.H)
     result = {}; n = data['sizes'][0]
-    for label in CACHE_NAMES:
+    for label in cache_names:
         clock(deadline); d = {key: old[label][key]-new[label][key] for key in old[label]}
         energy = sum(float(v@factors['u'].solve(v)) for v in (d['flow'][:n], d['flow'][n:2*n]))
         result[label] = dict(U=math.sqrt(max(0., energy)/volume),

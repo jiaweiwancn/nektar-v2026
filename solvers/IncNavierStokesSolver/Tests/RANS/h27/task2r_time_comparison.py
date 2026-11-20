@@ -168,7 +168,8 @@ def cold(uninterrupted, resumed, split, checkpoint, out, seconds, uninterrupted_
         dependent = dependent_delta(old["current"],new["current"],p,owners,ref,deadline)
         physical = {role:physical_delta(old[role],new[role],p,ref,20,17,deadline)
                     for role in ("current","previous")}
-        caches = cache_duals(old,new,p,ref,deadline)
+        caches = cache_duals(old, new, p, ref, deadline,
+                            cache_names=("advection", "previous_advection"))
     limit = 1e-8
     # The exact route proves all physical and cache differences simultaneously.
     norms_ok = exact

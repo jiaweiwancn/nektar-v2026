@@ -1,0 +1,72 @@
+{
+  "schema": "WJH27R3AdmissionV1",
+  "label": "r3-audit-signed-cold-resumed",
+  "phase": "r3-audit",
+  "role": "accepted_time_discrete",
+  "seconds": 1450,
+  "peak_new_bytes": 201326592,
+  "rss_limit_bytes": 10737418240,
+  "address_space_gib": 8,
+  "cpu": 0,
+  "maximum_paused_seconds": 520,
+  "bf_binding": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/r3-bf-binding.json",
+    "bytes": 8452,
+    "sha256": "7350dfccdb51114f34aa940ea53e7352717309843d95ff3bcdbd90a69386392a"
+  },
+  "command": [
+    "python3",
+    "-B",
+    "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py",
+    "--native",
+    "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-1-fd-fourfold-restart/state.science-4.json",
+    "--table",
+    "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+    "--out",
+    "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-audit-signed-cold-resumed/audit.json",
+    "--seconds",
+    "1435",
+    "--address-space-gib",
+    "8"
+  ],
+  "anchor": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-time-perturbed-1-fd-fourfold-restart/receipt.json",
+    "bytes": 7302,
+    "sha256": "1df14db2f80437ea152b6feda41146fef6dcc94b3b296c85ca2ce2ca290b39dd"
+  },
+  "inputs": [
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science-r3/r3-time-perturbed-1-fd-fourfold-restart/state.science-4.json",
+      "bytes": 61023995,
+      "sha256": "c8b5c065dd66b21bf71db2e5f75ff01e4441e71dedbffdd96b08efccf433b4f0"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+      "bytes": 139982,
+      "sha256": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/tools/r3-v8/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py",
+      "bytes": 31248,
+      "sha256": "b8fa6a4676ae39865abb14d75d9b27bd8ff3795542f6dc0eedb7747ebcda9631"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/r3-time-perturbed-1-fd-fourfold-restart/receipt.json",
+      "bytes": 7302,
+      "sha256": "1df14db2f80437ea152b6feda41146fef6dcc94b3b296c85ca2ce2ca290b39dd"
+    }
+  ],
+  "resource_anchors": [
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/evidence/outlet-campaign-x15-parity.json",
+      "bytes": 3857,
+      "sha256": "f5fe3f6f2e372243a3048d148cc655a40caa85777741cd2f000928a9e676eab3"
+    },
+    {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/operations/outlet-qual-bf-continue-2-steady/receipt.json",
+      "bytes": 7589,
+      "sha256": "0c6b63973ebc62ec6a34dc5c2e362d0f532543fd4bd3a23690cceb48599deec9"
+    }
+  ],
+  "resource_note": "Single audit process, sequential independent Gauss orders 20 and 24; maximum RSS checked separately from inherited virtual memory limits."
+}

@@ -307,11 +307,19 @@ The separate .02 process read the on-cadence t=.04 checkpoint and reproduced eve
 
 The cold comparison uses the explicit current and previous advection roles read from both restart binaries. The endpoint audits retain the measured 8 GiB address-space cap and 10 GiB tree-RSS allowance. The account has 14,107.076 s nonprotected, including 2,054.366 s staged, with 3,600 s protected. [Live accounting and verified cold inputs](wj-h27-linux/task2r-r3-advancing/timestep-matrix/fourfold-signed-cold-process.json)
 
-| Closure gate | Status after the signed cold process |
+### Audited signed cold-restart result
+
+The uninterrupted and resumed .02 signed endpoints each passed the independent t=.08 BDF2/EX2 equations and physical checks. Momentum residuals were 2.631e−10 and 2.635e−10. Both endpoint histories bind to their native frame and recovery files, and the resumed input matches the four imported roles. Recovery wrote the scheduled split in .244210 s. The replay read it in .088189 s and rebuilt its history caches in 27.830398 s. [Independent audits, clocks and write/read timings](wj-h27-linux/task2r-r3-advancing/timestep-matrix/signed-cold-endpoint-result.json)
+
+The matched endpoint gate is NOT_MET at 1e−8. The maximum modified-pressure coefficient difference is 2.273e−8 in the previous state. The maximum pointwise modified-pressure field difference is 1.372e−9, and its scaled gradient maximum is 9.551e−6. The largest velocity, k and outer-epsilon field differences are under 1.6e−14. The largest dependent wall/trace difference is 7.083e−15 and the explicit advection mass-dual maximum is 3.387e−14. The analysis evaluates the two actual advection roles in the binary. [Exact state, field, trace and mass-dual norms](wj-h27-linux/task2r-r3-advancing/timestep-matrix/evidence/r3-signed-cold-comparison.json)
+
+The uninterrupted run reused its inverse factors at the first step after t=.04, while the restarted process assembled cold factors at that step. A repeat with the existing maximum-use control set to three will test matched refreshes at the step boundary, since the four accepted .02 steps each used three preconditioner bases. This control keeps the 1e−8 comparison and independent equation thresholds. The earlier .005 signed failure used the default displacement. The next matrix admission tests .005 with 4e−6. The ledger has 12,538.655 s nonprotected, of which 2,611.946 s is staged. [Audit and ledger snapshot](wj-h27-linux/task2r-r3-advancing/timestep-matrix/signed-cold-endpoint-result.json)
+
+| Closure gate | Status after the audited signed cold comparison |
 | --- | --- |
 | CP0 Bf state and admission | MET. Exact Bf replay and independently certified signed initial coefficients and histories bind to the Linux application. |
 | CP1 positive-time equations and costs | Quiet and retained-inlet prefixes accepted three steps at dt=.04. Earlier signed independent BE/EX1 and BDF2/EX2 audits passed. The larger-displacement .02 signed run supplies a two-step warm timing block. Its adjusted endpoints still require their independent audits. |
-| CP2 timestep and recovery | OPEN. The original .02 and .01 startup frames pass the independently audited t=.04 comparison. The larger displacement produced signed .02 frames at both common times and extended .01 to t=.03. The .02 signed cold process reached the matched endpoint. Its independent norm and equation comparison, the finer witness and timestep choice remain open. |
+| CP2 timestep and recovery | OPEN. The original .02 and .01 startup frames pass the independently audited t=.04 comparison. The larger displacement produced signed .02 frames at both common times and extended .01 to t=.03. The .02 cold replay passed the independent equations and failed the pressure endpoint tolerance. The finest signed refinement, timestep choice and restart remedy remain open. |
 | CP3 affordability and stock | Stock was repeated at .04 and on the matched .02 retained-inlet interval. The tested .02 startup projects above the day target under its measured rate. Selected-recipe stock, cold and per-trajectory costs remain open. |
 | R4 admission | HELD. A passing R3 scientific recipe and a complete affordable pilot case set remain prerequisites. |
 
