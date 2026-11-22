@@ -17,6 +17,77 @@ namespace
 using T=Eigen::Triplet<double>;
 void Check(bool ok,const char*text){if(!ok)throw std::runtime_error(text);}
 double Clock(){return std::chrono::duration<double>(std::chrono::steady_clock::now().time_since_epoch()).count();}
+
+class WorkTimer
+{
+public:
+    explicit WorkTimer(double *total) : m_total(total), m_start(total ? Clock() : 0.) {}
+    ~WorkTimer()
+    {
+        if (m_total)
+        {
+            *m_total += Clock() - m_start;
+        }
+    }
+
+private:
+    double *m_total;
+    double m_start;
+};
+
+template <typename Apply, typename Precondition, typename CountIteration>
+Vec KrylovCorrection(const Vec &residual, int dimension, double projectedTolerance,
+                     Apply apply, Precondition precondition, CountIteration countIteration)
+{
+    const double beta = residual.norm();
+    RequireLinear(std::isfinite(beta) && beta > 0, "invalid Krylov residual");
+    Mat v(residual.size(), dimension + 1), z(residual.size(), dimension);
+    Mat h = Mat::Zero(dimension + 1, dimension);
+    Vec rhs = Vec::Zero(dimension + 1), best;
+    v.col(0) = residual / beta;
+    rhs[0] = beta;
+    int used = 0;
+    for (int j = 0; j < dimension; ++j)
+    {
+        z.col(j) = precondition(v.col(j));
+        Vec action = apply(z.col(j));
+        for (int pass = 0; pass < 2; ++pass)
+        {
+            for (int i = 0; i <= j; ++i)
+            {
+                const double value = v.col(i).dot(action);
+                h(i, j) += value;
+                action.noalias() -= value * v.col(i);
+            }
+        }
+        h(j + 1, j) = action.norm();
+        if (h(j + 1, j) > 0)
+        {
+            v.col(j + 1) = action / h(j + 1, j);
+        }
+        const auto column = h.topLeftCorner(j + 2, j + 1);
+        best = column.colPivHouseholderQr().solve(rhs.head(j + 2));
+        RequireLinear(best.allFinite(), "nonfinite Krylov least-squares solve");
+        countIteration();
+        used = j + 1;
+        if ((rhs.head(j + 2) - column * best).norm() < projectedTolerance ||
+            h(j + 1, j) < 1e-28)
+        {
+            break;
+        }
+    }
+    return z.leftCols(used) * best;
+}
+
+bool SameCompressedMatrix(const Sparse &a, const Sparse &b)
+{
+    return a.rows() == b.rows() && a.cols() == b.cols() && a.nonZeros() == b.nonZeros() &&
+           a.isCompressed() && b.isCompressed() &&
+           std::equal(a.outerIndexPtr(), a.outerIndexPtr() + a.outerSize() + 1, b.outerIndexPtr()) &&
+           std::equal(a.innerIndexPtr(), a.innerIndexPtr() + a.nonZeros(), b.innerIndexPtr()) &&
+           std::equal(a.valuePtr(), a.valuePtr() + a.nonZeros(), b.valuePtr());
+}
+
 Sparse Gather(const Sparse&a,const std::vector<int>&ids)
 {
     std::vector<int>inverse(a.rows(),-1);for(int i=0;i<int(ids.size());++i)inverse[ids[i]]=i;
@@ -49,10 +120,13 @@ std::pair<Vec,Vec>Gauss(int n)
 }
 }
 
-MixedFlow::MixedFlow(const std::vector<MultiRegions::ContFieldSharedPtr>&fields,Geometry geometry)
-    :m_fields(fields),m_core({fields.at(0),fields.at(0),fields.at(2)},geometry)
+MixedFlow::MixedFlow(const std::vector<MultiRegions::ContFieldSharedPtr>&fields,
+                     Geometry geometry, int pressureCorrectors)
+    :m_fields(fields),m_core({fields.at(0),fields.at(0),fields.at(2)},geometry),
+     m_pressureCorrectors(pressureCorrectors)
 {
     Check(fields.size()==3,"H27 MixedFlow requires serial u,v,p fields");
+    Check(pressureCorrectors >= 0, "negative number of mixed pressure correctors");
     const int n=VelocitySize(),np=PressureSize();auto vm=fields[1]->GetLocalToGlobalMap();
     Check(vm->GetNumGlobalCoeffs()==n,"component global Q3 spaces have different dimensions");
     Check(fields[1]->GetExpSize()==int(Elements().size()),"component element inventories differ");
@@ -109,6 +183,20 @@ Sparse MixedFlow::System(double alpha,const Sparse&k,double awf)const
     if(m_gauge)for(int i=0;i<PressureSize();++i){t.emplace_back(offset+i,Size()-1,PressureMean()[i]);t.emplace_back(Size()-1,offset+i,PressureMean()[i]);}
     Sparse a(Size(),Size());a.setFromTriplets(t.begin(),t.end());return a;
 }
+
+Vec MixedFlow::VelocityDiagonal(double alpha, const Sparse &diffusion) const
+{
+    Vec diagonal(PressureOffset());
+    const int n = VelocitySize();
+    for (int i = 0; i < diagonal.size(); ++i)
+    {
+        const int id = m_freeFull[i];
+        diagonal[i] = alpha * m_core.Mass().coeff(id % n, id % n) +
+                      diffusion.coeff(id, id);
+    }
+    return diagonal;
+}
+
 Vec MixedFlow::ProjectNative(const Function&f,const MultiRegions::ContFieldSharedPtr&field)const
 {
     Array<OneD,NekDouble>x(field->GetTotPoints()),z(x.size()),dummy(x.size()),v(x.size()),coef(field->GetNcoeffs());
@@ -158,14 +246,37 @@ SolveInfo MixedFlow::RawResidualNorm(const Vec&residual)const
 {
     Check(residual.size()==Size()&&residual.allFinite(),"invalid raw mixed residual");
     SolveInfo info;Vec full=Vec::Zero(2*VelocitySize()+PressureSize());for(int i=0;i<PressureOffset();++i)full[m_freeFull[i]]=residual[i];info.momentum=VelocityDual(full);
-    Vec v=residual.segment(PressureOffset(),PressureSize()),z=m_pressureRiesz.solve(v);
-    Check(m_pressureRiesz.info()==Eigen::Success&&z.allFinite(),"raw continuity Riesz solve failed");
-    info.continuity=std::sqrt(std::max(0.,v.dot(z))/m_volume);
+    info.continuity=ContinuityNorm(residual.segment(PressureOffset(),PressureSize()));
     info.gauge=m_gauge?std::abs(residual[Size()-1])/(.01*m_volume):0;return info;
 }
-double MixedFlow::Prepare(const Sparse&a,bool amdOrdering)
+
+double MixedFlow::ContinuityNorm(const Vec &residual) const
 {
-    double began=Clock();Sparse factor=a;
+    const Vec riesz = m_pressureRiesz.solve(residual);
+    Check(m_pressureRiesz.info() == Eigen::Success && riesz.allFinite(),
+          "raw continuity Riesz solve failed");
+    return std::sqrt(std::max(0., residual.dot(riesz)) / m_volume);
+}
+
+bool MixedFlow::NeedsFactor(double change) const
+{
+    return (!m_factor && !m_pressureCorrection) || change > .25 ||
+           m_lastIterations > 30 ||
+           (m_initialIterations > 0 && m_lastIterations > 2 * m_initialIterations);
+}
+
+double MixedFlow::Prepare(const Sparse &a, bool amdOrdering, MixedFlowWork *work,
+                          const Vec &positiveDiagonal)
+{
+    const double began = Clock();
+    WorkTimer setup(work ? &work->setup : nullptr);
+    if (m_pressureCorrectors > 0)
+    {
+        ResetPreconditioner();
+        PreparePressureCorrection(a, positiveDiagonal, work);
+        return Clock() - began;
+    }
+    Sparse factor=a;
     if(m_gauge){int pivot=PressureOffset()+m_pressurePivot,last=Size()-1;std::vector<T>t;for(int c=0;c<a.outerSize();++c)for(Sparse::InnerIterator it(a,c);it;++it)if(it.row()!=pivot&&it.col()!=pivot&&it.row()!=last&&it.col()!=last)t.emplace_back(it.row(),it.col(),it.value());t.emplace_back(pivot,pivot,1);t.emplace_back(last,last,1);factor.setZero();factor.setFromTriplets(t.begin(),t.end());}
     ResetPreconditioner();
     if(amdOrdering)
@@ -182,8 +293,136 @@ double MixedFlow::Prepare(const Sparse&a,bool amdOrdering)
     }
     return Clock()-began;
 }
-Vec MixedFlow::Precondition(const Vec&rhs)const
+
+void MixedFlow::PreparePressureCorrection(const Sparse &a,
+                                           const Vec &positiveDiagonal,
+                                           MixedFlowWork *work)
 {
+    const int nv = PressureOffset(), np = PressureSize();
+    Check(a.rows() == Size() && a.cols() == Size() &&
+          (positiveDiagonal.size() == 0 || positiveDiagonal.size() == nv),
+          "pressure correction block inventory differs");
+    auto data = std::make_unique<PressureCorrection>();
+    const Sparse momentum = a.topLeftCorner(nv, nv);
+    {
+        WorkTimer timer(work ? &work->velocityFactor : nullptr);
+        data->velocityFactor.compute(momentum);
+        RequireLinear(data->velocityFactor.info() == Eigen::Success,
+                      "pressure correction velocity factor failed");
+    }
+
+    Sparse pressure;
+    {
+        WorkTimer timer(work ? &work->pressureAssembly : nullptr);
+        const Vec diagonal = positiveDiagonal.size() ? positiveDiagonal : Vec(momentum.diagonal());
+        RequireLinear(diagonal.allFinite() && (diagonal.array() > 0).all(),
+                      "pressure correction needs a positive momentum diagonal");
+        data->correctionGradient = a.block(0, nv, nv, np);
+        for (int col = 0; col < np; ++col)
+        {
+            for (Sparse::InnerIterator entry(data->correctionGradient, col); entry; ++entry)
+            {
+                entry.valueRef() /= diagonal[entry.row()];
+            }
+        }
+        data->divergence = a.block(nv, 0, np, nv);
+        pressure = PressureSystem(data->divergence * data->correctionGradient);
+        if (m_pressureCorrectors > 1)
+        {
+            data->system = a;
+        }
+    }
+    {
+        WorkTimer timer(work ? &work->pressureFactor : nullptr);
+        data->pressureFactor.compute(pressure);
+        RequireLinear(data->pressureFactor.info() == Eigen::Success,
+                      "pressure correction Schur factor failed");
+    }
+    m_pressureCorrection = std::move(data);
+}
+
+Sparse MixedFlow::PressureSystem(Sparse pressure) const
+{
+    if (m_gauge)
+    {
+        // Eliminating velocity gives S deltaPi - mean deltaLambda = D predictor - rhs_c.
+        const int np = PressureSize();
+        std::vector<T> entries;
+        entries.reserve(pressure.nonZeros() + 2 * np);
+        for (int col = 0; col < np; ++col)
+        {
+            for (Sparse::InnerIterator entry(pressure, col); entry; ++entry)
+            {
+                entries.emplace_back(entry.row(), col, entry.value());
+            }
+            entries.emplace_back(col, np, -PressureMean()[col]);
+            entries.emplace_back(np, col, PressureMean()[col]);
+        }
+        pressure.resize(np + 1, np + 1);
+        pressure.setFromTriplets(entries.begin(), entries.end());
+    }
+    return pressure;
+}
+
+Vec MixedFlow::PressureUpdate(const Vec &rhs, MixedFlowWork *work) const
+{
+    Check(bool(m_pressureCorrection) && rhs.size() == Size(),
+          "pressure correction requires prepared flow blocks");
+    const auto &data = *m_pressureCorrection;
+    const int nv = PressureOffset(), np = PressureSize();
+    Vec predictor;
+    {
+        WorkTimer timer(work ? &work->predictor : nullptr);
+        predictor = data.velocityFactor.solve(rhs.head(nv));
+        RequireLinear(data.velocityFactor.info() == Eigen::Success && predictor.allFinite(),
+                      "pressure correction momentum predictor failed");
+    }
+    Vec pressureIncrement;
+    {
+        WorkTimer timer(work ? &work->pressureSolve : nullptr);
+        Vec pressureRhs(Size() - nv);
+        pressureRhs.head(np) = data.divergence * predictor - rhs.segment(nv, np);
+        if (m_gauge)
+        {
+            pressureRhs[np] = rhs[Size() - 1];
+        }
+        pressureIncrement = data.pressureFactor.solve(pressureRhs);
+        RequireLinear(data.pressureFactor.info() == Eigen::Success &&
+                      pressureIncrement.allFinite(), "pressure correction solve failed");
+    }
+    WorkTimer timer(work ? &work->correction : nullptr);
+    Vec update(Size());
+    update.head(nv) = predictor - data.correctionGradient * pressureIncrement.head(np);
+    update.tail(Size() - nv) = pressureIncrement;
+    RequireLinear(update.allFinite(), "pressure correction produced a nonfinite update");
+    if (work)
+    {
+        ++work->pressureCorrections;
+    }
+    return update;
+}
+
+void MixedFlow::ApplyPressureCorrections(const Sparse &system, const Vec &rhs, Vec &x,
+                                          MixedFlowWork *work) const
+{
+    for (int count = 0; count < m_pressureCorrectors; ++count)
+    {
+        x += PressureUpdate(rhs - system * x, work);
+    }
+}
+
+Vec MixedFlow::Precondition(const Vec &rhs, MixedFlowWork *work) const
+{
+    if (m_pressureCorrection)
+    {
+        if (m_pressureCorrectors == 1)
+        {
+            return PressureUpdate(rhs, work);
+        }
+        Vec result = Vec::Zero(Size());
+        ApplyPressureCorrections(m_pressureCorrection->system, rhs, result, work);
+        return result;
+    }
     Vec b=rhs;double mean=0,lambda=0;
     if(m_gauge){mean=b[Size()-1];lambda=PressureOne().dot(b.segment(PressureOffset(),PressureSize()))/m_volume;b.segment(PressureOffset(),PressureSize())-=PressureMean()*lambda;b[PressureOffset()+m_pressurePivot]=0;b[Size()-1]=0;}
     Vec x;
@@ -202,21 +441,194 @@ Vec MixedFlow::Precondition(const Vec&rhs)const
     }
     if(m_gauge){x.segment(PressureOffset(),PressureSize())-=PressureOne()*((PressureMean().dot(x.segment(PressureOffset(),PressureSize()))-mean)/m_volume);x[Size()-1]=lambda;}return x;
 }
-SolveInfo MixedFlow::Solve(const Sparse&a,const Vec&b,Vec&x,double change,double tolerance)
+SolveInfo MixedFlow::Solve(const Sparse &a, const Vec &b, Vec &x, double change,
+                           double tolerance, MixedFlowWork *work)
 {
     Check(x.size()==Size()&&b.size()==Size(),"mixed component system size");SolveInfo info;double began=Clock();
-    if(!m_factor||change>.25||m_lastIterations>30||(m_initialIterations>0&&m_lastIterations>2*m_initialIterations)){info.factorSeconds=Prepare(a);++info.rebuilds;}
+    if (NeedsFactor(change))
+    {
+        info.factorSeconds = Prepare(a, false, work);
+        ++info.rebuilds;
+    }
     int used=0;auto actual=Residual(a,b,x);
     while(std::max({actual.momentum,actual.continuity,actual.gauge})>tolerance&&used<400)
     {
-        Vec residual=(b-a*x).cwiseProduct(m_scale);double beta=residual.norm();RequireLinear(std::isfinite(beta)&&beta>0,"invalid mixed Krylov residual");
-        int dimension=std::min(30,400-used);Mat v=Mat::Zero(Size(),dimension+1),z(Size(),dimension),h=Mat::Zero(dimension+1,dimension);v.col(0)=residual/beta;Vec rhs=Vec::Zero(dimension+1);rhs[0]=beta;Vec best;int done=0;
-        for(int j=0;j<dimension;++j){z.col(j)=Precondition(v.col(j).cwiseQuotient(m_scale));Vec action=(a*z.col(j)).cwiseProduct(m_scale);for(int pass=0;pass<2;++pass)for(int i=0;i<=j;++i){double value=v.col(i).dot(action);h(i,j)+=value;action.noalias()-=value*v.col(i);}h(j+1,j)=action.norm();if(h(j+1,j)>0)v.col(j+1)=action/h(j+1,j);best=h.block(0,0,j+2,j+1).colPivHouseholderQr().solve(rhs.head(j+2));++used;done=j+1;if((rhs.head(j+2)-h.block(0,0,j+2,j+1)*best).norm()<tolerance*std::sqrt(m_volume)||h(j+1,j)<1e-28)break;}
-        Vec delta=z.leftCols(done)*best;x+=delta;info.correction+=delta.segment(PressureOffset(),PressureSize()).norm();actual=Residual(a,b,x);
+        const Vec delta = KrylovCorrection(
+            (b - a * x).cwiseProduct(m_scale), std::min(30, 400 - used),
+            tolerance * std::sqrt(m_volume),
+            [&](const Vec &z) -> Vec { return (a * z).cwiseProduct(m_scale); },
+            [&](const Vec &v) { return Precondition(v.cwiseQuotient(m_scale), work); },
+            [&] { ++used; if (work) ++work->krylovIterations; });
+        x += delta;
+        info.correction += delta.segment(PressureOffset(), PressureSize()).norm();
+        actual = Residual(a, b, x);
     }
     double check=Clock();auto final=Residual(a,b,x);info.residualSeconds=Clock()-check;info.momentum=final.momentum;info.continuity=final.continuity;info.gauge=final.gauge;info.iterations=used;info.solveSeconds=Clock()-began-info.factorSeconds-info.residualSeconds;
     if(std::max({info.momentum,info.continuity,info.gauge})>tolerance){std::ostringstream error;error<<std::setprecision(17)<<"mixed component CURRENT true residual failed: momentum="<<info.momentum<<", continuity="<<info.continuity<<", gauge="<<info.gauge<<", tolerance="<<tolerance<<", iterations="<<used;throw NativeLinearFailure(error.str());}
     if(!m_initialIterations&&used)m_initialIterations=used;m_lastIterations=used;return info;
+}
+
+SolveInfo MixedFlow::Correct(const Sparse &system, const Vec &rhs, Vec &x, MixedFlowWork &work,
+                             double continuityTolerance)
+{
+    Check(m_pressureCorrectors > 0 && x.size() == Size() && rhs.size() == Size() &&
+          system.rows() == Size() && system.cols() == Size() &&
+          std::isfinite(continuityTolerance) && continuityTolerance > 0,
+          "invalid fixed pressure correction system or tolerance");
+    const int nv = PressureOffset(), np = PressureSize(), nq = Size() - nv;
+    const double pressureTolerance = .1 * continuityTolerance;
+    const Vec scale = m_scale.tail(nq);
+    SolveInfo info;
+    const double setupStart = Clock();
+    Sparse momentum, gradient, divergence, massGradient;
+    Vec inverseMassDiagonal;
+    Eigen::SimplicialLDLT<Sparse> velocityFactor;
+    {
+        WorkTimer setup(&work.setup);
+        momentum = system.topLeftCorner(nv, nv);
+        {
+            // The fixed Picard predictor uses symmetric positive strain and time mass.
+            WorkTimer timer(&work.velocityFactor);
+            velocityFactor.compute(momentum);
+            RequireLinear(velocityFactor.info() == Eigen::Success &&
+                          (velocityFactor.vectorD().array() > 0).all(),
+                          "fixed Picard momentum factor is not positive definite");
+        }
+        Sparse pressure;
+        {
+            WorkTimer timer(&work.pressureAssembly);
+            gradient = system.block(0, nv, nv, np);
+            divergence = system.block(nv, 0, np, nv);
+            inverseMassDiagonal = m_scale.head(nv).array().square().matrix();
+            massGradient = gradient;
+            for (int col = 0; col < np; ++col)
+            {
+                for (Sparse::InnerIterator entry(massGradient, col); entry; ++entry)
+                {
+                    entry.valueRef() *= inverseMassDiagonal[entry.row()];
+                }
+            }
+            pressure = PressureSystem(divergence * massGradient);
+            pressure.makeCompressed();
+        }
+        if (!m_fixedPressureFactor || !SameCompressedMatrix(pressure, m_fixedPressureMatrix))
+        {
+            WorkTimer timer(&work.pressureFactor);
+            auto factor = std::make_unique<Eigen::SparseLU<Sparse>>();
+            factor->compute(pressure);
+            RequireLinear(factor->info() == Eigen::Success,
+                          "fixed Picard pressure preconditioner factor failed");
+            m_fixedPressureMatrix = std::move(pressure);
+            m_fixedPressureFactor = std::move(factor);
+        }
+    }
+    info.factorSeconds = Clock() - setupStart;
+    ++info.rebuilds;
+
+    const auto velocitySolve = [&](const Vec &load) -> Vec
+    {
+        Vec velocity = velocityFactor.solve(load);
+        RequireLinear(velocityFactor.info() == Eigen::Success && velocity.allFinite(),
+                      "fixed Picard momentum solve failed");
+        return velocity;
+    };
+    const auto schur = [&](const Vec &pressure) -> Vec
+    {
+        Vec action(nq);
+        action.head(np) = divergence * velocitySolve(gradient * pressure.head(np));
+        if (m_gauge)
+        {
+            action.head(np) -= PressureMean() * pressure[np];
+            action[np] = PressureMean().dot(pressure.head(np));
+        }
+        return action;
+    };
+    const auto precondition = [&](const Vec &scaledRhs) -> Vec
+    {
+        // Least-squares commutator using L = D Mdiag^-1 G and the frozen A.
+        // It accelerates the pressure-only iteration. The actual action uses A^-1.
+        const Vec load = scaledRhs.cwiseQuotient(scale);
+        const auto &pressureFactor = *m_fixedPressureFactor;
+        const Vec first = pressureFactor.solve(load);
+        RequireLinear(pressureFactor.info() == Eigen::Success && first.allFinite(),
+                      "fixed Picard pressure preconditioner solve failed");
+        const Vec weighted = (momentum * (massGradient * first.head(np))).cwiseProduct(inverseMassDiagonal);
+        Vec middle(nq);
+        middle.head(np) = divergence * weighted;
+        if (m_gauge)
+        {
+            middle.head(np) -= PressureMean() * first[np];
+            middle[np] = load[np];
+        }
+        Vec result = pressureFactor.solve(middle);
+        RequireLinear(pressureFactor.info() == Eigen::Success && result.allFinite(),
+                      "fixed Picard pressure preconditioner solve failed");
+        return result;
+    };
+
+    const double began = Clock();
+    for (int pass = 0; pass < m_pressureCorrectors; ++pass)
+    {
+        const Vec residual = rhs - system * x;
+        Vec predictor;
+        {
+            WorkTimer timer(&work.predictor);
+            predictor = velocitySolve(residual.head(nv));
+        }
+        Vec pressure = Vec::Zero(nq);
+        {
+            WorkTimer timer(&work.pressureSolve);
+            Vec pressureRhs(nq);
+            pressureRhs.head(np) = divergence * predictor - residual.segment(nv, np);
+            if (m_gauge)
+            {
+                pressureRhs[np] = residual[Size() - 1];
+            }
+            Vec defect = pressureRhs;
+            const auto norm = [&]()
+            {
+                const double divergenceNorm = ContinuityNorm(defect.head(np));
+                return m_gauge ? std::max(divergenceNorm, std::abs(defect[np] * scale[np]))
+                               : divergenceNorm;
+            };
+            const auto scaledAction = [&](const Vec &p) -> Vec { return schur(p).cwiseProduct(scale); };
+            constexpr int maximumIterations = 240, restart = 60;
+            int iterations = 0;
+            double current = norm();
+            while (current > pressureTolerance && iterations < maximumIterations)
+            {
+                pressure += KrylovCorrection(defect.cwiseProduct(scale),
+                    std::min(restart, maximumIterations - iterations),
+                    pressureTolerance * std::sqrt(m_volume), scaledAction, precondition,
+                    [&] { ++iterations; ++work.pressureKrylovIterations; });
+                defect = pressureRhs - schur(pressure);
+                current = norm();
+            }
+            if (current > pressureTolerance)
+            {
+                std::ostringstream error;
+                error << std::setprecision(17) << "fixed Picard pressure residual failed: residual="
+                      << current << ", tolerance=" << pressureTolerance << ", iterations=" << iterations;
+                throw NativeLinearFailure(error.str());
+            }
+        }
+        WorkTimer timer(&work.correction);
+        x.head(nv) += predictor - velocitySolve(gradient * pressure.head(np));
+        x.tail(nq) += pressure;
+        info.correction += pressure.head(np).norm();
+        ++work.pressureCorrections;
+    }
+    const double solveEnd = Clock();
+    const auto final = Residual(system, rhs, x);
+    info.momentum = final.momentum;
+    info.continuity = final.continuity;
+    info.gauge = final.gauge;
+    work.fixedMomentum = std::max(work.fixedMomentum, final.momentum);
+    work.fixedContinuity = std::max(work.fixedContinuity, final.continuity);
+    work.fixedGauge = std::max(work.fixedGauge, final.gauge);
+    info.solveSeconds = solveEnd - began;
+    info.residualSeconds = Clock() - solveEnd;
+    return info;
 }
 
 void MixedFlow::SetTransportedKSpace(const MultiRegions::ContFieldSharedPtr&field)

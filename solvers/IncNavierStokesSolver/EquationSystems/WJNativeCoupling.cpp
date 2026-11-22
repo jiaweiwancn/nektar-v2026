@@ -61,7 +61,8 @@ CoupledState Combination(const CoupledState&a,double wa,const CoupledState&b,dou
 Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry geometry,
     std::shared_ptr<const Reference>reference,CoupledOptions options)
     :m_fields(std::move(fields)),m_geometry(geometry),m_reference(std::move(reference)),m_options(std::move(options)),
-     m_flow({m_fields.at(0),m_fields.at(1),m_fields.at(4)},geometry),
+     m_flow({m_fields.at(0),m_fields.at(1),m_fields.at(4)},geometry,
+            m_options.flowPreconditioner == "PressureCorrection" ? m_options.pressureCorrectors : 0),
      m_rules(m_flow.Core(),m_options.quadratureX,m_options.quadratureR),
      m_k(m_fields.at(2),m_flow.Core(),[this](double,double){return m_reference->Parameters().KIn;},{0}),
      m_e(m_fields.at(3),m_flow.Core(),[this](double,double z){return m_reference->Amplitude(m_reference->Parameters().KIn)/(z-m_geometry.d0);},{0,2})
@@ -84,6 +85,18 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     Require(m_options.stressSplit=="PositiveShearV1"||m_options.stressSplit=="IsotropicMuV1","unknown numerical stress split");
     Require(m_options.steadyVelocityPC=="FullGradientV1"||m_options.steadyVelocityPC=="PositiveFrozenV1","unknown steady velocity preconditioner");
     Require(m_options.advancement=="PicardV1"||m_options.advancement=="CoupledJFNKV1","unknown implicit coupled solver");
+    const bool pressureCorrection = m_options.flowPreconditioner == "PressureCorrection";
+    const bool fixedBudget = m_options.picardStop == "FixedCorrectors";
+    Require(pressureCorrection || m_options.flowPreconditioner == "SparseLU",
+            "unknown WJ flow preconditioner");
+    Require(m_options.pressureCorrectors > 0, "WJPressureCorrectors must be positive");
+    Require(fixedBudget || m_options.picardStop == "CoupledResidual", "unknown WJ Picard stopping rule");
+    Require(fixedBudget ? (m_options.advancement == "PicardV1" && pressureCorrection &&
+                          m_options.picardOuterCorrectors > 0 && m_options.andersonDepth == 0)
+                       : m_options.picardOuterCorrectors == 0,
+            "fixed budgets require PicardV1, PressureCorrection, positive outer count and zero Anderson depth");
+    Require(!pressureCorrection || m_options.stepPreconditioner != "CurrentDataAMDOrderingV1",
+            "WJ PressureCorrection uses the COLAMD ordering for both sparse factors");
     Require(m_options.stepPreconditioner=="RebuildEveryNewtonV1"||m_options.stepPreconditioner=="OperatorDriftV1"||
             m_options.stepPreconditioner=="CurrentDataDriftV1"||m_options.stepPreconditioner=="CurrentDataAMDOrderingV1",
         "unknown implicit Newton preconditioner policy");
@@ -125,6 +138,15 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     signature<<'|'<<m_options.advancement<<'|'<<newton.maximumSeconds<<'|'<<newton.acceptanceNorm<<'|'
         <<newton.maximumNewtonIterations<<'|'<<newton.restartDimension<<'|'<<newton.maximumLinearCycles<<'|'<<newton.fdRelativeStep;
     signature<<'|'<<m_options.stepPreconditioner<<'|'<<m_options.stepPCRelativeDrift<<'|'<<m_options.stepPCMaximumUses;
+    if (pressureCorrection)
+    {
+        signature << '|' << m_options.flowPreconditioner << '|' << m_options.pressureCorrectors
+                  << '|' << m_options.picardStop << '|' << m_options.picardOuterCorrectors;
+        if (fixedBudget)
+        {
+            signature << "|MomentumSchurV1";
+        }
+    }
     if(m_reference->Policy()!=ReferencePolicy::Historical)
         signature<<'|'<<m_reference->PolicyName()<<'|'<<m_reference->TransportName();
     if(m_reference->Transport()!=InnerKTransport::ScalarV2)
@@ -766,8 +788,14 @@ CoupledStepInfo Coupling::Advance(CoupledHistory&h,bool injectRetry)
 {
     Require(m_reference->Transport()==InnerKTransport::ScalarV2,"inner-k diagnostic transport cannot advance a trajectory");
     if(m_options.advancement=="CoupledJFNKV1")return AdvanceNewton(h,injectRetry);
+    const bool fixedBudget = m_options.picardStop == "FixedCorrectors";
+    const int maximumSweeps = fixedBudget ? m_options.picardOuterCorrectors : m_options.maximumIterations;
     const double begin=Clock();CheckHistory(h);m_constitutiveStats={};m_lastInputHistory=h;m_hasInputHistory=true;CoupledStepInfo info;const double time=(h.step+1)*h.dt,alpha=(h.step==0?1.:1.5)/h.dt;
     m_lastAttempt={};auto saveAttempt=[&]{info.seconds=Clock()-begin;info.constitutiveStats=m_constitutiveStats;info.timing.other=info.seconds-info.timing.Sum();m_lastAttempt=info;};
+    if (fixedBudget)
+    {
+        ResetPreconditioners();
+    }
     auto history=Combination(h.current,h.step==0?1/h.dt:2/h.dt,h.previous,h.step==0?0:-.5/h.dt);
     auto adv=Combination(h.advection,h.step==0?1:2,h.previousAdvection,h.step==0?0:-1);
     Loads external=Forcing(time,info.timing);external.flow-=adv.flow;external.k-=adv.k;external.epsilon-=adv.epsilon;
@@ -783,7 +811,7 @@ CoupledStepInfo Coupling::Advance(CoupledHistory&h,bool injectRetry)
         bool complete=false,recoverable=false;
         std::vector<Vec>andersonF,andersonG;
         auto data=Evaluate(s,time,false,info.timing);
-        try{for(int iteration=0;iteration<m_options.maximumIterations;++iteration){
+        try{for(int iteration=0;iteration<maximumSweeps;++iteration){
             ++info.nonlinearIterations;
             const double iterationStart=Clock();const Vec input=m_options.andersonDepth?PackFree(s):Vec();
             double start=Clock();
@@ -791,21 +819,40 @@ CoupledStepInfo Coupling::Advance(CoupledHistory&h,bool injectRetry)
             Sparse K=Strain(data),A=m_flow.System(alpha,K,1.);Vec flowLoad=base.flow+RemainderLoad(data);flowLoad.head(2*m_flow.VelocitySize())+=m_flow.KnownScalarKLoad(s.k);
             Vec lift=m_flow.Lift(s.flow),rhs=m_flow.LiftedRhs(alpha,K,1.,flowLoad,lift),free=m_flow.Restrict(s.flow);info.timing.assembly+=Clock()-start;
             if(injectRetry&&attempt==0&&iteration==0)throw NativeLinearFailure("qualification injected recoverable Krylov failure");
-            auto fi=m_flow.Solve(A,rhs,free,drift,m_options.linearTolerance);s.flow=m_flow.Expand(free,lift);info.flowIterations+=fi.iterations;info.rebuilds+=fi.rebuilds;info.timing.flow+=fi.solveSeconds+fi.residualSeconds;info.timing.rebuild+=fi.factorSeconds;
+            const double flowStart = Clock(), setupBefore = info.flowWork.setup;
+            SolveInfo fi;
+            try
+            {
+                fi = fixedBudget ? m_flow.Correct(A, rhs, free, info.flowWork,
+                                                m_options.nonlinearTolerance)
+                                 : m_flow.Solve(A, rhs, free, drift, m_options.linearTolerance,
+                                                &info.flowWork);
+            }
+            catch (...)
+            {
+                const double setup = info.flowWork.setup - setupBefore;
+                info.timing.rebuild += setup;
+                info.timing.flow += Clock() - flowStart - setup;
+                info.flowIterations = info.flowWork.krylovIterations;
+                throw;
+            }
+            s.flow=m_flow.Expand(free,lift);info.flowIterations=info.flowWork.krylovIterations;info.rebuilds+=fi.rebuilds;info.timing.flow+=fi.solveSeconds+fi.residualSeconds;info.timing.rebuild+=fi.factorSeconds;
             if(fi.rebuilds){m_preconditionerCoefficients=data.coefficients;m_flowFactorAlpha=alpha;}
             // Refresh P, E_w, current positive scalar diffusivities and all
             // stresses after the flow update, BEFORE the k solve.
             data=Evaluate(s,time,false,info.timing);start=Clock();Sparse Kk=m_k.Diffusion(data.kRules,data.Dk);Vec klift=m_k.Lift(s.k),krhs=m_k.LiftedRhs(alpha,Kk,base.k+KVolumeLoad(s,data),klift),kf=m_k.Restrict(s.k);auto Ak=m_k.System(alpha,Kk);info.timing.assembly+=Clock()-start;
             const double kd=std::max(Drift(data.kCoefficients,m_kPreconditionerCoefficients),alphaDrift(m_kFactorAlpha));info.coefficientDrift=std::max(info.coefficientDrift,kd);
             auto ki=m_k.Solve(Ak,krhs,kf,kd,m_options.linearTolerance);s.k=m_k.Expand(kf,klift);info.kIterations+=ki.iterations;info.rebuilds+=ki.rebuilds;info.timing.scalar+=ki.solveSeconds+ki.residualSeconds;info.timing.rebuild+=ki.factorSeconds;
+            info.timingDetail.kFactor += ki.factorSeconds;
             if(ki.rebuilds){m_kPreconditionerCoefficients=data.kCoefficients;m_kFactorAlpha=alpha;}
             // K(H) has changed: replace the dependent outer epsilon trace and
             // recompute the entire closure before solving outer epsilon.
             start=Clock();s=DirichletState(s,time);info.timing.wall+=Clock()-start;data=Evaluate(s,time,false,info.timing);start=Clock();Sparse Ke=m_e.Diffusion(m_rules.Static(),data.De,data.reactionE);Vec elift=m_e.Lift(s.epsilon),erhs=m_e.LiftedRhs(alpha,Ke,base.epsilon+EVolumeLoad(s,data),elift),ef=m_e.Restrict(s.epsilon);auto Ae=m_e.System(alpha,Ke);info.timing.assembly+=Clock()-start;
             const double ed=std::max(Drift(data.eCoefficients,m_ePreconditionerCoefficients),alphaDrift(m_eFactorAlpha));info.coefficientDrift=std::max(info.coefficientDrift,ed);
             auto ei=m_e.Solve(Ae,erhs,ef,ed,m_options.linearTolerance);s.epsilon=m_e.Expand(ef,elift);info.epsilonIterations+=ei.iterations;info.rebuilds+=ei.rebuilds;info.timing.scalar+=ei.solveSeconds+ei.residualSeconds;info.timing.rebuild+=ei.factorSeconds;
+            info.timingDetail.epsilonFactor += ei.factorSeconds;
             if(ei.rebuilds){m_ePreconditionerCoefficients=data.eCoefficients;m_eFactorAlpha=alpha;}
-            // Acceptance always tests the complete CURRENT coupled equations.
+            // Refresh all current equation residuals for diagnostics and acceptance.
             data=Evaluate(s,time,false,info.timing);info.residual=Residual(s,data,external,alpha,time,info.timing,&h);
             bool accelerated=false;
             if(m_options.andersonDepth){
@@ -837,17 +884,45 @@ CoupledStepInfo Coupling::Advance(CoupledHistory&h,bool injectRetry)
                 }
             }
             if(m_options.recordNonlinearTrace)info.nonlinearTrace.push_back({info.residual,accelerated,Clock()-iterationStart});
-            if(info.residual.Maximum()<=m_options.nonlinearTolerance){
+            if (fixedBudget ? iteration + 1 == maximumSweeps
+                            : info.residual.Maximum() <= m_options.nonlinearTolerance)
+            {
                 auto final=Evaluate(s,time,true,info.timing);info.residual=Residual(s,final,external,alpha,time,info.timing,&h);
-                Require(info.residual.Maximum()<=m_options.nonlinearTolerance,"final refreshed coupled residual changed acceptance");
+                if (fixedBudget)
+                {
+                    const auto &res = info.residual;
+                    const double tolerance = m_options.nonlinearTolerance;
+                    const std::array<double, 6> rows{res.momentum, res.continuity, res.gauge,
+                                                     res.k, res.epsilon, res.trace};
+                    RequireState(std::all_of(rows.begin(), rows.end(),
+                                             [](double value) { return std::isfinite(value); }) &&
+                                 res.continuity <= tolerance && res.gauge <= tolerance &&
+                                 res.trace <= tolerance,
+                                 "fixed Picard budget failed final continuity, gauge or trace checks");
+                }
+                else
+                {
+                    Require(info.residual.Maximum() <= m_options.nonlinearTolerance,
+                            "final refreshed coupled residual changed acceptance");
+                }
                 info.minimumK=final.minK;info.minimumEpsilon=final.minE;info.minimumCovarianceOverK=final.minCovariance;info.minimumPrincipalOverMu=final.minPrincipal;
                 const double advStart=Clock();auto nextAdvection=Advection(s,final.kRules);info.timing.assembly+=Clock()-advStart;
-                h.previous=h.current;h.current=s;h.previousAdvection=h.advection;h.advection=std::move(nextAdvection);++h.step;h.time=time;
+                CoupledHistory next;
+                next.step = h.step + 1;
+                next.time = time;
+                next.dt = h.dt;
+                next.current = std::move(s);
+                next.previous = h.current;
+                next.advection = std::move(nextAdvection);
+                next.previousAdvection = h.advection;
+                CheckHistory(next);
+                h = std::move(next);
+                info.acceptedByFixedBudget = fixedBudget;
                 complete=true;break;
             }
-        }}catch(const NativeLinearFailure&e){info.retryReason=e.what();recoverable=true;if(attempt==1){saveAttempt();throw;}}
-        catch(const NativeInadmissibleState&){saveAttempt();throw;}
-        if(complete){saveAttempt();CheckHistory(h);return info;}
+        }}catch(const NativeLinearFailure&e){info.retryReason=e.what();recoverable=true;if(fixedBudget||attempt==1){saveAttempt();throw;}}
+        catch(...){saveAttempt();throw;}
+        if(complete){saveAttempt();return info;}
         if(!recoverable)break;
     }
     saveAttempt();std::ostringstream error;error<<std::setprecision(17)<<"current coupled iteration did not converge; accepted history preserved, residuals=["<<info.residual.momentum<<','<<info.residual.continuity<<','<<info.residual.gauge<<','<<info.residual.k<<','<<info.residual.epsilon<<','<<info.residual.trace<<"], nonlinear iterations="<<info.nonlinearIterations<<", linear iterations=["<<info.flowIterations<<','<<info.kIterations<<','<<info.epsilonIterations<<']';throw std::runtime_error(error.str());
@@ -1072,6 +1147,33 @@ void Coupling::WriteOutletActions(std::ostream&out,const CoupledHistory&h)const
     out<<"]}";
 }
 
+void WriteFlowSolverFields(std::ostream &out, const CoupledOptions &options,
+                           const CoupledStepInfo &info)
+{
+    using RANSWallSolveJson::Quote;
+    const auto &work = info.flowWork;
+    out << ",\"flow_preconditioner\":" << Quote(options.flowPreconditioner)
+        << ",\"pressure_correctors\":"
+        << (options.flowPreconditioner == "PressureCorrection" ? options.pressureCorrectors : 0)
+        << ",\"picard_stop\":" << Quote(options.picardStop)
+        << ",\"picard_outer_correctors\":" << options.picardOuterCorrectors
+        << ",\"accepted_by_fixed_budget\":" << (info.acceptedByFixedBudget ? "true" : "false")
+        << ",\"mixed_flow_work\":{\"setup_seconds\":" << work.setup
+        << ",\"velocity_factor_seconds\":" << work.velocityFactor
+        << ",\"pressure_assembly_seconds\":" << work.pressureAssembly
+        << ",\"pressure_factor_seconds\":" << work.pressureFactor
+        << ",\"predictor_seconds\":" << work.predictor
+        << ",\"pressure_solve_seconds\":" << work.pressureSolve
+        << ",\"velocity_correction_seconds\":" << work.correction
+        << ",\"pressure_corrections\":" << work.pressureCorrections
+        << ",\"pressure_krylov_iterations\":" << work.pressureKrylovIterations
+        << ",\"fixed_frozen_residuals\":[" << work.fixedMomentum << ','
+        << work.fixedContinuity << ',' << work.fixedGauge << ']'
+        << ",\"krylov_iterations\":" << work.krylovIterations << '}'
+        << ",\"scalar_factor_seconds\":{\"k\":" << info.timingDetail.kFactor
+        << ",\"epsilon\":" << info.timingDetail.epsilonFactor << '}';
+}
+
 void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepInfo&info,bool coefficients)const
 {
     out<<std::setprecision(17)<<"{\"schema\":\"WJH27NativeCoupledStateV2\",\"model\":\""<<WallModelV2<<"\",\"signature\":\""<<m_signature<<"\",\"source_identity\":\""<<m_options.sourceIdentity<<"\",\"reference_identity\":\""<<m_reference->Identity()<<"\",\"manufactured\":"<<(m_mms?"true":"false")<<",\"step\":"<<h.step<<",\"time\":"<<h.time<<",\"dt\":"<<h.dt<<",\"state_sha256\":\""<<StateHash(h.current)<<"\",\"previous_sha256\":\""<<StateHash(h.previous)<<"\",\"advection_sha256\":\""<<StateHash(h.advection)<<"\",\"previous_advection_sha256\":\""<<StateHash(h.previousAdvection)<<"\",\"sizes\":["<<m_flow.VelocitySize()<<','<<m_flow.PressureSize()<<','<<m_k.Size()<<','<<m_e.Size()<<"],\"gauge\":"<<(m_flow.Gauge()?"true":"false")<<",\"nonlinear_iterations\":"<<info.nonlinearIterations<<",\"linear_iterations\":["<<info.flowIterations<<','<<info.kIterations<<','<<info.epsilonIterations<<"],\"rebuilds\":"<<info.rebuilds<<",\"retries\":"<<info.retries<<",\"seconds\":"<<info.seconds<<",\"coefficient_drift\":"<<info.coefficientDrift<<",\"residuals\":["<<info.residual.momentum<<','<<info.residual.continuity<<','<<info.residual.gauge<<','<<info.residual.k<<','<<info.residual.epsilon<<','<<info.residual.trace<<"],\"minimum_k\":"<<info.minimumK<<",\"minimum_epsilon\":"<<info.minimumEpsilon<<",\"minimum_covariance_over_k\":"<<info.minimumCovarianceOverK<<",\"minimum_principal_over_mu\":"<<info.minimumPrincipalOverMu<<",\"disjoint_seconds\":{\"constitutive\":"<<info.timing.constitutive<<",\"wall\":"<<info.timing.wall<<",\"assembly\":"<<info.timing.assembly<<",\"flow\":"<<info.timing.flow<<",\"scalar\":"<<info.timing.scalar<<",\"rebuild\":"<<info.timing.rebuild<<",\"guards\":"<<info.timing.guards<<",\"forcing\":"<<info.timing.forcing<<",\"residual\":"<<info.timing.residual<<",\"nonlinear\":"<<info.timing.nonlinear<<",\"io\":"<<info.timing.io<<",\"other\":"<<info.timing.other<<'}';
@@ -1080,6 +1182,7 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
         << ",\"scalar_advection\":" << info.timingDetail.scalarAdvection
         << ",\"scalar_momentum_coupling\":" << info.timingDetail.scalarMomentumCoupling
         << ",\"history_movement\":" << info.timingDetail.historyMovement << '}';
+    WriteFlowSolverFields(out, m_options, info);
     out<<",\"inner_k_transport\":"<<RANSWallSolveJson::Quote(m_reference->TransportName())
        <<",\"boundary_identity\":"<<RANSWallSolveJson::Quote(m_reference->BoundaryIdentity());
     out<<",\"outlet_policy\":"<<RANSWallSolveJson::Quote(m_options.outletPolicy)
@@ -1097,7 +1200,10 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
         <<",\"rejected_trials\":"<<info.coupledRejectedTrials
         <<",\"counts_complete\":"<<(info.coupledStatisticsComplete?"true":"false")
         <<",\"step_seconds_cap\":"<<m_options.stepNewton.maximumSeconds
-        <<",\"uncommitted_guard\":\"positivity/root/covariance\",\"physical_acceptance_guard\":\"fresh full planar principal and complete current residual\"";
+        <<",\"uncommitted_guard\":\"positivity/root/covariance\",\"physical_acceptance_guard\":"
+        <<RANSWallSolveJson::Quote(m_options.picardStop == "FixedCorrectors"
+             ? "fresh full planar principal, continuity, gauge and trace at fixed budget"
+             : "fresh full planar principal and complete current residual");
     WriteStepPreconditionerFields(out,m_options,info);out<<'}';
     out<<",\"nonlinear_trace_scope\":"<<RANSWallSolveJson::Quote(m_options.advancement=="CoupledJFNKV1"?
         "Uncommitted Newton bases and Armijo candidates; FD excluded; records are not accepted updates; times are inclusive observations":

@@ -39,7 +39,8 @@ void AttemptJSON(std::ostream&out,const WJNative::CoupledStepInfo&info,const WJN
     for(int i=0;i<int(info.nonlinearTrace.size());++i){const auto&t=info.nonlinearTrace[i];if(i)out<<',';
         out<<"{\"residuals\":["<<t.residual.momentum<<','<<t.residual.continuity<<','<<t.residual.gauge<<','<<t.residual.k<<','<<t.residual.epsilon<<','<<t.residual.trace
            <<"],\"accelerated\":"<<(t.accelerated?"true":"false")<<",\"seconds\":"<<t.seconds<<'}';}out<<']';
-    WJNative::WriteStepPreconditionerFields(out,options,info);out<<'}';
+    WJNative::WriteStepPreconditionerFields(out,options,info);
+    WJNative::WriteFlowSolverFields(out,options,info);out<<'}';
 }
 void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mass)
 {
@@ -100,6 +101,10 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadSolverInfo("WJStressSplit",options.stressSplit,"PositiveShearV1");
     m_session->LoadSolverInfo("WJSteadyVelocityPC",options.steadyVelocityPC,"FullGradientV1");
     m_session->LoadSolverInfo("WJImplicitSolver",options.advancement,"PicardV1");
+    m_session->LoadSolverInfo("WJFlowPreconditioner", options.flowPreconditioner, "SparseLU");
+    m_session->LoadParameter("WJPressureCorrectors", options.pressureCorrectors, 1);
+    m_session->LoadSolverInfo("WJPicardStop", options.picardStop, "CoupledResidual");
+    m_session->LoadParameter("WJPicardOuterCorrectors", options.picardOuterCorrectors, 0);
     m_session->LoadSolverInfo("WJStepPreconditioner",options.stepPreconditioner,"RebuildEveryNewtonV1");
     m_session->LoadParameter("WJStepPCRelativeDrift",options.stepPCRelativeDrift,.02);
     m_session->LoadParameter("WJStepPCMaximumUses",options.stepPCMaximumUses,8);
@@ -125,6 +130,8 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadSolverInfo("WJMMSVariant",options.mmsVariant,"Historical");
     m_session->LoadSolverInfo("WJInitialSourceIdentity",options.initialSourceIdentity,WJ_H27_SOURCE_ID);
     std::string solve;m_session->LoadSolverInfo("WJNativeSolve",solve,"Advance");Check(solve=="Advance"||solve=="SteadyReference","unknown WJ native solve mode");m_steadyMode=solve=="SteadyReference";
+    Check(!m_steadyMode || options.flowPreconditioner == "SparseLU",
+          "WJFlowPreconditioner=PressureCorrection is for time advancement");
     Check(options.diagnosticOutletX==15.||m_steadyMode,"outlet location diagnostic requires steady preparation");
     if(m_steadyMode){Check(m_steps==0,"steady reference preparation requires NumSteps=0");
         m_session->LoadParameter("WJSteadySeconds",m_steadyOptions.maximumSeconds,0.);Check(m_steadyOptions.maximumSeconds>0,"steady reference preparation requires an explicit WJSteadySeconds cap");

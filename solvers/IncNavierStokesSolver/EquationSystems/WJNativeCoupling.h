@@ -35,8 +35,9 @@ struct CoupledOptions
     double diagnosticOutletX=15.;
     // Numerical split only; the complete current V is identical in both.
     std::string stressSplit="PositiveShearV1",steadyVelocityPC="FullGradientV1";
-    // Equivalent solvers of the same current implicit BDF/EX equations.
     std::string advancement="PicardV1";
+    std::string flowPreconditioner="SparseLU", picardStop="CoupledResidual";
+    int pressureCorrectors=1, picardOuterCorrectors=0;
     SteadyKrylovOptions stepNewton;
     std::string stepPreconditioner="RebuildEveryNewtonV1";
     double stepPCRelativeDrift=.02;
@@ -61,6 +62,8 @@ struct CoupledStepTimingDetail
     double scalarAdvection = 0;
     double scalarMomentumCoupling = 0;
     double historyMovement = 0;
+    double kFactor = 0;
+    double epsilonFactor = 0;
 };
 struct CoupledStepInfo
 {
@@ -71,6 +74,8 @@ struct CoupledStepInfo
     CoupledResidual residual;
     CoupledTiming timing;
     CoupledStepTimingDetail timingDetail;
+    MixedFlowWork flowWork;
+    bool acceptedByFixedBudget = false;
     WallEvaluationStats constitutiveStats;
     struct Iteration {CoupledResidual residual;bool accelerated=false;double seconds=0;};
     std::vector<Iteration>nonlinearTrace;
@@ -95,6 +100,8 @@ struct CoupledStepInfo
 // Append comma-prefixed numerical cache members to an open diagnostic object.
 void WriteStepPreconditionerFields(std::ostream&out,const CoupledOptions&options,
                                   const CoupledStepInfo&info);
+void WriteFlowSolverFields(std::ostream &out, const CoupledOptions &options,
+                           const CoupledStepInfo &info);
 
 /** Supported flat serial, fully coupled BDF2/EX2 velocity/modified-pressure,
  * full-domain k and outer-only epsilon. E_w and the reference cutoff are

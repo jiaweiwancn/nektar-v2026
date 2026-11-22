@@ -328,11 +328,28 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
                 {
                     m_timePCReady=false; // a partial factorization cannot be reused
                     if(currentDataPolicy)assembleInverseOperators();
+                    Vec positiveDiagonal;
+                    if (m_options.flowPreconditioner == "PressureCorrection")
+                    {
+                        AccountTime timer(info.timing.assembly);
+                        positiveDiagonal = m_flow.VelocityDiagonal(alpha, Strain(data));
+                    }
                     {
                         AccountTime timer(info.timing.rebuild);
-                        m_flow.PrepareLinearPreconditioner(m_flow.System(alpha,flowPC,1.),amdOrdering);++info.rebuilds;
-                        m_k.PrepareLinearPreconditioner(m_k.System(alpha,kPC));++info.rebuilds;
-                        m_e.PrepareLinearPreconditioner(m_e.System(alpha,ePC));++info.rebuilds;
+                        m_flow.PrepareLinearPreconditioner(m_flow.System(alpha,flowPC,1.),
+                                                           amdOrdering, &info.flowWork,
+                                                           positiveDiagonal);
+                        ++info.rebuilds;
+                        {
+                            AccountTime factor(info.timingDetail.kFactor);
+                            m_k.PrepareLinearPreconditioner(m_k.System(alpha,kPC));
+                            ++info.rebuilds;
+                        }
+                        {
+                            AccountTime factor(info.timingDetail.epsilonFactor);
+                            m_e.PrepareLinearPreconditioner(m_e.System(alpha,ePC));
+                            ++info.rebuilds;
+                        }
                     }
                     {
                         AccountTime timer(info.timing.assembly);
@@ -370,7 +387,8 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
                         cross = Vec::Zero(2*m_flow.VelocitySize()+m_flow.PressureSize());
                         cross.head(2*m_flow.VelocitySize()) = m_flow.KnownScalarKLoad(dk);
                     }
-                    result.head(nf)=m_flow.ApplyLinearPreconditioner(rhs.head(nf)+m_flow.Restrict(cross));
+                    result.head(nf)=m_flow.ApplyLinearPreconditioner(rhs.head(nf)+m_flow.Restrict(cross),
+                                                                    &info.flowWork);
                 }
                 Vec trace;
                 {

@@ -28,6 +28,41 @@ int main(int argc,char**argv)
         std::ofstream out(argv[3]);out<<std::setprecision(17)<<"{\"foundation_only\":true,\"full_coupled_gate_pass\":false,\"case\":\""<<request.get<std::string>("case")<<"\",\"velocity_size\":"<<n<<",\"pressure_size\":"<<p<<",\"alpha\":2,\"awf\":1,\"H\":"<<geometry.H<<",\"h\":"<<geometry.h<<",\"curve\":0,\"gauge\":"<<(flow.Gauge()?"true":"false")<<",\"constant_pressure_action_ratio\":"<<flow.ConstantPressureAction()<<",\"gauge_multiplier\":"<<(flow.Gauge()?x[flow.Size()-1]:0)<<",\"free_velocity_ids\":[";ListJSON(out,flow.FreeVelocityIds()[0]);out<<',';ListJSON(out,flow.FreeVelocityIds()[1]);out<<"],\"v_to_u\":";ListJSON(out,flow.NativeVToCanonical());out<<",\"v_to_u_sign\":";ListJSON(out,flow.NativeVSigns());
         for(const auto&item:std::vector<std::pair<std::string,const Vec*>>{{"target",&target},{"lift",&lift},{"solution",&solution},{"rhs",&rhs},{"known_scalar_coefficients",&kg},{"known_scalar_load",&known},{"oldQ2k_load",&oldLoad}}){out<<",\""<<item.first<<"\":";VectorJSON(out,*item.second);}
         out<<",\"nativeVcoefftarget\":";VectorJSON(out,flow.NativeVelocity(target,1));out<<",\"mean\":";VectorJSON(out,flow.PressureMean());out<<",\"pressure_one\":";VectorJSON(out,flow.PressureOne());out<<",\"solve\":";InfoJSON(out,info);
+        if (request.get("check_pressure_correction", false))
+        {
+            constexpr int correctors = 2;
+            MixedFlow splitFlow(fields, geometry, correctors);
+            MixedFlowWork work;
+            Vec provisional = Vec::Zero(flow.Size());
+            const auto fixed = splitFlow.Correct(a, rhs, provisional, work);
+            const double liftedContinuity = rhs.segment(flow.PressureOffset(), p).norm();
+            const double fixedDifference =
+                (splitFlow.Expand(provisional, lift) - solution).cwiseAbs().maxCoeff();
+            if (work.pressureCorrections != correctors || liftedContinuity <= 1e-8 ||
+                work.pressureKrylovIterations == 0 || fixed.momentum > 1e-10 ||
+                fixed.continuity > 1e-11 || fixed.gauge > 1e-11 ||
+                fixedDifference > 1e-8 ||
+                (flow.Lift(splitFlow.Expand(provisional, lift)) - lift).norm() != 0.)
+            {
+                throw std::runtime_error("fixed correction failed the mixed residual, solution or velocity lift check");
+            }
+            Vec converged = Vec::Zero(flow.Size());
+            const auto strict = splitFlow.Solve(a, rhs, converged);
+            const double difference = (flow.Expand(converged, lift) - solution).cwiseAbs().maxCoeff();
+            if (difference > 1e-8)
+            {
+                throw std::runtime_error("pressure-preconditioned solve differs from the native mixed solution");
+            }
+            out << ",\"pressure_correction\":{\"fixed_correctors\":" << work.pressureCorrections
+                << ",\"pressure_iterations\":" << work.pressureKrylovIterations
+                << ",\"fixed_solution_difference_max\":" << fixedDifference
+                << ",\"lifted_continuity_rhs_norm\":" << liftedContinuity
+                << ",\"solution_difference_max\":" << difference << ",\"fixed\":";
+            InfoJSON(out, fixed);
+            out << ",\"strict\":";
+            InfoJSON(out, strict);
+            out << '}';
+        }
         for(const auto&item:std::vector<std::pair<std::string,const Sparse*>>{{"mass",&core.Mass()},{"pressure_mass",&core.PressureMass()},{"D",&core.Divergence()},{"G",&core.Gradient()},{"C",&core.AWF()},{"K",&k},{"system",&a},{"known_scalar_action",&flow.KnownScalarAction()}}){out<<",\""<<item.first<<"\":";MatrixJSON(out,*item.second);}
         out<<",\"elements\":[";auto vm=fields[1]->GetLocalToGlobalMap(),km=scalar->GetLocalToGlobalMap();
         for(int i=0;i<int(flow.Elements().size());++i){if(i)out<<',';const auto&e=flow.Elements()[i];out<<"{\"geometry\":"<<e.geometry<<",\"bounds\":["<<e.xl<<','<<e.xr<<','<<e.rl<<','<<e.rr<<"],\"u\":";ListJSON(out,e.u);out<<",\"us\":";ListJSON(out,e.us);out<<",\"p\":";ListJSON(out,e.p);out<<",\"ps\":";ListJSON(out,e.ps);
