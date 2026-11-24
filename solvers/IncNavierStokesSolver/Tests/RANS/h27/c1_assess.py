@@ -103,6 +103,20 @@ def geometry_check(path, reference):
         length,_=hill.face(face,face["side"],a,np.full_like(a,hill.H))
         expected=float(weights@length)*(hi-lo)/2
         defects["matching_measure"]=max(defects["matching_measure"],abs(expected-face["measure"]))
+    defects["laboratory_datum_roundtrip"] = 0.
+    # Include face points and both sides of each foot and the matching layer.
+    stations = (hill.left,-hill.L-1e-8,-hill.L,-hill.L+1e-8,-.5*hill.L,0.,
+                .5*hill.L,hill.L-1e-8,hill.L,hill.L+1e-8,hill.right)
+    radii = (0.,.007,hill.H-1e-10,hill.H,hill.H+1e-10,.52,2.7,hill.top-hill.d)
+    patch = {"bounds": (hill.left,hill.right,0.,hill.top-hill.d)}
+    for a in stations:
+        for r in radii:
+            point=hill.metrics(patch,np.array([a]),np.array([r]),outer=r>=hill.H)["position"][0]
+            x,z=point
+            laboratory_z=z-float(hill.graph(x)[0])
+            got=np.array(hill.from_experiment(40*x,40*laboratory_z))
+            error=float(np.max(np.abs(got-[a,r])))
+            defects["laboratory_datum_roundtrip"]=max(defects["laboratory_datum_roundtrip"],error)
     rotation={key: 0. for key in ("R","V","traction","production","covariance","principal","principal_raw")}
     base={row["radius"]:row for row in data["rotation"] if row["angle"]==0}
     for row in data["rotation"]:

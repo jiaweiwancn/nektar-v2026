@@ -85,10 +85,16 @@ class Hill:
     def from_experiment(self, x_mm, above_hill_mm):
         """Map a vertical laboratory sample at fixed x into the chart."""
         x = x_mm/40
+        tolerance = 64*np.finfo(float).eps*max(1.,abs(self.left),abs(self.right),abs(self.top))
+        if not self.left-tolerance <= x <= self.right+tolerance:
+            raise ValueError("experiment sample is outside the tunnel mesh")
+        # Unit conversion can place a boundary sample a few ulps past a face.
+        x = min(self.right,max(self.left,x))
         z = float(self.graph(x)[0]) + above_hill_mm/40
         self.certificate()
-        if not self.left <= x <= self.right or z > self.top:
+        if not math.isfinite(z) or z > self.top+tolerance:
             raise ValueError("experiment sample is outside the tunnel mesh")
+        z = min(z,self.top)
         reach = self.d + self.H
         limits = [x - reach, x + reach]
         def matching(a):
@@ -103,9 +109,9 @@ class Hill:
             a = brentq(orthogonality, *limits)
             f, p, _ = self.graph(a)
             r = ((z - f) - (x - a)*p)/math.hypot(1., p) - self.d
-            if r < 0:
+            if r < -tolerance:
                 raise ValueError("experiment sample is below the displaced wall")
-            return a, r
+            return a, max(0.,r)
         def projected_x(a):
             xh, zh = matching(a)
             eta = (z - zh)/(self.top - zh)
