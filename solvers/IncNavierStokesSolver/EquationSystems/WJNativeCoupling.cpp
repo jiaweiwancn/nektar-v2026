@@ -646,6 +646,13 @@ CoupledHistory Coupling::Initialise()const
             const double y=r-m_geometry.H, rise=-std::expm1(-y/.035);
             const double fade=1-SmoothTransition(r,3.5,5.5)[0];
             E*=1+m_options.hillInitialEpsilonBump*window*rise*rise*fade;
+            // The broad velocity transition can have appreciable strain
+            // where the logarithmic inlet epsilon is already small. Give
+            // that outer seed region its own smooth perturbation scale.
+            const double midLayer=SmoothTransition(r,.8,2.)[0]
+                *(1-SmoothTransition(r,7.,14.)[0]);
+            E+=.1*m_reference->InletE(m_geometry.H)
+                *m_options.hillInitialEpsilonBump*window*midLayer;
         }
         return E;
     });
