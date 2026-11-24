@@ -133,6 +133,7 @@ def geometry_check(path, reference):
     limits=dict(metrics=2e-11,rotation=5e-12,cutoff_derivative=1e-8)
     return dict(native=identity(path),height=hill.height,certificate=hill.certificate(),
                 defects=defects,rotation_defects=rotation,cutoff_relative_defects=cutoff,
+                flat_operator_relative_defects=data.get("flat_operator_relative_defects"),
                 limits=limits,passed=bool(max(defects.values())<=limits["metrics"] and
                     max(rotation.values())<=limits["rotation"] and max(cutoff.values())<=limits["cutoff_derivative"]))
 

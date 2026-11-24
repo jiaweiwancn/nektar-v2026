@@ -77,8 +77,27 @@ int main(int argc,char **argv)
         map.lengthX=2.5;
         session->LoadParameter("WJHillHeight",map.amplitude,1.);
 
-        const MixedFlow flow(fields,geometry);
+        MixedFlow flow(fields,geometry);
         const RuleFactory rules(flow.Core(),6,8);
+        std::string flatOperators="null";
+        if (map.amplitude==0.)
+        {
+            auto flatGeometry=geometry;
+            flatGeometry.normalMap.reset();
+            MixedFlow flat(fields,flatGeometry);
+            auto k=MemoryManager<MultiRegions::ContField>::AllocateSharedPtr(session,graph,"k",true,false);
+            flow.SetTransportedKSpace(k);
+            flat.SetTransportedKSpace(k);
+            auto relative=[](const Sparse &a,const Sparse &b) {
+                return (a-b).norm()/b.norm();
+            };
+            flatOperators=J::Object({
+                {"velocity_mass",J::Number(relative(flow.Core().Mass(),flat.Core().Mass()))},
+                {"pressure_mass",J::Number(relative(flow.Core().PressureMass(),flat.Core().PressureMass()))},
+                {"weak_divergence",J::Number(relative(flow.Core().Divergence(),flat.Core().Divergence()))},
+                {"sampled_pressure",J::Number(relative(flow.Core().AWF(),flat.Core().AWF()))},
+                {"sampled_k",J::Number(relative(flow.KnownScalarAction(),flat.KnownScalarAction()))}});
+        }
         const Vec first=flow.Project([&](double a,double z) {
             const double r=z-geometry.d0;
             return .1+.23*a+.07*a*r-.12*r*r;
@@ -137,7 +156,8 @@ int main(int argc,char **argv)
         std::ofstream output(argv[3]);
         output<<J::Object({{"height",J::Number(map.amplitude)},{"points",J::List(observations)},
                      {"faces",J::List(faces)},{"rotation",RotationObservations()},
-                     {"cutoff_derivatives",J::List(cutoff)}})<<'\n';
+                     {"cutoff_derivatives",J::List(cutoff)},
+                     {"flat_operator_relative_defects",flatOperators}})<<'\n';
         session->Finalise();
         return output ? 0 : 1;
     }

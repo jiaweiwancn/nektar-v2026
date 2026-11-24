@@ -386,6 +386,29 @@ class Audit:
                                  (float((w*length)@np.abs(phi))*self.ref.A/self.ref.H))
         return dict(pointwise_approximation=exact_error, interior_projection_defect=normal_error)
 
+    def along_layer_k_flux(self,column,a):
+        values=0.
+        nodes,weights=self.gauss
+        for e in column:
+            if e["epsilon"]:
+                continue
+            cut=self.ref.cutoff(self.trace(e,"k",np.array([a])))[0]
+            cuts=self.cuts(*e["bounds"][2:],(cut,))
+            for lo,hi in zip(cuts[:-1],cuts[1:]):
+                r=lo+(hi-lo)*(1+nodes)/2
+                ax=np.full_like(r,a)
+                metric=self.hill.metrics(e,ax,r)
+                b,g=self.basis(e,"k",ax,r,metric)
+                local=self.s["k"][e["k"]]
+                K=self.trace(e,"k",ax)
+                k=b@local
+                E=K**1.5/self.ref.cl/np.maximum(r,cut)
+                D=self.ref.nu+self.ref.cd*k*k/(self.ref.sk*E)
+                u=self.velocity(po.basis(e,"u",ax,r)[0],np.asarray(e["u"]),self.s)
+                grad=np.einsum("qij,i->qj",g,local)
+                values+=(hi-lo)/2*float(weights@dot(k[:,None]*u-D[:,None]*grad,metric["t"]))
+        return values
+
     def interface_checks(self,regions,total):
         area=jump_traction=jump_k=face_error=trace_jump=0.
         raw_mass=destruction_error=layer_mass_identity=0.
@@ -393,6 +416,7 @@ class Audit:
         fluxes=defaultdict(float)
         lower_K,upper_K=math.inf,-math.inf
         crossings=[]
+        layer_k_square,layer_k_measure=0.,0.
         for lo,hi in self.interfaces:
             a,r,w=self.face(lo,3)
             Li,n=self.hill.face(lo,3,a,r)
@@ -430,6 +454,7 @@ class Audit:
             destroyed=np.zeros(len(a))
             along=np.zeros(len(a))
             divint=np.zeros(len(a))
+            storage_k,source_k,flux_k=np.zeros((3,len(a)))
             column=self.columns[tuple(lo["bounds"][:2])]
             xl,xr=lo["bounds"][:2]
             xfit=np.linspace(xl,xr,4)
@@ -451,7 +476,7 @@ class Audit:
                         rr=l+(h-l)*(1+nodes)/2
                         ax=np.full_like(rr,aa)
                         metric=self.hill.metrics(e,ax,rr)
-                        _,U,G,_,_,_,q,_,_,_=self.sample(e,ax,rr,metric)
+                        basis,U,G,_,_,production,q,_,_,_=self.sample(e,ax,rr,metric)
                         wr=gauss*(h-l)/2
                         destroyed[i]+=float(wr@(metric["det"]*q["epsilon"]))
                         distance_curve=metric["curvature"]*metric["effective_area"]
@@ -459,11 +484,22 @@ class Audit:
                         ut_a-=distance_curve*dot(U,metric["n"])
                         along[i]+=float(wr@ut_a)
                         divint[i]+=float(wr@(metric["det"]*np.trace(G,axis1=1,axis2=2)))
+                        storage_k[i]+=float(wr@(metric["det"]*(basis["k"][0]@self.rates["k"][e["k"]])))
+                        forcing=self.exact.sources(e,ax,rr,self.time,steady=not self.data["step"])[1]["k"] if self.exact else 0.
+                        source_k[i]+=float(wr@(metric["det"]*(production-q["epsilon"]+forcing)))
+                step=min(1e-4*(xr-xl),.2*(aa-xl),.2*(xr-aa))
+                fa=[self.along_layer_k_flux(column,aa+step*s) for s in (-2,-1,1,2)]
+                flux_k[i]=(fa[0]-8*fa[1]+8*fa[2]-fa[3])/(12*step)
             target=JH["effective_area"]*K**1.5/self.ref.cl*(
                 1+np.log(self.ref.H/cutoff)+JH["curvature"]*(self.ref.H-cutoff/2))
             destruction_error=max(destruction_error,float(np.max(np.abs(destroyed-target))))
             raw_mass=max(raw_mass,float(np.max(np.abs(through+along))))
             layer_mass_identity=max(layer_mass_identity,float(np.max(np.abs(through+along-divint))))
+            exchange=JH["matching_area"]*(dot(u0,n)*q0["k"]-dot(d0["k"][:,None]*g0["k"],n))
+            ds=JH["effective_area"]
+            residual=(storage_k+flux_k+exchange-source_k)/ds
+            layer_k_square+=float((w*ds)@(residual*residual))
+            layer_k_measure+=float((w*ds).sum())
         free={key: np.intersect1d(list(i),self.free[key]) for key,i in ids.items()}
         weak={key: float(np.max(np.abs(total[key][i]),initial=0.)) for key,i in free.items()}
         flux_reaction=-float(self.one["k"][free["k"]]@regions["inner"]["k"][free["k"]])
@@ -475,6 +511,7 @@ class Audit:
                     cutoff_split_abscissae=sorted(set(crossings)),
                     destruction_formula_max_error=destruction_error,
                     raw_integrated_normal_mass_defect=raw_mass,
+                    raw_column_k_budget_rms=math.sqrt(layer_k_square/layer_k_measure),
                     layer_mass_coordinate_identity_max_error=layer_mass_identity)
 
 

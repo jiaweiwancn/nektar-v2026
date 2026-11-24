@@ -524,24 +524,29 @@ Vector Coupling::InitialVelocity(double a, double r) const
     double level=r;
     Vector gradient{chart.inverse[2][0],0.,chart.inverse[2][2]};
     // The streamfunction is the integral of the retained approach U in
-    // level. Match its normal distance at H, then merge into the outer chart.
-    constexpr double blendStart=.25, blendEnd=.8;
-    if (outer && r<blendEnd && map.amplitude!=0)
+    // level. Match the physical distance and gradient at H using the
+    // linear normal projection of the ruled displacement there. Relax
+    // that initial coordinate gradually without continuing the normal rays.
+    constexpr double blendStart=.35, blendEnd=3.;
+    if (outer && r<blendEnd && map.amplitude!=0.)
     {
-        auto tube=map;
-        tube.compositeTunnel=false;
-        const auto foot=tube.Inverse(chart.point);
-        const double normalDistance=foot[2]-m_geometry.d0;
-        const double reachBound=std::abs(map.amplitude)*std::pow(std::acos(-1.)/map.lengthX,2)/2;
-        Require(foot[2]*reachBound<.8,"initial streamfunction left certified normal reach");
-        const auto normal=tube.At(foot).normal;
+        const auto matching=m_geometry.At(a,m_geometry.H,a,a,false);
+        const auto &normal=matching.normal;
+        const auto &tangent=matching.tangent1;
+        const double curvature=matching.kappa1+matching.kappa2;
+        const double radialX=chart.jacobian[0][2],radialZ=chart.jacobian[2][2];
+        const double slope=normal[0]*radialX+normal[2]*radialZ;
+        const double slopeA=curvature*matching.baseArea*(tangent[0]*radialX+tangent[2]*radialZ)
+            +normal[0]/(map.tunnelTop-m_geometry.d0-m_geometry.H);
         const double q=std::clamp((r-blendStart)/(blendEnd-blendStart),0.,1.);
         const double blend=q*q*q*(10+q*(-15+6*q));
         const double blendR=30*q*q*(1-q)*(1-q)/(blendEnd-blendStart);
-        level=(1-blend)*normalDistance+blend*r;
+        const double distance=r-m_geometry.H;
+        level=r+(1-blend)*distance*(slope-1);
+        const double radialDerivative=1+(1-blend-distance*blendR)*(slope-1);
         for (int i : {0,2})
-            gradient[i]=(1-blend)*normal[i]+
-                (blend+blendR*(r-normalDistance))*gradient[i];
+            gradient[i]=radialDerivative*gradient[i]+
+                (1-blend)*distance*slopeA*chart.inverse[0][i];
     }
     if (m_options.hillInitialSlowdown!=0.)
     {
