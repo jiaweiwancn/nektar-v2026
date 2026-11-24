@@ -6,10 +6,13 @@ import argparse
 import json
 import math
 from pathlib import Path
+import re
+import xml.etree.ElementTree as ET
 
 import numpy as np
 from numpy.polynomial.chebyshev import chebder, chebval
 from numpy.polynomial.legendre import leggauss
+from scipy.optimize import minimize_scalar
 
 from c1_geometry import Hill
 from c1_mms import Manufactured
@@ -18,6 +21,60 @@ from resources import identity
 
 
 FIELDS = ("velocity", "pressure", "k", "epsilon")
+
+
+def guard_replay(path, ref):
+    pattern=(r"geometry=(\d+), x=([^,]+), r=([^,]+), k=([^,]+), E=([^,]+), auxiliary=([^,]+), "
+             r"chi=([^,]+), covariance/k=([^,]+), principal/mu=([^,]+), Gxx=([^,]+), "
+             r"Gxz=([^,]+), Gzx=([^,]+), Gzz=([-+0-9.eE]+)")
+    match=re.search(pattern,path.read_text())
+    if not match:
+        raise ValueError(f"no constitutive guard point in {path}")
+    owner,a,r,k,E,aux,chi,cov,reported,*g=map(float,match.groups())
+    session=ET.parse(path.with_name("run.xml"))
+    parameters={key.strip():float(value) for key,value in
+                (element.text.split("=",1) for element in session.findall(".//PARAMETERS/P"))}
+    hill=Hill(dict(left=-10.,right=15.,d0=ref.d0,H=ref.H,tunnel_top=ref.top+ref.d0,
+                   hill_height=parameters["WJHillHeight"],hill_half_length=2.5))
+    cell={"bounds":(a-1,a+1,ref.H if r>=ref.H else 0.,r+1)}
+    metric=hill.metrics(cell,np.array([a]),np.array([r]))
+    n=np.array([metric["n"][0,0],0.,metric["n"][0,1]])
+    P=np.eye(3)-np.outer(n,n)
+    G=np.zeros((3,3))
+    G[0,0],G[0,2],G[2,0],G[2,2]=g
+    def law(G):
+        M=G+G.T
+        R=np.eye(3)*(2*k/3)
+        b=-aux*(P@M@n)
+        R+=np.outer(b,n)+np.outer(n,b)
+        mu=ref.nu+(1-chi)*aux
+        if chi:
+            rwj,N,*_=po.full_wj(np.array([k]),np.array([E]),G[None,:,:])
+            O=.5*k/E*(G-G.T)
+            mu+=chi*.6*k*k/E*N[0]/(N[0]**2-2*np.trace(O@O))
+            R=(1-chi)*R+chi*rwj[0]
+        return R,ref.nu*M-R+(2*k/3)*np.eye(3),mu
+    R,_,mu=law(G)
+    covariance=float(np.linalg.eigvalsh(R)[0]/k)
+    def minimum(step):
+        def symbol(theta):
+            c,s=np.cos(theta),np.sin(theta)
+            L=np.outer([-s,0,c],[c,0,s])
+            v=[law(G+j*step*L)[1] for j in (-2,-1,1,2)]
+            derivative=(v[0]-8*v[1]+8*v[2]-v[3])/(12*step)
+            return float(np.sum(L*derivative)/mu)
+        angles=np.linspace(0,np.pi,241)
+        index=int(np.argmin([symbol(theta) for theta in angles]))
+        theta=angles[index]
+        window=np.pi/240
+        result=minimize_scalar(symbol,bounds=(theta-window,theta+window),method="bounded",
+                               options=dict(xatol=1e-13))
+        return float(result.fun)
+    return dict(log=identity(path),session=identity(path.with_name("run.xml")),geometry=int(owner),
+                a=a,rho=r,physical_point=metric["position"][0].tolist(),gradient=G.tolist(),
+                k=k,E=E,normal=n.tolist(),auxiliary=aux,chi=chi,
+                native_covariance=cov,independent_covariance=covariance,native_principal=reported,
+                independent_principal=[minimum(h) for h in (1e-4,5e-5)])
 
 
 def geometry_check(path, reference):
@@ -76,7 +133,7 @@ def geometry_check(path, reference):
     limits=dict(metrics=2e-11,rotation=5e-12,cutoff_derivative=1e-8)
     return dict(native=identity(path),height=hill.height,certificate=hill.certificate(),
                 defects=defects,rotation_defects=rotation,cutoff_relative_defects=cutoff,
-                limits=limits,passed=(max(defects.values())<=limits["metrics"] and
+                limits=limits,passed=bool(max(defects.values())<=limits["metrics"] and
                     max(rotation.values())<=limits["rotation"] and max(cutoff.values())<=limits["cutoff_derivative"]))
 
 
@@ -174,6 +231,7 @@ def main():
     parser.add_argument("--geometry",type=Path,nargs="*")
     parser.add_argument("--spatial",type=Path,nargs="*")
     parser.add_argument("--temporal",type=Path,nargs="*")
+    parser.add_argument("--guard",type=Path,nargs="*")
     parser.add_argument("--out",type=Path,required=True)
     args=parser.parse_args()
     ref=po.load_reference(args.table)
@@ -184,6 +242,8 @@ def main():
         result["spatial"]=spatial(args.spatial)
     if args.temporal:
         result["temporal"]=temporal(args.temporal,ref)
+    if args.guard:
+        result["guard"]=[guard_replay(p,ref) for p in args.guard]
     with args.out.open("x") as stream:
         json.dump(result,stream,indent=2,allow_nan=False)
         stream.write("\n")

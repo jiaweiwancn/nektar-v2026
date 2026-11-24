@@ -436,7 +436,7 @@ class Audit:
             polynomial=np.polynomial.Chebyshev.fit(xfit,self.trace(hi,"k",xfit),3,domain=(xl,xr))
             extrema=[xl,xr]+[float(z.real) for z in polynomial.deriv().roots()
                              if abs(z.imag)<1e-12 and xl<z.real<xr]
-            bounds=polynomial(extrema)
+            bounds=polynomial(np.asarray(extrema))
             lower_K=min(lower_K,float(bounds.min()))
             upper_K=max(upper_K,float(bounds.max()))
             for e in column:
@@ -489,8 +489,10 @@ def main():
     data,_=po.load_native(args.native)
     began=time.monotonic()
     evidence=Audit(data,ref,args.order,began+args.seconds).integrate()
-    output=dict(native=identity(args.native),table=identity(args.table),order=args.order,
-                time=data["time"],step=data["step"],elapsed=time.monotonic()-began,**evidence)
+    output=dict(native=identity(args.native),table=identity(args.table),
+                audit_source=identity(__file__),source_identity=data["source_identity"],
+                order=args.order,time=data["time"],step=data["step"],
+                elapsed=time.monotonic()-began,**evidence)
     with args.out.open("x") as stream:
         json.dump(output,stream,indent=2,allow_nan=False)
         stream.write("\n")

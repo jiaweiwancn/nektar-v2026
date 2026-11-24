@@ -56,6 +56,13 @@ std::string StateHash(const CoupledState&s)
 {D::Sha256 hash;for(const auto*v:{&s.flow,&s.k,&s.epsilon})hash.Update(v->data(),v->size()*sizeof(double));return hash.Finish();}
 CoupledState Combination(const CoupledState&a,double wa,const CoupledState&b,double wb)
 {return {wa*a.flow+wb*b.flow,wa*a.k+wb*b.k,wa*a.epsilon+wb*b.epsilon};}
+std::array<double,2> HillWindow(double a,double left,double right,double band)
+{
+    const double width=a<0 ? -band-left : right-band;
+    const double xi=std::clamp(a<0 ? (a-left)/width : (right-a)/width,0.,1.);
+    return {xi*xi*xi*(10+xi*(-15+6*xi)),
+            (a<0 ? 1. : -1.)*30*xi*xi*(1-xi)*(1-xi)/width};
+}
 }
 
 Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry geometry,
@@ -130,6 +137,10 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
             (m_geometry.normalMap && !m_options.manufactured &&
              m_options.hillInitialSlowdown>0. && m_options.hillInitialSlowdown<=.9),
             "initial slowdown requires a physical hill and an amplitude in (0,.9]");
+    Require(m_options.hillInitialEpsilonBump==0. ||
+            (m_geometry.normalMap && !m_options.manufactured &&
+             m_options.hillInitialEpsilonBump>0. && m_options.hillInitialEpsilonBump<=2.),
+            "initial epsilon bump requires a physical hill and an amplitude in (0,2]");
     for(const auto&field:m_fields)for(int e=0;e<field->GetExpSize();++e)for(int d=0;d<2;++d)
         Require(field->GetExp(e)->GetBasis(d)->GetBasisType()==LibUtilities::eModified_A,"coupled fields require the declared native Modified_A basis");
     m_flow.SetTransportedKSpace(m_fields[2]);BuildTopology();
@@ -188,7 +199,8 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     signature<<"|outlet:"<<m_outletIdentity;
     if (m_geometry.normalMap)
         signature << "|NormalCosineHillV1|" << m_geometry.normalMap->Signature()
-                  << "|initial_slowdown:" << m_options.hillInitialSlowdown;
+                  << "|initial_slowdown:" << m_options.hillInitialSlowdown
+                  << "|initial_epsilon_bump:" << m_options.hillInitialEpsilonBump;
     for(const auto&e:m_flow.Elements()){
         signature<<'|'<<e.geometry<<','<<e.xl<<','<<e.xr<<','<<e.rl<<','<<e.rr;
         for(int a:e.u)signature<<','<<a;for(double a:e.us)signature<<','<<a;
@@ -535,11 +547,7 @@ Vector Coupling::InitialVelocity(double a, double r) const
     {
         // Change the initial streamfunction only. Blend back to the full
         // approach profile at the inlet, outlet and roof.
-        const double band=map.lengthX+.5;
-        const double width=a<0 ? -band-m_left : m_right-band;
-        const double xi=std::clamp(a<0 ? (a-m_left)/width : (m_right-a)/width,0.,1.);
-        const double window=xi*xi*xi*(10+xi*(-15+6*xi));
-        const double windowA=(a<0 ? 1. : -1.)*30*xi*xi*(1-xi)*(1-xi)/width;
+        const auto [window,windowA]=HillWindow(a,m_left,m_right,map.lengthX+.5);
         const double q=level/m_top;
         const double fade=1-q*q*(3-2*q), fadeR=-6*q*(1-q)/m_top;
         const double f=-std::expm1(-level);
@@ -560,9 +568,12 @@ Vec Coupling::ProjectContinuity(const Vec &flow) const
     // thin ground cells. The regularizer acts only in this initial lift.
     // Discard the projection multiplier. Advancement uses the full G_eff.
     const int nv=2*m_flow.VelocitySize();
-    const double length=.4*m_geometry.H;
-    const Sparse regularizer=m_flow.Core().Strain(
-        [length](double,double){return length*length;},false);
+    Sparse regularizer(nv,nv);
+    if (!m_options.manufactured)
+    {
+        const double length=.4*m_geometry.H;
+        regularizer=m_flow.Core().Strain([length](double,double){return length*length;},false);
+    }
     const auto system=m_flow.System(1.,regularizer,0.);
     Eigen::SparseLU<Sparse> factor;
     factor.compute(system);
@@ -600,7 +611,23 @@ CoupledHistory Coupling::Initialise()const
         else h.current.flow.tail(m_flow.PressureSize())=value;
     }
     h.current.k=m_k.Project([&](double x,double z){return m_mms?m_mms->Fields(NativeX(x),NativeRadius(z)+m_geometry.d0,0).k.value:m_reference->InletK(NativeRadius(z));});
-    h.current.epsilon=m_e.Project([&](double x,double z){return m_mms?m_mms->OuterEpsilon(NativeX(x),NativeRadius(z)+m_geometry.d0,0).value:m_reference->InletE(NativeRadius(z));});
+    h.current.epsilon=m_e.Project([&](double x,double z){
+        const double r=NativeRadius(z);
+        if (m_mms)
+            return m_mms->OuterEpsilon(NativeX(x),r+m_geometry.d0,0).value;
+        double E=m_reference->InletE(r);
+        if (m_options.hillInitialEpsilonBump!=0.)
+        {
+            // This initial outer profile leaves the fixed inlet and the
+            // dependent H trace intact. It supplies no equation source.
+            const double window=HillWindow(x,m_left,m_right,m_geometry.normalMap->lengthX+.5)[0];
+            const double y=r-m_geometry.H, rise=-std::expm1(-y/.035);
+            const double eta=y/(m_top-m_geometry.H);
+            const double fade=(1-eta)*(1-eta)*std::exp(-y/4.);
+            E*=1+m_options.hillInitialEpsilonBump*window*rise*rise*fade;
+        }
+        return E;
+    });
     if(!m_mms && !m_geometry.normalMap)m_physicalFlowLift=m_flow.Lift(h.current.flow);
     if(m_geometry.normalMap)
     {
@@ -1619,6 +1646,7 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
                <<",\"hill_height\":"<<map.amplitude<<",\"hill_half_length\":"<<map.lengthX
                <<",\"tunnel_top\":"<<map.tunnelTop
                <<",\"initial_slowdown\":"<<m_options.hillInitialSlowdown
+               <<",\"initial_epsilon_bump\":"<<m_options.hillInitialEpsilonBump
                <<",\"coordinates\":\"affine chart (a,d0+rho); velocity components Cartesian\"";
         }
         out<<"},\"free_velocity_ids\":[";integers(m_flow.FreeVelocityIds()[0]);out<<',';integers(m_flow.FreeVelocityIds()[1]);out<<"],\"k_free_ids\":";integers(m_k.FreeIds());out<<",\"epsilon_free_ids\":";integers(m_e.FreeIds());
