@@ -558,14 +558,13 @@ Vector Coupling::InitialVelocity(double a, double r) const
         // Change the initial streamfunction only. Blend back to the full
         // approach profile at the inlet, outlet and roof.
         const auto [window,windowA]=HillWindow(a,m_left,m_right,map.lengthX+.5);
-        const auto [turned,turnedR]=SmoothTransition(level,.6,4.8);
+        const auto [turned,turnedR]=SmoothTransition(level,2.5,9.);
         const double fade=1-turned, fadeR=-turnedR;
-        const double f=-std::expm1(-level);
         const double alpha=m_options.hillInitialSlowdown;
         for(int i : {0,2})
-            gradient[i]=(1-alpha*window*(std::exp(-level)*fade+f*fadeR))*gradient[i]-
-                alpha*windowA*f*fade*chart.inverse[0][i];
-        level-=alpha*window*f*fade;
+            gradient[i]=(1-alpha*window*(fade+level*fadeR))*gradient[i]-
+                alpha*windowA*level*fade*chart.inverse[0][i];
+        level*=1-alpha*window*fade;
     }
     const double velocity=m_reference->InletU(level);
     return {velocity*gradient[2],0.,-velocity*gradient[0]};
