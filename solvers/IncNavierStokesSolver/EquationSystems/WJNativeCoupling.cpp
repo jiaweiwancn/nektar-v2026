@@ -126,6 +126,10 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     Require(!m_geometry.normalMap || (m_reference->Policy()==ReferencePolicy::ExactInnerFiniteNuV1 &&
             m_reference->Transport()==InnerKTransport::ScalarV2),
         "the normal layer requires the exact finite-viscosity ScalarCdV2 reference");
+    Require(m_options.hillInitialSlowdown==0. ||
+            (m_geometry.normalMap && !m_options.manufactured &&
+             m_options.hillInitialSlowdown>0. && m_options.hillInitialSlowdown<=.9),
+            "initial slowdown requires a physical hill and an amplitude in (0,.9]");
     for(const auto&field:m_fields)for(int e=0;e<field->GetExpSize();++e)for(int d=0;d<2;++d)
         Require(field->GetExp(e)->GetBasis(d)->GetBasisType()==LibUtilities::eModified_A,"coupled fields require the declared native Modified_A basis");
     m_flow.SetTransportedKSpace(m_fields[2]);BuildTopology();
@@ -183,7 +187,8 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
         signature<<'|'<<m_reference->TransportName()<<'|'<<m_reference->BoundaryIdentity();
     signature<<"|outlet:"<<m_outletIdentity;
     if (m_geometry.normalMap)
-        signature << "|NormalCosineHillV1|" << m_geometry.normalMap->Signature();
+        signature << "|NormalCosineHillV1|" << m_geometry.normalMap->Signature()
+                  << "|initial_slowdown:" << m_options.hillInitialSlowdown;
     for(const auto&e:m_flow.Elements()){
         signature<<'|'<<e.geometry<<','<<e.xl<<','<<e.xr<<','<<e.rl<<','<<e.rr;
         for(int a:e.u)signature<<','<<a;for(double a:e.us)signature<<','<<a;
@@ -505,6 +510,24 @@ Vector Coupling::InitialVelocity(double a, double r) const
         for (int i : {0,2})
             gradient[i]=(1-blend)*normal[i]+
                 (blend+blendR*(r-normalDistance))*gradient[i];
+    }
+    if (m_options.hillInitialSlowdown!=0.)
+    {
+        // Change the initial streamfunction only. Blend back to the full
+        // approach profile at the inlet, outlet and roof.
+        const double band=map.lengthX+.5;
+        const double width=a<0 ? -band-m_left : m_right-band;
+        const double xi=std::clamp(a<0 ? (a-m_left)/width : (m_right-a)/width,0.,1.);
+        const double window=xi*xi*xi*(10+xi*(-15+6*xi));
+        const double windowA=(a<0 ? 1. : -1.)*30*xi*xi*(1-xi)*(1-xi)/width;
+        const double q=level/m_top;
+        const double fade=1-q*q*(3-2*q), fadeR=-6*q*(1-q)/m_top;
+        const double f=-std::expm1(-level);
+        const double alpha=m_options.hillInitialSlowdown;
+        for(int i : {0,2})
+            gradient[i]=(1-alpha*window*(std::exp(-level)*fade+f*fadeR))*gradient[i]-
+                alpha*windowA*f*fade*chart.inverse[0][i];
+        level-=alpha*window*f*fade;
     }
     const double velocity=m_reference->InletU(level);
     return {velocity*gradient[2],0.,-velocity*gradient[0]};
@@ -1558,6 +1581,7 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
                <<RANSWallSolveJson::Quote(map.Signature())
                <<",\"hill_height\":"<<map.amplitude<<",\"hill_half_length\":"<<map.lengthX
                <<",\"tunnel_top\":"<<map.tunnelTop
+               <<",\"initial_slowdown\":"<<m_options.hillInitialSlowdown
                <<",\"coordinates\":\"affine chart (a,d0+rho); velocity components Cartesian\"";
         }
         out<<"},\"free_velocity_ids\":[";integers(m_flow.FreeVelocityIds()[0]);out<<',';integers(m_flow.FreeVelocityIds()[1]);out<<"],\"k_free_ids\":";integers(m_k.FreeIds());out<<",\"epsilon_free_ids\":";integers(m_e.FreeIds());

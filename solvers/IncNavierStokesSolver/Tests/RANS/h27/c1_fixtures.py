@@ -20,6 +20,7 @@ def main():
     parser.add_argument("case", choices=("flat", "hill", "manufactured"))
     parser.add_argument("out", type=Path)
     parser.add_argument("--height", type=float)
+    parser.add_argument("--initial-slowdown", type=float, default=0.)
     parser.add_argument("--level", type=int, choices=range(4), default=0)
     parser.add_argument("--dt", type=float, default=.02)
     parser.add_argument("--steps", type=int, default=3)
@@ -64,6 +65,7 @@ def main():
     if args.case != "flat":
         info["WJGeometry"] = "NormalCosineHillV1"
         parameters["WJHillHeight"] = args.height if args.height is not None else (.1 if manufactured else 1.)
+        parameters["WJHillInitialSlowdown"] = args.initial_slowdown
     if manufactured:
         info["WJMMSVariant"] = "NormalTubeV1"
     edit(session, info, parameters)

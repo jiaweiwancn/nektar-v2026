@@ -30,6 +30,7 @@ struct CoupledOptions
     double dt=.005,linearTolerance=1e-12,nonlinearTolerance=1e-10,mmsBodyAmplitude=0;
     int maximumIterations=60,quadratureX=8,quadratureR=12,andersonDepth=0;
     bool manufactured=false,recordNonlinearTrace=false,checkCurrentActions=false;
+    double hillInitialSlowdown=0.;
     std::string outletPolicy="FullTractionV1";
     bool checkOutletActions=false;
     double diagnosticOutletX=15.;

@@ -112,6 +112,7 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
               "WJHillHeight must lie in [0,1] code units");
     }
     WJNative::CoupledOptions options;options.dt=m_timestep;options.manufactured=mode=="Manufactured";options.sourceIdentity=WJ_H27_SOURCE_ID;
+    m_session->LoadParameter("WJHillInitialSlowdown",options.hillInitialSlowdown,0.);
     std::string backend;m_session->LoadSolverInfo("WJConstitutiveBackend",backend,"Historical");Check(backend=="Historical"||backend=="FastFull3DV1","unknown WJ constitutive backend");options.backend=backend=="Historical"?WJNative::ConstitutiveBackend::Historical:WJNative::ConstitutiveBackend::FastFull3DV1;
     m_session->LoadParameter("WJLinearTolerance",options.linearTolerance,1e-12);m_session->LoadParameter("WJCoupledTolerance",options.nonlinearTolerance,1e-10);m_session->LoadParameter("WJMaximumIterations",options.maximumIterations,60);
     m_session->LoadParameter("WJQuadratureX",options.quadratureX,8);m_session->LoadParameter("WJQuadratureR",options.quadratureR,12);
