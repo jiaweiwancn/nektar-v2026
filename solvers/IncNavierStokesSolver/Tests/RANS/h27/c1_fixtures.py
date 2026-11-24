@@ -24,6 +24,8 @@ def main():
     parser.add_argument("--initial-epsilon-bump", type=float, default=0.)
     parser.add_argument("--level", type=int, choices=range(4), default=0)
     parser.add_argument("--bisect-streamwise", action="store_true")
+    parser.add_argument("--resolve-outer-seed", action="store_true",
+                        help="split outer hill cells around the initial dissipation transitions")
     parser.add_argument("--dt", type=float, default=.02)
     parser.add_argument("--steps", type=int, default=3)
     parser.add_argument("--restart", type=Path)
@@ -36,6 +38,8 @@ def main():
     parser.add_argument("--flat-map-control", action="store_true")
     parser.add_argument("--trace-derivative-check", action="store_true")
     args = parser.parse_args()
+    if args.resolve_outer_seed and args.case != "hill":
+        parser.error("--resolve-outer-seed requires a physical hill")
     out = args.out.resolve()
     out.mkdir(parents=True)
     plans = Path(__file__).resolve().parents[5] / "docs/plans/wj-h27-linux"
@@ -54,6 +58,13 @@ def main():
         xs, rs = bisect(xs), bisect(rs)
     if args.bisect_streamwise:
         xs = bisect(xs)
+    if args.resolve_outer_seed:
+        d0 = .0875
+        transition = [.35, .8, 2., 3.5, 5.5, 7., 14.]
+        rs = sorted(set(rs + [d0 + radius for radius in transition]))
+        midpoints = [(lo + hi) / 2 for lo, hi in zip(rs, rs[1:])
+                     if lo >= d0 + .35 and hi - lo > .12]
+        rs = sorted(rs + midpoints)
     geometry = out / "geometry.xml"
     mesh(geometry, xs, rs, quadrature=12)
     session = out / "run.xml"
