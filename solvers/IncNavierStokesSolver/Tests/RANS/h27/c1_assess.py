@@ -161,7 +161,10 @@ def field_norms(data, ref, other=None, order=20):
     n,n_p,*_=data["sizes"]
     state={key:np.asarray(value) for key,value in data["coefficients"].items()}
     if other is not None:
-        po.require(other["geometry"]==geometry and other["elements"]==data["elements"],
+        metric_keys=("mapping","normal_map_signature","d0","H","h","left","right","top",
+                     "hill_height","hill_half_length","tunnel_top")
+        po.require(all(geometry[key]==other["geometry"][key] for key in metric_keys)
+                   and other["elements"]==data["elements"],
                    "temporal differences require identical native spaces")
         state={key:value-np.asarray(other["coefficients"][key]) for key,value in state.items()}
     nodes,weights=leggauss(order)

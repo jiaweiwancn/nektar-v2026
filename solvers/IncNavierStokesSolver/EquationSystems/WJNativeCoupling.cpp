@@ -15,6 +15,7 @@
 #include <cmath>
 #include <fstream>
 #include <iomanip>
+#include <iostream>
 #include <limits>
 #include <set>
 #include <sstream>
@@ -62,6 +63,11 @@ std::array<double,2> HillWindow(double a,double left,double right,double band)
     const double xi=std::clamp(a<0 ? (a-left)/width : (right-a)/width,0.,1.);
     return {xi*xi*xi*(10+xi*(-15+6*xi)),
             (a<0 ? 1. : -1.)*30*xi*xi*(1-xi)*(1-xi)/width};
+}
+std::array<double,2> SmoothTransition(double value,double lower,double upper)
+{
+    const double t=std::clamp((value-lower)/(upper-lower),0.,1.);
+    return {t*t*t*(10+t*(-15+6*t)),30*t*t*(1-t)*(1-t)/(upper-lower)};
 }
 }
 
@@ -139,8 +145,8 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
             "initial slowdown requires a physical hill and an amplitude in (0,.9]");
     Require(m_options.hillInitialEpsilonBump==0. ||
             (m_geometry.normalMap && !m_options.manufactured &&
-             m_options.hillInitialEpsilonBump>0. && m_options.hillInitialEpsilonBump<=2.),
-            "initial epsilon bump requires a physical hill and an amplitude in (0,2]");
+             m_options.hillInitialEpsilonBump>0. && m_options.hillInitialEpsilonBump<=6.),
+            "initial epsilon bump requires a physical hill and an amplitude in (0,6]");
     for(const auto&field:m_fields)for(int e=0;e<field->GetExpSize();++e)for(int d=0;d<2;++d)
         Require(field->GetExp(e)->GetBasis(d)->GetBasisType()==LibUtilities::eModified_A,"coupled fields require the declared native Modified_A basis");
     m_flow.SetTransportedKSpace(m_fields[2]);BuildTopology();
@@ -525,10 +531,9 @@ Vector Coupling::InitialVelocity(double a, double r) const
     Vector gradient{chart.inverse[2][0],0.,chart.inverse[2][2]};
     // The streamfunction is the integral of the retained approach U in
     // level. Match the physical distance and gradient at H using the
-    // linear normal projection of the ruled displacement there. Relax
-    // that initial coordinate gradually without continuing the normal rays.
-    constexpr double blendStart=.35, blendEnd=3.;
-    if (outer && r<blendEnd && map.amplitude!=0.)
+    // linear normal projection of the ruled displacement there. Recover
+    // horizontal approach streamlines above the transition in physical space.
+    if (outer && map.amplitude!=0.)
     {
         const auto matching=m_geometry.At(a,m_geometry.H,a,a,false);
         const auto &normal=matching.normal;
@@ -538,14 +543,14 @@ Vector Coupling::InitialVelocity(double a, double r) const
         const double slope=normal[0]*radialX+normal[2]*radialZ;
         const double slopeA=curvature*matching.baseArea*(tangent[0]*radialX+tangent[2]*radialZ)
             +normal[0]/(map.tunnelTop-m_geometry.d0-m_geometry.H);
-        const double q=std::clamp((r-blendStart)/(blendEnd-blendStart),0.,1.);
-        const double blend=q*q*q*(10+q*(-15+6*q));
-        const double blendR=30*q*q*(1-q)*(1-q)/(blendEnd-blendStart);
+        const auto [blend,blendR]=SmoothTransition(r,.35,4.);
         const double distance=r-m_geometry.H;
-        level=r+(1-blend)*distance*(slope-1);
-        const double radialDerivative=1+(1-blend-distance*blendR)*(slope-1);
+        const double matched=m_geometry.H+distance*slope;
+        const double vertical=chart.point[2]-m_geometry.d0;
+        level=(1-blend)*matched+blend*vertical;
+        const double radialDerivative=(1-blend)*slope+blendR*(vertical-matched);
         for (int i : {0,2})
-            gradient[i]=radialDerivative*gradient[i]+
+            gradient[i]=(i==2?blend:0.)+radialDerivative*gradient[i]+
                 (1-blend)*distance*slopeA*chart.inverse[0][i];
     }
     if (m_options.hillInitialSlowdown!=0.)
@@ -553,8 +558,8 @@ Vector Coupling::InitialVelocity(double a, double r) const
         // Change the initial streamfunction only. Blend back to the full
         // approach profile at the inlet, outlet and roof.
         const auto [window,windowA]=HillWindow(a,m_left,m_right,map.lengthX+.5);
-        const double q=level/m_top;
-        const double fade=1-q*q*(3-2*q), fadeR=-6*q*(1-q)/m_top;
+        const auto [turned,turnedR]=SmoothTransition(level,.6,4.8);
+        const double fade=1-turned, fadeR=-turnedR;
         const double f=-std::expm1(-level);
         const double alpha=m_options.hillInitialSlowdown;
         for(int i : {0,2})
@@ -620,15 +625,21 @@ CoupledHistory Coupling::Initialise()const
         const double r=NativeRadius(z);
         if (m_mms)
             return m_mms->OuterEpsilon(NativeX(x),r+m_geometry.d0,0).value;
-        double E=m_reference->InletE(r);
+        double level=r;
+        if (m_geometry.normalMap && m_geometry.normalMap->amplitude!=0.)
+        {
+            const auto metric=m_geometry.At(x,r,x,x,true);
+            const double blend=SmoothTransition(r,.35,4.)[0];
+            level=(1-blend)*r+blend*(metric.point[2]-m_geometry.d0);
+        }
+        double E=m_reference->InletE(level);
         if (m_options.hillInitialEpsilonBump!=0.)
         {
             // This initial outer profile leaves the fixed inlet and the
             // dependent H trace intact. It supplies no equation source.
             const double window=HillWindow(x,m_left,m_right,m_geometry.normalMap->lengthX+.5)[0];
             const double y=r-m_geometry.H, rise=-std::expm1(-y/.035);
-            const double eta=y/(m_top-m_geometry.H);
-            const double fade=(1-eta)*(1-eta)*std::exp(-y/4.);
+            const double fade=1-SmoothTransition(r,3.5,5.5)[0];
             E*=1+m_options.hillInitialEpsilonBump*window*rise*rise*fade;
         }
         return E;
@@ -649,6 +660,15 @@ CoupledHistory Coupling::Initialise()const
         m_initialContinuityAfter=norm(h.current.flow);
         Require(m_initialContinuityAfter<=1e-9,
                 "normal-chart initialization does not satisfy represented continuity");
+    }
+    if (m_geometry.normalMap && !m_mms)
+    {
+        const auto &p=m_reference->Parameters();
+        const auto K=InterfaceBounds(h.current);
+        std::cout << std::setprecision(17) << "WJ-H27 initial normal-chart continuity "
+                  << m_initialContinuityBefore << " -> " << m_initialContinuityAfter
+                  << ", whole matching K/Kin [" << K[0]/p.KIn << ',' << K[1]/p.KIn
+                  << ']' << std::endl;
     }
     return FreshHistory(h.current);
 }

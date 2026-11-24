@@ -338,6 +338,8 @@ class PhysicalOracle:
         self.data, self.ref, self.order, self.deadline = data, reference, order, deadline
         self.n, self.np, self.nk, self.ne = map(int, data['sizes'])
         self.elements, self.geometry = data['elements'], data['geometry']
+        require(self.geometry.get('mapping', 'Flat') == 'Flat',
+                'use the normal-coordinate audit for a mapped WJ state')
         require(data['schema'] == 'WJH27NativeCoupledStateV2' and data['manufactured'] is False and
                 data['gauge'] is False and data['model'] == 'FiniteNuIsotropicWallFullWJCollarV2',
                 'physical oracle requires actual open-outlet v2 state, no MMS or pressure gauge')
