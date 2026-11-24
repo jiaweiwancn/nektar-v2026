@@ -682,7 +682,13 @@ SolveInfo MixedFlow::Correct(const Sparse &system, const Vec &rhs, Vec &x, Mixed
 
 void MixedFlow::SetTransportedKSpace(const MultiRegions::ContFieldSharedPtr&field)
 {
-    Check(bool(field)&&field->GetComm()->GetSize()==1&&field->GetExpSize()==int(Elements().size()),"native Q3 k must be serial over the full domain");m_kField=field;auto map=field->GetLocalToGlobalMap();const int nk=map->GetNumGlobalCoeffs();std::vector<T>triplets;auto rule=Gauss(16);
+    Check(bool(field)&&field->GetComm()->GetSize()==1&&field->GetExpSize()==int(Elements().size()),"native Q3 k must be serial over the full domain");m_kField=field;
+    if (m_core.Mapping().normalMap)
+    {
+        m_scalarAction = m_core.NormalSampledAction(field);
+        return;
+    }
+    auto map=field->GetLocalToGlobalMap();const int nk=map->GetNumGlobalCoeffs();std::vector<T>triplets;auto rule=Gauss(16);
     struct Trace{LocalRegions::ExpansionSharedPtr exp;Mat dx,dz;std::vector<int>ids;};std::vector<Trace>traces;
     for(int e=0;e<int(Elements().size());++e){auto exp=field->GetExp(e);Check(exp->GetGeom()->GetGlobalID()==Elements()[e].geometry&&exp->GetNcoeffs()==16,"transported k geometry/Q3 basis differs");for(int d=0;d<2;++d)Check(exp->GetBasisNumModes(d)==4,"transported k is not tensor Q3");Trace t;t.exp=exp;t.dx=NativeBasis(exp,0);t.dz=NativeBasis(exp,1);for(int j=0;j<16;++j){int local=field->GetCoeff_Offset(e)+j;t.ids.push_back(map->GetLocalToGlobalMap(local));double sign=map->GetLocalToGlobalSign(local);t.dx.col(j)*=sign;t.dz.col(j)*=sign;}traces.push_back(std::move(t));}
     const auto geo=m_core.Mapping();

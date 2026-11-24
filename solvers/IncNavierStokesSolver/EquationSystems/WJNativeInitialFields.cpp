@@ -49,6 +49,7 @@ InitialFieldGeometry Geometry(const Tree&t)
     InitialFieldGeometry g;g.d0=Number(t,"d0");g.H=Number(t,"H");g.h=Number(t,"h");
     g.left=Number(t,"left");g.right=Number(t,"right");g.top=Number(t,"top");
     g.curve=t.get<double>("curve",0.);
+    g.normalMap=t.get<std::string>("normal_map_signature","");
     Require(std::isfinite(g.curve)&&g.curve==0&&g.H>0&&g.h>=0&&g.h<g.H&&g.top>g.H&&g.right>g.left,
             "unsupported nonflat/invalid geometry");return g;
 }
@@ -57,7 +58,8 @@ bool SameGeometry(const InitialFieldGeometry&a,const InitialFieldGeometry&b)
     const double scale=std::max(a.H,b.H);
     return scale>0&&Same(a.d0,b.d0,scale)&&Same(a.H,b.H,scale)&&Same(a.h,b.h,scale)&&
         Same(a.left,b.left,scale)&&Same(a.right,b.right,scale)&&Same(a.top,b.top,scale)&&
-        std::isfinite(a.curve)&&std::isfinite(b.curve)&&a.curve==0&&b.curve==0;
+        std::isfinite(a.curve)&&std::isfinite(b.curve)&&a.curve==0&&b.curve==0&&
+        a.normalMap==b.normalMap;
 }
 std::array<double,4>Modified(double t)
 {

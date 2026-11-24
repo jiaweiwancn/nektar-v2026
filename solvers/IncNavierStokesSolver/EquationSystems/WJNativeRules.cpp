@@ -35,10 +35,24 @@ struct Factors
         Vec l(nodes.size());for(int i=0;i<nodes.size();++i)l[i]=barycentric[i]/(x-nodes[i]);l/=l.sum();return{value.transpose()*l,derivative.transpose()*l};
     }
 };
+
+Vector FlatFaceNormal(int side)
+{
+    return side==0 ? Vector{-1,0,0} : side==1 ? Vector{1,0,0} :
+           side==2 ? Vector{0,0,-1} : Vector{0,0,1};
+}
+
+Vector FaceArea(const SolverUtils::RANSWallNormalMap::Sample &metric, int side)
+{
+    const int axis = side<2 ? 0 : 2;
+    const double sign = side%2 ? 1. : -1.;
+    return {sign*metric.determinant*metric.inverse[axis][0], 0.,
+            sign*metric.determinant*metric.inverse[axis][2]};
+}
 }
 RuleFactory::RuleFactory(const Flow&flow,int nx,int nz):m_flow(flow),m_nx(nx),m_nz(nz)
 {
-    Require(flow.Mapping().curve==0&&nx>=4&&nz>=4,"split native rules initially support flat quads and Gauss order>=4");
+    Require(flow.Mapping().curve==0&&nx>=4&&nz>=4,"split native rules require affine chart quads and Gauss order>=4");
     for(const auto&e:flow.Elements())
     {
         auto x=e.velocity->GetBasis(0)->GetZ(),z=e.velocity->GetBasis(1)->GetZ();
@@ -53,12 +67,32 @@ NativeRule RuleFactory::Evaluate(const Element&e,const Vec&xi,const Vec&eta,cons
     r.B=Mat(xi.size(),16);r.Dx=r.B;r.Dz=r.B;r.P=Mat(xi.size(),9);r.Px=r.P;r.Pz=r.P;
     Factors ux(e.velocity,0),uz(e.velocity,1),px(e.pressure,0),pz(e.pressure,1);
     double sx=2/(e.xr-e.xl),sz=2/(e.rr-e.rl);
+    const auto &geo = m_flow.Mapping();
+    if (geo.normalMap)
+    {
+        r.wallNormals.resize(xi.size());
+        r.matchingCurvature.resize(xi.size());
+    }
     for(int q=0;q<xi.size();++q)
     {
         auto x=ux.At(xi[q]),z=uz.At(eta[q]),p=px.At(xi[q]),v=pz.At(eta[q]);
         r.x[q]=(e.xl+e.xr)/2+(e.xr-e.xl)*xi[q]/2;r.z[q]=m_flow.Mapping().d0+(e.rl+e.rr)/2+(e.rr-e.rl)*eta[q]/2;
         for(int j=0;j<16;++j){int a=j%4,b=j/4;r.B(q,j)=x.first[a]*z.first[b]*e.us[j];r.Dx(q,j)=x.second[a]*z.first[b]*sx*e.us[j];r.Dz(q,j)=x.first[a]*z.second[b]*sz*e.us[j];}
         for(int j=0;j<9;++j){int a=j%3,b=j/3;r.P(q,j)=p.first[a]*v.first[b]*e.ps[j];r.Px(q,j)=p.second[a]*v.first[b]*sx*e.ps[j];r.Pz(q,j)=p.first[a]*v.second[b]*sz*e.ps[j];}
+        if (geo.normalMap)
+        {
+            const auto metric = geo.At(r.x[q],r.z[q]-geo.d0,e.xl,e.xr,
+                                       e.rl>=geo.H-1e-12);
+            const auto &inv = metric.inverse;
+            const auto du = r.Dx.row(q).eval(), dp = r.Px.row(q).eval();
+            r.Dx.row(q) = inv[0][0]*du + inv[2][0]*r.Dz.row(q);
+            r.Dz.row(q) = inv[0][2]*du + inv[2][2]*r.Dz.row(q);
+            r.Px.row(q) = inv[0][0]*dp + inv[2][0]*r.Pz.row(q);
+            r.Pz.row(q) = inv[0][2]*dp + inv[2][2]*r.Pz.row(q);
+            r.wallNormals[q] = metric.normal;
+            const double curvature = metric.kappa1 + metric.kappa2;
+            r.matchingCurvature[q] = curvature/(1 + geo.H*curvature);
+        }
     }
     return r;
 }
@@ -94,7 +128,10 @@ NativeRule RuleFactory::Volume(const Element&e,const std::function<double(const 
         for(double a:{.4*geo.H,.75*geo.H,geo.H,geo.h})if(a>e.rl+roundoff&&a<e.rr-roundoff)cuts.push_back(a);
         if(cutoff){double c=cutoff(e,physicalX);Require(std::isfinite(c)&&c>0&&c<.4*geo.H,"current cutoff left certified below-collar branch");if(c>e.rl+roundoff&&c<e.rr-roundoff)cuts.push_back(c);}
         std::sort(cuts.begin(),cuts.end());cuts.erase(std::unique(cuts.begin(),cuts.end()),cuts.end());
-        for(int s=0;s+1<int(cuts.size());++s)for(int j=0;j<m_nz;++j){double physicalR=(cuts[s]+cuts[s+1])/2+(cuts[s+1]-cuts[s])*z.first[j]/2;xs.push_back(xi);ys.push_back(2*(physicalR-e.rl)/(e.rr-e.rl)-1);ws.push_back(x.second[i]*z.second[j]*(right-left)*(cuts[s+1]-cuts[s])/4);}
+        for(int s=0;s+1<int(cuts.size());++s)for(int j=0;j<m_nz;++j){double physicalR=(cuts[s]+cuts[s+1])/2+(cuts[s+1]-cuts[s])*z.first[j]/2;xs.push_back(xi);ys.push_back(2*(physicalR-e.rl)/(e.rr-e.rl)-1);
+            const double determinant = geo.normalMap ?
+                geo.At(physicalX,physicalR,e.xl,e.xr,e.rl>=geo.H-1e-12).determinant : 1.;
+            ws.push_back(x.second[i]*z.second[j]*(right-left)*(cuts[s+1]-cuts[s])*determinant/4);}
     }
     Vec xi(xs.size()),eta(ys.size()),weight(ws.size());for(int i=0;i<int(xs.size());++i){xi[i]=xs[i];eta[i]=ys[i];weight[i]=ws[i];}return Evaluate(e,xi,eta,weight);
 }
@@ -134,7 +171,32 @@ NativeRule RuleFactory::Face(const Element&e,int side,int order,
         if(side<2){double r=(cuts[panel]+cuts[panel+1])/2+(cuts[panel+1]-cuts[panel])*q.first[i]/2;xi[j]=side==0?-1.:1.;eta[j]=2*(r-e.rl)/(e.rr-e.rl)-1;weight[j]=q.second[i]*(cuts[panel+1]-cuts[panel])/2;}
         else{xi[j]=q.first[i];eta[j]=side==2?-1.:1.;weight[j]=q.second[i]*(e.xr-e.xl)/2;}
     }
-    NativeRule result=Evaluate(e,xi,eta,weight);result.normal=side==0?Vector{-1,0,0}:side==1?Vector{1,0,0}:side==2?Vector{0,0,-1}:Vector{0,0,1};return result;
+    NativeRule result=Evaluate(e,xi,eta,weight);
+    result.normal=FlatFaceNormal(side);
+    if (geo.normalMap)
+    {
+        result.outward.resize(weight.size());
+        for (int i=0; i<weight.size(); ++i)
+        {
+            const auto metric = geo.At(result.x[i],result.z[i]-geo.d0,
+                                       e.xl,e.xr,e.rl>=geo.H-1e-12);
+            const auto area = FaceArea(metric,side);
+            const double length = std::hypot(area[0],area[2]);
+            result.w[i] *= length;
+            result.outward[i] = {area[0]/length,0.,area[2]/length};
+        }
+    }
+    return result;
+}
+
+Vector RuleFactory::FaceNormal(const Element &e, int side, double a, double rho) const
+{
+    const auto &geo = m_flow.Mapping();
+    if (!geo.normalMap)
+        return FlatFaceNormal(side);
+    const auto area = FaceArea(geo.At(a,rho,e.xl,e.xr,e.rl>=geo.H-1e-12),side);
+    const double length = std::hypot(area[0],area[2]);
+    return {area[0]/length,0.,area[2]/length};
 }
 NativeRule RuleFactory::Points(const Element&e,const Vec&x,const Vec&z)const
 {

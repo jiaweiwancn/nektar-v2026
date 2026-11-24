@@ -12,6 +12,7 @@ add_library(WJNativeFlow STATIC
     ${H26_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlow.cpp
     ${H26_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSModels.cpp
     ${H26_SOURCE_ROOT}/library/SolverUtils/Turbulence/WJEARSM.cpp
+    ${H26_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallNormalMap.cpp
     ${H26_SOURCE_ROOT}/library/SolverUtils/Turbulence/AnalyticalWallFunction.cpp)
 target_link_libraries(WJNativeFlow PUBLIC Eigen3::Eigen ${NEKTAR++_LIBRARIES} ${NEKTAR++_TP_LIBRARIES})
 target_compile_definitions(WJNativeFlow PRIVATE SOLVER_UTILS_EXPORTS)

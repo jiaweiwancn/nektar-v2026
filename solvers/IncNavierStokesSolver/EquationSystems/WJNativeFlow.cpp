@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <limits>
+#include <map>
 #include <stdexcept>
 
 namespace Nektar::WJNative
@@ -38,6 +40,59 @@ Vec Evaluate(const LocalRegions::ExpansionSharedPtr&e,const Mat&basis,double xi,
 }
 }
 
+SolverUtils::RANSWallNormalMap::Sample Geometry::At(
+    double a, double rho, double left, double right, bool outer) const
+{
+    const auto &map = normalMap.value();
+    const double tolerance = 32 * std::numeric_limits<double>::epsilon() *
+        std::max({1., std::abs(a), map.lengthX});
+    int footSide = 0;
+    if (std::abs(std::abs(a) - map.lengthX) <= tolerance)
+    {
+        footSide = std::abs(a - left) <= tolerance ? 1 :
+                   std::abs(a - right) <= tolerance ? -1 : 0;
+    }
+    // The map uses tunnelTop as its outer computational endpoint. Normalize
+    // that interval to the native reference height so a zero hill recovers
+    // the flat mesh, including its full-height approach profiles.
+    const double scale = (map.tunnelTop - H) / (map.tunnelTop - d0 - H);
+    double q = outer ? H + (rho - H) * scale : rho;
+    if (std::abs(rho - H) <= 16 * std::numeric_limits<double>::epsilon() * H)
+        q = H;
+    if (std::abs(q) <= tolerance)
+        q = 0.;
+    if (std::abs(q - map.tunnelTop) <= tolerance)
+        q = map.tunnelTop;
+    auto metric = map.At({a, 0, q}, footSide, outer ? 1 : -1);
+    if (outer)
+    {
+        for (int i : {0, 2})
+        {
+            metric.jacobian[i][2] *= scale;
+            metric.inverse[2][i] /= scale;
+        }
+        metric.determinant *= scale;
+    }
+    return metric;
+}
+
+void Geometry::ValidateNormalMesh(double left, double right, double top) const
+{
+    const auto &map = normalMap.value();
+    Require(curve == 0 && map.compositeTunnel && map.height == H &&
+                map.displacement == d0 && std::abs(top + d0 - map.tunnelTop) < 1e-12,
+            "normal hill requires an affine chart mesh with the declared tunnel top");
+    // The bare graph certificate proves unique closest footpoints for the
+    // entire displaced tube. The composite certificate covers the outer
+    // ruled mesh independently, with its straight lateral and top boundaries.
+    const double lo = std::min(left, -2 * map.lengthX);
+    const double hi = std::max(right, 2 * map.lengthX);
+    auto tube = map;
+    tube.compositeTunnel = false;
+    tube.Validate({lo, 0, 0}, {hi, 0, d0 + H});
+    map.Validate({lo, 0, 0}, {hi, 0, map.tunnelTop});
+}
+
 WallStress Adapt(double k,double epsilon,const Tensor&G,const Vector&n,double nu,double nuA,double r,double H)
 {
     Require(k>0&&epsilon>0&&nu>0&&nuA>=0&&H>0,"invalid prescribed wall stress inputs");
@@ -60,6 +115,7 @@ Flow::Flow(const std::vector<MultiRegions::ContFieldSharedPtr>&fields,Geometry g
     m_nu=um->GetNumGlobalCoeffs();m_np=pm->GetNumGlobalCoeffs();m_nd=um->GetNumGlobalDirBndCoeffs();m_nf=m_nu-m_nd;
     Require(vm->GetNumGlobalCoeffs()==m_nu&&vm->GetNumGlobalDirBndCoeffs()==m_nd,"velocity homogeneous increment spaces differ");
     for(auto bc:fields[0]->GetBndConditions())if(bc->GetBoundaryConditionType()==SpatialDomains::eNeumann||bc->GetBoundaryConditionType()==SpatialDomains::eRobin)m_gauge=false;
+    double left=1e100,right=-1e100,top=-1e100;
     for(int e=0;e<fields[0]->GetExpSize();++e)
     {
         Element a;a.velocity=fields[0]->GetExp(e);a.pressure=fields[2]->GetExp(e);a.geometry=a.velocity->GetGeom()->GetGlobalID();
@@ -69,12 +125,44 @@ Flow::Flow(const std::vector<MultiRegions::ContFieldSharedPtr>&fields,Geometry g
         int nq=a.velocity->GetTotPoints();Require(nq==a.pressure->GetTotPoints(),"Q3/Q2 quadrature grids differ");
         Array<OneD,NekDouble>x(nq),z(nq),dummy(nq),one(nq,1.),weight(nq);a.velocity->GetCoords(x,z,dummy);a.velocity->MultiplyByQuadratureMetric(one,weight);
         a.x=Vec(nq);a.z=Vec(nq);a.w=Vec(nq);a.xl=a.rl=1e100;a.xr=a.rr=-1e100;
-        for(int q=0;q<nq;++q){a.x[q]=x[q];a.z[q]=z[q];a.w[q]=weight[q];a.xl=std::min(a.xl,x[q]);a.xr=std::max(a.xr,x[q]);double r=z[q]-geometry.Ground(x[q]);a.rl=std::min(a.rl,r);a.rr=std::max(a.rr,r);m_volume+=weight[q];}
+        for(int q=0;q<nq;++q){a.x[q]=x[q];a.z[q]=z[q];a.w[q]=weight[q];a.xl=std::min(a.xl,x[q]);a.xr=std::max(a.xr,x[q]);double r=z[q]-geometry.Ground(x[q]);a.rl=std::min(a.rl,r);a.rr=std::max(a.rr,r);}
         a.B=Basis(a.velocity,-1);a.Dx=Basis(a.velocity,0);a.Dz=Basis(a.velocity,1);a.P=Basis(a.pressure,-1);a.Px=Basis(a.pressure,0);a.Pz=Basis(a.pressure,1);
+        if (geometry.normalMap)
+        {
+            const auto &map = *geometry.normalMap;
+            for (double foot : {-map.lengthX, map.lengthX})
+                Require(!(a.xl < foot-1e-12 && a.xr > foot+1e-12),
+                        "each cosine hill foot must be a complete chart face");
+            Require(!(a.rl < geometry.H-1e-12 && a.rr > geometry.H+1e-12),
+                    "the normal matching surface must be a complete chart face");
+            const bool outer = a.rl >= geometry.H-1e-12;
+            const auto nodesX = a.velocity->GetBasis(0)->GetZ();
+            const auto nodesR = a.velocity->GetBasis(1)->GetZ();
+            for (int q=0; q<nq; ++q)
+            {
+                const double aa = a.xl + (a.xr-a.xl)*(1+nodesX[q%nodesX.size()])/2;
+                const double rho = a.rl + (a.rr-a.rl)*(1+nodesR[q/nodesX.size()])/2;
+                Require(std::abs(aa-a.x[q])<1e-10 &&
+                            std::abs(rho+geometry.d0-a.z[q])<1e-10,
+                        "normal hill requires affine tensor chart cells");
+                const auto metric = geometry.At(aa, rho, a.xl, a.xr, outer);
+                const auto &inv = metric.inverse;
+                a.w[q] *= metric.determinant;
+                const auto du = a.Dx.row(q).eval(), dp = a.Px.row(q).eval();
+                a.Dx.row(q) = inv[0][0]*du + inv[2][0]*a.Dz.row(q);
+                a.Dz.row(q) = inv[0][2]*du + inv[2][2]*a.Dz.row(q);
+                a.Px.row(q) = inv[0][0]*dp + inv[2][0]*a.Pz.row(q);
+                a.Pz.row(q) = inv[0][2]*dp + inv[2][2]*a.Pz.row(q);
+            }
+        }
+        left=std::min(left,a.xl);right=std::max(right,a.xr);top=std::max(top,a.rr);
+        for (int q=0; q<nq; ++q) m_volume+=a.w[q];
         for(int j=0;j<16;++j){int l=fields[0]->GetCoeff_Offset(e)+j;a.u.push_back(um->GetLocalToGlobalMap(l));double s=um->GetLocalToGlobalSign(l);a.us.push_back(s);a.B.col(j)*=s;a.Dx.col(j)*=s;a.Dz.col(j)*=s;Require(a.u.back()==vm->GetLocalToGlobalMap(l)&&s==vm->GetLocalToGlobalSign(l),"velocity signed map differs");}
         for(int j=0;j<9;++j){int l=fields[2]->GetCoeff_Offset(e)+j;a.p.push_back(pm->GetLocalToGlobalMap(l));double s=pm->GetLocalToGlobalSign(l);a.ps.push_back(s);a.P.col(j)*=s;a.Px.col(j)*=s;a.Pz.col(j)*=s;}
         m_elements.push_back(std::move(a));
     }
+    if (geometry.normalMap)
+        geometry.ValidateNormalMesh(left, right, top);
     Require(m_volume>0,"nonpositive physical volume");m_length=std::sqrt(m_volume);m_forceScale=1+1/m_length+(6.423173803526447e-5+.3819178635467331*.051*m_elements.back().rr/2)/(m_length*m_length)+.01/m_length;
     BuildInvariant();BuildAWF();m_scale=RowScale();m_pressureOne=Project([](double,double){return 1.;},2);for(int i=0;i<m_np;++i)if(std::abs(m_pressureOne[i])>.5){m_pressurePivot=i;break;}
 }
@@ -97,6 +185,11 @@ void Flow::BuildInvariant()
 
 void Flow::BuildAWF()
 {
+    if (m_geometry.normalMap)
+    {
+        m_awf = NormalSampledAction(m_fields[2]);
+        return;
+    }
     std::vector<Triplet>t;auto quadrature=Gauss(16);
     for(const auto&e:m_elements)
     {
@@ -116,6 +209,65 @@ void Flow::BuildAWF()
         for(int i=0;i<16;++i)for(int j=0;j<9;++j){t.emplace_back(e.u[i],trace->p[j],localX(i,j));t.emplace_back(m_nu+e.u[i],trace->p[j],localZ(i,j));}
     }
     m_awf.resize(2*m_nu,m_np);m_awf.setFromTriplets(t.begin(),t.end());
+}
+
+Sparse Flow::NormalSampledAction(const MultiRegions::ContFieldSharedPtr &field) const
+{
+    const auto [points, weights] = Gauss(16);
+    const auto map = field->GetLocalToGlobalMap();
+    std::map<std::pair<double,double>, int> matchingOwners;
+    for (int i=0; i<int(m_elements.size()); ++i)
+    {
+        const auto &cell = m_elements[i];
+        if (std::abs(cell.rl-m_geometry.H)<1e-12)
+            Require(matchingOwners.emplace(std::make_pair(cell.xl,cell.xr),i).second,
+                    "duplicate normal matching trace owner");
+    }
+    std::vector<Triplet> entries;
+    for (const auto &cell : m_elements)
+    {
+        const double upper = std::min(cell.rr,m_geometry.h);
+        const double lower = std::max(cell.rl,0.);
+        if (upper<=lower)
+            continue;
+        const int owner = matchingOwners.at({cell.xl,cell.xr});
+        const auto trace = field->GetExp(owner);
+        Require(trace->GetGeom()->GetGlobalID()==m_elements[owner].geometry,
+                "normal sampled trace has inconsistent native ownership");
+        const auto derivative = Basis(trace,0); // derivative in chart a
+        Mat axial = Mat::Zero(16,trace->GetNcoeffs()), vertical = axial;
+        const double da = (cell.xr-cell.xl)/2, dr = (upper-lower)/2;
+        for (int i=0; i<points.size(); ++i)
+        {
+            const double a = cell.xl + da*(1+points[i]);
+            const auto H = m_geometry.At(a,m_geometry.H,cell.xl,cell.xr,false);
+            const Vec ds = Evaluate(trace,derivative,points[i],-1.)/H.determinant;
+            for (int j=0; j<points.size(); ++j)
+            {
+                const double rho = lower + dr*(1+points[j]);
+                const auto metric = m_geometry.At(a,rho,cell.xl,cell.xr,false);
+                const double eta = 2*(rho-cell.rl)/(cell.rr-cell.rl)-1;
+                const Vec v = Evaluate(cell.velocity,cell.B,points[i],eta);
+                const double weight = weights[i]*weights[j]*da*dr*metric.determinant;
+                axial.noalias() += weight*H.tangent1[0]*v*ds.transpose();
+                vertical.noalias() += weight*H.tangent1[2]*v*ds.transpose();
+            }
+        }
+        for (int b=0; b<trace->GetNcoeffs(); ++b)
+        {
+            const int local = field->GetCoeff_Offset(owner)+b;
+            const int global = map->GetLocalToGlobalMap(local);
+            const double sign = map->GetLocalToGlobalSign(local);
+            for (int a=0; a<16; ++a)
+            {
+                entries.emplace_back(cell.u[a],global,sign*axial(a,b));
+                entries.emplace_back(m_nu+cell.u[a],global,sign*vertical(a,b));
+            }
+        }
+    }
+    Sparse action(2*m_nu,map->GetNumGlobalCoeffs());
+    action.setFromTriplets(entries.begin(),entries.end());
+    return action;
 }
 
 Sparse Flow::Strain(const Function&mu,bool transpose)const

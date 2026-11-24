@@ -409,18 +409,7 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
                 Vec trace;
                 {
                     AccountTime timer(info.timing.wall);
-                    trace=m_e.EssentialLift([&](double x,double,const Vector &normal) {
-                        if(normal[2]>=-.5)return 0.;
-                        const Element *owner=nullptr;
-                        for(const auto &e:m_flow.Elements())
-                            if(std::abs(e.rl-m_geometry.H)<1e-12&&x>=e.xl-1e-12&&x<=e.xr+1e-12)
-                            { owner=&e;break; }
-                        if(!owner)throw std::runtime_error("implicit Gamma derivative has no outer owner");
-                        const auto rule=m_rules.Points(*owner,Vec::Constant(1,x),
-                            Vec::Constant(1,m_geometry.d0+m_geometry.H));
-                        return m_reference->AmplitudeDerivative(InterfaceK(*owner,x,pcState))*
-                            m_k.Evaluate(rule,dk)[0]/m_geometry.H;
-                    },m_rules);
+                    trace=DependentTraceDirection(pcState,dk);
                 }
                 {
                     AccountTime timer(info.timing.scalar);

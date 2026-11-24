@@ -6,6 +6,8 @@ function(wj_h27_source_identity root output)
     list(APPEND wj_native_files
         "${root}/library/SolverUtils/Turbulence/WJEARSM.h"
         "${root}/library/SolverUtils/Turbulence/WJEARSM.cpp"
+        "${root}/library/SolverUtils/Turbulence/RANSWallNormalMap.h"
+        "${root}/library/SolverUtils/Turbulence/RANSWallNormalMap.cpp"
         "${root}/library/SolverUtils/Turbulence/RANSModels.h"
         "${root}/library/SolverUtils/Turbulence/RANSModels.cpp"
         "${root}/library/SolverUtils/Turbulence/AnalyticalWallFunction.h"

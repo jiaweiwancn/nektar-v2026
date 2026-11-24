@@ -15,6 +15,7 @@ enum class InitialFieldRole { QualifiedReference, Candidate };
 struct InitialFieldGeometry
 {
     double d0=0,H=0,h=0,left=0,right=0,top=0,curve=0;
+    std::string normalMap;
 };
 
 struct InitialFieldMetadata

@@ -19,7 +19,7 @@ void Finite(const FrozenPlanarVelocityTangent&t)
 
 FrozenPlanarVelocityTangent EvaluatePlanarVelocityTangent(double k,double epsilon,
     const Tensor&gradient,double nu,double auxiliary,double r,double H,
-    ConstitutiveBackend backend,WallEvaluationStats*statistics)
+    ConstitutiveBackend backend,WallEvaluationStats*statistics,const Vector&normal)
 {
     for(int i=0;i<3;++i)for(int j=0;j<3;++j)
     {
@@ -30,7 +30,7 @@ FrozenPlanarVelocityTangent EvaluatePlanarVelocityTangent(double k,double epsilo
     for(int component=0;component<2;++component)for(int derivative=0;derivative<2;++derivative)
     {
         Tensor direction{};direction[Axis[component]][Axis[derivative]]=1.;
-        out.dVdG[2*component+derivative]=ApplyAmendedDirection(k,epsilon,gradient,{0,0,1},
+        out.dVdG[2*component+derivative]=ApplyAmendedDirection(k,epsilon,gradient,normal,
             nu,auxiliary,r,H,0.,0.,direction,0.,0.,backend,statistics).V;
     }
     Finite(out);return out;

@@ -25,7 +25,7 @@ struct OwnedPlanarVelocityTangents
 FrozenPlanarVelocityTangent EvaluatePlanarVelocityTangent(double k,double epsilon,
     const Tensor&gradient,double nu,double auxiliary,double r,double H,
     ConstitutiveBackend backend=ConstitutiveBackend::Historical,
-    WallEvaluationStats*statistics=nullptr);
+    WallEvaluationStats*statistics=nullptr, const Vector&normal={0,0,1});
 
 /** Full signed canonical [u,v] Jacobian of int grad(test):V, size 2Nu by 2Nu.
  * Samples must match each supplied owned rule point in its original order.

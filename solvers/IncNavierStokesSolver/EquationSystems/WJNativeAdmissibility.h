@@ -13,7 +13,7 @@ struct PlanarAdmissibility
     bool principalEvaluated=false;
 };
 
-/** Current flat x-z state, n_wall=e_z; inactive spanwise rows/columns must
+/** Current Cartesian x-z state with a planar wall normal. Spanwise rows/columns must
  * vanish. The base gradient need not have pointwise zero divergence. The
  * acoustic perturbations alone are incompressible planar rank-one matrices.
  *
@@ -27,6 +27,7 @@ struct PlanarAdmissibility
 PlanarAdmissibility CheckPlanarState(double k,double epsilon,const Tensor &gradient,
     double nu,double auxiliary,double r,double H,bool principal=true,
     const WallStress*currentValue=nullptr,
-    ConstitutiveBackend backend=ConstitutiveBackend::Historical,WallEvaluationStats*stats=nullptr);
+    ConstitutiveBackend backend=ConstitutiveBackend::Historical,WallEvaluationStats*stats=nullptr,
+    const Vector&normal={0,0,1});
 }
 #endif

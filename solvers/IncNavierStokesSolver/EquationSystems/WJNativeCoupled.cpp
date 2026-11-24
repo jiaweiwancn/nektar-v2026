@@ -85,7 +85,7 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
 {
     try{
     const double start=Clock();(void)declareFields;EquationSystem::v_InitObject(false);
-    Check(m_spacedim==2&&m_expdim==2&&m_HomogeneousType==eNotHomogeneous&&m_session->GetComm()->GetSize()==1,"WJNativeCoupledV2 supports flat serial 2D only");
+    Check(m_spacedim==2&&m_expdim==2&&m_HomogeneousType==eNotHomogeneous&&m_session->GetComm()->GetSize()==1,"WJNativeCoupledV2 requires serial 2D geometry");
     Check(m_session->GetVariables()==std::vector<std::string>({"u","v","k","epsilon","p"}),"WJNativeCoupledV2 variable order must be u,v,k,epsilon,p");
     Check(m_NumQuadPointsError==0,"restricted epsilon output currently requires NumQuadPointsError=0");
     std::string mode,table;m_session->LoadSolverInfo("WJNativeMode",mode,"Physical");Check(mode=="Physical"||mode=="Manufactured","unknown WJNativeMode");
@@ -95,6 +95,22 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     double viscosity;m_session->LoadParameter("Kinvis",viscosity,reference->Parameters().nu);Check(std::isfinite(viscosity)&&std::abs(viscosity-reference->Parameters().nu)<=16*std::numeric_limits<double>::epsilon()*reference->Parameters().nu,"Kinvis differs from the pinned physical reference viscosity");
     WJNative::Geometry geometry;geometry.d0=reference->Parameters().d0;geometry.H=reference->Parameters().H;geometry.h=reference->Parameters().roughness;
     m_session->LoadParameter("WJPhysicalDisplacement",geometry.d0,geometry.d0);
+    std::string geometryPolicy;
+    m_session->LoadSolverInfo("WJGeometry",geometryPolicy,"Flat");
+    Check(geometryPolicy=="Flat" || geometryPolicy=="NormalCosineHillV1","unknown WJGeometry");
+    if (geometryPolicy=="NormalCosineHillV1")
+    {
+        auto &map=geometry.normalMap.emplace();
+        map.kind=SolverUtils::RANSWallNormalMap::Kind::CosineHill;
+        map.lengthX=2.5;
+        map.displacement=geometry.d0;
+        map.height=geometry.H;
+        map.compositeTunnel=true;
+        map.tunnelTop=mode=="Manufactured" ? geometry.d0+.5 : 20.;
+        m_session->LoadParameter("WJHillHeight",map.amplitude,1.);
+        Check(std::isfinite(map.amplitude) && map.amplitude>=0 && map.amplitude<=1.,
+              "WJHillHeight must lie in [0,1] code units");
+    }
     WJNative::CoupledOptions options;options.dt=m_timestep;options.manufactured=mode=="Manufactured";options.sourceIdentity=WJ_H27_SOURCE_ID;
     std::string backend;m_session->LoadSolverInfo("WJConstitutiveBackend",backend,"Historical");Check(backend=="Historical"||backend=="FastFull3DV1","unknown WJ constitutive backend");options.backend=backend=="Historical"?WJNative::ConstitutiveBackend::Historical:WJNative::ConstitutiveBackend::FastFull3DV1;
     m_session->LoadParameter("WJLinearTolerance",options.linearTolerance,1e-12);m_session->LoadParameter("WJCoupledTolerance",options.nonlinearTolerance,1e-10);m_session->LoadParameter("WJMaximumIterations",options.maximumIterations,60);
@@ -204,7 +220,11 @@ void WJNativeCoupled::v_DoInitialise(bool dump)
             for(int id:m_coupling->EpsilonKernel().FreeIds())seed.epsilon[id]+=m_steadySeed*m_coupling->ReferenceModel().Amplitude(p.KIn)/p.H*std::cos(.9*(id+1));
             m_history=m_coupling->FreshHistory(seed);
         }
-        m_time=m_history.time;m_initialStep=m_history.step;m_initialTime=m_history.time;m_coupling->Store(m_history.current);m_stepsLog.open(m_prefix+".steps.jsonl");m_stepsLog<<std::setprecision(17);Check(bool(m_stepsLog),"cannot create coupled step log");
+        m_time=m_history.time;m_initialStep=m_history.step;m_initialTime=m_history.time;
+        if (m_steps==0 && !m_steadyMode && m_history.step==0 &&
+            m_coupling->FlowKernel().Core().Mapping().normalMap)
+            m_last=m_coupling->AuditSteadyState(m_history.current);
+        m_coupling->Store(m_history.current);m_stepsLog.open(m_prefix+".steps.jsonl");m_stepsLog<<std::setprecision(17);Check(bool(m_stepsLog),"cannot create coupled step log");
         m_initialisationSeconds=Clock()-start;
     }catch(const std::exception&e){std::cerr<<"WJ-H27 initialisation: "<<e.what()<<std::endl;throw std::runtime_error(e.what());}
 }
@@ -316,7 +336,10 @@ void WJNativeCoupled::v_Output()
 }
 void WJNativeCoupled::v_GenerateSummary(SolverUtils::SummaryList&summary)
 {
-    SolverUtils::AddSummaryItem(summary,"WJ coupled path","WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon");
+    SolverUtils::AddSummaryItem(summary,"WJ coupled path","WJNativeCoupledV2; serial Q3/Q2, outer-only epsilon");
+    SolverUtils::AddSummaryItem(summary,"Geometry",
+        m_coupling->FlowKernel().Core().Mapping().normalMap ?
+            "cosine hill normal layer and separate outer map" : "flat");
     SolverUtils::AddSummaryItem(summary,"Wall tensor",WJNative::WallModelV2);
     SolverUtils::AddSummaryItem(summary,"Integration",
         m_coupling->Options().UsesImplicitAdvection()

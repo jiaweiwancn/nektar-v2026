@@ -75,13 +75,15 @@ Real Contract(const Tensor &a,const Tensor &b)
 
 PlanarAdmissibility CheckPlanarState(double k,double epsilon,const Tensor &gradient,
     double nu,double auxiliary,double r,double H,bool principal,const WallStress*currentValue,
-    ConstitutiveBackend backend,WallEvaluationStats*stats)
+    ConstitutiveBackend backend,WallEvaluationStats*stats,const Vector&normal)
 {
     Require(std::isfinite(k)&&k>0&&std::isfinite(epsilon)&&epsilon>0&&std::isfinite(nu)&&nu>0&&std::isfinite(auxiliary)&&auxiliary>=0&&std::isfinite(r)&&r>=0&&std::isfinite(H)&&H>0,"invalid planar current state inputs");
     for(const auto&row:gradient)for(double value:row)Require(std::isfinite(value),"nonfinite planar gradient");
     for(int i=0;i<3;++i)
         Require(gradient[1][i]==0 && gradient[i][1]==0,"planar admissibility requires inactive spanwise gradient");
-    WallStress evaluated;if(!currentValue)evaluated=AdaptAmended(k,epsilon,gradient,{0,0,1},nu,auxiliary,r,H,backend,stats);
+    Require(normal[1]==0 && std::abs(std::hypot(normal[0],normal[2])-1)<1e-12,
+            "planar admissibility requires a unit planar wall normal");
+    WallStress evaluated;if(!currentValue)evaluated=AdaptAmended(k,epsilon,gradient,normal,nu,auxiliary,r,H,backend,stats);
     const auto&wall=currentValue?*currentValue:evaluated;
     Require(std::isfinite(k)&&k>0&&std::isfinite(wall.mu)&&wall.mu>0,"invalid supplied current wall state");
     Eigen::Matrix3d covariance;
@@ -110,7 +112,10 @@ PlanarAdmissibility CheckPlanarState(double k,double epsilon,const Tensor &gradi
         // H=l tensor n: H:nu(H+H^T)=nu and the auxiliary contribution
         // is aux*cos(2theta)^2. theta=pi/4 reaches the exact lower bound.
         result.principalOverMu=result.principalRawOverMu=nu/wall.mu;
-        result.principalAngle=double(pi/4);result.stationaryCandidates=2;
+        double angle=double(pi/4)+std::atan2(-normal[0],normal[2]);
+        if(angle<0)angle+=double(pi);
+        if(angle>=double(pi))angle-=double(pi);
+        result.principalAngle=angle;result.stationaryCandidates=2;
         return result;
     }
     std::array<Tensor,3> basis{};
@@ -120,7 +125,7 @@ PlanarAdmissibility CheckPlanarState(double k,double epsilon,const Tensor &gradi
     Real q[3][3]{},qnorm=0;
     for(int j=0;j<3;++j)
     {
-        const auto action=ApplyAmendedDirection(k,epsilon,gradient,{0,0,1},nu,auxiliary,r,H,0,0,basis[j],0,0,backend,stats).V;
+        const auto action=ApplyAmendedDirection(k,epsilon,gradient,normal,nu,auxiliary,r,H,0,0,basis[j],0,0,backend,stats).V;
         for(int i=0;i<3;++i)
         {
             q[i][j]=Contract(basis[i],action)/wall.mu;

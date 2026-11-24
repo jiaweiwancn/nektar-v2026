@@ -81,7 +81,7 @@ Scalar::Scalar(const MultiRegions::ContFieldSharedPtr &field, const Flow &flow,
           "native scalar requires a serial ContField");
     Check(bool(residualScale), "native scalar needs a positive reference scale");
     Check(flow.Mapping().curve == 0,
-          "native scalar currently supports flat rectangles only");
+          "native scalar requires affine chart rectangles");
     Check(field->GetExpSize() > 0, "empty native scalar domain");
     for (int side : essentialSides)
     {
@@ -263,7 +263,8 @@ Scalar::Scalar(const MultiRegions::ContFieldSharedPtr &field, const Flow &flow,
         }
         m_volume += rule.w.sum();
     }
-    Check(m_volume > 0 && std::abs(m_volume - area) <= 1e-10 * area,
+    Check(m_volume > 0 && (flow.Mapping().normalMap ||
+                          std::abs(m_volume - area) <= 1e-10 * area),
           "native scalar mass rules do not cover its domain");
     m_mass.resize(m_size, m_size);
     m_mass.setFromTriplets(mass.begin(), mass.end());
@@ -461,14 +462,15 @@ Vec Scalar::EssentialLift(const ScalarBoundaryFunction &function,
                 (endpoint == 0 ? element.rl : element.rr) :
                 (face.side == 2 ? element.rl : element.rr);
             endpoints[endpoint] = function(x, r + m_flow.Mapping().Ground(x),
-                                           rule.normal) / cell.signs[modes[endpoint]];
+                                           factory.FaceNormal(element,face.side,x,r)) /
+                                  cell.signs[modes[endpoint]];
             assign(cell.ids[modes[endpoint]], endpoints[endpoint],
                    m_referenceScale(x, r + m_flow.Mapping().Ground(x)));
         }
         Vec values(rule.w.size());
         for (int q = 0; q < values.size(); ++q)
         {
-            values[q] = function(rule.x[q], rule.z[q], rule.normal);
+            values[q] = function(rule.x[q], rule.z[q], rule.Outward(q));
             Check(std::isfinite(values[q]), "nonfinite essential scalar edge value");
         }
         values -= basis.col(modes[0]) * endpoints[0] +
@@ -687,8 +689,8 @@ Vec Scalar::Advection(const Rules &rules, const Vec &velocity,
         const Cell &cell = m_cells[face.cell];
         const NativeRule &rule = face.rule;
         const Mat b = Basis(rule, cell, -1);
-        const Vec normalVelocity = rule.normal[0] * sampleVelocity(rule, 0) +
-                                   rule.normal[2] * sampleVelocity(rule, 1);
+        const Vec normalVelocity = rule.NormalVelocity(sampleVelocity(rule,0),
+                                                       sampleVelocity(rule,1));
         const Vec q = b * Local(scalar, cell.ids);
         Add(result, b.transpose() *
             rule.w.cwiseProduct(normalVelocity).cwiseProduct(q), cell);
@@ -710,7 +712,7 @@ Sparse Scalar::TransportMatrix(const Rules&rules,const Vec&velocity)const
                      dz.transpose()*r.w.cwiseProduct(sample(r,1)).asDiagonal()*b);
     }
     for(const auto&face:m_faces){const Cell&cell=m_cells[face.cell];const auto&r=face.rule;const Mat b=Basis(r,cell,-1);
-        const Vec normal=r.normal[0]*sample(r,0)+r.normal[2]*sample(r,1);
+        const Vec normal=r.NormalVelocity(sample(r,0),sample(r,1));
         append(cell,b.transpose()*r.w.cwiseProduct(normal).asDiagonal()*b);
     }
     Sparse result(Size(),Size());result.setFromTriplets(triplets.begin(),triplets.end());return result;
@@ -730,7 +732,7 @@ Vec Scalar::NaturalFlux(const ScalarBoundaryFunction &outwardFlux,
         Vec flux(rule.w.size());
         for (int q = 0; q < flux.size(); ++q)
         {
-            flux[q] = outwardFlux(rule.x[q], rule.z[q], rule.normal);
+            flux[q] = outwardFlux(rule.x[q], rule.z[q], rule.Outward(q));
             Check(std::isfinite(flux[q]), "nonfinite scalar natural flux");
         }
         Add(result, -b.transpose() * rule.w.cwiseProduct(flux), cell);

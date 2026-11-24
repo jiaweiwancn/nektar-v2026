@@ -6,11 +6,13 @@
 #define NEKTAR_WJ_NATIVE_FLOW_H
 #include <MultiRegions/ContField.h>
 #include <SolverUtils/Turbulence/WJEARSM.h>
+#include <SolverUtils/Turbulence/RANSWallNormalMap.h>
 #include <Eigen/Sparse>
 #include <Eigen/SparseLU>
 #include <Eigen/SparseCholesky>
 #include <functional>
 #include <memory>
+#include <optional>
 #include <vector>
 
 namespace Nektar::WJNative
@@ -24,8 +26,14 @@ using Function=std::function<double(double,double)>;
 struct Geometry
 {
     double d0=0,H=.15,h=.10854503542535461,curve=0;
+    // The native mesh supplies affine chart cells (a, d0+rho). The fields
+    // store Cartesian velocity, even though their coefficients use this mesh.
+    std::optional<SolverUtils::RANSWallNormalMap> normalMap;
     double Ground(double x) const {return d0+curve*x*x*(1-x)*(1-x);}
     double Slope(double x) const {return curve*(2*x-6*x*x+4*x*x*x);}
+    auto At(double a, double rho, double left, double right, bool outer) const
+        -> SolverUtils::RANSWallNormalMap::Sample;
+    void ValidateNormalMesh(double left, double right, double top) const;
 };
 struct WallStress
 {
@@ -47,7 +55,7 @@ struct Element
     std::vector<int> u,p;
     std::vector<double> us,ps;
     Mat B,Dx,Dz,P,Px,Pz;
-    Vec x,z,w;
+    Vec x,z,w; // Native chart labels and physical quadrature weights.
     LocalRegions::ExpansionSharedPtr velocity,pressure;
 };
 /** Native continuous mixed Galerkin blocks. Native quadrature/physical
@@ -72,7 +80,7 @@ public:
     const Sparse&AWF()const{return m_awf;}
     const Vec&PressureMean()const{return m_mean;}
     const Vec&PressureOne()const{return m_pressureOne;}
-    Geometry Mapping()const{return m_geometry;}
+    const Geometry&Mapping()const{return m_geometry;}
     Sparse Strain(const Function &mu,bool transpose=true)const;
     Sparse StrainSamples(const std::vector<Vec>&mu,bool transpose=true)const;
     Sparse System(double alpha,const Sparse &K,double awf)const;
@@ -81,6 +89,9 @@ public:
     Vec StressSamples(const std::vector<std::vector<Tensor>>&T)const;
     Vec AWFLoad(const std::function<Vector(double,double)>&sampleAtH)const;
     Vec KnownKLoad(const Vec &prescribedK)const;
+    /** Normal-layer derivative of the shared scalar trace, extended along
+     * each ray and tested against both Cartesian momentum components. */
+    Sparse NormalSampledAction(const MultiRegions::ContFieldSharedPtr &field) const;
     Vec MassAction(const Vec &full)const;
     Vec Convection(const Vec &full)const;
     double PreparePreconditioner(const Sparse &a);

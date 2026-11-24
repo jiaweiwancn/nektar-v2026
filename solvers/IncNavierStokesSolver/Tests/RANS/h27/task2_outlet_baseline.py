@@ -24,9 +24,12 @@ def verified(item):
 def source_identity(root):
     eq = root / "solvers/IncNavierStokesSolver/EquationSystems"
     turb = root / "library/SolverUtils/Turbulence"
+    names = ["WJEARSM", "RANSModels", "AnalyticalWallFunction"]
+    recipe = eq.parent / "Tests/RANS/h27/source_identity.cmake"
+    if recipe.is_file() and "RANSWallNormalMap.cpp" in recipe.read_text():
+        names.append("RANSWallNormalMap")
     files = sorted([*eq.glob("WJNative*.h"), *eq.glob("WJNative*.cpp"),
-                    *(turb / f"{name}.{ext}" for name in
-                      ("WJEARSM", "RANSModels", "AnalyticalWallFunction") for ext in ("h", "cpp"))])
+                    *(turb / f"{name}.{ext}" for name in names for ext in ("h", "cpp"))])
     inventory = [identity(path) for path in files]
     material = "WJH27-v2|C++17|no-fast-math|fp-contract=off|" + "|".join(
         entry["sha256"] for entry in inventory)

@@ -111,7 +111,7 @@ void WriteStepPreconditionerFields(std::ostream&out,const CoupledOptions&options
 void WriteFlowSolverFields(std::ostream &out, const CoupledOptions &options,
                            const CoupledStepInfo &info);
 
-/** Supported flat serial, fully coupled BDF2/EX2 velocity/modified-pressure,
+/** Serial coupled BE/BDF2 velocity/modified-pressure,
  * full-domain k and outer-only epsilon. E_w and the reference cutoff are
  * current dependent data. No artificial equilibrium source or scalar floor.
  */
@@ -157,7 +157,7 @@ private:
     CoupledStepInfo AdvanceNewton(CoupledHistory&history,bool injectRetry);
     struct Data
     {
-        struct VelocityInput {double k,E,aux,r;Tensor gradient;};
+        struct VelocityInput {double k,E,aux,r;Tensor gradient;Vector normal;};
         std::vector<std::vector<VelocityInput>>velocityInputs;
         Rules kRules;
         std::vector<Vec>mu,bulk,shear,Dk,De,sourceK,sourceE,reactionE;
@@ -170,7 +170,9 @@ private:
     const Element&Owner(int geometry)const;
     const Element&HOwner(const Element&element)const;
     NativeRule HRule(const NativeRule&rule)const;
+    const Element& MatchingOwner(double a) const;
     double InterfaceK(const Element&element,double x,const CoupledState&state)const;
+    std::array<double,2> InterfaceBounds(const CoupledState &state) const;
     std::array<double,2> InterfaceVelocity(const Element&element,double x,const CoupledState&state)const;
     std::vector<double> CutoffXBreaks(const Element&element,const std::array<double,4>&coefficients,
                                     double traceLeft,double traceRight)const;
@@ -195,6 +197,9 @@ private:
                              double alpha,double time,CoupledTiming&timing,
                              const CoupledHistory*history=nullptr)const;
     Vec FlowLift(double time)const;
+    Vec DependentTraceDirection(const CoupledState &state, const Vec &dk) const;
+    Vector InitialVelocity(double a, double r) const;
+    Vec ProjectContinuity(const Vec &flow) const;
     void WriteOutletActions(std::ostream&out,const CoupledHistory&history)const;
     Vec PackFree(const CoupledState&state)const;
     CoupledState FromFree(const Vec&free,double time)const;

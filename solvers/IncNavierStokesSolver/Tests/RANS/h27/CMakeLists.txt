@@ -32,8 +32,7 @@ add_library(WJNativeMixedFlow STATIC
     ${H27_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallInnerStress.cpp
     ${H27_SOURCE_ROOT}/library/SolverUtils/Turbulence/EquilibriumAWFProfiles.cpp
     ${H27_SOURCE_ROOT}/library/SolverUtils/Turbulence/EquilibriumAWFTransition.cpp
-    ${H27_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallGeometry.cpp
-    ${H27_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallNormalMap.cpp)
+    ${H27_SOURCE_ROOT}/library/SolverUtils/Turbulence/RANSWallGeometry.cpp)
 target_compile_definitions(WJNativeMixedFlow PRIVATE SOLVER_UTILS_EXPORTS)
 target_link_libraries(WJNativeMixedFlow PUBLIC WJNativeFlow)
 target_compile_options(WJNativeMixedFlow PRIVATE

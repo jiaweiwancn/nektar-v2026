@@ -122,7 +122,12 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
             m_options.stepNewton.acceptanceNorm==m_options.nonlinearTolerance,"implicit Newton requires explicit time cap and current coupled tolerance");
     }
     Require(m_geometry.curve==0&&m_geometry.H==m_reference->Parameters().H&&m_geometry.h==m_reference->Parameters().roughness,
-        "coupled v2 supports only the pinned flat geometry/model heights");
+        "coupled v2 requires the pinned model heights on the supported chart mesh");
+    Require(!m_geometry.normalMap || (m_reference->Policy()==ReferencePolicy::ExactInnerFiniteNuV1 &&
+            m_reference->Transport()==InnerKTransport::ScalarV2),
+        "the normal layer requires the exact finite-viscosity ScalarCdV2 reference");
+    Require(!m_geometry.normalMap || !m_options.manufactured,
+            "the curved application requires its own manufactured source");
     for(const auto&field:m_fields)for(int e=0;e<field->GetExpSize();++e)for(int d=0;d<2;++d)
         Require(field->GetExp(e)->GetBasis(d)->GetBasisType()==LibUtilities::eModified_A,"coupled fields require the declared native Modified_A basis");
     m_flow.SetTransportedKSpace(m_fields[2]);BuildTopology();
@@ -177,6 +182,8 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     if(m_reference->Transport()!=InnerKTransport::ScalarV2)
         signature<<'|'<<m_reference->TransportName()<<'|'<<m_reference->BoundaryIdentity();
     signature<<"|outlet:"<<m_outletIdentity;
+    if (m_geometry.normalMap)
+        signature << "|NormalCosineHillV1|" << m_geometry.normalMap->Signature();
     for(const auto&e:m_flow.Elements()){
         signature<<'|'<<e.geometry<<','<<e.xl<<','<<e.xr<<','<<e.rl<<','<<e.rr;
         for(int a:e.u)signature<<','<<a;for(double a:e.us)signature<<','<<a;
@@ -204,6 +211,12 @@ void Coupling::BuildTopology()
         for(int side=0;side<4;++side)edges[e.velocity->GetGeom()->GetEid(side)].push_back({i,side});
     }
     Require(std::abs(m_volume-(m_right-m_left)*m_top)<1e-10*m_volume,"flow mesh is not the complete supported rectangle");
+    if (m_geometry.normalMap)
+    {
+        m_volume=0.;
+        for (const auto &e : elements)
+            m_volume += e.w.sum();
+    }
     constexpr int sideFromNative[4]={2,1,3,0};
     int interfaces=0;
     for(const auto&entry:edges){const auto&owners=entry.second;Require(owners.size()==1||owners.size()==2,"native edge is nonmanifold");
@@ -274,6 +287,16 @@ void Coupling::BuildTopology()
 }
 const Element&Coupling::Owner(int geometry)const{return m_flow.Elements().at(m_geometryIndex.at(geometry));}
 const Element&Coupling::HOwner(const Element&e)const{return m_flow.Elements().at(m_hOwner.at(e.geometry));}
+const Element& Coupling::MatchingOwner(double a) const
+{
+    for (const auto &entry : m_hKTrace)
+    {
+        const auto &cell = Owner(entry.first);
+        if (a >= cell.xl-1e-12 && a <= cell.xr+1e-12)
+            return cell;
+    }
+    throw std::runtime_error("dependent epsilon trace has no outer matching owner");
+}
 NativeRule Coupling::HRule(const NativeRule&rule)const
 {return m_rules.HorizontalTrace(HOwner(Owner(rule.geometry)),rule.x,2);}
 double Coupling::InterfaceK(const Element&e,double x,const CoupledState&s)const
@@ -286,7 +309,20 @@ double Coupling::InterfaceK(const Element&e,double x,const CoupledState&s)const
 std::array<double,2>Coupling::InterfaceVelocity(const Element&e,double x,const CoupledState&s)const
 {
     const auto&owner=HOwner(e);std::array<double,4>c{};for(int j=0;j<4;++j)c[j]=s.flow[owner.u[j]]*owner.us[j];
-    return CubicTrace(c,(x-owner.xl)/(owner.xr-owner.xl),owner.xr-owner.xl);
+    const double width=owner.xr-owner.xl, xi=(x-owner.xl)/width;
+    const auto u=CubicTrace(c,xi,width);
+    if (!m_geometry.normalMap)
+        return u;
+    for (int j=0;j<4;++j)
+        c[j]=s.flow[m_flow.VelocitySize()+owner.u[j]]*owner.us[j];
+    const auto w=CubicTrace(c,xi,width);
+    const auto metric=m_geometry.At(x,m_geometry.H,owner.xl,owner.xr,false);
+    const auto &t=metric.tangent1;
+    const auto &n=metric.normal;
+    const double curvature=metric.kappa1+metric.kappa2;
+    return {t[0]*u[0]+t[2]*w[0],
+            (t[0]*u[1]+t[2]*w[1])/metric.determinant -
+                curvature/(1+m_geometry.H*curvature)*(n[0]*u[0]+n[2]*w[0])};
 }
 std::vector<double>Coupling::CutoffXBreaks(const Element&e,const std::array<double,4>&c,double left,double right)const
 {
@@ -302,6 +338,30 @@ std::vector<double>Coupling::CurrentCutoffXBreaks(const Element&e,const CoupledS
     const auto&owner=HOwner(e);const auto&trace=m_hKTrace.at(owner.geometry);std::array<double,4>c{};
     for(int j=0;j<4;++j)c[j]=s.k[trace.ids[j]]*trace.signs[j];
     return CutoffXBreaks(e,c,owner.xl,owner.xr);
+}
+std::array<double,2> Coupling::InterfaceBounds(const CoupledState &state) const
+{
+    const auto &p=m_reference->Parameters();
+    std::array<double,2> result{p.KMaximum,p.KMinimum};
+    for (const auto &[id,trace] : m_hKTrace)
+    {
+        std::array<double,4> coefficients;
+        for (int j=0; j<4; ++j)
+            coefficients[j]=state.k[trace.ids[j]]*trace.signs[j];
+        const auto bounds=CubicBounds(coefficients);
+        if (!(bounds[0]>=p.KMinimum && bounds[1]<=p.KMaximum))
+        {
+            const auto &owner=Owner(id);
+            std::ostringstream error;
+            error << std::setprecision(17) << "interface K polynomial left the qualified reference interval"
+                  << " in geometry " << id << " (chart a " << owner.xl << " to " << owner.xr
+                  << "), K/Kin=[" << bounds[0]/p.KIn << ',' << bounds[1]/p.KIn << ']';
+            throw NativeInadmissibleState(error.str());
+        }
+        result[0]=std::min(result[0],bounds[0]);
+        result[1]=std::max(result[1],bounds[1]);
+    }
+    return result;
 }
 std::vector<double>Coupling::MMSCutoffXBreaks(const Element&e,double time)const
 {
@@ -328,8 +388,19 @@ void Coupling::CheckTraceEvaluation()const
         double x=e.xl+t*(e.xr-e.xl);auto rule=m_rules.HorizontalTrace(e,Vec::Constant(1,x),2);
         const double K=m_k.Evaluate(rule,synthetic.k)[0],fast=InterfaceK(e,x,synthetic);
         Require(std::abs(K-fast)<=2e-13*m_reference->Parameters().KIn,"direct native H scalar trace disagrees with owned basis evaluation");
-        auto velocity=InterfaceVelocity(e,x,synthetic);Vec local=Local(synthetic.flow,rule.u);
-        Require(std::abs((rule.B*local)[0]-velocity[0])<=2e-13&&std::abs((rule.Dx*local)[0]-velocity[1])*(e.xr-e.xl)<=2e-13,
+        auto velocity=InterfaceVelocity(e,x,synthetic);
+        const auto normal=rule.WallNormal(0);
+        const std::array<double,2> tangent{normal[2],-normal[0]};
+        const Mat ds=tangent[0]*rule.Dx+tangent[1]*rule.Dz;
+        double traceValue=0., derivative=0.;
+        for (int i=0;i<2;++i)
+        {
+            const Vec local=Local(synthetic.flow,rule.u,i*m_flow.VelocitySize());
+            traceValue+=tangent[i]*rule.B.row(0).dot(local);
+            derivative+=tangent[i]*ds.row(0).dot(local)
+                -rule.MatchingCurvature(0)*normal[2*i]*rule.B.row(0).dot(local);
+        }
+        Require(std::abs(traceValue-velocity[0])<=2e-13&&std::abs(derivative-velocity[1])*(e.xr-e.xl)<=2e-13,
             "direct native H velocity trace/gradient disagrees with owned basis evaluation");
     }}
 }
@@ -365,15 +436,77 @@ CoupledState Coupling::DirichletState(const CoupledState&s,double time)const
     if(!m_mms&&m_physicalKLift.size())kLift=m_physicalKLift;
     else{kLift=m_k.EssentialLift([&](double x,double z,const Vector&){return m_mms?m_mms->Fields(NativeX(x),NativeRadius(z)+m_geometry.d0,time).k.value:m_reference->InletK(NativeRadius(z));},m_rules);if(!m_mms)m_physicalKLift=kLift;}
     result.k=m_k.Expand(m_k.Restrict(s.k),kLift);
-    auto eLift=m_e.EssentialLift([&](double x,double z,const Vector&n){
-        if(n[2]<-.5){
-            const Element*owner=nullptr;for(const auto&e:m_flow.Elements())if(std::abs(e.rl-m_geometry.H)<1e-12&&x>=e.xl-1e-12&&x<=e.xr+1e-12){owner=&e;break;}
-            Require(owner!=nullptr,"dependent epsilon trace has no outer owner");
-            return m_reference->Amplitude(InterfaceK(*owner,x,result))/m_geometry.H;
-        }
+    auto eLift=m_e.EssentialLift([&](double x,double z,const Vector&){
+        if(NativeRadius(z)==m_geometry.H)
+            return m_reference->Amplitude(InterfaceK(MatchingOwner(x),x,result))/m_geometry.H;
         return m_mms?m_mms->OuterEpsilon(NativeX(x),NativeRadius(z)+m_geometry.d0,time).value:m_reference->InletE(NativeRadius(z));
     },m_rules);
     result.epsilon=m_e.Expand(m_e.Restrict(s.epsilon),eLift);return result;
+}
+
+Vec Coupling::DependentTraceDirection(const CoupledState &state, const Vec &dk) const
+{
+    return m_e.EssentialLift([&](double a,double z,const Vector&){
+        if (NativeRadius(z)!=m_geometry.H)
+            return 0.;
+        const auto &owner=MatchingOwner(a);
+        const auto rule=m_rules.HorizontalTrace(owner,Vec::Constant(1,a),2);
+        return m_reference->AmplitudeDerivative(InterfaceK(owner,a,state))*
+            m_k.Evaluate(rule,dk)[0]/m_geometry.H;
+    },m_rules);
+}
+Vector Coupling::InitialVelocity(double a, double r) const
+{
+    if (!m_geometry.normalMap)
+        return {m_reference->InletU(r),0.,0.};
+
+    const auto &map=*m_geometry.normalMap;
+    const bool outer=r>m_geometry.H;
+    const auto chart=m_geometry.At(a,r,a,a,outer);
+    double level=r;
+    Vector gradient{chart.inverse[2][0],0.,chart.inverse[2][2]};
+    // The streamfunction is the integral of the retained approach U in
+    // level. Match its normal distance at H, then merge into the outer chart.
+    constexpr double blendStart=.25, blendEnd=.8;
+    if (outer && r<blendEnd && map.amplitude!=0)
+    {
+        auto tube=map;
+        tube.compositeTunnel=false;
+        const auto foot=tube.Inverse(chart.point);
+        const double normalDistance=foot[2]-m_geometry.d0;
+        const double reachBound=std::abs(map.amplitude)*std::pow(std::acos(-1.)/map.lengthX,2)/2;
+        Require(foot[2]*reachBound<.8,"initial streamfunction left certified normal reach");
+        const auto normal=tube.At(foot).normal;
+        const double q=std::clamp((r-blendStart)/(blendEnd-blendStart),0.,1.);
+        const double blend=q*q*q*(10+q*(-15+6*q));
+        const double blendR=30*q*q*(1-q)*(1-q)/(blendEnd-blendStart);
+        level=(1-blend)*normalDistance+blend*r;
+        for (int i : {0,2})
+            gradient[i]=(1-blend)*normal[i]+
+                (blend+blendR*(r-normalDistance))*gradient[i];
+    }
+    const double velocity=m_reference->InletU(level);
+    return {velocity*gradient[2],0.,-velocity*gradient[0]};
+}
+
+Vec Coupling::ProjectContinuity(const Vec &flow) const
+{
+    // Constrained velocity mass projection with homogeneous increments.
+    // Its multiplier is discarded. Advancement uses the complete G_eff.
+    const int nv=2*m_flow.VelocitySize();
+    const Sparse zero(nv,nv);
+    const auto system=m_flow.System(1.,zero,0.);
+    Eigen::SparseLU<Sparse> factor;
+    factor.compute(system);
+    Require(factor.info()==Eigen::Success,"initial velocity mass projection factorization failed");
+    const Vec lift=m_flow.Lift(flow);
+    const Vec rhs=m_flow.LiftedRhs(1.,zero,0.,m_flow.Core().MassAction(flow),lift);
+    const Vec projected=factor.solve(rhs);
+    Require(factor.info()==Eigen::Success&&projected.allFinite(),
+            "initial velocity mass projection failed");
+    Vec result=m_flow.Expand(projected,lift);
+    result.tail(m_flow.PressureSize())=flow.tail(m_flow.PressureSize());
+    return result;
 }
 
 CoupledHistory Coupling::Initialise()const
@@ -382,8 +515,7 @@ CoupledHistory Coupling::Initialise()const
     h.current.flow=Vec::Zero(2*m_flow.VelocitySize()+m_flow.PressureSize());
     for(int component=0;component<3;++component){auto f=[&,component](double x,double z){
             if(m_mms){auto a=m_mms->Fields(NativeX(x),NativeRadius(z)+m_geometry.d0,0);return component==0?a.u.value:component==1?a.w.value:a.Pi.value;}
-            if(component==0)return m_reference->InletU(NativeRadius(z));
-            if(component==1)return 0.;
+            if(component<2)return InitialVelocity(x,NativeRadius(z))[2*component];
             if(m_reference->Policy()==ReferencePolicy::ExactInnerFiniteNuV1)
                 return m_reference->InletModifiedPressure(NativeRadius(z));
             // A fresh normal-traction-compatible seed, with no imposed old
@@ -399,7 +531,17 @@ CoupledHistory Coupling::Initialise()const
     }
     h.current.k=m_k.Project([&](double x,double z){return m_mms?m_mms->Fields(NativeX(x),NativeRadius(z)+m_geometry.d0,0).k.value:m_reference->InletK(NativeRadius(z));});
     h.current.epsilon=m_e.Project([&](double x,double z){return m_mms?m_mms->OuterEpsilon(NativeX(x),NativeRadius(z)+m_geometry.d0,0).value:m_reference->InletE(NativeRadius(z));});
-    if(!m_mms)m_physicalFlowLift=m_flow.Lift(h.current.flow);
+    if(!m_mms && !m_geometry.normalMap)m_physicalFlowLift=m_flow.Lift(h.current.flow);
+    if(m_geometry.normalMap)
+    {
+        h.current=DirichletState(h.current,0.);
+        h.current.flow=ProjectContinuity(h.current.flow);
+        Vec continuity=Vec::Zero(h.current.flow.size());
+        continuity.tail(m_flow.PressureSize())=
+            m_flow.Core().Divergence()*h.current.flow.head(2*m_flow.VelocitySize());
+        Require(m_flow.RawResidualNorm(m_flow.Restrict(continuity)).continuity<=1e-9,
+                "normal-chart initialization does not satisfy represented continuity");
+    }
     return FreshHistory(h.current);
 }
 
@@ -416,6 +558,8 @@ CoupledHistory Coupling::ReadInitialFields(const std::string&path,bool allowCand
 {
     InitialFields initial(path);InitialFieldGeometry geometry;
     geometry.d0=m_geometry.d0;geometry.H=m_geometry.H;geometry.h=m_geometry.h;geometry.left=m_left;geometry.right=m_right;geometry.top=m_top;geometry.curve=m_geometry.curve;
+    if (m_geometry.normalMap)
+        geometry.normalMap=m_geometry.normalMap->Signature();
     const std::string expectedSource=m_options.initialSourceIdentity.empty()?m_options.sourceIdentity:m_options.initialSourceIdentity;
     Require(expectedSource.size()==64,"initial-field source binding is missing");
     Require(expectedSource==m_options.sourceIdentity||allowCandidate,"a different declared initial source is allowed only as a steady-preparation guess");
@@ -466,7 +610,7 @@ CoupledHistory Coupling::ReadInitialFields(const std::string&path,bool allowCand
 CoupledHistory Coupling::PerturbInitialHistory(const CoupledHistory&base,const std::string&certificate,
                                                const std::string&sha256)
 {
-    Require(!m_mms&&m_zeroTransverseOutlet&&
+    Require(!m_mms&&!m_geometry.normalMap&&m_zeroTransverseOutlet&&
             m_reference->Policy()==ReferencePolicy::ExactInnerFiniteNuV1&&
             !m_initialPacketSha.empty()&&!m_initialProjected&&!m_initialCandidate&&
             base.step==0&&base.time==0,
@@ -521,11 +665,8 @@ Coupling::Data Coupling::Evaluate(const CoupledState&s,double time,bool principa
     d.minK=kb[0];d.minE=std::min(eb[0],m_reference->Amplitude(p.KMinimum)/m_geometry.H);
     // The interface polynomial must remain in the qualified reference table
     // over its complete edge, rather than only at a chosen node set.
-    auto km=m_fields[2]->GetLocalToGlobalMap();
-    for(int ei=0;ei<m_fields[2]->GetExpSize();++ei){const auto&e=Owner(m_fields[2]->GetExp(ei)->GetGeom()->GetGlobalID());if(std::abs(e.rl-m_geometry.H)>1e-12)continue;
-        std::array<double,4>c{};for(int j=0;j<4;++j){int l=m_fields[2]->GetCoeff_Offset(ei)+j;c[j]=s.k[km->GetLocalToGlobalMap(l)]*km->GetLocalToGlobalSign(l);}
-        auto bound=CubicBounds(c);RequireState(bound[0]>=p.KMinimum&&bound[1]<=p.KMaximum,"current interface K polynomial left the qualified reference interval");
-    }
+    const auto KBounds=InterfaceBounds(s);
+    d.minE=std::min(eb[0],m_reference->Amplitude(KBounds[0])/m_geometry.H);
     timing.guards+=Clock()-start;start=Clock();
     const CutoffPartition partition{m_cutoffRange,[&](const Element&e){return CurrentCutoffXBreaks(e,s);}};
     d.kRules=m_rules.Cutoff([&](const Element&e,double x){return m_reference->Cutoff(InterfaceK(e,x,s));},&partition);
@@ -545,17 +686,28 @@ Coupling::Data Coupling::Evaluate(const CoupledState&s,double time,bool principa
             double E=outer?eps[q]:m_reference->Ew(interface[q],radius),aux=outer?0:m_reference->Aux(interface[q],radius);
             RequireState(std::isfinite(E)&&E>0,"current transported/dependent epsilon is not strictly positive");
             Tensor G{};G[0][0]=ux[q];G[0][2]=uz[q];G[2][0]=vx[q];G[2][2]=vz[q];
-            if(flowPart)d.velocityInputs.back()[q]={k,E,aux,radius,G};
-            double began=Clock();auto a=AdaptAmended(k,E,G,{0,0,1},p.nu,aux,radius,m_geometry.H,m_options.backend,&m_constitutiveStats);timing.constitutive+=Clock()-began;
+            const auto normal=r.WallNormal(q);
+            if(flowPart)d.velocityInputs.back()[q]={k,E,aux,radius,G,normal};
+            double began=Clock();auto a=AdaptAmended(k,E,G,normal,p.nu,aux,radius,m_geometry.H,m_options.backend,&m_constitutiveStats);timing.constitutive+=Clock()-began;
             Require(a.mu>0&&std::isfinite(a.production),"invalid current complete constitutive data");
             mu[q]=a.mu;rem[q]=a.remainder;viscous[q]=a.V;
             shear[q]=m_options.stressSplit=="PositiveShearV1"?(1-a.chi)*aux:0.;
             bulk[q]=a.mu-shear[q];
-            // B=b M+a[(PMn) tensor n+n tensor (PMn)]. On the flat
-            // supported geometry only the xz/zx shear receives a. Keep the
-            // COMPLETE V-B remainder, including weak-divergence terms.
-            if(shear[q]!=0)for(int i:{0,2})for(int j:{0,2})
-                if(i==j)rem[q][i][j]+=shear[q]*(G[i][j]+G[j][i]);
+            // Positive planar split, with the full V minus this split kept
+            // in the remainder. S is t tensor n + n tensor t.
+            if(shear[q]!=0)
+            {
+                const Vector t{normal[2],0.,-normal[0]};
+                Tensor S{};
+                double projected=0.;
+                for (int i : {0,2}) for (int j : {0,2})
+                {
+                    S[i][j]=t[i]*normal[j]+normal[i]*t[j];
+                    projected+=S[i][j]*G[i][j];
+                }
+                for (int i : {0,2}) for (int j : {0,2})
+                    rem[q][i][j]+=shear[q]*(G[i][j]+G[j][i]-S[i][j]*projected);
+            }
             Dk[q]=m_reference->KDiffusivity(k,E,aux,outer);
             De[q]=outer?p.nu+p.Cd*k*k/(p.sigmaE*E):0.;
             sourceK[q]=a.production-E;sourceE[q]=outer?1.44*a.production*E/k:0.;reactionE[q]=outer?1.82*E/k:0.;
@@ -563,7 +715,7 @@ Coupling::Data Coupling::Evaluate(const CoupledState&s,double time,bool principa
             if(flowPart){coefficient.push_back(bulk[q]);coefficient.push_back(shear[q]);kCoefficient.push_back(Dk[q]);if(outer){eCoefficient.push_back(De[q]);eCoefficient.push_back(reactionE[q]);}}
             // Covariance is checked at every current assembly point. Principal
             // checks include the continuum of supported planar directions.
-            began=Clock();auto guard=CheckPlanarState(k,E,G,p.nu,aux,radius,m_geometry.H,principal&&flowPart,&a,m_options.backend,&m_constitutiveStats);
+            began=Clock();auto guard=CheckPlanarState(k,E,G,p.nu,aux,radius,m_geometry.H,principal&&flowPart,&a,m_options.backend,&m_constitutiveStats,normal);
             d.minCovariance=std::min(d.minCovariance,guard.covarianceOverK);
             if(principal&&flowPart)d.minPrincipal=std::min(d.minPrincipal,guard.principalOverMu);
             if(guard.covarianceOverK<=1e-10||(principal&&flowPart&&guard.principalOverMu<=1e-8)){
@@ -621,7 +773,7 @@ Sparse Coupling::VelocityTangent(const Data&d,CoupledTiming&timing)const
         const auto&r=*m_rules.Static()[i];Require(d.velocityInputs[i].size()==std::size_t(r.w.size()),"steady tangent current point inventory differs");
         OwnedPlanarVelocityTangents cell;cell.geometry=r.geometry;cell.points.reserve(r.w.size());
         for(const auto&input:d.velocityInputs[i])cell.points.push_back(EvaluatePlanarVelocityTangent(input.k,input.E,input.gradient,
-            m_reference->Parameters().nu,input.aux,input.r,m_geometry.H,m_options.backend,&m_constitutiveStats));
+            m_reference->Parameters().nu,input.aux,input.r,m_geometry.H,m_options.backend,&m_constitutiveStats,input.normal));
         samples.push_back(std::move(cell));
     }
     timing.constitutive+=Clock()-start;const double assembly=Clock();
@@ -633,8 +785,20 @@ Sparse Coupling::Strain(const Data&d)const
 {
     std::vector<Triplet>t;t.reserve(m_rules.Static().size()*1024);const int n=m_flow.VelocitySize();
     for(int e=0;e<int(m_rules.Static().size());++e){const auto&r=*m_rules.Static()[e];Vec w=r.w.cwiseProduct(d.bulk[e]),wa=r.w.cwiseProduct(d.shear[e]);std::array<Mat,2>g{r.Dx,r.Dz};Mat lap=r.Dx.transpose()*w.asDiagonal()*r.Dx+r.Dz.transpose()*w.asDiagonal()*r.Dz;
+        std::array<Mat,2> projected{g[1],g[0]};
+        if(m_geometry.normalMap && wa.squaredNorm()!=0)
+        {
+            for(int q=0;q<wa.size();++q)
+            {
+                const auto n=r.WallNormal(q);
+                const std::array<double,2> t{n[2],-n[0]};
+                for(int i=0;i<2;++i)
+                    projected[i].row(q)=(t[i]*n[0]+n[2*i]*t[0])*r.Dx.row(q)
+                        +(t[i]*n[2]+n[2*i]*t[1])*r.Dz.row(q);
+            }
+        }
         for(int i=0;i<2;++i)for(int j=0;j<2;++j){Mat k=g[j].transpose()*w.asDiagonal()*g[i];if(i==j)k+=lap;
-            k.noalias()+=g[1-i].transpose()*wa.asDiagonal()*g[1-j];
+            k.noalias()+=projected[i].transpose()*wa.asDiagonal()*projected[j];
             for(int a=0;a<16;++a)for(int b=0;b<16;++b)t.emplace_back(i*n+r.u[a],j*n+r.u[b],k(a,b));}}
     Sparse result(2*n,2*n);result.setFromTriplets(t.begin(),t.end());return result;
 }
@@ -652,13 +816,22 @@ Vec Coupling::MomentumAdvection(const CoupledState&s)const
     const int n=m_flow.VelocitySize();Vec load=Vec::Zero(2*n+m_flow.PressureSize());
     for(const auto&rp:m_rules.Static()){
         const auto&r=*rp;Vec u=Local(s.flow,r.u),v=Local(s.flow,r.u,n),up=r.B*u,vp=r.B*v;
-        for(int component=0;component<2;++component){const Vec&c=component==0?u:v;Vec a=up.cwiseProduct(r.Dx*c)+vp.cwiseProduct(r.Dz*c);
-            // The tangential roughness advection uses the same time
-            // treatment as the domain convection.
-            if(component==0&&Owner(r.geometry).rl<m_geometry.h){const auto&e=Owner(r.geometry);
-                for(int q=0;q<a.size();++q)if(r.z[q]-m_geometry.d0<m_geometry.h){auto h=InterfaceVelocity(e,r.x[q],s);a[q]-=2*h[0]*h[1];}}
-            Add(load,r.u,r.B.transpose()*r.w.asDiagonal()*a,component*n);
+        std::array<Vec,2> a{up.cwiseProduct(r.Dx*u)+vp.cwiseProduct(r.Dz*u),
+                            up.cwiseProduct(r.Dx*v)+vp.cwiseProduct(r.Dz*v)};
+        const auto &cell=Owner(r.geometry);
+        if(cell.rl<m_geometry.h)
+        {
+            for(int q=0;q<r.w.size();++q) if(r.z[q]-m_geometry.d0<m_geometry.h)
+            {
+                const auto h=InterfaceVelocity(cell,r.x[q],s);
+                const auto normal=r.WallNormal(q);
+                const double amplitude=2*h[0]*h[1];
+                a[0][q]-=normal[2]*amplitude;
+                a[1][q]+=normal[0]*amplitude;
+            }
         }
+        for(int i=0;i<2;++i)
+            Add(load,r.u,r.B.transpose()*r.w.asDiagonal()*a[i],i*n);
     }
     return load;
 }
@@ -690,10 +863,33 @@ Sparse Coupling::MomentumTransportJacobian(const CoupledState&s)const
             if(i==j)local+=r.B.transpose()*r.w.asDiagonal()*adv;
             for(int a=0;a<16;++a)for(int b=0;b<16;++b)triplets.emplace_back(i*n+r.u[a],j*n+r.u[b],local(a,b));
         }
-        if(Owner(r.geometry).rl<m_geometry.h){auto h=HRule(r);const Vec hu=Local(s.flow,h.u),uh=h.B*hu,uxh=h.Dx*hu;
+        if(Owner(r.geometry).rl<m_geometry.h){auto h=HRule(r);
             Vec weights=r.w;for(int q=0;q<weights.size();++q)if(r.z[q]-m_geometry.d0>=m_geometry.h)weights[q]=0;
-            Mat sampled=-2*r.B.transpose()*weights.asDiagonal()*(uxh.asDiagonal()*h.B+uh.asDiagonal()*h.Dx);
-            for(int a=0;a<16;++a)for(int b=0;b<16;++b)triplets.emplace_back(r.u[a],h.u[b],sampled(a,b));
+            std::array<Mat,2> values{h.B,h.B}, derivatives{h.Dx,h.Dx};
+            std::array<Vec,2> tangents{Vec::Ones(weights.size()),Vec::Zero(weights.size())};
+            for(int q=0;q<weights.size();++q)
+            {
+                const auto normal=h.WallNormal(q);
+                tangents[0][q]=normal[2];
+                tangents[1][q]=-normal[0];
+                const auto ds=(normal[2]*h.Dx.row(q)-normal[0]*h.Dz.row(q)).eval();
+                for (int j=0;j<2;++j)
+                {
+                    values[j].row(q)=tangents[j][q]*h.B.row(q);
+                    derivatives[j].row(q)=tangents[j][q]*ds-
+                        h.MatchingCurvature(q)*normal[2*j]*h.B.row(q);
+                }
+            }
+            const std::array<Vec,2> local{Local(s.flow,h.u),Local(s.flow,h.u,n)};
+            const Vec ut=values[0]*local[0]+values[1]*local[1];
+            const Vec dut=derivatives[0]*local[0]+derivatives[1]*local[1];
+            for(int i=0;i<2;++i) for(int j=0;j<2;++j)
+            {
+                const Mat sampled=-2*r.B.transpose()*weights.cwiseProduct(tangents[i]).asDiagonal()*
+                    (dut.asDiagonal()*values[j]+ut.asDiagonal()*derivatives[j]);
+                for(int a=0;a<16;++a)for(int b=0;b<16;++b)
+                    triplets.emplace_back(i*n+r.u[a],j*n+h.u[b],sampled(a,b));
+            }
         }
     }
     Sparse result(2*n,2*n);result.setFromTriplets(triplets.begin(),triplets.end());return result;
@@ -1102,13 +1298,7 @@ SteadyKrylovResult Coupling::SolveSteady(CoupledHistory&history,const SteadyKryl
         Vec dk=m_k.Expand(result.segment(nf,nk),Vec::Zero(m_k.Size()));
         Vec cross=Vec::Zero(2*m_flow.VelocitySize()+m_flow.PressureSize());cross.head(2*m_flow.VelocitySize())=m_flow.KnownScalarKLoad(dk);
         result.head(nf)=m_flow.ApplyLinearPreconditioner(rhs.head(nf)+m_flow.Restrict(cross));
-        auto trace=m_e.EssentialLift([&](double x,double,const Vector&normal){
-            if(normal[2]>=-.5)return 0.;const Element*owner=nullptr;
-            for(const auto&e:m_flow.Elements())if(std::abs(e.rl-m_geometry.H)<1e-12&&x>=e.xl-1e-12&&x<=e.xr+1e-12){owner=&e;break;}
-            Require(owner!=nullptr,"steady Gamma derivative has no outer owner");
-            auto rule=m_rules.HorizontalTrace(*owner,Vec::Constant(1,x),2);
-            return m_reference->AmplitudeDerivative(InterfaceK(*owner,x,pcState))*m_k.Evaluate(rule,dk)[0]/m_geometry.H;
-        },m_rules);
+        const auto trace=DependentTraceDirection(pcState,dk);
         result.tail(ne)=m_e.ApplyLinearPreconditioner(rhs.tail(ne)-m_e.Restrict(epsilonPCFull*trace));return result;
     };
     if(m_options.checkCurrentActions){
@@ -1279,6 +1469,13 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
        <<",\"boundary_identity\":"<<RANSWallSolveJson::Quote(m_reference->BoundaryIdentity());
     out<<",\"outlet_policy\":"<<RANSWallSolveJson::Quote(m_options.outletPolicy)
        <<",\"outlet_identity\":"<<RANSWallSolveJson::Quote(m_outletIdentity);
+    const auto &p=m_reference->Parameters();
+    const auto K=InterfaceBounds(h.current);
+    out<<",\"interface_K_over_Kin\":["<<K[0]/p.KIn<<','<<K[1]/p.KIn<<']'
+       <<",\"interface_K_table_margin_over_Kin\":["<<(K[0]-p.KMinimum)/p.KIn
+       <<','<<(p.KMaximum-K[1])/p.KIn<<']'
+       <<",\"interface_cutoff_range\":["<<m_reference->Cutoff(K[1])
+       <<','<<m_reference->Cutoff(K[0])<<']';
     if(m_options.checkOutletActions)WriteOutletActions(out,h);
     const auto slopes=m_reference->LogCutoffDerivativeBounds();
     out<<",\"scalar_quadrature_policy\":\"CubicCutoffFacePanelsV1\",\"cutoff_radius_range\":["<<m_cutoffRange[0]<<','<<m_cutoffRange[1]
@@ -1320,7 +1517,17 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
         out<<",\"essential_epsilon_lift\":";VectorJSON(out,m_e.Lift(essential.epsilon));
         out<<",\"mms_bulk_body_rhs\":";VectorJSON(out,m_bulkBodyAction);out<<",\"mms_sampled_body_rhs\":";VectorJSON(out,m_sampledBodyAction);
         out<<",\"current_advection\":";state(h.advection);out<<",\"previous_advection\":";state(h.previousAdvection);
-        out<<",\"geometry\":{\"d0\":"<<m_geometry.d0<<",\"H\":"<<m_geometry.H<<",\"h\":"<<m_geometry.h<<",\"left\":"<<m_left<<",\"right\":"<<m_right<<",\"top\":"<<m_top<<"},\"free_velocity_ids\":[";integers(m_flow.FreeVelocityIds()[0]);out<<',';integers(m_flow.FreeVelocityIds()[1]);out<<"],\"k_free_ids\":";integers(m_k.FreeIds());out<<",\"epsilon_free_ids\":";integers(m_e.FreeIds());
+        out<<",\"geometry\":{\"d0\":"<<m_geometry.d0<<",\"H\":"<<m_geometry.H<<",\"h\":"<<m_geometry.h<<",\"left\":"<<m_left<<",\"right\":"<<m_right<<",\"top\":"<<m_top;
+        if(m_geometry.normalMap)
+        {
+            const auto &map=*m_geometry.normalMap;
+            out<<",\"mapping\":\"NormalCosineHillV1\",\"normal_map_signature\":"
+               <<RANSWallSolveJson::Quote(map.Signature())
+               <<",\"hill_height\":"<<map.amplitude<<",\"hill_half_length\":"<<map.lengthX
+               <<",\"tunnel_top\":"<<map.tunnelTop
+               <<",\"coordinates\":\"affine chart (a,d0+rho); velocity components Cartesian\"";
+        }
+        out<<"},\"free_velocity_ids\":[";integers(m_flow.FreeVelocityIds()[0]);out<<',';integers(m_flow.FreeVelocityIds()[1]);out<<"],\"k_free_ids\":";integers(m_k.FreeIds());out<<",\"epsilon_free_ids\":";integers(m_e.FreeIds());
         if(m_hasInputHistory){const auto&a=m_lastInputHistory;out<<",\"input_history\":{\"step\":"<<a.step<<",\"time\":"<<a.time<<",\"dt\":"<<a.dt<<",\"current\":";state(a.current);out<<",\"previous\":";state(a.previous);out<<",\"advection\":";state(a.advection);out<<",\"previous_advection\":";state(a.previousAdvection);out<<'}';}
         out<<",\"elements\":[";int count=0;
         for(const auto&e:m_flow.Elements()){
