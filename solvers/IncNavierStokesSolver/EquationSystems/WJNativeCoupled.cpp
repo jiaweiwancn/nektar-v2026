@@ -4,6 +4,7 @@
 #include <IncNavierStokesSolver/EquationSystems/WJNativeWallV2.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallDurableProgress.h>
+#include <algorithm>
 #include <array>
 #include <chrono>
 #include <cmath>
@@ -105,6 +106,7 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadParameter("WJPressureCorrectors", options.pressureCorrectors, 1);
     m_session->LoadSolverInfo("WJPicardStop", options.picardStop, "CoupledResidual");
     m_session->LoadSolverInfo("WJPicardAdvection", options.picardAdvection, "Explicit");
+    m_session->LoadSolverInfo("WJNewtonAdvection", options.newtonAdvection, "Explicit");
     m_session->LoadSolverInfo("WJPicardStressLinearization", options.picardStressLinearization, "FrozenStrain");
     m_session->LoadParameter("WJPicardOuterCorrectors", options.picardOuterCorrectors, 0);
     m_session->LoadSolverInfo("WJStepPreconditioner",options.stepPreconditioner,"RebuildEveryNewtonV1");
@@ -117,6 +119,18 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
         m_session->LoadParameter("WJStepKrylovDimension",options.stepNewton.restartDimension,40);
         m_session->LoadParameter("WJStepLinearCycles",options.stepNewton.maximumLinearCycles,8);
         m_session->LoadParameter("WJStepFDStep",options.stepNewton.fdRelativeStep,1e-6);
+        double multiplier, ceiling;
+        m_session->LoadParameter("WJStepForcingMultiplier", multiplier, 1.);
+        m_session->LoadParameter("WJStepForcingCeiling", ceiling, .9);
+        Check(std::isfinite(multiplier) && multiplier >= 1. && multiplier <= 4.,
+              "WJStepForcingMultiplier must lie in [1,4]");
+        Check(std::isfinite(ceiling) && ceiling >= .01 && ceiling <= .9,
+              "WJStepForcingCeiling must lie in [.01,.9]");
+        auto &newton = options.stepNewton;
+        newton.forcingInitial = std::min(ceiling, multiplier * newton.forcingInitial);
+        newton.forcingMinimum = std::min(ceiling, multiplier * newton.forcingMinimum);
+        newton.forcingMaximum = std::min(ceiling, multiplier * newton.forcingMaximum);
+        newton.forcingGamma *= multiplier;
     }
     std::string currentActions;m_session->LoadSolverInfo("WJCheckCurrentActions",currentActions,"False");Check(currentActions=="True"||currentActions=="False","invalid current action check switch");options.checkCurrentActions=currentActions=="True";
     m_session->LoadSolverInfo("WJOutletPolicy",options.outletPolicy,"FullTractionV1");
@@ -305,7 +319,7 @@ void WJNativeCoupled::v_GenerateSummary(SolverUtils::SummaryList&summary)
     SolverUtils::AddSummaryItem(summary,"WJ coupled path","WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon");
     SolverUtils::AddSummaryItem(summary,"Wall tensor",WJNative::WallModelV2);
     SolverUtils::AddSummaryItem(summary,"Integration",
-        m_coupling->Options().picardAdvection == "Implicit"
+        m_coupling->Options().UsesImplicitAdvection()
             ? "BDF2 with implicit advection, backward Euler startup"
             : "current coupled BDF2/EX2, BE startup, no clipping");
     SolverUtils::AddSummaryItem(summary,"Pressure gauge",m_coupling->FlowKernel().Gauge()?"native restricted mean":"fixed by total outlet traction");

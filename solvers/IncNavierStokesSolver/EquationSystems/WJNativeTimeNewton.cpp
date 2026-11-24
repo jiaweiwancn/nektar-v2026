@@ -133,6 +133,7 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
     CoupledStepInfo info;
     const double time=(history.step+1)*history.dt;
     const double alpha=(history.step==0?1.:1.5)/history.dt;
+    const bool implicitAdvection = m_options.UsesImplicitAdvection();
     const int nf=m_flow.Size(), nk=m_k.FreeSize(), ne=m_e.FreeSize();
     const int size=nf+nk+ne;
     auto save=[&] {
@@ -152,11 +153,14 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
     {
         external=Forcing(time,info.timing);
         AccountTime timer(info.timing.nonlinear);
-        const double currentEX=history.step==0?1.:2.;
-        const double previousEX=history.step==0?0.:-1.;
-        external.flow-=currentEX*history.advection.flow+previousEX*history.previousAdvection.flow;
-        external.k-=currentEX*history.advection.k+previousEX*history.previousAdvection.k;
-        external.epsilon-=currentEX*history.advection.epsilon+previousEX*history.previousAdvection.epsilon;
+        if (!implicitAdvection)
+        {
+            const double currentEX=history.step==0?1.:2.;
+            const double previousEX=history.step==0?0.:-1.;
+            external.flow-=currentEX*history.advection.flow+previousEX*history.previousAdvection.flow;
+            external.k-=currentEX*history.advection.k+previousEX*history.previousAdvection.k;
+            external.epsilon-=currentEX*history.advection.epsilon+previousEX*history.previousAdvection.epsilon;
+        }
         unknownScale=UnknownScales();
         rowScale.head(nf)=m_flow.ResidualRowScale();
         rowScale.segment(nf,nk)=m_k.ResidualRowScale();
@@ -208,8 +212,20 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
                 const double evaluationBegan=Seconds();
                 const auto state=unpack(x);
                 const auto owned=currentData(x,state);
+                CoupledState advection;
+                if (implicitAdvection)
+                {
+                    AccountTime timer(info.timing.assembly);
+                    advection = Advection(state, owned->kRules, &info.timingDetail);
+                }
                 AccountTime timer(info.timing.residual);
                 auto action=CurrentActions(state,*owned);
+                if (implicitAdvection)
+                {
+                    action.flow += advection.flow;
+                    action.k += advection.k;
+                    action.epsilon += advection.epsilon;
+                }
                 // Stable coefficient differences include the complete
                 // essential/Gamma history before the physical mass action.
                 CoupledState delta{alpha*(state.flow-history.current.flow),
@@ -284,8 +300,8 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
                 pcState=unpack(x);
                 const auto owned=currentData(x,pcState);
                 const auto &data=*owned;
-                // EX advection is fixed history, so it has no current-state
-                // transport Jacobian. Alpha is the actual BE/BDF2 coefficient.
+                // Jv includes current advection for an implicit step. These
+                // inverse approximations retain the diffusive block structure.
                 Sparse flowPC,kPC,ePC;Vec currentTuple;
                 const bool amdOrdering=m_options.stepPreconditioner=="CurrentDataAMDOrderingV1";
                 const bool currentDataPolicy=amdOrdering||m_options.stepPreconditioner=="CurrentDataDriftV1";
@@ -445,17 +461,25 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
             const auto state=unpack(result.x);
             checkDeadline();
             const auto final=Evaluate(state,time,true,info.timing);
+            CoupledState nextAdvection;
+            {
+                AccountTime timer(info.timing.assembly);
+                nextAdvection = Advection(state, final.kRules, &info.timingDetail);
+            }
+            // Subtract current transport from the RHS so the same residual
+            // norm includes it once, on the left of the new-time equations.
+            if (implicitAdvection)
+            {
+                external.flow -= nextAdvection.flow;
+                external.k -= nextAdvection.k;
+                external.epsilon -= nextAdvection.epsilon;
+            }
             info.residual=Residual(state,final,external,alpha,time,info.timing,&history);
             if(info.residual.Maximum()>m_options.nonlinearTolerance)
                 throw std::runtime_error("fresh current implicit residual failed after eliminating gauge multiplier");
             checkDeadline();
             info.minimumK=final.minK;info.minimumEpsilon=final.minE;
             info.minimumCovarianceOverK=final.minCovariance;info.minimumPrincipalOverMu=final.minPrincipal;
-            CoupledState nextAdvection;
-            {
-                AccountTime timer(info.timing.assembly);
-                nextAdvection = Advection(state, final.kRules, &info.timingDetail);
-            }
             {
                 AccountTime movement(info.timingDetail.historyMovement);
                 auto next=history;

@@ -85,6 +85,11 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     Require(m_options.stressSplit=="PositiveShearV1"||m_options.stressSplit=="IsotropicMuV1","unknown numerical stress split");
     Require(m_options.steadyVelocityPC=="FullGradientV1"||m_options.steadyVelocityPC=="PositiveFrozenV1","unknown steady velocity preconditioner");
     Require(m_options.advancement=="PicardV1"||m_options.advancement=="CoupledJFNKV1","unknown implicit coupled solver");
+    Require(m_options.newtonAdvection == "Explicit" ||
+            (m_options.newtonAdvection == "Implicit" && m_options.advancement == "CoupledJFNKV1"),
+            "WJNewtonAdvection requires Explicit or CoupledJFNKV1 with Implicit");
+    Require(m_options.newtonAdvection != "Implicit" || m_options.nonlinearTolerance <= 1e-10,
+            "Implicit Newton requires a refreshed coupled tolerance of at most 1e-10");
     Require(m_options.picardAdvection == "Explicit" ||
             (m_options.picardAdvection == "Implicit" && m_options.advancement == "PicardV1"),
             "WJPicardAdvection requires Explicit or PicardV1 with Implicit");
@@ -137,7 +142,7 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
         std::abs(m_top-m_reference->Parameters().topRadius)<1e-12&&std::abs(m_left+10)<1e-12&&
         std::abs(m_right-m_options.diagnosticOutletX)<1e-12,
         "application geometry differs from the retained physical domain");
-    const char *integration = m_options.picardAdvection == "Implicit" ?
+    const char *integration = m_options.UsesImplicitAdvection() ?
         "BDF2-ImplicitAdvection" : "BDF2-EX2";
     std::ostringstream signature;signature<<std::setprecision(17)<<"WJ-H27-coupled-v2-"<<integration<<'|'<<WallModelV2<<"|CubicCutoffFacePanelsV1|"
         <<m_options.sourceIdentity<<'|'<<m_reference->Identity()<<'|'<<m_options.dt<<'|'<<m_options.manufactured<<'|'
@@ -150,6 +155,13 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     const auto&newton=m_options.stepNewton;
     signature<<'|'<<m_options.advancement<<'|'<<newton.maximumSeconds<<'|'<<newton.acceptanceNorm<<'|'
         <<newton.maximumNewtonIterations<<'|'<<newton.restartDimension<<'|'<<newton.maximumLinearCycles<<'|'<<newton.fdRelativeStep;
+    if (m_options.advancement == "CoupledJFNKV1")
+    {
+        signature << "|NewtonAdvection:" << m_options.newtonAdvection
+                  << "|forcing:" << newton.forcingInitial << ',' << newton.forcingMinimum
+                  << ',' << newton.forcingMaximum << ',' << newton.forcingGamma
+                  << ',' << newton.forcingExponent;
+    }
     signature<<'|'<<m_options.stepPreconditioner<<'|'<<m_options.stepPCRelativeDrift<<'|'<<m_options.stepPCMaximumUses;
     if (pressureCorrection)
     {
@@ -1241,6 +1253,17 @@ void WriteFlowSolverFields(std::ostream &out, const CoupledOptions &options,
         << ",\"krylov_iterations\":" << work.krylovIterations << '}'
         << ",\"scalar_factor_seconds\":{\"k\":" << info.timingDetail.kFactor
         << ",\"epsilon\":" << info.timingDetail.epsilonFactor << '}';
+    if (options.advancement == "CoupledJFNKV1")
+    {
+        const auto &newton = options.stepNewton;
+        out << ",\"step_advection\":"
+            << Quote(options.UsesImplicitAdvection() ? "BDF2ImplicitAdvectionV1" : "BDF2EX2")
+            << ",\"newton_forcing\":{\"initial\":" << newton.forcingInitial
+            << ",\"minimum\":" << newton.forcingMinimum
+            << ",\"maximum\":" << newton.forcingMaximum
+            << ",\"gamma\":" << newton.forcingGamma
+            << ",\"exponent\":" << newton.forcingExponent << '}';
+    }
 }
 
 void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepInfo&info,bool coefficients)const

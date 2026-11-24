@@ -38,6 +38,7 @@ struct CoupledOptions
     std::string advancement="PicardV1";
     std::string flowPreconditioner="SparseLU", picardStop="CoupledResidual";
     std::string picardAdvection="Explicit", picardStressLinearization="FrozenStrain";
+    std::string newtonAdvection="Explicit";
     int pressureCorrectors=1, picardOuterCorrectors=0;
     SteadyKrylovOptions stepNewton;
     std::string stepPreconditioner="RebuildEveryNewtonV1";
@@ -45,6 +46,12 @@ struct CoupledOptions
     int stepPCMaximumUses=8;
     ConstitutiveBackend backend=ConstitutiveBackend::Historical;
     std::string sourceIdentity,mmsVariant="Historical",initialSourceIdentity,initialReferenceIdentity;
+
+    bool UsesImplicitAdvection() const
+    {
+        return advancement == "CoupledJFNKV1" ? newtonAdvection == "Implicit"
+                                              : picardAdvection == "Implicit";
+    }
 };
 struct CoupledResidual
 {

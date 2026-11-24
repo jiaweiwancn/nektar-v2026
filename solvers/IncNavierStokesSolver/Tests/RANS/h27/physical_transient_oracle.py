@@ -64,6 +64,12 @@ def scheme(data):
     startup = h['step'] == 0
     mode = data.get('picard_advection', 'Explicit')
     po.require(mode in ('Explicit', 'Implicit'), 'unknown transient advection mode')
+    if 'step_advection' in data:
+        marker = data['step_advection']
+        po.require(data.get('implicit_solver') == 'CoupledJFNKV1' and mode == 'Explicit'
+                   and marker in ('BDF2ImplicitAdvectionV1', 'BDF2EX2'),
+                   'Newton advection summary conflicts with exported solver identity')
+        mode = 'Implicit' if marker == 'BDF2ImplicitAdvectionV1' else 'Explicit'
     implicit = mode == 'Implicit'
     name = 'BE_EX1_STARTUP' if startup else 'BDF2_EX2'
     if implicit:
