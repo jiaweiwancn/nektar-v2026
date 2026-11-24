@@ -23,6 +23,7 @@ def main():
     parser.add_argument("--initial-slowdown", type=float, default=0.)
     parser.add_argument("--initial-epsilon-bump", type=float, default=0.)
     parser.add_argument("--level", type=int, choices=range(4), default=0)
+    parser.add_argument("--bisect-streamwise", action="store_true")
     parser.add_argument("--dt", type=float, default=.02)
     parser.add_argument("--steps", type=int, default=3)
     parser.add_argument("--restart", type=Path)
@@ -51,6 +52,8 @@ def main():
                1.875, 2.5, 4., 6., 9., 12., 15.])
     for _ in range(args.level):
         xs, rs = bisect(xs), bisect(rs)
+    if args.bisect_streamwise:
+        xs = bisect(xs)
     geometry = out / "geometry.xml"
     mesh(geometry, xs, rs, quadrature=12)
     session = out / "run.xml"
