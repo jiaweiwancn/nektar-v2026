@@ -37,3 +37,51 @@ The checked-in Picard changes add optional implicit advection and the velocity-t
 | Four sweeps | 4.930e-11 | 6.312e-11 | 1.612e-11 | 2.185e-11 |
 
 Both final Picard checkpoint histories verified. The Linux analytic controls passed for explicit and implicit advection at both startup and BDF2. The Picard rows describe native endpoint checks. [Picard runtime, checkpoints, and analytic controls](wj-h27-linux/bf-t10/picard-t10.json)
+
+## Timing comparison
+
+Steps 201–500 cover \(4<t\le 10\) at \(\Delta t=0.02\). This interval is inside the final uninterrupted segment of all four runs. Complete step wall time includes the advance, journal, checkpoint, and scientific output for each step. The receipts record one MPI rank and one compute thread per case, pinned to the CPUs below, and no supervisor pauses in these segments.
+
+| Solver | Pinned CPU | Total wall (h) | Mean (s/step) | Median (s/step) | P10–P90 (s/step) | Time relative to Sparse-LU |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Coupled Newton, Sparse-LU | 105 | 11.37 | 136.5 | 136.4 | 135.9–137.1 | 1.00× |
+| Picard, 4 sweeps × 1 corrector | 93 | 12.48 | 149.8 | 149.1 | 146.6–151.5 | 1.10× |
+| Coupled Newton, 1 pressure corrector | 14 | 12.74 | 152.9 | 141.9 | 92.2–244.8 | 1.12× |
+| Picard, 3 sweeps × 1 corrector | 3 | 14.27 | 171.3 | 171.1 | 159.2–182.0 | 1.26× |
+
+The two Newton variants used full-step residual tolerances of `1e-10` and `3e-6`, respectively. Both Picard variants used implicit advection, the velocity-tangent stress linearization, a fixed sweep count, and a final continuity tolerance of `1e-10`. The timings compare the archived configurations with these acceptance criteria and their own restart histories.
+
+### Where the time went
+
+- Sparse-LU spent 82.5 s per step on rebuilds, about 61% of native step time. Pressure correction lowered that cost to 42.2 s. It averaged 36.5 Jacobian actions per step versus 13.0 for Sparse-LU, with 27.3 s more assembly and 11.3 s more constitutive work per step. Its step cost varied widely.
+- Four-sweep Picard took 12.6% less wall time than three-sweep Picard over the matched interval. The pressure solves averaged 86.7 versus 114.3 s per step, with about 185 aggregate pressure Krylov iterations per step in each run. Rank CPU and complete step wall means agreed within 0.3 s for all four cases. The runs used different pinned cores on a shared host, which limits attribution of the timing difference to sweep count.
+
+### Time cost across the full march
+
+The accepted native step totals sum the `seconds` field for steps 1–500. The journals form continuous state and advection histories across the restarts. Launcher totals sum receipts on the retained histories and include startup, output, pauses, and incomplete work in those launches. Time between launches and separate test and recovery probes are outside those totals.
+
+| Solver | Accepted native step time (h) | Launcher wall time (h) |
+| --- | ---: | ---: |
+| Coupled Newton, Sparse-LU | 19.96 | 21.24 |
+| Picard, 4 sweeps × 1 corrector | 21.47 | 21.69 |
+| Coupled Newton, 1 pressure corrector | 25.75 | 26.43 |
+| Picard, 3 sweeps × 1 corrector | 23.54 | 23.76 |
+
+The early Newton histories include explicit advection through step 16 and recovery to implicit advection at step 17. Each physical time band below contains 100 accepted steps. The values are median native seconds per step, including any restart effects on the accepted steps in that band.
+
+| Solver | \(0<t\le 2\) | \(2<t\le 4\) | \(4<t\le 6\) | \(6<t\le 8\) | \(8<t\le 10\) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Coupled Newton, Sparse-LU | 137.2 | 136.2 | 136.3 | 136.3 | 136.0 |
+| Picard, 4 sweeps × 1 corrector | 166.0 | 154.5 | 150.3 | 148.4 | 146.9 |
+| Coupled Newton, 1 pressure corrector | 226.6 | 151.5 | 142.9 | 132.7 | 147.1 |
+| Picard, 3 sweeps × 1 corrector | 159.8 | 164.8 | 160.8 | 172.8 | 174.7 |
+
+Four-sweep Picard continued to get cheaper, with a 2.3% drop in median cost from \((4,6]\) to \((8,10]\). Three-sweep Picard rose 8.7% across those bands. Sparse-LU stayed near 136 s per step, and pressure-corrected Newton slowed again in the final band.
+
+The [timing evidence](wj-h27-linux/bf-t10/timing.json) records the segment paths, tested source identities, and timing breakdowns. To regenerate it from the retained Linux archives, run the following command from the repository root. [Collector](wj-h27-linux/bf-t10/summarize-timing.py)
+
+```bash
+ssh jay@100.88.70.60 \
+  'OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python3 - /media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs' \
+  < docs/plans/wj-h27-linux/bf-t10/summarize-timing.py
+```

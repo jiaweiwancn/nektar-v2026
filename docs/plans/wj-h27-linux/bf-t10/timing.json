@@ -1,0 +1,694 @@
+{
+  "dt": 0.02,
+  "matched_from_step_exclusive": 200,
+  "through_step": 500,
+  "runs": {
+    "newton-sparse": {
+      "model_and_mesh": {
+        "model": "FiniteNuIsotropicWallFullWJCollarV2",
+        "reference_identity": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1",
+        "boundary_identity": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1",
+        "outlet_identity": "a5bc691bd4b67be3f626981e673789b8d3a8c70519cebd9d99bfac5085542635",
+        "outlet_policy": "ZeroTransverseV1",
+        "sizes": [
+          92518,
+          41255,
+          92518,
+          25384
+        ],
+        "quadratureX": 6,
+        "quadratureR": 8,
+        "scalar_quadrature_policy": "CubicCutoffFacePanelsV1",
+        "inner_k_transport": "ScalarCdV2",
+        "basis": "Modified_A"
+      },
+      "final_settings": {
+        "source_identity": "4e893ab954e7132967a9ddb260b89ab9a869cd2e46fe674c4072abeb3db5b31e",
+        "implicit_solver": "CoupledJFNKV1",
+        "flow_preconditioner": "SparseLU",
+        "pressure_correctors": 0,
+        "picard_stop": "CoupledResidual",
+        "picard_outer_correctors": 0,
+        "nonlinear_tolerance": 1e-10,
+        "step_advection": "BDF2ImplicitAdvectionV1"
+      },
+      "final_cpu": [
+        105
+      ],
+      "final_peak_sampled_workers": 47,
+      "final_segment_start_step": 176,
+      "final_segment_wall_seconds": 44281.26500421803,
+      "full_accepted_native_seconds": 71869.66198263172,
+      "full_launch_wall_seconds": 76453.20052209508,
+      "launches": [
+        {
+          "start_step": 0,
+          "through_step": 13,
+          "journal": "wj-h27-newton-t10-20261123.BRziGz/sparse-control/segments/001/trials/retained/state.steps.jsonl",
+          "receipt": "wj-h27-newton-t10-20261123.BRziGz/sparse-control/segments/001/operations/retained/receipt.json",
+          "wall_seconds": 6628.3970687810215
+        },
+        {
+          "start_step": 13,
+          "through_step": 14,
+          "journal": "wj-h27-residual-gates-20261123.ChVqFQ/sparse-inner/step/state.steps.jsonl",
+          "receipt": "wj-h27-residual-gates-20261123.ChVqFQ/sparse-inner/operations/step/receipt.json",
+          "wall_seconds": 281.27938005898613
+        },
+        {
+          "start_step": 14,
+          "through_step": 16,
+          "journal": "wj-h27-newton-t10-resumed-20261123.FwHrOG/sparse/segments/001/run/state.steps.jsonl",
+          "receipt": "wj-h27-newton-t10-resumed-20261123.FwHrOG/sparse/segments/001/operations/solve/receipt.json",
+          "wall_seconds": 948.7369830319658
+        },
+        {
+          "start_step": 16,
+          "through_step": 17,
+          "journal": "wj-h27-newton-t10-resumed-20261123.FwHrOG/sparse-recovery/implicit-capped/step/state.steps.jsonl",
+          "receipt": "wj-h27-newton-t10-resumed-20261123.FwHrOG/sparse-recovery/implicit-capped/operations/step/receipt.json",
+          "wall_seconds": 546.5719441610272
+        },
+        {
+          "start_step": 17,
+          "through_step": 97,
+          "journal": "wj-h27-newton-t10-resumed-20261123.FwHrOG/sparse-repaired/segments/001/run/state.steps.jsonl",
+          "receipt": "wj-h27-newton-t10-resumed-20261123.FwHrOG/sparse-repaired/segments/001/operations/solve/receipt.json",
+          "wall_seconds": 12527.641523619997
+        },
+        {
+          "start_step": 97,
+          "through_step": 120,
+          "journal": "wj-h27-newton-t10-resumed-20261123.FwHrOG/sparse-repaired/segments/002/run/state.steps.jsonl",
+          "receipt": "wj-h27-newton-t10-resumed-20261123.FwHrOG/sparse-repaired/segments/002/operations/solve/receipt.json",
+          "wall_seconds": 3244.1603810550296
+        },
+        {
+          "start_step": 120,
+          "through_step": 160,
+          "journal": "wj-h27-newton-t10-resumed-20261123.FwHrOG/sparse-repaired/segments/003/run/state.steps.jsonl",
+          "receipt": "wj-h27-newton-t10-resumed-20261123.FwHrOG/sparse-repaired/segments/003/operations/solve/receipt.json",
+          "wall_seconds": 5542.01940111001
+        },
+        {
+          "start_step": 160,
+          "through_step": 170,
+          "journal": "wj-h27-newton-t10-resumed-20261123.FwHrOG/sparse-repaired/segments/004/run/state.steps.jsonl",
+          "receipt": "wj-h27-newton-t10-resumed-20261123.FwHrOG/sparse-repaired/segments/004/operations/solve/receipt.json",
+          "wall_seconds": 1544.103211513022
+        },
+        {
+          "start_step": 170,
+          "through_step": 176,
+          "journal": "wj-h27-newton-t10-resumed-20261123.FwHrOG/sparse-no-pause/segments/001/run/state.steps.jsonl",
+          "receipt": "wj-h27-newton-t10-resumed-20261123.FwHrOG/sparse-no-pause/segments/001/operations/solve/receipt.json",
+          "wall_seconds": 909.0256245459896
+        },
+        {
+          "start_step": 176,
+          "through_step": 500,
+          "journal": "wj-h27-newton-t10-resumed-20261123.FwHrOG/sparse-no-pause/segments/002/run/state.steps.jsonl",
+          "receipt": "wj-h27-newton-t10-resumed-20261123.FwHrOG/sparse-no-pause/segments/002/operations/solve/receipt.json",
+          "wall_seconds": 44281.26500421803
+        }
+      ],
+      "matched_complete_step_seconds": {
+        "total": 40944.90199735534,
+        "mean": 136.48300665785112,
+        "median": 136.44905542299966,
+        "p10": 135.89904064330622,
+        "p90": 137.10926915502642
+      },
+      "matched_native_step_seconds": {
+        "total": 40858.42159799853,
+        "mean": 136.1947386599951,
+        "median": 136.1992283645086,
+        "p10": 135.63319085937692,
+        "p90": 136.7900767867628
+      },
+      "matched_rank_cpu_seconds": {
+        "total": 40899.369999999995,
+        "mean": 136.33123333333333,
+        "median": 136.29999999999745,
+        "p10": 135.7489999999998,
+        "p90": 137.0410000000007
+      },
+      "matched_mean_component_seconds": {
+        "constitutive": 9.828188851263258,
+        "wall": 2.7230396256964498,
+        "assembly": 19.82680594572448,
+        "flow": 3.5531454081321137,
+        "scalar": 0.47206200657315395,
+        "rebuild": 82.52808265841352,
+        "guards": 12.010935872645545,
+        "forcing": 0,
+        "residual": 4.52413463023433,
+        "nonlinear": 0.6792857407120755,
+        "io": 0,
+        "other": 0.0490579206001712
+      },
+      "matched_mean_pressure_solve_seconds": 0,
+      "matched_mean_pressure_krylov_iterations": 0,
+      "matched_mean_nonlinear_iterations": 3,
+      "matched_mean_newton_jacobian_actions": 12.986666666666666,
+      "matched_mean_newton_preconditioner_refreshes": 1,
+      "native_step_seconds_by_interval": {
+        "(0,2]": {
+          "total": 17312.042609416065,
+          "mean": 173.12042609416065,
+          "median": 137.19858667749213,
+          "p10": 123.87673787879757,
+          "p90": 210.52428457641508
+        },
+        "(2,4]": {
+          "total": 13699.197775217122,
+          "mean": 136.99197775217124,
+          "median": 136.21478724599,
+          "p10": 132.49637414332247,
+          "p90": 137.2894327227259
+        },
+        "(4,6]": {
+          "total": 13618.356263551163,
+          "mean": 136.18356263551163,
+          "median": 136.2692823440011,
+          "p10": 135.70597666313407,
+          "p90": 136.6971408009762
+        },
+        "(6,8]": {
+          "total": 13627.098139262234,
+          "mean": 136.27098139262233,
+          "median": 136.29914631898282,
+          "p10": 135.66070779513683,
+          "p90": 136.8129994721152
+        },
+        "(8,10]": {
+          "total": 13612.967195185134,
+          "mean": 136.12967195185135,
+          "median": 136.00935857949662,
+          "p10": 135.62083761332906,
+          "p90": 136.79349261865718
+        }
+      }
+    },
+    "newton-pressure": {
+      "model_and_mesh": {
+        "model": "FiniteNuIsotropicWallFullWJCollarV2",
+        "reference_identity": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1",
+        "boundary_identity": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1",
+        "outlet_identity": "a5bc691bd4b67be3f626981e673789b8d3a8c70519cebd9d99bfac5085542635",
+        "outlet_policy": "ZeroTransverseV1",
+        "sizes": [
+          92518,
+          41255,
+          92518,
+          25384
+        ],
+        "quadratureX": 6,
+        "quadratureR": 8,
+        "scalar_quadrature_policy": "CubicCutoffFacePanelsV1",
+        "inner_k_transport": "ScalarCdV2",
+        "basis": "Modified_A"
+      },
+      "final_settings": {
+        "source_identity": "4e893ab954e7132967a9ddb260b89ab9a869cd2e46fe674c4072abeb3db5b31e",
+        "implicit_solver": "CoupledJFNKV1",
+        "flow_preconditioner": "PressureCorrection",
+        "pressure_correctors": 1,
+        "picard_stop": "CoupledResidual",
+        "picard_outer_correctors": 0,
+        "nonlinear_tolerance": 3e-06,
+        "step_advection": "BDF2ImplicitAdvectionV1"
+      },
+      "final_cpu": [
+        14
+      ],
+      "final_peak_sampled_workers": 76,
+      "final_segment_start_step": 46,
+      "final_segment_wall_seconds": 73479.08559492405,
+      "full_accepted_native_seconds": 92696.2336337798,
+      "full_launch_wall_seconds": 95163.26750869991,
+      "launches": [
+        {
+          "start_step": 0,
+          "through_step": 1,
+          "journal": "wj-h27-residual-gates-20261123.ChVqFQ/pressure-full-diagnostic/step/state.steps.jsonl",
+          "receipt": "wj-h27-residual-gates-20261123.ChVqFQ/pressure-full-diagnostic/operations/step/receipt.json",
+          "wall_seconds": 676.4635569159873
+        },
+        {
+          "start_step": 1,
+          "through_step": 16,
+          "journal": "wj-h27-newton-t10-resumed-20261123.FwHrOG/pressure/segments/001/run/state.steps.jsonl",
+          "receipt": "wj-h27-newton-t10-resumed-20261123.FwHrOG/pressure/segments/001/operations/solve/receipt.json",
+          "wall_seconds": 10198.84025100799
+        },
+        {
+          "start_step": 16,
+          "through_step": 17,
+          "journal": "wj-h27-newton-t10-resumed-20261123.FwHrOG/pressure-recovery/capped-retry/step/state.steps.jsonl",
+          "receipt": "wj-h27-newton-t10-resumed-20261123.FwHrOG/pressure-recovery/capped-retry/operations/step/receipt.json",
+          "wall_seconds": 631.6037938909722
+        },
+        {
+          "start_step": 17,
+          "through_step": 20,
+          "journal": "wj-h27-newton-t10-resumed-20261123.FwHrOG/pressure-repaired/segments/001/run/state.steps.jsonl",
+          "receipt": "wj-h27-newton-t10-resumed-20261123.FwHrOG/pressure-repaired/segments/001/operations/solve/receipt.json",
+          "wall_seconds": 2453.3867153819883
+        },
+        {
+          "start_step": 20,
+          "through_step": 38,
+          "journal": "wj-h27-newton-t10-resumed-20261123.FwHrOG/pressure-repaired/segments/002/run/state.steps.jsonl",
+          "receipt": "wj-h27-newton-t10-resumed-20261123.FwHrOG/pressure-repaired/segments/002/operations/solve/receipt.json",
+          "wall_seconds": 5499.054035445966
+        },
+        {
+          "start_step": 38,
+          "through_step": 38,
+          "journal": null,
+          "receipt": "wj-h27-newton-t10-resumed-20261123.FwHrOG/pressure-repaired/segments/003/operations/solve/receipt.json",
+          "wall_seconds": 14.910340367001481
+        },
+        {
+          "start_step": 38,
+          "through_step": 42,
+          "journal": "wj-h27-newton-t10-resumed-20261123.FwHrOG/pressure-repaired/segments/004/run/state.steps.jsonl",
+          "receipt": "wj-h27-newton-t10-resumed-20261123.FwHrOG/pressure-repaired/segments/004/operations/solve/receipt.json",
+          "wall_seconds": 1233.6429660169524
+        },
+        {
+          "start_step": 42,
+          "through_step": 46,
+          "journal": "wj-h27-newton-t10-resumed-20261123.FwHrOG/pressure-no-pause/segments/001/run/state.steps.jsonl",
+          "receipt": "wj-h27-newton-t10-resumed-20261123.FwHrOG/pressure-no-pause/segments/001/operations/solve/receipt.json",
+          "wall_seconds": 976.2802547489991
+        },
+        {
+          "start_step": 46,
+          "through_step": 500,
+          "journal": "wj-h27-newton-t10-resumed-20261123.FwHrOG/pressure-no-pause/segments/002/run/state.steps.jsonl",
+          "receipt": "wj-h27-newton-t10-resumed-20261123.FwHrOG/pressure-no-pause/segments/002/operations/solve/receipt.json",
+          "wall_seconds": 73479.08559492405
+        }
+      ],
+      "matched_complete_step_seconds": {
+        "total": 45860.09709274734,
+        "mean": 152.86699030915779,
+        "median": 141.92177585000172,
+        "p10": 92.1736928229162,
+        "p90": 244.77599892025464
+      },
+      "matched_native_step_seconds": {
+        "total": 45772.41301197262,
+        "mean": 152.57471003990872,
+        "median": 141.6913172894856,
+        "p10": 91.94471762159955,
+        "p90": 244.5359963593597
+      },
+      "matched_rank_cpu_seconds": {
+        "total": 45809.86,
+        "mean": 152.69953333333333,
+        "median": 141.76499999999942,
+        "p10": 92.02199999999429,
+        "p90": 244.65499999999957
+      },
+      "matched_mean_component_seconds": {
+        "constitutive": 21.133632727390697,
+        "wall": 6.504873059085803,
+        "assembly": 47.108414395593186,
+        "flow": 8.409895643808413,
+        "scalar": 1.565704879136562,
+        "rebuild": 42.23614115997024,
+        "guards": 14.076449761388163,
+        "forcing": 0,
+        "residual": 10.296744492466484,
+        "nonlinear": 1.1900882707022054,
+        "io": 0,
+        "other": 0.05276565036697624
+      },
+      "matched_mean_pressure_solve_seconds": 1.9655438933424496,
+      "matched_mean_pressure_krylov_iterations": 0,
+      "matched_mean_nonlinear_iterations": 2.716666666666667,
+      "matched_mean_newton_jacobian_actions": 36.54666666666667,
+      "matched_mean_newton_preconditioner_refreshes": 0.9066666666666666,
+      "native_step_seconds_by_interval": {
+        "(0,2]": {
+          "total": 30180.182584071183,
+          "mean": 301.80182584071184,
+          "median": 226.60068613599287,
+          "p10": 126.80816918269848,
+          "p90": 618.5848674618871
+        },
+        "(2,4]": {
+          "total": 16743.638037736004,
+          "mean": 167.43638037736002,
+          "median": 151.5404959860316,
+          "p10": 99.99785021939897,
+          "p90": 259.3590998515836
+        },
+        "(4,6]": {
+          "total": 14778.697570785938,
+          "mean": 147.78697570785937,
+          "median": 142.90966031397693,
+          "p10": 88.87366265519522,
+          "p90": 219.48242518371552
+        },
+        "(6,8]": {
+          "total": 14404.421661519795,
+          "mean": 144.04421661519794,
+          "median": 132.73598366300575,
+          "p10": 87.15323368533863,
+          "p90": 220.97062827858025
+        },
+        "(8,10]": {
+          "total": 16589.293779666885,
+          "mean": 165.89293779666886,
+          "median": 147.08484782004962,
+          "p10": 96.41209721375489,
+          "p90": 261.59616995109246
+        }
+      }
+    },
+    "picard-3x1": {
+      "model_and_mesh": {
+        "model": "FiniteNuIsotropicWallFullWJCollarV2",
+        "reference_identity": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1",
+        "boundary_identity": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1",
+        "outlet_identity": "a5bc691bd4b67be3f626981e673789b8d3a8c70519cebd9d99bfac5085542635",
+        "outlet_policy": "ZeroTransverseV1",
+        "sizes": [
+          92518,
+          41255,
+          92518,
+          25384
+        ],
+        "quadratureX": 6,
+        "quadratureR": 8,
+        "scalar_quadrature_policy": "CubicCutoffFacePanelsV1",
+        "inner_k_transport": "ScalarCdV2",
+        "basis": "Modified_A"
+      },
+      "final_settings": {
+        "source_identity": "d07dfa0423939f4cf2c0a58517a472d64acae060e20da1b7ab8b4c1af8073960",
+        "implicit_solver": "PicardV1",
+        "flow_preconditioner": "PressureCorrection",
+        "pressure_correctors": 1,
+        "picard_stop": "FixedCorrectors",
+        "picard_outer_correctors": 3,
+        "nonlinear_tolerance": 1e-10,
+        "picard_advection": "Implicit",
+        "picard_stress_linearization": "VelocityTangent"
+      },
+      "final_cpu": [
+        3
+      ],
+      "final_peak_sampled_workers": 75,
+      "final_segment_start_step": 73,
+      "final_segment_wall_seconds": 72886.994871022,
+      "full_accepted_native_seconds": 84749.34590224893,
+      "full_launch_wall_seconds": 85550.53816971998,
+      "launches": [
+        {
+          "start_step": 0,
+          "through_step": 13,
+          "journal": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-3x1/segments/001/trials/retained/state.steps.jsonl",
+          "receipt": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-3x1/segments/001/operations/retained/receipt.json",
+          "wall_seconds": 2276.6988631300046
+        },
+        {
+          "start_step": 13,
+          "through_step": 20,
+          "journal": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-3x1/segments/002/trials/retained/state.steps.jsonl",
+          "receipt": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-3x1/segments/002/operations/retained/receipt.json",
+          "wall_seconds": 1209.883417226025
+        },
+        {
+          "start_step": 20,
+          "through_step": 32,
+          "journal": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-3x1/segments/003/trials/retained/state.steps.jsonl",
+          "receipt": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-3x1/segments/003/operations/retained/receipt.json",
+          "wall_seconds": 2030.249638906971
+        },
+        {
+          "start_step": 32,
+          "through_step": 66,
+          "journal": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-3x1/segments/004/trials/retained/state.steps.jsonl",
+          "receipt": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-3x1/segments/004/operations/retained/receipt.json",
+          "wall_seconds": 5548.923626264965
+        },
+        {
+          "start_step": 66,
+          "through_step": 73,
+          "journal": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-3x1/segments/005/trials/retained/state.steps.jsonl",
+          "receipt": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-3x1/segments/005/operations/retained/receipt.json",
+          "wall_seconds": 1597.787753170007
+        },
+        {
+          "start_step": 73,
+          "through_step": 500,
+          "journal": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-3x1/segments/006/trials/retained/state.steps.jsonl",
+          "receipt": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-3x1/segments/006/operations/retained/receipt.json",
+          "wall_seconds": 72886.994871022
+        }
+      ],
+      "matched_complete_step_seconds": {
+        "total": 51386.38091979403,
+        "mean": 171.28793639931342,
+        "median": 171.06737870752113,
+        "p10": 159.20688151223004,
+        "p90": 182.03652159366175
+      },
+      "matched_native_step_seconds": {
+        "total": 51297.369262869994,
+        "mean": 170.99123087623332,
+        "median": 170.80211607148522,
+        "p10": 158.95694326601225,
+        "p90": 181.77789930779255
+      },
+      "matched_rank_cpu_seconds": {
+        "total": 51316.74,
+        "mean": 171.0558,
+        "median": 170.7950000000019,
+        "p10": 159.02599999999876,
+        "p90": 181.73399999999674
+      },
+      "matched_mean_component_seconds": {
+        "constitutive": 7.896603119029896,
+        "wall": 0.4701367483388943,
+        "assembly": 19.71038182369123,
+        "flow": 116.95539158571802,
+        "scalar": 0.5114923660218483,
+        "rebuild": 12.587821941528624,
+        "guards": 11.084600648995838,
+        "forcing": 0,
+        "residual": 1.2802976826388233,
+        "nonlinear": 0,
+        "io": 0,
+        "other": 0.49450496027013285
+      },
+      "matched_mean_pressure_solve_seconds": 114.30803823686476,
+      "matched_mean_pressure_krylov_iterations": 185.01666666666668,
+      "matched_mean_nonlinear_iterations": 3,
+      "matched_mean_newton_jacobian_actions": 0,
+      "matched_mean_newton_preconditioner_refreshes": 0,
+      "native_step_seconds_by_interval": {
+        "(0,2]": {
+          "total": 16953.611856190022,
+          "mean": 169.53611856190022,
+          "median": 159.75233940247563,
+          "p10": 155.0910305783851,
+          "p90": 192.37411283398396
+        },
+        "(2,4]": {
+          "total": 16498.36478318891,
+          "mean": 164.9836478318891,
+          "median": 164.8068687460036,
+          "p10": 161.12510770859663,
+          "p90": 168.9705320645706
+        },
+        "(4,6]": {
+          "total": 16322.26002711401,
+          "mean": 163.2226002711401,
+          "median": 160.78544883299037,
+          "p10": 158.46483505677898,
+          "p90": 172.6859235630196
+        },
+        "(6,8]": {
+          "total": 17558.06194273458,
+          "mean": 175.58061942734582,
+          "median": 172.7735181679891,
+          "p10": 161.75229156510323,
+          "p90": 184.85968720400706
+        },
+        "(8,10]": {
+          "total": 17417.047293021402,
+          "mean": 174.17047293021403,
+          "median": 174.70615906949388,
+          "p10": 165.5637816121569,
+          "p90": 181.8104814087739
+        }
+      }
+    },
+    "picard-4x1": {
+      "model_and_mesh": {
+        "model": "FiniteNuIsotropicWallFullWJCollarV2",
+        "reference_identity": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1",
+        "boundary_identity": "3eeb32e6c1f53d6045d9d03707344c65f0f1ec3964dc69116a87e04e104325e1",
+        "outlet_identity": "a5bc691bd4b67be3f626981e673789b8d3a8c70519cebd9d99bfac5085542635",
+        "outlet_policy": "ZeroTransverseV1",
+        "sizes": [
+          92518,
+          41255,
+          92518,
+          25384
+        ],
+        "quadratureX": 6,
+        "quadratureR": 8,
+        "scalar_quadrature_policy": "CubicCutoffFacePanelsV1",
+        "inner_k_transport": "ScalarCdV2",
+        "basis": "Modified_A"
+      },
+      "final_settings": {
+        "source_identity": "d07dfa0423939f4cf2c0a58517a472d64acae060e20da1b7ab8b4c1af8073960",
+        "implicit_solver": "PicardV1",
+        "flow_preconditioner": "PressureCorrection",
+        "pressure_correctors": 1,
+        "picard_stop": "FixedCorrectors",
+        "picard_outer_correctors": 4,
+        "nonlinear_tolerance": 1e-10,
+        "picard_advection": "Implicit",
+        "picard_stress_linearization": "VelocityTangent"
+      },
+      "final_cpu": [
+        93
+      ],
+      "final_peak_sampled_workers": 77,
+      "final_segment_start_step": 70,
+      "final_segment_wall_seconds": 65338.24860362394,
+      "full_accepted_native_seconds": 77306.15802530554,
+      "full_launch_wall_seconds": 78073.76673123392,
+      "launches": [
+        {
+          "start_step": 0,
+          "through_step": 12,
+          "journal": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-4x1/segments/001/trials/retained/state.steps.jsonl",
+          "receipt": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-4x1/segments/001/operations/retained/receipt.json",
+          "wall_seconds": 2276.918880416022
+        },
+        {
+          "start_step": 12,
+          "through_step": 20,
+          "journal": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-4x1/segments/002/trials/retained/state.steps.jsonl",
+          "receipt": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-4x1/segments/002/operations/retained/receipt.json",
+          "wall_seconds": 1463.286438507028
+        },
+        {
+          "start_step": 20,
+          "through_step": 30,
+          "journal": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-4x1/segments/003/trials/retained/state.steps.jsonl",
+          "receipt": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-4x1/segments/003/operations/retained/receipt.json",
+          "wall_seconds": 1803.811859999958
+        },
+        {
+          "start_step": 30,
+          "through_step": 62,
+          "journal": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-4x1/segments/004/trials/retained/state.steps.jsonl",
+          "receipt": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-4x1/segments/004/operations/retained/receipt.json",
+          "wall_seconds": 5556.536661369959
+        },
+        {
+          "start_step": 62,
+          "through_step": 70,
+          "journal": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-4x1/segments/005/trials/retained/state.steps.jsonl",
+          "receipt": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-4x1/segments/005/operations/retained/receipt.json",
+          "wall_seconds": 1634.9642873170087
+        },
+        {
+          "start_step": 70,
+          "through_step": 500,
+          "journal": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-4x1/segments/006/trials/retained/state.steps.jsonl",
+          "receipt": "wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-4x1/segments/006/operations/retained/receipt.json",
+          "wall_seconds": 65338.24860362394
+        }
+      ],
+      "matched_complete_step_seconds": {
+        "total": 44925.09756316553,
+        "mean": 149.75032521055178,
+        "median": 149.05154182453407,
+        "p10": 146.56327718911925,
+        "p90": 151.49326390351052
+      },
+      "matched_native_step_seconds": {
+        "total": 44839.33142767608,
+        "mean": 149.4644380922536,
+        "median": 148.76342438202119,
+        "p10": 146.3260672935052,
+        "p90": 151.20390489470446
+      },
+      "matched_rank_cpu_seconds": {
+        "total": 44869.590000000004,
+        "mean": 149.5653,
+        "median": 148.89999999999964,
+        "p10": 146.47799999999626,
+        "p90": 151.27100000000027
+      },
+      "matched_mean_component_seconds": {
+        "constitutive": 10.333613638048021,
+        "wall": 0.5559809373616008,
+        "assembly": 22.246070615819384,
+        "flow": 89.17833769965567,
+        "scalar": 0.49290515543039265,
+        "rebuild": 13.651340886579128,
+        "guards": 11.187626342367537,
+        "forcing": 0,
+        "residual": 1.3490178629332998,
+        "nonlinear": 0,
+        "io": 0,
+        "other": 0.469544954058559
+      },
+      "matched_mean_pressure_solve_seconds": 86.71700763163389,
+      "matched_mean_pressure_krylov_iterations": 185.00666666666666,
+      "matched_mean_nonlinear_iterations": 4,
+      "matched_mean_newton_jacobian_actions": 0,
+      "matched_mean_newton_preconditioner_refreshes": 0,
+      "native_step_seconds_by_interval": {
+        "(0,2]": {
+          "total": 17025.39683000982,
+          "mean": 170.2539683000982,
+          "median": 165.96314111948595,
+          "p10": 160.92635565788368,
+          "p90": 178.214252303791
+        },
+        "(2,4]": {
+          "total": 15441.429767619644,
+          "mean": 154.41429767619644,
+          "median": 154.52758414749405,
+          "p10": 151.13629597791586,
+          "p90": 157.71845220057875
+        },
+        "(4,6]": {
+          "total": 15009.934177150833,
+          "mean": 150.09934177150834,
+          "median": 150.28644590999465,
+          "p10": 149.06774716852232,
+          "p90": 150.96536105109845
+        },
+        "(6,8]": {
+          "total": 14890.146991754882,
+          "mean": 148.9014699175488,
+          "median": 148.38083950948203,
+          "p10": 146.94608067881782,
+          "p90": 151.7451654374716
+        },
+        "(8,10]": {
+          "total": 14939.250258770364,
+          "mean": 149.39250258770363,
+          "median": 146.88069298301707,
+          "p10": 146.12755853727577,
+          "p90": 150.84937425191748
+        }
+      }
+    }
+  }
+}
