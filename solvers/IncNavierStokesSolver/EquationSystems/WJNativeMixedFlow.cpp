@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 #include <IncNavierStokesSolver/EquationSystems/WJNativeMixedFlow.h>
 #include <IncNavierStokesSolver/EquationSystems/WJNativeFailures.h>
+#include <Eigen/IterativeLinearSolvers>
 #include <Eigen/QR>
 #include <algorithm>
 #include <chrono>
@@ -469,30 +470,51 @@ SolveInfo MixedFlow::Solve(const Sparse &a, const Vec &b, Vec &x, double change,
 }
 
 SolveInfo MixedFlow::Correct(const Sparse &system, const Vec &rhs, Vec &x, MixedFlowWork &work,
-                             double continuityTolerance)
+                             double continuityTolerance, bool symmetricMomentum)
 {
     Check(m_pressureCorrectors > 0 && x.size() == Size() && rhs.size() == Size() &&
           system.rows() == Size() && system.cols() == Size() &&
           std::isfinite(continuityTolerance) && continuityTolerance > 0,
           "invalid fixed pressure correction system or tolerance");
     const int nv = PressureOffset(), np = PressureSize(), nq = Size() - nv;
-    const double pressureTolerance = .1 * continuityTolerance;
+    // Both inner targets leave room for the final direct continuity check.
+    const double pressureTolerance = (symmetricMomentum ? .1 : .75) * continuityTolerance;
     const Vec scale = m_scale.tail(nq);
     SolveInfo info;
     const double setupStart = Clock();
-    Sparse momentum, gradient, divergence, massGradient;
-    Vec inverseMassDiagonal;
+    Sparse momentum, gradient, divergence, massGradient, scaledMomentum;
+    Vec inverseMassDiagonal, velocityScale;
     Eigen::SimplicialLDLT<Sparse> velocityFactor;
+    Eigen::BiCGSTAB<Sparse, Eigen::IncompleteLUT<double>> velocityIteration;
     {
         WorkTimer setup(&work.setup);
         momentum = system.topLeftCorner(nv, nv);
         {
-            // The fixed Picard predictor uses symmetric positive strain and time mass.
             WorkTimer timer(&work.velocityFactor);
-            velocityFactor.compute(momentum);
-            RequireLinear(velocityFactor.info() == Eigen::Success &&
-                          (velocityFactor.vectorD().array() > 0).all(),
-                          "fixed Picard momentum factor is not positive definite");
+            if (symmetricMomentum)
+            {
+                velocityFactor.compute(momentum);
+                RequireLinear(velocityFactor.info() == Eigen::Success &&
+                              (velocityFactor.vectorD().array() > 0).all(),
+                              "fixed Picard momentum factor is not positive definite");
+            }
+            else
+            {
+                // Diagonal equilibration and incomplete LU bound the setup
+                // cost even with the sampled wall term's nonlocal couplings.
+                velocityScale = momentum.diagonal().cwiseAbs().array().rsqrt().matrix();
+                RequireLinear(velocityScale.allFinite() && (velocityScale.array() > 0).all(),
+                              "invalid diagonal scaling for implicit Picard momentum");
+                scaledMomentum = velocityScale.asDiagonal() * momentum * velocityScale.asDiagonal();
+                scaledMomentum.prune([](int, int, double value) { return value != 0.; });
+                velocityIteration.preconditioner().setDroptol(1e-4);
+                velocityIteration.preconditioner().setFillfactor(4);
+                velocityIteration.setTolerance(2e-13);
+                velocityIteration.setMaxIterations(150);
+                velocityIteration.compute(scaledMomentum);
+                RequireLinear(velocityIteration.info() == Eigen::Success,
+                              "implicit Picard momentum ILUT failed");
+            }
         }
         Sparse pressure;
         {
@@ -527,10 +549,24 @@ SolveInfo MixedFlow::Correct(const Sparse &system, const Vec &rhs, Vec &x, Mixed
 
     const auto velocitySolve = [&](const Vec &load) -> Vec
     {
-        Vec velocity = velocityFactor.solve(load);
-        RequireLinear(velocityFactor.info() == Eigen::Success && velocity.allFinite(),
-                      "fixed Picard momentum solve failed");
-        return velocity;
+        if (symmetricMomentum)
+        {
+            Vec velocity = velocityFactor.solve(load);
+            RequireLinear(velocityFactor.info() == Eigen::Success && velocity.allFinite(),
+                          "fixed Picard momentum solve failed");
+            return velocity;
+        }
+        const Vec scaledLoad = load.cwiseProduct(velocityScale);
+        const Vec velocity = velocityIteration.solve(scaledLoad);
+        const double defect = (scaledMomentum * velocity - scaledLoad).norm();
+        if (!(velocity.allFinite() && defect <= 2e-12 * scaledLoad.norm()))
+        {
+            std::ostringstream error;
+            error << "implicit Picard momentum did not converge in "
+                  << velocityIteration.iterations() << " linear iterations";
+            throw NativeLinearFailure(error.str());
+        }
+        return velocity.cwiseProduct(velocityScale);
     };
     const auto schur = [&](const Vec &pressure) -> Vec
     {
@@ -592,14 +628,21 @@ SolveInfo MixedFlow::Correct(const Sparse &system, const Vec &rhs, Vec &x, Mixed
                                : divergenceNorm;
             };
             const auto scaledAction = [&](const Vec &p) -> Vec { return schur(p).cwiseProduct(scale); };
-            constexpr int maximumIterations = 240, restart = 60;
+            const int maximumIterations = symmetricMomentum ? 240 : 400;
+            const int restart = symmetricMomentum ? 60 : 100;
             int iterations = 0;
             double current = norm();
             while (current > pressureTolerance && iterations < maximumIterations)
             {
-                pressure += KrylovCorrection(defect.cwiseProduct(scale),
+                const Vec scaledDefect = defect.cwiseProduct(scale);
+                // Relate the diagonal-scaled Krylov norm to the actual
+                // continuity norm at each restart of the nonsymmetric solve.
+                const double projectedTolerance = symmetricMomentum
+                    ? pressureTolerance * std::sqrt(m_volume)
+                    : .8 * pressureTolerance * (scaledDefect.norm() / current);
+                pressure += KrylovCorrection(scaledDefect,
                     std::min(restart, maximumIterations - iterations),
-                    pressureTolerance * std::sqrt(m_volume), scaledAction, precondition,
+                    projectedTolerance, scaledAction, precondition,
                     [&] { ++iterations; ++work.pressureKrylovIterations; });
                 defect = pressureRhs - schur(pressure);
                 current = norm();
@@ -626,6 +669,12 @@ SolveInfo MixedFlow::Correct(const Sparse &system, const Vec &rhs, Vec &x, Mixed
     work.fixedMomentum = std::max(work.fixedMomentum, final.momentum);
     work.fixedContinuity = std::max(work.fixedContinuity, final.continuity);
     work.fixedGauge = std::max(work.fixedGauge, final.gauge);
+    if (!symmetricMomentum)
+    {
+        RequireLinear(std::max({final.momentum, final.continuity, final.gauge}) <=
+                      continuityTolerance,
+                      "implicit Picard correction failed the direct frozen-system residual check");
+    }
     info.solveSeconds = solveEnd - began;
     info.residualSeconds = Clock() - solveEnd;
     return info;

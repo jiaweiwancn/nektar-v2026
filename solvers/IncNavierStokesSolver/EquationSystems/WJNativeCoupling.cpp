@@ -85,6 +85,13 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     Require(m_options.stressSplit=="PositiveShearV1"||m_options.stressSplit=="IsotropicMuV1","unknown numerical stress split");
     Require(m_options.steadyVelocityPC=="FullGradientV1"||m_options.steadyVelocityPC=="PositiveFrozenV1","unknown steady velocity preconditioner");
     Require(m_options.advancement=="PicardV1"||m_options.advancement=="CoupledJFNKV1","unknown implicit coupled solver");
+    Require(m_options.picardAdvection == "Explicit" ||
+            (m_options.picardAdvection == "Implicit" && m_options.advancement == "PicardV1"),
+            "WJPicardAdvection requires Explicit or PicardV1 with Implicit");
+    Require(m_options.picardStressLinearization == "FrozenStrain" ||
+            (m_options.picardStressLinearization == "VelocityTangent" &&
+             m_options.picardAdvection == "Implicit"),
+            "WJPicardStressLinearization requires FrozenStrain or Implicit with VelocityTangent");
     const bool pressureCorrection = m_options.flowPreconditioner == "PressureCorrection";
     const bool fixedBudget = m_options.picardStop == "FixedCorrectors";
     Require(pressureCorrection || m_options.flowPreconditioner == "SparseLU",
@@ -130,10 +137,16 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
         std::abs(m_top-m_reference->Parameters().topRadius)<1e-12&&std::abs(m_left+10)<1e-12&&
         std::abs(m_right-m_options.diagnosticOutletX)<1e-12,
         "application geometry differs from the retained physical domain");
-    std::ostringstream signature;signature<<std::setprecision(17)<<"WJ-H27-coupled-v2-BDF2-EX2|"<<WallModelV2<<"|CubicCutoffFacePanelsV1|"
+    const char *integration = m_options.picardAdvection == "Implicit" ?
+        "BDF2-ImplicitAdvection" : "BDF2-EX2";
+    std::ostringstream signature;signature<<std::setprecision(17)<<"WJ-H27-coupled-v2-"<<integration<<'|'<<WallModelV2<<"|CubicCutoffFacePanelsV1|"
         <<m_options.sourceIdentity<<'|'<<m_reference->Identity()<<'|'<<m_options.dt<<'|'<<m_options.manufactured<<'|'
         <<m_options.quadratureX<<'|'<<m_options.quadratureR<<'|'<<m_geometry.d0<<'|'<<m_geometry.H<<'|'<<m_geometry.h<<'|'
         <<m_options.linearTolerance<<'|'<<m_options.nonlinearTolerance<<'|'<<m_options.maximumIterations<<'|'<<m_options.mmsBodyAmplitude<<'|'<<int(m_options.backend)<<'|'<<m_options.mmsVariant<<'|'<<m_options.andersonDepth<<'|'<<m_options.stressSplit<<'|'<<m_options.steadyVelocityPC;
+    if (m_options.picardStressLinearization == "VelocityTangent")
+    {
+        signature << "|PicardVelocityTangent";
+    }
     const auto&newton=m_options.stepNewton;
     signature<<'|'<<m_options.advancement<<'|'<<newton.maximumSeconds<<'|'<<newton.acceptanceNorm<<'|'
         <<newton.maximumNewtonIterations<<'|'<<newton.restartDimension<<'|'<<newton.maximumLinearCycles<<'|'<<newton.fdRelativeStep;
@@ -628,8 +641,8 @@ Vec Coupling::MomentumAdvection(const CoupledState&s)const
     for(const auto&rp:m_rules.Static()){
         const auto&r=*rp;Vec u=Local(s.flow,r.u),v=Local(s.flow,r.u,n),up=r.B*u,vp=r.B*v;
         for(int component=0;component<2;++component){const Vec&c=component==0?u:v;Vec a=up.cwiseProduct(r.Dx*c)+vp.cwiseProduct(r.Dz*c);
-            // EX2 applies to the complete declared tangential convective
-            // roughness acceleration, as well as the domain convection.
+            // The tangential roughness advection uses the same time
+            // treatment as the domain convection.
             if(component==0&&Owner(r.geometry).rl<m_geometry.h){const auto&e=Owner(r.geometry);
                 for(int q=0;q<a.size();++q)if(r.z[q]-m_geometry.d0<m_geometry.h){auto h=InterfaceVelocity(e,r.x[q],s);a[q]-=2*h[0]*h[1];}}
             Add(load,r.u,r.B.transpose()*r.w.asDiagonal()*a,component*n);
@@ -776,6 +789,13 @@ CoupledResidual Coupling::Residual(const CoupledState&s,const Data&d,const Loads
             delta.k+=a*(history->previous.k-history->current.k);
             delta.epsilon+=a*(history->previous.epsilon-history->current.epsilon);}
         action.flow+=m_flow.Core().MassAction(delta.flow);action.k+=m_k.Mass()*delta.k;action.epsilon+=m_e.Mass()*delta.epsilon;
+        if (m_options.picardAdvection == "Implicit")
+        {
+            const auto advection = Advection(s, d.kRules);
+            action.flow += advection.flow;
+            action.k += advection.k;
+            action.epsilon += advection.epsilon;
+        }
     }
     action.flow-=external.flow;action.k-=external.k;action.epsilon-=external.epsilon;
     auto raw=m_flow.Restrict(action.flow);if(m_flow.Gauge())raw[raw.size()-1]=m_flow.PressureMean().dot(s.flow.tail(m_flow.PressureSize()));
@@ -789,6 +809,8 @@ CoupledStepInfo Coupling::Advance(CoupledHistory&h,bool injectRetry)
     Require(m_reference->Transport()==InnerKTransport::ScalarV2,"inner-k diagnostic transport cannot advance a trajectory");
     if(m_options.advancement=="CoupledJFNKV1")return AdvanceNewton(h,injectRetry);
     const bool fixedBudget = m_options.picardStop == "FixedCorrectors";
+    const bool implicitAdvection = m_options.picardAdvection == "Implicit";
+    const bool velocityTangent = m_options.picardStressLinearization == "VelocityTangent";
     const int maximumSweeps = fixedBudget ? m_options.picardOuterCorrectors : m_options.maximumIterations;
     const double begin=Clock();CheckHistory(h);m_constitutiveStats={};m_lastInputHistory=h;m_hasInputHistory=true;CoupledStepInfo info;const double time=(h.step+1)*h.dt,alpha=(h.step==0?1.:1.5)/h.dt;
     m_lastAttempt={};auto saveAttempt=[&]{info.seconds=Clock()-begin;info.constitutiveStats=m_constitutiveStats;info.timing.other=info.seconds-info.timing.Sum();m_lastAttempt=info;};
@@ -797,8 +819,12 @@ CoupledStepInfo Coupling::Advance(CoupledHistory&h,bool injectRetry)
         ResetPreconditioners();
     }
     auto history=Combination(h.current,h.step==0?1/h.dt:2/h.dt,h.previous,h.step==0?0:-.5/h.dt);
-    auto adv=Combination(h.advection,h.step==0?1:2,h.previousAdvection,h.step==0?0:-1);
-    Loads external=Forcing(time,info.timing);external.flow-=adv.flow;external.k-=adv.k;external.epsilon-=adv.epsilon;
+    Loads external=Forcing(time,info.timing);
+    if (!implicitAdvection)
+    {
+        const auto adv=Combination(h.advection,h.step==0?1:2,h.previousAdvection,h.step==0?0:-1);
+        external.flow-=adv.flow;external.k-=adv.k;external.epsilon-=adv.epsilon;
+    }
     Loads base=external;base.flow+=m_flow.Core().MassAction(history.flow);
     base.k+=m_k.Mass()*history.k;base.epsilon+=m_e.Mass()*history.epsilon;
     double boundaryStart=Clock();CoupledState s=DirichletState(h.current,time);info.timing.wall+=Clock()-boundaryStart;
@@ -815,16 +841,47 @@ CoupledStepInfo Coupling::Advance(CoupledHistory&h,bool injectRetry)
             ++info.nonlinearIterations;
             const double iterationStart=Clock();const Vec input=m_options.andersonDepth?PackFree(s):Vec();
             double start=Clock();
+            const double attributedBefore = info.timing.Sum();
             const double drift=std::max(Drift(data.coefficients,m_preconditionerCoefficients),alphaDrift(m_flowFactorAlpha));info.coefficientDrift=std::max(info.coefficientDrift,drift);
-            Sparse K=Strain(data),A=m_flow.System(alpha,K,1.);Vec flowLoad=base.flow+RemainderLoad(data);flowLoad.head(2*m_flow.VelocitySize())+=m_flow.KnownScalarKLoad(s.k);
-            Vec lift=m_flow.Lift(s.flow),rhs=m_flow.LiftedRhs(alpha,K,1.,flowLoad,lift),free=m_flow.Restrict(s.flow);info.timing.assembly+=Clock()-start;
+            Sparse K=Strain(data);
+            Vec flowLoad=base.flow+RemainderLoad(data);
+            const int velocitySize=2*m_flow.VelocitySize();
+            flowLoad.head(velocitySize)+=m_flow.KnownScalarKLoad(s.k);
+            if (velocityTangent)
+            {
+                Sparse tangent = VelocityTangent(data, info.timing);
+                const auto velocity = s.flow.head(velocitySize);
+                // The full current stress carries the same affine remainder
+                // when its frozen strain is replaced by its velocity tangent.
+                flowLoad.head(velocitySize) += tangent*velocity - K*velocity;
+                K = std::move(tangent);
+            }
+            if (implicitAdvection)
+            {
+                const Sparse convectionJacobian = MomentumTransportJacobian(s);
+                const Vec convection = MomentumAdvection(s);
+                // The complete convection A(u) is quadratic, including the H trace.
+                // Its affine linearization is A'(u) u_next - A(u).
+                if (m_options.checkCurrentActions)
+                {
+                    const Vec defect = convectionJacobian * s.flow.head(velocitySize) -
+                                       2 * convection.head(velocitySize);
+                    Require(defect.cwiseAbs().maxCoeff() <= 1e-10,
+                            "assembled momentum convection Jacobian disagrees with its quadratic action");
+                }
+                K += convectionJacobian;
+                flowLoad += convection;
+            }
+            const Sparse A=m_flow.System(alpha,K,1.);
+            Vec lift=m_flow.Lift(s.flow),rhs=m_flow.LiftedRhs(alpha,K,1.,flowLoad,lift),free=m_flow.Restrict(s.flow);
+            info.timing.assembly += (Clock()-start) - (info.timing.Sum()-attributedBefore);
             if(injectRetry&&attempt==0&&iteration==0)throw NativeLinearFailure("qualification injected recoverable Krylov failure");
             const double flowStart = Clock(), setupBefore = info.flowWork.setup;
             SolveInfo fi;
             try
             {
                 fi = fixedBudget ? m_flow.Correct(A, rhs, free, info.flowWork,
-                                                m_options.nonlinearTolerance)
+                                                m_options.nonlinearTolerance, !implicitAdvection)
                                  : m_flow.Solve(A, rhs, free, drift, m_options.linearTolerance,
                                                 &info.flowWork);
             }
@@ -840,14 +897,24 @@ CoupledStepInfo Coupling::Advance(CoupledHistory&h,bool injectRetry)
             if(fi.rebuilds){m_preconditionerCoefficients=data.coefficients;m_flowFactorAlpha=alpha;}
             // Refresh P, E_w, current positive scalar diffusivities and all
             // stresses after the flow update, BEFORE the k solve.
-            data=Evaluate(s,time,false,info.timing);start=Clock();Sparse Kk=m_k.Diffusion(data.kRules,data.Dk);Vec klift=m_k.Lift(s.k),krhs=m_k.LiftedRhs(alpha,Kk,base.k+KVolumeLoad(s,data),klift),kf=m_k.Restrict(s.k);auto Ak=m_k.System(alpha,Kk);info.timing.assembly+=Clock()-start;
+            data=Evaluate(s,time,false,info.timing);start=Clock();Sparse Kk=m_k.Diffusion(data.kRules,data.Dk);
+            if (implicitAdvection)
+            {
+                Kk += m_k.TransportMatrix(data.kRules, s.flow);
+            }
+            Vec klift=m_k.Lift(s.k),krhs=m_k.LiftedRhs(alpha,Kk,base.k+KVolumeLoad(s,data),klift),kf=m_k.Restrict(s.k);auto Ak=m_k.System(alpha,Kk);info.timing.assembly+=Clock()-start;
             const double kd=std::max(Drift(data.kCoefficients,m_kPreconditionerCoefficients),alphaDrift(m_kFactorAlpha));info.coefficientDrift=std::max(info.coefficientDrift,kd);
             auto ki=m_k.Solve(Ak,krhs,kf,kd,m_options.linearTolerance);s.k=m_k.Expand(kf,klift);info.kIterations+=ki.iterations;info.rebuilds+=ki.rebuilds;info.timing.scalar+=ki.solveSeconds+ki.residualSeconds;info.timing.rebuild+=ki.factorSeconds;
             info.timingDetail.kFactor += ki.factorSeconds;
             if(ki.rebuilds){m_kPreconditionerCoefficients=data.kCoefficients;m_kFactorAlpha=alpha;}
             // K(H) has changed: replace the dependent outer epsilon trace and
             // recompute the entire closure before solving outer epsilon.
-            start=Clock();s=DirichletState(s,time);info.timing.wall+=Clock()-start;data=Evaluate(s,time,false,info.timing);start=Clock();Sparse Ke=m_e.Diffusion(m_rules.Static(),data.De,data.reactionE);Vec elift=m_e.Lift(s.epsilon),erhs=m_e.LiftedRhs(alpha,Ke,base.epsilon+EVolumeLoad(s,data),elift),ef=m_e.Restrict(s.epsilon);auto Ae=m_e.System(alpha,Ke);info.timing.assembly+=Clock()-start;
+            start=Clock();s=DirichletState(s,time);info.timing.wall+=Clock()-start;data=Evaluate(s,time,false,info.timing);start=Clock();Sparse Ke=m_e.Diffusion(m_rules.Static(),data.De,data.reactionE);
+            if (implicitAdvection)
+            {
+                Ke += m_e.TransportMatrix(m_rules.Static(), s.flow);
+            }
+            Vec elift=m_e.Lift(s.epsilon),erhs=m_e.LiftedRhs(alpha,Ke,base.epsilon+EVolumeLoad(s,data),elift),ef=m_e.Restrict(s.epsilon);auto Ae=m_e.System(alpha,Ke);info.timing.assembly+=Clock()-start;
             const double ed=std::max(Drift(data.eCoefficients,m_ePreconditionerCoefficients),alphaDrift(m_eFactorAlpha));info.coefficientDrift=std::max(info.coefficientDrift,ed);
             auto ei=m_e.Solve(Ae,erhs,ef,ed,m_options.linearTolerance);s.epsilon=m_e.Expand(ef,elift);info.epsilonIterations+=ei.iterations;info.rebuilds+=ei.rebuilds;info.timing.scalar+=ei.solveSeconds+ei.residualSeconds;info.timing.rebuild+=ei.factorSeconds;
             info.timingDetail.epsilonFactor += ei.factorSeconds;
@@ -1156,6 +1223,8 @@ void WriteFlowSolverFields(std::ostream &out, const CoupledOptions &options,
         << ",\"pressure_correctors\":"
         << (options.flowPreconditioner == "PressureCorrection" ? options.pressureCorrectors : 0)
         << ",\"picard_stop\":" << Quote(options.picardStop)
+        << ",\"picard_advection\":" << Quote(options.picardAdvection)
+        << ",\"picard_stress_linearization\":" << Quote(options.picardStressLinearization)
         << ",\"picard_outer_correctors\":" << options.picardOuterCorrectors
         << ",\"accepted_by_fixed_budget\":" << (info.acceptedByFixedBudget ? "true" : "false")
         << ",\"mixed_flow_work\":{\"setup_seconds\":" << work.setup

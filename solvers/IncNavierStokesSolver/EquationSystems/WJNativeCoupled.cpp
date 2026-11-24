@@ -104,6 +104,8 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadSolverInfo("WJFlowPreconditioner", options.flowPreconditioner, "SparseLU");
     m_session->LoadParameter("WJPressureCorrectors", options.pressureCorrectors, 1);
     m_session->LoadSolverInfo("WJPicardStop", options.picardStop, "CoupledResidual");
+    m_session->LoadSolverInfo("WJPicardAdvection", options.picardAdvection, "Explicit");
+    m_session->LoadSolverInfo("WJPicardStressLinearization", options.picardStressLinearization, "FrozenStrain");
     m_session->LoadParameter("WJPicardOuterCorrectors", options.picardOuterCorrectors, 0);
     m_session->LoadSolverInfo("WJStepPreconditioner",options.stepPreconditioner,"RebuildEveryNewtonV1");
     m_session->LoadParameter("WJStepPCRelativeDrift",options.stepPCRelativeDrift,.02);
@@ -132,6 +134,8 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     std::string solve;m_session->LoadSolverInfo("WJNativeSolve",solve,"Advance");Check(solve=="Advance"||solve=="SteadyReference","unknown WJ native solve mode");m_steadyMode=solve=="SteadyReference";
     Check(!m_steadyMode || options.flowPreconditioner == "SparseLU",
           "WJFlowPreconditioner=PressureCorrection is for time advancement");
+    Check(!m_steadyMode || options.picardAdvection == "Explicit",
+          "WJPicardAdvection=Implicit requires time advancement");
     Check(options.diagnosticOutletX==15.||m_steadyMode,"outlet location diagnostic requires steady preparation");
     if(m_steadyMode){Check(m_steps==0,"steady reference preparation requires NumSteps=0");
         m_session->LoadParameter("WJSteadySeconds",m_steadyOptions.maximumSeconds,0.);Check(m_steadyOptions.maximumSeconds>0,"steady reference preparation requires an explicit WJSteadySeconds cap");
@@ -300,7 +304,10 @@ void WJNativeCoupled::v_GenerateSummary(SolverUtils::SummaryList&summary)
 {
     SolverUtils::AddSummaryItem(summary,"WJ coupled path","WJNativeCoupledV2; flat serial Q3/Q2, outer-only epsilon");
     SolverUtils::AddSummaryItem(summary,"Wall tensor",WJNative::WallModelV2);
-    SolverUtils::AddSummaryItem(summary,"Integration","current coupled BDF2/EX2, BE startup, no clipping");
+    SolverUtils::AddSummaryItem(summary,"Integration",
+        m_coupling->Options().picardAdvection == "Implicit"
+            ? "BDF2 with implicit advection, backward Euler startup"
+            : "current coupled BDF2/EX2, BE startup, no clipping");
     SolverUtils::AddSummaryItem(summary,"Pressure gauge",m_coupling->FlowKernel().Gauge()?"native restricted mean":"fixed by total outlet traction");
 }
 void WJNativeCoupled::v_EvaluateExactSolution(unsigned int field,Array<OneD,NekDouble>&output,NekDouble time)

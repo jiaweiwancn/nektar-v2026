@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
-"""Linux-only independent accepted physical BE/BDF2 + EX1/EX2 audit.
+"""Independent physical BE/BDF2 audit for explicit and implicit advection.
 
 The frozen steady oracle supplies current constitutive, natural/essential, and
-owner-aware spatial evaluations. This module replaces its steady advection by
-independently rebuilt accepted-history advection and adds independently
-integrated time mass. No native operator, cached advection, or reported residual
-enters the audited equations. Stored caches are comparison evidence only.
+owner-aware spatial evaluations. This module reconstructs transport at the
+states selected by the advancement scheme and integrates the time mass.
+Stored caches and native residuals serve only as comparison evidence.
 """
 import argparse
 import hashlib
@@ -63,10 +62,17 @@ def scheme(data):
                    abs(record['time']-expected) <= 2e-13*max(1., expected),
                    'accepted/input scientific time differs from integer step times dt')
     startup = h['step'] == 0
+    mode = data.get('picard_advection', 'Explicit')
+    po.require(mode in ('Explicit', 'Implicit'), 'unknown transient advection mode')
+    implicit = mode == 'Implicit'
+    name = 'BE_EX1_STARTUP' if startup else 'BDF2_EX2'
+    if implicit:
+        name = 'BE_IMPLICIT_ADVECTION' if startup else 'BDF2_IMPLICIT_ADVECTION'
     return dict(startup=startup, dt=dt, alpha=(1. if startup else 1.5)/dt,
                 mass_coefficients=[1., -1., 0.] if startup else [1.5, -2., .5],
-                explicit_coefficients=[1., 0.] if startup else [2., -1.],
-                name='BE_EX1_STARTUP' if startup else 'BDF2_EX2')
+                advection_mode=mode, current_advection_coefficient=1. if implicit else 0.,
+                explicit_coefficients=[0., 0.] if implicit else ([1., 0.] if startup else [2., -1.]),
+                name=name)
 
 
 class TransientOracle:
@@ -89,7 +95,7 @@ class TransientOracle:
                    'accepted state/advection byte identity or history shift differs')
         for cache in (self.cached, self.cached_previous, self.cached_new):
             po.require(np.all(cache['flow'][2*self.current.n:] == 0.),
-                       'explicit advection cache contains a pressure/continuity load')
+                       'advection cache contains a pressure/continuity load')
         if self.scheme['startup']:
             po.require(state_hash(self.old) == state_hash(self.previous) and
                        state_hash(self.cached) == state_hash(self.cached_previous),
@@ -249,11 +255,18 @@ class TransientOracle:
         current, old, previous = (transported[owner.data['state_sha256']]
             for owner in (o, self.old_oracle, self.previous_oracle))
         f, g = self.scheme['explicit_coefficients']
-        explicit = combine(old['total'], f, previous['total'], g)
+        implicit = self.scheme['advection_mode'] == 'Implicit'
+        label = 'implicit' if implicit else 'explicit'
+        weighted = ((1., current),) if implicit else ((f, old), (g, previous))
+
+        def advection_sum(quantity):
+            return sum(weight*quantity(values) for weight, values in weighted)
+
+        advection = {key: advection_sum(lambda a: a['total'][key]) for key in KEYS}
         mass, storage = self.storage()
         spatial = [part for name,part in o.parts.items() if name not in ('advection','awf_convection')]
-        total = {key: sum(part[key] for part in spatial)+explicit[key]+mass[key] for key in KEYS}
-        self.total, self.mass, self.explicit = total, mass, explicit
+        total = {key: sum(part[key] for part in spatial)+advection[key]+mass[key] for key in KEYS}
+        self.total, self.mass, self.advective_action = total, mass, advection
         self.transport_results = dict(current=current, old=old, previous=previous)
         checks = {}
         for name, cached, independent in (('input_current', self.cached, old['total']),
@@ -271,7 +284,7 @@ class TransientOracle:
             fixed, free = o.fixed[key], o.free[key]
             reaction = -float(o.one[key][fixed]@total[key][fixed])
             action = float(o.one[key][free]@total[key][free])
-            adv = f*old['boundary'][key]+g*previous['boundary'][key]
+            adv = advection_sum(lambda a: a['boundary'][key])
             rate = storage['whole'][key]
             prescribed = boundary[key+'_diffusion_prescribed']
             essential = boundary[key+'_diffusion_essential']
@@ -279,7 +292,7 @@ class TransientOracle:
             scale = steady['budgets'][key]['fixed_scale']
             weak = rate+adv+prescribed+reaction-bulk[source]
             error = abs(weak-action)/scale; identities.append(error)
-            budgets[key] = dict(storage=rate, explicit_advective_outflow=adv,
+            budgets[key] = dict(storage=rate,
                 current_prescribed_outward_diffusion=prescribed, current_source=bulk[source],
                 essential_outward_diffusion_reaction=reaction,
                 essential_reaction_scope=steady['budgets'][key]['essential_reaction_scope'],
@@ -290,7 +303,8 @@ class TransientOracle:
                 all_owner_gradient_balance=rate+adv+physical-bulk[source], fixed_scale=scale,
                 actual_production_minus_destruction_not_constrained=True,
                 status='OBSERVED_REQUIRES_RESOLUTION_CHECK')
-        work = {key: f*old['work']['whole'][key]+g*previous['work']['whole'][key]
+            budgets[key][label+'_advective_outflow'] = adv
+        work = {key: advection_sum(lambda a: a['work']['whole'][key])
                 for key in old['work']['whole']}
         # Replace only sampled convective AWF work. Its pressure and known-k
         # terms remain evaluated at the accepted new state.
@@ -306,7 +320,7 @@ class TransientOracle:
         error = abs(balance-free_work)/scale; identities.append(error)
         energy_identity = abs(rate-storage['whole']['G_energy_rate']-storage['whole']['nonnegative_BDF_dissipation'])/scale
         identities.append(energy_identity)
-        cross_flux = f*old['boundary']['cross_kinetic_flux']+g*previous['boundary']['cross_kinetic_flux']
+        cross_flux = advection_sum(lambda a: a['boundary']['cross_kinetic_flux'])
         cross_error = abs(work['domain']+work['cross_integration_bulk']-cross_flux)/scale
         identities.append(cross_error)
         budgets['mechanical'] = dict(storage_velocity_test_work=rate,
@@ -315,16 +329,12 @@ class TransientOracle:
             nonnegative_BDF_dissipation=storage['whole']['nonnegative_BDF_dissipation'],
             discrete_time_energy_identity_error_over_scale=energy_identity,
             G_energy_definition='|u|^2/2 for BE; (|u_n|^2+|2u_n-u_(n-1)|^2)/4 for BDF2',
-            explicit_domain_advection_current_velocity_test_work=work['domain'],
-            explicit_cross_integration_boundary=cross_flux,
-            explicit_cross_integration_bulk=work['cross_integration_bulk'],
             cross_advection_integration_identity_error_over_scale=cross_error,
-            explicit_history_kinetic_advective_flux=f*old['boundary']['kinetic_flux']+g*previous['boundary']['kinetic_flux'],
-            advection_note='Current velocity tests explicit old-state advection; history kinetic-energy outflow is not substituted for this work',
+            advection_note=('Current velocity tests current-state advection' if implicit else
+                            'Current velocity tests explicit old-state advection'),
             current_full_stress_work=bulk['stress_work'], current_molecular_work=bulk['molecular_work'],
             current_raw_turbulent_production_work=bulk['P'], current_isotropic_k_divergence_work=bulk['isotropic_k_divergence'],
             current_modified_pressure_divergence_work=-bulk['pressure_divergence'],
-            explicit_sampled_convective_roughness_work=work['sampled'],
             current_pressure_and_known_k_roughness_work=current_nonconvective_awf,
             sampled_roughness_work=total_awf, prescribed_boundary_traction_work=boundary['traction_prescribed_work'],
             essential_traction_reaction_work=fixed_work,
@@ -335,14 +345,22 @@ class TransientOracle:
             mixed_physical_balance=energy_volume-boundary['traction_prescribed_work']-boundary['traction_essential_actual_work'],
             all_owner_gradient_balance=energy_volume-boundary['traction_actual_work'],
             status='OBSERVED_REQUIRES_RESOLUTION_CHECK')
+        mechanical = budgets['mechanical']
+        mechanical[label+'_domain_advection_current_velocity_test_work'] = work['domain']
+        mechanical[label+'_cross_integration_boundary'] = cross_flux
+        mechanical[label+'_cross_integration_bulk'] = work['cross_integration_bulk']
+        mechanical[label+'_sampled_convective_roughness_work'] = work['sampled']
+        flux_key = 'current_kinetic_advective_flux' if implicit else 'explicit_history_kinetic_advective_flux'
+        mechanical[flux_key] = advection_sum(lambda a: a['boundary']['kinetic_flux'])
         budgets['combined_mechanical_plus_k'] = dict(
             reaction_balance=balance+budgets['k']['reaction_balance'],
             storage=rate+storage['whole']['k'], current_molecular_work=bulk['molecular_work'],
             current_destruction=bulk['E'], raw_current_production_cancels_algebraically=True,
             current_pressure_and_isotropic_k_divergence=-bulk['pressure_divergence']+bulk['isotropic_k_divergence'],
-            explicit_momentum_work_plus_scalar_outflow=work['domain']+budgets['k']['explicit_advective_outflow'],
             sampled_roughness_work=total_awf,
-            scope='Discrete current-velocity BDF/EX identity; no instantaneous or reference P=E constraint')
+            scope='Discrete BE/BDF2 mechanical and k budget tested at the current velocity')
+        budgets['combined_mechanical_plus_k'][label+'_momentum_work_plus_scalar_outflow'] = (
+            work['domain']+budgets['k'][label+'_advective_outflow'])
         budgets['mass'] = steady['budgets']['mass']
         essential_actions = o.outlet_tangent_reactions(total['flow'])
         outlet = dict(policy=o.outlet_policy,
@@ -354,19 +372,25 @@ class TransientOracle:
         identities.extend((steady['accounting_identity_max_error'],))
         # Nonzero fixture tests these controls; actual physical states may make
         # a particular term invisible, which is explicitly not a positive pass.
+        cached = self.cached_new if implicit else combine(self.cached, f, self.cached_previous, g)
         deltas = dict(missing_time_mass=combine(mass, -1., mass, 0.),
-            current_instead_of_explicit_advection=combine(current['total'], 1., explicit, -1.),
-            missing_explicit_AWF_convection=combine(old['awf'], -f, previous['awf'], -g),
-            missing_explicit_domain_convection=o.zeros(),
-            nonconservative_explicit_scalar_advection=o.zeros(),
-            stored_instead_of_reconstructed_advection=combine(combine(self.cached, f, self.cached_previous, g), 1., explicit, -1.))
-        deltas['missing_explicit_domain_convection']['flow'] = -f*old['advection']['flow']-g*previous['advection']['flow']
+            stored_instead_of_reconstructed_advection=combine(cached, 1., advection, -1.))
+        awf = 'missing_'+label+'_AWF_convection'
+        domain = 'missing_'+label+'_domain_convection'
+        scalar = 'nonconservative_'+label+'_scalar_advection'
+        deltas[awf] = {key: -advection_sum(lambda a: a['awf'][key]) for key in KEYS}
+        deltas[domain], deltas[scalar] = o.zeros(), o.zeros()
+        deltas[domain]['flow'] = -advection_sum(lambda a: a['advection']['flow'])
         for key in ('k', 'epsilon'):
-            deltas['nonconservative_explicit_scalar_advection'][key] = (
-                f*(old['nonconservative'][key]-old['advection'][key])+
-                g*(previous['nonconservative'][key]-previous['advection'][key]))
+            deltas[scalar][key] = advection_sum(lambda a: a['nonconservative'][key]-a['advection'][key])
+        if implicit:
+            extrapolated = old['total'] if self.scheme['startup'] else combine(old['total'], 2., previous['total'], -1.)
+            deltas['explicit_instead_of_current_advection'] = combine(extrapolated, 1., advection, -1.)
+        else:
+            deltas['current_instead_of_explicit_advection'] = combine(current['total'], 1., advection, -1.)
+            if not self.scheme['startup']:
+                deltas['EX1_instead_of_EX2'] = combine(old['total'], 1., advection, -1.)
         if not self.scheme['startup']:
-            deltas['EX1_instead_of_EX2'] = combine(old['total'], 1., explicit, -1.)
             be_mass, _ = self.storage(startup=True)
             deltas['BE_instead_of_BDF2_mass'] = combine(be_mass, 1., mass, -1.)
         mutations = {}
@@ -375,17 +399,23 @@ class TransientOracle:
             mutations[name] = dict(delta_dual=sensitivity, mutated_residual=o.dual(combine(total, 1., delta, 1.)),
                 status='DETECTABLE_AT_DECLARED_TOLERANCE' if any(sensitivity[key] > po.RESIDUAL_LIMITS[key] for key in sensitivity)
                 else 'INACTIVE_IN_THIS_PHYSICAL_STATE; independent nonzero fixture still required')
-        return dict(residuals=residual, residual_limits=po.RESIDUAL_LIMITS,
+        result = dict(residuals=residual, residual_limits=po.RESIDUAL_LIMITS,
             transient_residual_status='MET' if all(residual[key] <= limit for key, limit in po.RESIDUAL_LIMITS.items()) else 'NOT_MET',
             history_cache_checks=cache_checks, storage_by_region=storage, budgets=budgets,
             accepted_discrete_outlet=outlet,
             sampled_history_minima={key: value['sampled_minima'] for key, value in self.transport_results.items()},
             accounting_identity_max_error=max(identities), accounting_identity_status='MET' if max(identities) <= 1e-10 else 'NOT_MET',
-            explicit_boundary_faces=[dict(**row, extrapolation_coefficient=coefficient, history_role=role)
-                for role, coefficient, values in (('input_current', f, old), ('input_previous', g, previous)) for row in values['faces']],
             current_instantaneous_spatial_observation=steady,
             instantaneous_note='Its steady residual/budgets are observed instantaneous defects, not the accepted time-discrete equations',
             mutations=mutations)
+        if implicit:
+            result['implicit_boundary_faces'] = current['faces']
+        else:
+            result['explicit_boundary_faces'] = [
+                dict(**row, extrapolation_coefficient=coefficient, history_role=role)
+                for role, coefficient, values in (('input_current', f, old), ('input_previous', g, previous))
+                for row in values['faces']]
+        return result
 
     def boundary_checks(self):
         return {name: oracle.boundary_checks() for name, oracle in
@@ -403,7 +433,8 @@ def audit(data, reference, order, refine_order, deadline):
     quadrature_ok = all(difference[key] <= .2*limit for key, limit in po.RESIDUAL_LIMITS.items())
     boundaries = final.boundary_checks()
     boundary_ok = all(row['status'] == 'MET' for row in boundaries.values())
-    result = dict(scheme=final.scheme, ex2_exercised=not final.scheme['startup'],
+    result = dict(scheme=final.scheme,
+        ex2_exercised=not final.scheme['startup'] and final.scheme['advection_mode'] == 'Explicit',
         input_history_identity=dict(step=data['input_history']['step'], time=data['input_history']['time'],
             current_sha256=state_hash(final.old), previous_sha256=state_hash(final.previous),
             advection_sha256=state_hash(final.cached), previous_advection_sha256=state_hash(final.cached_previous),

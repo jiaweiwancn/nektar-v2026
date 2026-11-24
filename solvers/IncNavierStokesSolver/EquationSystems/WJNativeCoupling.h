@@ -37,6 +37,7 @@ struct CoupledOptions
     std::string stressSplit="PositiveShearV1",steadyVelocityPC="FullGradientV1";
     std::string advancement="PicardV1";
     std::string flowPreconditioner="SparseLU", picardStop="CoupledResidual";
+    std::string picardAdvection="Explicit", picardStressLinearization="FrozenStrain";
     int pressureCorrectors=1, picardOuterCorrectors=0;
     SteadyKrylovOptions stepNewton;
     std::string stepPreconditioner="RebuildEveryNewtonV1";

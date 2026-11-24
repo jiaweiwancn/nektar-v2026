@@ -51,7 +51,7 @@ public:
                     double coefficientChange=0,double tolerance=1e-11,
                     MixedFlowWork *work=nullptr);
     SolveInfo Correct(const Sparse &current, const Vec &rhs, Vec &x, MixedFlowWork &work,
-                      double continuityTolerance = 1e-10);
+                      double continuityTolerance = 1e-10, bool symmetricMomentum = true);
     SolveInfo Residual(const Sparse&current,const Vec&rhs,const Vec&x)const;
     /** Fixed, homogeneous norms of the raw free momentum/divergence/mean rows.
      * No time-mass or state-dependent denominator enters this action. */

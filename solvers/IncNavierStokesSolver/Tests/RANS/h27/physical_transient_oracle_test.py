@@ -140,9 +140,11 @@ def main():
     try:
         po.require(po.identity(args.table)['sha256'] == po.TABLE_SHA, 'wrong immutable table')
         ref = po.Reference(json.loads(args.table.read_text()))
-        cases = []
-        for step in (1, 2):
+        cases = {'Explicit': [], 'Implicit': []}
+        for mode, step in (('Implicit', 1), ('Implicit', 2), ('Explicit', 1), ('Explicit', 2)):
             data, field = packet(ref, step)
+            if mode == 'Implicit':
+                data['picard_advection'] = mode
             oracle = transient.TransientOracle(data, ref, 20, began+args.seconds)
             core = oracle.assemble()
             errors = {}
@@ -160,10 +162,12 @@ def main():
             for key in transient.KEYS:
                 close('every_'+key+'_BDF_mass_coefficient', oracle.mass[key], expected_mass[key], np.max(np.abs(expected_mass[key])))
             f, g = oracle.scheme['explicit_coefficients']
-            expected_explicit = transient.combine(data['input_history']['advection'], f,
-                                                 data['input_history']['previous_advection'], g)
+            expected_transport = (data['current_advection'] if mode == 'Implicit' else
+                                  transient.combine(data['input_history']['advection'], f,
+                                                    data['input_history']['previous_advection'], g))
             for key in transient.KEYS:
-                close('every_'+key+'_EX_advection_coefficient', oracle.explicit[key], expected_explicit[key], np.max(np.abs(expected_explicit[key])))
+                close('every_'+key+'_advection_coefficient', oracle.advective_action[key], expected_transport[key],
+                      np.max(np.abs(expected_transport[key])))
             for key in ('k', 'epsilon'):
                 close(key+'_storage_inventory', core['storage_by_region']['whole'][key],
                       rate[key]*integral[key], abs(rate[key]*integral[key]))
@@ -171,17 +175,23 @@ def main():
                   factors(t)['u']*rate['u']*integral['velocity_square'],
                   abs(factors(t)['u']*rate['u']*integral['velocity_square']))
             po.require(np.all(oracle.mass['flow'][2*oracle.current.n:] == 0.), 'pressure received a time mass')
-            expected_mutations = ['missing_time_mass', 'current_instead_of_explicit_advection',
-                'missing_explicit_AWF_convection', 'missing_explicit_domain_convection',
-                'nonconservative_explicit_scalar_advection']
-            if step > 1: expected_mutations += ['EX1_instead_of_EX2', 'BE_instead_of_BDF2_mass']
+            label = mode.lower()
+            alternate = ('explicit_instead_of_current_advection' if mode == 'Implicit' else
+                         'current_instead_of_explicit_advection')
+            expected_mutations = ['missing_time_mass', alternate, 'missing_'+label+'_AWF_convection',
+                'missing_'+label+'_domain_convection', 'nonconservative_'+label+'_scalar_advection']
+            if step > 1:
+                expected_mutations.append('BE_instead_of_BDF2_mass')
+                if mode == 'Explicit':
+                    expected_mutations.append('EX1_instead_of_EX2')
             for name in expected_mutations:
                 po.require(core['mutations'][name]['status'] == 'DETECTABLE_AT_DECLARED_TOLERANCE', 'inactive nonzero mutation '+name)
-            cases.append(dict(scheme=oracle.scheme, analytic_relative_errors=errors,
+            cases[mode].append(dict(scheme=oracle.scheme, analytic_relative_errors=errors,
                 accounting_identity_max_error=core['accounting_identity_max_error'],
                 cache_checks=core['history_cache_checks'], non_solution_residuals=core['residuals'],
                 mutations={name: core['mutations'][name] for name in expected_mutations}))
-        report['analytic_cases'] = cases
+        report['analytic_cases'] = cases['Explicit']
+        report['implicit_advection_cases'] = cases['Implicit']
         # Corrupt a free stored cache with all corresponding byte hashes updated.
         # The independently reconstructed equation must be unchanged while the
         # cache evidence fails, so there is no accidental dependence on caches.
@@ -206,6 +216,7 @@ def main():
             'wrong_previous_hash': lambda d: d.update(previous_sha256='0'*64),
             'wrong_new_cache_hash': lambda d: d.update(advection_sha256='0'*64),
             'wrong_basis': lambda d: d.update(basis='Ortho_A'),
+            'unknown_advection_mode': lambda d: d.update(picard_advection='Unknown'),
             'truncated_history': lambda d: d['input_history']['previous'].update(k=d['input_history']['previous']['k'][:-1]),
         }
         for name, mutate in mutations.items():

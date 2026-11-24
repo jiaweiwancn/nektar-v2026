@@ -1,0 +1,10 @@
+diff --git a/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py b/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py
+index 9c53e0c..0299117 100644
+--- a/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py
++++ b/solvers/IncNavierStokesSolver/Tests/RANS/h27/physical_transient_oracle.py
+@@ -65,0 +66,5 @@ def scheme(data):
++    if data.get('step_advection') == 'BDF2ImplicitAdvectionV1':
++        po.require(data.get('implicit_solver') == 'CoupledJFNKV1'
++                   and 'picard_advection' not in data,
++                   'Newton implicit-advection summary conflicts with exported solver identity')
++        mode = 'Implicit'

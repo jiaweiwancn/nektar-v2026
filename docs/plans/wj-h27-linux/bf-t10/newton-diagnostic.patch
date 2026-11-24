@@ -1,0 +1,203 @@
+diff --git a/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupled.cpp b/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupled.cpp
+index cac81e3..799c0be 100644
+--- a/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupled.cpp
++++ b/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupled.cpp
+@@ -6,0 +7 @@
++#include <algorithm>
+@@ -117,0 +119,13 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
++        double forcingMultiplier = 1.;
++        double forcingCeiling = .9;
++        m_session->LoadParameter("WJStepForcingMultiplier", forcingMultiplier, 1.);
++        m_session->LoadParameter("WJStepForcingCeiling", forcingCeiling, .9);
++        Check(std::isfinite(forcingMultiplier) && forcingMultiplier >= 1. &&
++              forcingMultiplier <= 4., "invalid diagnostic Newton forcing multiplier");
++        Check(std::isfinite(forcingCeiling) && forcingCeiling >= .01 && forcingCeiling <= .9,
++              "invalid diagnostic Newton forcing ceiling");
++        auto &newton = options.stepNewton;
++        newton.forcingInitial = std::min(forcingCeiling, newton.forcingInitial * forcingMultiplier);
++        newton.forcingMinimum = std::min(forcingCeiling, newton.forcingMinimum * forcingMultiplier);
++        newton.forcingMaximum = std::min(forcingCeiling, newton.forcingMaximum * forcingMultiplier);
++        newton.forcingGamma *= forcingMultiplier;
+@@ -303 +317,2 @@ void WJNativeCoupled::v_GenerateSummary(SolverUtils::SummaryList&summary)
+-    SolverUtils::AddSummaryItem(summary,"Integration","current coupled BDF2/EX2, BE startup, no clipping");
++    SolverUtils::AddSummaryItem(summary,"Integration",m_coupling->Options().advancement == "CoupledJFNKV1" ?
++        "BDF2 with current implicit advection, BE startup" : "current coupled BDF2/EX2, BE startup, no clipping");
+diff --git a/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp b/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp
+index d0d8524..1335db1 100644
+--- a/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp
++++ b/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp
+@@ -70,0 +71,2 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry
++    // This isolated Newton replay permits wider test gates in the timestep check.
++    const double maximumTolerance = m_options.advancement == "CoupledJFNKV1" ? 1e-5 : 1e-8;
+@@ -72 +74 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry
+-        m_options.nonlinearTolerance>0&&m_options.nonlinearTolerance<=1e-8&&m_options.maximumIterations>=2,
++        m_options.nonlinearTolerance>0&&m_options.nonlinearTolerance<=maximumTolerance&&m_options.maximumIterations>=2,
+@@ -139,0 +142,5 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry
++    if (m_options.advancement == "CoupledJFNKV1")
++    {
++        signature << "|BDF2ImplicitAdvectionV1|forcing:" << newton.forcingInitial << ',' << newton.forcingMinimum
++                  << ',' << newton.forcingMaximum << ',' << newton.forcingGamma;
++    }
+@@ -1153,0 +1161,4 @@ void WriteFlowSolverFields(std::ostream &out, const CoupledOptions &options,
++    if (options.advancement == "CoupledJFNKV1")
++    {
++        out << ",\"step_advection\":\"BDF2ImplicitAdvectionV1\"";
++    }
+diff --git a/solvers/IncNavierStokesSolver/EquationSystems/WJNativeTimeNewton.cpp b/solvers/IncNavierStokesSolver/EquationSystems/WJNativeTimeNewton.cpp
+index a04cab4..d99ddb8 100644
+--- a/solvers/IncNavierStokesSolver/EquationSystems/WJNativeTimeNewton.cpp
++++ b/solvers/IncNavierStokesSolver/EquationSystems/WJNativeTimeNewton.cpp
+@@ -3,0 +4 @@
++#include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
+@@ -6,0 +8,3 @@
++#include <iostream>
++#include <limits>
++#include <sstream>
+@@ -26,0 +31,101 @@ constexpr std::array<const char*,7> RefreshNames{
++void WriteDiagnosticLinearChecks(const SteadyKrylovResult &result,
++                                 std::uint64_t step, int attempt)
++{
++    for (const auto &n : result.newton)
++    {
++        double initialScaled = 0.;
++        double bestRatio = std::numeric_limits<double>::infinity();
++        double scaledRatio = 0., physicalRatio = 0.;
++        int cycles = 0, iterations = 0;
++        for (const auto &l : result.linear)
++        {
++            if (l.newton != n.iteration)
++            {
++                continue;
++            }
++            cycles = l.cycle + 1;
++            iterations += l.iteration >= 0;
++            if (l.cycle == 0 && l.iteration == -1)
++            {
++                initialScaled = l.trueScaledNorm;
++            }
++            if (l.trueChecked && initialScaled > 0. && n.baseNorm > 0.)
++            {
++                const double scaled = l.trueScaledNorm / (n.forcing * initialScaled);
++                const double physical = l.trueNorm / (n.forcing * n.baseNorm);
++                const double ratio = std::max(scaled, physical);
++                if (ratio < bestRatio)
++                {
++                    bestRatio = ratio;
++                    scaledRatio = scaled;
++                    physicalRatio = physical;
++                }
++            }
++        }
++        if (std::isfinite(bestRatio))
++        {
++            std::ostringstream line;
++            line << std::setprecision(17) << "WJ_GATE_LINEAR {\"step\":" << step
++                 << ",\"attempt\":" << attempt << ",\"newton\":" << n.iteration
++                 << ",\"base_max\":" << n.baseNorm << ",\"eta\":" << n.forcing
++                 << ",\"cycles\":" << cycles << ",\"iterations\":" << iterations
++                 << ",\"best_scaled_over_target\":" << scaledRatio
++                 << ",\"best_physical_over_target\":" << physicalRatio
++                 << ",\"passed\":" << (n.linearConverged ? "true" : "false") << '}';
++            std::cout << line.str() << std::endl;
++        }
++    }
++}
++void WriteDiagnosticLineSearch(const SteadyKrylovResult &result,
++                               std::uint64_t step, int attempt)
++{
++    for (const auto &n : result.newton)
++    {
++        int inadmissible = 0, insufficientDecrease = 0, feasible = 0;
++        double bestMerit = std::numeric_limits<double>::infinity();
++        std::string firstInadmissibility, lastInadmissibility;
++        for (const auto &trial : result.lineSearch)
++        {
++            if (trial.newton != n.iteration)
++            {
++                continue;
++            }
++            if (!trial.admissible)
++            {
++                ++inadmissible;
++                if (firstInadmissibility.empty())
++                {
++                    firstInadmissibility = trial.reason;
++                }
++                lastInadmissibility = trial.reason;
++            }
++            else if (trial.evaluated)
++            {
++                ++feasible;
++                insufficientDecrease += !trial.sufficientDecrease;
++                bestMerit = std::min(bestMerit, trial.trueNorm);
++            }
++        }
++        if (feasible + inadmissible == 0)
++        {
++            continue;
++        }
++        std::ostringstream line;
++        line << std::setprecision(17) << "WJ_GATE_LINE_SEARCH {\"step\":" << step
++             << ",\"attempt\":" << attempt << ",\"newton\":" << n.iteration
++             << ",\"base_max\":" << n.baseNorm << ",\"accepted_scale\":" << n.acceptedStep
++             << ",\"feasible\":" << feasible << ",\"inadmissible\":" << inadmissible
++             << ",\"insufficient_decrease\":" << insufficientDecrease << ",\"best_feasible_max\":";
++        if (std::isfinite(bestMerit))
++        {
++            line << bestMerit;
++        }
++        else
++        {
++            line << "null";
++        }
++        line << ",\"first_inadmissibility\":" << RANSWallSolveJson::Quote(firstInadmissibility)
++             << ",\"last_inadmissibility\":" << RANSWallSolveJson::Quote(lastInadmissibility) << '}';
++        std::cout << line.str() << std::endl;
++    }
++}
+@@ -155,5 +259,0 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
+-        const double currentEX=history.step==0?1.:2.;
+-        const double previousEX=history.step==0?0.:-1.;
+-        external.flow-=currentEX*history.advection.flow+previousEX*history.previousAdvection.flow;
+-        external.k-=currentEX*history.advection.k+previousEX*history.previousAdvection.k;
+-        external.epsilon-=currentEX*history.advection.epsilon+previousEX*history.previousAdvection.epsilon;
+@@ -210,0 +311,5 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
++                CoupledState advection;
++                {
++                    AccountTime timer(info.timing.assembly);
++                    advection = Advection(state, owned->kRules, &info.timingDetail);
++                }
+@@ -225,3 +330,3 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
+-                action.flow+=m_flow.Core().MassAction(delta.flow)-external.flow;
+-                action.k+=m_k.Mass()*delta.k-external.k;
+-                action.epsilon+=m_e.Mass()*delta.epsilon-external.epsilon;
++                action.flow+=m_flow.Core().MassAction(delta.flow)+advection.flow-external.flow;
++                action.k+=m_k.Mass()*delta.k+advection.k-external.k;
++                action.epsilon+=m_e.Mass()*delta.epsilon+advection.epsilon-external.epsilon;
+@@ -287,2 +392,2 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
+-                // EX advection is fixed history, so it has no current-state
+-                // transport Jacobian. Alpha is the actual BE/BDF2 coefficient.
++                // Newton's finite differences include current advection. The
++                // preconditioner retains the existing diffusive block operators.
+@@ -432,0 +538,5 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
++            if (m_options.recordNonlinearTrace)
++            {
++                WriteDiagnosticLinearChecks(result, history.step + 1, attempt);
++                WriteDiagnosticLineSearch(result, history.step + 1, attempt);
++            }
+@@ -448,6 +557,0 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
+-            info.residual=Residual(state,final,external,alpha,time,info.timing,&history);
+-            if(info.residual.Maximum()>m_options.nonlinearTolerance)
+-                throw std::runtime_error("fresh current implicit residual failed after eliminating gauge multiplier");
+-            checkDeadline();
+-            info.minimumK=final.minK;info.minimumEpsilon=final.minE;
+-            info.minimumCovarianceOverK=final.minCovariance;info.minimumPrincipalOverMu=final.minPrincipal;
+@@ -458,0 +563,8 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
++            const Loads currentExternal{external.flow-nextAdvection.flow, external.k-nextAdvection.k,
++                                        external.epsilon-nextAdvection.epsilon};
++            info.residual=Residual(state,final,currentExternal,alpha,time,info.timing,&history);
++            if(info.residual.Maximum()>m_options.nonlinearTolerance)
++                throw std::runtime_error("fresh current implicit residual failed after eliminating gauge multiplier");
++            checkDeadline();
++            info.minimumK=final.minK;info.minimumEpsilon=final.minE;
++            info.minimumCovarianceOverK=final.minCovariance;info.minimumPrincipalOverMu=final.minPrincipal;

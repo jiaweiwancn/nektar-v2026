@@ -1,0 +1,107 @@
+{
+  "source_revision": "2f28cce00cb1284e9a5736b8a92d57f599a301ae",
+  "source_identity": "d07dfa0423939f4cf2c0a58517a472d64acae060e20da1b7ab8b4c1af8073960",
+  "executable": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-picard-t10-tangent-20261123.3G9WSr/build/IncNavierStokesSolver",
+    "bytes": 10172608,
+    "sha256": "4723e2a12e927bf1954e0b59192ab81517a1f8d60cb238ba56f7d5164f1e8c91"
+  },
+  "source_overlay": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-picard-t10-tangent-20261123.3G9WSr/source-overlay.tar",
+    "bytes": 337920,
+    "sha256": "553f3c1c1b59647dec963c82d364a1871f3a3746f980a623b3c4a2ca6e6e79a0"
+  },
+  "analytic_controls": {
+    "status": "PASS",
+    "explicit_cases": 2,
+    "implicit_cases": 2,
+    "evidence": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-prepush-20261124.8QoXLb/oracle-controls.json",
+      "bytes": 28546,
+      "sha256": "d6a7e790896f4c53b40e3523c03c747e9f730a27a4d684e53e06d226a944ed25"
+    },
+    "operation": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-prepush-20261124.8QoXLb/operations/oracle-controls-retry/receipt.json",
+      "bytes": 1545,
+      "sha256": "f37014cdb8b52c0f4f0a901c30c810fa79bfc5c76489eb37151c041c25b3fd70"
+    }
+  },
+  "outcomes": {
+    "picard-3x1": {
+      "manifest": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-3x1/campaign.json",
+        "bytes": 11195,
+        "sha256": "5d144d8f77fc36dbe293ea617da885de99cdf58de3a9d8c9161eb7fc2290973a"
+      },
+      "native": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-3x1/segments/006/trials/retained/state.result.json",
+        "bytes": 61021035,
+        "sha256": "65faea7521d210fd105e4a7d2e49816fbfda387ac831f27dd54c3583627236f9"
+      },
+      "checkpoint": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-3x1/segments/006/trials/retained/state.final.bin",
+        "bytes": 11014450,
+        "sha256": "7eabc76f59a1d64e074f54b2cab4f4e2df30cd62e33731063934504d8daf33a7"
+      },
+      "residuals": {
+        "momentum": 2.873020586736564e-11,
+        "continuity": 6.253072003270379e-11,
+        "gauge": 0,
+        "k": 3.3264401762075556e-10,
+        "epsilon": 2.1848843019001775e-11,
+        "trace": 0
+      },
+      "minimum_covariance_over_k": 0.28104070862888086,
+      "minimum_principal_over_mu": 0.004071137894755014,
+      "status": "COMPLETE",
+      "step": 500,
+      "time": 10,
+      "dt": 0.02,
+      "picard_sweeps": 3,
+      "pressure_correctors": 1,
+      "termination": "FixedCorrectors",
+      "stress": "VelocityTangent",
+      "advection": "Implicit",
+      "threads": 1,
+      "mpi_ranks": 1
+    },
+    "picard-4x1": {
+      "manifest": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-4x1/campaign.json",
+        "bytes": 11142,
+        "sha256": "3971df734e6df6acd8e7a6ff89708b466a94f219bb136bd491fba2bd2d01b494"
+      },
+      "native": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-4x1/segments/006/trials/retained/state.result.json",
+        "bytes": 61019736,
+        "sha256": "8b957f8b59dbf11f51a5771a6118bee4e1288f5a4be529a3b52ba449d243444b"
+      },
+      "checkpoint": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-picard-t10-tangent-20261123.3G9WSr/runs/picard-4x1/segments/006/trials/retained/state.final.bin",
+        "bytes": 11014450,
+        "sha256": "0571047ac90415eee0debd4d8ebf4874a6e6eb2307183fe59cc8394429c1d769"
+      },
+      "residuals": {
+        "momentum": 4.9300553267108675e-11,
+        "continuity": 6.31225758908973e-11,
+        "gauge": 0,
+        "k": 1.612437565283332e-11,
+        "epsilon": 2.1850112409473187e-11,
+        "trace": 0
+      },
+      "minimum_covariance_over_k": 0.2810407086241254,
+      "minimum_principal_over_mu": 0.004071137894736429,
+      "status": "COMPLETE",
+      "step": 500,
+      "time": 10,
+      "dt": 0.02,
+      "picard_sweeps": 4,
+      "pressure_correctors": 1,
+      "termination": "FixedCorrectors",
+      "stress": "VelocityTangent",
+      "advection": "Implicit",
+      "threads": 1,
+      "mpi_ranks": 1
+    }
+  }
+}

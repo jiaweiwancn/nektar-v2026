@@ -1,0 +1,315 @@
+{
+  "pressure": {
+    "pressure": {
+      "native": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-newton-t10-resumed-20261123.FwHrOG/pressure-no-pause/segments/002/run/state.result.json",
+        "bytes": 61061777,
+        "sha256": "441ccc41f67f12b7f694bb1a69e49f5e4802dce68842ec8e3c28ede9317eae1f"
+      },
+      "reference": {
+        "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/outlet-qual-bf-continue-2/state.result.json",
+        "bytes": 76986400,
+        "sha256": "23ee2191573f48a4312352ea5549fb1b37b76a44347eb102f17593b000e85782"
+      },
+      "native_step": 500,
+      "time": 10,
+      "reference_kind": "Qualified steady Bf on common signed element maps",
+      "metric": "Area-weighted field RMS. Four-point tensor Gauss exactly integrates the squared Q3/Q2 differences.",
+      "fields": {
+        "u": {
+          "absolute_rms": 0.00016004786001658453,
+          "reference_rms": 0.9658040455666157,
+          "relative_l2": 0.00016571462995134588,
+          "last_step_rms": 2.3698923493490394e-07,
+          "bdf2_rate_rms": 1.1849283836659931e-05,
+          "sampled_max_absolute": 0.0024038239984115013,
+          "sampled_max_location": {
+            "x": 15.0,
+            "r": 0.08194341873583733
+          },
+          "integrated_area": 497.8125000000036,
+          "elements": 10212,
+          "domain": "whole"
+        },
+        "w": {
+          "absolute_rms": 2.549192560229394e-05,
+          "reference_rms": 3.5896515562845626e-05,
+          "relative_l2": 0.7101504199666424,
+          "last_step_rms": 6.69230742184014e-08,
+          "bdf2_rate_rms": 3.351014555676761e-06,
+          "sampled_max_absolute": 0.0001122158461310635,
+          "sampled_max_location": {
+            "x": -4.630176674220109,
+            "r": 0.14358881460699918
+          },
+          "integrated_area": 497.8125000000036,
+          "elements": 10212,
+          "domain": "whole"
+        },
+        "Pi": {
+          "absolute_rms": 1.735617412184853e-05,
+          "reference_rms": 0.00014872776160521767,
+          "relative_l2": 0.11669760866783353,
+          "last_step_rms": 3.149670332142302e-08,
+          "bdf2_rate_rms": 2.661911141407998e-06,
+          "sampled_max_absolute": 6.372215857091874e-05,
+          "sampled_max_location": {
+            "x": -9.467455831444973,
+            "r": 0.11541061001735001
+          },
+          "integrated_area": 497.8125000000036,
+          "elements": 10212,
+          "domain": "whole"
+        },
+        "k": {
+          "absolute_rms": 1.5150478039010971e-05,
+          "reference_rms": 0.008814449020918531,
+          "relative_l2": 0.0017188230373850616,
+          "last_step_rms": 1.5577530930622597e-08,
+          "bdf2_rate_rms": 7.793465250430941e-07,
+          "sampled_max_absolute": 0.0003542981340381488,
+          "sampled_max_location": {
+            "x": -4.11982332577989,
+            "r": 0.021167831359200185
+          },
+          "integrated_area": 497.8125000000036,
+          "elements": 10212,
+          "domain": "whole"
+        },
+        "epsilon": {
+          "absolute_rms": 7.964390281340267e-07,
+          "reference_rms": 0.00020103250303270156,
+          "relative_l2": 0.003961742584503719,
+          "last_step_rms": 9.382808658622403e-10,
+          "bdf2_rate_rms": 4.69200237941214e-08,
+          "sampled_max_absolute": 1.9381786625524006e-05,
+          "sampled_max_location": {
+            "x": 15.0,
+            "r": 0.14999999999999997
+          },
+          "integrated_area": 494.0625000000036,
+          "elements": 2775,
+          "domain": "outer"
+        }
+      },
+      "native_residuals": {
+        "momentum": 4.0129860780695564e-07,
+        "continuity": 5.077931544445998e-10,
+        "gauge": 0,
+        "k": 7.071790961163229e-08,
+        "epsilon": 4.9618025504137e-08,
+        "trace": 0
+      },
+      "native_gate": 3e-06,
+      "covariance_minimum": 0.28103216212467713,
+      "principal_minimum": 0.0040711257853390265
+    },
+    "sparse_current": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-newton-t10-resumed-20261123.FwHrOG/sparse-no-pause/segments/002/run/state.result.json",
+      "bytes": 61018445,
+      "sha256": "3d16c4b68c864095e737151fbb4f113e6bfe787396589a46cbe22255e0bd97a0"
+    },
+    "previous_t008": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-fixed-picard-20261122.98Yu4Z/final/trials/sparse-control/state.science-4.json",
+      "bytes": 61110443,
+      "sha256": "8c306859c3bdf296764e67f74fb27cc08a5bcb22bdfaeff1d7aea88be92f7b59"
+    },
+    "shared_baseline": {
+      "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-sparse-t10-audit-20261124.77dE7d/comparison-t008-t10.json",
+      "bytes": 14221,
+      "sha256": "4ee4d4f1c75289a56e0e107883083af886e4d5b029a6b8bcaf3e121860b503d3"
+    },
+    "comparison": {
+      "u": {
+        "steady_difference_t008_rms": 0.0002608618247504097,
+        "steady_difference_sparse_t10_rms": 0.00016010513877776428,
+        "steady_difference_pressure_t10_rms": 0.00016004786001658453,
+        "pressure_reduction_from_t008_percent": 38.64649985879808,
+        "pressure_sparse_t10_rms": 6.779661509769769e-07,
+        "pressure_sparse_relative_l2": 7.019785301993935e-07,
+        "pressure_sparse_sampled_max": 6.491055682868754e-05
+      },
+      "w": {
+        "steady_difference_t008_rms": 3.5817019289963025e-05,
+        "steady_difference_sparse_t10_rms": 2.5473242539094777e-05,
+        "steady_difference_pressure_t10_rms": 2.549192560229394e-05,
+        "pressure_reduction_from_t008_percent": 28.827339327375235,
+        "pressure_sparse_t10_rms": 4.0662615013881535e-07,
+        "pressure_sparse_relative_l2": 0.024911896046235657,
+        "pressure_sparse_sampled_max": 2.048946935061135e-05
+      },
+      "Pi": {
+        "steady_difference_t008_rms": 2.3894369481598984e-05,
+        "steady_difference_sparse_t10_rms": 1.7337851264915305e-05,
+        "steady_difference_pressure_t10_rms": 1.735617412184853e-05,
+        "pressure_reduction_from_t008_percent": 27.36291227431429,
+        "pressure_sparse_t10_rms": 1.296365732601814e-07,
+        "pressure_sparse_relative_l2": 0.0009050040207295622,
+        "pressure_sparse_sampled_max": 5.93298650366862e-06
+      },
+      "k": {
+        "steady_difference_t008_rms": 1.553962636874533e-05,
+        "steady_difference_sparse_t10_rms": 1.5149656844400905e-05,
+        "steady_difference_pressure_t10_rms": 1.5150478039010971e-05,
+        "pressure_reduction_from_t008_percent": 2.5042322157568075,
+        "pressure_sparse_t10_rms": 4.806141190336497e-08,
+        "pressure_sparse_relative_l2": 5.451744148289557e-06,
+        "pressure_sparse_sampled_max": 5.396116486128022e-06
+      },
+      "epsilon": {
+        "steady_difference_t008_rms": 1.1486604949178508e-06,
+        "steady_difference_sparse_t10_rms": 7.966094513041114e-07,
+        "steady_difference_pressure_t10_rms": 7.964390281340267e-07,
+        "pressure_reduction_from_t008_percent": 30.663670278746203,
+        "pressure_sparse_t10_rms": 2.124116225367441e-09,
+        "pressure_sparse_relative_l2": 1.0548438491558333e-05,
+        "pressure_sparse_sampled_max": 1.5332688769759822e-07
+      }
+    }
+  },
+  "pressure_independent": {
+    "endpoint_status": "NOT_MET",
+    "scheme": {
+      "startup": false,
+      "dt": 0.02,
+      "alpha": 75.0,
+      "mass_coefficients": [
+        1.5,
+        -2.0,
+        0.5
+      ],
+      "advection_mode": "Implicit",
+      "current_advection_coefficient": 1.0,
+      "explicit_coefficients": [
+        0.0,
+        0.0
+      ],
+      "name": "BDF2_IMPLICIT_ADVECTION"
+    },
+    "orders": [
+      20,
+      24
+    ],
+    "residuals": {
+      "momentum": 4.013399014530778e-07,
+      "continuity": 5.077983082069147e-10,
+      "k": 7.073300466588408e-08,
+      "epsilon": 4.958200815018285e-08
+    },
+    "limits": {
+      "momentum": 1e-09,
+      "continuity": 1e-09,
+      "k": 1e-08,
+      "epsilon": 1e-08
+    },
+    "passes": {
+      "momentum": false,
+      "continuity": true,
+      "k": false,
+      "epsilon": false
+    },
+    "ratio_to_limit": {
+      "momentum": 401.33990145307774,
+      "continuity": 0.5077983082069146,
+      "k": 7.073300466588408,
+      "epsilon": 4.958200815018285
+    },
+    "quadrature_difference": {
+      "momentum": 1.1466135249393465e-12,
+      "continuity": 3.630008523882152e-16,
+      "k": 9.684562872849514e-13,
+      "epsilon": 5.577250959550669e-13
+    },
+    "history_caches": "MET",
+    "boundary_history": "MET",
+    "accounting": "MET",
+    "strong_divergence_rms": 2.884143093746878e-05,
+    "net_boundary_outflow": 2.75853118125724e-10,
+    "steady_residuals": {
+      "momentum": 1.231791159250488e-05,
+      "continuity": 5.077983082069147e-10,
+      "k": 8.847116644996278e-05,
+      "epsilon": 5.8238470752315087e-05
+    }
+  },
+  "sparse_independent": {
+    "momentum": 2.618815980194988e-10,
+    "continuity": 1.8723316281759078e-14,
+    "k": 1.4510380995063452e-10,
+    "epsilon": 1.119253653330503e-10
+  },
+  "max_relative_gap_in_steady_rms": 0.0010568124419374492,
+  "pressure_history": {
+    "current": {
+      "step": 499,
+      "sha256": "6e6e0dc04cf3fee38975c3422c409a7473ddbd26426ff023ba2f399a2079d6e7"
+    },
+    "previous": {
+      "step": 498,
+      "sha256": "90ea7b84dad13aeed9d620ca21afdfc89b2d6a3783ecc6c94054eb41e9f24140"
+    },
+    "advection": {
+      "step": 499,
+      "sha256": "60876d573cef4b4cbb7255aa740eb720073494c10f8ac6c3d18b275244632003"
+    },
+    "previous_advection": {
+      "step": 498,
+      "sha256": "5cac38bc594af7705129224e0b18b90c3199ae3f57d25ad5783811bb4c22112f"
+    }
+  },
+  "receipt": {
+    "request": {
+      "command": [
+        "taskset",
+        "--cpu-list",
+        "32",
+        "/usr/bin/python3",
+        "-B",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-pressure-t10-audit-20261124.tQ5Bu5/physical_transient_oracle.py",
+        "--native",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-newton-t10-resumed-20261123.FwHrOG/pressure-no-pause/segments/002/run/state.result.json",
+        "--table",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-task2r-20261118/science/r1-qualified/tables-exact-inner-v1.json",
+        "--out",
+        "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-pressure-t10-audit-20261124.tQ5Bu5/independent-t10.json",
+        "--seconds",
+        "1200",
+        "--address-space-gib",
+        "20"
+      ],
+      "cwd": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-pressure-t10-audit-20261124.tQ5Bu5",
+      "worker_limit": 80,
+      "admitted_slots": 3,
+      "wall_limit_seconds": 1250,
+      "rss_limit_gib": 22,
+      "start_active_workers": 3,
+      "start_stopped_workers": 80,
+      "threads": {
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "BLIS_NUM_THREADS": "1",
+        "NUMEXPR_NUM_THREADS": "1",
+        "VECLIB_MAXIMUM_THREADS": "1"
+      },
+      "started_epoch_seconds": 1795524229.554576,
+      "worker_pause_enabled": false,
+      "pause_threshold": null,
+      "resume_threshold": null
+    },
+    "exit_code": 0,
+    "reason": null,
+    "wall_seconds": 557.005965651013,
+    "peak_active_workers": 7,
+    "peak_rss_bytes": 4548546560,
+    "worker_paused_seconds": 0.0,
+    "worker_pauses": 0,
+    "rank_affinity": null
+  },
+  "source_revision": "2f28cce00cb1284e9a5736b8a92d57f599a301ae",
+  "independent_full_report": {
+    "path": "/media/jay/cb7dc460-f22f-4533-8329-245d10620f47/nektar-v2026-workspace/runs/wj-h27-pressure-t10-audit-20261124.tQ5Bu5/independent-t10.json",
+    "bytes": 48659701,
+    "sha256": "ec50b7a912fd56b7b6e016b6eadaa394ef0b6a3c8aa3d7fb01bbb4abbd21deab"
+  }
+}
