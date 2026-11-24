@@ -52,7 +52,7 @@ class Audit:
     rule = po.PhysicalOracle.rule
     face = po.PhysicalOracle.face
 
-    def __init__(self, data, ref, order, deadline):
+    def __init__(self, data, ref, order, deadline, radial_order=None):
         self.data, self.ref, self.order, self.deadline = data, ref, order, deadline
         self.s = coefficients(data["coefficients"])
         po.require(state_hash(self.s) == data["state_sha256"], "accepted coefficient hash differs")
@@ -66,6 +66,7 @@ class Audit:
         self.exact = Manufactured(self.hill,ref) if data["manufactured"] else None
         self.top = self.hill.top-self.hill.d
         self.gauss = leggauss(order)
+        self.radial_gauss = self.gauss if radial_order is None else leggauss(radial_order)
         self.columns = defaultdict(list)
         for e in self.mesh:
             self.columns[tuple(e["bounds"][:2])].append(e)
@@ -520,15 +521,18 @@ def main():
     for key in ("native","table","out"):
         parser.add_argument("--"+key,type=Path,required=True)
     parser.add_argument("--order",type=int,default=20)
+    parser.add_argument("--radial-order",type=int,
+                        help="use a different Gauss order for radial volume panels")
     parser.add_argument("--seconds",type=float,default=180.)
     args=parser.parse_args()
     ref=po.load_reference(args.table)
     data,_=po.load_native(args.native)
     began=time.monotonic()
-    evidence=Audit(data,ref,args.order,began+args.seconds).integrate()
+    evidence=Audit(data,ref,args.order,began+args.seconds,args.radial_order).integrate()
     output=dict(native=identity(args.native),table=identity(args.table),
                 audit_source=identity(__file__),source_identity=data["source_identity"],
-                order=args.order,time=data["time"],step=data["step"],
+                order=args.order,radial_order=args.radial_order or args.order,
+                time=data["time"],step=data["step"],
                 elapsed=time.monotonic()-began,**evidence)
     with args.out.open("x") as stream:
         json.dump(output,stream,indent=2,allow_nan=False)

@@ -522,6 +522,7 @@ class PhysicalOracle:
 
     def rule(self, e, bounds=None, extra_cutoff=None, extra_x_splits=()):
         a, w = self.gauss
+        radial, radial_weights = getattr(self, 'radial_gauss', self.gauss)
         xl, xr, rl, rr = bounds if bounds is not None else e['bounds']
         xs, rs, weights = [], [], []
         panels = sorted(set([xl,xr,*self.cutoff_x_splits(e,bounds),*extra_x_splits]))
@@ -534,8 +535,8 @@ class PhysicalOracle:
             for x, wx, c, c2 in zip(xnodes, w, cutoff, extra):
                 cuts = self.cuts(rl, rr, (c, c2))
                 for lo, hi in zip(cuts[:-1], cuts[1:]):
-                    xs.extend(np.full(self.order, x)); rs.extend((lo+hi)/2+(hi-lo)*a/2)
-                    weights.extend(wx*w*(right-left)*(hi-lo)/4)
+                    xs.extend(np.full(len(radial), x)); rs.extend((lo+hi)/2+(hi-lo)*radial/2)
+                    weights.extend(wx*radial_weights*(right-left)*(hi-lo)/4)
         return np.asarray(xs), np.asarray(rs), np.asarray(weights)
 
     def face(self, e, side, endpoints=False):
