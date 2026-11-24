@@ -543,7 +543,7 @@ Vector Coupling::InitialVelocity(double a, double r) const
         const double slope=normal[0]*radialX+normal[2]*radialZ;
         const double slopeA=curvature*matching.baseArea*(tangent[0]*radialX+tangent[2]*radialZ)
             +normal[0]/(map.tunnelTop-m_geometry.d0-m_geometry.H);
-        const auto [blend,blendR]=SmoothTransition(r,.35,4.);
+        const auto [blend,blendR]=SmoothTransition(r,.25,1.55);
         const double distance=r-m_geometry.H;
         const double matched=m_geometry.H+distance*slope;
         const double vertical=chart.point[2]-m_geometry.d0;
