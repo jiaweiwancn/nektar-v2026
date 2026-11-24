@@ -408,6 +408,26 @@ void Coupling::CheckTraceEvaluation()const
         Require(std::abs(traceValue-velocity[0])<=2e-13&&std::abs(derivative-velocity[1])*(e.xr-e.xl)<=2e-13,
             "direct native H velocity trace/gradient disagrees with owned basis evaluation");
     }}
+    if (m_geometry.normalMap && m_options.checkCurrentActions)
+    {
+        synthetic.epsilon=Vec::Zero(m_e.Size());
+        synthetic=DirichletState(synthetic,0.);
+        Vec dk=Vec::Zero(m_k.Size());
+        for (int id : m_k.FreeIds())
+            dk[id]=.01*m_reference->Parameters().KIn*std::sin(.3*(id+1));
+        auto trace=[&](double displacement)
+        {
+            CoupledState state=synthetic;
+            state.k+=displacement*dk;
+            return m_e.Lift(DirichletState(state,0.).epsilon);
+        };
+        const double step=.001;
+        const Vec finiteDifference=(trace(-2*step)-8*trace(-step)+
+            8*trace(step)-trace(2*step))/(12*step);
+        const auto derivative=DependentTraceDirection(synthetic,dk);
+        m_dependentTraceDerivativeError=(finiteDifference-derivative).norm()/derivative.norm();
+        Require(m_dependentTraceDerivativeError<=1e-8,"dependent epsilon lift derivative mismatch");
+    }
 }
 double Coupling::NativeRadius(double physicalZ)const
 {
@@ -535,16 +555,22 @@ Vector Coupling::InitialVelocity(double a, double r) const
 
 Vec Coupling::ProjectContinuity(const Vec &flow) const
 {
-    // Constrained velocity mass projection with homogeneous increments.
-    // Its multiplier is discarded. Advancement uses the complete G_eff.
+    // Constrain continuity while minimizing an H1 velocity correction.
+    // A pure mass projection can give steep shear corrections in the very
+    // thin ground cells. The regularizer acts only in this initial lift.
+    // Discard the projection multiplier. Advancement uses the full G_eff.
     const int nv=2*m_flow.VelocitySize();
-    const Sparse zero(nv,nv);
-    const auto system=m_flow.System(1.,zero,0.);
+    const double length=.4*m_geometry.H;
+    const Sparse regularizer=m_flow.Core().Strain(
+        [length](double,double){return length*length;},false);
+    const auto system=m_flow.System(1.,regularizer,0.);
     Eigen::SparseLU<Sparse> factor;
     factor.compute(system);
     Require(factor.info()==Eigen::Success,"initial velocity mass projection factorization failed");
     const Vec lift=m_flow.Lift(flow);
-    const Vec rhs=m_flow.LiftedRhs(1.,zero,0.,m_flow.Core().MassAction(flow),lift);
+    Vec target=m_flow.Core().MassAction(flow);
+    target.head(nv)+=regularizer*flow.head(nv);
+    const Vec rhs=m_flow.LiftedRhs(1.,regularizer,0.,target,lift);
     const Vec projected=factor.solve(rhs);
     Require(factor.info()==Eigen::Success&&projected.allFinite(),
             "initial velocity mass projection failed");
@@ -579,11 +605,17 @@ CoupledHistory Coupling::Initialise()const
     if(m_geometry.normalMap)
     {
         h.current=DirichletState(h.current,0.);
+        auto norm=[&](const Vec &flow)
+        {
+            Vec residual=Vec::Zero(flow.size());
+            residual.tail(m_flow.PressureSize())=
+                m_flow.Core().Divergence()*flow.head(2*m_flow.VelocitySize());
+            return m_flow.RawResidualNorm(m_flow.Restrict(residual)).continuity;
+        };
+        m_initialContinuityBefore=norm(h.current.flow);
         h.current.flow=ProjectContinuity(h.current.flow);
-        Vec continuity=Vec::Zero(h.current.flow.size());
-        continuity.tail(m_flow.PressureSize())=
-            m_flow.Core().Divergence()*h.current.flow.head(2*m_flow.VelocitySize());
-        Require(m_flow.RawResidualNorm(m_flow.Restrict(continuity)).continuity<=1e-9,
+        m_initialContinuityAfter=norm(h.current.flow);
+        Require(m_initialContinuityAfter<=1e-9,
                 "normal-chart initialization does not satisfy represented continuity");
     }
     return FreshHistory(h.current);
@@ -1392,7 +1424,7 @@ void Coupling::WriteHistory(const std::filesystem::path&path,const CoupledHistor
     CheckHistory(h);Require(!std::filesystem::exists(path),"coupled checkpoint is immutable");std::ostringstream stream(std::ios::binary);stream<<"WJ_H27_NATIVE_COUPLED_V2\n"<<m_signature<<'\n';
     stream.write(reinterpret_cast<const char*>(&h.step),sizeof(h.step));stream.write(reinterpret_cast<const char*>(&h.time),sizeof(double));stream.write(reinterpret_cast<const char*>(&h.dt),sizeof(double));
     for(const auto*s:{&h.current,&h.previous,&h.advection,&h.previousAdvection})for(const auto*v:{&s->flow,&s->k,&s->epsilon}){std::uint64_t n=v->size();stream.write(reinterpret_cast<const char*>(&n),sizeof(n));stream.write(reinterpret_cast<const char*>(v->data()),n*sizeof(double));}
-    auto payload=stream.str();payload+=D::Hash(payload);auto tmp=path.string()+".tmp";int fd=::open(tmp.c_str(),O_WRONLY|O_CREAT|O_EXCL,0600);D::Check(fd>=0,"coupled checkpoint create");D::WriteAll(fd,payload.data(),payload.size());D::Check(::fsync(fd)==0,"coupled checkpoint sync");::close(fd);std::filesystem::rename(tmp,path);D::SyncDirectory(path);
+    auto payload=stream.str();payload+=D::Hash(payload);auto tmp=path.string()+".tmp";int fd=::open(tmp.c_str(),O_WRONLY|O_CREAT|O_EXCL,0600);D::Check(fd>=0,"coupled checkpoint create");D::WriteAll(fd,payload.data(),payload.size());D::Check(::fsync(fd)==0,"coupled checkpoint sync");::close(fd);std::filesystem::rename(tmp,path);D::SyncDirectory(std::filesystem::absolute(path));
 }
 CoupledHistory Coupling::ReadHistory(const std::filesystem::path &path,
                                     CoupledRecoveryTiming *recoveryTiming) const
@@ -1556,6 +1588,11 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
     out<<",\"steady_velocity_preconditioner\":"<<RANSWallSolveJson::Quote(m_options.steadyVelocityPC);
     out<<",\"stress_split\":"<<RANSWallSolveJson::Quote(m_options.stressSplit)<<",\"all_row_action_crosschecks\":"<<(m_options.checkCurrentActions?"true":"false");
     out<<",\"current_action_checks\":{\"all_row_calls\":"<<m_actionChecks<<",\"maximum_scaled_differences_flow_k_epsilon\":["<<m_actionDifference[0]<<','<<m_actionDifference[1]<<','<<m_actionDifference[2]<<"],\"augmented_calls\":"<<m_augmentedChecks<<",\"maximum_augmented_scaled_difference\":"<<m_augmentedDifference<<",\"maximum_weak_divergence_load_norm\":"<<m_checkedWeakDivergence<<",\"maximum_gauge_multiplier\":"<<m_checkedGaugeMultiplier<<'}';
+    if (m_geometry.normalMap && m_options.checkCurrentActions)
+        out<<",\"dependent_trace_direction_relative_error\":"<<m_dependentTraceDerivativeError;
+    if (m_geometry.normalMap && h.step==0)
+        out<<",\"initial_continuity_before_projection\":"<<m_initialContinuityBefore
+           <<",\"initial_continuity_after_projection\":"<<m_initialContinuityAfter;
     out<<",\"basis\":\"Modified_A\",\"anderson_depth\":"<<m_options.andersonDepth<<",\"acceleration\":{\"proposals\":"<<info.accelerationProposals<<",\"accepted\":"<<info.accelerationAccepted<<",\"inadmissible_trials\":"<<info.accelerationInadmissible<<'}';
     out<<",\"initial_field_transfer\":{\"packet_sha256\":"<<RANSWallSolveJson::Quote(m_initialPacketSha)<<",\"source_state_sha256\":"<<RANSWallSolveJson::Quote(m_initialSourceStateSha)<<",\"projected\":"<<(m_initialProjected?"true":"false")<<",\"source_was_candidate\":"<<(m_initialCandidate?"true":"false")<<'}';
     if(m_options.recordNonlinearTrace){out<<",\"nonlinear_trace\":[";for(int i=0;i<int(info.nonlinearTrace.size());++i){const auto&t=info.nonlinearTrace[i];if(i)out<<',';out<<"{\"residuals\":["<<t.residual.momentum<<','<<t.residual.continuity<<','<<t.residual.gauge<<','<<t.residual.k<<','<<t.residual.epsilon<<','<<t.residual.trace<<"],\"accelerated\":"<<(t.accelerated?"true":"false")<<",\"seconds\":"<<t.seconds<<'}';}out<<']';}

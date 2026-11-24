@@ -79,6 +79,10 @@ add_executable(WJH27TraceGeometryProbe trace_geometry_probe.cpp)
 target_link_libraries(WJH27TraceGeometryProbe PRIVATE WJNativeMixedFlow)
 target_compile_options(WJH27TraceGeometryProbe PRIVATE
     -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra)
+add_executable(WJH27HillGeometryProbe c1_geometry_probe.cpp)
+target_link_libraries(WJH27HillGeometryProbe PRIVATE WJNativeMixedFlow)
+target_compile_options(WJH27HillGeometryProbe PRIVATE
+    -O3 -ffp-contract=off -fno-fast-math -Wall -Wextra)
 add_executable(WJH27CutoffPanelProbe cutoff_panel_probe.cpp)
 target_link_libraries(WJH27CutoffPanelProbe PRIVATE WJNativeMixedFlow)
 target_compile_options(WJH27CutoffPanelProbe PRIVATE

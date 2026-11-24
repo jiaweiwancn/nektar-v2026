@@ -30,6 +30,9 @@ def main():
     parser.add_argument("--science", type=int, default=0)
     parser.add_argument("--step-seconds", type=float, default=90.)
     parser.add_argument("--steady-seconds", type=float, default=0.)
+    parser.add_argument("--tolerance", type=float, default=1e-10)
+    parser.add_argument("--flat-map-control", action="store_true")
+    parser.add_argument("--trace-derivative-check", action="store_true")
     args = parser.parse_args()
     out = args.out.resolve()
     out.mkdir(parents=True)
@@ -55,6 +58,7 @@ def main():
              template=geometry, dt=args.dt, steps=0 if args.steady_seconds else args.steps, science=args.science,
              recovery=args.recovery, quadrature_x=qx, quadrature_r=qr,
              solve="SteadyReference" if args.steady_seconds else "Advance", steady_seconds=args.steady_seconds,
+             nonlinear=args.tolerance, check_current_actions=args.trace_derivative_check,
              backend="FastFull3DV1", outlet_policy="FullTractionV1" if manufactured else "ZeroTransverseV1",
              restart=args.restart.resolve() if args.restart else "")
     info = dict(WJReferencePolicy="ExactInnerFiniteNuV1", WJImplicitSolver="CoupledJFNKV1",
@@ -62,7 +66,7 @@ def main():
     parameters = dict(WJStepNewtonSeconds=args.step_seconds, WJStepPCMaximumUses=3,
                       WJStepPCRelativeDrift=.02, WJStepFDStep=4e-6,
                       WJStepForcingMultiplier=4, WJStepForcingCeiling=.3)
-    if args.case != "flat":
+    if args.case != "flat" and not args.flat_map_control:
         info["WJGeometry"] = "NormalCosineHillV1"
         parameters["WJHillHeight"] = args.height if args.height is not None else (.1 if manufactured else 1.)
         parameters["WJHillInitialSlowdown"] = args.initial_slowdown

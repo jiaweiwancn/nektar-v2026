@@ -253,6 +253,8 @@ private:
     mutable std::uint64_t m_actionChecks=0,m_augmentedChecks=0;
     mutable std::array<double,3>m_actionDifference{};
     mutable double m_augmentedDifference=0,m_checkedWeakDivergence=0,m_checkedGaugeMultiplier=0;
+    mutable double m_dependentTraceDerivativeError=0.;
+    mutable double m_initialContinuityBefore=0.,m_initialContinuityAfter=0.;
 };
 }
 #endif

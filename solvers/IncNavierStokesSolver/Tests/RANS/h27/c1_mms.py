@@ -18,7 +18,7 @@ class Manufactured:
         if not e["epsilon"]:
             return a, rho
         x, z = self.hill.metrics(e, a, rho)["position"].T
-        b = a.copy()
+        b = np.array(a,dtype=float,copy=True)
         for _ in range(8):
             f, p, pp, _ = self.graph(b)
             b -= (b - x + (f-z)*p) / (1+p*p+(f-z)*pp)
