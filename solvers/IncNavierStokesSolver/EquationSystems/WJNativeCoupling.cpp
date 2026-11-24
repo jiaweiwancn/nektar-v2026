@@ -126,8 +126,6 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
     Require(!m_geometry.normalMap || (m_reference->Policy()==ReferencePolicy::ExactInnerFiniteNuV1 &&
             m_reference->Transport()==InnerKTransport::ScalarV2),
         "the normal layer requires the exact finite-viscosity ScalarCdV2 reference");
-    Require(!m_geometry.normalMap || !m_options.manufactured,
-            "the curved application requires its own manufactured source");
     for(const auto&field:m_fields)for(int e=0;e<field->GetExpSize();++e)for(int d=0;d<2;++d)
         Require(field->GetExp(e)->GetBasis(d)->GetBasisType()==LibUtilities::eModified_A,"coupled fields require the declared native Modified_A basis");
     m_flow.SetTransportedKSpace(m_fields[2]);BuildTopology();
@@ -137,11 +135,13 @@ Coupling::Coupling(std::vector<MultiRegions::ContFieldSharedPtr>fields,Geometry 
             m_cutoffFaceK.emplace(radius,m_reference->KAtCutoff(radius));
     Require(std::isfinite(m_options.mmsBodyAmplitude),"nonfinite MMS body amplitude");
     Require(m_options.manufactured||m_options.mmsBodyAmplitude==0,"the prescribed MMS body is verification-only");
-    Require(m_options.mmsVariant=="Historical"||m_options.mmsVariant=="PolynomialScalarsV1","unknown continuous MMS variant");
+    Require(m_options.mmsVariant=="Historical"||m_options.mmsVariant=="PolynomialScalarsV1"||
+            m_options.mmsVariant=="NormalTubeV1","unknown continuous MMS variant");
     Require(m_options.manufactured||m_options.mmsVariant=="Historical","a continuous MMS variant is verification-only");
     Require(m_reference->Transport()==InnerKTransport::ScalarV2||!m_options.manufactured,
             "inner-k diagnostic transport is restricted to the unforced physical steady fixture");
     if(m_options.manufactured)m_mms=std::make_unique<CoupledMMS>(*m_reference,m_geometry,m_top,m_options.mmsBodyAmplitude,
+        m_options.mmsVariant=="NormalTubeV1"?MMSVariant::NormalTubeV1:
         m_options.mmsVariant=="Historical"?MMSVariant::Historical:MMSVariant::PolynomialScalarsV1);
     else Require(std::abs(m_geometry.d0-m_reference->Parameters().d0)<1e-14&&
         std::abs(m_top-m_reference->Parameters().topRadius)<1e-12&&std::abs(m_left+10)<1e-12&&
@@ -427,7 +427,28 @@ Vec Coupling::FlowLift(double time)const
         if(m_mms){auto a=m_mms->Fields(NativeX(x),NativeRadius(z)+m_geometry.d0,time);return component==0?a.u.value:a.w.value;}
         return component==0?m_reference->InletU(NativeRadius(z)):0.;};
         full.segment(component*m_flow.VelocitySize(),m_flow.VelocitySize())=m_flow.Project(f,component);}
-    Vec lift=m_flow.Lift(full);if(!m_mms)m_physicalFlowLift=lift;return lift;
+    Vec lift=m_flow.Lift(full);
+    if (m_mms && m_geometry.normalMap)
+    {
+        // The exact closed fixture has zero net mass flux. Preserve that
+        // compatibility when projecting its nonpolynomial boundary values.
+        // Only right-side interior trace modes take the correction.
+        const int n=m_flow.VelocitySize();
+        const Vec flux=m_flow.Core().Divergence().transpose()*m_flow.PressureOne();
+        Vec direction=Vec::Zero(2*n);
+        for (const auto &[index,side] : m_boundaryFaces)
+            if (side==1)
+                for (int mode : {9,13})
+                {
+                    const int id=m_flow.Elements()[index].u[mode];
+                    direction[id]=flux[id];
+                    direction[n+id]=flux[n+id];
+                }
+        Require(direction.squaredNorm()>0,"closed lift has no right-side flux mode");
+        lift.head(2*n)-=direction*(flux.dot(lift.head(2*n))/direction.squaredNorm());
+    }
+    if(!m_mms)m_physicalFlowLift=lift;
+    return lift;
 }
 CoupledState Coupling::DirichletState(const CoupledState&s,double time)const
 {
@@ -924,11 +945,11 @@ Coupling::Loads Coupling::Forcing(double time,CoupledTiming&timing,bool freezeMa
             [&](const Element&,double x){return m_reference->Cutoff(m_mms->InterfaceK(NativeX(x),time).value);});
         load.epsilon+=m_e.NaturalFlux([&](double x,double z,const Vector&normal){
             // H is Dirichlet only: its reaction is diagnosed from the solve.
-            return normal[2]<-.5?0.:m_mms->EpsilonOutwardFlux(x,z,time,normal);
+            return NativeRadius(z)==m_geometry.H?0.:m_mms->EpsilonOutwardFlux(x,z,time,normal);
         },m_rules);
     }else{
         // The application has no manufactured/balance forcing. Body force
-        // is exactly zero for this pinned neutral, flat physical case.
+        // is exactly zero for this pinned neutral physical case.
         const double topTraction=m_reference->TopTangentialTraction();
         if(m_options.checkOutletActions)m_outletLoad=Vec::Zero(2*n);
         for(const auto&[index,side]:m_boundaryFaces)if(side==1||side==3){auto r=m_rules.Face(m_flow.Elements()[index],side,20);Vec tx(r.w.size()),tz(tx.size());
@@ -1377,10 +1398,22 @@ CoupledHistory Coupling::ReadHistory(const std::filesystem::path &path,
 std::array<double,5>Coupling::MMSErrors(const CoupledState&s,double time)const
 {
     Require(bool(m_mms),"MMS errors requested for application");std::array<double,5>error{};double outerVolume=0;const int n=m_flow.VelocitySize();
+    double pressureMean=0.;
+    if (m_geometry.normalMap)
+    {
+        double volume=0.;
+        for (const auto &rule : m_rules.Static())
+            for (int q=0;q<rule->w.size();++q)
+            {
+                volume+=rule->w[q];
+                pressureMean+=rule->w[q]*m_mms->Fields(rule->x[q],rule->z[q],time).Pi.value;
+            }
+        pressureMean/=volume;
+    }
     for(const auto&rp:m_rules.Static()){
         const auto&r=*rp;Vec u=r.B*Local(s.flow,r.u),v=r.B*Local(s.flow,r.u,n),p=r.P*Local(s.flow,r.p,2*n),k=m_k.Evaluate(r,s.k),e;
         bool outer=m_e.Owns(r.geometry);if(outer)e=m_e.Evaluate(r,s.epsilon);
-        for(int q=0;q<r.w.size();++q){auto exact=m_mms->Fields(r.x[q],r.z[q],time);error[0]+=r.w[q]*(std::pow(u[q]-exact.u.value,2)+std::pow(v[q]-exact.w.value,2));error[1]+=r.w[q]*std::pow(p[q]-exact.Pi.value,2);error[2]+=r.w[q]*std::pow((k[q]-exact.k.value)/m_reference->Parameters().KIn,2);
+        for(int q=0;q<r.w.size();++q){auto exact=m_mms->Fields(r.x[q],r.z[q],time);error[0]+=r.w[q]*(std::pow(u[q]-exact.u.value,2)+std::pow(v[q]-exact.w.value,2));error[1]+=r.w[q]*std::pow(p[q]-(exact.Pi.value-pressureMean),2);error[2]+=r.w[q]*std::pow((k[q]-exact.k.value)/m_reference->Parameters().KIn,2);
             if(outer){const double ex=m_mms->OuterEpsilon(r.x[q],r.z[q],time).value;error[3]+=r.w[q]*std::pow((e[q]-ex)/ex,2);outerVolume+=r.w[q];}
             Vec ul=Local(s.flow,r.u),vl=Local(s.flow,r.u,n);Tensor G{};G[0][0]=r.Dx.row(q).dot(ul);G[0][2]=r.Dz.row(q).dot(ul);G[2][0]=r.Dx.row(q).dot(vl);G[2][2]=r.Dz.row(q).dot(vl);
             for(int i:{0,2})for(int j:{0,2})error[4]+=r.w[q]*std::pow(G[i][j]-exact.gradient[i][j],2);

@@ -141,6 +141,7 @@ public:
     const Scalar&EpsilonKernel()const{return m_e;}
     const RuleFactory&Factory()const{return m_rules;}
     const Reference&ReferenceModel()const{return *m_reference;}
+    const CoupledMMS&ManufacturedSolution()const{return *m_mms;}
     const CoupledOptions&Options()const{return m_options;}
     const std::string&Signature()const{return m_signature;}
     double TopRadius()const{return m_top;}

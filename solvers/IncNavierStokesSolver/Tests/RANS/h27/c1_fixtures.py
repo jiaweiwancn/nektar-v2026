@@ -28,6 +28,7 @@ def main():
     parser.add_argument("--recovery", type=int, default=1)
     parser.add_argument("--science", type=int, default=0)
     parser.add_argument("--step-seconds", type=float, default=90.)
+    parser.add_argument("--steady-seconds", type=float, default=0.)
     args = parser.parse_args()
     out = args.out.resolve()
     out.mkdir(parents=True)
@@ -50,8 +51,9 @@ def main():
     session = out / "run.xml"
     qx, qr = args.quadrature or ((12, 16) if manufactured else (6, 8))
     generate(session, table, out / "state", mode="Manufactured" if manufactured else "Physical",
-             template=geometry, dt=args.dt, steps=args.steps, science=args.science,
+             template=geometry, dt=args.dt, steps=0 if args.steady_seconds else args.steps, science=args.science,
              recovery=args.recovery, quadrature_x=qx, quadrature_r=qr,
+             solve="SteadyReference" if args.steady_seconds else "Advance", steady_seconds=args.steady_seconds,
              backend="FastFull3DV1", outlet_policy="FullTractionV1" if manufactured else "ZeroTransverseV1",
              restart=args.restart.resolve() if args.restart else "")
     info = dict(WJReferencePolicy="ExactInnerFiniteNuV1", WJImplicitSolver="CoupledJFNKV1",
@@ -62,6 +64,8 @@ def main():
     if args.case != "flat":
         info["WJGeometry"] = "NormalCosineHillV1"
         parameters["WJHillHeight"] = args.height if args.height is not None else (.1 if manufactured else 1.)
+    if manufactured:
+        info["WJMMSVariant"] = "NormalTubeV1"
     edit(session, info, parameters)
     files = [geometry, session, out / "run.xml.opt", table]
     (out / "inputs.json").write_text(json.dumps([identity(file) for file in files], indent=2) + "\n")

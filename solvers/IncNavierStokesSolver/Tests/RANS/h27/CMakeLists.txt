@@ -19,6 +19,7 @@ add_library(WJNativeMixedFlow STATIC
     ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeReference.cpp
     ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeAdmissibility.cpp
     ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupledMMS.cpp
+    ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeHillMMS.cpp
     ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeCoupling.cpp
     ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeFlowTangent.cpp
     ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeTimeNewton.cpp

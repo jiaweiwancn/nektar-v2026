@@ -350,7 +350,8 @@ void WJNativeCoupled::v_GenerateSummary(SolverUtils::SummaryList&summary)
 void WJNativeCoupled::v_EvaluateExactSolution(unsigned int field,Array<OneD,NekDouble>&output,NekDouble time)
 {
     const int n=m_fields[field]->GetTotPoints();output=Array<OneD,NekDouble>(n,0.);if(!m_coupling->Options().manufactured)return;
-    WJNative::CoupledMMS exact(m_coupling->ReferenceModel(),m_coupling->FlowKernel().Core().Mapping(),m_coupling->TopRadius(),m_coupling->Options().mmsBodyAmplitude,m_coupling->Options().mmsVariant=="Historical"?WJNative::MMSVariant::Historical:WJNative::MMSVariant::PolynomialScalarsV1);Array<OneD,NekDouble>x(n),z(n),d(n);m_fields[field]->GetCoords(x,z,d);
+    const auto &exact=m_coupling->ManufacturedSolution();
+    Array<OneD,NekDouble>x(n),z(n),d(n);m_fields[field]->GetCoords(x,z,d);
     for(int q=0;q<n;++q){if(field==3)output[q]=exact.OuterEpsilon(x[q],z[q],time).value;else{auto a=exact.Fields(x[q],z[q],time);output[q]=field==0?a.u.value:field==1?a.w.value:field==2?a.k.value:a.Pi.value;}}
 }
 }

@@ -7,7 +7,7 @@
 
 namespace Nektar::WJNative
 {
-enum class MMSVariant { Historical, PolynomialScalarsV1 };
+enum class MMSVariant { Historical, PolynomialScalarsV1, NormalTubeV1 };
 
 /** Continuous derivatives in physical x and flat wall distance r=z-d0.
  * dr is also the physical z derivative. These are analytic field derivatives,
@@ -87,6 +87,12 @@ public:
 
 private:
     double Radius(double x, double z, double time) const;
+    MMSFields NormalFields(double a, double rho, double time) const;
+    MMSJet NormalEpsilon(double a, double rho, double time) const;
+    MMSForcing NormalForcing(double a, double rho, double time) const;
+    Vector NormalAWF(double a, double time) const;
+    double NormalFlux(double a, double rho, double time, const Vector &normal,
+                      bool epsilon) const;
     const Reference &m_reference;
     Geometry m_geometry;
     double m_top, m_bodyAmplitude;

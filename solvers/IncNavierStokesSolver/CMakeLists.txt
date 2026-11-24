@@ -77,12 +77,12 @@ IF( NEKTAR_SOLVER_INCNAVIERSTOKES )
         ./BoundaryConditions/MovingFrameWall.cpp
         )
 
-    OPTION(NEKTAR_WJ_NATIVE_COUPLED "Build opt-in H27 flat serial coupled WJ/AWF solver" OFF)
+    OPTION(NEKTAR_WJ_NATIVE_COUPLED "Build opt-in serial coupled finite-viscosity WJ/AWF solver" OFF)
     IF(NEKTAR_WJ_NATIVE_COUPLED)
         FIND_PACKAGE(Eigen3 REQUIRED NO_MODULE)
         SET(wj_native_sources WJNativeFlow WJNativeMixedFlow WJNativeWallV2
             WJNativeRules WJNativeScalar WJNativeReference WJNativeAdmissibility
-            WJNativeCoupledMMS WJNativeCoupling WJNativeFlowTangent WJNativeTimeNewton WJNativeCoupled WJNativeConstitutive
+            WJNativeCoupledMMS WJNativeHillMMS WJNativeCoupling WJNativeFlowTangent WJNativeTimeNewton WJNativeCoupled WJNativeConstitutive
             WJNativePerturbation WJNativeSteadyKrylov WJNativeInitialFields)
         FOREACH(name IN LISTS wj_native_sources)
             TARGET_SOURCES(IncNavierStokesSolver-obj PRIVATE EquationSystems/${name}.cpp)

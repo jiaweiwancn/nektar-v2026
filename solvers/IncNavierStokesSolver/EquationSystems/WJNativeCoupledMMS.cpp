@@ -115,8 +115,14 @@ CoupledMMS::CoupledMMS(const Reference &reference, Geometry geometry,
       m_bodyAmplitude(bodyAmplitude), m_variant(variant)
 {
     const auto &p=reference.Parameters();
-    Require(variant==MMSVariant::Historical || variant==MMSVariant::PolynomialScalarsV1,
+    Require(variant==MMSVariant::Historical || variant==MMSVariant::PolynomialScalarsV1 ||
+            variant==MMSVariant::NormalTubeV1,
             "unsupported continuous coupled MMS variant");
+    Require(bool(geometry.normalMap)==(variant==MMSVariant::NormalTubeV1),
+            "normal geometry requires the independent normal-tube MMS");
+    if (geometry.normalMap)
+        Require(geometry.normalMap->amplitude<=.3 && bodyAmplitude==0.,
+                "normal MMS fixtures require a smooth small hill patch and zero extra body force");
     Require(std::isfinite(bodyAmplitude), "nonfinite prescribed MMS body amplitude");
     Require(std::isfinite(geometry.d0) && geometry.curve==0 &&
                 std::isfinite(topRadius) && std::abs(topRadius-.5)<1e-13 &&
@@ -131,6 +137,8 @@ CoupledMMS::CoupledMMS(const Reference &reference, Geometry geometry,
 
 const char *CoupledMMS::VariantName() const
 {
+    if (m_variant==MMSVariant::NormalTubeV1)
+        return "NormalTubeV1";
     return m_variant==MMSVariant::Historical?"Historical":"PolynomialScalarsV1";
 }
 
@@ -163,6 +171,8 @@ MMSJet CoupledMMS::InterfaceK(double x, double time) const
 MMSFields CoupledMMS::Fields(double x, double z, double time) const
 {
     const double r=Radius(x,z,time), R=m_top, H=m_geometry.H;
+    if (m_variant==MMSVariant::NormalTubeV1)
+        return NormalFields(x,r,time);
     MMSFields fields;
     const double S=.02*(1+.1*std::cos(.9*time));
     const double St=-.0018*std::sin(.9*time);
@@ -243,6 +253,8 @@ MMSJet CoupledMMS::OuterEpsilon(double x, double z, double time) const
 {
     const double r=Radius(x,z,time), H=m_geometry.H, R=m_top;
     Require(OuterOwner(r,H), "transported MMS epsilon requested below H");
+    if (m_variant==MMSVariant::NormalTubeV1)
+        return NormalEpsilon(x,r,time);
     const MMSJet K=InterfaceK(x,time);
     const double A=m_reference.Amplitude(K.value);
     const double Ax=m_reference.AmplitudeDerivative(K.value)*K.dx;
@@ -295,6 +307,8 @@ Vector CoupledMMS::BodyAtH(double x, double time) const
 
 Vector CoupledMMS::AWFAtH(double x, double time) const
 {
+    if (m_variant==MMSVariant::NormalTubeV1)
+        return NormalAWF(x,time);
     const auto atH=Fields(x,m_geometry.d0+m_geometry.H,time);
     const Vector physicalBody=BodyAtH(x,time);
     Vector awf{};
@@ -306,6 +320,8 @@ Vector CoupledMMS::AWFAtH(double x, double time) const
 MMSForcing CoupledMMS::Forcing(double x, double z, double time) const
 {
     const double r=Radius(x,z,time);
+    if (m_variant==MMSVariant::NormalTubeV1)
+        return NormalForcing(x,r,time);
     const auto fields=Fields(x,z,time);
     const auto K=InterfaceK(x,time);
     MMSForcing force;
@@ -368,6 +384,8 @@ double CoupledMMS::KOutwardFlux(double x, double z, double time,
 {
     CheckNormal(normal);
     const double r=Radius(x,z,time);
+    if (m_variant==MMSVariant::NormalTubeV1)
+        return NormalFlux(x,r,time,normal,false);
     const auto fields=Fields(x,z,time);
     const auto K=InterfaceK(x,time);
     const bool outer=OuterOwner(r,m_geometry.H);
@@ -385,6 +403,8 @@ double CoupledMMS::EpsilonOutwardFlux(double x, double z, double time,
 {
     CheckNormal(normal);
     const double r=Radius(x,z,time);
+    if (m_variant==MMSVariant::NormalTubeV1)
+        return NormalFlux(x,r,time,normal,true);
     const auto fields=Fields(x,z,time);
     const auto K=InterfaceK(x,time);
     const auto epsilon=OuterEpsilon(x,z,time);
