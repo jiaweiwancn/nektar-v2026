@@ -637,7 +637,13 @@ CoupledHistory Coupling::Initialise()const
         {
             // This initial outer profile leaves the fixed inlet and the
             // dependent H trace intact. It supplies no equation source.
-            const double window=HillWindow(x,m_left,m_right,m_geometry.normalMap->lengthX+.5)[0];
+            // Use a separate entrance length for epsilon. The onset of the
+            // slowdown's strain involves two horizontal derivatives of its
+            // streamfunction, so the velocity window itself rises too slowly
+            // to support that strain near the entrance.
+            const double edge=std::min(x-m_left,m_right-x);
+            const double fraction=std::min(1.,edge/2.);
+            const double window=fraction*(2-fraction);
             const double y=r-m_geometry.H, rise=-std::expm1(-y/.035);
             const double fade=1-SmoothTransition(r,3.5,5.5)[0];
             E*=1+m_options.hillInitialEpsilonBump*window*rise*rise*fade;
