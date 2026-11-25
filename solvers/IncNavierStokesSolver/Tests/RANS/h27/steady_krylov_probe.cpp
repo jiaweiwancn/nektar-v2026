@@ -65,6 +65,8 @@ std::string Result(const SteadyKrylovResult&r)
     for(const auto&a:r.lineSearch)lineSearch.push_back(J::Object({{"newton",J::Number(a.newton)},
         {"trial",J::Number(a.trial)},{"step",J::Number(a.step)},{"true_norm",J::Number(a.trueNorm)},
         {"admissible",J::Boolean(a.admissible)},{"evaluated",J::Boolean(a.evaluated)},
+        {"predicted_norm",a.predictedNorm?J::Number(*a.predictedNorm):"null"},
+        {"actual_to_predicted_decrease",a.decreaseRatio?J::Number(*a.decreaseRatio):"null"},
         {"nonlinear_validation_attempted",J::Boolean(a.nonlinearValidationAttempted)},
         {"nonlinear_validated",J::Boolean(a.nonlinearValidated)},
         {"sufficient_decrease",J::Boolean(a.sufficientDecrease)},{"accepted",J::Boolean(a.accepted)},
@@ -79,6 +81,7 @@ std::string Result(const SteadyKrylovResult&r)
         {"converged",J::Boolean(r.converged)},{"has_evaluated_state",J::Boolean(r.hasEvaluatedState)},
         {"nonlinear_validation_enabled",J::Boolean(r.nonlinearValidationEnabled)},
         {"best_from_accepted",J::Boolean(r.bestFromAcceptedIterate)},{"x",V(r.x)},{"residual",V(r.residual)},
+        {"last_accepted_x",V(r.lastAcceptedX)},
         {"true_norm",J::Number(r.trueNorm)},{"last_accepted_norm",J::Number(r.lastAcceptedNorm)},
         {"statistics",Statistics(r.statistics)},{"finite_differences",FD(r.finiteDifferences)},
         {"linear",J::List(linear)},{"line_search",J::List(lineSearch)},{"newton",J::List(newton)}});
@@ -205,6 +208,7 @@ int main(int argc,char**argv)
             auto cb=ScalarCallbacks();
             auto options=Options();
             options.maximumNewtonIterations=1;
+            options.measureDirection=true;
             int additiveCalls=0;
             double frozenBase=std::numeric_limits<double>::quiet_NaN();
             cb.PrepareCorrection=[&](const Vec&x,const Vec&){frozenBase=x[0];};
@@ -224,6 +228,10 @@ int main(int argc,char**argv)
                   std::abs(result.trueNorm-2./3)<1e-10,"correction action changed the nonlinear residual");
             Check(!result.newton.empty()&&result.newton[0].linearConverged&&additiveCalls>=2,
                   "Arnoldi or true linear check skipped the correction action");
+            const auto &trial=result.lineSearch.at(0);
+            Check(trial.predictedNorm&&std::abs(*trial.predictedNorm-2./3)<1e-10&&
+                  trial.decreaseRatio&&std::abs(*trial.decreaseRatio-1.)<1e-9,
+                  "shifted correction did not predict the original residual");
             const auto probe=solver.ProbeDirection(Vector({.25}),one);
             Check(probe.completed&&frozenBase==.25&&std::abs(probe.actions.back()[0]-3.)<1e-9,
                   "additive derivative action disagrees with the analytic shifted derivative");
@@ -392,6 +400,43 @@ int main(int argc,char**argv)
             SteadyKrylov(cb,Vector({1}),Vector({2}),Options()).Solve(Vector({0}));
         });
         Check(fullBaseCalls==3,"accepted nonlinear base was not fully revalidated without a generic cache");
+        {
+            auto cb=ScalarCallbacks();auto options=Options();
+            cb.Residual=[](const Vec &x){return Vector({x[0]*x[0]*x[0]-1.});};
+            cb.TrueNorm=[](const Vec &f) {
+                if(f[0]>.3&&f[0]<.5)
+                    std::this_thread::sleep_for(std::chrono::milliseconds(120));
+                return std::abs(f[0]);
+            };
+            options.armijo=.4;options.maximumSeconds=.08;
+            const Vec start=Vector({.72}),one=Vector({1.});
+            const auto stopped=SteadyKrylov(cb,one,one,options).Solve(start);
+            Check(stopped.reason.rfind("DEADLINE",0)==0&&!stopped.bestFromAcceptedIterate&&
+                  stopped.lastAcceptedX.size()==1&&stopped.lastAcceptedX[0]==start[0]&&stopped.x[0]!=start[0]&&
+                  stopped.trueNorm<stopped.lastAcceptedNorm,
+                  "deadline replaced the last accepted state with a better uncommitted trial");
+            options.maximumSeconds=3.;
+            cb.TrueNorm=[](const Vec &f){return std::abs(f[0]);};
+            const auto resumed=SteadyKrylov(cb,one,one,options).Solve(stopped.lastAcceptedX);
+            Check(resumed.converged&&std::abs(resumed.x[0]-1.)<1e-10,"accepted-state resume failed");
+            solves.push_back(J::Object({{"name",J::Quote("deadline_uncommitted_then_resume")},
+                {"result",Result(stopped)},{"resumed",Result(resumed)}}));
+        }
+        {
+            Problem p;auto options=Options();
+            options.maximumInverseAge=4;options.reuseLinearIterations=1;
+            const auto solver=SteadyKrylov(p.Callbacks(),p.sx,p.RowScale(),options);
+            const auto result=solver.Solve(p.X(initialY));
+            const auto again=solver.Solve(p.X(initialY));
+            int refreshes=0;
+            for(const auto &use:result.inverses)
+                if(use.rebuild&&use.reason=="current linear check or work cap")++refreshes;
+            Check(refreshes>0&&result.converged&&again.converged&&again.inverses.at(0).rebuild&&
+                  again.inverses.at(0).age==0,
+                  "reused inverse work cap or cold entry was not enforced");
+            solves.push_back(J::Object({{"name",J::Quote("reuse_forced_cold_refresh")},
+                {"refreshes",J::Number(refreshes)},{"result",Result(result)}}));
+        }
         const auto result=J::Object({{"schema",J::Quote("WJH27SteadyKrylovProbeV1")},{"status",J::Quote("RECORDED")},
             {"solver_identity",J::Quote(SteadyKrylov::Identity)},{"unknown_scale",V(problem.sx)},
             {"physical_residual_scale",V(problem.b)},{"residual_row_scale",V(problem.RowScale())},

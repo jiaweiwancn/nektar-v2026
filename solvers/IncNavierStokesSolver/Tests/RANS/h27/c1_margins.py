@@ -122,7 +122,7 @@ def audit_state(data, ref, order, radial_order, deadline, regularization=None, o
             groups.append(('matching_outer' if outer else 'matching_inner',
                            face_a, np.full_like(face_a, ref.H)))
         if one_sided_faces:
-            _, _, rl, rr = element["bounds"]
+            xl, xr, rl, rr = element["bounds"]
             name = "faces_outer" if outer else "faces_inner"
             for side in range(4):
                 along, radial, _ = audit.face(element, side, endpoints=True)
@@ -132,6 +132,12 @@ def audit_state(data, ref, order, radial_order, deadline, regularization=None, o
                 inside = (cutoff >= rl) & (cutoff <= rr)
                 if inside.any():
                     groups.append(("cutoff", along[inside], cutoff[inside]))
+                # Include both owners when the sampled momentum-load support
+                # ends on a chart face. The one-sided gradients can differ.
+                if rl-2e-14 <= ref.h <= rr+2e-14:
+                    abscissae = np.r_[xl, xl+(xr-xl)*(audit.gauss[0]+1)/2, xr]
+                    groups.append(("forcing_support", abscissae,
+                                   np.full_like(abscissae, np.clip(ref.h, rl, rr))))
         for group, a, r in groups:
             metric = audit.hill.metrics(element, a, r, outer=outer)
             _, _, G, _, _, _, scalars, _, _, covariance = audit.sample(element, a, r, metric)
