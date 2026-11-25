@@ -264,6 +264,7 @@ void InitialFields::ValidateOriginalSteadyRelease(const std::string &receiptPath
             points.get<int>("order")>std::max(quadratureX,quadratureR),
             "point audit source, coefficient digest or rule differs");
     const double H=m_geometry.H,L=m_geometry.hillHalfLength,h=m_geometry.h,left=m_geometry.left;
+    const double witnessScale=std::max(1.,H);
     Require(Same(L,hillHalfLength,H)&&L>0.&&left<-L&&m_geometry.right>L,
             "different physical hill geometry for release controls");
     // Mirror the named independent controls, using the packet's exact support radius.
@@ -273,10 +274,16 @@ void InitialFields::ValidateOriginalSteadyRelease(const std::string &receiptPath
         {"support_original",{.75*L,h}},
         {"support_refined",{.5625*L,h}},
         {"support_downstream_foot",{L,h}}};
+    // The XML chart faces and the exact reference h can differ by a few ulps
+    // after decimal I/O and subtracting d0. Keep both one-sided witnesses at h.
+    auto containsWitness=[&](const InitialFieldElement &cell,double a,double r) {
+        return a>=cell.xl-Tolerance(a,cell.xl,witnessScale)&&a<=cell.xr+Tolerance(a,cell.xr,witnessScale)&&
+               r>=cell.rl-Tolerance(r,cell.rl,witnessScale)&&r<=cell.rr+Tolerance(r,cell.rr,witnessScale);
+    };
     auto owner=[&](const Tree &point) {
         const int i=point.get<int>("geometry");
         const auto found=m_index.find(i);
-        Require(found!=m_index.end()&&Contains(m_elements[found->second],
+        Require(found!=m_index.end()&&containsWitness(m_elements[found->second],
                 Number(point,"a"),Number(point,"rho")),"response point has a different owner");
         return i;
     };
@@ -300,8 +307,8 @@ void InitialFields::ValidateOriginalSteadyRelease(const std::string &receiptPath
         if(label)
         {
             const auto required=controls.find(*label);
-            Require(required!=controls.end()&&Same(Number(point,"a"),required->second[0],H)&&
-                    Same(Number(point,"rho"),required->second[1],H)&&fixed.emplace(*label,i).second,
+            Require(required!=controls.end()&&Same(Number(point,"a"),required->second[0],witnessScale)&&
+                    Same(Number(point,"rho"),required->second[1],witnessScale)&&fixed.emplace(*label,i).second,
                     "fixed original response location or owner differs for "+*label);
         }
         positive(point,label?*label:"additional fixed control");
@@ -310,7 +317,7 @@ void InitialFields::ValidateOriginalSteadyRelease(const std::string &receiptPath
     {
         bool hasOwner=false;
         for(const auto &e:m_elements)
-            if(Contains(e,coordinate[0],coordinate[1]))
+            if(containsWitness(e,coordinate[0],coordinate[1]))
             {
                 hasOwner=true;
                 Require(fixed.count({label,e.geometry})==1,"missing fixed original response owner for "+label);
@@ -336,8 +343,8 @@ void InitialFields::ValidateOriginalSteadyRelease(const std::string &receiptPath
             {
                 const auto &witness=response.get_child("regions.forcing_support.witness");
                 hasReportedWitness|=i==witness.get<int>("geometry")&&
-                    Same(Number(point,"a"),Number(witness,"a"),H)&&
-                    Same(Number(point,"rho"),Number(witness,"rho"),H);
+                    Same(Number(point,"a"),Number(witness,"a"),witnessScale)&&
+                    Same(Number(point,"rho"),Number(witness,"rho"),witnessScale);
             }
         }
         Require(region!="forcing_support"||hasReportedWitness,

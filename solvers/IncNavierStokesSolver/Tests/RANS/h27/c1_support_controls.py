@@ -20,7 +20,9 @@ def locations(geometry):
 
 
 def tolerance(x, y, H):
-    return 64*float_info.epsilon*max(abs(x), abs(y), H)
+    # Chart face bounds come from decimal mesh vertices and a displacement
+    # subtraction. The exact reference h is left untouched at either owner.
+    return 64*float_info.epsilon*max(1., abs(x), abs(y), H)
 
 
 def coincides(x, y, H):

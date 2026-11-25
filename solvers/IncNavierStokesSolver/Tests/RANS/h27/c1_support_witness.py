@@ -132,6 +132,15 @@ def limits(audit, section):
             row["radial_side"] = owner_side(rl, rr, h, H)
             row["load_limit_from_below"] = {
                 name: float(values[0]) for name, values in audit.matching_load(cell, np.array([a])).items()}
+            ax, rad = np.array([a]), np.array([h])
+            metric = audit.hill.metrics(cell,ax,rad,outer=False)
+            _, _, _, pressure, stress, _, _, diffusivity, gradients, _ = audit.sample(cell,ax,rad,metric)
+            sigma = stress[0]-pressure[0]*np.eye(2)
+            k_flux = -diffusivity["k"][0]*gradients["k"][0]
+            row["raw_tractions"] = {face:(sigma@metric[n][0]).tolist()
+                                     for face,n in (("axial","t"),("radial","n"))}
+            row["raw_k_diffusive_flux"] = {face:float(k_flux@metric[n][0])
+                                           for face,n in (("axial","t"),("radial","n"))}
             rows.append(row)
         out[name] = rows
     return out
@@ -142,6 +151,25 @@ def choose(rows, x, r):
     if len(candidates) != 1:
         raise ValueError("ambiguous or missing approached one-sided owner")
     return candidates[0]
+
+
+def raw_jumps(points):
+    result = {}
+    for name, rows in points.items():
+        jumps = []
+        for face, pairs in (("axial",[((-1,r),(1,r)) for r in (-1,1)]),
+                            ("radial",[((x,-1),(x,1)) for x in (-1,1)])):
+            for lo,hi in pairs:
+                minus,plus=choose(rows,*lo),choose(rows,*hi)
+                if minus["geometry"]==plus["geometry"]:
+                    continue
+                jumps.append(dict(face=face, owners=[minus["geometry"],plus["geometry"]],
+                    traction=(np.asarray(plus["raw_tractions"][face])-
+                              minus["raw_tractions"][face]).tolist(),
+                    k_diffusive_flux=(plus["raw_k_diffusive_flux"][face]-
+                                      minus["raw_k_diffusive_flux"][face])))
+        result[name]=jumps
+    return result
 
 
 def extent(rows, relative):
@@ -344,6 +372,7 @@ def main():
                   axial_grid_range=[float(fixed[:,0].min()),float(fixed[:,0].max())],
                   cell_relative_fractions=RELATIVE_OFFSETS, fixed_grid_points=len(fixed), controls=controls,
                   signed_extents=summaries, matching_point_variation=variation(profiles,args.compare),
+                  support_face_jumps={label:raw_jumps(points) for label,points in controls.items()},
                   profile_file=identity(args.profiles))
     if args.check_sampled_order:
         result["independent_sampled_action_16_vs_28"]={label:sampled_action_order(audit)
