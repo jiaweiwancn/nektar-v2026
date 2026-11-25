@@ -160,4 +160,4 @@ The next discriminating experiment is one matched axial refinement comparison of
 | `C1_CLOSED` | OPEN | Requires the full-height disturbed physical qualification. |
 | `C2_READY` | OPEN | Depends on C1. |
 | `LONG_FLAT_PRODUCTION_COST_CLOSED` | OPEN | Production gate remains 1.25 times total cost at most 86,400 wall seconds. |
-| `REMOTE_PUSH_VERIFIED` | OPEN | Publication receipt follows ref verification. |
+| `REMOTE_PUSH_VERIFIED` | PASS | `git ls-remote origin refs/heads/codex/wj-earsm-awf` matched evidence head `92caa94c8b178459e4f04e7654d8b84eef32db50`. |
