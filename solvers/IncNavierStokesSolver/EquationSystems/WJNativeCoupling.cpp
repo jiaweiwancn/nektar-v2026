@@ -599,6 +599,64 @@ Vec Coupling::ProjectContinuity(const Vec &flow) const
     return result;
 }
 
+double Coupling::ContinuityNorm(const Vec &flow) const
+{
+    Vec residual=Vec::Zero(flow.size());
+    residual.tail(m_flow.PressureSize())=
+        m_flow.Core().Divergence()*flow.head(2*m_flow.VelocitySize());
+    return m_flow.RawResidualNorm(m_flow.Restrict(residual)).continuity;
+}
+
+Vec Coupling::RemapVelocity(const Vec &flow, const Geometry &source)
+{
+    const int count=m_flow.VelocitySize();
+    Vec result=flow;
+    if (source.normalMap->amplitude==m_geometry.normalMap->amplitude)
+        return result;
+
+    // Preserve the contravariant volume flux on each chart patch. Its
+    // tangential velocity can jump where the mapping derivatives change,
+    // so project the difference into the continuous Cartesian space with
+    // the physical mass rule. The boundary and continuity lifts follow.
+    Vec correction=Vec::Zero(2*count);
+    m_initialFluxRoundtripError=0.;
+    const double foot=m_geometry.normalMap->lengthX;
+    for (const auto &cell : m_flow.Elements())
+    {
+        if (cell.xr<=-foot || cell.xl>=foot)
+            continue;
+        const bool outer=cell.rl>=m_geometry.H-1e-12;
+        const Vec u=cell.B*Local(flow,cell.u);
+        const Vec w=cell.B*Local(flow,cell.u,count);
+        Vec du(u.size()),dw(w.size());
+        for (int i=0;i<u.size();++i)
+        {
+            const double a=cell.x[i], radius=cell.z[i]-m_geometry.d0;
+            const auto old=source.At(a,radius,cell.xl,cell.xr,outer);
+            const auto next=m_geometry.At(a,radius,cell.xl,cell.xr,outer);
+            const double qa=old.determinant*(old.inverse[0][0]*u[i]+old.inverse[0][2]*w[i]);
+            const double qr=old.determinant*(old.inverse[2][0]*u[i]+old.inverse[2][2]*w[i]);
+            const double x=(next.jacobian[0][0]*qa+next.jacobian[0][2]*qr)/next.determinant;
+            const double z=(next.jacobian[2][0]*qa+next.jacobian[2][2]*qr)/next.determinant;
+            du[i]=x-u[i];
+            dw[i]=z-w[i];
+            const double recoveredA=next.determinant*(next.inverse[0][0]*x+next.inverse[0][2]*z);
+            const double recoveredR=next.determinant*(next.inverse[2][0]*x+next.inverse[2][2]*z);
+            m_initialFluxRoundtripError=std::max({m_initialFluxRoundtripError,
+                std::abs(recoveredA-qa),std::abs(recoveredR-qr)});
+        }
+        Add(correction,cell.u,cell.B.transpose()*cell.w.cwiseProduct(du));
+        Add(correction,cell.u,cell.B.transpose()*cell.w.cwiseProduct(dw),count);
+    }
+    Eigen::SimplicialLDLT<Sparse> mass(m_flow.Core().Mass());
+    Require(mass.info()==Eigen::Success,"geometry seed velocity mass factorization failed");
+    result.head(count)+=mass.solve(correction.head(count));
+    result.segment(count,count)+=mass.solve(correction.tail(count));
+    Require(mass.info()==Eigen::Success && result.allFinite(),
+            "geometry seed velocity mass projection failed");
+    return result;
+}
+
 CoupledHistory Coupling::Initialise()const
 {
     CoupledHistory h;h.dt=m_options.dt;
@@ -660,16 +718,9 @@ CoupledHistory Coupling::Initialise()const
     if(m_geometry.normalMap)
     {
         h.current=DirichletState(h.current,0.);
-        auto norm=[&](const Vec &flow)
-        {
-            Vec residual=Vec::Zero(flow.size());
-            residual.tail(m_flow.PressureSize())=
-                m_flow.Core().Divergence()*flow.head(2*m_flow.VelocitySize());
-            return m_flow.RawResidualNorm(m_flow.Restrict(residual)).continuity;
-        };
-        m_initialContinuityBefore=norm(h.current.flow);
+        m_initialContinuityBefore=ContinuityNorm(h.current.flow);
         h.current.flow=ProjectContinuity(h.current.flow);
-        m_initialContinuityAfter=norm(h.current.flow);
+        m_initialContinuityAfter=ContinuityNorm(h.current.flow);
         Require(m_initialContinuityAfter<=1e-9,
                 "normal-chart initialization does not satisfy represented continuity");
     }
@@ -694,7 +745,8 @@ CoupledHistory Coupling::FreshHistory(const CoupledState&state)const
     h.advection=Advection(h.current,data.kRules);h.previousAdvection=h.advection;CheckHistory(h);return h;
 }
 
-CoupledHistory Coupling::ReadInitialFields(const std::string&path,bool allowCandidate)
+CoupledHistory Coupling::ReadInitialFields(const std::string &path, bool allowCandidate,
+                                            std::optional<double> geometrySeedHeight)
 {
     InitialFields initial(path);InitialFieldGeometry geometry;
     geometry.d0=m_geometry.d0;geometry.H=m_geometry.H;geometry.h=m_geometry.h;geometry.left=m_left;geometry.right=m_right;geometry.top=m_top;geometry.curve=m_geometry.curve;
@@ -706,8 +758,21 @@ CoupledHistory Coupling::ReadInitialFields(const std::string&path,bool allowCand
     const auto &seedReference=m_options.initialReferenceIdentity;
     Require(seedReference.empty()||(allowCandidate&&m_reference->Transport()==InnerKTransport::AuxiliaryHistoricalFixtureV1&&
             seedReference==m_reference->BoundaryIdentity()),"a different reference is allowed only as an explicitly bound v2 steady fixture guess");
+    Geometry seedGeometry=m_geometry;
+    if (geometrySeedHeight)
+    {
+        Require(m_geometry.normalMap && !m_options.manufactured &&
+                std::isfinite(*geometrySeedHeight) && *geometrySeedHeight>=0. &&
+                *geometrySeedHeight<=1. && initial.Metadata().qualifiedReference &&
+                initial.Metadata().outletPolicy==m_options.outletPolicy &&
+                m_options.hillInitialSlowdown==0. && m_options.hillInitialEpsilonBump==0.,
+                "geometry continuation requires a compatible developed physical seed");
+        seedGeometry.normalMap->amplitude=*geometrySeedHeight;
+        seedGeometry.ValidateNormalMesh(m_left,m_right,m_top);
+        geometry.normalMap=seedGeometry.normalMap->Signature();
+    }
     const double seedRight=initial.GeometryData().right;
-    const bool extendSeed=allowCandidate&&seedRight>=15.&&m_right>seedRight+1e-12;
+    const bool extendSeed=!geometrySeedHeight&&allowCandidate&&seedRight>=15.&&m_right>seedRight+1e-12;
     if(extendSeed){
         Require(m_zeroTransverseOutlet&&initial.Metadata().qualifiedReference&&
             initial.Metadata().outletPolicy==m_options.outletPolicy,
@@ -726,6 +791,7 @@ CoupledHistory Coupling::ReadInitialFields(const std::string&path,bool allowCand
         inventory.push_back(std::move(cell));
     }
     const bool same=initial.SameInventory(inventory,{m_flow.VelocitySize(),m_flow.PressureSize(),m_k.Size(),m_e.Size()});
+    Require(!geometrySeedHeight || same,"geometry continuation requires the same signed chart inventory");
     CoupledState state;
     if(same)state={initial.Flow(),initial.K(),initial.Epsilon()};
     else{
@@ -740,11 +806,26 @@ CoupledHistory Coupling::ReadInitialFields(const std::string&path,bool allowCand
         state.k=m_k.Project([&](double x,double z){return evaluate(2,x,z);});
         state.epsilon=m_e.Project([&](double x,double z){return evaluate(3,x,z);});
     }
+    if (geometrySeedHeight)
+    {
+        state.flow=RemapVelocity(state.flow,seedGeometry);
+        state=DirichletState(state,0.);
+        m_initialContinuityBefore=ContinuityNorm(state.flow);
+        state.flow=ProjectContinuity(state.flow);
+        m_initialContinuityAfter=ContinuityNorm(state.flow);
+        Require(m_initialContinuityAfter<=1e-9,"geometry seed continuity projection failed");
+        m_geometrySeedHeight=geometrySeedHeight;
+        std::cout<<std::setprecision(17)<<"WJ-H27 geometry seed "<<*geometrySeedHeight
+                 <<" -> "<<m_geometry.normalMap->amplitude<<", weak continuity "
+                 <<m_initialContinuityBefore<<" -> "<<m_initialContinuityAfter
+                 <<", mapped flux roundtrip "<<m_initialFluxRoundtripError<<std::endl;
+    }
     auto history=FreshHistory(state);
-    if(!allowCandidate)Require(SteadyResidual(history.current).Maximum()<=m_options.nonlinearTolerance,
+    if(!allowCandidate && !geometrySeedHeight)
+        Require(SteadyResidual(history.current).Maximum()<=m_options.nonlinearTolerance,
         "imported reference is not stationary for this native recipe; prepare a current reference first");
     m_initialPacketSha=initial.Metadata().packetSha256;m_initialSourceStateSha=initial.Metadata().stateSha256;
-    m_initialProjected=!same;m_initialCandidate=!initial.Metadata().qualifiedReference;return history;
+    m_initialProjected=!same||geometrySeedHeight.has_value();m_initialCandidate=!initial.Metadata().qualifiedReference;return history;
 }
 
 CoupledHistory Coupling::PerturbInitialHistory(const CoupledHistory&base,const std::string&certificate,
@@ -1659,6 +1740,12 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
            <<",\"initial_continuity_after_projection\":"<<m_initialContinuityAfter;
     out<<",\"basis\":\"Modified_A\",\"anderson_depth\":"<<m_options.andersonDepth<<",\"acceleration\":{\"proposals\":"<<info.accelerationProposals<<",\"accepted\":"<<info.accelerationAccepted<<",\"inadmissible_trials\":"<<info.accelerationInadmissible<<'}';
     out<<",\"initial_field_transfer\":{\"packet_sha256\":"<<RANSWallSolveJson::Quote(m_initialPacketSha)<<",\"source_state_sha256\":"<<RANSWallSolveJson::Quote(m_initialSourceStateSha)<<",\"projected\":"<<(m_initialProjected?"true":"false")<<",\"source_was_candidate\":"<<(m_initialCandidate?"true":"false")<<'}';
+    if (m_geometrySeedHeight)
+        out<<",\"geometry_seed\":{\"from_height\":"<<*m_geometrySeedHeight
+           <<",\"to_height\":"<<m_geometry.normalMap->amplitude
+           <<",\"pointwise_flux_roundtrip_error\":"<<m_initialFluxRoundtripError
+           <<",\"continuity_before\":"<<m_initialContinuityBefore
+           <<",\"continuity_after\":"<<m_initialContinuityAfter<<'}';
     if(m_options.recordNonlinearTrace){out<<",\"nonlinear_trace\":[";for(int i=0;i<int(info.nonlinearTrace.size());++i){const auto&t=info.nonlinearTrace[i];if(i)out<<',';out<<"{\"residuals\":["<<t.residual.momentum<<','<<t.residual.continuity<<','<<t.residual.gauge<<','<<t.residual.k<<','<<t.residual.epsilon<<','<<t.residual.trace<<"],\"accelerated\":"<<(t.accelerated?"true":"false")<<",\"seconds\":"<<t.seconds<<'}';}out<<']';}
 
     out<<",\"constitutive_backend\":\""<<(m_options.backend==ConstitutiveBackend::Historical?"Historical":"FastFull3DV1")<<"\",\"constitutive_calls\":{\"values\":"<<info.constitutiveStats.values<<",\"directions\":"<<info.constitutiveStats.directions<<",\"fallbacks\":"<<info.constitutiveStats.fallbacks<<",\"root_iterations\":"<<info.constitutiveStats.rootIterations<<",\"maximum_normalized_root_residual\":"<<info.constitutiveStats.maximumRootResidual<<'}';

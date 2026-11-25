@@ -186,6 +186,15 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadParameter("WJTerminalBegin",m_terminalBegin,0.);m_session->LoadParameter("WJTerminalEnd",m_terminalEnd,0.);
     if(m_terminalOutput)Check(!m_steadyMode&&m_coefficients&&std::isfinite(m_terminalBegin)&&std::isfinite(m_terminalEnd)&&m_terminalBegin>=0&&m_terminalEnd>m_terminalBegin,"terminal output requires advancement, complete coefficients and a finite increasing nonnegative interval");
     m_session->LoadSolverInfo("WJInitialFields",m_initialFields,"");Check(m_initialFields.empty()||m_restart.empty(),"initial fields and cold restart are separate mutually exclusive inputs");
+    double geometrySeedHeight=-1.;
+    m_session->LoadParameter("WJGeometrySeedFromHeight",geometrySeedHeight,-1.);
+    if (geometrySeedHeight!=-1.)
+    {
+        Check(std::isfinite(geometrySeedHeight)&&geometrySeedHeight>=0.&&geometrySeedHeight<=1.&&
+              geometry.normalMap&&!options.manufactured&&!m_initialFields.empty()&&m_restart.empty(),
+              "WJGeometrySeedFromHeight requires a physical normal-chart initial-field import");
+        m_geometrySeedHeight=geometrySeedHeight;
+    }
     m_session->LoadSolverInfo("WJPerturbationCertificate",m_perturbationCertificate,"");
     m_session->LoadSolverInfo("WJPerturbationCertificateSHA256",m_perturbationSha256,"");
     Check(m_perturbationCertificate.empty()==m_perturbationSha256.empty()&&
@@ -213,7 +222,8 @@ void WJNativeCoupled::v_DoInitialise(bool dump)
         {
             m_history = m_coupling->ReadHistory(m_restart, &m_recoveryTiming);
         }
-        else if(!m_initialFields.empty())m_history=m_coupling->ReadInitialFields(m_initialFields,m_steadyMode);
+        else if(!m_initialFields.empty())
+            m_history=m_coupling->ReadInitialFields(m_initialFields,m_steadyMode,m_geometrySeedHeight);
         else m_history=m_coupling->Initialise();
         if(!m_perturbationCertificate.empty())m_history=m_coupling->PerturbInitialHistory(
             m_history,m_perturbationCertificate,m_perturbationSha256);

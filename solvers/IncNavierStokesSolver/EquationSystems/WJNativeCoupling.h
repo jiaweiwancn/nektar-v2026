@@ -10,6 +10,7 @@
 #include <filesystem>
 #include <algorithm>
 #include <map>
+#include <optional>
 
 namespace Nektar::WJNative
 {
@@ -123,7 +124,8 @@ public:
              std::shared_ptr<const Reference> reference,CoupledOptions options);
     CoupledHistory Initialise()const;
     CoupledHistory FreshHistory(const CoupledState&state)const;
-    CoupledHistory ReadInitialFields(const std::string&path,bool allowCandidate=false);
+    CoupledHistory ReadInitialFields(const std::string &path, bool allowCandidate=false,
+                                     std::optional<double> geometrySeedHeight=std::nullopt);
     CoupledHistory PerturbInitialHistory(const CoupledHistory&base,const std::string&certificate,
                                         const std::string&sha256);
     CoupledHistory SteadyCandidateHistory(const Vec&unknowns)const;
@@ -202,6 +204,8 @@ private:
     Vec DependentTraceDirection(const CoupledState &state, const Vec &dk) const;
     Vector InitialVelocity(double a, double r) const;
     Vec ProjectContinuity(const Vec &flow) const;
+    double ContinuityNorm(const Vec &flow) const;
+    Vec RemapVelocity(const Vec &flow, const Geometry &source);
     void WriteOutletActions(std::ostream&out,const CoupledHistory&history)const;
     Vec PackFree(const CoupledState&state)const;
     CoupledState FromFree(const Vec&free,double time)const;
@@ -249,6 +253,8 @@ private:
     mutable Loads m_physicalForcing;
     std::string m_initialPacketSha,m_initialSourceStateSha;
     bool m_initialProjected=false,m_initialCandidate=false;
+    std::optional<double> m_geometrySeedHeight;
+    double m_initialFluxRoundtripError=0.;
     mutable WallEvaluationStats m_constitutiveStats;
     mutable std::uint64_t m_actionChecks=0,m_augmentedChecks=0;
     mutable std::array<double,3>m_actionDifference{};

@@ -29,6 +29,9 @@ def main():
     parser.add_argument("--dt", type=float, default=.02)
     parser.add_argument("--steps", type=int, default=3)
     parser.add_argument("--restart", type=Path)
+    parser.add_argument("--initial-fields", type=Path)
+    parser.add_argument("--initial-source")
+    parser.add_argument("--from-height", type=float)
     parser.add_argument("--quadrature", type=int, nargs=2)
     parser.add_argument("--recovery", type=int, default=1)
     parser.add_argument("--science", type=int, default=0)
@@ -38,6 +41,12 @@ def main():
     parser.add_argument("--flat-map-control", action="store_true")
     parser.add_argument("--trace-derivative-check", action="store_true")
     args = parser.parse_args()
+    if args.initial_fields and args.restart:
+        parser.error("initial fields and restart are separate modes")
+    if args.from_height is not None and (args.case != "hill" or not args.initial_fields):
+        parser.error("--from-height requires developed physical hill initial fields")
+    if args.initial_source and not args.initial_fields:
+        parser.error("--initial-source requires --initial-fields")
     if args.resolve_outer_seed and args.case != "hill":
         parser.error("--resolve-outer-seed requires a physical hill")
     out = args.out.resolve()
@@ -75,6 +84,8 @@ def main():
              solve="SteadyReference" if args.steady_seconds else "Advance", steady_seconds=args.steady_seconds,
              nonlinear=args.tolerance, check_current_actions=args.trace_derivative_check,
              backend="FastFull3DV1", outlet_policy="FullTractionV1" if manufactured else "ZeroTransverseV1",
+             initial_fields=args.initial_fields.resolve() if args.initial_fields else "",
+             initial_source_identity=args.initial_source or "",
              restart=args.restart.resolve() if args.restart else "")
     info = dict(WJReferencePolicy="ExactInnerFiniteNuV1", WJImplicitSolver="CoupledJFNKV1",
                 WJNewtonAdvection="Implicit", WJStepPreconditioner="CurrentDataDriftV1")
@@ -86,10 +97,13 @@ def main():
         parameters["WJHillHeight"] = args.height if args.height is not None else (.1 if manufactured else 1.)
         parameters["WJHillInitialSlowdown"] = args.initial_slowdown
         parameters["WJHillInitialEpsilonBump"] = args.initial_epsilon_bump
+    if args.from_height is not None:
+        parameters["WJGeometrySeedFromHeight"] = args.from_height
     if manufactured:
         info["WJMMSVariant"] = "NormalTubeV1"
     edit(session, info, parameters)
     files = [geometry, session, out / "run.xml.opt", table]
+    files.extend(path.resolve() for path in (args.initial_fields, args.restart) if path)
     (out / "inputs.json").write_text(json.dumps([identity(file) for file in files], indent=2) + "\n")
 
 
