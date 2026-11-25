@@ -116,7 +116,7 @@ def response(ref, G, k, E, radius, metric, outer, added_viscosity=None, *, point
             if value < best[0]:
                 best = value, int(active[winner])
     if pointwise:
-        return margins, uncertainty
+        return margins, uncertainty, mu
     value, index = best
     return value, index, difference, float(aux[index]), float(chi[index])
 

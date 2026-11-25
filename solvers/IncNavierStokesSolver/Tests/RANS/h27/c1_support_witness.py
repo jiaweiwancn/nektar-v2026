@@ -26,6 +26,12 @@ FIXED_RADIAL = (-.0015, -.001, -.00075, -.0005, -.00025, -.0001, -.00005,
                 0., .00005, .0001, .00025, .0005, .00075, .001, .0015)
 EXTRA_RADIAL = (.002, .0025, .003, .004, .006, .010, .015)
 RELATIVE_OFFSETS = (.001, .01, .05, .20)
+PROFILE_COLUMNS = ("mesh","a","r","x","z","owner","axial_side","radial_side","fixed","r_minus_h",
+                   "a_left","a_right","r_low","r_high","basis","u","w","Gxx","Gzx","Gzz",
+                   "k","epsilon","Pi_H","K","u_t_H","u_n_H","dPi_da","dK_da","dUt_da","matching_area",
+                   "mu","raw_response","angular_difference",*FIELD_NAMES,"total_load","applied_total_load",
+                   "traction_axial_x","traction_axial_z","traction_radial_x","traction_radial_z",
+                   "k_flux_axial","k_flux_radial","relative_origin","local_axial_fraction","local_radial_fraction")
 
 
 def owner_side(lo, hi, value, H):
@@ -59,13 +65,18 @@ def section_points(audits, wide):
     return section, fixed, radial
 
 
-def write_profiles(writer, audit, label, fixed, section):
+def write_profiles(writer, audit, label, fixed, section, *, include_outer=False):
     h, H = audit.ref.h, audit.ref.H
+    al,rl = np.min(fixed,axis=0)
+    ar,rr = np.max(fixed,axis=0)
+    tol = 64*np.finfo(float).eps*max(1.,abs(al),abs(ar),abs(rl),abs(rr))
     records = {}
     relative = []
     for cell in audit.mesh:
-        xl, xr, rl, rr = cell["bounds"]
-        if cell["epsilon"] or xr < fixed[:, 0].min() or xl > fixed[:, 0].max():
+        xl,xr,low,high = cell["bounds"]
+        outer = bool(cell["epsilon"])
+        if ((outer and not include_outer) or xr < al-tol or xl > ar+tol
+                or high < rl-tol or low > rr+tol):
             continue
         audit.clock()
         common = np.array([contains(cell, a, r, H) for a, r in fixed])
@@ -77,7 +88,7 @@ def write_profiles(writer, audit, label, fixed, section):
                 continue
             for x_sign, r_sign in ((-1, -1), (-1, 1), (1, -1), (1, 1)):
                 span_x = a-xl if x_sign < 0 else xr-a
-                span_r = h-rl if r_sign < 0 else rr-h
+                span_r = h-low if r_sign < 0 else high-h
                 if span_x > 1e-13 and span_r > 1e-13:
                     scaled.extend((a+x_sign*t*span_x, h+r_sign*t*span_r, a, x_sign*t, r_sign*t)
                                   for t in RELATIVE_OFFSETS)
@@ -86,25 +97,38 @@ def write_profiles(writer, audit, label, fixed, section):
             ax, rad = np.r_[ax, a_rel], np.r_[rad, r_rel]
         if not len(ax):
             continue
-        metric = audit.hill.metrics(cell, ax, rad, outer=False)
-        _, U, G, _, _, _, scalars, _, _, _ = audit.sample(cell, ax, rad, metric)
+        metric = audit.hill.metrics(cell, ax, rad, outer=outer)
+        _,U,G,pressure,stress,_,scalars,diffusivity,gradients,_ = audit.sample(cell,ax,rad,metric)
         terms = audit.matching_load(cell, ax)
         metric["K"] = terms["K"]
-        values, uncertainty = response(audit.ref, G, scalars["k"], scalars["epsilon"], rad,
-                                       metric, False, pointwise=True)
+        values,uncertainty,mu = response(audit.ref,G,scalars["k"],scalars["epsilon"],rad,
+                                         metric,outer,pointwise=True)
+        normals = [metric[k]/np.linalg.norm(metric[k],axis=1)[:,None] for k in ("da","dr")]
+        sigma = stress-pressure[:,None,None]*np.eye(2)
+        traction = [np.einsum("qij,qj->qi",sigma,n) for n in normals]
+        k_flux = [-diffusivity["k"]*np.einsum("qi,qi->q",gradients["k"],n) for n in normals]
         for i, (a, r) in enumerate(zip(ax, rad)):
-            x_owner, r_owner = owner_side(xl, xr, a, H), owner_side(rl, rr, r, H)
+            x_owner,r_owner = owner_side(xl,xr,a,H),owner_side(low,high,r,H)
             values_at_point = dict(zip(FIELD_NAMES, [float(values[i]), float(G[i, 0, 1]),
                 float(np.trace(G[i])), float(terms["pressure"][i]), float(terms["k"][i]),
                 float(terms["convection"][i])]))
+            total = sum(values_at_point[k] for k in ("pressure","k_load","convection"))
             row = dict(mesh=label, a=float(a), r=float(r), x=float(metric["position"][i, 0]),
                        z=float(metric["position"][i, 1]), owner=cell["geometry"],
                        axial_side=x_owner, radial_side=r_owner, fixed=i < count, r_minus_h=float(r-h),
+                       a_left=xl,a_right=xr,r_low=low,r_high=high,
                        basis=cell["basis"] if "basis" in cell else audit.data["basis"],
                        u=float(U[i, 0]), w=float(U[i, 1]), Gxx=float(G[i, 0, 0]),
                        Gzx=float(G[i, 1, 0]), Gzz=float(G[i, 1, 1]), k=float(scalars["k"][i]),
                        epsilon=float(scalars["epsilon"][i]), Pi_H=float(terms["Pi_H"][i]),
-                       K=float(terms["K"][i]), u_t_H=float(terms["u_t"][i]),
+                       K=float(terms["K"][i]),u_t_H=float(terms["u_t"][i]),u_n_H=float(terms["u_n"][i]),
+                       dPi_da=float(terms["dPi_da"][i]),dK_da=float(terms["dK_da"][i]),
+                       dUt_da=float(terms["dUt_da"][i]),matching_area=float(terms["matching_area"][i]),
+                       mu=float(mu[i]),raw_response=float(mu[i]*values[i]),
+                       total_load=total,applied_total_load=total if r<h else 0.,
+                       traction_axial_x=float(traction[0][i,0]),traction_axial_z=float(traction[0][i,1]),
+                       traction_radial_x=float(traction[1][i,0]),traction_radial_z=float(traction[1][i,1]),
+                       k_flux_axial=float(k_flux[0][i]),k_flux_radial=float(k_flux[1][i]),
                        angular_difference=float(uncertainty[i]), **values_at_point)
             if i < count:
                 records.setdefault((float(a), float(r)), []).append(row)
@@ -293,7 +317,7 @@ def attribution(audit, first, second):
 
     def evaluate(g, k, K, E):
         metric["K"] = np.array([K])
-        values, uncertainty = response(ref,g[None, :, :],np.array([k]),np.array([E]),
+        values,uncertainty,_ = response(ref,g[None, :, :],np.array([k]),np.array([E]),
                                        radius,metric,False,pointwise=True)
         return dict(response=float(values[0]), difference=float(uncertainty[0]),
                     k_over_epsilon=k/E)
@@ -358,10 +382,7 @@ def main():
     section, fixed, radial = section_points(audits,args.wide)
     profiles, summaries, controls = {}, {}, {}
     with args.profiles.open("x") as f:
-        columns = ["mesh","a","r","x","z","owner","axial_side","radial_side","fixed","r_minus_h","basis",
-                   "u","w","Gxx","Gzx","Gzz","k","epsilon","Pi_H","K","u_t_H","angular_difference",
-                   *FIELD_NAMES,"relative_origin","local_axial_fraction","local_radial_fraction"]
-        writer = csv.DictWriter(f, fieldnames=columns)
+        writer = csv.DictWriter(f,fieldnames=PROFILE_COLUMNS)
         writer.writeheader()
         for label, audit in audits.items():
             profiles[label], relative = write_profiles(writer,audit,label,fixed,section)

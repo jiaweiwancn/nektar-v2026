@@ -12,7 +12,6 @@ from c1_support_witness import FIELD_NAMES, choose
 from resources import identity
 
 
-ORDER = ("M0", "Mr", "Mx", "Mxr", "Mshift", "Mref", "Mshift-ref")
 STYLES = (("#24384c","-"), ("#288e84",":"), ("#a05584","--"),
           ("#9b3330","-"), ("#bc7322","--"), ("#366bc5","-"), ("#536b22","-."))
 PANELS = (("margin", r"Principal response / $\mu$"),
@@ -25,10 +24,14 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("profiles",type=Path)
     p.add_argument("image",type=Path)
-    p.add_argument("--summary",type=Path,required=True)
-    p.add_argument("--half-length",type=float,required=True)
-    p.add_argument("--pair",nargs=2,action="append",required=True)
+    p.add_argument("--case",action="append",help="case label in legend order")
+    p.add_argument("--a-range",nargs=2,type=float)
+    p.add_argument("--summary",type=Path)
+    p.add_argument("--half-length",type=float)
+    p.add_argument("--pair",nargs=2,action="append",default=[])
     args=p.parse_args()
+    if args.pair and (args.summary is None or args.half_length is None):
+        p.error("legacy strip comparison requires --summary and --half-length")
     curves=defaultdict(lambda:defaultdict(list))
     strip=defaultdict(lambda:defaultdict(list))
     L=args.half_length
@@ -42,7 +45,7 @@ def main():
                 continue
             name,a,r,offset=row["mesh"],float(row["a"]),float(row["r"]),float(row["r_minus_h"])
             values={k:float(row[k]) for k in FIELD_NAMES}
-            if name in ORDER and offset==0.:
+            if offset==0. and (args.case is None or name in args.case):
                 curves[name][row["owner"]].append((a,values))
             if name in compare_fields and .35*L<=a<=L and abs(offset)<=.0015+1e-15:
                 strip[name][a,r].append(dict(axial_side=int(row["axial_side"]),
@@ -69,7 +72,11 @@ def main():
     import matplotlib.pyplot as plt
     fig,axes=plt.subplots(3,2,sharex=True,figsize=(10,8))
     handles=[]
-    for name,(color,style) in zip(ORDER,STYLES):
+    order=args.case or list(curves)
+    if not order or any(not curves[name] for name in order):
+        p.error("selected label has no sampled support line")
+    for index,name in enumerate(order):
+        color,style=STYLES[index%len(STYLES)]
         for axis,(key,unit) in zip(axes.ravel(),PANELS):
             for j,points in enumerate(curves[name].values()):
                 points.sort(key=lambda row:row[0])
@@ -83,17 +90,20 @@ def main():
             axis.ticklabel_format(axis="y",style="sci",scilimits=(-2,2))
             axis.spines[["top","right"]].set_visible(False)
     axes[0,0].axhline(0.,color=".3",lw=.6)
+    if args.a_range:
+        axes[0,0].set_xlim(*args.a_range)
     for ax in axes[-1,:]:
         ax.set_xlabel("Chart abscissa a (code units)")
-    fig.legend(handles=handles,loc="upper center",ncol=7,frameon=False,fontsize=9)
+    fig.legend(handles=handles,loc="upper center",ncol=min(len(handles),7),frameon=False,fontsize=9)
     fig.tight_layout(rect=(0,0,1,.94))
     fig.savefig(args.image,dpi=175)
     plt.close(fig)
-    with args.summary.open("x") as f:
-        json.dump(dict(profile=identity(args.profiles),image=identity(args.image),
-                  a_interval=[.35*L,L],absolute_radial_offset=.0015,results=result),
-                  f,indent=2,allow_nan=False)
-        f.write("\n")
+    if args.summary:
+        with args.summary.open("x") as f:
+            json.dump(dict(profile=identity(args.profiles),image=identity(args.image),
+                      labels=order,a_interval=None if L is None else [.35*L,L],
+                      absolute_radial_offset=.0015,results=result),f,indent=2,allow_nan=False)
+            f.write("\n")
 
 
 if __name__=="__main__":
