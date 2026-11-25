@@ -1970,6 +1970,9 @@ void Coupling::WriteOriginalTransferAudit(const std::filesystem::path &path,
     (void)evaluate(x-h*delta,&minus);
     const Vec remainder=fp-fx+j;
     const Vec spacingChange=j-derivative.actions[derivative.actions.size()-2];
+    Vec exactContinuity=Vec::Zero(x.size());
+    exactContinuity.segment(m_flow.PressureOffset(),m_flow.PressureSize())=
+        m_flow.Core().Divergence()*(root.flow.head(nv)-transferred.flow.head(nv));
 
     std::ofstream out(path);
     namespace J=RANSWallSolveJson;
@@ -1991,6 +1994,11 @@ void Coupling::WriteOriginalTransferAudit(const std::filesystem::path &path,
     out<<",\"J_root_delta\":";writeNorms(j);
     out<<",\"remainder\":";writeNorms(remainder);
     out<<",\"halving_change\":";writeNorms(spacingChange);
+    out<<",\"exact_linear_continuity_action\":";writeNorms(exactContinuity);
+    Vec continuityClosure=exactContinuity;
+    continuityClosure.segment(m_flow.PressureOffset(),m_flow.PressureSize())+=
+        (fp-fx).segment(m_flow.PressureOffset(),m_flow.PressureSize());
+    out<<",\"exact_linear_continuity_closure\":";writeNorms(continuityClosure);
     out<<",\"spacing_records\":[";
     bool comma=false;
     for(const auto &record:derivative.finiteDifferences)
@@ -2018,6 +2026,15 @@ void Coupling::WriteOriginalTransferAudit(const std::filesystem::path &path,
     out<<"},\"partition_closure\":{\"F_prepared\":";writeNorms(fpSum-fp);
     out<<",\"F_root\":";writeNorms(fxSum-fx);
     out<<",\"J_root_delta\":";writeNorms(jSum-j);
+    out<<"},\"root_sampled_residual_rows\":{";
+    comma=false;
+    for(const char *name:{"pressure","k","convection"})
+    {
+        if(comma)out<<',';
+        comma=true;
+        out<<J::Quote(name)<<':';
+        VectorJSON(out,rootTerms.at(std::string("sampled_")+name).head(m_flow.PressureOffset()));
+    }
     out<<"},\"stages\":{";
     comma=false;
     for(const auto &[name,state]:stages)

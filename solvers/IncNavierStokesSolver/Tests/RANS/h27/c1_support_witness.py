@@ -271,7 +271,7 @@ def variation(profiles, pairs):
     return results
 
 
-def sampled_action_order(audit):
+def sampled_action_order(audit, native_residual=None):
     """Independent signed row check of the fixed sampled-force support rule."""
     names = ("pressure", "k", "convection")
 
@@ -297,8 +297,18 @@ def sampled_action_order(audit):
         return result
 
     a, b = assemble(16), assemble(28)
-    return {name: dict(order16_max=float(abs(a[name]).max()), order28_max=float(abs(b[name]).max()),
-                       maximum_difference=float(abs(a[name]-b[name]).max())) for name in names}
+    result = {name: dict(order16_max=float(abs(a[name]).max()), order28_max=float(abs(b[name]).max()),
+                         maximum_difference=float(abs(a[name]-b[name]).max())) for name in names}
+    if native_residual is not None:
+        for name in names:
+            # The oracle integrates applied force. Native rows carry its
+            # residual sign, in free u followed by free w ordering.
+            force=np.r_[b[name][audit.free["u"],0],b[name][audit.free["w"],1]]
+            raw=np.asarray(native_residual[name])
+            if raw.shape!=force.shape:
+                raise ValueError("native sampled momentum action inventory differs")
+            result[name]["native_vs_independent_order28_signed_difference"]=float(abs(raw+force).max())
+    return result
 
 
 def attribution(audit, first, second):

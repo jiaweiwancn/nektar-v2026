@@ -181,7 +181,7 @@ def transfer_fields(audit_file,root):
             dict(packet=root_identity,coefficient_sha256=digest,source_identity=report["source_identity"],
                  native_original_residuals=meta["original_residuals"] if name=="solved" else None,
                  audit=receipt,stage=name,weak_continuity=stage["weak_continuity"]))
-    return stages
+    return stages, report.get("root_sampled_residual_rows")
 
 
 def main():
@@ -226,8 +226,10 @@ def main():
         states[label]=dict(packet=identity(packet),coefficient_sha256=data["state_sha256"],
                            source_identity=data["source_identity"],native_original_residuals=meta["original_residuals"])
     domain=tuple(common_geometry[k] for k in ("left","right","top"))
+    native_sampled=None
     if args.transfer_audit:
-        for name,(data,state) in transfer_fields(*args.transfer_audit).items():
+        stages,native_sampled=transfer_fields(*args.transfer_audit)
+        for name,(data,state) in stages.items():
             if name in audits or any(data["geometry"][k]!=v for k,v in common_geometry.items()):
                 raise ValueError("transfer stage label or physical chart differs across fields")
             audits[name]=Audit(data,ref,28,deadline)
@@ -284,6 +286,8 @@ def main():
              for k,v in report["regions"].items()} for name,report in reports.items()},
         patches=study_patches,
         sampled_action_orders={k:sampled_action_order(a) for k,a in audits.items()} if args.sampled_action else {},
+        transfer_root_signed_sampled_action=sampled_action_order(audits["solved"],native_sampled)
+            if native_sampled is not None else None,
         gradient_layout="Cartesian 3x3 with nonzero entries allowed only in the x-z block",
         noise_pairs=args.noise_pair,
         noise_definition="Empirical archive-to-replay discrepancy for R4 columns and current independent repeated evaluation with identical coefficients.",
