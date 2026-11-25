@@ -7,6 +7,7 @@
 #include <IncNavierStokesSolver/EquationSystems/WJNativeCoupledMMS.h>
 #include <IncNavierStokesSolver/EquationSystems/WJNativeWallV2.h>
 #include <IncNavierStokesSolver/EquationSystems/WJNativeSteadyKrylov.h>
+#include <IncNavierStokesSolver/EquationSystems/WJNativeSteadyCorrection.h>
 #include <filesystem>
 #include <algorithm>
 #include <map>
@@ -82,6 +83,7 @@ struct DiagnosticSteadyOptions
     double regularizationStart=0., regularizationFull=0.;
     std::string seedSha256;
     int scalarSubdivisionDepth=0;
+    bool sparseInverse=false, auditCorrection=false;
 };
 struct CoupledTiming
 {
@@ -215,7 +217,7 @@ private:
     NativeRule HRule(const NativeRule&rule)const;
     const Element& MatchingOwner(double a) const;
     double InterfaceK(const Element&element,double x,const CoupledState&state)const;
-    std::array<double,2> InterfaceBounds(const CoupledState &state) const;
+    std::array<double,2> InterfaceBounds(const CoupledState &state,bool requireQualified=true) const;
     std::array<double,2> InterfaceVelocity(const Element&element,double x,const CoupledState&state)const;
     std::vector<double> CutoffXBreaks(const Element&element,const std::array<double,4>&coefficients,
                                     double traceLeft,double traceRight)const;
@@ -262,11 +264,12 @@ private:
     Vec PackFree(const CoupledState&state)const;
     CoupledState FromFree(const Vec&free,double time)const;
     Vec UnknownScales()const;
+    std::unique_ptr<SteadySparseInverse> MakeSteadySparseInverse(const Vec &unknownScale,const Vec &rowScale)const;
     Vec KVolumeLoad(const CoupledState&state,const Data&data)const;
     Vec EVolumeLoad(const CoupledState&state,const Data&data)const;
     double Drift(const Vec&current,const Vec&previous)const;
     void CheckHistory(const CoupledHistory&history)const;
-    void WriteCoefficientFields(std::ostream&out,const CoupledState&state,double time)const;
+    void WriteCoefficientFields(std::ostream&out,const CoupledState&state,double time,bool refreshLift=true)const;
     void WriteInputHistory(std::ostream&out)const;
     void WriteDiagnostic(const std::filesystem::path&path,const DiagnosticCandidate&candidate,
                          const CoupledStepInfo *original,const DiagnosticSteadyOptions *options)const;
@@ -311,6 +314,19 @@ private:
     double m_diagnosticModifiedMargin=0.;
     std::array<double,2> m_diagnosticWholeCellLower{};
     std::vector<std::array<double,3>> m_diagnosticCorrections;
+    std::vector<SteadySparseWork> m_sparseSteadyWork;
+    std::vector<std::array<double,6>> m_steadyBaseObservations;
+    struct SteadyActionAudit
+    {
+        std::string direction, rejection;
+        double step=0., taylorRemainder=0., centeredRelativeError=0., shiftRelativeError=0.;
+        std::optional<std::array<double,6>> differenceBlocks;
+    };
+    std::vector<SteadyActionAudit> m_steadyActionAudits;
+    std::array<std::array<double,4>,4> m_steadyScaleExtrema{};
+    double m_steadyPatternSeconds=0., m_steadyAuditSeconds=0.;
+    int m_steadyAuditResiduals=0;
+    std::string m_steadyBaseSha256;
     mutable Vec m_bulkBodyAction,m_sampledBodyAction;
     mutable Vec m_outletLoad;
     mutable Vec m_physicalFlowLift,m_physicalKLift;

@@ -74,6 +74,12 @@ public:
             double norm=Norm(f),previousBase=norm;
             Observe(x,f,norm,true);Deadline();
             if(norm<=o.acceptanceNorm){Converged();return Finish();}
+            if(o.evaluateInitialOnly)
+            {
+                out.status="EVALUATED";
+                out.reason="initial residual evaluated without applying a correction";
+                return Finish();
+            }
             for(int iteration=0;iteration<o.maximumNewtonIterations;++iteration)
             {
                 newton=iteration;
@@ -85,13 +91,6 @@ public:
                     f=Base(x);norm=Norm(f);Observe(x,f,norm,true);Deadline();
                     if(norm<=o.acceptanceNorm){Converged();return Finish();}
                 }
-                if(cb.PreparePreconditioner)
-                {
-                    ++out.statistics.preconditionerPreparations;
-                    Timer timer(out.statistics.preparationSeconds);
-                    cb.PreparePreconditioner(x,f);
-                }
-                Deadline();
                 double forcing=o.forcingInitial;
                 if(iteration>0)
                     forcing=std::clamp(o.forcingGamma*std::pow(norm/previousBase,o.forcingExponent),
@@ -100,7 +99,16 @@ public:
                 SteadyNewtonRecord record;
                 record.iteration=iteration;record.baseNorm=norm;record.forcing=forcing;
                 out.newton.push_back(record);
+                if(cb.PrepareCorrection)cb.PrepareCorrection(x,f);
+                if(cb.PreparePreconditioner)
+                {
+                    ++out.statistics.preconditionerPreparations;
+                    Timer timer(out.statistics.preparationSeconds);
+                    cb.PreparePreconditioner(x,f);
+                }
+                Deadline();
                 const auto linear=Linear(x,f,norm,forcing);
+                out.newton.back().linearEvaluated=true;
                 out.newton.back().linearTrueNorm=linear.trueNorm;
                 out.newton.back().linearConverged=linear.converged;
                 if(!linear.converged&&
@@ -159,6 +167,7 @@ public:
             throw Stop("NEWTON_NOT_CONVERGED: declared Newton iteration bound exhausted");
         }
         catch(const Stop &error){out.reason=error.what();}
+        catch(const SteadyCorrectionFailure &error){out.reason=error.what();}
         return Finish();
     }
 
@@ -177,6 +186,7 @@ public:
         try
         {
             const Vec f=Base(base);
+            if(cb.PrepareCorrection)cb.PrepareCorrection(base,f);
             const Vec scaledDirection=(direction.array()/sx.array()).matrix();
             for(double multiplier:multipliers)
             {
@@ -194,6 +204,7 @@ public:
             result.completed=true;result.reason="fixed prescribed directional probes completed; accuracy not certified";
         }
         catch(const Stop &error){result.reason=error.what();}
+        catch(const SteadyCorrectionFailure &error){result.reason=error.what();}
         out.statistics.totalSeconds=Seconds(start);
         result.statistics=out.statistics;
         result.finiteDifferences=std::move(out.finiteDifferences);
@@ -294,7 +305,11 @@ private:
             out.bestFromAcceptedIterate=accepted;
         }
         else if(accepted&&(x.array()==out.x.array()).all())out.bestFromAcceptedIterate=true;
-        if(accepted)out.lastAcceptedNorm=norm;
+        if(accepted)
+        {
+            out.lastAcceptedNorm=norm;
+            if(cb.ObserveAccepted)cb.ObserveAccepted(x,norm);
+        }
     }
 
     void Converged()
@@ -412,10 +427,12 @@ private:
                 r-=(sr.array()*Jacobian(x,f,baseCorrection,1.,"restart-residual",cycle,-1).array()).matrix();
             CheckVector(r,n,"current scaled linear residual");
             const double beta=r.stableNorm();
-            const double initialTrue=Norm((r.array()/sr.array()).matrix());
+            const Vec raw=(r.array()/sr.array()).matrix();
+            const double initialTrue=Norm(raw);
             SteadyLinearRecord restart;restart.newton=newton;restart.cycle=cycle;
             restart.iteration=-1;restart.trueChecked=true;restart.projectedNorm=beta;
             restart.trueScaledNorm=beta;restart.trueNorm=initialTrue;
+            if(cb.ResidualBlocks)restart.trueBlocks=cb.ResidualBlocks(raw);
             restart.converged=beta<=forcing*bNorm&&initialTrue<=forcing*baseNorm;
             out.linear.push_back(restart);
             if(restart.converged)
@@ -467,7 +484,9 @@ private:
                     const Vec check=b-(sr.array()*Jacobian(x,f,candidate,1.,"true-linear-residual",cycle,j).array()).matrix();
                     CheckVector(check,n,"recomputed linear residual");
                     record.trueChecked=true;record.trueScaledNorm=check.stableNorm();
-                    record.trueNorm=Norm((check.array()/sr.array()).matrix());
+                    const Vec rawCheck=(check.array()/sr.array()).matrix();
+                    record.trueNorm=Norm(rawCheck);
+                    if(cb.ResidualBlocks)record.trueBlocks=cb.ResidualBlocks(rawCheck);
                     record.converged=record.trueScaledNorm<=forcing*bNorm&&record.trueNorm<=forcing*baseNorm;
                     if(record.trueNorm<bestNorm||
                        (record.trueNorm==bestNorm&&record.trueScaledNorm<bestScaled))

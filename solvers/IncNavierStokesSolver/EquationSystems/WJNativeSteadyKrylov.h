@@ -3,7 +3,9 @@
 #define NEKTAR_WJ_NATIVE_STEADY_KRYLOV_H
 
 #include <Eigen/Core>
+#include <array>
 #include <functional>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -21,6 +23,14 @@ class SteadyInadmissibleTrial : public std::runtime_error
 public:
     explicit SteadyInadmissibleTrial(const std::string &reason)
         :std::runtime_error(reason){}
+};
+
+// A bounded numerical preparation failure. The solver returns its last
+// evaluated base and the ledger rather than treating it as a physical trial.
+class SteadyCorrectionFailure : public std::runtime_error
+{
+public:
+    using std::runtime_error::runtime_error;
 };
 
 struct SteadyTrialValidity
@@ -47,9 +57,14 @@ struct SteadyKrylovCallbacks
     // Optional explicit rebuild/refresh at each Newton base. Residual trials
     // must not silently redefine the prepared base operator or norm weights.
     std::function<void(const SteadyVector &,const SteadyVector &)> PreparePreconditioner;
+    // Prepare the additive operator independently of the inverse, including
+    // whenever a standalone directional probe supplies a new base.
+    std::function<void(const SteadyVector &,const SteadyVector &)> PrepareCorrection;
     // Raw additive correction action in physical unknowns at the frozen
     // nonlinear base. It is used in every linear product and check, never F.
     std::function<SteadyVector(const SteadyVector &,const SteadyVector &)> CorrectionAction;
+    std::function<std::array<double,6>(const SteadyVector &)> ResidualBlocks;
+    std::function<void(const SteadyVector &,double)> ObserveAccepted;
     // Optional complete scientific guard for actual nonlinear states. Called
     // after ValidTrial and before Residual/Observe at every initial/re-evaluated
     // base and nonlinear line-search candidate. NEVER called on FD samples:
@@ -77,6 +92,7 @@ struct SteadyKrylovOptions
     // If explicitly enabled, an incomplete linear solve may enter line search
     // only after its recomputed true linear norm improves on the base norm.
     bool allowIncompleteLinearStep=false;
+    bool evaluateInitialOnly=false;
 };
 
 struct SteadyKrylovStatistics
@@ -109,6 +125,7 @@ struct SteadyLinearRecord
 {
     int newton=0, cycle=0, iteration=0, leastSquaresRank=0;
     double projectedNorm=0, trueScaledNorm=0, trueNorm=0;
+    std::optional<std::array<double,6>> trueBlocks;
     bool trueChecked=false, breakdown=false, converged=false;
 };
 
@@ -125,7 +142,7 @@ struct SteadyNewtonRecord
 {
     int iteration=0;
     double baseNorm=0, forcing=0, linearTrueNorm=0, acceptedNorm=0, acceptedStep=0;
-    bool linearConverged=false, accepted=false;
+    bool linearEvaluated=false,linearConverged=false, accepted=false;
 };
 
 struct SteadyKrylovResult

@@ -26,6 +26,7 @@ add_library(WJNativeMixedFlow STATIC
     ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeConstitutive.cpp
     ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativePerturbation.cpp
     ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeSteadyKrylov.cpp
+    ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeSteadyCorrection.cpp
     ${H27_SOURCE_ROOT}/solvers/IncNavierStokesSolver/EquationSystems/WJNativeInitialFields.cpp
     # The isolated prefix predates these legacy factory dependencies. Build
     # their exact capsule sources rather than dropping historical factories.

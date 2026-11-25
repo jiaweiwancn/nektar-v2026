@@ -362,17 +362,18 @@ std::vector<double>Coupling::CurrentCutoffXBreaks(const Element&e,const CoupledS
     for(int j=0;j<4;++j)c[j]=s.k[trace.ids[j]]*trace.signs[j];
     return CutoffXBreaks(e,c,owner.xl,owner.xr);
 }
-std::array<double,2> Coupling::InterfaceBounds(const CoupledState &state) const
+std::array<double,2> Coupling::InterfaceBounds(const CoupledState &state,bool requireQualified) const
 {
     const auto &p=m_reference->Parameters();
-    std::array<double,2> result{p.KMaximum,p.KMinimum};
+    std::array<double,2> result{std::numeric_limits<double>::infinity(),
+                                -std::numeric_limits<double>::infinity()};
     for (const auto &[id,trace] : m_hKTrace)
     {
         std::array<double,4> coefficients;
         for (int j=0; j<4; ++j)
             coefficients[j]=state.k[trace.ids[j]]*trace.signs[j];
         const auto bounds=CubicBounds(coefficients);
-        if (!(bounds[0]>=p.KMinimum && bounds[1]<=p.KMaximum))
+        if (requireQualified && !(bounds[0]>=p.KMinimum && bounds[1]<=p.KMaximum))
         {
             const auto &owner=Owner(id);
             std::ostringstream error;
@@ -871,10 +872,20 @@ CoupledHistory Coupling::Initialise()const
 
 CoupledState Coupling::LiftInitialState(const CoupledState&state)const
 {
-    auto lifted=DirichletState(state,0.);
-    if(m_flow.Gauge())lifted.flow.tail(m_flow.PressureSize())-=m_flow.PressureOne()*
-        (m_flow.PressureMean().dot(lifted.flow.tail(m_flow.PressureSize()))/m_volume);
-    return lifted;
+    try
+    {
+        auto lifted=DirichletState(state,0.);
+        if(m_flow.Gauge())lifted.flow.tail(m_flow.PressureSize())-=m_flow.PressureOne()*
+            (m_flow.PressureMean().dot(lifted.flow.tail(m_flow.PressureSize()))/m_volume);
+        return lifted;
+    }
+    catch(const NativeInadmissibleState &error)
+    {
+        if(m_exportRejections)
+            m_rejectedCandidate=DiagnosticCandidate{DiagnosticRole::RejectedInitialization,
+                state,0,0.,error.what(),std::nullopt};
+        throw;
+    }
 }
 
 CoupledHistory Coupling::FreshHistory(const CoupledState&state)const
@@ -1074,6 +1085,67 @@ Vec Coupling::UnknownScales()const
     for(int i=0;i<ne;++i){int id=m_e.FreeIds()[i];scale[nf+nk+i]=1/(m_e.ResidualRowScale()[i]*std::sqrt(m_e.Mass().coeff(id,id)));}
     return scale;
 }
+
+std::unique_ptr<SteadySparseInverse> Coupling::MakeSteadySparseInverse(
+    const Vec &unknownScale,const Vec &rowScale)const
+{
+    const int n=m_flow.VelocitySize(),nf=m_flow.Size(),nk=m_k.FreeSize();
+    const int size=unknownScale.size();
+    std::array<std::vector<int>,2> velocity{std::vector<int>(n,-1),std::vector<int>(n,-1)};
+    int row=0;
+    for(int component=0;component<2;++component)
+        for(int id:m_flow.FreeVelocityIds()[component])velocity[component][id]=row++;
+    auto idsToFree=[](const Scalar &scalar,int offset) {
+        std::vector<int> map(scalar.Size(),-1);
+        for(int id:scalar.FreeIds())map[id]=offset++;
+        return map;
+    };
+    const auto k=idsToFree(m_k,nf),epsilon=idsToFree(m_e,nf+nk);
+    std::vector<std::vector<int>> columns(size);
+    auto add=[](std::vector<int> &inventory,const auto &ids,const std::vector<int> &free) {
+        for(int id:ids)if(free[id]>=0)inventory.push_back(free[id]);
+    };
+    auto connect=[&](const std::vector<int> &rows,const std::vector<int> &sources){
+        for(int col:sources)columns[col].insert(columns[col].end(),rows.begin(),rows.end());
+    };
+    for(const auto &cell:m_flow.Elements())
+    {
+        std::vector<int> momentum;
+        for(const auto &free:velocity)add(momentum,cell.u,free);
+        auto rows=momentum;
+        add(rows,m_k.CellIds(cell.geometry),k);
+        const bool outer=m_e.Owns(cell.geometry);
+        if(outer)add(rows,m_e.CellIds(cell.geometry),epsilon);
+        auto sources=rows;
+        // WJ production and stress use cell fields. The inner wall data and
+        // the moving k quadrature use the matching K from the same column.
+        // The only outer lift depending on K is the projected bottom trace.
+        const auto &owner=HOwner(cell);
+        if(!outer||std::abs(cell.rl-m_geometry.H)<1e-12)
+            add(sources,m_hKTrace.at(owner.geometry).ids,k);
+        connect(rows,sources);
+        if(cell.rl<m_geometry.h)
+        {
+            // Sampled convection uses the four velocity trace modes. Use the
+            // actual transported-k owner inventory for the sampled k action,
+            // including rounded basis entries from the native trace mapping.
+            std::vector<int> trace;
+            const std::array<int,4> modes{owner.u[0],owner.u[1],owner.u[2],owner.u[3]};
+            for(const auto &free:velocity)add(trace,modes,free);
+            add(trace,m_k.CellIds(owner.geometry),k);
+            connect(momentum,trace);
+        }
+    }
+    const Sparse mixed=m_flow.System(0.,Sparse(2*n,2*n),1.);
+    std::vector<Triplet> entries;
+    for(int col=0;col<mixed.outerSize();++col)
+        for(Sparse::InnerIterator it(mixed,col);it;++it)
+            if(it.value()!=0.)entries.emplace_back(it.row(),col,it.value());
+    Sparse algebraic(size,size);
+    algebraic.setFromTriplets(entries.begin(),entries.end());
+    return std::make_unique<SteadySparseInverse>(std::move(columns),std::move(algebraic),unknownScale,rowScale);
+}
+
 CoupledHistory Coupling::SteadyCandidateHistory(const Vec&unknowns)const{return FreshHistory(FromFree(unknowns,0));}
 
 double Coupling::RegularizationShape(const NativeRule &rule,int q,const DiagnosticSteadyOptions &options)const
@@ -1691,6 +1763,11 @@ SteadyKrylovResult Coupling::SolveDiagnosticSteady(const CoupledState &seed,
             "invalid diagnostic scalar Bernstein depth");
     m_diagnosticOptions=diagnostic;
     m_diagnosticCorrections.clear();
+    m_sparseSteadyWork.clear();
+    m_steadyBaseObservations.clear();
+    m_steadyActionAudits.clear();
+    m_steadyPatternSeconds=m_steadyAuditSeconds=0.;
+    m_steadyAuditResiduals=0;
     m_steadyDiagnosticCandidate.reset();
     return SearchSteady(seed,options,final,preconditionerMass,nullptr,&diagnostic);
 }
@@ -1768,8 +1845,33 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
     };
     Vec sx=UnknownScales(),sr(size);
     sr.head(nf)=m_flow.ResidualRowScale();sr.segment(nf,nk)=m_k.ResidualRowScale();sr.tail(ne)=m_e.ResidualRowScale();
+    const int npOffset=m_flow.PressureOffset();
+    const std::array<int,5> offsets{0,npOffset,nf,nf+nk,size};
+    if(diagnostic)
+        for(int block=0;block<4;++block)
+        {
+            const int offset=offsets[block],n=offsets[block+1]-offset;
+            const auto x=sx.segment(offset,n),r=sr.segment(offset,n);
+            m_steadyScaleExtrema[block]={x.minCoeff(),x.maxCoeff(),r.minCoeff(),r.maxCoeff()};
+        }
+    const bool sparse=diagnostic&&diagnostic->sparseInverse;
+    const double patternStart=Clock();
+    auto coupledInverse=sparse?MakeSteadySparseInverse(sx,sr):nullptr;
+    if(diagnostic)
+    {
+        m_steadyPatternSeconds=sparse?Clock()-patternStart:0.;
+        m_steadyBaseSha256=StateHash(unpack(pack(seed)));
+    }
     CoupledState pcState;Sparse epsilonPCFull;
     double initialBaseNorm=0.,correctionMass=0.,correctionDiffusion=0.;
+    auto blockNorms=[&](const Vec &raw) {
+        const auto r=norms(raw);
+        return std::array<double,6>{r.momentum,r.continuity,r.gauge,r.k,r.epsilon,r.trace};
+    };
+    auto deadline=[&]{
+        if(Clock()-began>=options.maximumSeconds)
+            throw SteadyCorrectionFailure("DEADLINE: bounded coupled inverse preparation exhausted");
+    };
     SteadyKrylovCallbacks callbacks;
     callbacks.ValidTrial=[&](const Vec&x){
         try{auto s=unpack(x);
@@ -1789,10 +1891,8 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
     };
     callbacks.Residual=[&](const Vec&x)->Vec{try{return equations(x);}catch(const NativeInadmissibleState&error){throw SteadyInadmissibleTrial(error.what());}};
     callbacks.TrueNorm=[&](const Vec&raw){return norms(raw).Maximum();};
-    callbacks.PreparePreconditioner=[&](const Vec&x,const Vec&raw){
-        pcState=unpack(x);auto owned=currentData(x,pcState);const auto&d=*owned;
-        Sparse flowPC=(m_options.steadyVelocityPC=="FullGradientV1"?VelocityTangent(d,timing):Strain(d))+MomentumTransportJacobian(pcState);
-        if(modified)flowPC+=regularization;
+    callbacks.PrepareCorrection=[&](const Vec&x,const Vec&raw){
+        pcState=unpack(x);
         if(shifted)
         {
             const double norm=norms(raw).Maximum();
@@ -1802,35 +1902,144 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
             const double ratio=std::clamp(norm/initialBaseNorm,1e-8,1.);
             correctionMass=diagnostic->pseudoTime>0.?ratio/diagnostic->pseudoTime:0.;
             correctionDiffusion=std::sqrt(ratio)*diagnostic->correctionDiffusion;
-            if(correctionDiffusion>0.)flowPC+=correctionDiffusion*positiveDiffusion;
             m_diagnosticCorrections.push_back({norm,correctionMass,correctionDiffusion});
         }
+    };
+    auto differentialShift=[&](const CoupledState&delta,double mass,double diffusion) {
+        Vec action=Vec::Zero(size);
+        Vec momentum=mass*m_flow.Core().MassAction(delta.flow);
+        if(diffusion>0.)
+            momentum.head(nv).noalias()+=diffusion*(positiveDiffusion*delta.flow.head(nv));
+        action.head(nf)=m_flow.Restrict(momentum);
+        if(mass>0.)
+        {
+            action.segment(nf,nk)=mass*m_k.Restrict(m_k.Mass()*delta.k);
+            action.tail(ne)=mass*m_e.Restrict(m_e.Mass()*delta.epsilon);
+        }
+        return action;
+    };
+    auto applyShift=[&](const Vec&dx,double mass,double diffusion) {
+        CoupledState delta;
+        delta.flow=m_flow.Expand(dx.head(nf),Vec::Zero(nv+m_flow.PressureSize()));
+        if(mass>0.)
+        {
+            delta.k=m_k.Expand(dx.segment(nf,nk),Vec::Zero(m_k.Size()));
+            delta.epsilon=m_e.Expand(dx.tail(ne),DependentTraceDirection(pcState,delta.k));
+        }
+        return differentialShift(delta,mass,diffusion);
+    };
+    if(shifted)callbacks.CorrectionAction=[&](const Vec&,const Vec&dx) {
+        return applyShift(dx,correctionMass,correctionDiffusion);
+    };
+    Vec lastObserved;
+    if(diagnostic)
+    {
+        callbacks.ResidualBlocks=blockNorms;
+        if(!options.evaluateInitialOnly)callbacks.ObserveAccepted=[&](const Vec &x,double norm) {
+            if(x.size()==lastObserved.size()&&(x.array()==lastObserved.array()).all())return;
+            const double start=Clock();
+            const auto s=unpack(x);
+            const auto observed=Evaluate(s,0,PrincipalPolicy::Observe,timing,diagnostic);
+            const auto k=InterfaceBounds(s);
+            const auto kin=m_reference->Parameters().KIn;
+            m_steadyBaseObservations.push_back({norm,observed.minPrincipal,observed.minCovariance,
+                                               k[0]/kin,k[1]/kin,Clock()-start});
+            lastObserved=x;
+            std::cout<<std::setprecision(12)<<"WJ-H27 steady base "<<m_steadyBaseObservations.size()-1
+                     <<" residual "<<norm<<" original principal "<<observed.minPrincipal
+                     <<" K/Kin ["<<k[0]/kin<<','<<k[1]/kin<<']'<<std::endl;
+        };
+    }
+    const auto checkedResidual=callbacks.Residual;
+    auto auditInverse=[&](const Vec &x,const Vec &raw){
+        const double start=Clock();
+        std::set<int> matching;
+        for(const auto &[id,trace]:m_hKTrace)
+            matching.insert(trace.ids.begin(),trace.ids.end());
+        std::vector<std::pair<std::string,Vec>> directions;
+        for(const char *name:{"velocity","pressure/gauge","bulk k","matching k","outer epsilon","mixed"})
+            directions.emplace_back(name,Vec::Zero(size));
+        for(int i=0;i<size;++i)
+        {
+            const double value=sx[i]*(.6*std::sin(.47*(i+1))+.4*std::cos(.21*(i+1)));
+            const int block=i<npOffset?0:i<nf?1:i<nf+nk?
+                (matching.count(m_k.FreeIds()[i-nf])?3:2):4;
+            directions[block].second[i]=value;
+            directions.back().second[i]=value;
+        }
+        const double scale=std::max(1.,x.cwiseQuotient(sx).cwiseAbs().maxCoeff());
+        for(const auto &[label,direction]:directions)
+        {
+            const Vec assembled=coupledInverse->OriginalAction(direction);
+            const Vec shift=shifted?applyShift(direction,correctionMass,correctionDiffusion):Vec::Zero(size).eval();
+            for(double multiplier:{8.,2.,.5,.125})
+            {
+                deadline();
+                SteadyActionAudit record;
+                record.direction=label;
+                record.step=multiplier*options.fdRelativeStep*scale;
+                const double h=record.step;
+                try
+                {
+                    const Vec plus=x+h*direction,minus=x-h*direction;
+                    ++m_steadyAuditResiduals;
+                    const Vec fp=checkedResidual(plus);
+                    ++m_steadyAuditResiduals;
+                    const Vec fm=checkedResidual(minus);
+                    const Vec centered=(fp-fm)/(2.*h);
+                    const Vec error=assembled-centered;
+                    record.differenceBlocks=blockNorms(error);
+                    record.centeredRelativeError=error.cwiseProduct(sr).norm()/
+                        std::max(1e-20,centered.cwiseProduct(sr).norm());
+                    record.taylorRemainder=(fp-raw-h*assembled).cwiseProduct(sr).norm();
+                    if(shifted)
+                    {
+                        const auto delta=Combination(unpack(plus),.5/h,unpack(minus),-.5/h);
+                        const Vec reference=differentialShift(delta,correctionMass,correctionDiffusion);
+                        record.shiftRelativeError=(shift-reference).cwiseProduct(sr).norm()/
+                            std::max(1e-20,reference.cwiseProduct(sr).norm());
+                    }
+                }
+                catch(const SteadyInadmissibleTrial &error)
+                {
+                    record.rejection=error.what();
+                }
+                m_steadyActionAudits.push_back(std::move(record));
+            }
+        }
+        m_steadyAuditSeconds+=Clock()-start;
+    };
+    callbacks.PreparePreconditioner=[&](const Vec&x,const Vec&raw){
+        const double inverseMass=preconditionerMass+correctionMass;
+        if(sparse)
+        {
+            SteadySparseInverse::Action addShift;
+            if(inverseMass>0.||correctionDiffusion>0.)
+                addShift=[&](const Vec &dx){return applyShift(dx,inverseMass,correctionDiffusion);};
+            auto &work=m_sparseSteadyWork.emplace_back();
+            work.baseNorm=norms(raw).Maximum();
+            coupledInverse->Prepare(x,checkedResidual,addShift,options,deadline,work);
+            std::cout<<"WJ-H27 coupled inverse "<<work.colors<<" colors, "<<work.nonzeros
+                     <<" entries, assembly "<<work.assemblySeconds<<" s, factor "
+                     <<work.factorSeconds<<" s"<<std::endl;
+            if(diagnostic->auditCorrection&&m_sparseSteadyWork.size()==1)auditInverse(x,raw);
+            return;
+        }
+        auto owned=currentData(x,pcState);
+        const auto &d=*owned;
+        Sparse flowPC=(m_options.steadyVelocityPC=="FullGradientV1"?VelocityTangent(d,timing):Strain(d))+MomentumTransportJacobian(pcState);
+        if(modified)flowPC+=regularization;
+        if(correctionDiffusion>0.)flowPC+=correctionDiffusion*positiveDiffusion;
         Sparse kPC=m_k.Diffusion(d.kRules,d.Dk)+m_k.TransportMatrix(d.kRules,pcState.flow);
         Sparse ePC=m_e.Diffusion(m_rules.Static(),d.De,d.reactionE)+m_e.TransportMatrix(m_rules.Static(),pcState.flow);
         // preconditionerMass belongs solely to the inverse approximation.
-        const double inverseMass=preconditionerMass+correctionMass;
         epsilonPCFull=ePC+inverseMass*m_e.Mass();
         m_flow.PrepareLinearPreconditioner(m_flow.System(inverseMass,flowPC,1));
         m_k.PrepareLinearPreconditioner(m_k.System(inverseMass,kPC));
         m_e.PrepareLinearPreconditioner(m_e.System(inverseMass,ePC));
     };
-    if(shifted)callbacks.CorrectionAction=[&](const Vec&,const Vec&dx) {
-        const auto du=m_flow.Expand(dx.head(nf),Vec::Zero(nv+m_flow.PressureSize()));
-        Vec action=Vec::Zero(size);
-        Vec momentum=correctionMass*m_flow.Core().MassAction(du);
-        if(correctionDiffusion>0.)
-            momentum.head(nv).noalias()+=correctionDiffusion*(positiveDiffusion*du.head(nv));
-        action.head(nf)=m_flow.Restrict(momentum);
-        if(correctionMass>0.)
-        {
-            const auto dk=m_k.Expand(dx.segment(nf,nk),Vec::Zero(m_k.Size()));
-            const auto de=m_e.Expand(dx.tail(ne),DependentTraceDirection(pcState,dk));
-            action.segment(nf,nk)=correctionMass*m_k.Restrict(m_k.Mass()*dk);
-            action.tail(ne)=correctionMass*m_e.Restrict(m_e.Mass()*de);
-        }
-        return action;
-    };
     callbacks.Precondition=[&](const Vec&rhs){
+        if(sparse)return coupledInverse->Solve(rhs);
         Vec result(size);result.segment(nf,nk)=m_k.ApplyLinearPreconditioner(rhs.segment(nf,nk));
         Vec dk=m_k.Expand(result.segment(nf,nk),Vec::Zero(m_k.Size()));
         Vec cross=Vec::Zero(2*m_flow.VelocitySize()+m_flow.PressureSize());cross.head(2*m_flow.VelocitySize())=m_flow.KnownScalarKLoad(dk);
@@ -2113,16 +2322,21 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
     out<<'}';
 }
 
-void Coupling::WriteCoefficientFields(std::ostream&out,const CoupledState&s,double time)const
+void Coupling::WriteCoefficientFields(std::ostream&out,const CoupledState&s,double time,bool refreshLift)const
 {
     auto state=[&](const CoupledState&s){out<<"{\"flow\":";VectorJSON(out,s.flow);out<<",\"k\":";VectorJSON(out,s.k);out<<",\"epsilon\":";VectorJSON(out,s.epsilon);out<<'}';};
     auto integers=[&](const std::vector<int>&v){out<<'[';for(int i=0;i<int(v.size());++i){if(i)out<<',';out<<v[i];}out<<']';};
     auto numbers=[&](const std::vector<double>&v){out<<'[';for(int i=0;i<int(v.size());++i){if(i)out<<',';out<<v[i];}out<<']';};
     out<<",\"coefficients\":";state(s);
-    auto essential=DirichletState(s,time);
-    out<<",\"essential_flow_lift\":";VectorJSON(out,m_flow.Lift(essential.flow));
-    out<<",\"essential_k_lift\":";VectorJSON(out,m_k.Lift(essential.k));
-    out<<",\"essential_epsilon_lift\":";VectorJSON(out,m_e.Lift(essential.epsilon));
+    if(refreshLift)
+    {
+        auto essential=DirichletState(s,time);
+        out<<",\"essential_flow_lift\":";VectorJSON(out,m_flow.Lift(essential.flow));
+        out<<",\"essential_k_lift\":";VectorJSON(out,m_k.Lift(essential.k));
+        out<<",\"essential_epsilon_lift\":";VectorJSON(out,m_e.Lift(essential.epsilon));
+    }
+    else
+        out<<",\"essential_flow_lift\":null,\"essential_k_lift\":null,\"essential_epsilon_lift\":null";
     out<<",\"mms_bulk_body_rhs\":";VectorJSON(out,m_bulkBodyAction);out<<",\"mms_sampled_body_rhs\":";VectorJSON(out,m_sampledBodyAction);
     out<<",\"geometry\":{\"d0\":"<<m_geometry.d0<<",\"H\":"<<m_geometry.H<<",\"h\":"<<m_geometry.h<<",\"left\":"<<m_left<<",\"right\":"<<m_right<<",\"top\":"<<m_top;
     if(m_geometry.normalMap)
@@ -2211,6 +2425,50 @@ void Coupling::WriteDiagnostic(const std::filesystem::path&path,const Diagnostic
         }
         out<<"]},\"original_residuals\":";
         norms(out,original->residual);
+        out<<",\"base_coefficient_sha256\":"<<J::Quote(m_steadyBaseSha256)
+           <<",\"steady_inverse\":"<<J::Quote(options->sparseInverse?"ColoredSparseV1":"BlockV1")
+           <<",\"scale_extrema\":[";
+        for(std::size_t i=0;i<m_steadyScaleExtrema.size();++i)
+        {
+            if(i)out<<',';
+            out<<J::Numbers(m_steadyScaleExtrema[i]);
+        }
+        out<<"],\"accepted_bases\":[";
+        for(std::size_t i=0;i<m_steadyBaseObservations.size();++i)
+        {
+            if(i)out<<',';
+            out<<J::Numbers(m_steadyBaseObservations[i]);
+        }
+        out<<"],\"sparse_pattern_seconds\":"<<m_steadyPatternSeconds<<",\"sparse_inverse_work\":[";
+        for(std::size_t i=0;i<m_sparseSteadyWork.size();++i)
+        {
+            const auto &work=m_sparseSteadyWork[i];
+            if(i)out<<',';
+            out<<"{\"base_norm\":"<<work.baseNorm<<",\"colors\":"<<work.colors
+               <<",\"nonzeros\":"<<work.nonzeros<<",\"factor_nonzeros\":"<<work.factorNonzeros
+               <<",\"residual_evaluations\":"<<work.residualEvaluations
+               <<",\"rejected_samples\":"<<work.rejectedSamples
+               <<",\"assembly_seconds\":"<<work.assemblySeconds<<",\"factor_seconds\":"<<work.factorSeconds
+               <<",\"maximum_unassigned_action\":"<<work.maximumUnassignedAction
+               <<",\"last_rejection\":"<<J::Quote(work.lastRejection)<<'}';
+        }
+        out<<"],\"direction_audit_seconds\":"<<m_steadyAuditSeconds
+           <<",\"direction_audit_residual_evaluations\":"<<m_steadyAuditResiduals<<",\"direction_audit\":[";
+        for(std::size_t i=0;i<m_steadyActionAudits.size();++i)
+        {
+            const auto &record=m_steadyActionAudits[i];
+            if(i)out<<',';
+            out<<"{\"direction\":"<<J::Quote(record.direction)<<",\"step\":"<<record.step;
+            if(record.differenceBlocks)
+                out<<",\"taylor_remainder\":"<<record.taylorRemainder
+                   <<",\"centered_relative_error\":"<<record.centeredRelativeError
+                   <<",\"difference_blocks\":"<<J::Numbers(*record.differenceBlocks)
+                   <<",\"shift_relative_error\":"<<(options->pseudoTime>0.||options->correctionDiffusion>0.?
+                       J::Number(record.shiftRelativeError):"null");
+            else out<<",\"rejection\":"<<J::Quote(record.rejection);
+            out<<'}';
+        }
+        out<<']';
         out<<",\"minimum_k\":"<<original->minimumK<<",\"minimum_epsilon\":"<<original->minimumEpsilon
            <<",\"minimum_covariance_over_k\":"<<original->minimumCovarianceOverK
            <<",\"original_principal_over_mu\":"<<original->minimumPrincipalOverMu
@@ -2231,8 +2489,9 @@ void Coupling::WriteDiagnostic(const std::filesystem::path&path,const Diagnostic
            <<",\"previous_advection_sha256\":"<<J::Quote(StateHash(h.previousAdvection))<<'}';
     }
     const auto &s=candidate.state;
-    const auto bounds=InterfaceBounds(s);
+    const auto bounds=InterfaceBounds(s,false);
     const auto &p=m_reference->Parameters();
+    const bool inTable=bounds[0]>=p.KMinimum&&bounds[1]<=p.KMaximum;
     out<<",\"state\":{\"schema\":\"WJH27NativeDiagnosticStateV1\",\"model\":"<<J::Quote(WallModelV2)
        <<",\"signature\":"<<J::Quote(m_signature)<<",\"source_identity\":"<<J::Quote(m_options.sourceIdentity)
        <<",\"reference_identity\":"<<J::Quote(m_reference->Identity())
@@ -2249,8 +2508,11 @@ void Coupling::WriteDiagnostic(const std::filesystem::path&path,const Diagnostic
        <<",\"interface_K_over_Kin\":["<<bounds[0]/p.KIn<<','<<bounds[1]/p.KIn<<']'
        <<",\"interface_K_table_margin_over_Kin\":["<<(bounds[0]-p.KMinimum)/p.KIn
        <<','<<(p.KMaximum-bounds[1])/p.KIn<<']'
-       <<",\"interface_cutoff_range\":["<<m_reference->Cutoff(bounds[1])<<','<<m_reference->Cutoff(bounds[0])<<']';
-    WriteCoefficientFields(out,s,candidate.attemptedTime);
+       <<",\"interface_derived_status\":"<<J::Quote(inTable?"AVAILABLE":"UNAVAILABLE_OUTSIDE_TABLE")
+       <<",\"interface_cutoff_range\":";
+    if(inTable)out<<'['<<m_reference->Cutoff(bounds[1])<<','<<m_reference->Cutoff(bounds[0])<<']';
+    else out<<"null";
+    WriteCoefficientFields(out,s,candidate.attemptedTime,inTable);
     if(timeStep)WriteInputHistory(out);
     out<<"}}\n";
 

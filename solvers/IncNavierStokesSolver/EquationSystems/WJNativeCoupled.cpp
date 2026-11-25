@@ -60,7 +60,7 @@ void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mas
        <<",\"callback_seconds\":{\"residual\":"<<s.residualSeconds<<",\"validity\":"<<s.validitySeconds<<",\"norm\":"<<s.normSeconds
        <<",\"precondition\":"<<s.preconditionerSeconds<<",\"prepare\":"<<s.preparationSeconds<<",\"arnoldi\":"<<s.arnoldiSeconds<<"},\"newton\":[";
     for(int i=0;i<int(r.newton.size());++i){const auto&n=r.newton[i];if(i)out<<',';out<<"{\"iteration\":"<<n.iteration<<",\"base_norm\":"<<n.baseNorm
-        <<",\"forcing\":"<<n.forcing<<",\"linear_true_norm\":"<<n.linearTrueNorm<<",\"linear_converged\":"<<(n.linearConverged?"true":"false")
+        <<",\"forcing\":"<<n.forcing<<",\"linear_true_norm\":"<<(n.linearEvaluated?J::Number(n.linearTrueNorm):"null")<<",\"linear_converged\":"<<(n.linearConverged?"true":"false")
         <<",\"accepted\":"<<(n.accepted?"true":"false")<<",\"accepted_norm\":"<<n.acceptedNorm<<",\"accepted_step\":"<<n.acceptedStep<<'}';}
     out<<"],\"line_search\":[";for(int i=0;i<int(r.lineSearch.size());++i){const auto&l=r.lineSearch[i];if(i)out<<',';out<<"{\"newton\":"<<l.newton<<",\"trial\":"<<l.trial<<",\"step\":"<<l.step
         <<",\"nonlinear_validation_attempted\":"<<(l.nonlinearValidationAttempted?"true":"false")<<",\"nonlinear_validated\":"<<(l.nonlinearValidated?"true":"false")
@@ -75,7 +75,9 @@ void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mas
            <<",\"plus_reason\":"<<J::Quote(f.plusReason)<<",\"minus_reason\":"<<J::Quote(f.minusReason)<<",\"half_reason\":"<<J::Quote(f.halfReason)<<",\"seconds\":"<<f.seconds<<'}';}
     out<<"],\"linear_checks\":[";for(int i=0;i<int(r.linear.size());++i){const auto&l=r.linear[i];if(i)out<<',';
         out<<"{\"newton\":"<<l.newton<<",\"cycle\":"<<l.cycle<<",\"iteration\":"<<l.iteration<<",\"least_squares_rank\":"<<l.leastSquaresRank
-           <<",\"projected_norm\":"<<l.projectedNorm<<",\"true_scaled_norm\":"<<l.trueScaledNorm<<",\"true_norm\":"<<l.trueNorm
+           <<",\"projected_norm\":"<<l.projectedNorm<<",\"true_scaled_norm\":"<<(l.trueChecked?J::Number(l.trueScaledNorm):"null")
+           <<",\"true_norm\":"<<(l.trueChecked?J::Number(l.trueNorm):"null")
+           <<",\"true_blocks\":"<<(l.trueBlocks?J::Numbers(*l.trueBlocks):"null")
            <<",\"true_checked\":"<<(l.trueChecked?"true":"false")<<",\"breakdown\":"<<(l.breakdown?"true":"false")<<",\"converged\":"<<(l.converged?"true":"false")<<'}';}out<<"]}";
 }
 }
@@ -208,6 +210,13 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadParameter("WJDiagnosticScalarSubdivisionDepth",
                              m_diagnosticSteadyOptions.scalarSubdivisionDepth,0);
     m_session->LoadSolverInfo("WJDiagnosticSeedSHA256",m_diagnosticSteadyOptions.seedSha256,"");
+    std::string inverse,audit,evaluateOnly;
+    m_session->LoadSolverInfo("WJDiagnosticSteadyInverse",inverse,"BlockV1");
+    m_session->LoadSolverInfo("WJDiagnosticCorrectionAudit",audit,"False");
+    m_session->LoadSolverInfo("WJDiagnosticEvaluateOnly",evaluateOnly,"False");
+    Check((inverse=="BlockV1"||inverse=="ColoredSparseV1")&&
+          (audit=="False"||audit=="True")&&(evaluateOnly=="False"||evaluateOnly=="True"),
+          "invalid diagnostic steady correction options");
     if(m_diagnosticSteady)
     {
         Check(m_restart.empty()&&m_steadySeed==0&&options.nonlinearTolerance<=1e-10,
@@ -215,10 +224,16 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
         Check(m_diagnosticSteadyOptions.seedSha256.empty()||!m_initialFields.empty(),
               "diagnostic seed digest requires a coefficient input");
         m_steadyOptions.allowIncompleteLinearStep=allowIncomplete=="True";
+        m_steadyOptions.evaluateInitialOnly=evaluateOnly=="True";
+        m_diagnosticSteadyOptions.sparseInverse=inverse=="ColoredSparseV1";
+        m_diagnosticSteadyOptions.auditCorrection=audit=="True";
+        Check(audit=="False"||(m_diagnosticSteadyOptions.sparseInverse&&!m_steadyOptions.evaluateInitialOnly),
+              "the coupled correction audit requires a sparse correction solve");
     }
     else
     {
-        Check(allowIncomplete=="False"&&m_diagnosticSteadyOptions.seedSha256.empty()&&
+        Check(allowIncomplete=="False"&&inverse=="BlockV1"&&audit=="False"&&evaluateOnly=="False"&&
+              m_diagnosticSteadyOptions.seedSha256.empty()&&
               !m_session->DefinesParameter("WJDiagnosticPseudoTime")&&
               !m_session->DefinesParameter("WJDiagnosticCorrectionDiffusion")&&
               !m_session->DefinesParameter("WJDiagnosticEta")&&
@@ -381,7 +396,8 @@ void WJNativeCoupled::v_DoSolve()
         m_coupling->WriteSteadyDiagnostic(m_prefix+".diagnostic-steady.json");
         std::cout<<"WJ-H27 diagnostic steady: "<<m_steadyResult.reason<<", residual="
                  <<m_steadyResult.trueNorm<<std::endl;
-        Check(m_steadyResult.converged,"bounded diagnostic steady search did not converge");
+        Check(m_steadyResult.converged||(m_steadyOptions.evaluateInitialOnly&&m_steadyResult.hasEvaluatedState),
+              "bounded diagnostic steady search did not converge");
         m_solveCompleted=true;
         return;
     }

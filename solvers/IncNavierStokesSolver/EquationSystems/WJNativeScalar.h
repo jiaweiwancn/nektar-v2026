@@ -43,6 +43,8 @@ public:
     const MultiRegions::ContFieldSharedPtr &Field() const { return m_field; }
     const Sparse &Mass() const { return m_mass; }
     bool Owns(int geometry) const { return m_geometryToCell.count(geometry)!=0; }
+    const std::vector<int> &CellIds(int geometry) const
+    { return m_cells.at(m_geometryToCell.at(geometry)).ids; }
     Vec Evaluate(const NativeRule &rule,const Vec &state,int derivative=-1) const;
     /** Sufficient full-cell bounds from the native Q3 tensor polynomial's
      * Bernstein coefficients, including endpoints and inter-node regions. */

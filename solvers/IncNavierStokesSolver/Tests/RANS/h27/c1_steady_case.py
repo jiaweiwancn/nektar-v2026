@@ -28,8 +28,13 @@ def prepare(args):
     output = args.out.resolve()
     fields = dict(WJNativeSolve="DiagnosticSteady", WJOutputPrefix=output/"state",
                   WJDiagnosticIncompleteLinear="True" if args.incomplete_linear else "False",
+                  WJDiagnosticSteadyInverse=args.inverse,
+                  WJDiagnosticCorrectionAudit="True" if args.correction_audit else "False",
+                  WJDiagnosticEvaluateOnly="True" if args.evaluate_only else "False",
                   WJSteadyVelocityPC=args.velocity_pc,
                   WJCheckCurrentActions="True" if args.check_actions else "False")
+    if args.export_rejections:
+        fields["WJDiagnosticCandidateOutput"] = "True"
     controls = dict(NumSteps=0, WJSteadySeconds=args.seconds,
                     WJSteadyFDStep=args.fd, WJSteadyNewtonIterations=args.newton,
                     WJSteadyKrylovDimension=args.krylov, WJSteadyLinearCycles=args.cycles,
@@ -91,6 +96,11 @@ def main():
                         default="FullGradientV1")
     parser.add_argument("--incomplete-linear", action="store_true")
     parser.add_argument("--check-actions", action="store_true")
+    parser.add_argument("--inverse", choices=("BlockV1", "ColoredSparseV1"),
+                        default="BlockV1")
+    parser.add_argument("--correction-audit", action="store_true")
+    parser.add_argument("--evaluate-only", action="store_true")
+    parser.add_argument("--export-rejections", action="store_true")
     prepare(parser.parse_args())
 
 
