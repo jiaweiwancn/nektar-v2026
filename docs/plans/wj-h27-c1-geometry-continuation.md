@@ -1,5 +1,7 @@
 # C1 physical hill geometry continuation
 
+A follow-up source-gradient fit reached 0.64952 mm through its first independently accepted BDF2 step. [Gradient seed comparison](wj-h27-c1-seed-gradient-study.md)
+
 The continuation starts from a developed, stationary discrete solution at height fraction .002 (0.08 mm), using the retained finite-viscosity inlet and the exact-inner reference table. The full experimental hill has height 40 mm, half-length 100 mm, and height fraction 1. The effective wall, independent outer mesh, fixed roughness displacement, fixed $h$, sampled forces, boundary laws, and cutoff family are defined in the [C1 governing and verification report](wj-h27-c1-normal-hill.md).
 
 ## Code and acceptance
