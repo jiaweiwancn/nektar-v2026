@@ -12,6 +12,7 @@ import numpy as np
 
 from c1_oracle import Audit, load_c1_state
 from c1_rejected_points import neighborhood, point
+from c1_support_controls import coincides, contains, locations
 from coupled_fixtures import generate, mesh
 import physical_oracle as po
 from physical_transient_oracle import state_hash
@@ -73,11 +74,18 @@ def inspect(args):
     data, _ = load_c1_state(args.native, True)
     audit = Audit(data, ref, args.order, deadline)
     controls = []
-    for a, r in args.point:
+    coordinates = [(None, a, r) for a, r in args.point]
+    if args.release_controls:
+        if not coincides(data["geometry"]["h"], ref.h, ref.H):
+            raise ValueError("support coordinate differs from the pinned reference")
+        coordinates += [(label, a, r) for label, (a, r) in locations(data["geometry"]).items()]
+    for label, a, r in coordinates:
         for cell in audit.mesh:
-            xl, xr, rl, rr = cell["bounds"]
-            if xl <= a <= xr and rl <= r <= rr:
-                controls.append(point(audit, cell, a, r, "fixed-comparison"))
+            if contains(cell, a, r, ref.H):
+                row = point(audit, cell, a, r, "fixed-comparison")
+                if label is not None:
+                    row["control"] = label
+                controls.append(row)
     local = []
     for label, filename in args.minima:
         report = read(filename)
@@ -107,6 +115,7 @@ def inspect(args):
         force += weight @ traction
         tangential += float(weight @ np.einsum("qi,qi->q", traction, metric["t"]))
     write(args.out, dict(native=identity(args.native), table=identity(args.table),
+                         source_identity=data["source_identity"],
                          coefficient_sha256=data["state_sha256"], order=args.order,
                          wall_force_on_fluid=force.tolist(), tangential_wall_force_on_fluid=tangential,
                          fixed_controls=controls, local_minima=local))
@@ -148,6 +157,8 @@ def main():
         for key in ("native", "table", "out"):
             mode.add_argument("--"+key, type=Path, required=True)
     compare.add_argument("--point", nargs=2, action="append", type=float, default=[])
+    compare.add_argument("--release-controls", action="store_true",
+                         help="check required chart locations and every containing owner")
     compare.add_argument("--minima", nargs=2, action="append", default=[])
     compare.add_argument("--order", type=int, default=32)
     compare.add_argument("--samples", type=int, default=25)

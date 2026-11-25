@@ -13,6 +13,7 @@ import sys
 import time
 
 from resources import identity
+from c1_support_controls import positive_point, positive_region, valid_owners
 
 
 HERE = Path(__file__).resolve().parent
@@ -73,8 +74,9 @@ def original_admission(candidate, table, receipts):
            for r in (equations, margins, points)):
         return "AUDIT_IDENTITY_FAILURE"
     native = state["state"]
-    if (equations["source_identity"] != native["source_identity"] or
-            points["coefficient_sha256"] != native["state_sha256"] or
+    if (any(r.get("source_identity") != native["source_identity"] for r in (equations, margins, points)) or
+            any(r.get("coefficient_sha256") != native["state_sha256"] for r in (margins, points)) or
+            points["order"] <= max(native["quadratureX"], native["quadratureR"]) or
             any(r["candidate_role"] != "STEADY_SEARCH" or r["regularization"] is not None or
                 r["step"] != 0 or r["time"] != 0. or r["order"] <= native["quadratureX"] or
                 r["radial_order"] <= native["quadratureR"] for r in (equations, margins))):
@@ -97,19 +99,20 @@ def original_admission(candidate, table, receipts):
             equations["raw_boundary"]["outlet_minimum_normal_velocity"] >= -1e-12):
         return "ORIGINAL_DOMAIN_FAILURE"
     minima = points["local_minima"]
+    regions = {record["region"] for record in minima}
     if (not margins["one_sided_faces"] or not
             {"inner", "outer", "matching_inner", "matching_outer", "faces_inner",
              "faces_outer", "cutoff", "forcing_support"} <= margins["regions"].keys() or
             not {"inner", "outer", "faces_inner", "faces_outer", "forcing_support"} <=
-            {record["region"] for record in minima} or
+            regions or len(regions) != len(minima) or
             any(record["receipt"]["sha256"] != identity(receipts["margins"])["sha256"]
-                for record in minima)):
+                for record in minima) or
+            not valid_owners(native, margins, points)):
         return "AUDIT_IDENTITY_FAILURE"
     if (state["original_principal_over_mu"] <= 1e-8 or
-            not all(region["sample_pass"] for region in margins["regions"].values()) or
+            not all(positive_region(region) for region in margins["regions"].values()) or
             any(not record["values"] for record in minima) or
-            any(value["differentiation_spread"] < 0. or len(value["minima"]) < 3 or
-                any(m["over_mu"]-value["differentiation_spread"] <= 1e-8 for m in value["minima"])
+            any(not positive_point(value)
                 for value in [*points["fixed_controls"], *(v for r in minima for v in r["values"])])):
         return "ADVERSE_CONVERGED_ROOT"
     return "QUALIFIED"
@@ -138,8 +141,7 @@ def run_audits(args, case, candidate, deadline, row):
         if args.require_original_admissible and kind == "margins":
             check.append("--one-sided-faces")
         if kind == "points":
-            for a, r in [(-8.29, .1111), (2.5, 1.107899), (1.875, .11541061001735001)]:
-                check.extend(("--point", a, r))
+            check.append("--release-controls")
             for region in ("inner", "outer", "faces_inner", "faces_outer", "forcing_support"):
                 check.extend(("--minima", region, case/"margins.json"))
         status = call(check, path.with_suffix(".log"), cap+4., case)

@@ -15,7 +15,7 @@ enum class InitialFieldRole { QualifiedReference, Candidate, AcceptedTimeState, 
 
 struct InitialFieldGeometry
 {
-    double d0=0,H=0,h=0,left=0,right=0,top=0,curve=0;
+    double d0=0,H=0,h=0,left=0,right=0,top=0,curve=0,hillHalfLength=0;
     std::string normalMap;
 };
 
@@ -68,7 +68,7 @@ public:
         const InitialFieldGeometry&expectedGeometry)const;
     void ValidateOriginalSteadyRelease(const std::string &receiptPath,const std::string &receiptSha,
         const std::string &source,const std::string &reference,const std::string &signature,
-        int quadratureX,int quadratureR)const;
+        int quadratureX,int quadratureR,double hillHalfLength)const;
     // Geometry IDs, signed maps and vector dimensions must match. Bounds may
     // differ only by the declared 64-epsilon geometric coincidence tolerance.
     bool SameInventory(const std::vector<InitialFieldElement>&elements,

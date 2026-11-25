@@ -991,7 +991,8 @@ CoupledHistory Coupling::ReleaseOriginalSteady(const std::string &path,const std
             "original steady release requires a fresh implicit physical hill trajectory");
     const InitialFields initial(path,false,true);
     initial.ValidateOriginalSteadyRelease(receipt,receiptSha,m_options.sourceIdentity,
-        m_reference->Identity(),m_signature,m_options.quadratureX,m_options.quadratureR);
+        m_reference->Identity(),m_signature,m_options.quadratureX,m_options.quadratureR,
+        m_geometry.normalMap->lengthX);
     const auto &metadata=initial.Metadata();
     auto state=PrepareState(path,metadata.packetSha256,std::nullopt);
     Require(!m_initialProjected&&StateHash(state)==metadata.stateSha256,

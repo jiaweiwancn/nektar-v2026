@@ -49,6 +49,7 @@ InitialFieldGeometry Geometry(const Tree&t)
     InitialFieldGeometry g;g.d0=Number(t,"d0");g.H=Number(t,"H");g.h=Number(t,"h");
     g.left=Number(t,"left");g.right=Number(t,"right");g.top=Number(t,"top");
     g.curve=t.get<double>("curve",0.);
+    g.hillHalfLength=t.get<double>("hill_half_length",0.);
     g.normalMap=t.get<std::string>("normal_map_signature","");
     Require(std::isfinite(g.curve)&&g.curve==0&&g.H>0&&g.h>=0&&g.h<g.H&&g.top>g.H&&g.right>g.left,
             "unsupported nonflat/invalid geometry");return g;
@@ -184,7 +185,7 @@ InitialFields::InitialFields(const std::string &path, bool allowAcceptedTimeStat
 
 void InitialFields::ValidateOriginalSteadyRelease(const std::string &receiptPath,
     const std::string &receiptSha,const std::string &source,const std::string &reference,
-    const std::string &signature,int quadratureX,int quadratureR)const
+    const std::string &signature,int quadratureX,int quadratureR,double hillHalfLength)const
 {
     const auto &m=m_metadata;
     Require(m.originalDiagnosticSteady&&!m.manufactured&&m.step==0&&m.time==0.&&
@@ -242,9 +243,14 @@ void InitialFields::ValidateOriginalSteadyRelease(const std::string &receiptPath
             Number(equations,"raw_boundary.outlet_minimum_normal_velocity")>=-1e-12,
             "independent geometry or outlet receipt failed");
     Require(response.get<bool>("one_sided_faces"),"release response audit must include one-sided faces");
+    Require(response.get<std::string>("source_identity")==source&&
+            response.get<std::string>("coefficient_sha256")==m.stateSha256,
+            "response audit source or coefficient digest differs");
     for(const std::string group:{"inner","outer","matching_inner","matching_outer",
-                                 "faces_inner","faces_outer","cutoff"})
+                                 "faces_inner","faces_outer","cutoff","forcing_support"})
     {
+        Require(bool(response.get_child_optional("regions."+group)),
+                "missing independent original response for "+group);
         const auto &region=response.get_child("regions."+group);
         const double uncertainty=Number(region,"max_directional_difference");
         Require(region.get<int>("samples")>0&&region.get<bool>("sample_pass")&&uncertainty>=0.&&
@@ -253,28 +259,91 @@ void InitialFields::ValidateOriginalSteadyRelease(const std::string &receiptPath
                 Number(region,"minimum_epsilon")>0.,
                 "independent original response failed for "+group);
     }
-    Require(points.get<std::string>("coefficient_sha256")==m.stateSha256,
-            "point audit coefficient digest differs");
+    Require(points.get<std::string>("source_identity")==source&&
+            points.get<std::string>("coefficient_sha256")==m.stateSha256&&
+            points.get<int>("order")>std::max(quadratureX,quadratureR),
+            "point audit source, coefficient digest or rule differs");
+    const double H=m_geometry.H,L=m_geometry.hillHalfLength,h=m_geometry.h,left=m_geometry.left;
+    Require(Same(L,hillHalfLength,H)&&L>0.&&left<-L&&m_geometry.right>L,
+            "different physical hill geometry for release controls");
+    // Mirror the named independent controls, using the packet's exact support radius.
+    const std::map<std::string,std::array<double,2>> controls={
+        {"upstream_collar",{left+.228*(-L-left),H*(1111./1500.)}},
+        {"downstream_outer",{L,H+std::min(.957899,.5*(m_geometry.top-H))}},
+        {"support_original",{.75*L,h}},
+        {"support_refined",{.5625*L,h}},
+        {"support_downstream_foot",{L,h}}};
+    auto owner=[&](const Tree &point) {
+        const int i=point.get<int>("geometry");
+        const auto found=m_index.find(i);
+        Require(found!=m_index.end()&&Contains(m_elements[found->second],
+                Number(point,"a"),Number(point,"rho")),"response point has a different owner");
+        return i;
+    };
+    auto positive=[](const Tree &point,const std::string &label) {
+        const double uncertainty=Number(point,"differentiation_spread");
+        const auto &minima=point.get_child("minima");
+        Require(uncertainty>=0.&&minima.size()>=3,"missing independent differentiation spacings for "+label);
+        Require(Number(point,"k")>0.&&Number(point,"epsilon")>0.&&
+                Number(point,"covariance_over_k")>1e-10&&Number(point,"mu")>0.,
+                "independent point domain failed for "+label);
+        for(const auto &minimum:minima)
+            Require(Number(minimum.second,"over_mu")-uncertainty>1e-8,
+                    "independent original point response failed for "+label);
+    };
+    std::set<std::pair<std::string,int>> fixed;
+    for(const auto &entry:points.get_child("fixed_controls"))
+    {
+        const auto &point=entry.second;
+        const int i=owner(point);
+        const auto label=point.get_optional<std::string>("control");
+        if(label)
+        {
+            const auto required=controls.find(*label);
+            Require(required!=controls.end()&&Same(Number(point,"a"),required->second[0],H)&&
+                    Same(Number(point,"rho"),required->second[1],H)&&fixed.emplace(*label,i).second,
+                    "fixed original response location or owner differs for "+*label);
+        }
+        positive(point,label?*label:"additional fixed control");
+    }
+    for(const auto &[label,coordinate]:controls)
+    {
+        bool hasOwner=false;
+        for(const auto &e:m_elements)
+            if(Contains(e,coordinate[0],coordinate[1]))
+            {
+                hasOwner=true;
+                Require(fixed.count({label,e.geometry})==1,"missing fixed original response owner for "+label);
+            }
+        Require(hasOwner,"fixed original response location has no owner for "+label);
+    }
     std::set<std::string> checked;
     for(const auto &report:points.get_child("local_minima"))
     {
         Require(report.second.get<std::string>("receipt.sha256")==receipt.get<std::string>("response.sha256"),
                 "local response audit has a different volume scan");
-        checked.insert(report.second.get<std::string>("region"));
+        const auto region=report.second.get<std::string>("region");
+        Require(checked.insert(region).second,"duplicate local response audit for "+region);
         const auto &values=report.second.get_child("values");
         Require(!values.empty(),"empty local response audit");
+        bool hasReportedWitness=false;
         for(const auto &entry:values)
         {
             const auto &point=entry.second;
-            const double uncertainty=Number(point,"differentiation_spread");
-            const auto &minima=point.get_child("minima");
-            Require(uncertainty>=0.&&minima.size()>=3,"missing independent differentiation spacings");
-            for(const auto &minimum:minima)
-                Require(Number(minimum.second,"over_mu")-uncertainty>1e-8,
-                        "local original response failed");
+            const int i=owner(point);
+            positive(point,region);
+            if(region=="forcing_support"&&point.get<std::string>("side")=="reported-minimum")
+            {
+                const auto &witness=response.get_child("regions.forcing_support.witness");
+                hasReportedWitness|=i==witness.get<int>("geometry")&&
+                    Same(Number(point,"a"),Number(witness,"a"),H)&&
+                    Same(Number(point,"rho"),Number(witness,"rho"),H);
+            }
         }
+        Require(region!="forcing_support"||hasReportedWitness,
+                "missing reported one-sided forcing support witness");
     }
-    for(const std::string region:{"inner","outer","faces_inner","faces_outer"})
+    for(const std::string region:{"inner","outer","faces_inner","faces_outer","forcing_support"})
         Require(checked.count(region)>0,"missing local original response audit for "+region);
 }
 

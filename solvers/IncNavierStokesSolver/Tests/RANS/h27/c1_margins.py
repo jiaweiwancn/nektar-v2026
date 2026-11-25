@@ -188,6 +188,7 @@ def main():
     groups = audit_state(data, ref, args.order, args.radial_order, began+args.seconds,
                          regularization, args.one_sided_faces)
     report = dict(native=identity(args.native), table=identity(args.table), audit_source=identity(__file__),
+                  source_identity=data["source_identity"], coefficient_sha256=data["state_sha256"],
                   time=data['time'], step=data['step'], height=data['geometry']['hill_height'],
                   order=args.order, radial_order=args.radial_order or args.order,
                   one_sided_faces=args.one_sided_faces, regions=groups,
