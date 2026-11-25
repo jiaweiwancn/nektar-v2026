@@ -152,6 +152,7 @@ def main():
     _, denser, _ = neighborhood(audit, cell, a, r, 2*args.samples-1)
     comparisons = [point(audit, *sample) for sample in (*sides, dense, denser)]
     previous = None
+    substitution = {}
     if args.previous:
         old, _ = load_c1_state(args.previous)
         po.require(old["geometry"] == data["geometry"] and old["elements"] == data["elements"]
@@ -159,11 +160,20 @@ def main():
                    "previous checkpoint does not match rejected history")
         old_audit = Audit(old, ref, 12, deadline)
         previous = point(old_audit, cell, a, r, "accepted-at-first-rejection-location")
+        x, radius = np.array([a]), np.array([r])
+        metric = audit.hill.metrics(cell, x, radius, outer=first["outer"])
+        for label, gradients, scalars in (("rejected_gradient_only", first, previous),
+                                           ("rejected_scalars_only", previous, first)):
+            gradient = np.asarray(gradients["gradient"])[np.ix_([0, 2], [0, 2])][None, :, :]
+            metric["K"] = np.array([scalars["K"]])
+            margin, _, uncertainty, _, _ = response(ref, gradient, np.array([scalars["k"]]),
+                np.array([scalars["epsilon"]]), radius, metric, first["outer"])
+            substitution[label] = dict(principal_over_mu=margin, differentiation_spread=uncertainty)
     report = dict(native=identity(args.native), table=identity(args.table),
                   evaluator=identity(__file__), role=meta["role"], native_first_principal=principal,
                   coefficient_sha256=data["state_sha256"], first=first, neighboring_samples=comparisons,
                   neighborhood_cells=cells, grid_order=[args.samples, 2*args.samples-1],
-                  previous=previous)
+                  previous=previous, pointwise_substitution=substitution)
     with args.out.open("x") as stream:
         json.dump(report, stream, indent=2, allow_nan=False)
         stream.write("\n")

@@ -1076,17 +1076,20 @@ Vec Coupling::UnknownScales()const
 }
 CoupledHistory Coupling::SteadyCandidateHistory(const Vec&unknowns)const{return FreshHistory(FromFree(unknowns,0));}
 
-double Coupling::RegularizationShape(const NativeRule &rule,int q)const
+double Coupling::RegularizationShape(const NativeRule &rule,int q,const DiagnosticSteadyOptions &options)const
 {
     // A polynomial of physical position, common on both sides of matching.
     // Added traction vanishes at the inlet, outlet and top.
     const auto &cell=Owner(rule.geometry);
-    const auto point=m_geometry.At(rule.x[q],rule.z[q]-m_geometry.d0,
+    const double radius=rule.z[q]-m_geometry.d0;
+    const auto point=m_geometry.At(rule.x[q],radius,
         cell.xl,cell.xr,m_e.Owns(rule.geometry)).point;
     const double x=(point[0]-m_left)/(m_right-m_left);
     const double z=(point[2]-m_geometry.d0)/m_top;
     const double span=4.*x*(1.-x),height=1.-std::pow(z,8);
-    return span*span*height*height;
+    const double ramp=options.regularizationFull>0.?
+        SmoothTransition(radius,options.regularizationStart,options.regularizationFull)[0]:1.;
+    return span*span*height*height*ramp;
 }
 
 Coupling::Data Coupling::Evaluate(const CoupledState&s,double time,PrincipalPolicy principal,
@@ -1158,7 +1161,7 @@ Coupling::Data Coupling::Evaluate(const CoupledState&s,double time,PrincipalPoli
                 if(diagnostic)
                 {
                     const double added=diagnostic->eta>0.?diagnostic->eta*diagnostic->regularizationViscosity*
-                        RegularizationShape(r,q):0.;
+                        RegularizationShape(r,q,*diagnostic):0.;
                     d.minModifiedPrincipal=std::min(d.minModifiedPrincipal,guard.principalOverMu+added/a.mu);
                 }
             }
@@ -1672,11 +1675,16 @@ SteadyKrylovResult Coupling::SolveDiagnosticSteady(const CoupledState &seed,
     const DiagnosticSteadyOptions &diagnostic)
 {
     for(double value:{diagnostic.pseudoTime,diagnostic.correctionDiffusion,diagnostic.eta,
-                      diagnostic.regularizationViscosity})
+                      diagnostic.regularizationViscosity,diagnostic.regularizationStart,
+                      diagnostic.regularizationFull})
         Require(std::isfinite(value)&&value>=0.,"invalid diagnostic steady parameter");
     Require(diagnostic.eta==0.||(diagnostic.regularizationViscosity>0.&&!m_mms&&
             std::isfinite(diagnostic.eta*diagnostic.regularizationViscosity)),
             "diagnostic diffusion requires a finite positive prescribed physical-case coefficient");
+    Require((diagnostic.regularizationStart==0.&&diagnostic.regularizationFull==0.)||
+            (m_geometry.normalMap&&diagnostic.regularizationStart<diagnostic.regularizationFull&&
+             diagnostic.regularizationFull<=m_geometry.H),
+            "diagnostic radial ramp must lie inside the normal wall layer");
     Require(diagnostic.scalarSubdivisionDepth>=0&&diagnostic.scalarSubdivisionDepth<=6,
             "invalid diagnostic scalar Bernstein depth");
     m_diagnosticOptions=diagnostic;
@@ -1711,7 +1719,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
                 weights.shear.emplace_back(Vec::Zero(cell->w.size()));
                 if(useProfile)
                     for(int q=0;q<cell->w.size();++q)
-                        weights.bulk.back()[q]*=RegularizationShape(*cell,q);
+                        weights.bulk.back()[q]*=RegularizationShape(*cell,q,*diagnostic);
             }
             return Strain(weights);
         };
@@ -2181,7 +2189,9 @@ void Coupling::WriteDiagnostic(const std::filesystem::path&path,const Diagnostic
     {
         out<<",\"regularization\":{\"eta\":"<<options->eta
            <<",\"viscosity\":"<<options->regularizationViscosity
-           <<",\"shape\":\"CartesianBoundaryPolynomialV1\",\"mean_energy_loss\":"<<m_diagnosticExtraWork<<'}'
+           <<",\"shape\":\"CartesianBoundaryPolynomialV1\",\"radius_ramp\":["
+           <<options->regularizationStart<<','<<options->regularizationFull
+           <<"],\"mean_energy_loss\":"<<m_diagnosticExtraWork<<'}'
            <<",\"correction\":{\"initial_pseudo_time\":"<<options->pseudoTime
            <<",\"initial_diffusion\":"<<options->correctionDiffusion<<",\"rows\":[";
         for(std::size_t i=0;i<m_diagnosticCorrections.size();++i)

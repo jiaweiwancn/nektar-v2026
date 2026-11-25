@@ -56,14 +56,19 @@ def load_c1_state(path, diagnostic=False):
     return state, {key: value for key, value in packet.items() if key != "state"}
 
 
-def regularization_viscosity(geometry, prescription, position):
+def regularization_viscosity(geometry, prescription, position, radius):
     if prescription is None or prescription["eta"] == 0.:
         return np.zeros(len(position))
     po.require(prescription["shape"] == "CartesianBoundaryPolynomialV1",
                "unrecognized numerical diffusion prescription")
     x = (position[:, 0]-geometry["left"])/(geometry["right"]-geometry["left"])
     z = (position[:, 1]-geometry["d0"])/(geometry["tunnel_top"]-geometry["d0"])
-    return prescription["eta"]*prescription["viscosity"]*(4*x*(1-x))**2*(1-z**8)**2
+    viscosity = prescription["eta"]*prescription["viscosity"]*(4*x*(1-x))**2*(1-z**8)**2
+    start, full = prescription.get("radius_ramp", (0.,0.))
+    if full > 0.:
+        t = np.minimum(1., np.maximum(0., (radius-start)/(full-start)))
+        viscosity *= t**3*(10-15*t+6*t*t)
+    return viscosity
 
 
 def rate(data, state):
@@ -197,7 +202,7 @@ class Audit:
         planar=R[:,(0,2),:][:,:,(0,2)]
         V=ref.nu*M-planar+2*k[:,None,None]*np.eye(2)/3
         if self.regularization is not None:
-            viscosity = regularization_viscosity(self.geometry, self.regularization, metric["position"])
+            viscosity = regularization_viscosity(self.geometry, self.regularization, metric["position"], r)
             V += viscosity[:, None, None]*M
         P=-np.einsum("qij,qij->q",planar,G)
         Pi=basis["p"][0]@self.s["flow"][2*self.n+np.asarray(e["p"])]
@@ -286,7 +291,7 @@ class Audit:
                         weak_divergence_work=(dot(U,U)/2+Pi-2*q["k"]/3)*div,
                         mass_divergence=div,strong_divergence_square=div**2)
             if self.regularization is not None:
-                viscosity = regularization_viscosity(self.geometry, self.regularization, metric["position"])
+                viscosity = regularization_viscosity(self.geometry, self.regularization, metric["position"], r)
                 strain = G+G.transpose(0,2,1)
                 values["numerical_diffusion_work"] = .5*viscosity*np.einsum("qij,qij->q",strain,strain)
             if self.temporal:

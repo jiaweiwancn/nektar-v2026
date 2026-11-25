@@ -79,6 +79,7 @@ struct DiagnosticSteadyOptions
     double pseudoTime=0., correctionDiffusion=0.;
     // A positive eta selects a separate momentum problem for initialization.
     double eta=0., regularizationViscosity=0.;
+    double regularizationStart=0., regularizationFull=0.;
     std::string seedSha256;
     int scalarSubdivisionDepth=0;
 };
@@ -230,7 +231,7 @@ private:
     Data Evaluate(const CoupledState&state,double time,bool principal,CoupledTiming&timing)const
     {return Evaluate(state,time,principal?PrincipalPolicy::Enforce:PrincipalPolicy::Skip,timing);}
     Loads Forcing(double time,CoupledTiming&timing,bool freezeManufactured=false)const;
-    double RegularizationShape(const NativeRule &rule,int q)const;
+    double RegularizationShape(const NativeRule &rule,int q,const DiagnosticSteadyOptions &options)const;
     Sparse Strain(const Data&data)const;
     Sparse VelocityTangent(const Data&data,CoupledTiming&timing)const;
     Vec TimePreconditionerData(const Data&data)const;
