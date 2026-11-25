@@ -37,7 +37,7 @@ def stage(args, case, seed, height, increment, deadline):
                "--eta", args.eta, "--regularization-viscosity", args.viscosity,
                "--regularization-radius", *args.regularization_radius,
                "--pseudo-time", args.pseudo_time, "--beta", args.beta,
-               "--scalar-subdivision", args.scalar_subdivision]
+               "--scalar-subdivision", args.scalar_subdivision, "--inverse", args.inverse]
     row = dict(height=height, increment=increment, seed=identity(seed), case=str(case),
                eta=args.eta, predicted="geometry predictor followed by the current fixed-height steady residual",
                commands=[list(map(str, prepare))])
@@ -73,6 +73,8 @@ def stage(args, case, seed, height, increment, deadline):
                          "--seconds", audit_cap]
                 if regularized:
                     check.append("--regularized")
+                if args.require_original_admissible and name == "margins":
+                    check.append("--one-sided-faces")
                 row["commands"].append(list(map(str, check)))
                 code = call(check, path.with_suffix(".log"), audit_cap+4., case)
                 row[kind] = identity(path) if code == 0 else {"exit_status": code}
@@ -87,6 +89,18 @@ def stage(args, case, seed, height, increment, deadline):
     if not (case/"margins.json").is_file() or (args.eta > 0. and not (case/"margins-modified.json").is_file()):
         row["decision"] = "hold for independent principal-response check"
         return row, None
+    if args.require_original_admissible:
+        equations = read(equation_report)
+        response = read(case/"margins.json")["regions"]
+        if not (max(state["original_residuals"]) <= 1e-10 and
+                min(state["physical_whole_cell_scalar_lower_bounds"]) > 0. and
+                state["minimum_covariance_over_k"] > 1e-10 and state["original_principal_over_mu"] > 1e-8 and
+                min(state["state"]["interface_K_table_margin_over_Kin"]) >= 0. and
+                equations["epsilon_trace"]["interior_projection_defect"] <= 1e-10 and
+                equations["raw_boundary"]["outlet_minimum_normal_velocity"] >= -1e-12 and
+                all(region["sample_pass"] for region in response.values())):
+            row["decision"] = "reduce increment after original admissibility witness"
+            return row, None
     row["decision"] = "continue as diagnostic seed"
     return row, candidate
 
@@ -110,11 +124,15 @@ def main():
     p.add_argument("--pseudo-time", type=float, default=0.)
     p.add_argument("--beta", type=float, default=0.)
     p.add_argument("--scalar-subdivision", type=int, choices=range(7), default=0)
+    p.add_argument("--inverse", choices=("BlockV1", "ColoredSparseV1"), default="BlockV1")
+    p.add_argument("--require-original-admissible", action="store_true")
     args = p.parse_args()
     seed, bound = args.seed, read(args.seed)
     if (bound["schema"] != "WJH27DiagnosticCandidateV1" or bound["role"] != "STEADY_SEARCH"
             or max(bound["residuals"]) > 1e-10):
         p.error("a converged diagnostic steady seed is required")
+    if args.require_original_admissible and (args.eta != 0. or bound["regularization"]["eta"] != 0.):
+        p.error("original admissible continuation requires literal eta=0")
     g = bound["state"]["geometry"]["hill_height"]
     if not (0 < args.minimum <= args.increment <= args.maximum and g < args.target <= 1):
         p.error("invalid continuation heights or increments")
