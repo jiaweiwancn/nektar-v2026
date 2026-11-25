@@ -108,7 +108,7 @@ def response(ref, G, k, E, radius, metric, outer, added_viscosity=None):
     return value, index, difference, float(aux[index]), float(chi[index])
 
 
-def audit_state(data, ref, order, radial_order, deadline, regularization=None):
+def audit_state(data, ref, order, radial_order, deadline, regularization=None, one_sided_faces=False):
     audit = Audit(data, ref, order, deadline, radial_order)
     results = {}
     for element in audit.mesh:
@@ -121,6 +121,17 @@ def audit_state(data, ref, order, radial_order, deadline, regularization=None):
             face_a = lo+(hi-lo)*(audit.gauss[0]+1)/2
             groups.append(('matching_outer' if outer else 'matching_inner',
                            face_a, np.full_like(face_a, ref.H)))
+        if one_sided_faces:
+            _, _, rl, rr = element["bounds"]
+            name = "faces_outer" if outer else "faces_inner"
+            for side in range(4):
+                along, radial, _ = audit.face(element, side, endpoints=True)
+                groups.append((name, along, radial))
+            if not outer:
+                cutoff = ref.cutoff(audit.trace(element, "k", along))
+                inside = (cutoff >= rl) & (cutoff <= rr)
+                if inside.any():
+                    groups.append(("cutoff", along[inside], cutoff[inside]))
         for group, a, r in groups:
             metric = audit.hill.metrics(element, a, r, outer=outer)
             _, _, G, _, _, _, scalars, _, _, covariance = audit.sample(element, a, r, metric)
@@ -140,6 +151,7 @@ def audit_state(data, ref, order, radial_order, deadline, regularization=None):
                 result['principal_over_mu'] = principal
                 result['witness'] = dict(geometry=element['geometry'], a=float(a[index]),
                     rho=float(r[index]), position=metric['position'][index].tolist(),
+                    element_bounds=element["bounds"],
                     gradient=G[index].tolist(), k=float(k[index]), epsilon=float(E[index]),
                     auxiliary=aux, chi=chi)
     for result in results.values():
@@ -158,6 +170,8 @@ def main():
     parser.add_argument('--seconds', type=float, default=180.)
     parser.add_argument('--diagnostic', action='store_true')
     parser.add_argument('--regularized', action='store_true')
+    parser.add_argument('--one-sided-faces', action='store_true',
+                        help='also scan both polynomial owners of faces, corners, and the cutoff')
     args = parser.parse_args()
     began = time.monotonic()
     ref = po.load_reference(args.table)
@@ -165,11 +179,13 @@ def main():
     if args.regularized and (not args.diagnostic or "regularization" not in metadata):
         parser.error("--regularized requires a diagnostic steady candidate")
     regularization = metadata["regularization"] if args.regularized else None
-    groups = audit_state(data, ref, args.order, args.radial_order, began+args.seconds, regularization)
+    groups = audit_state(data, ref, args.order, args.radial_order, began+args.seconds,
+                         regularization, args.one_sided_faces)
     report = dict(native=identity(args.native), table=identity(args.table), audit_source=identity(__file__),
                   time=data['time'], step=data['step'], height=data['geometry']['hill_height'],
                   order=args.order, radial_order=args.radial_order or args.order,
-                  regions=groups, elapsed=time.monotonic()-began)
+                  one_sided_faces=args.one_sided_faces, regions=groups,
+                  elapsed=time.monotonic()-began)
     if args.diagnostic:
         report.update(candidate_role=data['diagnostic_role'], regularization=regularization)
     with args.out.open('x') as stream:
