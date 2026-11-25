@@ -47,6 +47,23 @@ void CheckSparse(const Sparse &matrix, int size)
         }
     }
 }
+
+double BernsteinLower(const Eigen::Matrix4d &coefficients,int remaining,double reserve)
+{
+    const double lower=coefficients.minCoeff()-reserve;
+    if(lower>0.||remaining==0)return lower;
+    const Eigen::Matrix4d left=(Eigen::Matrix4d()<<
+        1.,0.,0.,0.,
+        .5,.5,0.,0.,
+        .25,.5,.25,0.,
+        .125,.375,.375,.125).finished();
+    const Eigen::Matrix4d right=left.reverse();
+    const Eigen::Matrix4d first=left*coefficients,second=right*coefficients;
+    return std::min({BernsteinLower(first*left.transpose(),remaining-1,reserve),
+        BernsteinLower(first*right.transpose(),remaining-1,reserve),
+        BernsteinLower(second*left.transpose(),remaining-1,reserve),
+        BernsteinLower(second*right.transpose(),remaining-1,reserve)});
+}
 }
 
 Vec Scalar::Evaluate(const NativeRule &rule,const Vec &state,int derivative) const
@@ -57,9 +74,10 @@ Vec Scalar::Evaluate(const NativeRule &rule,const Vec &state,int derivative) con
     return Basis(rule,*cell,derivative,false)*Local(state,cell->ids);
 }
 
-std::array<double,2> Scalar::PolynomialBounds(const Vec&state)const
+std::array<double,2> Scalar::PolynomialBounds(const Vec&state,int subdivisionDepth)const
 {
     Check(state.size()==m_size&&state.allFinite(),"scalar polynomial-bound state differs");
+    Check(subdivisionDepth>=0&&subdivisionDepth<=6,"scalar Bernstein depth out of range");
     Eigen::Matrix4d transform;
     transform<<1,0,0,0, 2./3,1./3,1./3,-2./3,
                1./3,2./3,1./3,2./3, 0,1,0,0;
@@ -67,7 +85,17 @@ std::array<double,2> Scalar::PolynomialBounds(const Vec&state)const
     for(const auto&cell:m_cells){Eigen::Matrix4d local;
         for(int j=0;j<16;++j)local(j%4,j/4)=state[cell.ids[j]]*cell.signs[j];
         Eigen::Matrix4d bernstein=transform*local*transform.transpose();
-        bounds[0]=std::min(bounds[0],bernstein.minCoeff());bounds[1]=std::max(bounds[1],bernstein.maxCoeff());
+        double lower=bernstein.minCoeff(),upper=bernstein.maxCoeff();
+        if(subdivisionDepth>0)
+        {
+            // Keep a reserve for the basis transformation and the convex
+            // combinations in the dyadic de Casteljau subdivisions.
+            const double reserve=128.*(1+subdivisionDepth)*std::numeric_limits<double>::epsilon()*
+                local.cwiseAbs().maxCoeff();
+            lower=BernsteinLower(bernstein,subdivisionDepth,reserve);
+            upper+=reserve;
+        }
+        bounds[0]=std::min(bounds[0],lower);bounds[1]=std::max(bounds[1],upper);
     }
     return bounds;
 }

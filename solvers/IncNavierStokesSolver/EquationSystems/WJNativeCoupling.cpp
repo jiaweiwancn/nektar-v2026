@@ -928,7 +928,7 @@ CoupledState Coupling::ImportInitialState(const std::string &path,bool allowCand
     if (diagnosticSeedSha256 && !diagnosticSeedSha256->empty())
         Require(*diagnosticSeedSha256==initial.Metadata().packetSha256,
                 "diagnostic seed packet SHA256 differs");
-    Require(!diagnosticSeed || pinnedGeometrySeed || !diagnosticSeedSha256->empty(),
+    Require(!diagnosticSeed || pinnedGeometrySeed || (diagnosticSeedSha256&&!diagnosticSeedSha256->empty()),
             "diagnostic seeds must be explicitly pinned by packet SHA256");
     Require(expectedSource==m_options.sourceIdentity || allowCandidate || pinnedGeometrySeed,
             "a different initial source requires a steady-preparation guess or an explicitly pinned geometry seed packet");
@@ -1076,19 +1076,25 @@ Vec Coupling::UnknownScales()const
 }
 CoupledHistory Coupling::SteadyCandidateHistory(const Vec&unknowns)const{return FreshHistory(FromFree(unknowns,0));}
 
-double Coupling::RegularizationShape(double a,double r)const
+double Coupling::RegularizationShape(const NativeRule &rule,int q)const
 {
-    // Prescribed chart-space C2 ramps of one code unit to zero at the
-    // exterior inlet, outlet and top. The wall has essential velocity.
-    return SmoothTransition(a-m_left,0.,1.)[0]*SmoothTransition(m_right-a,0.,1.)[0]*
-        SmoothTransition(m_top-r,0.,1.)[0];
+    // A polynomial of physical position, common on both sides of matching.
+    // Added traction vanishes at the inlet, outlet and top.
+    const auto &cell=Owner(rule.geometry);
+    const auto point=m_geometry.At(rule.x[q],rule.z[q]-m_geometry.d0,
+        cell.xl,cell.xr,m_e.Owns(rule.geometry)).point;
+    const double x=(point[0]-m_left)/(m_right-m_left);
+    const double z=(point[2]-m_geometry.d0)/m_top;
+    const double span=4.*x*(1.-x),height=1.-std::pow(z,8);
+    return span*span*height*height;
 }
 
 Coupling::Data Coupling::Evaluate(const CoupledState&s,double time,PrincipalPolicy principal,
     CoupledTiming&timing,const DiagnosticSteadyOptions *diagnostic)const
 {
     const double evaluateStart=Clock(),attributedBefore=timing.Sum();Data d;double start=Clock();const auto&p=m_reference->Parameters();
-    auto kb=m_k.PolynomialBounds(s.k),eb=m_e.PolynomialBounds(s.epsilon);
+    const int subdivision=diagnostic?diagnostic->scalarSubdivisionDepth:0;
+    auto kb=m_k.PolynomialBounds(s.k,subdivision),eb=m_e.PolynomialBounds(s.epsilon,subdivision);
     if(kb[0]<=0||eb[0]<=0){std::ostringstream error;error<<std::setprecision(17)<<"transported scalar positivity is not certified between quadrature points: k=["<<kb[0]<<','<<kb[1]<<"], epsilon=["<<eb[0]<<','<<eb[1]<<']';throw NativeInadmissibleState(error.str());}
     d.minK=kb[0];d.minE=std::min(eb[0],m_reference->Amplitude(p.KMinimum)/m_geometry.H);
     // The interface polynomial must remain in the qualified reference table
@@ -1151,8 +1157,8 @@ Coupling::Data Coupling::Evaluate(const CoupledState&s,double time,PrincipalPoli
                 d.minPrincipal=std::min(d.minPrincipal,guard.principalOverMu);
                 if(diagnostic)
                 {
-                    const double added=diagnostic->eta*diagnostic->regularizationViscosity*
-                        RegularizationShape(r.x[q],radius);
+                    const double added=diagnostic->eta>0.?diagnostic->eta*diagnostic->regularizationViscosity*
+                        RegularizationShape(r,q):0.;
                     d.minModifiedPrincipal=std::min(d.minModifiedPrincipal,guard.principalOverMu+added/a.mu);
                 }
             }
@@ -1671,6 +1677,8 @@ SteadyKrylovResult Coupling::SolveDiagnosticSteady(const CoupledState &seed,
     Require(diagnostic.eta==0.||(diagnostic.regularizationViscosity>0.&&!m_mms&&
             std::isfinite(diagnostic.eta*diagnostic.regularizationViscosity)),
             "diagnostic diffusion requires a finite positive prescribed physical-case coefficient");
+    Require(diagnostic.scalarSubdivisionDepth>=0&&diagnostic.scalarSubdivisionDepth<=6,
+            "invalid diagnostic scalar Bernstein depth");
     m_diagnosticOptions=diagnostic;
     m_diagnosticCorrections.clear();
     m_steadyDiagnosticCandidate.reset();
@@ -1703,7 +1711,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
                 weights.shear.emplace_back(Vec::Zero(cell->w.size()));
                 if(useProfile)
                     for(int q=0;q<cell->w.size();++q)
-                        weights.bulk.back()[q]*=RegularizationShape(cell->x[q],cell->z[q]-m_geometry.d0);
+                        weights.bulk.back()[q]*=RegularizationShape(*cell,q);
             }
             return Strain(weights);
         };
@@ -1718,7 +1726,8 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
     Vec validatedUnknowns;std::shared_ptr<const Data>validatedData;
     auto currentData=[&](const Vec&x,const CoupledState&s){
         if(validatedData&&x.size()==validatedUnknowns.size()&&(x.array()==validatedUnknowns.array()).all())return validatedData;
-        return std::shared_ptr<const Data>(std::make_shared<Data>(Evaluate(s,0,false,timing)));
+        return std::shared_ptr<const Data>(
+            std::make_shared<Data>(Evaluate(s,0,PrincipalPolicy::Skip,timing,diagnostic)));
     };
     auto equations=[&](const Vec&x){
         auto s=unpack(x);auto owned=currentData(x,s);const auto&d=*owned;const double start=Clock();auto adv=Advection(s,d.kRules);auto action=CurrentActions(s,d);
@@ -1753,7 +1762,9 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
     double initialBaseNorm=0.,correctionMass=0.,correctionDiffusion=0.;
     SteadyKrylovCallbacks callbacks;
     callbacks.ValidTrial=[&](const Vec&x){
-        try{auto s=unpack(x);auto k=m_k.PolynomialBounds(s.k),e=m_e.PolynomialBounds(s.epsilon);
+        try{auto s=unpack(x);
+            const int depth=diagnostic?diagnostic->scalarSubdivisionDepth:0;
+            const auto k=m_k.PolynomialBounds(s.k,depth),e=m_e.PolynomialBounds(s.epsilon,depth);
             if(k[0]<=0||e[0]<=0)return SteadyTrialValidity{false,"transported scalar polynomial is not strictly positive"};
             return SteadyTrialValidity{};
         }catch(const NativeInadmissibleState&error){return SteadyTrialValidity{false,error.what()};}
@@ -1761,7 +1772,8 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
     callbacks.ValidateNonlinearState=[&](const Vec&x){
         try{
             auto s=unpack(x);
-            auto full=std::make_shared<Data>(Evaluate(s,0,diagnostic?PrincipalPolicy::Skip:PrincipalPolicy::Enforce,timing));
+            auto full=std::make_shared<Data>(Evaluate(s,0,
+                diagnostic?PrincipalPolicy::Skip:PrincipalPolicy::Enforce,timing,diagnostic));
             validatedUnknowns=x;validatedData=std::move(full);
         }catch(const NativeInadmissibleState&error){throw SteadyInadmissibleTrial(error.what());}
     };
@@ -1833,6 +1845,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
         if(diagnostic)
         {
             m_diagnosticOriginal=final;
+            m_diagnosticWholeCellLower={m_k.PolynomialBounds(state.k)[0],m_e.PolynomialBounds(state.epsilon)[0]};
             m_diagnosticModifiedMargin=d.minModifiedPrincipal;
             m_diagnosticExtraWork=0.;
             if(modified)
@@ -2168,7 +2181,7 @@ void Coupling::WriteDiagnostic(const std::filesystem::path&path,const Diagnostic
     {
         out<<",\"regularization\":{\"eta\":"<<options->eta
            <<",\"viscosity\":"<<options->regularizationViscosity
-           <<",\"shape\":\"ChartExteriorUnitQuinticV1\",\"mean_energy_loss\":"<<m_diagnosticExtraWork<<'}'
+           <<",\"shape\":\"CartesianBoundaryPolynomialV1\",\"mean_energy_loss\":"<<m_diagnosticExtraWork<<'}'
            <<",\"correction\":{\"initial_pseudo_time\":"<<options->pseudoTime
            <<",\"initial_diffusion\":"<<options->correctionDiffusion<<",\"rows\":[";
         for(std::size_t i=0;i<m_diagnosticCorrections.size();++i)
@@ -2182,7 +2195,11 @@ void Coupling::WriteDiagnostic(const std::filesystem::path&path,const Diagnostic
         out<<",\"minimum_k\":"<<original->minimumK<<",\"minimum_epsilon\":"<<original->minimumEpsilon
            <<",\"minimum_covariance_over_k\":"<<original->minimumCovarianceOverK
            <<",\"original_principal_over_mu\":"<<original->minimumPrincipalOverMu
-           <<",\"modified_principal_over_original_mu\":"<<m_diagnosticModifiedMargin;
+           <<",\"modified_principal_over_original_mu\":"<<m_diagnosticModifiedMargin
+           <<",\"scalar_bernstein_depth\":"<<options->scalarSubdivisionDepth
+           <<",\"physical_whole_cell_scalar_lower_bounds\":["
+           <<m_diagnosticWholeCellLower[0]<<','<<m_diagnosticWholeCellLower[1]<<']'
+           <<",\"dependent_trace_direction_relative_error\":"<<m_dependentTraceDerivativeError;
     }
     if(timeStep)
     {

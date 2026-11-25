@@ -30,6 +30,18 @@ int main(int argc,char**argv)
         const double kin=.008809015145515192,cl=2.3804029452632984,A=std::pow(kin,1.5)/cl;
         Function scale=mode=="full"?Function([=](double,double){return kin;}):Function([=](double,double z){return A/(z-geo.d0);});
         Scalar scalar(field,flow,scale,mode=="full"?std::vector<int>{0}:std::vector<int>{0,2});RuleFactory factory(flow,8,12);
+        const auto &first=flow.Elements().front();
+        const double center=(first.xl+first.xr)/2.,width=first.xr-first.xl;
+        auto quadratic=scalar.Project([=](double x,double){
+            const double d=(x-center)/width;
+            return d*d+.01;
+        });
+        const double oneCell=scalar.PolynomialBounds(quadratic)[0];
+        const double subdivided=scalar.PolynomialBounds(quadratic,3)[0];
+        const Vec signChanging=quadratic-.02*scalar.Project([](double,double){return 1.;});
+        const double negative=scalar.PolynomialBounds(signChanging,3)[0];
+        if(!(oneCell<0.&&std::abs(subdivided-.01)<1e-10&&negative<-.009))
+            throw std::runtime_error("diagnostic Bernstein subdivision did not certify the polynomial sign");
         auto cutoff=[](const Element&,double x){return .03*(1+.03*x);};Rules rules=factory.Cutoff(cutoff);
         Function qf=[=](double x,double z){double r=z-geo.d0;return .01*(1+.2*x+.1*r+.3*x*x*x*(1+.1*r*r));};
         Vec target=scalar.Project(qf),lift=scalar.Lift(target),one=scalar.Project([](double,double){return 1.;});
@@ -45,6 +57,7 @@ int main(int argc,char**argv)
         bool incompatible=false;try{scalar.EssentialLift([=](double x,double z,const Vector&n){return qf(x,z)+(mode=="outer"&&n[0]<-.5?1e-5:0);},factory);}catch(const std::exception&){incompatible=true;}
         Vec gamma=Vec::Zero(scalar.Size());if(mode=="outer")gamma=scalar.EssentialLift([=](double x,double z,const Vector&n){return n[2]<-.5?A*std::pow(1+.02*x,3)/geo.H:A/(z-geo.d0);},factory);
         std::ofstream o(argv[3]);o<<std::setprecision(17)<<"{\"foundation_only\":true,\"full_coupled_gate_pass\":false,\"case\":\""<<mode<<"\",\"d0\":"<<geo.d0<<",\"H\":"<<geo.H<<",\"h\":"<<geo.h<<",\"alpha\":2,\"Kin\":"<<kin<<",\"Ain\":"<<A<<",\"velocity_size\":"<<flow.VelocitySize()<<",\"scalar_size\":"<<scalar.Size()<<",\"native_dirichlet_count\":"<<field->GetLocalToGlobalMap()->GetNumGlobalDirBndCoeffs()<<",\"essential_count\":"<<scalar.DirichletSize()<<",\"corner_conflict_rejected\":"<<(incompatible?"true":"false")<<",\"free_ids\":";ListScalarJSON(o,scalar.FreeIds());
+        o<<",\"bernstein_lower_bounds\":["<<oneCell<<','<<subdivided<<','<<negative<<']';
         for(const auto&v:std::vector<std::pair<std::string,const Vec*>>{{"target",&target},{"lift",&lift},{"one",&one},{"solution",&solution},{"rhs",&rhs},{"changed_solution",&solution2},{"changed_rhs",&rhs2},{"velocity",&velocity},{"advection",&adv},{"source_load",&src},{"natural_flux_rhs",&flux},{"dependent_gamma_lift",&gamma},{"diffusion_action",&diffusionAction}}){o<<",\""<<v.first<<"\":";VectorJSON(o,*v.second);}
         for(const auto&m:std::vector<std::pair<std::string,const Sparse*>>{{"mass",&scalar.Mass()},{"K",&k},{"system",&system},{"transport",&transport}}){o<<",\""<<m.first<<"\":";MatrixJSON(o,*m.second);}
         o<<",\"solve\":";ScalarInfoJSON(o,info);o<<",\"changed_solve\":";ScalarInfoJSON(o,info2);o<<",\"flow_elements\":[";

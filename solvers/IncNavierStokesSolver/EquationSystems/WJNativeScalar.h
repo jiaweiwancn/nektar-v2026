@@ -46,7 +46,7 @@ public:
     Vec Evaluate(const NativeRule &rule,const Vec &state,int derivative=-1) const;
     /** Sufficient full-cell bounds from the native Q3 tensor polynomial's
      * Bernstein coefficients, including endpoints and inter-node regions. */
-    std::array<double,2> PolynomialBounds(const Vec&state)const;
+    std::array<double,2> PolynomialBounds(const Vec&state,int subdivisionDepth=0)const;
     void ResetPreconditioner() { m_factor.reset(); m_initialIterations=m_lastIterations=0; }
 
     Vec Project(const Function &function) const;

@@ -201,6 +201,8 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadParameter("WJDiagnosticEta",m_diagnosticSteadyOptions.eta,0.);
     m_session->LoadParameter("WJDiagnosticRegularizationViscosity",
                              m_diagnosticSteadyOptions.regularizationViscosity,0.);
+    m_session->LoadParameter("WJDiagnosticScalarSubdivisionDepth",
+                             m_diagnosticSteadyOptions.scalarSubdivisionDepth,0);
     m_session->LoadSolverInfo("WJDiagnosticSeedSHA256",m_diagnosticSteadyOptions.seedSha256,"");
     if(m_diagnosticSteady)
     {
@@ -216,7 +218,8 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
               !m_session->DefinesParameter("WJDiagnosticPseudoTime")&&
               !m_session->DefinesParameter("WJDiagnosticCorrectionDiffusion")&&
               !m_session->DefinesParameter("WJDiagnosticEta")&&
-              !m_session->DefinesParameter("WJDiagnosticRegularizationViscosity"),
+              !m_session->DefinesParameter("WJDiagnosticRegularizationViscosity")&&
+              !m_session->DefinesParameter("WJDiagnosticScalarSubdivisionDepth"),
               "diagnostic correction or momentum regularization requires DiagnosticSteady");
     }
     double geometrySeedHeight=-1.;

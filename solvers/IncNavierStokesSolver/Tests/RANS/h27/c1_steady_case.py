@@ -35,7 +35,8 @@ def prepare(args):
                     WJSteadyKrylovDimension=args.krylov, WJSteadyLinearCycles=args.cycles,
                     WJSteadyPreconditionerMass=args.inverse_mass, WJDiagnosticPseudoTime=args.pseudo_time,
                     WJDiagnosticCorrectionDiffusion=args.beta, WJDiagnosticEta=args.eta,
-                    WJDiagnosticRegularizationViscosity=args.regularization_viscosity)
+                    WJDiagnosticRegularizationViscosity=args.regularization_viscosity,
+                    WJDiagnosticScalarSubdivisionDepth=args.scalar_subdivision)
     if args.height is not None:
         if info.find("I[@PROPERTY='WJGeometry']") is None:
             raise ValueError("height override requires a normal chart")
@@ -82,6 +83,7 @@ def main():
     parser.add_argument("--beta", type=float, default=0.)
     parser.add_argument("--eta", type=float, default=0.)
     parser.add_argument("--regularization-viscosity", type=float, default=0.)
+    parser.add_argument("--scalar-subdivision", type=int, choices=range(7), default=0)
     parser.add_argument("--velocity-pc", choices=("FullGradientV1", "PositiveFrozenV1"),
                         default="FullGradientV1")
     parser.add_argument("--incomplete-linear", action="store_true")

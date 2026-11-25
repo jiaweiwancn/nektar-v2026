@@ -126,7 +126,7 @@ def audit_state(data, ref, order, radial_order, deadline, regularization=None):
             _, _, G, _, _, _, scalars, _, _, covariance = audit.sample(element, a, r, metric)
             k, E = scalars['k'], scalars['epsilon']
             metric['K'] = audit.trace(element, 'k', a)
-            added = regularization_viscosity(audit.geometry, regularization, a, r)
+            added = regularization_viscosity(audit.geometry, regularization, metric["position"])
             principal, index, difference, aux, chi = response(ref, G, k, E, r, metric, outer, added)
             result = results.setdefault(group, dict(samples=0, minimum_k=float('inf'),
                 minimum_epsilon=float('inf'), covariance_over_k=float('inf'),
