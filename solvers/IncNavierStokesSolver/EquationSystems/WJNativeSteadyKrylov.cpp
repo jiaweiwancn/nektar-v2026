@@ -54,6 +54,7 @@ struct LinearResult
     Vec correction;
     bool converged=false;
     double trueNorm=0;
+    Vec action;
 };
 
 class Runner
@@ -80,6 +81,7 @@ public:
                 out.reason="initial residual evaluated without applying a correction";
                 return Finish();
             }
+            int factorBase=-1;
             for(int iteration=0;iteration<o.maximumNewtonIterations;++iteration)
             {
                 newton=iteration;
@@ -98,17 +100,16 @@ public:
                 previousBase=norm;
                 SteadyNewtonRecord record;
                 record.iteration=iteration;record.baseNorm=norm;record.forcing=forcing;
+                record.missingLinearReason="correction base preparation";
                 out.newton.push_back(record);
                 if(cb.PrepareCorrection)cb.PrepareCorrection(x,f);
-                if(cb.PreparePreconditioner)
-                {
-                    ++out.statistics.preconditionerPreparations;
-                    Timer timer(out.statistics.preparationSeconds);
-                    cb.PreparePreconditioner(x,f);
-                }
-                Deadline();
-                const auto linear=Linear(x,f,norm,forcing);
+                const bool reuse=factorBase>=0&&iteration-factorBase<=o.maximumInverseAge;
+                auto linear=Correct(x,f,norm,forcing,factorBase,
+                    reuse?"reuse":factorBase<0?"cold entry":"age cap",reuse);
+                if(reuse&&!linear.converged)
+                    linear=Correct(x,f,norm,forcing,factorBase,"current linear check or work cap",false);
                 out.newton.back().linearEvaluated=true;
+                out.newton.back().missingLinearReason.clear();
                 out.newton.back().linearTrueNorm=linear.trueNorm;
                 out.newton.back().linearConverged=linear.converged;
                 if(!linear.converged&&
@@ -117,11 +118,24 @@ public:
                 const Vec correction=(sx.array()*linear.correction.array()).matrix();
                 if(!correction.allFinite()||correction.cwiseAbs().maxCoeff()==0)
                     throw Stop("NEWTON_DIRECTION_UNUSABLE: zero or nonfinite correction");
+                Vec originalAction;
+                double modelSlope=0.;
+                if(o.measureDirection)
+                {
+                    originalAction=std::move(linear.action);
+                    if(cb.CorrectionAction)originalAction-=cb.CorrectionAction(x,correction);
+                    if(o.adaptiveTrialStep)
+                    {
+                        constexpr double localFraction=.015625;
+                        modelSlope=(Norm(f+localFraction*originalAction)-norm)/localFraction;
+                    }
+                    if(cb.InspectDirection)cb.InspectDirection(iteration,x,correction);
+                }
                 bool accepted=false;
                 {
                     Timer timer(out.statistics.lineSearchSeconds);
                     double step=1;
-                    for(int trial=0;trial<o.maximumLineSearchTrials;++trial,step*=o.lineSearchReduction)
+                    for(int trial=0;trial<o.maximumLineSearchTrials;++trial)
                     {
                         Deadline();
                         SteadyLineSearchRecord ls;
@@ -139,6 +153,25 @@ public:
                         {
                             ls.trueNorm=Norm(evaluation.residual);ls.evaluated=true;
                             Observe(candidate,evaluation.residual,ls.trueNorm,false);
+                            if(o.measureDirection)
+                            {
+                                const Vec predicted=f+step*originalAction;
+                                const Vec remainder=evaluation.residual-predicted;
+                                ls.predictedNorm=Norm(predicted);
+                                const double decrease=norm-*ls.predictedNorm;
+                                if(decrease>0.)
+                                {
+                                    const double ratio=(norm-ls.trueNorm)/decrease;
+                                    if(std::isfinite(ratio))ls.decreaseRatio=ratio;
+                                }
+                                if(cb.ResidualBlocks)
+                                {
+                                    ls.predictedBlocks=cb.ResidualBlocks(predicted);
+                                    ls.actualBlocks=cb.ResidualBlocks(evaluation.residual);
+                                    ls.remainderBlocks=cb.ResidualBlocks(remainder);
+                                }
+                                if(cb.InspectTrial)cb.InspectTrial(iteration,trial,step,candidate,remainder);
+                            }
                             // Norm-Armijo uses the caller's fixed physical norm.
                             ls.sufficientDecrease=ls.trueNorm<=o.acceptanceNorm||
                                 ls.trueNorm<=(1-o.armijo*step)*norm;
@@ -157,8 +190,19 @@ public:
                             ++out.statistics.acceptedNewtonSteps;
                             auto &nr=out.newton.back();nr.accepted=true;
                             nr.acceptedNorm=norm;nr.acceptedStep=step;
+                            nr.acceptedSeconds=Seconds(start);
                             break;
                         }
+                        double reduction=o.lineSearchReduction;
+                        if(o.adaptiveTrialStep&&ls.evaluated&&modelSlope<0.)
+                        {
+                            // Safeguarded minimizer of the quadratic through the
+                            // measured trial with the current model slope at zero.
+                            const double curvature=ls.trueNorm-norm-step*modelSlope;
+                            if(curvature>0.)
+                                reduction=std::clamp(-step*modelSlope/(2.*curvature),.1,.75);
+                        }
+                        step*=reduction;
                     }
                 }
                 if(!accepted)throw Stop("LINE_SEARCH_NOT_CONVERGED: declared feasible Armijo trials exhausted");
@@ -307,6 +351,9 @@ private:
         else if(accepted&&(x.array()==out.x.array()).all())out.bestFromAcceptedIterate=true;
         if(accepted)
         {
+            if(out.lastAcceptedX.size()==0||!(x.array()==out.lastAcceptedX.array()).all())
+                out.lastAcceptedNewtonIteration=newton;
+            out.lastAcceptedX=x;
             out.lastAcceptedNorm=norm;
             if(cb.ObserveAccepted)cb.ObserveAccepted(x,norm);
         }
@@ -316,7 +363,44 @@ private:
     {out.converged=true;out.status="CONVERGED";out.reason="current true steady residual meets caller acceptance norm";}
 
     SteadyKrylovResult Finish()
-    {out.statistics.totalSeconds=Seconds(start);return std::move(out);}
+    {
+        if(!out.newton.empty()&&!out.newton.back().linearEvaluated)
+            out.newton.back().missingLinearReason+=": "+out.reason;
+        out.statistics.totalSeconds=Seconds(start);return std::move(out);
+    }
+
+    LinearResult Correct(const Vec &x,const Vec &f,double norm,double forcing,
+                         int &factorBase,const char *reason,bool reuse)
+    {
+        auto &record=out.inverses.emplace_back();
+        record.base=newton;record.factorBase=reuse?factorBase:newton;
+        record.age=newton-record.factorBase;record.reason=reason;
+        record.rebuild=!reuse&&bool(cb.PreparePreconditioner);
+        const auto before=out.statistics.linearIterations;
+        try
+        {
+            if(record.rebuild)
+            {
+                out.newton.back().missingLinearReason="inverse preparation";
+                ++out.statistics.preconditionerPreparations;
+                Timer timer(out.statistics.preparationSeconds);
+                cb.PreparePreconditioner(x,f);
+                factorBase=newton;
+                record.prepared=true;
+            }
+            out.newton.back().missingLinearReason="current linear solve";
+            auto result=Linear(x,f,norm,forcing,reuse?o.reuseLinearIterations:0);
+            record.iterations=int(out.statistics.linearIterations-before);
+            record.converged=result.converged;
+            record.trueNorm=result.trueNorm;
+            return result;
+        }
+        catch(...)
+        {
+            record.iterations=int(out.statistics.linearIterations-before);
+            throw;
+        }
+    }
 
     Vec Precondition(const Vec &scaledResidual)
     {
@@ -409,7 +493,7 @@ private:
         throw Stop("FD_INFEASIBLE: derivative construction exhausted");
     }
 
-    LinearResult Linear(const Vec &x,const Vec &f,double baseNorm,double forcing)
+    LinearResult Linear(const Vec &x,const Vec &f,double baseNorm,double forcing,int workLimit)
     {
         Timer timer(out.statistics.linearSeconds);
         const Vec b=-(sr.array()*f.array()).matrix();
@@ -417,14 +501,20 @@ private:
         const double bNorm=b.stableNorm();
         if(!Positive(bNorm))throw Stop("LINEAR_SCALING: nonzero true residual has zero/nonfinite scaled norm");
         const int n=static_cast<int>(sx.size()),m=std::min(n,o.restartDimension);
-        Vec best=Vec::Zero(n);double bestNorm=baseNorm,bestScaled=bNorm;
+        Vec best=Vec::Zero(n),bestAction=Vec::Zero(n);
+        double bestNorm=baseNorm,bestScaled=bNorm;
+        int work=0;
         for(int cycle=0;cycle<o.maximumLinearCycles;++cycle)
         {
             Deadline();++out.statistics.linearCycles;
             const Vec baseCorrection=best;
+            Vec baseAction=Vec::Zero(n);
             Vec r=b;
             if(baseCorrection.cwiseAbs().maxCoeff()!=0)
-                r-=(sr.array()*Jacobian(x,f,baseCorrection,1.,"restart-residual",cycle,-1).array()).matrix();
+            {
+                baseAction=Jacobian(x,f,baseCorrection,1.,"restart-residual",cycle,-1);
+                r-=baseAction.cwiseProduct(sr);
+            }
             CheckVector(r,n,"current scaled linear residual");
             const double beta=r.stableNorm();
             const Vec raw=(r.array()/sr.array()).matrix();
@@ -436,13 +526,14 @@ private:
             restart.converged=beta<=forcing*bNorm&&initialTrue<=forcing*baseNorm;
             out.linear.push_back(restart);
             if(restart.converged)
-                return {baseCorrection,true,initialTrue};
+                return {baseCorrection,true,initialTrue,std::move(baseAction)};
             if(!Positive(beta))throw Stop("LINEAR_SCALING: inconsistent zero/nonfinite Krylov residual");
             Mat v=Mat::Zero(n,m+1),z=Mat::Zero(n,m),h=Mat::Zero(m+1,m);
             v.col(0)=r/beta;
-            for(int j=0;j<m;++j)
+            const int available=workLimit?std::min(m,workLimit-work):m;
+            for(int j=0;j<available;++j)
             {
-                Deadline();++out.statistics.linearIterations;
+                Deadline();++out.statistics.linearIterations;++work;
                 z.col(j)=Precondition(v.col(j));
                 Vec w=(sr.array()*Jacobian(x,f,z.col(j),1.,"arnoldi",cycle,j).array()).matrix();
                 CheckVector(w,n,"scaled Arnoldi action");
@@ -476,12 +567,13 @@ private:
                 SteadyLinearRecord record;record.newton=newton;record.cycle=cycle;
                 record.iteration=j;record.leastSquaresRank=static_cast<int>(qr.rank());
                 record.projectedNorm=(target-small*coefficients).stableNorm();record.breakdown=breakdown;
-                if(breakdown||k==m||k%o.trueLinearCheckInterval==0||record.projectedNorm<=forcing*bNorm)
+                if(breakdown||k==available||k%o.trueLinearCheckInterval==0||record.projectedNorm<=forcing*bNorm)
                 {
                     const Vec candidate=baseCorrection+z.leftCols(k)*coefficients;
                     // This is a new nonlinear-residual FD evaluation in the
                     // accumulated direction, not the Arnoldi recurrence norm.
-                    const Vec check=b-(sr.array()*Jacobian(x,f,candidate,1.,"true-linear-residual",cycle,j).array()).matrix();
+                    Vec action=Jacobian(x,f,candidate,1.,"true-linear-residual",cycle,j);
+                    const Vec check=b-action.cwiseProduct(sr);
                     CheckVector(check,n,"recomputed linear residual");
                     record.trueChecked=true;record.trueScaledNorm=check.stableNorm();
                     const Vec rawCheck=(check.array()/sr.array()).matrix();
@@ -490,15 +582,16 @@ private:
                     record.converged=record.trueScaledNorm<=forcing*bNorm&&record.trueNorm<=forcing*baseNorm;
                     if(record.trueNorm<bestNorm||
                        (record.trueNorm==bestNorm&&record.trueScaledNorm<bestScaled))
-                    {best=candidate;bestNorm=record.trueNorm;bestScaled=record.trueScaledNorm;}
+                    {best=candidate;bestAction=action;bestNorm=record.trueNorm;bestScaled=record.trueScaledNorm;}
                     out.linear.push_back(record);Deadline();
-                    if(record.converged)return {candidate,true,record.trueNorm};
+                    if(record.converged)return {candidate,true,record.trueNorm,std::move(action)};
                 }
                 else out.linear.push_back(record);
                 if(breakdown)break;
             }
+            if(workLimit&&work>=workLimit)break;
         }
-        return {best,false,bestNorm};
+        return {best,false,bestNorm,std::move(bestAction)};
     }
 
     const SteadyKrylovCallbacks &cb;
@@ -526,7 +619,10 @@ SteadyKrylov::SteadyKrylov(SteadyKrylovCallbacks callbacks,SteadyVector unknownS
     Require(Positive(o.maximumSeconds)&&Positive(o.acceptanceNorm),
             "steady solver needs explicit finite wall budget and true-norm acceptance threshold");
     Require(o.maximumNewtonIterations>0&&o.restartDimension>0&&o.maximumLinearCycles>0&&
-            o.trueLinearCheckInterval>0&&o.maximumLineSearchTrials>0&&o.maximumFDReductions>=0,
+            o.trueLinearCheckInterval>0&&o.maximumLineSearchTrials>0&&o.maximumFDReductions>=0&&
+            o.maximumInverseAge>=0&&o.reuseLinearIterations>0&&
+            (o.maximumInverseAge==0||bool(m_callbacks.PreparePreconditioner))&&
+            (!o.adaptiveTrialStep||o.measureDirection),
             "invalid declared steady algorithm cycle bounds");
     Require(Positive(o.fdRelativeStep)&&Positive(o.fdMinimumRelativeStep)&&
             o.fdMinimumRelativeStep<=o.fdRelativeStep&&Fraction(o.fdReduction)&&

@@ -73,6 +73,7 @@ struct DiagnosticCandidate
     std::string reason;
     std::optional<CoupledResidual> residual;
     int attemptedIteration=-1;
+    bool acceptedSteady=true;
 };
 struct DiagnosticSteadyOptions
 {
@@ -83,7 +84,7 @@ struct DiagnosticSteadyOptions
     double regularizationStart=0., regularizationFull=0.;
     std::string seedSha256;
     int scalarSubdivisionDepth=0;
-    bool sparseInverse=false, auditCorrection=false;
+    bool sparseInverse=false, auditCorrection=false, allowUncommittedGuess=false;
 };
 struct CoupledTiming
 {
@@ -152,15 +153,18 @@ public:
     CoupledHistory ReadInitialFields(const std::string &path, bool allowCandidate=false,
                                      std::optional<double> geometrySeedHeight=std::nullopt);
     CoupledState PrepareState(const std::string &path, const std::string &seedSha256,
-                              std::optional<double> geometrySeedHeight);
+                              std::optional<double> geometrySeedHeight,
+                              bool allowUncommittedGuess=false);
     CoupledHistory ReleaseOriginalSteady(const std::string &path,const std::string &receipt,
-        const std::string &receiptSha,int pulseCell,double relativeKPeak);
+        const std::string &receiptSha,int pulseCell,double relativeKPeak,
+        double velocityPulseRadius,double velocityPulsePeak);
     void EnableRejectionPackets(bool enabled){m_exportRejections=enabled;}
     void WriteRejection(const std::filesystem::path&path)const;
     SteadyKrylovResult SolveDiagnosticSteady(const CoupledState &seed,
         const SteadyKrylovOptions &options,CoupledStepInfo &final,double preconditionerMass,
         const DiagnosticSteadyOptions &diagnostic);
-    void WriteSteadyDiagnostic(const std::filesystem::path &path)const;
+    void WriteSteadyDiagnostic(const std::filesystem::path &path,
+                               const std::filesystem::path &uncommittedPath)const;
     CoupledHistory PerturbInitialHistory(const CoupledHistory&base,const std::string&certificate,
                                         const std::string&sha256);
     CoupledHistory SteadyCandidateHistory(const Vec&unknowns)const;
@@ -197,7 +201,8 @@ private:
     CoupledState InitialState()const;
     CoupledState LiftInitialState(const CoupledState&state)const;
     CoupledState ImportInitialState(const std::string &path,bool allowCandidate,
-        std::optional<double> geometrySeedHeight,const std::string *diagnosticSeedSha256);
+        std::optional<double> geometrySeedHeight,const std::string *diagnosticSeedSha256,
+        bool allowUncommittedGuess=false);
     SteadyKrylovResult SearchSteady(const CoupledState &seed,
         const SteadyKrylovOptions &options,CoupledStepInfo &final,double preconditionerMass,
         CoupledHistory *physicalHistory,const DiagnosticSteadyOptions *diagnostic);
@@ -260,6 +265,7 @@ private:
     };
     SeedGradientFit GeometrySeedGradientFit(const Vec &oldFlow, const Geometry &source) const;
     Vec ProjectContinuity(const Vec &flow, const SeedGradientFit *fit=nullptr) const;
+    Vec DownstreamVelocityPulse(double radius,double axialPeak) const;
     double ContinuityNorm(const Vec &flow) const;
     Vec RemapVelocity(const Vec &flow, const Geometry &source);
     void WriteOutletActions(std::ostream&out,const CoupledHistory&history)const;
@@ -273,8 +279,15 @@ private:
     void CheckHistory(const CoupledHistory&history)const;
     void WriteCoefficientFields(std::ostream&out,const CoupledState&state,double time,bool refreshLift=true)const;
     void WriteInputHistory(std::ostream&out)const;
+    struct SteadyPacket
+    {
+        DiagnosticCandidate candidate;
+        CoupledStepInfo original;
+        std::array<double,2> wholeCellLower{};
+        double extraWork=0.,modifiedMargin=0.;
+    };
     void WriteDiagnostic(const std::filesystem::path&path,const DiagnosticCandidate&candidate,
-                         const CoupledStepInfo *original,const DiagnosticSteadyOptions *options)const;
+                         const SteadyPacket *steady=nullptr)const;
     std::vector<MultiRegions::ContFieldSharedPtr>m_fields;
     Geometry m_geometry;
     std::shared_ptr<const Reference>m_reference;
@@ -309,12 +322,8 @@ private:
     bool m_hasInputHistory=false;
     bool m_exportRejections=false;
     mutable std::optional<DiagnosticCandidate> m_rejectedCandidate;
-    std::optional<DiagnosticCandidate> m_steadyDiagnosticCandidate;
+    std::optional<SteadyPacket> m_steadyDiagnosticCandidate,m_steadyUncommitted;
     DiagnosticSteadyOptions m_diagnosticOptions;
-    CoupledStepInfo m_diagnosticOriginal;
-    double m_diagnosticExtraWork=0.;
-    double m_diagnosticModifiedMargin=0.;
-    std::array<double,2> m_diagnosticWholeCellLower{};
     std::vector<std::array<double,3>> m_diagnosticCorrections;
     std::vector<SteadySparseWork> m_sparseSteadyWork;
     std::vector<std::array<double,6>> m_steadyBaseObservations;
@@ -325,8 +334,19 @@ private:
         std::optional<std::array<double,6>> differenceBlocks;
     };
     std::vector<SteadyActionAudit> m_steadyActionAudits;
+    struct SteadyEpsilonRemainder
+    {
+        int iteration=0,trial=0,epsilonId=-1;
+        std::vector<int> owners;
+        std::array<double,4> terms{};
+        double step=0., closure=0.,liftResidual=0.,liftCoefficient=0.;
+        std::optional<double> halfSpacingDifference;
+        std::string unavailable;
+    };
+    std::vector<SteadyEpsilonRemainder> m_steadyEpsilonRemainders;
     std::array<std::array<double,4>,4> m_steadyScaleExtrema{};
-    double m_steadyPatternSeconds=0., m_steadyAuditSeconds=0.;
+    double m_steadyPatternSeconds=0., m_steadyAuditSeconds=0.,m_steadyEpsilonSeconds=0.;
+    int m_steadyEpsilonEvaluations=0;
     int m_steadyAuditResiduals=0;
     std::string m_steadyBaseSha256;
     mutable Vec m_bulkBodyAction,m_sampledBodyAction;

@@ -24,15 +24,20 @@ def main():
     parser.add_argument("--recovery", type=int, default=1)
     parser.add_argument("--pulse-cell", type=int)
     parser.add_argument("--k-peak", type=float, default=0.)
+    parser.add_argument("--velocity-peak", type=float, default=0.)
+    parser.add_argument("--velocity-radius", type=float)
     args = parser.parse_args()
     proofs = (args.packet, args.equations, args.response, args.points)
     if args.restart:
-        if any(proofs) or args.k_peak or args.pulse_cell is not None:
+        if any(proofs) or any((args.k_peak, args.velocity_peak)) or any(
+                value is not None for value in (args.pulse_cell, args.velocity_radius)):
             parser.error("cold restart has no coefficient packet, proof, or disturbance")
     elif not all(proofs):
         parser.error("fresh release requires the typed packet and the three independent audits")
     if bool(args.k_peak) != (args.pulse_cell is not None):
         parser.error("a signed k peak requires a native pulse cell")
+    if bool(args.velocity_peak) != (args.velocity_radius is not None):
+        parser.error("a signed velocity peak requires a downstream radial face")
     session = ET.parse(args.template)
     info = session.find("CONDITIONS/SOLVERINFO")
     parameters = session.find("CONDITIONS/PARAMETERS")
@@ -73,6 +78,9 @@ def main():
                         WJOriginalSteadyReceiptSHA256=identity(receipt)["sha256"])
         if args.pulse_cell is not None:
             values.update(WJOriginalSteadyKPulseCell=args.pulse_cell, WJOriginalSteadyKPulse=args.k_peak)
+        if args.velocity_radius is not None:
+            values.update(WJOriginalSteadyVelocityPulseRadius=args.velocity_radius,
+                          WJOriginalSteadyVelocityPulse=args.velocity_peak)
         files = [*proofs, receipt]
     target = out/"run.xml"
     session.write(target, encoding="unicode")

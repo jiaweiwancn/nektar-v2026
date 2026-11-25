@@ -31,6 +31,7 @@ private:
     std::string m_prefix,m_restart,m_initialFields;
     std::string m_originalSteadyReceipt,m_originalSteadyReceiptSha256;
     double m_originalSteadyKPulse=0.;
+    double m_originalSteadyVelocityPulseRadius=0.,m_originalSteadyVelocityPulse=0.;
     int m_originalSteadyKPulseCell=-1;
     std::optional<double> m_geometrySeedHeight;
     std::string m_perturbationCertificate,m_perturbationSha256;

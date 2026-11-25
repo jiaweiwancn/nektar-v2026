@@ -52,7 +52,7 @@ class InitialFields
 {
 public:
     explicit InitialFields(const std::string &jsonPath, bool allowAcceptedTimeState=false,
-                           bool allowDiagnostic=false);
+                           bool allowDiagnostic=false,bool allowUncommittedGuess=false);
     const InitialFieldMetadata&Metadata()const{return m_metadata;}
     const InitialFieldGeometry&GeometryData()const{return m_geometry;}
     // Native packet order: Nu, Np, Nk, Ne (epsilon has only outer coefficients).

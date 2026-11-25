@@ -46,6 +46,8 @@ void AttemptJSON(std::ostream&out,const WJNative::CoupledStepInfo&info,const WJN
 void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mass)
 {
     namespace J=RANSWallSolveJson;const auto&s=r.statistics;
+    auto number=[](const auto &value){return value?J::Number(*value):"null";};
+    auto blocks=[](const auto &value){return value?J::Numbers(*value):"null";};
     out<<std::setprecision(17)<<"{\"algorithm\":\""<<WJNative::SteadyKrylov::Identity<<"\",\"status\":"<<J::Quote(r.status)
        <<",\"reason\":"<<J::Quote(r.reason)<<",\"converged\":"<<(r.converged?"true":"false")
        <<",\"has_evaluated_state\":"<<(r.hasEvaluatedState?"true":"false")<<",\"true_norm\":"<<r.trueNorm
@@ -61,11 +63,28 @@ void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mas
        <<",\"precondition\":"<<s.preconditionerSeconds<<",\"prepare\":"<<s.preparationSeconds<<",\"arnoldi\":"<<s.arnoldiSeconds<<"},\"newton\":[";
     for(int i=0;i<int(r.newton.size());++i){const auto&n=r.newton[i];if(i)out<<',';out<<"{\"iteration\":"<<n.iteration<<",\"base_norm\":"<<n.baseNorm
         <<",\"forcing\":"<<n.forcing<<",\"linear_true_norm\":"<<(n.linearEvaluated?J::Number(n.linearTrueNorm):"null")<<",\"linear_converged\":"<<(n.linearConverged?"true":"false")
-        <<",\"accepted\":"<<(n.accepted?"true":"false")<<",\"accepted_norm\":"<<n.acceptedNorm<<",\"accepted_step\":"<<n.acceptedStep<<'}';}
+        <<",\"missing_linear_reason\":"<<(n.linearEvaluated?"null":J::Quote(n.missingLinearReason))
+        <<",\"accepted\":"<<(n.accepted?"true":"false")<<",\"accepted_norm\":"<<n.acceptedNorm<<",\"accepted_step\":"<<n.acceptedStep
+        <<",\"accepted_seconds\":"<<(n.accepted?J::Number(n.acceptedSeconds):"null")<<'}';}
     out<<"],\"line_search\":[";for(int i=0;i<int(r.lineSearch.size());++i){const auto&l=r.lineSearch[i];if(i)out<<',';out<<"{\"newton\":"<<l.newton<<",\"trial\":"<<l.trial<<",\"step\":"<<l.step
         <<",\"nonlinear_validation_attempted\":"<<(l.nonlinearValidationAttempted?"true":"false")<<",\"nonlinear_validated\":"<<(l.nonlinearValidated?"true":"false")
-        <<",\"admissible\":"<<(l.admissible?"true":"false")<<",\"evaluated\":"<<(l.evaluated?"true":"false")<<",\"true_norm\":"<<l.trueNorm
+        <<",\"admissible\":"<<(l.admissible?"true":"false")<<",\"evaluated\":"<<(l.evaluated?"true":"false")
+        <<",\"true_norm\":"<<(l.evaluated?J::Number(l.trueNorm):"null")
+        <<",\"predicted_norm\":"<<number(l.predictedNorm)<<",\"actual_to_predicted_decrease\":"<<number(l.decreaseRatio)
+        <<",\"predicted_blocks\":"<<blocks(l.predictedBlocks)<<",\"actual_blocks\":"<<blocks(l.actualBlocks)
+        <<",\"nonlinear_remainder_blocks\":"<<blocks(l.remainderBlocks)
         <<",\"accepted\":"<<(l.accepted?"true":"false")<<",\"sufficient_decrease\":"<<(l.sufficientDecrease?"true":"false")<<",\"reason\":"<<J::Quote(l.reason)<<'}';}
+    out<<"],\"inverse_uses\":[";
+    for(std::size_t i=0;i<r.inverses.size();++i)
+    {
+        const auto &use=r.inverses[i];
+        if(i)out<<',';
+        out<<"{\"base\":"<<use.base<<",\"factor_base\":"<<use.factorBase<<",\"age\":"<<use.age
+           <<",\"rebuild\":"<<J::Boolean(use.rebuild)<<",\"preparation_completed\":"<<J::Boolean(use.prepared)
+           <<",\"reason\":"<<J::Quote(use.reason)<<",\"krylov_iterations\":"<<use.iterations
+           <<",\"linear_converged\":"<<(use.converged?J::Boolean(*use.converged):"null")
+           <<",\"linear_true_norm\":"<<number(use.trueNorm)<<'}';
+    }
     out<<"],\"best_from_accepted_iterate\":"<<(r.bestFromAcceptedIterate?"true":"false")<<",\"best_unknowns\":";VecJSON(out,r.x);out<<",\"best_raw_residual\":";VecJSON(out,r.residual);
     out<<",\"finite_differences\":[";for(int i=0;i<int(r.finiteDifferences.size());++i){const auto&f=r.finiteDifferences[i];if(i)out<<',';
         out<<"{\"newton\":"<<f.newton<<",\"cycle\":"<<f.cycle<<",\"iteration\":"<<f.iteration<<",\"reduction\":"<<f.reduction<<",\"purpose\":"<<J::Quote(f.purpose)<<",\"method\":"<<J::Quote(f.method)
@@ -195,6 +214,8 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadSolverInfo("WJOriginalSteadyReceiptSHA256",m_originalSteadyReceiptSha256,"");
     m_session->LoadParameter("WJOriginalSteadyKPulse",m_originalSteadyKPulse,0.);
     m_session->LoadParameter("WJOriginalSteadyKPulseCell",m_originalSteadyKPulseCell,-1);
+    m_session->LoadParameter("WJOriginalSteadyVelocityPulse",m_originalSteadyVelocityPulse,0.);
+    m_session->LoadParameter("WJOriginalSteadyVelocityPulseRadius",m_originalSteadyVelocityPulseRadius,0.);
     std::string exportRejections,allowIncomplete;
     m_session->LoadSolverInfo("WJDiagnosticCandidateOutput",exportRejections,"False");
     m_session->LoadSolverInfo("WJDiagnosticIncompleteLinear",allowIncomplete,"False");
@@ -214,12 +235,20 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadParameter("WJDiagnosticScalarSubdivisionDepth",
                              m_diagnosticSteadyOptions.scalarSubdivisionDepth,0);
     m_session->LoadSolverInfo("WJDiagnosticSeedSHA256",m_diagnosticSteadyOptions.seedSha256,"");
-    std::string inverse,audit,evaluateOnly;
+    std::string inverse,audit,evaluateOnly,direction,globalization,uncommitted;
     m_session->LoadSolverInfo("WJDiagnosticSteadyInverse",inverse,"BlockV1");
     m_session->LoadSolverInfo("WJDiagnosticCorrectionAudit",audit,"False");
     m_session->LoadSolverInfo("WJDiagnosticEvaluateOnly",evaluateOnly,"False");
+    m_session->LoadSolverInfo("WJDiagnosticDirectionModel",direction,"False");
+    m_session->LoadSolverInfo("WJDiagnosticGlobalization",globalization,"HalvingV1");
+    m_session->LoadSolverInfo("WJDiagnosticUncommittedGuess",uncommitted,"False");
+    m_session->LoadParameter("WJDiagnosticInverseMaximumAge",m_steadyOptions.maximumInverseAge,0);
+    m_session->LoadParameter("WJDiagnosticReuseLinearIterations",m_steadyOptions.reuseLinearIterations,12);
     Check((inverse=="BlockV1"||inverse=="ColoredSparseV1")&&
-          (audit=="False"||audit=="True")&&(evaluateOnly=="False"||evaluateOnly=="True"),
+          (audit=="False"||audit=="True")&&(evaluateOnly=="False"||evaluateOnly=="True")&&
+          (direction=="False"||direction=="True")&&
+          (globalization=="HalvingV1"||globalization=="ModelBacktrackV1")&&
+          (uncommitted=="False"||uncommitted=="True"),
           "invalid diagnostic steady correction options");
     if(m_diagnosticSteady)
     {
@@ -231,12 +260,22 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
         m_steadyOptions.evaluateInitialOnly=evaluateOnly=="True";
         m_diagnosticSteadyOptions.sparseInverse=inverse=="ColoredSparseV1";
         m_diagnosticSteadyOptions.auditCorrection=audit=="True";
+        m_diagnosticSteadyOptions.allowUncommittedGuess=uncommitted=="True";
+        m_steadyOptions.measureDirection=direction=="True";
+        m_steadyOptions.adaptiveTrialStep=globalization=="ModelBacktrackV1";
+        Check(m_steadyOptions.maximumInverseAge==0||m_diagnosticSteadyOptions.sparseInverse,
+              "inverse reuse requires ColoredSparseV1");
+        Check(!m_steadyOptions.adaptiveTrialStep||m_steadyOptions.measureDirection,
+              "model backtracking requires the current unshifted direction model");
         Check(audit=="False"||(m_diagnosticSteadyOptions.sparseInverse&&!m_steadyOptions.evaluateInitialOnly),
               "the coupled correction audit requires a sparse correction solve");
     }
     else
     {
         Check(allowIncomplete=="False"&&inverse=="BlockV1"&&audit=="False"&&evaluateOnly=="False"&&
+              direction=="False"&&globalization=="HalvingV1"&&uncommitted=="False"&&
+              !m_session->DefinesParameter("WJDiagnosticInverseMaximumAge")&&
+              !m_session->DefinesParameter("WJDiagnosticReuseLinearIterations")&&
               m_diagnosticSteadyOptions.seedSha256.empty()&&
               !m_session->DefinesParameter("WJDiagnosticPseudoTime")&&
               !m_session->DefinesParameter("WJDiagnosticCorrectionDiffusion")&&
@@ -285,7 +324,9 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
           "physical perturbation requires a certified initial-field import and fresh histories");
     Check(m_originalSteadyReceipt.empty()==m_originalSteadyReceiptSha256.empty()&&
           (m_originalSteadyReceipt.empty()?(!m_session->DefinesParameter("WJOriginalSteadyKPulse")&&
-              !m_session->DefinesParameter("WJOriginalSteadyKPulseCell")):
+              !m_session->DefinesParameter("WJOriginalSteadyKPulseCell")&&
+              !m_session->DefinesParameter("WJOriginalSteadyVelocityPulse")&&
+              !m_session->DefinesParameter("WJOriginalSteadyVelocityPulseRadius")):
               (!m_steadyMode&&!m_initialFields.empty()&&m_restart.empty()&&
                !m_geometrySeedHeight&&m_perturbationCertificate.empty())),
           "original steady release requires explicit independent receipts and fresh coefficient input");
@@ -310,7 +351,8 @@ void WJNativeCoupled::v_DoInitialise(bool dump)
         if(m_diagnosticSteady)
         {
             m_diagnosticSeed=m_coupling->PrepareState(m_initialFields,
-                m_diagnosticSteadyOptions.seedSha256,m_geometrySeedHeight);
+                m_diagnosticSteadyOptions.seedSha256,m_geometrySeedHeight,
+                m_diagnosticSteadyOptions.allowUncommittedGuess);
             m_initialisationSeconds=Clock()-start;
             return;
         }
@@ -321,7 +363,8 @@ void WJNativeCoupled::v_DoInitialise(bool dump)
         else if(!m_originalSteadyReceipt.empty())
         {
             m_history=m_coupling->ReleaseOriginalSteady(m_initialFields,m_originalSteadyReceipt,
-                m_originalSteadyReceiptSha256,m_originalSteadyKPulseCell,m_originalSteadyKPulse);
+                m_originalSteadyReceiptSha256,m_originalSteadyKPulseCell,m_originalSteadyKPulse,
+                m_originalSteadyVelocityPulseRadius,m_originalSteadyVelocityPulse);
         }
         else if(!m_initialFields.empty())
             m_history=m_coupling->ReadInitialFields(m_initialFields,m_steadyMode,m_geometrySeedHeight);
@@ -408,7 +451,8 @@ void WJNativeCoupled::v_DoSolve()
         SteadyJSON(out,m_steadyResult,m_steadyPreconditionerMass);
         out<<'\n'<<std::flush;
         Check(bool(out),"cannot write diagnostic steady ledger");
-        m_coupling->WriteSteadyDiagnostic(m_prefix+".diagnostic-steady.json");
+        m_coupling->WriteSteadyDiagnostic(m_prefix+".diagnostic-steady.json",
+                                          m_prefix+".diagnostic-uncommitted.json");
         std::cout<<"WJ-H27 diagnostic steady: "<<m_steadyResult.reason<<", residual="
                  <<m_steadyResult.trueNorm<<std::endl;
         Check(m_steadyResult.converged||(m_steadyOptions.evaluateInitialOnly&&m_steadyResult.hasEvaluatedState),

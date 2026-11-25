@@ -35,6 +35,15 @@ def prepare(args):
                   WJCheckCurrentActions="True" if args.check_actions else "False")
     if args.export_rejections:
         fields["WJDiagnosticCandidateOutput"] = "True"
+    # Clear inherited numerical controls when reproducing the rebuild route.
+    for name in ("WJDiagnosticDirectionModel", "WJDiagnosticGlobalization",
+                 "WJDiagnosticUncommittedGuess"):
+        for item in info.findall(f"I[@PROPERTY='{name}']"):
+            info.remove(item)
+    for item in list(parameters):
+        if item.text.split("=", 1)[0].strip() in (
+                "WJDiagnosticInverseMaximumAge", "WJDiagnosticReuseLinearIterations"):
+            parameters.remove(item)
     controls = dict(NumSteps=0, WJSteadySeconds=args.seconds,
                     WJSteadyFDStep=args.fd, WJSteadyNewtonIterations=args.newton,
                     WJSteadyKrylovDimension=args.krylov, WJSteadyLinearCycles=args.cycles,
@@ -44,6 +53,17 @@ def prepare(args):
                     WJDiagnosticRegularizationStartRadius=args.regularization_radius[0],
                     WJDiagnosticRegularizationFullRadius=args.regularization_radius[1],
                     WJDiagnosticScalarSubdivisionDepth=args.scalar_subdivision)
+    if args.maximum_inverse_age:
+        controls.update(WJDiagnosticInverseMaximumAge=args.maximum_inverse_age,
+                        WJDiagnosticReuseLinearIterations=args.reuse_linear_iterations)
+    if args.direction_model:
+        fields["WJDiagnosticDirectionModel"] = "True"
+    if args.globalization != "HalvingV1":
+        fields["WJDiagnosticGlobalization"] = args.globalization
+    if args.uncommitted_guess:
+        if not args.seed or args.remap:
+            raise ValueError("an uncommitted guess needs a digest-bound fixed-height seed")
+        fields["WJDiagnosticUncommittedGuess"] = "True"
     if args.height is not None:
         if info.find("I[@PROPERTY='WJGeometry']") is None:
             raise ValueError("height override requires a normal chart")
@@ -51,7 +71,10 @@ def prepare(args):
     if args.quadrature:
         controls["WJQuadratureX"], controls["WJQuadratureR"] = args.quadrature
     if args.seed:
-        packet = json.loads(args.seed.read_text())["state"]
+        bound = json.loads(args.seed.read_text())
+        if bound.get("iterate_custody") == "UNCOMMITTED_TRIAL" and not args.uncommitted_guess:
+            raise ValueError("uncommitted diagnostic seed requires --uncommitted-guess")
+        packet = bound["state"]
         sha = identity(args.seed)["sha256"]
         fields.update(WJInitialFields=args.seed.resolve(),
                       WJInitialSourceIdentity=packet["source_identity"], WJDiagnosticSeedSHA256=sha)
@@ -101,6 +124,12 @@ def main():
     parser.add_argument("--correction-audit", action="store_true")
     parser.add_argument("--evaluate-only", action="store_true")
     parser.add_argument("--export-rejections", action="store_true")
+    parser.add_argument("--maximum-inverse-age", type=int, default=0)
+    parser.add_argument("--reuse-linear-iterations", type=int, default=12)
+    parser.add_argument("--direction-model", action="store_true")
+    parser.add_argument("--globalization", choices=("HalvingV1", "ModelBacktrackV1"),
+                        default="HalvingV1")
+    parser.add_argument("--uncommitted-guess", action="store_true")
     prepare(parser.parse_args())
 
 

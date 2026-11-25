@@ -11,7 +11,8 @@ struct SteadySparseWork
 {
     int colors=0, nonzeros=0, factorNonzeros=0, residualEvaluations=0, rejectedSamples=0;
     double baseNorm=0., assemblySeconds=0., factorSeconds=0., maximumUnassignedAction=0.;
-    std::string lastRejection;
+    double inverseMass=0.,stiffness=0.;
+    std::string lastRejection,baseSha256;
 };
 
 /** A row-disjoint, centered finite-difference inverse on the free unknowns.

@@ -72,7 +72,8 @@ const std::vector<double>&Signs(const InitialFieldElement&e,unsigned field)
 {return field<2?e.us:field==2?e.ks:field==3?e.epsilonSigns:e.ps;}
 }
 
-InitialFields::InitialFields(const std::string &path, bool allowAcceptedTimeState, bool allowDiagnostic)
+InitialFields::InitialFields(const std::string &path, bool allowAcceptedTimeState,
+    bool allowDiagnostic,bool allowUncommittedGuess)
 {
     Require(std::filesystem::is_regular_file(path),"input is not a regular coefficient packet");
     Require(std::filesystem::file_size(path)<=256ULL*1024*1024,"coefficient packet exceeds declared 256 MiB input allowance");
@@ -105,7 +106,11 @@ InitialFields::InitialFields(const std::string &path, bool allowAcceptedTimeStat
                 "unsupported diagnostic coefficient role");
         Require(!root.get<bool>("physical_history"),"diagnostic packet falsely claims a physical history");
         m.role=InitialFieldRole::Diagnostic;
-        m.originalDiagnosticSteady=role=="STEADY_SEARCH"&&
+        const auto custody=root.get<std::string>("iterate_custody","");
+        Require(custody.empty()||custody=="LAST_ACCEPTED"||
+                (custody=="UNCOMMITTED_TRIAL"&&allowUncommittedGuess&&!allowAcceptedTimeState),
+                "uncommitted steady trial requires an explicit fixed-height diagnostic guess");
+        m.originalDiagnosticSteady=role=="STEADY_SEARCH"&&custody!="UNCOMMITTED_TRIAL"&&
             root.get<std::string>("residual_kind","")=="refreshed original steady"&&
             root.get<double>("regularization.eta",-1.)==0.;
         m.equationIdentity=root.get<std::string>("equation_identity","");

@@ -64,6 +64,9 @@ struct SteadyKrylovCallbacks
     // nonlinear base. It is used in every linear product and check, never F.
     std::function<SteadyVector(const SteadyVector &,const SteadyVector &)> CorrectionAction;
     std::function<std::array<double,6>(const SteadyVector &)> ResidualBlocks;
+    // Diagnostic-only observations of the unshifted local model.
+    std::function<void(int,const SteadyVector &,const SteadyVector &)> InspectDirection;
+    std::function<void(int,int,double,const SteadyVector &,const SteadyVector &)> InspectTrial;
     std::function<void(const SteadyVector &,double)> ObserveAccepted;
     // Optional complete scientific guard for actual nonlinear states. Called
     // after ValidTrial and before Residual/Observe at every initial/re-evaluated
@@ -93,6 +96,9 @@ struct SteadyKrylovOptions
     // only after its recomputed true linear norm improves on the base norm.
     bool allowIncompleteLinearStep=false;
     bool evaluateInitialOnly=false;
+    int maximumInverseAge=0, reuseLinearIterations=12;
+    bool measureDirection=false;
+    bool adaptiveTrialStep=false;
 };
 
 struct SteadyKrylovStatistics
@@ -135,6 +141,17 @@ struct SteadyLineSearchRecord
     double step=0, trueNorm=0;
     bool admissible=false, evaluated=false, sufficientDecrease=false, accepted=false;
     bool nonlinearValidationAttempted=false, nonlinearValidated=false;
+    std::optional<double> predictedNorm,decreaseRatio;
+    std::optional<std::array<double,6>> predictedBlocks,actualBlocks,remainderBlocks;
+    std::string reason;
+};
+
+struct SteadyInverseUse
+{
+    int base=0,factorBase=0,age=0,iterations=0;
+    bool rebuild=false,prepared=false;
+    std::optional<bool> converged;
+    std::optional<double> trueNorm;
     std::string reason;
 };
 
@@ -142,27 +159,30 @@ struct SteadyNewtonRecord
 {
     int iteration=0;
     double baseNorm=0, forcing=0, linearTrueNorm=0, acceptedNorm=0, acceptedStep=0;
+    double acceptedSeconds=0.;
     bool linearEvaluated=false,linearConverged=false, accepted=false;
+    std::string missingLinearReason;
 };
 
 struct SteadyKrylovResult
 {
     bool converged=false, hasEvaluatedState=false, bestFromAcceptedIterate=true;
     bool nonlinearValidationEnabled=false;
-    int bestNewtonIteration=-1;
+    int bestNewtonIteration=-1,lastAcceptedNewtonIteration=-1;
     std::string status="NOT_CONVERGED", reason;
     // Best evaluated admissible state, with optional full nonlinear validation
     // passed, not necessarily an Armijo-accepted
     // iterate on failure. The caller must explicitly install any returned x.
     // If the deadline expires before an initial norm can be evaluated,
     // hasEvaluatedState=false and trueNorm/residual are not evidence.
-    SteadyVector x, residual;
+    SteadyVector x, residual, lastAcceptedX;
     double trueNorm=0, lastAcceptedNorm=0;
     SteadyKrylovStatistics statistics;
     std::vector<SteadyFDRecord> finiteDifferences;
     std::vector<SteadyLinearRecord> linear;
     std::vector<SteadyLineSearchRecord> lineSearch;
     std::vector<SteadyNewtonRecord> newton;
+    std::vector<SteadyInverseUse> inverses;
 };
 
 struct SteadyDerivativeProbe
