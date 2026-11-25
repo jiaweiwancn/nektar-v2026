@@ -1,5 +1,7 @@
 # C1 finite-viscosity WJ–EARSM on a normal-coordinate hill
 
+The later continuation campaign used the ext4 Linux workspace and independently checked the outer constitutive margin at each accepted height. [Continuation results and current gate decision](wj-h27-c1-geometry-continuation.md)
+
 The flat implicit baseline and curved governing checks passed on Linux. The full-height physical pilot reached .02 of the 1.48 target before the principal-response guard rejected further advancement. The inputs, source and binary identities, independent results, per-attempt diagnostics and raw Linux locations are recorded with the results. [Machine-readable evidence](wj-h27-c1-evidence.json)
 
 ## Geometry and implementation
