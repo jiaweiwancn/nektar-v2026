@@ -638,8 +638,14 @@ Vec Coupling::RemapVelocity(const Vec &flow, const Geometry &source)
             const double qr=old.determinant*(old.inverse[2][0]*u[i]+old.inverse[2][2]*w[i]);
             const double x=(next.jacobian[0][0]*qa+next.jacobian[0][2]*qr)/next.determinant;
             const double z=(next.jacobian[2][0]*qa+next.jacobian[2][2]*qr)/next.determinant;
-            du[i]=x-u[i];
-            dw[i]=z-w[i];
+            // Retain the Piola change through matching, and return to the
+            // previous Cartesian field in the outer bulk. A Piola remap
+            // across the full ruled tunnel carries changes of the matching
+            // tangent high into the flow and can create spurious shear there.
+            // Project the tapered field with the target weak divergence.
+            const double blend=outer ? 1-SmoothTransition(radius,m_geometry.H,m_geometry.H+1.)[0] : 1.;
+            du[i]=blend*(x-u[i]);
+            dw[i]=blend*(z-w[i]);
             const double recoveredA=next.determinant*(next.inverse[0][0]*x+next.inverse[0][2]*z);
             const double recoveredR=next.determinant*(next.inverse[2][0]*x+next.inverse[2][2]*z);
             m_initialFluxRoundtripError=std::max({m_initialFluxRoundtripError,
@@ -1743,7 +1749,8 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
     if (m_geometrySeedHeight)
         out<<",\"geometry_seed\":{\"from_height\":"<<*m_geometrySeedHeight
            <<",\"to_height\":"<<m_geometry.normalMap->amplitude
-           <<",\"pointwise_flux_roundtrip_error\":"<<m_initialFluxRoundtripError
+           <<",\"piola_flux_roundtrip_error\":"<<m_initialFluxRoundtripError
+           <<",\"outer_taper_end_radius\":"<<(m_geometry.H+1.)
            <<",\"continuity_before\":"<<m_initialContinuityBefore
            <<",\"continuity_after\":"<<m_initialContinuityAfter<<'}';
     if(m_options.recordNonlinearTrace){out<<",\"nonlinear_trace\":[";for(int i=0;i<int(info.nonlinearTrace.size());++i){const auto&t=info.nonlinearTrace[i];if(i)out<<',';out<<"{\"residuals\":["<<t.residual.momentum<<','<<t.residual.continuity<<','<<t.residual.gauge<<','<<t.residual.k<<','<<t.residual.epsilon<<','<<t.residual.trace<<"],\"accelerated\":"<<(t.accelerated?"true":"false")<<",\"seconds\":"<<t.seconds<<'}';}out<<']';}
