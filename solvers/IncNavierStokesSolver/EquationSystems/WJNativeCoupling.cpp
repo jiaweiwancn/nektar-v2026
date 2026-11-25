@@ -1082,8 +1082,8 @@ double Coupling::RegularizationShape(const NativeRule &rule,int q,const Diagnost
     // Added traction vanishes at the inlet, outlet and top.
     const auto &cell=Owner(rule.geometry);
     const double radius=rule.z[q]-m_geometry.d0;
-    const auto point=m_geometry.At(rule.x[q],radius,
-        cell.xl,cell.xr,m_e.Owns(rule.geometry)).point;
+    const auto point=m_geometry.normalMap?m_geometry.At(rule.x[q],radius,
+        cell.xl,cell.xr,m_e.Owns(rule.geometry)).point:Vector{rule.x[q],0.,rule.z[q]};
     const double x=(point[0]-m_left)/(m_right-m_left);
     const double z=(point[2]-m_geometry.d0)/m_top;
     const double span=4.*x*(1.-x),height=1.-std::pow(z,8);
@@ -1678,6 +1678,8 @@ SteadyKrylovResult Coupling::SolveDiagnosticSteady(const CoupledState &seed,
                       diagnostic.regularizationViscosity,diagnostic.regularizationStart,
                       diagnostic.regularizationFull})
         Require(std::isfinite(value)&&value>=0.,"invalid diagnostic steady parameter");
+    Require(diagnostic.pseudoTime==0.||std::isfinite(1./diagnostic.pseudoTime),
+            "diagnostic reciprocal pseudo-time must be representable");
     Require(diagnostic.eta==0.||(diagnostic.regularizationViscosity>0.&&!m_mms&&
             std::isfinite(diagnostic.eta*diagnostic.regularizationViscosity)),
             "diagnostic diffusion requires a finite positive prescribed physical-case coefficient");
@@ -2179,7 +2181,8 @@ void Coupling::WriteDiagnostic(const std::filesystem::path&path,const Diagnostic
        <<",\"role\":"<<J::Quote(role)<<",\"reason\":"<<J::Quote(candidate.reason)
        <<",\"attempted_step\":"<<candidate.attemptedStep<<",\"attempted_time\":"<<candidate.attemptedTime
        <<",\"attempted_iteration\":"<<candidate.attemptedIteration
-       <<",\"residual_kind\":"<<J::Quote(timeStep?"refreshed original time step":
+       <<",\"residual_kind\":"<<J::Quote(timeStep?(candidate.residual?
+            "refreshed original time step":"original time residual unavailable"):
             options?(options->eta>0.?"refreshed modified steady":"refreshed original steady"):"unevaluated preflight")
        <<",\"residuals\":";
     if(candidate.residual)norms(out,*candidate.residual);else out<<"null";
@@ -2187,7 +2190,13 @@ void Coupling::WriteDiagnostic(const std::filesystem::path&path,const Diagnostic
        <<",\"initial_coefficient_sha256\":"<<J::Quote(m_initialSourceStateSha);
     if(options)
     {
-        out<<",\"regularization\":{\"eta\":"<<options->eta
+        std::ostringstream identity;
+        identity<<std::setprecision(17)<<m_signature<<"|steady";
+        if(options->eta>0.)
+            identity<<"|CartesianBoundaryPolynomialV1|"<<options->eta<<'|'<<options->regularizationViscosity
+                    <<'|'<<options->regularizationStart<<'|'<<options->regularizationFull;
+        out<<",\"equation_identity\":"<<J::Quote(D::Hash(identity.str()))
+           <<",\"regularization\":{\"eta\":"<<options->eta
            <<",\"viscosity\":"<<options->regularizationViscosity
            <<",\"shape\":\"CartesianBoundaryPolynomialV1\",\"radius_ramp\":["
            <<options->regularizationStart<<','<<options->regularizationFull
@@ -2236,8 +2245,11 @@ void Coupling::WriteDiagnostic(const std::filesystem::path&path,const Diagnostic
        <<",\"quadratureX\":"<<m_options.quadratureX<<",\"quadratureR\":"<<m_options.quadratureR
        <<",\"nonlinear_tolerance\":"<<m_options.nonlinearTolerance
        <<",\"dt\":"<<m_options.dt<<",\"step_advection\":"
-       <<J::Quote(m_options.UsesImplicitAdvection()?"BDF2ImplicitAdvectionV1":"BDF2ExtrapolatedAdvectionV1")
-       <<",\"interface_K_over_Kin\":["<<bounds[0]/p.KIn<<','<<bounds[1]/p.KIn<<']';
+       <<J::Quote(m_options.UsesImplicitAdvection()?"BDF2ImplicitAdvectionV1":"BDF2EX2")
+       <<",\"interface_K_over_Kin\":["<<bounds[0]/p.KIn<<','<<bounds[1]/p.KIn<<']'
+       <<",\"interface_K_table_margin_over_Kin\":["<<(bounds[0]-p.KMinimum)/p.KIn
+       <<','<<(p.KMaximum-bounds[1])/p.KIn<<']'
+       <<",\"interface_cutoff_range\":["<<m_reference->Cutoff(bounds[1])<<','<<m_reference->Cutoff(bounds[0])<<']';
     WriteCoefficientFields(out,s,candidate.attemptedTime);
     if(timeStep)WriteInputHistory(out);
     out<<"}}\n";
