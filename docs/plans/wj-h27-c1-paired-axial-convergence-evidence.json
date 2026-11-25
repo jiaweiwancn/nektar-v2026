@@ -32662,8 +32662,10 @@
    "scope": "These are steady diagnostic preparation costs."
   },
   "REMOTE_PUSH_VERIFIED": {
-   "status": "OPEN",
-   "scope": "The evidence revision awaits remote verification."
+   "status": "PASS",
+   "scope": "Published source and evidence commit matched git ls-remote origin on the authorized branch.",
+   "verified_evidence_commit": "e6a18145a8cb15807653051e028adaa64cd32b71",
+   "remote_ref": "refs/heads/codex/wj-earsm-awf"
   }
  },
  "attempt_ledger": [
@@ -32959,5 +32961,11 @@
    "half_spacing_difference": 4.110665851870105e-09
   },
   "next_test": "Exact same-mesh digest-bound B3 cold entry with current ModelBacktrackV1, 2600 s native and 2900 s outer."
+ },
+ "publication": {
+  "verified_evidence_commit": "e6a18145a8cb15807653051e028adaa64cd32b71",
+  "remote_ref": "refs/heads/codex/wj-earsm-awf",
+  "local_and_remote_equal": true,
+  "command": "git ls-remote origin refs/heads/codex/wj-earsm-awf"
  }
 }

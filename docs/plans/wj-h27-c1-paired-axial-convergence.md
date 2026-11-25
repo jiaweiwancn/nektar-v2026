@@ -188,7 +188,7 @@ The transfer diagnostic was built in isolated Release trees. The first diagnosti
 | `C1_CLOSED` | OPEN | Full-height admissible original pilot remains pending. |
 | `C2_READY` | OPEN | C1 physical closure remains pending. |
 | `LONG_FLAT_PRODUCTION_COST_CLOSED` | OPEN | These are steady diagnostic preparation costs. |
-| `REMOTE_PUSH_VERIFIED` | OPEN | The evidence revision awaits remote verification. |
+| `REMOTE_PUSH_VERIFIED` | PASS | Published evidence commit `e6a18145a8cb15807653051e028adaa64cd32b71` matched `git ls-remote origin refs/heads/codex/wj-earsm-awf`. |
 
 The retained B3 packet is `B3-cross/state.diagnostic-steady.json`. Its SHA-256 is `bd5270047edfb1294ada7af01537d0aafd0301c9bbe52cab2f7a41206f4c3b5b` and its coefficient SHA-256 is `38b02cc97168d9e206069f30b1a2c80939260ac31a0c729a7cc646e08bae64a1`. Its original momentum, weak continuity, \(k\) and outer \(\epsilon\) residuals were respectively \(2.183\times10^{-5}\), \(1.716\times10^{-4}\), \(1.012\times10^{-4}\) and \(1.757\times10^{-4}\). The native principal response was \(+.00400910\), with whole-face \(K/K_{\rm in}\) in \([.9553447,1.0362653]\). This remains a diagnostic iterate.
 
