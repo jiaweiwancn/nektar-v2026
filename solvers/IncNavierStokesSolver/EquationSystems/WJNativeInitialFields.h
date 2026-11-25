@@ -4,13 +4,14 @@
 
 #include <Eigen/Core>
 #include <array>
+#include <cstdint>
 #include <map>
 #include <string>
 #include <vector>
 
 namespace Nektar::WJNative
 {
-enum class InitialFieldRole { QualifiedReference, Candidate };
+enum class InitialFieldRole { QualifiedReference, Candidate, AcceptedTimeState };
 
 struct InitialFieldGeometry
 {
@@ -23,6 +24,8 @@ struct InitialFieldMetadata
     std::string schema,stateSchema,model,sourceIdentity,referenceIdentity;
     std::string basis,mmsVariant,packetSha256,stateSha256,outletPolicy;
     bool manufactured=false,gauge=false,qualifiedReference=false;
+    std::uint64_t step=0;
+    double time=0.;
     InitialFieldRole role=InitialFieldRole::Candidate;
 };
 
@@ -34,7 +37,8 @@ struct InitialFieldElement
     std::vector<double>us,ps,ks,epsilonSigns;
 };
 
-/** Immutable step-zero coefficient packet, never a cold-history restart.
+/** Immutable coefficient packet used to construct new histories.
+ * Positive-time packets require an explicit geometry-continuation import.
  * Values use the original signed Modified_A Q3/Q2 maps. An explicit owner is
  * preserved. Without one, the lowest geometry ID containing the point and
  * owning the requested field is chosen; epsilon at H uses an outer owner.
@@ -45,7 +49,7 @@ struct InitialFieldElement
 class InitialFields
 {
 public:
-    explicit InitialFields(const std::string&jsonPath);
+    explicit InitialFields(const std::string &jsonPath, bool allowAcceptedTimeState=false);
     const InitialFieldMetadata&Metadata()const{return m_metadata;}
     const InitialFieldGeometry&GeometryData()const{return m_geometry;}
     // Native packet order: Nu, Np, Nk, Ne (epsilon has only outer coefficients).

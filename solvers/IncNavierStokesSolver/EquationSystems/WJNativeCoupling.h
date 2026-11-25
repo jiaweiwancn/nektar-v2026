@@ -254,6 +254,8 @@ private:
     std::string m_initialPacketSha,m_initialSourceStateSha;
     bool m_initialProjected=false,m_initialCandidate=false;
     std::optional<double> m_geometrySeedHeight;
+    std::uint64_t m_geometrySeedStep=0;
+    double m_geometrySeedTime=0.;
     double m_initialFluxRoundtripError=0.,m_initialTangentialTraceCorrection=0.;
     mutable WallEvaluationStats m_constitutiveStats;
     mutable std::uint64_t m_actionChecks=0,m_augmentedChecks=0;

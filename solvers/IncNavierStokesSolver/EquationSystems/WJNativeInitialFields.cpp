@@ -72,7 +72,7 @@ const std::vector<double>&Signs(const InitialFieldElement&e,unsigned field)
 {return field<2?e.us:field==2?e.ks:field==3?e.epsilonSigns:e.ps;}
 }
 
-InitialFields::InitialFields(const std::string&path)
+InitialFields::InitialFields(const std::string &path, bool allowAcceptedTimeState)
 {
     Require(std::filesystem::is_regular_file(path),"input is not a regular coefficient packet");
     Require(std::filesystem::file_size(path)<=256ULL*1024*1024,"coefficient packet exceeds declared 256 MiB input allowance");
@@ -84,10 +84,20 @@ InitialFields::InitialFields(const std::string&path)
     if(m.schema=="WJH27RegisteredCoupledRunV2"){
         Require(root.get<bool>("normal_main")&&root.get<std::string>("factory")=="WJNativeCoupledV2",
                 "registered packet is not from the declared normal-main factory");
-        Require(root.get<bool>("steady_mode")&&root.get<bool>("steady_solver.converged"),
-                "registered initial reference has not converged in steady mode; use explicit candidate schema for a candidate");
-        Require(root.get<std::string>("steady_solver.status")=="CONVERGED","contradictory registered steady status");
-        m.role=InitialFieldRole::QualifiedReference;m.qualifiedReference=true;
+        if (root.get<bool>("steady_mode"))
+        {
+            Require(root.get<bool>("steady_solver.converged"),
+                    "registered initial reference has not converged in steady mode; use explicit candidate schema for a candidate");
+            Require(root.get<std::string>("steady_solver.status")=="CONVERGED",
+                    "contradictory registered steady status");
+            m.role=InitialFieldRole::QualifiedReference;
+            m.qualifiedReference=true;
+        }
+        else
+        {
+            Require(allowAcceptedTimeState,"positive-time coefficients require a geometry-continuation import");
+            m.role=InitialFieldRole::AcceptedTimeState;
+        }
     }else{
         Require(m.schema=="WJH27SteadyCandidateV1","unsupported initial coefficient packet schema");
         Require(!root.get<bool>("qualified_reference"),"candidate packet falsely claims reference qualification");
@@ -95,8 +105,33 @@ InitialFields::InitialFields(const std::string&path)
     }
     const auto&state=root.get_child("state");m.stateSchema=state.get<std::string>("schema");
     Require(m.stateSchema=="WJH27NativeCoupledStateV2","unsupported native state schema");
-    Require(state.get<unsigned long long>("step")==0&&Number(state,"time")==0,
-            "fresh initial fields require step=time=0; cold histories cannot be imported here");
+    m.step=state.get<std::uint64_t>("step");
+    m.time=Number(state,"time");
+    if (m.role==InitialFieldRole::AcceptedTimeState)
+    {
+        const double dt=Number(state,"dt");
+        Require(m.step>0 && dt>0. && m.time>0. &&
+                std::abs(m.time-m.step*dt)<=2e-13*std::max(1.,m.time),
+                "geometry seed has inconsistent positive-time counters");
+        Require(!state.get<bool>("manufactured") && !state.get<bool>("accepted_by_fixed_budget") &&
+                state.get<std::string>("step_advection")=="BDF2ImplicitAdvectionV1" &&
+                bool(state.get_child_optional("input_history")),
+                "geometry seed requires an accepted physical implicit BE/BDF2 state");
+        const double tolerance=Number(state,"nonlinear_tolerance");
+        const auto residuals=Array<double>(state,"residuals");
+        Require(tolerance>0. && residuals.size()==6 &&
+                std::all_of(residuals.begin(),residuals.end(),[tolerance](double value) {
+                    return std::isfinite(value) && value>=0. && value<=std::min(tolerance,1e-10);
+                }),"geometry seed has an unqualified equation residual");
+        Require(Number(state,"minimum_k")>0. && Number(state,"minimum_epsilon")>0. &&
+                Number(state,"minimum_covariance_over_k")>1e-10 &&
+                Number(state,"minimum_principal_over_mu")>1e-8,
+                "geometry seed has unqualified admissibility margins");
+    }
+    else
+    {
+        Require(m.step==0 && m.time==0.,"steady initial fields require step=time=0");
+    }
     m.basis=state.get<std::string>("basis");Require(m.basis=="Modified_A","only native Modified_A Q3/Q2 initial fields are supported");
     m.outletPolicy=state.get<std::string>("outlet_policy","FullTractionV1");
     m.model=state.get<std::string>("model");m.sourceIdentity=state.get<std::string>("source_identity");

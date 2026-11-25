@@ -786,7 +786,9 @@ CoupledHistory Coupling::FreshHistory(const CoupledState&state)const
 CoupledHistory Coupling::ReadInitialFields(const std::string &path, bool allowCandidate,
                                             std::optional<double> geometrySeedHeight)
 {
-    InitialFields initial(path);InitialFieldGeometry geometry;
+    InitialFields initial(path,geometrySeedHeight.has_value());
+    const bool acceptedTimeSeed=initial.Metadata().role==InitialFieldRole::AcceptedTimeState;
+    InitialFieldGeometry geometry;
     geometry.d0=m_geometry.d0;geometry.H=m_geometry.H;geometry.h=m_geometry.h;geometry.left=m_left;geometry.right=m_right;geometry.top=m_top;geometry.curve=m_geometry.curve;
     if (m_geometry.normalMap)
         geometry.normalMap=m_geometry.normalMap->Signature();
@@ -801,10 +803,13 @@ CoupledHistory Coupling::ReadInitialFields(const std::string &path, bool allowCa
     {
         Require(m_geometry.normalMap && !m_options.manufactured &&
                 std::isfinite(*geometrySeedHeight) && *geometrySeedHeight>=0. &&
-                *geometrySeedHeight<=1. && initial.Metadata().qualifiedReference &&
+                *geometrySeedHeight<=1. &&
+                (initial.Metadata().qualifiedReference || acceptedTimeSeed) &&
                 initial.Metadata().outletPolicy==m_options.outletPolicy &&
                 m_options.hillInitialSlowdown==0. && m_options.hillInitialEpsilonBump==0.,
-                "geometry continuation requires a compatible developed physical seed");
+                "geometry continuation requires a compatible accepted physical seed");
+        Require(!acceptedTimeSeed || *geometrySeedHeight!=m_geometry.normalMap->amplitude,
+                "same-height transient continuation requires a cold checkpoint");
         seedGeometry.normalMap->amplitude=*geometrySeedHeight;
         seedGeometry.ValidateNormalMesh(m_left,m_right,m_top);
         geometry.normalMap=seedGeometry.normalMap->Signature();
@@ -820,7 +825,8 @@ CoupledHistory Coupling::ReadInitialFields(const std::string &path, bool allowCa
     initial.ValidateBindings(expectedSource,seedReference.empty()?m_reference->Identity():seedReference,
                              WallModelV2,m_options.manufactured,m_options.mmsVariant,geometry);
     Require(initial.Metadata().gauge==m_flow.Gauge(),"initial-field pressure-gauge binding differs");
-    Require(allowCandidate||initial.Metadata().qualifiedReference,"advancement requires a qualified reference initial packet");
+    Require(allowCandidate || initial.Metadata().qualifiedReference || acceptedTimeSeed,
+            "advancement requires a qualified reference or geometry seed");
     std::vector<InitialFieldElement>inventory;
     for(const auto&e:m_flow.Elements()){
         InitialFieldElement cell;cell.geometry=e.geometry;cell.xl=e.xl;cell.xr=e.xr;cell.rl=e.rl;cell.rr=e.rr;cell.u=e.u;cell.us=e.us;cell.p=e.p;cell.ps=e.ps;
@@ -853,6 +859,8 @@ CoupledHistory Coupling::ReadInitialFields(const std::string &path, bool allowCa
         m_initialContinuityAfter=ContinuityNorm(state.flow);
         Require(m_initialContinuityAfter<=1e-9,"geometry seed continuity projection failed");
         m_geometrySeedHeight=geometrySeedHeight;
+        m_geometrySeedStep=initial.Metadata().step;
+        m_geometrySeedTime=initial.Metadata().time;
         std::cout<<std::setprecision(17)<<"WJ-H27 geometry seed "<<*geometrySeedHeight
                  <<" -> "<<m_geometry.normalMap->amplitude<<", weak continuity "
                  <<m_initialContinuityBefore<<" -> "<<m_initialContinuityAfter
@@ -863,7 +871,9 @@ CoupledHistory Coupling::ReadInitialFields(const std::string &path, bool allowCa
         Require(SteadyResidual(history.current).Maximum()<=m_options.nonlinearTolerance,
         "imported reference is not stationary for this native recipe; prepare a current reference first");
     m_initialPacketSha=initial.Metadata().packetSha256;m_initialSourceStateSha=initial.Metadata().stateSha256;
-    m_initialProjected=!same||geometrySeedHeight.has_value();m_initialCandidate=!initial.Metadata().qualifiedReference;return history;
+    m_initialProjected=!same||geometrySeedHeight.has_value();
+    m_initialCandidate=initial.Metadata().role==InitialFieldRole::Candidate;
+    return history;
 }
 
 CoupledHistory Coupling::PerturbInitialHistory(const CoupledHistory&base,const std::string&certificate,
@@ -1781,6 +1791,8 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
     if (m_geometrySeedHeight)
         out<<",\"geometry_seed\":{\"from_height\":"<<*m_geometrySeedHeight
            <<",\"to_height\":"<<m_geometry.normalMap->amplitude
+           <<",\"source_step\":"<<m_geometrySeedStep
+           <<",\"source_time\":"<<m_geometrySeedTime
            <<",\"piola_flux_roundtrip_error\":"<<m_initialFluxRoundtripError
            <<",\"outer_taper_end_radius\":"<<(m_geometry.H+1.)
            <<",\"matching_tangent_correction\":"<<m_initialTangentialTraceCorrection
