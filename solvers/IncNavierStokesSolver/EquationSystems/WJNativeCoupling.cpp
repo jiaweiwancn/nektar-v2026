@@ -620,6 +620,20 @@ Vec Coupling::RemapVelocity(const Vec &flow, const Geometry &source)
     // the physical mass rule. The boundary and continuity lifts follow.
     Vec correction=Vec::Zero(2*count);
     m_initialFluxRoundtripError=0.;
+    m_initialTangentialTraceCorrection=0.;
+    using Sample=SolverUtils::RANSWallNormalMap::Sample;
+    auto piola=[&](const Sample &old,const Sample &next,double u,double w)
+    {
+        const double qa=old.determinant*(old.inverse[0][0]*u+old.inverse[0][2]*w);
+        const double qr=old.determinant*(old.inverse[2][0]*u+old.inverse[2][2]*w);
+        const double x=(next.jacobian[0][0]*qa+next.jacobian[0][2]*qr)/next.determinant;
+        const double z=(next.jacobian[2][0]*qa+next.jacobian[2][2]*qr)/next.determinant;
+        const double recoveredA=next.determinant*(next.inverse[0][0]*x+next.inverse[0][2]*z);
+        const double recoveredR=next.determinant*(next.inverse[2][0]*x+next.inverse[2][2]*z);
+        m_initialFluxRoundtripError=std::max({m_initialFluxRoundtripError,
+            std::abs(recoveredA-qa),std::abs(recoveredR-qr)});
+        return std::array<double,2>{x,z};
+    };
     const double foot=m_geometry.normalMap->lengthX;
     for (const auto &cell : m_flow.Elements())
     {
@@ -628,28 +642,46 @@ Vec Coupling::RemapVelocity(const Vec &flow, const Geometry &source)
         const bool outer=cell.rl>=m_geometry.H-1e-12;
         const Vec u=cell.B*Local(flow,cell.u);
         const Vec w=cell.B*Local(flow,cell.u,count);
+        const auto &matching=HOwner(cell);
+        std::array<double,4> traceU{},traceW{};
+        if (outer)
+            for (int j=0;j<4;++j)
+            {
+                traceU[j]=matching.us[j]*flow[matching.u[j]];
+                traceW[j]=matching.us[j]*flow[count+matching.u[j]];
+            }
         Vec du(u.size()),dw(w.size());
         for (int i=0;i<u.size();++i)
         {
             const double a=cell.x[i], radius=cell.z[i]-m_geometry.d0;
             const auto old=source.At(a,radius,cell.xl,cell.xr,outer);
             const auto next=m_geometry.At(a,radius,cell.xl,cell.xr,outer);
-            const double qa=old.determinant*(old.inverse[0][0]*u[i]+old.inverse[0][2]*w[i]);
-            const double qr=old.determinant*(old.inverse[2][0]*u[i]+old.inverse[2][2]*w[i]);
-            const double x=(next.jacobian[0][0]*qa+next.jacobian[0][2]*qr)/next.determinant;
-            const double z=(next.jacobian[2][0]*qa+next.jacobian[2][2]*qr)/next.determinant;
-            // Retain the Piola change through matching, and return to the
-            // previous Cartesian field in the outer bulk. A Piola remap
-            // across the full ruled tunnel carries changes of the matching
-            // tangent high into the flow and can create spurious shear there.
-            // Project the tapered field with the target weak divergence.
+            auto velocity=piola(old,next,u[i],w[i]);
+            // Both chart owners give the same Piola normal flux through H.
+            // Their transverse chart derivatives generally differ. Remove
+            // only the resulting tangential jump from the outer seed.
             const double blend=outer ? 1-SmoothTransition(radius,m_geometry.H,m_geometry.H+1.)[0] : 1.;
-            du[i]=blend*(x-u[i]);
-            dw[i]=blend*(z-w[i]);
-            const double recoveredA=next.determinant*(next.inverse[0][0]*x+next.inverse[0][2]*z);
-            const double recoveredR=next.determinant*(next.inverse[2][0]*x+next.inverse[2][2]*z);
-            m_initialFluxRoundtripError=std::max({m_initialFluxRoundtripError,
-                std::abs(recoveredA-qa),std::abs(recoveredR-qr)});
+            if (outer && blend>0.)
+            {
+                const double H=m_geometry.H;
+                const double width=matching.xr-matching.xl;
+                const double coordinate=(a-matching.xl)/width;
+                const double uH=CubicTrace(traceU,coordinate,width)[0];
+                const double wH=CubicTrace(traceW,coordinate,width)[0];
+                const auto newInner=m_geometry.At(a,H,cell.xl,cell.xr,false);
+                const auto innerVelocity=piola(source.At(a,H,cell.xl,cell.xr,false),newInner,uH,wH);
+                const auto outerVelocity=piola(source.At(a,H,cell.xl,cell.xr,true),
+                                       m_geometry.At(a,H,cell.xl,cell.xr,true),uH,wH);
+                const auto &t=newInner.tangent1;
+                const double jump=t[0]*(outerVelocity[0]-innerVelocity[0])+t[2]*(outerVelocity[1]-innerVelocity[1]);
+                m_initialTangentialTraceCorrection=std::max(m_initialTangentialTraceCorrection,std::abs(jump));
+                velocity[0]-=jump*t[0];
+                velocity[1]-=jump*t[2];
+            }
+            // Keep the previous Cartesian field in the outer bulk, then
+            // project the represented profile with the target divergence.
+            du[i]=blend*(velocity[0]-u[i]);
+            dw[i]=blend*(velocity[1]-w[i]);
         }
         Add(correction,cell.u,cell.B.transpose()*cell.w.cwiseProduct(du));
         Add(correction,cell.u,cell.B.transpose()*cell.w.cwiseProduct(dw),count);
@@ -1751,6 +1783,7 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
            <<",\"to_height\":"<<m_geometry.normalMap->amplitude
            <<",\"piola_flux_roundtrip_error\":"<<m_initialFluxRoundtripError
            <<",\"outer_taper_end_radius\":"<<(m_geometry.H+1.)
+           <<",\"matching_tangent_correction\":"<<m_initialTangentialTraceCorrection
            <<",\"continuity_before\":"<<m_initialContinuityBefore
            <<",\"continuity_after\":"<<m_initialContinuityAfter<<'}';
     if(m_options.recordNonlinearTrace){out<<",\"nonlinear_trace\":[";for(int i=0;i<int(info.nonlinearTrace.size());++i){const auto&t=info.nonlinearTrace[i];if(i)out<<',';out<<"{\"residuals\":["<<t.residual.momentum<<','<<t.residual.continuity<<','<<t.residual.gauge<<','<<t.residual.k<<','<<t.residual.epsilon<<','<<t.residual.trace<<"],\"accelerated\":"<<(t.accelerated?"true":"false")<<",\"seconds\":"<<t.seconds<<'}';}out<<']';}
