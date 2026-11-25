@@ -24,6 +24,7 @@ FIELD_NAMES = ("margin", "Gxz", "divergence", "pressure", "k_load", "convection"
 FIXED_AXIAL = (-.05, -.02, -.005, -.001, 0., .001, .005, .02, .05)
 FIXED_RADIAL = (-.0015, -.001, -.00075, -.0005, -.00025, -.0001, -.00005,
                 0., .00005, .0001, .00025, .0005, .00075, .001, .0015)
+EXTRA_RADIAL = (.002, .0025, .003, .004, .006, .010, .015)
 RELATIVE_OFFSETS = (.001, .01, .05, .20)
 
 
@@ -35,23 +36,27 @@ def owner_side(lo, hi, value, H):
     return 0
 
 
-def section_points(audits):
+def section_points(audits, wide):
     first = next(iter(audits.values()))
     L, h, H = first.hill.L, first.ref.h, first.ref.H
     section = {label: a for label, (a, _) in locations(first.geometry).items()
                if label.startswith("support_")}
+    left = 0. if wide else .35*L
+    if wide:
+        section["crown"] = left
     # The field-independent part covers the downstream support segment. Any
     # mesh endpoint in this segment is also evaluated on every other mesh.
     edges = sorted({round(float(v), 13) for audit in audits.values()
-                    for lo, hi in audit.columns for v in (lo, hi) if .35*L <= v <= L})
+                    for lo, hi in audit.columns for v in (lo, hi) if left <= v <= L})
     for v in edges:
         if not any(coincides(v, a, H) for a in section.values()):
             section[f"a={v:.13g}"] = v
-    a = sorted(set(np.linspace(.35*L, L, 129)) |
-               {a+off for a in section.values() for off in FIXED_AXIAL if .35*L <= a+off <= L})
-    r = np.asarray([h+off for off in FIXED_RADIAL])
+    a = sorted(set(np.linspace(left, L, 153 if wide else 129)) |
+               {a+off for a in section.values() for off in FIXED_AXIAL if left <= a+off <= L})
+    radial = sorted((*FIXED_RADIAL, *EXTRA_RADIAL, *(-v for v in EXTRA_RADIAL))) if wide else FIXED_RADIAL
+    r = np.asarray([h+off for off in radial])
     fixed = np.column_stack([v.ravel() for v in np.meshgrid(a, r)])
-    return section, fixed
+    return section, fixed, radial
 
 
 def write_profiles(writer, audit, label, fixed, section):
@@ -151,6 +156,8 @@ def extent(rows, relative):
         worst = min(points, key=lambda p: p["margin"])
         return dict(count=len(points), a_range=[min(p["a"] for p in points), max(p["a"] for p in points)],
                     r_minus_h_range=[min(p["r_minus_h"] for p in points), max(p["r_minus_h"] for p in points)],
+                    x_range=[min(p["x"] for p in points), max(p["x"] for p in points)],
+                    z_range=[min(p["z"] for p in points), max(p["z"] for p in points)],
                     worst={key: worst[key] for key in ("a", "r", "margin", "owner", "Gxz", "divergence",
                                                        "angular_difference", "axial_side", "radial_side")})
 
@@ -220,6 +227,7 @@ def sampled_action_order(audit):
         result = {k: np.zeros((audit.n,2)) for k in names}
         nodes, weights = np.polynomial.legendre.leggauss(order)
         for cell in audit.mesh:
+            audit.clock()
             xl,xr,rl,rr = cell["bounds"]
             upper = min(rr,audit.ref.h)
             if upper <= rl:
@@ -300,6 +308,8 @@ def main():
     parser.add_argument("--profiles", type=Path, required=True)
     parser.add_argument("--seconds", type=float, default=170)
     parser.add_argument("--check-sampled-order", action="store_true")
+    parser.add_argument("--wide", action="store_true",
+                        help="include the full downstream half and wider radial offsets")
     args = parser.parse_args()
     end = time.monotonic()+args.seconds
     ref = po.load_reference(args.table)
@@ -317,7 +327,7 @@ def main():
     geometry_keys = ("h","H","d0","hill_height","hill_half_length","normal_map_signature")
     if len({tuple(a.geometry[k] for k in geometry_keys) for a in audits.values()}) != 1:
         raise ValueError("these comparisons require the identical physical hill chart")
-    section, fixed = section_points(audits)
+    section, fixed, radial = section_points(audits,args.wide)
     profiles, summaries, controls = {}, {}, {}
     with args.profiles.open("x") as f:
         columns = ["mesh","a","r","x","z","owner","axial_side","radial_side","fixed","r_minus_h","basis",
@@ -330,7 +340,8 @@ def main():
             summaries[label] = extent(profiles[label],relative)
             controls[label] = limits(audit,section)
     result = dict(table=identity(args.table), audit_source=identity(__file__), fields=identity_rows,
-                  chart_support_h=ref.h, fixed_axial_offsets=FIXED_AXIAL, fixed_radial_offsets=FIXED_RADIAL,
+                  chart_support_h=ref.h, fixed_axial_offsets=FIXED_AXIAL, fixed_radial_offsets=radial,
+                  axial_grid_range=[float(fixed[:,0].min()),float(fixed[:,0].max())],
                   cell_relative_fractions=RELATIVE_OFFSETS, fixed_grid_points=len(fixed), controls=controls,
                   signed_extents=summaries, matching_point_variation=variation(profiles,args.compare),
                   profile_file=identity(args.profiles))
