@@ -23,7 +23,9 @@ struct InitialFieldMetadata
 {
     std::string schema,stateSchema,model,sourceIdentity,referenceIdentity;
     std::string basis,mmsVariant,packetSha256,stateSha256,outletPolicy;
+    std::string signature,equationIdentity;
     bool manufactured=false,gauge=false,qualifiedReference=false;
+    bool originalDiagnosticSteady=false;
     std::uint64_t step=0;
     double time=0.;
     InitialFieldRole role=InitialFieldRole::Candidate;
@@ -64,6 +66,9 @@ public:
     void ValidateBindings(const std::string&expectedSource,const std::string&expectedReference,
         const std::string&expectedModel,bool expectedManufactured,const std::string&expectedVariant,
         const InitialFieldGeometry&expectedGeometry)const;
+    void ValidateOriginalSteadyRelease(const std::string &receiptPath,const std::string &receiptSha,
+        const std::string &source,const std::string &reference,const std::string &signature,
+        int quadratureX,int quadratureR)const;
     // Geometry IDs, signed maps and vector dimensions must match. Bounds may
     // differ only by the declared 64-epsilon geometric coincidence tolerance.
     bool SameInventory(const std::vector<InitialFieldElement>&elements,

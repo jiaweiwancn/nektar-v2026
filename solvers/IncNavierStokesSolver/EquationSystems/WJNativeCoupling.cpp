@@ -920,6 +920,39 @@ CoupledState Coupling::PrepareState(const std::string &path,const std::string &s
         ImportInitialState(path,true,geometrySeedHeight,&seedSha256));
 }
 
+CoupledHistory Coupling::ReleaseOriginalSteady(const std::string &path,const std::string &receipt,
+    const std::string &receiptSha,int pulseCell,double relativeKPeak)
+{
+    Require(!m_mms&&m_geometry.normalMap&&m_options.advancement=="CoupledJFNKV1"&&
+            m_options.UsesImplicitAdvection()&&std::isfinite(relativeKPeak)&&
+            (relativeKPeak==0.?pulseCell<0:pulseCell>=0),
+            "original steady release requires a fresh implicit physical hill trajectory");
+    const InitialFields initial(path,false,true);
+    initial.ValidateOriginalSteadyRelease(receipt,receiptSha,m_options.sourceIdentity,
+        m_reference->Identity(),m_signature,m_options.quadratureX,m_options.quadratureR);
+    const auto &metadata=initial.Metadata();
+    auto state=PrepareState(path,metadata.packetSha256,std::nullopt);
+    Require(!m_initialProjected&&StateHash(state)==metadata.stateSha256,
+            "released coefficient inventory or rebuilt dependent lift differs");
+    const auto result=AuditSteadyState(state);
+    Require(result.residual.Maximum()<=std::min(1e-10,m_options.nonlinearTolerance),
+            "fresh original steady residual failed before physical release");
+    const auto released=FreshHistory(state);
+    if(relativeKPeak==0.)return released;
+    // Modified_A tensor interior mode (2,2) is a trace-zero bubble.
+    // Its peak is 1/16, so both signed perturbations have the specified
+    // resolved scalar amplitude with the same initial velocity and traces.
+    Require(m_geometryIndex.count(pulseCell)>0,"unknown original steady k pulse cell");
+    const int id=m_k.CellIds(pulseCell)[10];
+    const auto &element=*std::find_if(initial.Elements().begin(),initial.Elements().end(),
+        [pulseCell](const auto &cell){return cell.geometry==pulseCell;});
+    Require(element.k[10]==id&&std::find(m_k.FreeIds().begin(),m_k.FreeIds().end(),id)!=m_k.FreeIds().end(),
+            "pulse must use a free k interior mode");
+    state.k[id]+=16.*element.ks[10]*m_reference->Parameters().KIn*relativeKPeak;
+    Require(state.k[id]!=released.current.k[id],"original steady k pulse rounded to zero");
+    return FreshHistory(state);
+}
+
 CoupledState Coupling::ImportInitialState(const std::string &path,bool allowCandidate,
     std::optional<double> geometrySeedHeight,const std::string *diagnosticSeedSha256)
 {

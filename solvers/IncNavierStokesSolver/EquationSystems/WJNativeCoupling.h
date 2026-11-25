@@ -153,6 +153,8 @@ public:
                                      std::optional<double> geometrySeedHeight=std::nullopt);
     CoupledState PrepareState(const std::string &path, const std::string &seedSha256,
                               std::optional<double> geometrySeedHeight);
+    CoupledHistory ReleaseOriginalSteady(const std::string &path,const std::string &receipt,
+        const std::string &receiptSha,int pulseCell,double relativeKPeak);
     void EnableRejectionPackets(bool enabled){m_exportRejections=enabled;}
     void WriteRejection(const std::filesystem::path&path)const;
     SteadyKrylovResult SolveDiagnosticSteady(const CoupledState &seed,

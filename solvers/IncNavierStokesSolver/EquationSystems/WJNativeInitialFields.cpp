@@ -105,6 +105,10 @@ InitialFields::InitialFields(const std::string &path, bool allowAcceptedTimeStat
                 "unsupported diagnostic coefficient role");
         Require(!root.get<bool>("physical_history"),"diagnostic packet falsely claims a physical history");
         m.role=InitialFieldRole::Diagnostic;
+        m.originalDiagnosticSteady=role=="STEADY_SEARCH"&&
+            root.get<std::string>("residual_kind","")=="refreshed original steady"&&
+            root.get<double>("regularization.eta",-1.)==0.;
+        m.equationIdentity=root.get<std::string>("equation_identity","");
     }else{
         Require(m.schema=="WJH27SteadyCandidateV1","unsupported initial coefficient packet schema");
         Require(!root.get<bool>("qualified_reference"),"candidate packet falsely claims reference qualification");
@@ -147,6 +151,7 @@ InitialFields::InitialFields(const std::string &path, bool allowAcceptedTimeStat
     m.referenceIdentity=state.get<std::string>("reference_identity");m.mmsVariant=state.get<std::string>("mms_variant");
     m.manufactured=state.get<bool>("manufactured");m.gauge=state.get<bool>("gauge");
     m.stateSha256=state.get<std::string>("state_sha256");
+    m.signature=state.get<std::string>("signature","");
     Require(!m.model.empty()&&!m.mmsVariant.empty()&&SHA(m.sourceIdentity)&&SHA(m.referenceIdentity)&&SHA(m.stateSha256),
             "missing/invalid scientific metadata or identities");
     m_geometry=Geometry(state.get_child("geometry"));
@@ -170,6 +175,102 @@ InitialFields::InitialFields(const std::string &path, bool allowAcceptedTimeStat
         m_elements.push_back(std::move(e));
     }
     ValidateInventory();ValidateContinuity();
+}
+
+void InitialFields::ValidateOriginalSteadyRelease(const std::string &receiptPath,
+    const std::string &receiptSha,const std::string &source,const std::string &reference,
+    const std::string &signature,int quadratureX,int quadratureR)const
+{
+    const auto &m=m_metadata;
+    Require(m.originalDiagnosticSteady&&!m.manufactured&&m.step==0&&m.time==0.&&
+            m.sourceIdentity==source&&m.referenceIdentity==reference&&m.signature==signature&&
+            m.equationIdentity==RANSWallR3::Hash(signature+"|steady"),
+            "physical release requires the exact current zero-regularization steady equations");
+    auto pinned=[](const std::string &path,const std::string &sha) {
+        Require(SHA(sha)&&std::filesystem::is_regular_file(path)&&
+                std::filesystem::file_size(path)<=4*1024*1024,"invalid original steady audit receipt");
+        std::ifstream input(path,std::ios::binary);
+        const std::string bytes((std::istreambuf_iterator<char>(input)),{});
+        Require(!input.bad()&&RANSWallR3::Hash(bytes)==sha,"original steady audit receipt digest differs");
+        Tree tree;
+        std::istringstream json(bytes);
+        boost::property_tree::read_json(json,tree);
+        UniqueKeys(tree);
+        return tree;
+    };
+    const Tree receipt=pinned(receiptPath,receiptSha);
+    Require(receipt.get<std::string>("schema")=="WJH27OriginalSteadyReleaseV1"&&
+            receipt.get<std::string>("packet.sha256")==m.packetSha256&&
+            receipt.get<std::string>("coefficient_sha256")==m.stateSha256,
+            "release receipt binds different candidate coefficients");
+    auto audit=[&](const std::string &key) {
+        const Tree tree=pinned(receipt.get<std::string>(key+".path"),receipt.get<std::string>(key+".sha256"));
+        Require(tree.get<std::string>("native.sha256")==m.packetSha256&&
+                tree.get<std::string>("table.sha256")==reference,
+                "independent audit binds a different packet or table");
+        return tree;
+    };
+    auto limit=[](const Tree &tree,const std::string &key,double tolerance) {
+        Require(std::abs(Number(tree,key))<=tolerance,"independent release gate failed: "+key);
+    };
+    auto original=[&](const Tree &tree) {
+        Require(tree.get<std::string>("candidate_role")=="STEADY_SEARCH"&&
+                tree.get<std::string>("regularization")=="null"&&tree.get<int>("step")==0&&
+                Number(tree,"time")==0.&&tree.get<int>("order")>quadratureX&&
+                tree.get<int>("radial_order")>quadratureR,
+                "release requires richer independent original steady audits");
+    };
+    const Tree equations=audit("equations"),response=audit("response"),points=audit("points");
+    original(equations);original(response);
+    Require(equations.get<std::string>("source_identity")==source&&equations.get<bool>("residual_pass"),
+            "independent original equation receipt did not pass");
+    limit(equations,"residuals.momentum",1e-9);
+    limit(equations,"residuals.continuity",1e-9);
+    limit(equations,"residuals.k",1e-8);
+    limit(equations,"residuals.epsilon",1e-8);
+    limit(equations,"epsilon_trace.interior_projection_defect",1e-10);
+    limit(equations,"interface.physical_face_measure_max_difference",1e-10);
+    limit(equations,"interface.shared_trace_max",1e-10);
+    limit(equations,"power.algebraic_error",1e-10);
+    limit(equations,"mass_integration_identity_error",1e-10);
+    Require(Number(equations,"integration_minimum_jacobian")>0.&&
+            Number(equations,"raw_boundary.outlet_minimum_normal_velocity")>=-1e-12,
+            "independent geometry or outlet receipt failed");
+    Require(response.get<bool>("one_sided_faces"),"release response audit must include one-sided faces");
+    for(const std::string group:{"inner","outer","matching_inner","matching_outer",
+                                 "faces_inner","faces_outer","cutoff"})
+    {
+        const auto &region=response.get_child("regions."+group);
+        const double uncertainty=Number(region,"max_directional_difference");
+        Require(region.get<int>("samples")>0&&region.get<bool>("sample_pass")&&uncertainty>=0.&&
+                Number(region,"principal_over_mu")-uncertainty>1e-8&&
+                Number(region,"covariance_over_k")>1e-10&&Number(region,"minimum_k")>0.&&
+                Number(region,"minimum_epsilon")>0.,
+                "independent original response failed for "+group);
+    }
+    Require(points.get<std::string>("coefficient_sha256")==m.stateSha256,
+            "point audit coefficient digest differs");
+    std::set<std::string> checked;
+    for(const auto &report:points.get_child("local_minima"))
+    {
+        Require(report.second.get<std::string>("receipt.sha256")==receipt.get<std::string>("response.sha256"),
+                "local response audit has a different volume scan");
+        checked.insert(report.second.get<std::string>("region"));
+        const auto &values=report.second.get_child("values");
+        Require(!values.empty(),"empty local response audit");
+        for(const auto &entry:values)
+        {
+            const auto &point=entry.second;
+            const double uncertainty=Number(point,"differentiation_spread");
+            const auto &minima=point.get_child("minima");
+            Require(uncertainty>=0.&&minima.size()>=3,"missing independent differentiation spacings");
+            for(const auto &minimum:minima)
+                Require(Number(minimum.second,"over_mu")-uncertainty>1e-8,
+                        "local original response failed");
+        }
+    }
+    for(const std::string region:{"inner","outer","faces_inner","faces_outer"})
+        Require(checked.count(region)>0,"missing local original response audit for "+region);
 }
 
 void InitialFields::ValidateInventory()

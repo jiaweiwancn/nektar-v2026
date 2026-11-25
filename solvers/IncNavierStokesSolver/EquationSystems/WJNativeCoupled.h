@@ -29,6 +29,9 @@ private:
     WJNative::CoupledRecoveryTiming m_recoveryTiming;
     WJNative::CoupledStepInfo m_last;
     std::string m_prefix,m_restart,m_initialFields;
+    std::string m_originalSteadyReceipt,m_originalSteadyReceiptSha256;
+    double m_originalSteadyKPulse=0.;
+    int m_originalSteadyKPulseCell=-1;
     std::optional<double> m_geometrySeedHeight;
     std::string m_perturbationCertificate,m_perturbationSha256;
     int m_infoStride=20,m_recoveryStride=200,m_scienceStride=200,m_injectRetryStep=-1;

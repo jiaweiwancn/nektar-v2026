@@ -191,6 +191,10 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadParameter("WJTerminalBegin",m_terminalBegin,0.);m_session->LoadParameter("WJTerminalEnd",m_terminalEnd,0.);
     if(m_terminalOutput)Check(!m_steadyMode&&m_coefficients&&std::isfinite(m_terminalBegin)&&std::isfinite(m_terminalEnd)&&m_terminalBegin>=0&&m_terminalEnd>m_terminalBegin,"terminal output requires advancement, complete coefficients and a finite increasing nonnegative interval");
     m_session->LoadSolverInfo("WJInitialFields",m_initialFields,"");Check(m_initialFields.empty()||m_restart.empty(),"initial fields and cold restart are separate mutually exclusive inputs");
+    m_session->LoadSolverInfo("WJOriginalSteadyReceipt",m_originalSteadyReceipt,"");
+    m_session->LoadSolverInfo("WJOriginalSteadyReceiptSHA256",m_originalSteadyReceiptSha256,"");
+    m_session->LoadParameter("WJOriginalSteadyKPulse",m_originalSteadyKPulse,0.);
+    m_session->LoadParameter("WJOriginalSteadyKPulseCell",m_originalSteadyKPulseCell,-1);
     std::string exportRejections,allowIncomplete;
     m_session->LoadSolverInfo("WJDiagnosticCandidateOutput",exportRejections,"False");
     m_session->LoadSolverInfo("WJDiagnosticIncompleteLinear",allowIncomplete,"False");
@@ -279,6 +283,12 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
           (m_perturbationCertificate.empty()||(!options.manufactured&&!m_steadyMode&&
                                                !m_initialFields.empty()&&m_restart.empty())),
           "physical perturbation requires a certified initial-field import and fresh histories");
+    Check(m_originalSteadyReceipt.empty()==m_originalSteadyReceiptSha256.empty()&&
+          (m_originalSteadyReceipt.empty()?(!m_session->DefinesParameter("WJOriginalSteadyKPulse")&&
+              !m_session->DefinesParameter("WJOriginalSteadyKPulseCell")):
+              (!m_steadyMode&&!m_initialFields.empty()&&m_restart.empty()&&
+               !m_geometrySeedHeight&&m_perturbationCertificate.empty())),
+          "original steady release requires explicit independent receipts and fresh coefficient input");
     std::vector<MultiRegions::ContFieldSharedPtr>fields(5);
     for(int i:{0,1,2,4}){fields[i]=MemoryManager<MultiRegions::ContField>::AllocateSharedPtr(m_session,m_graph,m_session->GetVariable(i),true,false);m_fields[i]=fields[i];}
     std::vector<unsigned int>outer;
@@ -307,6 +317,11 @@ void WJNativeCoupled::v_DoInitialise(bool dump)
         if (!m_restart.empty())
         {
             m_history = m_coupling->ReadHistory(m_restart, &m_recoveryTiming);
+        }
+        else if(!m_originalSteadyReceipt.empty())
+        {
+            m_history=m_coupling->ReleaseOriginalSteady(m_initialFields,m_originalSteadyReceipt,
+                m_originalSteadyReceiptSha256,m_originalSteadyKPulseCell,m_originalSteadyKPulse);
         }
         else if(!m_initialFields.empty())
             m_history=m_coupling->ReadInitialFields(m_initialFields,m_steadyMode,m_geometrySeedHeight);
