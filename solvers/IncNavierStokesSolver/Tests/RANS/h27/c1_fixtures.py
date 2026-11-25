@@ -33,6 +33,9 @@ def main():
     parser.add_argument("--initial-source")
     parser.add_argument("--from-height", type=float)
     parser.add_argument("--seed-taper", type=float, help="outer extent of the velocity seed correction")
+    parser.add_argument("--seed-foot-length", type=float, help="gradient-fit length near the downstream foot")
+    parser.add_argument("--seed-collar-length", type=float, help="gradient-fit length in the crown collar")
+    parser.add_argument("--seed-packet-sha256", help="pin the archived geometry seed packet bytes")
     parser.add_argument("--quadrature", type=int, nargs=2)
     parser.add_argument("--recovery", type=int, default=1)
     parser.add_argument("--science", type=int, default=0)
@@ -46,8 +49,9 @@ def main():
         parser.error("initial fields and restart are separate modes")
     if args.from_height is not None and (args.case != "hill" or not args.initial_fields):
         parser.error("--from-height requires accepted physical hill initial fields")
-    if args.seed_taper is not None and args.from_height is None:
-        parser.error("--seed-taper requires --from-height")
+    controls = (args.seed_taper, args.seed_foot_length, args.seed_collar_length, args.seed_packet_sha256)
+    if any(value is not None for value in controls) and args.from_height is None:
+        parser.error("geometry seed controls require --from-height")
     if args.initial_source and not args.initial_fields:
         parser.error("--initial-source requires --initial-fields")
     if args.resolve_outer_seed and args.case != "hill":
@@ -104,6 +108,12 @@ def main():
         parameters["WJGeometrySeedFromHeight"] = args.from_height
     if args.seed_taper is not None:
         parameters["WJGeometrySeedTaper"] = args.seed_taper
+    if args.seed_foot_length is not None:
+        parameters["WJGeometrySeedFootLength"] = args.seed_foot_length
+    if args.seed_collar_length is not None:
+        parameters["WJGeometrySeedCollarLength"] = args.seed_collar_length
+    if args.seed_packet_sha256:
+        info["WJGeometrySeedPacketSHA256"] = args.seed_packet_sha256
     if manufactured:
         info["WJMMSVariant"] = "NormalTubeV1"
     edit(session, info, parameters)

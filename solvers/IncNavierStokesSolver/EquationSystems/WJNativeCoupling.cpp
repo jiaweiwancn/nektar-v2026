@@ -570,7 +570,84 @@ Vector Coupling::InitialVelocity(double a, double r) const
     return {velocity*gradient[2],0.,-velocity*gradient[0]};
 }
 
-Vec Coupling::ProjectContinuity(const Vec &flow) const
+double Coupling::SeedGradientFit::Error(const Vec &velocity) const
+{
+    const double squared=velocity.dot(gram*velocity)-2*velocity.dot(load)+targetSquared;
+    return std::sqrt(std::max(0.,squared)/weight);
+}
+
+Coupling::SeedGradientFit Coupling::GeometrySeedGradientFit(const Vec &oldFlow,
+                                                            const Geometry &source) const
+{
+    const int count=m_flow.VelocitySize();
+    const double H=m_geometry.H, foot=m_geometry.normalMap->lengthX;
+    const double footLength=m_options.geometrySeedFootLength;
+    const double collarLength=m_options.geometrySeedCollarLength;
+    SeedGradientFit fit;
+    fit.load=Vec::Zero(2*count);
+    // Evaluate the reflected quintic directly to retain nonnegative
+    // weights even within roundoff of the upper end of the transition.
+    const auto fade=[](double value,double lower,double upper)
+    {
+        return SmoothTransition(upper-value,0.,upper-lower)[0];
+    };
+    std::vector<Vec> weights;
+    weights.reserve(m_flow.Elements().size());
+    for (const auto &cell : m_flow.Elements())
+    {
+        const bool outer=cell.rl>=H-1e-12;
+        const double length=outer ? footLength : collarLength;
+        Vec &weightsHere=weights.emplace_back(Vec::Zero(cell.w.size()));
+        if (length==0.)
+            continue;
+        const auto u=Local(oldFlow,cell.u), w=Local(oldFlow,cell.u,count);
+        const Vec ux=cell.Dx*u, uz=cell.Dz*u, wx=cell.Dx*w, wz=cell.Dz*w;
+        Mat gradX=Mat::Zero(cell.w.size(),2), gradZ=gradX;
+        for (int q=0; q<cell.w.size(); ++q)
+        {
+            const double a=cell.x[q], r=cell.z[q]-m_geometry.d0;
+            const double window=outer
+                ? fade(std::abs(a-foot),.25,.80)*SmoothTransition(r,4*H,5.5*H)[0]*fade(r,9*H,11*H)
+                : fade(std::abs(a),.2*foot,.6*foot)*SmoothTransition(r,.15*H,.4*H)[0]*fade(r,.8*H,H);
+            if (window==0.)
+                continue;
+            const auto old=source.At(a,r,cell.xl,cell.xr,outer);
+            const auto next=m_geometry.At(a,r,cell.xl,cell.xr,outer);
+            Eigen::Matrix2d gradient, J, inverse;
+            gradient << ux[q],uz[q],wx[q],wz[q];
+            J << next.jacobian[0][0],next.jacobian[0][2],next.jacobian[2][0],next.jacobian[2][2];
+            inverse << old.inverse[0][0],old.inverse[0][2],old.inverse[2][0],old.inverse[2][2];
+            // Recover the old Cartesian gradient of the source polynomial
+            // at the same chart label, from its target-metric basis action.
+            gradient=(gradient*J*inverse).eval();
+            if (!outer)
+            {
+                // Compare crown gradients in corresponding wall frames.
+                const auto &s=old.tangent1, &t=next.tangent1;
+                const double c=s[0]*t[0]+s[2]*t[2], p=s[0]*t[2]-s[2]*t[0];
+                Eigen::Matrix2d rotation;
+                rotation << c,-p,p,c;
+                gradient=(rotation*gradient*rotation.transpose()).eval();
+            }
+            weightsHere[q]=length*length*window;
+            const double weighted=cell.w[q]*weightsHere[q];
+            gradX.row(q)=weighted*gradient.col(0).transpose();
+            gradZ.row(q)=weighted*gradient.col(1).transpose();
+            fit.targetSquared+=weighted*gradient.squaredNorm();
+            fit.weight+=weighted;
+        }
+        for (int component=0; component<2; ++component)
+        {
+            const Vec load=cell.Dx.transpose()*gradX.col(component)+cell.Dz.transpose()*gradZ.col(component);
+            Add(fit.load,cell.u,load,component*count);
+        }
+    }
+    Require(fit.weight>0.,"geometry seed gradient fit has no quadrature support");
+    fit.gram=m_flow.Core().StrainSamples(weights,false);
+    return fit;
+}
+
+Vec Coupling::ProjectContinuity(const Vec &flow, const SeedGradientFit *fit) const
 {
     // Constrain continuity while minimizing an H1 velocity correction.
     // A pure mass projection can give steep shear corrections in the very
@@ -583,13 +660,18 @@ Vec Coupling::ProjectContinuity(const Vec &flow) const
         const double length=.4*m_geometry.H;
         regularizer=m_flow.Core().Strain([length](double,double){return length*length;},false);
     }
+    Vec target=m_flow.Core().MassAction(flow);
+    target.head(nv)+=regularizer*flow.head(nv);
+    if (fit)
+    {
+        regularizer+=fit->gram;
+        target.head(nv)+=fit->load;
+    }
     const auto system=m_flow.System(1.,regularizer,0.);
     Eigen::SparseLU<Sparse> factor;
     factor.compute(system);
     Require(factor.info()==Eigen::Success,"initial velocity mass projection factorization failed");
     const Vec lift=m_flow.Lift(flow);
-    Vec target=m_flow.Core().MassAction(flow);
-    target.head(nv)+=regularizer*flow.head(nv);
     const Vec rhs=m_flow.LiftedRhs(1.,regularizer,0.,target,lift);
     const Vec projected=factor.solve(rhs);
     Require(factor.info()==Eigen::Success&&projected.allFinite(),
@@ -795,7 +877,12 @@ CoupledHistory Coupling::ReadInitialFields(const std::string &path, bool allowCa
         geometry.normalMap=m_geometry.normalMap->Signature();
     const std::string expectedSource=m_options.initialSourceIdentity.empty()?m_options.sourceIdentity:m_options.initialSourceIdentity;
     Require(expectedSource.size()==64,"initial-field source binding is missing");
-    Require(expectedSource==m_options.sourceIdentity||allowCandidate,"a different declared initial source is allowed only as a steady-preparation guess");
+    const auto &packet=m_options.geometrySeedPacketSha256;
+    const bool pinnedGeometrySeed=geometrySeedHeight && !packet.empty();
+    if (pinnedGeometrySeed)
+        Require(packet==initial.Metadata().packetSha256,"geometry seed packet SHA256 differs");
+    Require(expectedSource==m_options.sourceIdentity || allowCandidate || pinnedGeometrySeed,
+            "a different initial source requires a steady-preparation guess or an explicitly pinned geometry seed packet");
     const auto &seedReference=m_options.initialReferenceIdentity;
     Require(seedReference.empty()||(allowCandidate&&m_reference->Transport()==InnerKTransport::AuxiliaryHistoricalFixtureV1&&
             seedReference==m_reference->BoundaryIdentity()),"a different reference is allowed only as an explicitly bound v2 steady fixture guess");
@@ -855,10 +942,22 @@ CoupledHistory Coupling::ReadInitialFields(const std::string &path, bool allowCa
     }
     if (geometrySeedHeight)
     {
+        std::optional<SeedGradientFit> fit;
+        if (m_options.geometrySeedFootLength>0. || m_options.geometrySeedCollarLength>0.)
+            fit=GeometrySeedGradientFit(state.flow,seedGeometry);
         state.flow=RemapVelocity(state.flow,seedGeometry);
         state=DirichletState(state,0.);
         m_initialContinuityBefore=ContinuityNorm(state.flow);
-        state.flow=ProjectContinuity(state.flow);
+        const int nv=2*m_flow.VelocitySize();
+        const double gradientBefore=fit ? fit->Error(state.flow.head(nv)) : 0.;
+        state.flow=ProjectContinuity(state.flow,fit ? &*fit : nullptr);
+        if (fit)
+        {
+            m_initialGradientFit=std::array<double,2>{gradientBefore,fit->Error(state.flow.head(nv))};
+            std::cout<<std::setprecision(17)<<"WJ-H27 geometry seed weighted gradient RMS "
+                     <<m_initialGradientFit->front()<<" -> "<<m_initialGradientFit->back()
+                     <<std::endl;
+        }
         m_initialContinuityAfter=ContinuityNorm(state.flow);
         Require(m_initialContinuityAfter<=1e-9,"geometry seed continuity projection failed");
         m_geometrySeedHeight=geometrySeedHeight;
@@ -1793,6 +1892,7 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
     out<<",\"basis\":\"Modified_A\",\"anderson_depth\":"<<m_options.andersonDepth<<",\"acceleration\":{\"proposals\":"<<info.accelerationProposals<<",\"accepted\":"<<info.accelerationAccepted<<",\"inadmissible_trials\":"<<info.accelerationInadmissible<<'}';
     out<<",\"initial_field_transfer\":{\"packet_sha256\":"<<RANSWallSolveJson::Quote(m_initialPacketSha)<<",\"source_state_sha256\":"<<RANSWallSolveJson::Quote(m_initialSourceStateSha)<<",\"projected\":"<<(m_initialProjected?"true":"false")<<",\"source_was_candidate\":"<<(m_initialCandidate?"true":"false")<<'}';
     if (m_geometrySeedHeight)
+    {
         out<<",\"geometry_seed\":{\"from_height\":"<<*m_geometrySeedHeight
            <<",\"to_height\":"<<m_geometry.normalMap->amplitude
            <<",\"nested_refinement\":"<<(m_geometrySeedRefined?"true":"false")
@@ -1802,7 +1902,16 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
            <<",\"outer_taper_end_radius\":"<<(m_geometry.H+m_options.geometrySeedTaper)
            <<",\"matching_tangent_correction\":"<<m_initialTangentialTraceCorrection
            <<",\"continuity_before\":"<<m_initialContinuityBefore
-           <<",\"continuity_after\":"<<m_initialContinuityAfter<<'}';
+           <<",\"continuity_after\":"<<m_initialContinuityAfter
+           <<",\"foot_gradient_length\":"<<m_options.geometrySeedFootLength
+           <<",\"collar_gradient_length\":"<<m_options.geometrySeedCollarLength
+           <<",\"source_identity\":"<<RANSWallSolveJson::Quote(m_options.initialSourceIdentity.empty()
+                ? m_options.sourceIdentity : m_options.initialSourceIdentity);
+        if (m_initialGradientFit)
+            out<<",\"weighted_gradient_rms_before_after\":["<<m_initialGradientFit->front()
+               <<','<<m_initialGradientFit->back()<<']';
+        out<<'}';
+    }
     if(m_options.recordNonlinearTrace){out<<",\"nonlinear_trace\":[";for(int i=0;i<int(info.nonlinearTrace.size());++i){const auto&t=info.nonlinearTrace[i];if(i)out<<',';out<<"{\"residuals\":["<<t.residual.momentum<<','<<t.residual.continuity<<','<<t.residual.gauge<<','<<t.residual.k<<','<<t.residual.epsilon<<','<<t.residual.trace<<"],\"accelerated\":"<<(t.accelerated?"true":"false")<<",\"seconds\":"<<t.seconds<<'}';}out<<']';}
 
     out<<",\"constitutive_backend\":\""<<(m_options.backend==ConstitutiveBackend::Historical?"Historical":"FastFull3DV1")<<"\",\"constitutive_calls\":{\"values\":"<<info.constitutiveStats.values<<",\"directions\":"<<info.constitutiveStats.directions<<",\"fallbacks\":"<<info.constitutiveStats.fallbacks<<",\"root_iterations\":"<<info.constitutiveStats.rootIterations<<",\"maximum_normalized_root_residual\":"<<info.constitutiveStats.maximumRootResidual<<'}';

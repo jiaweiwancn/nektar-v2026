@@ -32,6 +32,8 @@ struct CoupledOptions
     int maximumIterations=60,quadratureX=8,quadratureR=12,andersonDepth=0;
     bool manufactured=false,recordNonlinearTrace=false,checkCurrentActions=false;
     double hillInitialSlowdown=0., hillInitialEpsilonBump=0., geometrySeedTaper=1.;
+    double geometrySeedFootLength=0., geometrySeedCollarLength=0.;
+    std::string geometrySeedPacketSha256;
     std::string outletPolicy="FullTractionV1";
     bool checkOutletActions=false;
     double diagnosticOutletX=15.;
@@ -203,7 +205,15 @@ private:
     Vec FlowLift(double time)const;
     Vec DependentTraceDirection(const CoupledState &state, const Vec &dk) const;
     Vector InitialVelocity(double a, double r) const;
-    Vec ProjectContinuity(const Vec &flow) const;
+    struct SeedGradientFit
+    {
+        Sparse gram;
+        Vec load;
+        double targetSquared=0., weight=0.;
+        double Error(const Vec &velocity) const;
+    };
+    SeedGradientFit GeometrySeedGradientFit(const Vec &oldFlow, const Geometry &source) const;
+    Vec ProjectContinuity(const Vec &flow, const SeedGradientFit *fit=nullptr) const;
     double ContinuityNorm(const Vec &flow) const;
     Vec RemapVelocity(const Vec &flow, const Geometry &source);
     void WriteOutletActions(std::ostream&out,const CoupledHistory&history)const;
@@ -258,6 +268,7 @@ private:
     std::uint64_t m_geometrySeedStep=0;
     double m_geometrySeedTime=0.;
     double m_initialFluxRoundtripError=0.,m_initialTangentialTraceCorrection=0.;
+    std::optional<std::array<double,2>> m_initialGradientFit;
     mutable WallEvaluationStats m_constitutiveStats;
     mutable std::uint64_t m_actionChecks=0,m_augmentedChecks=0;
     mutable std::array<double,3>m_actionDifference{};

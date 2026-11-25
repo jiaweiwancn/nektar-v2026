@@ -188,6 +188,7 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadSolverInfo("WJInitialFields",m_initialFields,"");Check(m_initialFields.empty()||m_restart.empty(),"initial fields and cold restart are separate mutually exclusive inputs");
     double geometrySeedHeight=-1.;
     m_session->LoadParameter("WJGeometrySeedFromHeight",geometrySeedHeight,-1.);
+    m_session->LoadSolverInfo("WJGeometrySeedPacketSHA256",options.geometrySeedPacketSha256,"");
     if (geometrySeedHeight!=-1.)
     {
         Check(std::isfinite(geometrySeedHeight)&&geometrySeedHeight>=0.&&geometrySeedHeight<=1.&&
@@ -198,10 +199,18 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
         Check(std::isfinite(options.geometrySeedTaper)&&options.geometrySeedTaper>0.&&
               options.geometrySeedTaper<geometry.normalMap->tunnelTop-geometry.d0-geometry.H,
               "WJGeometrySeedTaper must fit inside the outer chart");
+        m_session->LoadParameter("WJGeometrySeedFootLength",options.geometrySeedFootLength,0.);
+        m_session->LoadParameter("WJGeometrySeedCollarLength",options.geometrySeedCollarLength,0.);
+        for (double length : {options.geometrySeedFootLength,options.geometrySeedCollarLength})
+            Check(length>=0. && std::isfinite(length*length),
+                  "geometry seed gradient lengths must be nonnegative and finite in square");
     }
     else
-        Check(!m_session->DefinesParameter("WJGeometrySeedTaper"),
-              "WJGeometrySeedTaper requires a geometry-continuation seed");
+        Check(!m_session->DefinesParameter("WJGeometrySeedTaper") &&
+              !m_session->DefinesParameter("WJGeometrySeedFootLength") &&
+              !m_session->DefinesParameter("WJGeometrySeedCollarLength") &&
+              options.geometrySeedPacketSha256.empty(),
+              "geometry seed controls require a geometry-continuation seed");
     m_session->LoadSolverInfo("WJPerturbationCertificate",m_perturbationCertificate,"");
     m_session->LoadSolverInfo("WJPerturbationCertificateSHA256",m_perturbationSha256,"");
     Check(m_perturbationCertificate.empty()==m_perturbationSha256.empty()&&
