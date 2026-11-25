@@ -212,7 +212,8 @@ class Audit:
                   for key in D if key in basis}
         return basis,v,G,Pi,V,P,scalars,D,gradient,np.min(np.linalg.eigvalsh(R)[:,0]/k)
 
-    def sampled(self,e,a,r,metric):
+    def matching_load(self,e,a):
+        """One-sided matching traces and derivative contributions per unit tangent."""
         owner=self.owner[e["geometry"]]
         section=np.full_like(a,self.ref.H)
         h=self.hill.metrics(owner,a,section,outer=False)
@@ -221,11 +222,21 @@ class Audit:
         U=self.velocity(b,ids,self.s)
         ua=self.velocity(da,ids,self.s)
         ut=dot(h["t"],U)
-        dudl=dot(h["t"],ua)/h["matching_area"]-h["kh"]*dot(h["n"],U)
-        pressure=self.trace(e,"p",a,1)/h["matching_area"]
-        scalar=-2*self.trace(e,"k",a,1)/(3*h["matching_area"])
+        un=dot(h["n"],U)
+        ut_along=dot(h["t"],ua)
+        frame=-h["kh"]*un
+        dudl=ut_along/h["matching_area"]+frame
+        pa,ka=self.trace(e,"p",a,1),self.trace(e,"k",a,1)
+        area=h["matching_area"]
+        return dict(Pi_H=self.trace(e,"p",a),K=self.trace(e,"k",a),u_t=ut,u_n=un,
+                    matching_area=area,curvature_H=h["kh"],dPi_da=pa,dK_da=ka,
+                    dUt_da=area*dudl,dUt_frame_per_length=frame,
+                    pressure=pa/area,k=-2*ka/(3*area),convection=2*ut*dudl)
+
+    def sampled(self,e,a,r,metric):
+        terms=self.matching_load(e,a)
         return {(name): (q*(r<self.ref.h))[:,None]*metric["t"] for name,q in
-                (("pressure",pressure),("k",scalar),("convection",2*ut*dudl))}
+                ((name,terms[name]) for name in ("pressure","k","convection"))}
 
     def integrate(self):
         ref, data=self.ref,self.data

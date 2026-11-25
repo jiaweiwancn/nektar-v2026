@@ -22,7 +22,7 @@ DIRECTIONS[1, 0, 2] = 1.
 DIRECTIONS[2, 2, 0] = 1.
 
 
-def angular_minimum(action, shift):
+def angular_minimum(action, shift, pointwise=False):
     # For t = tan(theta), the coefficients of the perpendicular
     # polarization tensor are (-t, -t*t, 1)/(1+t*t).
     q = action + action.swapaxes(1, 2)
@@ -40,9 +40,8 @@ def angular_minimum(action, shift):
     d = (vc@action@vc-vs@action@vs)/2
     e = (vc@q@vs)/2
     lower = grid - .5*(np.pi/32)**2*(abs(b)+abs(c)+4*(abs(d)+abs(e)))
-    best = float(grid.min())
-    winner = int(grid.argmin())
-    for index in np.flatnonzero(lower <= best+5e-15):
+    indices = range(len(grid)) if pointwise else np.flatnonzero(lower <= grid.min()+5e-15)
+    for index in indices:
         # Each chart is evaluated only for |t| <= 1. The reversed
         # polynomial includes angles where cos(theta) vanishes.
         for coeff in (p[index], p[index, ::-1]):
@@ -50,12 +49,13 @@ def angular_minimum(action, shift):
             roots = polyroots([a1, 2*a2-4*a0, 3*a3-3*a1, 4*a4-2*a2, -a3])
             t = np.r_[-1., 0., 1., roots.real[(abs(roots.imag)<1e-9)&(abs(roots.real)<=1.)]]
             value = np.polynomial.polynomial.polyval(t, coeff)/(1+t*t)**2 + shift[index]
-            if value.min() < best:
-                best, winner = float(value.min()), int(index)
-    return best, winner
+            grid[index] = min(grid[index], value.min())
+    if pointwise:
+        return grid
+    return float(grid.min()), int(grid.argmin())
 
 
-def response(ref, G, k, E, radius, metric, outer, added_viscosity=None):
+def response(ref, G, k, E, radius, metric, outer, added_viscosity=None, *, pointwise=False):
     normal = np.column_stack((metric['n'][:, 0], np.zeros(len(k)), metric['n'][:, 1]))
     tangent = np.column_stack((metric['t'][:, 0], np.zeros(len(k)), metric['t'][:, 1]))
     size = len(k)
@@ -73,10 +73,16 @@ def response(ref, G, k, E, radius, metric, outer, added_viscosity=None):
     lower = np.flatnonzero(chi == 0.)
     best = (float('inf'), 0)
     difference = 0.
+    if pointwise:
+        margins = np.empty(size)
+        uncertainty = np.zeros(size)
     if len(lower):
         values = (ref.nu+added[lower])/mu[lower]
-        winner = int(values.argmin())
-        best = float(values[winner]), int(lower[winner])
+        if pointwise:
+            margins[lower] = values
+        else:
+            winner = int(values.argmin())
+            best = float(values[winner]), int(lower[winner])
     active = np.flatnonzero(chi > 0.)
     if len(active):
         g, ka, ea = full[active], k[active], E[active]
@@ -100,10 +106,17 @@ def response(ref, G, k, E, radius, metric, outer, added_viscosity=None):
                 stress = ref.nu*M-weight[:, None, None]*derivative+scale*wall
                 rows.append(np.einsum('aij,nij->na', DIRECTIONS, stress)/mu[active, None])
             forms.append(np.stack(rows, axis=2))
-        difference = float(np.max(np.sum(abs(forms[1]-forms[0]), axis=(1, 2))))
-        value, winner = angular_minimum(forms[1], added[active]/mu[active])
-        if value < best[0]:
-            best = value, int(active[winner])
+        differences = np.sum(abs(forms[1]-forms[0]), axis=(1, 2))
+        if pointwise:
+            uncertainty[active] = differences
+            margins[active] = angular_minimum(forms[1], added[active]/mu[active], pointwise=True)
+        else:
+            difference = float(differences.max())
+            value, winner = angular_minimum(forms[1], added[active]/mu[active])
+            if value < best[0]:
+                best = value, int(active[winner])
+    if pointwise:
+        return margins, uncertainty
     value, index = best
     return value, index, difference, float(aux[index]), float(chi[index])
 
