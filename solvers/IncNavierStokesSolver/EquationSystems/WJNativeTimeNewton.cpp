@@ -130,6 +130,7 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
     m_lastInputHistory=history;
     m_hasInputHistory=true;
     m_lastAttempt={};
+    m_rejectedCandidate.reset();
     CoupledStepInfo info;
     const double time=(history.step+1)*history.dt;
     const double alpha=(history.step==0?1.:1.5)/history.dt;
@@ -449,7 +450,35 @@ CoupledStepInfo Coupling::AdvanceNewton(CoupledHistory &history, bool injectRetr
             }
             const auto state=unpack(result.x);
             checkDeadline();
-            const auto final=Evaluate(state,time,true,info.timing);
+            Data final;
+            try{final=Evaluate(state,time,true,info.timing);}
+            catch(const NativeInadmissibleState &error){
+                if(m_exportRejections)
+                {
+                    m_rejectedCandidate=DiagnosticCandidate{DiagnosticRole::RejectedTimeStep,
+                        state,history.step+1,time,error.what(),std::nullopt};
+                    // Reassemble the original time residual separately from
+                    // principal acceptance, including the eliminated gauge.
+                    try
+                    {
+                        const auto observed=Evaluate(state,time,false,info.timing);
+                        auto load=external;
+                        if(implicitAdvection)
+                        {
+                            const auto advection=Advection(state,observed.kRules);
+                            load.flow-=advection.flow;load.k-=advection.k;load.epsilon-=advection.epsilon;
+                        }
+                        m_rejectedCandidate->residual=Residual(state,observed,load,alpha,time,
+                            info.timing,&history);
+                    }
+                    catch(const NativeInadmissibleState &)
+                    {
+                        // Preserve the field even if another guard precludes
+                        // safe equation evaluation.
+                    }
+                }
+                throw;
+            }
             CoupledState nextAdvection;
             {
                 AccountTime timer(info.timing.assembly);

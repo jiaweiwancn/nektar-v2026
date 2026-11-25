@@ -199,6 +199,33 @@ int main(int argc,char**argv)
             Check(result.completed==(name!="infeasible_stencil"),"derivative completion status differs");
             probes.push_back(Probe(name,result,base,direction,problem.Action(base,direction)));
         }
+        {
+            auto cb=ScalarCallbacks();
+            auto options=Options();
+            options.maximumNewtonIterations=1;
+            int additiveCalls=0;
+            double frozenBase=0.;
+            cb.PreparePreconditioner=[&](const Vec&x,const Vec&){frozenBase=x[0];};
+            cb.CorrectionAction=[&](const Vec&x,const Vec&direction){
+                Check(x[0]==frozenBase,"additive correction applied at a different nonlinear base");
+                ++additiveCalls;
+                return Vector({2.*direction[0]});
+            };
+            cb.Precondition=[](const Vec&rhs){return Vec(rhs/3.);};
+            const Vec one=Vector({1.});
+            SteadyKrylov solver(cb,one,one,options);
+            const auto result=solver.Solve(Vector({0.}));
+            Check(!result.converged&&result.hasEvaluatedState&&std::abs(result.x[0]-1./3)<1e-10&&
+                  std::abs(result.trueNorm-2./3)<1e-10,"correction action changed the nonlinear residual");
+            Check(!result.newton.empty()&&result.newton[0].linearConverged&&additiveCalls>=2,
+                  "Arnoldi or true linear check skipped the correction action");
+            const auto probe=solver.ProbeDirection(Vector({0.}),one);
+            Check(probe.completed&&std::abs(probe.actions.back()[0]-3.)<1e-9,
+                  "additive derivative action disagrees with the analytic shifted derivative");
+            solves.push_back(J::Object({{"name",J::Quote("additive_correction_only")},
+                {"system",J::Quote("scalar_analytic")},{"result",Result(result)}}));
+            probes.push_back(Probe("additive_correction_only",probe,Vector({0.}),one,Vector({3.})));
+        }
         for(const std::string name:{"newton_bound","linear_bound","line_search_bound","deadline_before_base","deadline_after_base"})
         {
             Problem problem;auto cb=problem.Callbacks();auto options=Options();

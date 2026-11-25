@@ -62,6 +62,25 @@ struct CoupledResidual
     double momentum=0,continuity=0,gauge=0,k=0,epsilon=0,trace=0;
     double Maximum()const{return std::max({momentum,continuity,gauge,k,epsilon,trace});}
 };
+enum class DiagnosticRole { RejectedInitialization, RejectedTimeStep, SteadySearch };
+struct DiagnosticCandidate
+{
+    DiagnosticRole role;
+    CoupledState state;
+    std::uint64_t attemptedStep=0;
+    double attemptedTime=0.;
+    std::string reason;
+    std::optional<CoupledResidual> residual;
+    int attemptedIteration=-1;
+};
+struct DiagnosticSteadyOptions
+{
+    // Zero pseudoTime disables the correction mass. These shifts never enter F.
+    double pseudoTime=0., correctionDiffusion=0.;
+    // A positive eta selects a separate momentum problem for initialization.
+    double eta=0., regularizationViscosity=0.;
+    std::string seedSha256;
+};
 struct CoupledTiming
 {
     double constitutive=0,wall=0,assembly=0,flow=0,scalar=0,rebuild=0,
@@ -128,6 +147,14 @@ public:
     CoupledHistory FreshHistory(const CoupledState&state)const;
     CoupledHistory ReadInitialFields(const std::string &path, bool allowCandidate=false,
                                      std::optional<double> geometrySeedHeight=std::nullopt);
+    CoupledState PrepareState(const std::string &path, const std::string &seedSha256,
+                              std::optional<double> geometrySeedHeight);
+    void EnableRejectionPackets(bool enabled){m_exportRejections=enabled;}
+    void WriteRejection(const std::filesystem::path&path)const;
+    SteadyKrylovResult SolveDiagnosticSteady(const CoupledState &seed,
+        const SteadyKrylovOptions &options,CoupledStepInfo &final,double preconditionerMass,
+        const DiagnosticSteadyOptions &diagnostic);
+    void WriteSteadyDiagnostic(const std::filesystem::path &path)const;
     CoupledHistory PerturbInitialHistory(const CoupledHistory&base,const std::string&certificate,
                                         const std::string&sha256);
     CoupledHistory SteadyCandidateHistory(const Vec&unknowns)const;
@@ -161,6 +188,13 @@ public:
 private:
     friend struct InnerKFixtureAccess;
     CoupledStepInfo AdvanceNewton(CoupledHistory&history,bool injectRetry);
+    CoupledState InitialState()const;
+    CoupledState LiftInitialState(const CoupledState&state)const;
+    CoupledState ImportInitialState(const std::string &path,bool allowCandidate,
+        std::optional<double> geometrySeedHeight,const std::string *diagnosticSeedSha256);
+    SteadyKrylovResult SearchSteady(const CoupledState &seed,
+        const SteadyKrylovOptions &options,CoupledStepInfo &final,double preconditionerMass,
+        CoupledHistory *physicalHistory,const DiagnosticSteadyOptions *diagnostic);
     struct Data
     {
         struct VelocityInput {double k,E,aux,r;Tensor gradient;Vector normal;};
@@ -169,7 +203,8 @@ private:
         std::vector<Vec>mu,bulk,shear,Dk,De,sourceK,sourceE,reactionE;
         std::vector<std::vector<Tensor>>remainder,viscousStress;
         Vec coefficients,kCoefficients,eCoefficients;
-        double minK=1e100,minE=1e100,minCovariance=1e100,minPrincipal=1e100,traceError=0;
+        double minK=1e100,minE=1e100,minCovariance=1e100,minPrincipal=1e100,
+               minModifiedPrincipal=1e100,traceError=0;
     };
     struct Loads { Vec flow,k,epsilon; };
     void BuildTopology();
@@ -188,8 +223,13 @@ private:
     double NativeRadius(double physicalZ)const;
     double NativeX(double x)const;
     CoupledState DirichletState(const CoupledState&state,double time)const;
-    Data Evaluate(const CoupledState&state,double time,bool principal,CoupledTiming&timing)const;
+    enum class PrincipalPolicy { Skip, Observe, Enforce };
+    Data Evaluate(const CoupledState&state,double time,PrincipalPolicy principal,CoupledTiming&timing,
+                  const DiagnosticSteadyOptions *diagnostic=nullptr)const;
+    Data Evaluate(const CoupledState&state,double time,bool principal,CoupledTiming&timing)const
+    {return Evaluate(state,time,principal?PrincipalPolicy::Enforce:PrincipalPolicy::Skip,timing);}
     Loads Forcing(double time,CoupledTiming&timing,bool freezeManufactured=false)const;
+    double RegularizationShape(double a,double r)const;
     Sparse Strain(const Data&data)const;
     Sparse VelocityTangent(const Data&data,CoupledTiming&timing)const;
     Vec TimePreconditionerData(const Data&data)const;
@@ -224,6 +264,10 @@ private:
     Vec EVolumeLoad(const CoupledState&state,const Data&data)const;
     double Drift(const Vec&current,const Vec&previous)const;
     void CheckHistory(const CoupledHistory&history)const;
+    void WriteCoefficientFields(std::ostream&out,const CoupledState&state,double time)const;
+    void WriteInputHistory(std::ostream&out)const;
+    void WriteDiagnostic(const std::filesystem::path&path,const DiagnosticCandidate&candidate,
+                         const CoupledStepInfo *original,const DiagnosticSteadyOptions *options)const;
     std::vector<MultiRegions::ContFieldSharedPtr>m_fields;
     Geometry m_geometry;
     std::shared_ptr<const Reference>m_reference;
@@ -256,6 +300,14 @@ private:
     CoupledHistory m_lastInputHistory;
     CoupledStepInfo m_lastAttempt;
     bool m_hasInputHistory=false;
+    bool m_exportRejections=false;
+    mutable std::optional<DiagnosticCandidate> m_rejectedCandidate;
+    std::optional<DiagnosticCandidate> m_steadyDiagnosticCandidate;
+    DiagnosticSteadyOptions m_diagnosticOptions;
+    CoupledStepInfo m_diagnosticOriginal;
+    double m_diagnosticExtraWork=0.;
+    double m_diagnosticModifiedMargin=0.;
+    std::vector<std::array<double,3>> m_diagnosticCorrections;
     mutable Vec m_bulkBodyAction,m_sampledBodyAction;
     mutable Vec m_outletLoad;
     mutable Vec m_physicalFlowLift,m_physicalKLift;

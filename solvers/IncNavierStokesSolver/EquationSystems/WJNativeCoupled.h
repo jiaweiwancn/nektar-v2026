@@ -35,6 +35,9 @@ private:
     double m_initialisationSeconds=0,m_constructionSeconds=0,m_completeAdvanceSeconds=0;
     bool m_coefficients=false;
     bool m_steadyMode=false;
+    bool m_diagnosticSteady=false;
+    WJNative::DiagnosticSteadyOptions m_diagnosticSteadyOptions;
+    std::optional<WJNative::CoupledState> m_diagnosticSeed;
     double m_steadyPreconditionerMass=0,m_steadySeed=0;
     WJNative::SteadyKrylovOptions m_steadyOptions;
     WJNative::SteadyKrylovResult m_steadyResult;

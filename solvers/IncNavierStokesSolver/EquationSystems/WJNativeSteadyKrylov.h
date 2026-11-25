@@ -47,6 +47,9 @@ struct SteadyKrylovCallbacks
     // Optional explicit rebuild/refresh at each Newton base. Residual trials
     // must not silently redefine the prepared base operator or norm weights.
     std::function<void(const SteadyVector &,const SteadyVector &)> PreparePreconditioner;
+    // Raw additive correction action in physical unknowns at the frozen
+    // nonlinear base. It is used in every linear product and check, never F.
+    std::function<SteadyVector(const SteadyVector &,const SteadyVector &)> CorrectionAction;
     // Optional complete scientific guard for actual nonlinear states. Called
     // after ValidTrial and before Residual/Observe at every initial/re-evaluated
     // base and nonlinear line-search candidate. NEVER called on FD samples:
@@ -129,6 +132,7 @@ struct SteadyKrylovResult
 {
     bool converged=false, hasEvaluatedState=false, bestFromAcceptedIterate=true;
     bool nonlinearValidationEnabled=false;
+    int bestNewtonIteration=-1;
     std::string status="NOT_CONVERGED", reason;
     // Best evaluated admissible state, with optional full nonlinear validation
     // passed, not necessarily an Armijo-accepted

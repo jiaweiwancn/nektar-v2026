@@ -72,7 +72,7 @@ const std::vector<double>&Signs(const InitialFieldElement&e,unsigned field)
 {return field<2?e.us:field==2?e.ks:field==3?e.epsilonSigns:e.ps;}
 }
 
-InitialFields::InitialFields(const std::string &path, bool allowAcceptedTimeState)
+InitialFields::InitialFields(const std::string &path, bool allowAcceptedTimeState, bool allowDiagnostic)
 {
     Require(std::filesystem::is_regular_file(path),"input is not a regular coefficient packet");
     Require(std::filesystem::file_size(path)<=256ULL*1024*1024,"coefficient packet exceeds declared 256 MiB input allowance");
@@ -98,15 +98,24 @@ InitialFields::InitialFields(const std::string &path, bool allowAcceptedTimeStat
             Require(allowAcceptedTimeState,"positive-time coefficients require a geometry-continuation import");
             m.role=InitialFieldRole::AcceptedTimeState;
         }
+    }else if(m.schema=="WJH27DiagnosticCandidateV1"){
+        Require(allowDiagnostic,"diagnostic coefficient packets require explicit diagnostic steady preparation");
+        const auto role=root.get<std::string>("role");
+        Require(role=="REJECTED_INITIALIZATION"||role=="REJECTED_TIME_STEP"||role=="STEADY_SEARCH",
+                "unsupported diagnostic coefficient role");
+        Require(!root.get<bool>("physical_history"),"diagnostic packet falsely claims a physical history");
+        m.role=InitialFieldRole::Diagnostic;
     }else{
         Require(m.schema=="WJH27SteadyCandidateV1","unsupported initial coefficient packet schema");
         Require(!root.get<bool>("qualified_reference"),"candidate packet falsely claims reference qualification");
         m.role=InitialFieldRole::Candidate;m.qualifiedReference=false;
     }
     const auto&state=root.get_child("state");m.stateSchema=state.get<std::string>("schema");
-    Require(m.stateSchema=="WJH27NativeCoupledStateV2","unsupported native state schema");
-    m.step=state.get<std::uint64_t>("step");
-    m.time=Number(state,"time");
+    const bool diagnostic=m.role==InitialFieldRole::Diagnostic;
+    Require(m.stateSchema==(diagnostic?"WJH27NativeDiagnosticStateV1":"WJH27NativeCoupledStateV2"),
+            "unsupported native state schema");
+    m.step=diagnostic?root.get<std::uint64_t>("attempted_step"):state.get<std::uint64_t>("step");
+    m.time=diagnostic?Number(root,"attempted_time"):Number(state,"time");
     if (m.role==InitialFieldRole::AcceptedTimeState)
     {
         const double dt=Number(state,"dt");
@@ -128,7 +137,7 @@ InitialFields::InitialFields(const std::string &path, bool allowAcceptedTimeStat
                 Number(state,"minimum_principal_over_mu")>1e-8,
                 "geometry seed has unqualified admissibility margins");
     }
-    else
+    else if(!diagnostic)
     {
         Require(m.step==0 && m.time==0.,"steady initial fields require step=time=0");
     }

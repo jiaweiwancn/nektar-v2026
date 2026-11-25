@@ -290,7 +290,7 @@ private:
     {
         if(!out.hasEvaluatedState||norm<out.trueNorm)
         {
-            out.hasEvaluatedState=true;out.x=x;out.residual=f;out.trueNorm=norm;
+            out.hasEvaluatedState=true;out.x=x;out.residual=f;out.trueNorm=norm;out.bestNewtonIteration=newton;
             out.bestFromAcceptedIterate=accepted;
         }
         else if(accepted&&(x.array()==out.x.array()).all())out.bestFromAcceptedIterate=true;
@@ -376,6 +376,12 @@ private:
             audit.seconds=Seconds(attemptStart);
             if(action.size()!=0)
             {
+                if(cb.CorrectionAction)
+                {
+                    const Vec correction=cb.CorrectionAction(x,direction);
+                    CheckVector(correction,sx.size(),"additive correction action");
+                    action+=correction;
+                }
                 if(!action.allFinite())throw Stop("FD_ARITHMETIC: nonfinite directional derivative");
                 Deadline();return action;
             }

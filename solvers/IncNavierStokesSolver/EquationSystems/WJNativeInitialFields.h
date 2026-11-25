@@ -11,7 +11,7 @@
 
 namespace Nektar::WJNative
 {
-enum class InitialFieldRole { QualifiedReference, Candidate, AcceptedTimeState };
+enum class InitialFieldRole { QualifiedReference, Candidate, AcceptedTimeState, Diagnostic };
 
 struct InitialFieldGeometry
 {
@@ -49,7 +49,8 @@ struct InitialFieldElement
 class InitialFields
 {
 public:
-    explicit InitialFields(const std::string &jsonPath, bool allowAcceptedTimeState=false);
+    explicit InitialFields(const std::string &jsonPath, bool allowAcceptedTimeState=false,
+                           bool allowDiagnostic=false);
     const InitialFieldMetadata&Metadata()const{return m_metadata;}
     const InitialFieldGeometry&GeometryData()const{return m_geometry;}
     // Native packet order: Nu, Np, Nk, Ne (epsilon has only outer coefficients).

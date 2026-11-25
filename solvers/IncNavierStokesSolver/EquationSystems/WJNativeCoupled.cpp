@@ -163,7 +163,10 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadParameter("WJMMSBodyAmplitude",options.mmsBodyAmplitude,0.);
     m_session->LoadSolverInfo("WJMMSVariant",options.mmsVariant,"Historical");
     m_session->LoadSolverInfo("WJInitialSourceIdentity",options.initialSourceIdentity,WJ_H27_SOURCE_ID);
-    std::string solve;m_session->LoadSolverInfo("WJNativeSolve",solve,"Advance");Check(solve=="Advance"||solve=="SteadyReference","unknown WJ native solve mode");m_steadyMode=solve=="SteadyReference";
+    std::string solve;m_session->LoadSolverInfo("WJNativeSolve",solve,"Advance");
+    Check(solve=="Advance"||solve=="SteadyReference"||solve=="DiagnosticSteady","unknown WJ native solve mode");
+    m_diagnosticSteady=solve=="DiagnosticSteady";
+    m_steadyMode=solve!="Advance";
     Check(!m_steadyMode || options.flowPreconditioner == "SparseLU",
           "WJFlowPreconditioner=PressureCorrection is for time advancement");
     Check(!m_steadyMode || options.picardAdvection == "Explicit",
@@ -186,6 +189,36 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadParameter("WJTerminalBegin",m_terminalBegin,0.);m_session->LoadParameter("WJTerminalEnd",m_terminalEnd,0.);
     if(m_terminalOutput)Check(!m_steadyMode&&m_coefficients&&std::isfinite(m_terminalBegin)&&std::isfinite(m_terminalEnd)&&m_terminalBegin>=0&&m_terminalEnd>m_terminalBegin,"terminal output requires advancement, complete coefficients and a finite increasing nonnegative interval");
     m_session->LoadSolverInfo("WJInitialFields",m_initialFields,"");Check(m_initialFields.empty()||m_restart.empty(),"initial fields and cold restart are separate mutually exclusive inputs");
+    std::string exportRejections,allowIncomplete;
+    m_session->LoadSolverInfo("WJDiagnosticCandidateOutput",exportRejections,"False");
+    m_session->LoadSolverInfo("WJDiagnosticIncompleteLinear",allowIncomplete,"False");
+    Check((exportRejections=="True"||exportRejections=="False")&&
+          (allowIncomplete=="True"||allowIncomplete=="False"),"invalid diagnostic switch");
+    Check(exportRejections=="False"||m_steps==0||options.advancement=="CoupledJFNKV1",
+          "time-step rejection packets require the coupled Newton path");
+    m_session->LoadParameter("WJDiagnosticPseudoTime",m_diagnosticSteadyOptions.pseudoTime,0.);
+    m_session->LoadParameter("WJDiagnosticCorrectionDiffusion",m_diagnosticSteadyOptions.correctionDiffusion,0.);
+    m_session->LoadParameter("WJDiagnosticEta",m_diagnosticSteadyOptions.eta,0.);
+    m_session->LoadParameter("WJDiagnosticRegularizationViscosity",
+                             m_diagnosticSteadyOptions.regularizationViscosity,0.);
+    m_session->LoadSolverInfo("WJDiagnosticSeedSHA256",m_diagnosticSteadyOptions.seedSha256,"");
+    if(m_diagnosticSteady)
+    {
+        Check(m_restart.empty()&&m_steadySeed==0&&options.nonlinearTolerance<=1e-10,
+              "diagnostic steady preparation requires coefficient input, no steady perturbation and tolerance at most 1e-10");
+        Check(m_diagnosticSteadyOptions.seedSha256.empty()||!m_initialFields.empty(),
+              "diagnostic seed digest requires a coefficient input");
+        m_steadyOptions.allowIncompleteLinearStep=allowIncomplete=="True";
+    }
+    else
+    {
+        Check(allowIncomplete=="False"&&m_diagnosticSteadyOptions.seedSha256.empty()&&
+              !m_session->DefinesParameter("WJDiagnosticPseudoTime")&&
+              !m_session->DefinesParameter("WJDiagnosticCorrectionDiffusion")&&
+              !m_session->DefinesParameter("WJDiagnosticEta")&&
+              !m_session->DefinesParameter("WJDiagnosticRegularizationViscosity"),
+              "diagnostic correction or momentum regularization requires DiagnosticSteady");
+    }
     double geometrySeedHeight=-1.;
     m_session->LoadParameter("WJGeometrySeedFromHeight",geometrySeedHeight,-1.);
     m_session->LoadSolverInfo("WJGeometrySeedPacketSHA256",options.geometrySeedPacketSha256,"");
@@ -231,6 +264,7 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     }
     Check(!outer.empty(),"empty outer epsilon domain");auto subset=MemoryManager<MultiRegions::ExpList>::AllocateSharedPtr(*fields[2],outer,true);fields[3]=MemoryManager<MultiRegions::ContField>::AllocateSharedPtr(m_session,*subset);m_fields[3]=fields[3];
     m_coupling=std::make_unique<WJNative::Coupling>(fields,geometry,reference,options);
+    m_coupling->EnableRejectionPackets(exportRejections=="True");
     m_constructionSeconds=Clock()-start;
     }catch(const std::exception&e){std::cerr<<"WJ-H27 construction: "<<e.what()<<std::endl;throw std::runtime_error(e.what());}
 }
@@ -239,6 +273,13 @@ void WJNativeCoupled::v_DoInitialise(bool dump)
     (void)dump;const double start=Clock();
     try{
         Check(!std::filesystem::exists(m_prefix+".steps.jsonl")&&!std::filesystem::exists(m_prefix+".result.json")&&!std::filesystem::exists(m_prefix+".science-index.json"),"coupled output prefix already exists");
+        if(m_diagnosticSteady)
+        {
+            m_diagnosticSeed=m_coupling->PrepareState(m_initialFields,
+                m_diagnosticSteadyOptions.seedSha256,m_geometrySeedHeight);
+            m_initialisationSeconds=Clock()-start;
+            return;
+        }
         if (!m_restart.empty())
         {
             m_history = m_coupling->ReadHistory(m_restart, &m_recoveryTiming);
@@ -259,7 +300,11 @@ void WJNativeCoupled::v_DoInitialise(bool dump)
             m_last=m_coupling->AuditSteadyState(m_history.current);
         m_coupling->Store(m_history.current);m_stepsLog.open(m_prefix+".steps.jsonl");m_stepsLog<<std::setprecision(17);Check(bool(m_stepsLog),"cannot create coupled step log");
         m_initialisationSeconds=Clock()-start;
-    }catch(const std::exception&e){std::cerr<<"WJ-H27 initialisation: "<<e.what()<<std::endl;throw std::runtime_error(e.what());}
+    }catch(const std::exception&e){
+        try{m_coupling->WriteRejection(m_prefix+".rejected-candidate.json");}
+        catch(const std::exception&journal){std::cerr<<"WJ-H27 candidate export: "<<journal.what()<<std::endl;}
+        std::cerr<<"WJ-H27 initialisation: "<<e.what()<<std::endl;throw std::runtime_error(e.what());
+    }
 }
 unsigned WJNativeCoupled::TerminalReasons(double left,double right,bool before)const
 {
@@ -313,6 +358,24 @@ void WJNativeCoupled::WriteScientificIndex()
 void WJNativeCoupled::v_DoSolve()
 {
     const double solveStart=Clock();
+    if(m_diagnosticSteady)
+    {
+        m_steadyResult=m_coupling->SolveDiagnosticSteady(*m_diagnosticSeed,m_steadyOptions,m_last,
+            m_steadyPreconditionerMass,m_diagnosticSteadyOptions);
+        const std::string path=m_prefix+".steady.json";
+        Check(!std::filesystem::exists(path),"diagnostic steady ledger is immutable");
+        std::ofstream out(path);
+        Check(bool(out),"cannot create diagnostic steady ledger");
+        SteadyJSON(out,m_steadyResult,m_steadyPreconditionerMass);
+        out<<'\n'<<std::flush;
+        Check(bool(out),"cannot write diagnostic steady ledger");
+        m_coupling->WriteSteadyDiagnostic(m_prefix+".diagnostic-steady.json");
+        std::cout<<"WJ-H27 diagnostic steady: "<<m_steadyResult.reason<<", residual="
+                 <<m_steadyResult.trueNorm<<std::endl;
+        Check(m_steadyResult.converged,"bounded diagnostic steady search did not converge");
+        m_solveCompleted=true;
+        return;
+    }
     try{
         if(m_steadyMode){
             m_steadyResult=m_coupling->SolveSteady(m_history,m_steadyOptions,m_last,m_steadyPreconditionerMass);
@@ -338,6 +401,8 @@ void WJNativeCoupled::v_DoSolve()
         }
         m_coupling->Store(m_history.current);m_solveCompleted=true;
     }catch(const std::exception&e){
+        try{m_coupling->WriteRejection(m_prefix+".rejected-candidate.json");}
+        catch(const std::exception&journal){std::cerr<<"WJ-H27 candidate export: "<<journal.what()<<std::endl;}
         try{
             m_coupling->WriteHistory(m_prefix+".failed-accepted.bin",m_history);
             WriteScientificIndex();
@@ -351,6 +416,7 @@ void WJNativeCoupled::v_DoSolve()
 }
 void WJNativeCoupled::v_Output()
 {
+    if(m_diagnosticSteady)return;
     try{
         double start=Clock();if(m_terminalOutput&&m_steps==0)WriteScientificFrame(Final);
         m_coupling->WriteHistory(m_prefix+".final.bin",m_history);

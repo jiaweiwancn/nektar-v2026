@@ -29,6 +29,46 @@ def coefficients(data):
     return {key: np.array(value) for key, value in data.items()}
 
 
+def load_c1_state(path, diagnostic=False):
+    if not diagnostic:
+        return po.load_native(path)
+    packet = json.loads(path.read_text(),
+                        parse_int=lambda token: -0.0 if token == "-0" else int(token))
+    po.require(packet["schema"] == "WJH27DiagnosticCandidateV1" and
+               packet["physical_history"] is False, "explicit diagnostic packet required")
+    state = packet["state"].copy()
+    po.require(state["schema"] == "WJH27NativeDiagnosticStateV1", "diagnostic state schema differs")
+    role = packet["role"]
+    po.require(role in ("REJECTED_TIME_STEP", "REJECTED_INITIALIZATION", "STEADY_SEARCH"),
+               "diagnostic candidate role differs")
+    state.update(step=packet["attempted_step"], time=packet["attempted_time"], diagnostic_role=role)
+    if role == "REJECTED_TIME_STEP":
+        history = state["input_history"]
+        bound = packet["input_history_identity"]
+        po.require(all(history[key] == bound[key] for key in ("step", "time", "dt")) and
+                   state["signature"] == bound["signature"], "diagnostic history counters differ")
+        for key in ("current", "previous", "advection", "previous_advection"):
+            po.require(state_hash(coefficients(history[key])) == bound[key+"_sha256"],
+                       "diagnostic input history coefficient identity differs")
+        state.update(previous_sha256=bound["current_sha256"], implicit_solver="CoupledJFNKV1")
+    else:
+        po.require(state["step"] == 0 and state["time"] == 0., "steady/preflight clock differs")
+    return state, {key: value for key, value in packet.items() if key != "state"}
+
+
+def regularization_viscosity(geometry, prescription, a, r):
+    if prescription is None or prescription["eta"] == 0.:
+        return np.zeros_like(a)
+    po.require(prescription["shape"] == "ChartExteriorUnitQuinticV1",
+               "unrecognized numerical diffusion prescription")
+    def ramp(distance):
+        u = np.minimum(1., np.maximum(0., distance))
+        return u**3*(10.-15.*u+6.*u**2)
+    top = geometry["tunnel_top"]-geometry["d0"]
+    return (prescription["eta"]*prescription["viscosity"]*
+            ramp(a-geometry["left"])*ramp(geometry["right"]-a)*ramp(top-r))
+
+
 def rate(data, state):
     if data["step"] == 0:
         return {k: np.zeros_like(x) for k, x in state.items()}
@@ -52,13 +92,14 @@ class Audit:
     rule = po.PhysicalOracle.rule
     face = po.PhysicalOracle.face
 
-    def __init__(self, data, ref, order, deadline, radial_order=None):
+    def __init__(self, data, ref, order, deadline, radial_order=None, regularization=None):
         self.data, self.ref, self.order, self.deadline = data, ref, order, deadline
         self.s = coefficients(data["coefficients"])
-        po.require(state_hash(self.s) == data["state_sha256"], "accepted coefficient hash differs")
+        po.require(state_hash(self.s) == data["state_sha256"], "coefficient hash differs")
         self.n, self.np, self.nk, self.ne = map(int,data["sizes"])
         self.mesh = data["elements"]
         self.geometry = data["geometry"]
+        self.regularization = regularization
         po.require(self.geometry["mapping"] == "NormalCosineHillV1" and
                    data["reference_identity"] == ref.identity, "wrong geometry or reference identity")
         self.hill = Hill(self.geometry)
@@ -158,6 +199,9 @@ class Audit:
             R[mixed]=(1-chi[mixed,None,None])*R[mixed]+chi[mixed,None,None]*wj
         planar=R[:,(0,2),:][:,:,(0,2)]
         V=ref.nu*M-planar+2*k[:,None,None]*np.eye(2)/3
+        if self.regularization is not None:
+            viscosity = regularization_viscosity(self.geometry, self.regularization, a, r)
+            V += viscosity[:, None, None]*M
         P=-np.einsum("qij,qij->q",planar,G)
         Pi=basis["p"][0]@self.s["flow"][2*self.n+np.asarray(e["p"])]
         D=dict(k=ref.nu+ref.cd*k*k/(ref.sk*E),epsilon=ref.nu+ref.cd*k*k/(ref.se*E))
@@ -244,6 +288,10 @@ class Audit:
                         velocity_BDF_work=dot(U,Dt),manufactured_work=dot(U,f),
                         weak_divergence_work=(dot(U,U)/2+Pi-2*q["k"]/3)*div,
                         mass_divergence=div,strong_divergence_square=div**2)
+            if self.regularization is not None:
+                viscosity = regularization_viscosity(self.geometry, self.regularization, a, r)
+                strain = G+G.transpose(0,2,1)
+                values["numerical_diffusion_work"] = .5*viscosity*np.einsum("qij,qij->q",strain,strain)
             if self.temporal:
                 old,older,fs=self.temporal
                 uo,upp=self.velocity(b,ids,old),self.velocity(b,ids,older)
@@ -297,7 +345,8 @@ class Audit:
             work_reaction+=float(U[self.fixed[key]]@total[key][self.fixed[key]])
         sampled_work=sum(stage[key+"_sampled_work"] for key in ("pressure","k","convection"))
         power=(stage["velocity_BDF_work"]+physical["kinetic_flux"]-stage["weak_divergence_work"]+
-               stage["molecular"]+stage["production"]-sampled_work-stage["manufactured_work"]-
+               stage["molecular"]+stage["production"]+stage["numerical_diffusion_work"]-
+               sampled_work-stage["manufactured_work"]-
                physical["prescribed_work"]-work_reaction)
         eps_trace=self.trace_error()
         intr=self.interface_checks(regions,total)
@@ -529,16 +578,23 @@ def main():
     parser.add_argument("--radial-order",type=int,
                         help="use a different Gauss order for radial volume panels")
     parser.add_argument("--seconds",type=float,default=180.)
+    parser.add_argument("--diagnostic",action="store_true")
+    parser.add_argument("--regularized",action="store_true")
     args=parser.parse_args()
     ref=po.load_reference(args.table)
-    data,_=po.load_native(args.native)
+    data,metadata=load_c1_state(args.native,args.diagnostic)
+    if args.regularized and (not args.diagnostic or "regularization" not in metadata):
+        parser.error("--regularized requires a diagnostic steady candidate")
+    regularization=metadata["regularization"] if args.regularized else None
     began=time.monotonic()
-    evidence=Audit(data,ref,args.order,began+args.seconds,args.radial_order).integrate()
+    evidence=Audit(data,ref,args.order,began+args.seconds,args.radial_order,regularization).integrate()
     output=dict(native=identity(args.native),table=identity(args.table),
                 audit_source=identity(__file__),source_identity=data["source_identity"],
                 order=args.order,radial_order=args.radial_order or args.order,
                 time=data["time"],step=data["step"],
                 elapsed=time.monotonic()-began,**evidence)
+    if args.diagnostic:
+        output.update(candidate_role=data["diagnostic_role"],regularization=regularization)
     with args.out.open("x") as stream:
         json.dump(output,stream,indent=2,allow_nan=False)
         stream.write("\n")
