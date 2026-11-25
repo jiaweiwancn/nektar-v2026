@@ -3,6 +3,7 @@
 """Continue independently admitted steady roots, with fixed-height deadline recovery."""
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor
 import json
 import math
 import os
@@ -106,10 +107,10 @@ def original_admission(candidate, table, receipts):
         return "AUDIT_IDENTITY_FAILURE"
     if (state["original_principal_over_mu"] <= 1e-8 or
             not all(region["sample_pass"] for region in margins["regions"].values()) or
-            any(not record["values"] or any(
-                value["differentiation_spread"] < 0. or len(value["minima"]) < 3 or
+            any(not record["values"] for record in minima) or
+            any(value["differentiation_spread"] < 0. or len(value["minima"]) < 3 or
                 any(m["over_mu"]-value["differentiation_spread"] <= 1e-8 for m in value["minima"])
-                for value in record["values"]) for record in minima)):
+                for value in [*points["fixed_controls"], *(v for r in minima for v in r["values"])])):
         return "ADVERSE_CONVERGED_ROOT"
     return "QUALIFIED"
 
@@ -119,13 +120,11 @@ def run_audits(args, case, candidate, deadline, row):
     if args.eta > 0.:
         requests.extend((("equations-modified", "c1_oracle.py", True),
                          ("margins-modified", "c1_margins.py", True)))
-    if args.require_original_admissible:
-        requests.append(("points", "c1_refined_witness.py", False))
-    paths = {}
-    for kind, tool, modified in requests:
+    def audit(request):
+        kind, tool, modified = request
         cap = min(args.audit_seconds, deadline-time.monotonic()-10.)
         if cap <= 5.:
-            return "HOLD_FOR_AUDIT"
+            return kind, None, None, None
         path = case/(kind+".json")
         check = [sys.executable, HERE/tool]
         if kind == "points":
@@ -142,14 +141,23 @@ def run_audits(args, case, candidate, deadline, row):
             for a, r in [(-8.29, .1111), (2.5, 1.107899), (1.875, .11541061001735001)]:
                 check.extend(("--point", a, r))
             for region in ("inner", "outer", "faces_inner", "faces_outer", "forcing_support"):
-                check.extend(("--minima", region, paths["margins"]))
-        row["commands"].append(list(map(str, check)))
+                check.extend(("--minima", region, case/"margins.json"))
         status = call(check, path.with_suffix(".log"), cap+4., case)
-        if status or not path.is_file():
-            row[kind] = {"exit_status": status}
-            return "HOLD_FOR_AUDIT"
-        paths[kind] = path
-        row[kind] = identity(path)
+        return kind, path if not status and path.is_file() else None, list(map(str,check)), status
+
+    with ThreadPoolExecutor(max_workers=args.audit_workers) as executor:
+        results = list(executor.map(audit, requests))
+    if args.require_original_admissible and all(result[1] for result in results):
+        results.append(audit(("points", "c1_refined_witness.py", False)))
+    paths = {}
+    for kind, path, command, status in results:
+        if command:
+            row["commands"].append(command)
+        row[kind] = identity(path) if path else {"exit_status": status}
+        if path:
+            paths[kind] = path
+    if len(paths) != len(results):
+        return "HOLD_FOR_AUDIT"
     if args.require_original_admissible:
         return original_admission(candidate, args.table, paths)
     source = paths["equations-modified" if args.eta > 0. else "equations"]
@@ -229,6 +237,7 @@ def main():
     p.add_argument("--stage-seconds", type=float, required=True)
     p.add_argument("--resume-seconds", type=float, default=0.)
     p.add_argument("--audit-seconds", type=float, default=180.)
+    p.add_argument("--audit-workers", type=int, choices=(1, 2), default=1)
     p.add_argument("--campaign-seconds", type=float, required=True)
     p.add_argument("--eta", type=float, default=0.)
     p.add_argument("--viscosity", type=float, default=0.)
