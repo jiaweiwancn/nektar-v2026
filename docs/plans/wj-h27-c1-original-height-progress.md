@@ -224,4 +224,4 @@ The next discriminating test is a solved original $g=.0024$ lower anchor on an i
 | `C1_CLOSED` | OPEN | Full-height original root and physical pilot remain outstanding. |
 | `C2_READY` | OPEN | Depends on C1. |
 | `LONG_FLAT_PRODUCTION_COST_CLOSED` | OPEN | The later limit remains $1.25C_{\rm total}\le86400$ s per qualified trajectory. |
-| `REMOTE_PUSH_VERIFIED` | OPEN | Publication receipt follows ref verification. |
+| `REMOTE_PUSH_VERIFIED` | PASS | `git ls-remote origin refs/heads/codex/wj-earsm-awf` matched the evidence head `768a65ba164a775109c051cbaf62f95745b28f8b`. |
