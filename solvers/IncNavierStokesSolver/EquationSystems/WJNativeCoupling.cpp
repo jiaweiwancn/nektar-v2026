@@ -660,7 +660,8 @@ Vec Coupling::RemapVelocity(const Vec &flow, const Geometry &source)
             // Both chart owners give the same Piola normal flux through H.
             // Their transverse chart derivatives generally differ. Remove
             // only the resulting tangential jump from the outer seed.
-            const double blend=outer ? 1-SmoothTransition(radius,m_geometry.H,m_geometry.H+1.)[0] : 1.;
+            const double taperEnd=m_geometry.H+m_options.geometrySeedTaper;
+            const double blend=outer ? 1-SmoothTransition(radius,m_geometry.H,taperEnd)[0] : 1.;
             if (outer && blend>0.)
             {
                 const double H=m_geometry.H;
@@ -1794,7 +1795,7 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
            <<",\"source_step\":"<<m_geometrySeedStep
            <<",\"source_time\":"<<m_geometrySeedTime
            <<",\"piola_flux_roundtrip_error\":"<<m_initialFluxRoundtripError
-           <<",\"outer_taper_end_radius\":"<<(m_geometry.H+1.)
+           <<",\"outer_taper_end_radius\":"<<(m_geometry.H+m_options.geometrySeedTaper)
            <<",\"matching_tangent_correction\":"<<m_initialTangentialTraceCorrection
            <<",\"continuity_before\":"<<m_initialContinuityBefore
            <<",\"continuity_after\":"<<m_initialContinuityAfter<<'}';

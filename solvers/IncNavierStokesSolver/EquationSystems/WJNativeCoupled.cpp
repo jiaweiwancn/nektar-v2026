@@ -194,7 +194,14 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
               geometry.normalMap&&!options.manufactured&&!m_initialFields.empty()&&m_restart.empty(),
               "WJGeometrySeedFromHeight requires a physical normal-chart initial-field import");
         m_geometrySeedHeight=geometrySeedHeight;
+        m_session->LoadParameter("WJGeometrySeedTaper",options.geometrySeedTaper,1.);
+        Check(std::isfinite(options.geometrySeedTaper)&&options.geometrySeedTaper>0.&&
+              options.geometrySeedTaper<geometry.normalMap->tunnelTop-geometry.d0-geometry.H,
+              "WJGeometrySeedTaper must fit inside the outer chart");
     }
+    else
+        Check(!m_session->DefinesParameter("WJGeometrySeedTaper"),
+              "WJGeometrySeedTaper requires a geometry-continuation seed");
     m_session->LoadSolverInfo("WJPerturbationCertificate",m_perturbationCertificate,"");
     m_session->LoadSolverInfo("WJPerturbationCertificateSHA256",m_perturbationSha256,"");
     Check(m_perturbationCertificate.empty()==m_perturbationSha256.empty()&&

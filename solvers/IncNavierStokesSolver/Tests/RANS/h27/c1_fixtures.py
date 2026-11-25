@@ -32,6 +32,7 @@ def main():
     parser.add_argument("--initial-fields", type=Path)
     parser.add_argument("--initial-source")
     parser.add_argument("--from-height", type=float)
+    parser.add_argument("--seed-taper", type=float, help="outer extent of the velocity seed correction")
     parser.add_argument("--quadrature", type=int, nargs=2)
     parser.add_argument("--recovery", type=int, default=1)
     parser.add_argument("--science", type=int, default=0)
@@ -44,7 +45,9 @@ def main():
     if args.initial_fields and args.restart:
         parser.error("initial fields and restart are separate modes")
     if args.from_height is not None and (args.case != "hill" or not args.initial_fields):
-        parser.error("--from-height requires developed physical hill initial fields")
+        parser.error("--from-height requires accepted physical hill initial fields")
+    if args.seed_taper is not None and args.from_height is None:
+        parser.error("--seed-taper requires --from-height")
     if args.initial_source and not args.initial_fields:
         parser.error("--initial-source requires --initial-fields")
     if args.resolve_outer_seed and args.case != "hill":
@@ -99,6 +102,8 @@ def main():
         parameters["WJHillInitialEpsilonBump"] = args.initial_epsilon_bump
     if args.from_height is not None:
         parameters["WJGeometrySeedFromHeight"] = args.from_height
+    if args.seed_taper is not None:
+        parameters["WJGeometrySeedTaper"] = args.seed_taper
     if manufactured:
         info["WJMMSVariant"] = "NormalTubeV1"
     edit(session, info, parameters)
