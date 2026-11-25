@@ -11,12 +11,13 @@ import time
 
 import numpy as np
 
-from c1_oracle import Audit, load_c1_state
+from c1_oracle import Audit, coefficients, load_c1_state
 from c1_paired_grid import APPROACHES, PARENT_NAMES, core_rows
 from c1_support_controls import coincides
 from c1_support_witness import (PROFILE_COLUMNS, FIXED_AXIAL, choose, extent, sampled_action_order,
                                 section_points, write_profiles)
 import physical_oracle as po
+from physical_transient_oracle import state_hash
 from resources import identity
 
 
@@ -159,11 +160,36 @@ def save(path,payload):
         stream.write("\n")
 
 
+def transfer_fields(audit_file,root):
+    receipt=identity(audit_file)
+    root_identity=identity(root)
+    report=json.loads(audit_file.read_text(),parse_int=lambda token:-0.0 if token=="-0" else int(token))
+    if (report["schema"]!="WJH27NativeOriginalTransferAuditV1" or report["physical_history"] is not False
+            or report["eta"]!=0. or report["root_packet_sha256"]!=root_identity["sha256"]):
+        raise ValueError("nested transfer analysis requires the bound native original-equation probe")
+    data,meta=load_c1_state(root,True)
+    if (report["reference_identity"]!=data["reference_identity"] or
+            report["stages"]["solved"]["state_sha256"]!=data["state_sha256"]):
+        raise ValueError("the native transfer probe used a different root")
+    stages={}
+    for name,stage in report["stages"].items():
+        digest=stage["state_sha256"]
+        if state_hash(coefficients(stage["coefficients"]))!=digest:
+            raise ValueError(f"coefficient identity differs at {name}")
+        stages[name]=(
+            dict(data,coefficients=stage["coefficients"],state_sha256=digest,source_identity=report["source_identity"]),
+            dict(packet=root_identity,coefficient_sha256=digest,source_identity=report["source_identity"],
+                 native_original_residuals=meta["original_residuals"] if name=="solved" else None,
+                 audit=receipt,stage=name,weak_continuity=stage["weak_continuity"]))
+    return stages
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--frozen",type=Path,required=True)
     p.add_argument("--table",type=Path,required=True)
     p.add_argument("--field",nargs=2,action="append",required=True,metavar=("LABEL","PACKET"))
+    p.add_argument("--transfer-audit",type=Path,nargs=2,metavar=("NATIVE_AUDIT","ROOT_INPUT"))
     p.add_argument("--compare",nargs=2,action="append",required=True,metavar=("A","B"))
     p.add_argument("--margins",nargs=2,action="append",default=[],metavar=("LABEL","REPORT"))
     p.add_argument("--out",type=Path,required=True)
@@ -200,6 +226,12 @@ def main():
         states[label]=dict(packet=identity(packet),coefficient_sha256=data["state_sha256"],
                            source_identity=data["source_identity"],native_original_residuals=meta["original_residuals"])
     domain=tuple(common_geometry[k] for k in ("left","right","top"))
+    if args.transfer_audit:
+        for name,(data,state) in transfer_fields(*args.transfer_audit).items():
+            if name in audits or any(data["geometry"][k]!=v for k,v in common_geometry.items()):
+                raise ValueError("transfer stage label or physical chart differs across fields")
+            audits[name]=Audit(data,ref,28,deadline)
+            states[name]=state
     reports={}
     report_ids={}
     for label,file in args.margins:
