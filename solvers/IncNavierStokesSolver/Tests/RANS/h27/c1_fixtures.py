@@ -35,6 +35,7 @@ def main():
     parser.add_argument("--seed-taper", type=float, help="outer extent of the velocity seed correction")
     parser.add_argument("--seed-foot-length", type=float, help="gradient-fit length near the downstream foot")
     parser.add_argument("--seed-collar-length", type=float, help="gradient-fit length in the crown collar")
+    parser.add_argument("--seed-collar-reach", type=float, help="outer radius of the crown fit")
     parser.add_argument("--seed-packet-sha256", help="pin the archived geometry seed packet bytes")
     parser.add_argument("--quadrature", type=int, nargs=2)
     parser.add_argument("--recovery", type=int, default=1)
@@ -49,7 +50,8 @@ def main():
         parser.error("initial fields and restart are separate modes")
     if args.from_height is not None and (args.case != "hill" or not args.initial_fields):
         parser.error("--from-height requires accepted physical hill initial fields")
-    controls = (args.seed_taper, args.seed_foot_length, args.seed_collar_length, args.seed_packet_sha256)
+    controls = (args.seed_taper, args.seed_foot_length, args.seed_collar_length,
+                args.seed_collar_reach, args.seed_packet_sha256)
     if any(value is not None for value in controls) and args.from_height is None:
         parser.error("geometry seed controls require --from-height")
     if args.initial_source and not args.initial_fields:
@@ -112,6 +114,8 @@ def main():
         parameters["WJGeometrySeedFootLength"] = args.seed_foot_length
     if args.seed_collar_length is not None:
         parameters["WJGeometrySeedCollarLength"] = args.seed_collar_length
+    if args.seed_collar_reach is not None:
+        parameters["WJGeometrySeedCollarReach"] = args.seed_collar_reach
     if args.seed_packet_sha256:
         info["WJGeometrySeedPacketSHA256"] = args.seed_packet_sha256
     if manufactured:

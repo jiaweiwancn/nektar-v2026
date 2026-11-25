@@ -32,7 +32,7 @@ struct CoupledOptions
     int maximumIterations=60,quadratureX=8,quadratureR=12,andersonDepth=0;
     bool manufactured=false,recordNonlinearTrace=false,checkCurrentActions=false;
     double hillInitialSlowdown=0., hillInitialEpsilonBump=0., geometrySeedTaper=1.;
-    double geometrySeedFootLength=0., geometrySeedCollarLength=0.;
+    double geometrySeedFootLength=0., geometrySeedCollarLength=0., geometrySeedCollarReach=0.;
     std::string geometrySeedPacketSha256;
     std::string outletPolicy="FullTractionV1";
     bool checkOutletActions=false;

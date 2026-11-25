@@ -57,6 +57,7 @@ def compare(source, target, order, prepared, point):
     require(source['sizes'] == target['sizes'], 'seed comparison requires the same signed grid')
     s, t = coefficients(source, False), coefficients(target, prepared)
     sh, th = Hill(source['geometry']), Hill(target['geometry'])
+    reach = target.get('geometry_seed', {}).get('collar_gradient_reach', th.H)
     q, w = leggauss(order)
     qa, qr = (x.ravel() for x in np.meshgrid(q,q,indexing='ij'))
     product = np.outer(w,w).ravel()/4
@@ -82,28 +83,25 @@ def compare(source, target, order, prepared, point):
         mass.add(e['p'],p.T@(weight[:,None]*p))
         area += weight.sum()
         strong += weight@(d*d)
-        if rl >= th.H-1e-13:
-            patch = 0
-            window = (fade(abs(a-th.L),.25,.80)*smooth(r,4*th.H,5.5*th.H)*
-                      fade(r,9*th.H,11*th.H))
-        else:
-            patch = 1
-            before = rotate_gradient(before,sm,m)
-            window = (fade(abs(a),.2*th.L,.6*th.L)*smooth(r,.15*th.H,.4*th.H)*
-                      fade(r,.8*th.H,th.H))
-        error = (G-before)**2
-        measure = window*weight
-        moments[patch,0] += (measure@error.sum(axis=(1,2)), measure.sum())
-        moments[patch,1] += (measure@error[:,:,0].sum(axis=1), measure.sum())
-        moments[patch,2] += (measure@error[:,:,1].sum(axis=1), measure.sum())
+        windows = (fade(abs(a-th.L),.25,.80)*smooth(r,4*th.H,5.5*th.H)*fade(r,9*th.H,11*th.H),
+                   fade(abs(a),.2*th.L,.6*th.L)*smooth(r,.15*th.H,.4*th.H)*fade(r,.8*th.H,reach))
+        for patch, window in enumerate(windows):
+            if not np.any(window):
+                continue
+            desired = rotate_gradient(before,sm,m) if patch else before
+            error = (G-desired)**2
+            measure = window*weight
+            moments[patch,0] += (measure@error.sum(axis=(1,2)), measure.sum())
+            moments[patch,1] += (measure@error[:,:,0].sum(axis=1), measure.sum())
+            moments[patch,2] += (measure@error[:,:,1].sum(axis=1), measure.sum())
         if xl <= point[0] <= xr and rl <= point[1] <= rr:
             a, r = (np.asarray([value]) for value in point)
             m, sm = th.metrics(e,a,r), sh.metrics(src,a,r)
             before = gradient(src,a,r,sm,s['flow'],n)
-            if patch:
-                before = rotate_gradient(before,sm,m)
+            rotated = rotate_gradient(before,sm,m)
             stations.append(dict(element=e['geometry'], physical=m['position'][0].tolist(),
-                source_gradient=before[0].tolist(), target_gradient=gradient(e,a,r,m,t['flow'],n)[0].tolist()))
+                source_gradient=before[0].tolist(), wall_frame_source_gradient=rotated[0].tolist(),
+                target_gradient=gradient(e,a,r,m,t['flow'],n)[0].tolist()))
     riesz = splu(mass.finish()).solve(divergence)
     lift = np.asarray(target['essential_flow_lift'])
     fixed = [np.setdiff1d(np.arange(n), free)+i*n for i,free in enumerate(target['free_velocity_ids'])]

@@ -201,6 +201,10 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
               "WJGeometrySeedTaper must fit inside the outer chart");
         m_session->LoadParameter("WJGeometrySeedFootLength",options.geometrySeedFootLength,0.);
         m_session->LoadParameter("WJGeometrySeedCollarLength",options.geometrySeedCollarLength,0.);
+        m_session->LoadParameter("WJGeometrySeedCollarReach",options.geometrySeedCollarReach,geometry.H);
+        Check(std::isfinite(options.geometrySeedCollarReach) && options.geometrySeedCollarReach>=geometry.H &&
+              options.geometrySeedCollarReach<=geometry.normalMap->tunnelTop-geometry.d0,
+              "geometry seed collar reach must lie from the matching face to the chart top");
         for (double length : {options.geometrySeedFootLength,options.geometrySeedCollarLength})
             Check(length>=0. && std::isfinite(length*length),
                   "geometry seed gradient lengths must be nonnegative and finite in square");
@@ -209,6 +213,7 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
         Check(!m_session->DefinesParameter("WJGeometrySeedTaper") &&
               !m_session->DefinesParameter("WJGeometrySeedFootLength") &&
               !m_session->DefinesParameter("WJGeometrySeedCollarLength") &&
+              !m_session->DefinesParameter("WJGeometrySeedCollarReach") &&
               options.geometrySeedPacketSha256.empty(),
               "geometry seed controls require a geometry-continuation seed");
     m_session->LoadSolverInfo("WJPerturbationCertificate",m_perturbationCertificate,"");

@@ -583,6 +583,7 @@ Coupling::SeedGradientFit Coupling::GeometrySeedGradientFit(const Vec &oldFlow,
     const double H=m_geometry.H, foot=m_geometry.normalMap->lengthX;
     const double footLength=m_options.geometrySeedFootLength;
     const double collarLength=m_options.geometrySeedCollarLength;
+    const double collarReach=m_options.geometrySeedCollarReach;
     SeedGradientFit fit;
     fit.load=Vec::Zero(2*count);
     // Evaluate the reflected quintic directly to retain nonnegative
@@ -596,9 +597,10 @@ Coupling::SeedGradientFit Coupling::GeometrySeedGradientFit(const Vec &oldFlow,
     for (const auto &cell : m_flow.Elements())
     {
         const bool outer=cell.rl>=H-1e-12;
-        const double length=outer ? footLength : collarLength;
+        const bool hasFoot=outer && footLength>0.;
+        const bool hasCollar=collarLength>0. && cell.rl<collarReach;
         Vec &weightsHere=weights.emplace_back(Vec::Zero(cell.w.size()));
-        if (length==0.)
+        if (!hasFoot && !hasCollar)
             continue;
         const auto u=Local(oldFlow,cell.u), w=Local(oldFlow,cell.u,count);
         const Vec ux=cell.Dx*u, uz=cell.Dz*u, wx=cell.Dx*w, wz=cell.Dz*w;
@@ -606,10 +608,12 @@ Coupling::SeedGradientFit Coupling::GeometrySeedGradientFit(const Vec &oldFlow,
         for (int q=0; q<cell.w.size(); ++q)
         {
             const double a=cell.x[q], r=cell.z[q]-m_geometry.d0;
-            const double window=outer
-                ? fade(std::abs(a-foot),.25,.80)*SmoothTransition(r,4*H,5.5*H)[0]*fade(r,9*H,11*H)
-                : fade(std::abs(a),.2*foot,.6*foot)*SmoothTransition(r,.15*H,.4*H)[0]*fade(r,.8*H,H);
-            if (window==0.)
+            const double footWeight=hasFoot ? footLength*footLength*fade(std::abs(a-foot),.25,.80)
+                *SmoothTransition(r,4*H,5.5*H)[0]*fade(r,9*H,11*H) : 0.;
+            const double collarWeight=hasCollar ? collarLength*collarLength*fade(std::abs(a),.2*foot,.6*foot)
+                *SmoothTransition(r,.15*H,.4*H)[0]*fade(r,.8*H,collarReach) : 0.;
+            weightsHere[q]=footWeight+collarWeight;
+            if (weightsHere[q]==0.)
                 continue;
             const auto old=source.At(a,r,cell.xl,cell.xr,outer);
             const auto next=m_geometry.At(a,r,cell.xl,cell.xr,outer);
@@ -620,21 +624,24 @@ Coupling::SeedGradientFit Coupling::GeometrySeedGradientFit(const Vec &oldFlow,
             // Recover the old Cartesian gradient of the source polynomial
             // at the same chart label, from its target-metric basis action.
             gradient=(gradient*J*inverse).eval();
-            if (!outer)
+            Eigen::Matrix2d weightedGradient=footWeight*gradient;
+            double targetEnergy=footWeight*gradient.squaredNorm();
+            if (collarWeight>0.)
             {
                 // Compare crown gradients in corresponding wall frames.
                 const auto &s=old.tangent1, &t=next.tangent1;
                 const double c=s[0]*t[0]+s[2]*t[2], p=s[0]*t[2]-s[2]*t[0];
                 Eigen::Matrix2d rotation;
                 rotation << c,-p,p,c;
-                gradient=(rotation*gradient*rotation.transpose()).eval();
+                const Eigen::Matrix2d rotated=rotation*gradient*rotation.transpose();
+                weightedGradient+=collarWeight*rotated;
+                targetEnergy+=collarWeight*rotated.squaredNorm();
             }
-            weightsHere[q]=length*length*window;
-            const double weighted=cell.w[q]*weightsHere[q];
-            gradX.row(q)=weighted*gradient.col(0).transpose();
-            gradZ.row(q)=weighted*gradient.col(1).transpose();
-            fit.targetSquared+=weighted*gradient.squaredNorm();
-            fit.weight+=weighted;
+            const double weight=cell.w[q];
+            gradX.row(q)=weight*weightedGradient.col(0).transpose();
+            gradZ.row(q)=weight*weightedGradient.col(1).transpose();
+            fit.targetSquared+=weight*targetEnergy;
+            fit.weight+=weight*weightsHere[q];
         }
         for (int component=0; component<2; ++component)
         {
@@ -1905,6 +1912,7 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
            <<",\"continuity_after\":"<<m_initialContinuityAfter
            <<",\"foot_gradient_length\":"<<m_options.geometrySeedFootLength
            <<",\"collar_gradient_length\":"<<m_options.geometrySeedCollarLength
+           <<",\"collar_gradient_reach\":"<<m_options.geometrySeedCollarReach
            <<",\"source_identity\":"<<RANSWallSolveJson::Quote(m_options.initialSourceIdentity.empty()
                 ? m_options.sourceIdentity : m_options.initialSourceIdentity);
         if (m_initialGradientFit)
