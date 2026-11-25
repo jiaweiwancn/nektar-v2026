@@ -67,6 +67,9 @@ public:
     // differ only by the declared 64-epsilon geometric coincidence tolerance.
     bool SameInventory(const std::vector<InitialFieldElement>&elements,
                        const std::array<int,4>&sizes)const;
+    // A strict child mesh represents the original Q3/Q2 fields without
+    // crossing any old element or changing the outer epsilon ownership.
+    bool CoversRefinement(const std::vector<InitialFieldElement>&elements)const;
 
 private:
     double Value(const InitialFieldElement&element,unsigned field,double x,double r)const;

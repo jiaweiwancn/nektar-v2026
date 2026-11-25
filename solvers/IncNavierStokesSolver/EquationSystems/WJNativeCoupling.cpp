@@ -809,8 +809,6 @@ CoupledHistory Coupling::ReadInitialFields(const std::string &path, bool allowCa
                 initial.Metadata().outletPolicy==m_options.outletPolicy &&
                 m_options.hillInitialSlowdown==0. && m_options.hillInitialEpsilonBump==0.,
                 "geometry continuation requires a compatible accepted physical seed");
-        Require(!acceptedTimeSeed || *geometrySeedHeight!=m_geometry.normalMap->amplitude,
-                "same-height transient continuation requires a cold checkpoint");
         seedGeometry.normalMap->amplitude=*geometrySeedHeight;
         seedGeometry.ValidateNormalMesh(m_left,m_right,m_top);
         geometry.normalMap=seedGeometry.normalMap->Signature();
@@ -836,7 +834,11 @@ CoupledHistory Coupling::ReadInitialFields(const std::string &path, bool allowCa
         inventory.push_back(std::move(cell));
     }
     const bool same=initial.SameInventory(inventory,{m_flow.VelocitySize(),m_flow.PressureSize(),m_k.Size(),m_e.Size()});
-    Require(!geometrySeedHeight || same,"geometry continuation requires the same signed chart inventory");
+    const bool refined=geometrySeedHeight && !same && initial.CoversRefinement(inventory);
+    Require(!geometrySeedHeight || same || refined,
+            "geometry continuation requires the same signed chart inventory or a strict nested refinement");
+    Require(!acceptedTimeSeed || refined || *geometrySeedHeight!=m_geometry.normalMap->amplitude,
+            "same-height transient continuation requires a cold checkpoint");
     CoupledState state;
     if(same)state={initial.Flow(),initial.K(),initial.Epsilon()};
     else{
@@ -860,6 +862,7 @@ CoupledHistory Coupling::ReadInitialFields(const std::string &path, bool allowCa
         m_initialContinuityAfter=ContinuityNorm(state.flow);
         Require(m_initialContinuityAfter<=1e-9,"geometry seed continuity projection failed");
         m_geometrySeedHeight=geometrySeedHeight;
+        m_geometrySeedRefined=refined;
         m_geometrySeedStep=initial.Metadata().step;
         m_geometrySeedTime=initial.Metadata().time;
         std::cout<<std::setprecision(17)<<"WJ-H27 geometry seed "<<*geometrySeedHeight
@@ -1792,6 +1795,7 @@ void Coupling::Report(std::ostream&out,const CoupledHistory&h,const CoupledStepI
     if (m_geometrySeedHeight)
         out<<",\"geometry_seed\":{\"from_height\":"<<*m_geometrySeedHeight
            <<",\"to_height\":"<<m_geometry.normalMap->amplitude
+           <<",\"nested_refinement\":"<<(m_geometrySeedRefined?"true":"false")
            <<",\"source_step\":"<<m_geometrySeedStep
            <<",\"source_time\":"<<m_geometrySeedTime
            <<",\"piola_flux_roundtrip_error\":"<<m_initialFluxRoundtripError

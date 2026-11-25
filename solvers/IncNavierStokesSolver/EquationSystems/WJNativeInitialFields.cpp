@@ -289,6 +289,20 @@ void InitialFields::ValidateBindings(const std::string&source,const std::string&
     Require(SameGeometry(m_geometry,geometry),"physical geometry binding differs");
 }
 
+bool InitialFields::CoversRefinement(const std::vector<InitialFieldElement>&elements)const
+{
+    if(elements.size()<=m_elements.size())return false;
+    for(const auto &cell:elements)
+    {
+        const auto owner=std::find_if(m_elements.begin(),m_elements.end(),[&](const auto &source){
+            return cell.epsilon.empty()==source.epsilon.empty() &&
+                Contains(source,cell.xl,cell.rl) && Contains(source,cell.xr,cell.rr);
+        });
+        if(owner==m_elements.end())return false;
+    }
+    return true;
+}
+
 bool InitialFields::SameInventory(const std::vector<InitialFieldElement>&elements,const std::array<int,4>&sizes)const
 {
     if(sizes!=m_sizes||elements.size()!=m_elements.size())return false;
