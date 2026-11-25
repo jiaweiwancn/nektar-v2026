@@ -11,6 +11,7 @@ import xml.etree.ElementTree as ET
 import numpy as np
 
 from c1_oracle import Audit, load_c1_state
+from c1_paired_grid import subdivisions
 from c1_rejected_points import neighborhood, point
 from c1_support_controls import coincides, contains, locations
 from coupled_fixtures import generate, mesh
@@ -29,7 +30,7 @@ def write(path, payload):
 
 def prepare(args):
     session = ET.parse(args.template)
-    xs, zs, _ = mesh_axes(args.template)
+    xs, zs, parent_geometry = mesh_axes(args.template)
     info = session.find("CONDITIONS/SOLVERINFO")
     parameters = session.find("CONDITIONS/PARAMETERS")
     required = {item.get("PROPERTY"): item.get("VALUE") for item in info}
@@ -48,8 +49,38 @@ def prepare(args):
     geometry = args.out / "geometry.xml"
     boundary = args.out / "boundary-template.xml"
     table = Path(required["WJReferenceTable"])
-    mesh(geometry, insert(xs, args.streamwise), insert(zs, [r+d0 for r in args.radial]),
-         quadrature=12)
+    splits, mesh_axis, radius_axis = dict(), None, None
+    if args.axial_envelope:
+        if args.streamwise or args.radial:
+            raise ValueError("a frozen axial envelope already defines all subdivisions")
+        endpoints, midpoints = subdivisions(xs, args.axial_envelope)
+        mesh_axis = sorted(xs+endpoints+midpoints)
+        radius_axis = zs
+        splits = dict(axial_envelope=args.axial_envelope, inserted_endpoints=endpoints,
+                      bisected_midpoints=midpoints, parent_axial=xs, child_axial=mesh_axis,
+                      cells=(len(mesh_axis)-1)*(len(zs)-1))
+    else:
+        mesh_axis = insert(xs, args.streamwise)
+        radius_axis = insert(zs, [r+d0 for r in args.radial])
+    mesh(geometry, mesh_axis, radius_axis, quadrature=12)
+    if args.axial_envelope:
+        # Preserve the parent's vertex text on existing coordinates and the
+        # original radial token at every new axial coordinate.
+        vertices = {}
+        radial = {}
+        for v in parent_geometry.findall("VERTEX/V"):
+            a,z,w = v.text.split()
+            if float(w)!=0.:
+                raise ValueError("expected a planar chart vertex")
+            vertices[float(a),float(z)] = v.text
+            if radial.setdefault(float(z),z)!=z:
+                raise ValueError("radial coordinate uses multiple original tokens")
+        gen = ET.parse(geometry)
+        for v in gen.findall("GEOMETRY/VERTEX/V"):
+            a,z,w = v.text.split()
+            v.text = vertices.get((float(a),float(z)),f"{a} {radial[float(z)]} {w}")
+        gen.write(geometry,encoding="unicode")
+        splits["radial_xml_tokens"] = [radial[z] for z in zs]
     generate(boundary, table, args.out / "unused", template=geometry,
              mode="Physical", outlet_policy=required["WJOutletPolicy"])
     rebuilt = ET.parse(boundary)
@@ -65,7 +96,7 @@ def prepare(args):
     write(args.out / "mesh-inputs.json",
           dict(template=identity(args.template), session=identity(target),
                geometry=identity(geometry), table=identity(table),
-               inserted_streamwise=args.streamwise, inserted_radius=args.radial))
+               inserted_streamwise=args.streamwise, inserted_radius=args.radial, **splits))
 
 
 def inspect(args):
@@ -150,6 +181,8 @@ def main():
     nested.add_argument("out", type=Path)
     nested.add_argument("--streamwise", nargs="+", type=float, default=[])
     nested.add_argument("--radial", nargs="+", type=float, default=[])
+    nested.add_argument("--axial-envelope",nargs=2,type=float,
+                        help="bisect each interval in this fixed envelope, preserving radial XML coordinates")
     nested.set_defaults(run=prepare)
     compare = modes.add_parser("inspect")
     rejection = modes.add_parser("rejected-input")
