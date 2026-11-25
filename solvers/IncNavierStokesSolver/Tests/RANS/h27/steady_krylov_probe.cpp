@@ -58,8 +58,9 @@ std::string Result(const SteadyKrylovResult&r)
     std::vector<std::string>linear,lineSearch,newton;
     for(const auto&a:r.linear)linear.push_back(J::Object({{"newton",J::Number(a.newton)},
         {"cycle",J::Number(a.cycle)},{"iteration",J::Number(a.iteration)},{"rank",J::Number(a.leastSquaresRank)},
-        {"projected_norm",J::Number(a.projectedNorm)},{"true_scaled_norm",J::Number(a.trueScaledNorm)},
-        {"true_norm",J::Number(a.trueNorm)},{"true_checked",J::Boolean(a.trueChecked)},
+        {"projected_norm",J::Number(a.projectedNorm)},
+        {"true_scaled_norm",a.trueChecked?J::Number(a.trueScaledNorm):"null"},
+        {"true_norm",a.trueChecked?J::Number(a.trueNorm):"null"},{"true_checked",J::Boolean(a.trueChecked)},
         {"breakdown",J::Boolean(a.breakdown)},{"converged",J::Boolean(a.converged)}}));
     for(const auto&a:r.lineSearch)lineSearch.push_back(J::Object({{"newton",J::Number(a.newton)},
         {"trial",J::Number(a.trial)},{"step",J::Number(a.step)},{"true_norm",J::Number(a.trueNorm)},
@@ -70,7 +71,8 @@ std::string Result(const SteadyKrylovResult&r)
         {"reason",J::Quote(a.reason)}}));
     for(const auto&a:r.newton)newton.push_back(J::Object({{"iteration",J::Number(a.iteration)},
         {"base_norm",J::Number(a.baseNorm)},{"forcing",J::Number(a.forcing)},
-        {"linear_true_norm",J::Number(a.linearTrueNorm)},{"accepted_norm",J::Number(a.acceptedNorm)},
+        {"linear_true_norm",a.linearEvaluated?J::Number(a.linearTrueNorm):"null"},
+        {"accepted_norm",J::Number(a.acceptedNorm)},
         {"accepted_step",J::Number(a.acceptedStep)},{"linear_converged",J::Boolean(a.linearConverged)},
         {"accepted",J::Boolean(a.accepted)}}));
     return J::Object({{"status",J::Quote(r.status)},{"reason",J::Quote(r.reason)},
