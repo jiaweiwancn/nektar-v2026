@@ -250,7 +250,10 @@ class Audit:
                 energy_now,energy_old,energy_older=[dot(u,u)/2 for u in (U,uo,upp)]
                 values["BDF_kinetic_energy_rate"]=(
                     fs[0]*(energy_now-energy_old)+fs[2]*(energy_older-energy_old))/data["dt"]
-            values.update({name+"_sampled_work": dot(U,force) for name,force in all_sampled.items()})
+            for name, force in all_sampled.items():
+                values[name+"_sampled_work"] = dot(U,force)
+                values[name+"_sampled_force_x"] = force[:,0]
+                values[name+"_sampled_force_z"] = force[:,1]
             for key, val in values.items():
                 integral[key]+=float(weight@val)
             for key, reaction in (("k",P-q["epsilon"]),
@@ -322,6 +325,8 @@ class Audit:
                                pressures_sampling_work=stage["pressure_sampled_work"],
                                scalar_sampling_work=stage["k_sampled_work"],
                                convection_sampling_work=stage["convection_sampled_work"], **physical),
+                    sampled_forces={name: [stage[name+"_sampled_force_"+axis] for axis in ("x","z")]
+                                    for name in ("pressure","k","convection")},
                     bulk=dict(stage), raw_boundary=dict(raw), layer=dict(inner), interface=intr,
                     epsilon_trace=eps_trace, **({"error": {k: math.sqrt(v/(
                         volume["outer"] if k=="epsilon" else total_area)) for k,v in errors.items()}}
