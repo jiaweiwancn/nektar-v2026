@@ -29,6 +29,7 @@ private:
     WJNative::CoupledRecoveryTiming m_recoveryTiming;
     WJNative::CoupledStepInfo m_last;
     std::string m_prefix,m_restart,m_initialFields;
+    std::string m_transferAuditParent,m_transferAuditParentSha;
     std::string m_originalSteadyReceipt,m_originalSteadyReceiptSha256;
     double m_originalSteadyKPulse=0.;
     double m_originalSteadyVelocityPulseRadius=0.,m_originalSteadyVelocityPulse=0.;

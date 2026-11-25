@@ -10,6 +10,7 @@
 #include <IncNavierStokesSolver/EquationSystems/WJNativeSteadyCorrection.h>
 #include <filesystem>
 #include <algorithm>
+#include <functional>
 #include <map>
 #include <optional>
 
@@ -165,6 +166,10 @@ public:
         const DiagnosticSteadyOptions &diagnostic);
     void WriteSteadyDiagnostic(const std::filesystem::path &path,
                                const std::filesystem::path &uncommittedPath)const;
+    void WriteOriginalTransferAudit(const std::filesystem::path &path,
+        const CoupledState &root,const std::string &rootPacketSha,
+        const std::string &parent,const std::string &parentPacketSha,
+        const SteadyKrylovOptions &options);
     CoupledHistory PerturbInitialHistory(const CoupledHistory&base,const std::string&certificate,
                                         const std::string&sha256);
     CoupledHistory SteadyCandidateHistory(const Vec&unknowns)const;
@@ -200,9 +205,10 @@ private:
     CoupledStepInfo AdvanceNewton(CoupledHistory&history,bool injectRetry);
     CoupledState InitialState()const;
     CoupledState LiftInitialState(const CoupledState&state)const;
+    using TransferObserver=std::function<void(const char *,const CoupledState &)>;
     CoupledState ImportInitialState(const std::string &path,bool allowCandidate,
         std::optional<double> geometrySeedHeight,const std::string *diagnosticSeedSha256,
-        bool allowUncommittedGuess=false);
+        bool allowUncommittedGuess=false,const TransferObserver &observe={});
     SteadyKrylovResult SearchSteady(const CoupledState &seed,
         const SteadyKrylovOptions &options,CoupledStepInfo &final,double preconditionerMass,
         CoupledHistory *physicalHistory,const DiagnosticSteadyOptions *diagnostic);
@@ -246,10 +252,12 @@ private:
     Vec TimePreconditionerData(const Data&data)const;
     Vec RemainderLoad(const Data&data)const;
     Loads CurrentActions(const CoupledState&state,const Data&data)const;
-    Vec MomentumAdvection(const CoupledState&state)const;
+    Vec MomentumAdvection(const CoupledState&state,Vec *sampledAction=nullptr)const;
+    Vec SteadyRows(const Loads &action,const CoupledState &state,double gaugeMultiplier)const;
+    CoupledResidual SteadyRowNorms(const Vec &raw)const;
     Sparse MomentumTransportJacobian(const CoupledState&state)const;
     CoupledState Advection(const CoupledState &state, const Rules &kRules,
-                           CoupledStepTimingDetail *timing = nullptr) const;
+                           CoupledStepTimingDetail *timing = nullptr,Vec *sampledMomentum = nullptr) const;
     CoupledResidual Residual(const CoupledState&state,const Data&data,const Loads&base,
                              double alpha,double time,CoupledTiming&timing,
                              const CoupledHistory*history=nullptr)const;

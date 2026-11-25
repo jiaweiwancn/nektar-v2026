@@ -1021,7 +1021,7 @@ CoupledHistory Coupling::ReleaseOriginalSteady(const std::string &path,const std
 
 CoupledState Coupling::ImportInitialState(const std::string &path,bool allowCandidate,
     std::optional<double> geometrySeedHeight,const std::string *diagnosticSeedSha256,
-    bool allowUncommittedGuess)
+    bool allowUncommittedGuess,const TransferObserver &observe)
 {
     InitialFields initial(path,geometrySeedHeight.has_value(),diagnosticSeedSha256!=nullptr,allowUncommittedGuess);
     const bool acceptedTimeSeed=initial.Metadata().role==InitialFieldRole::AcceptedTimeState;
@@ -1104,15 +1104,18 @@ CoupledState Coupling::ImportInitialState(const std::string &path,bool allowCand
     }
     if (geometrySeedHeight)
     {
+        if (observe) observe("nested_polynomial_transfer",state);
         std::optional<SeedGradientFit> fit;
         if (m_options.geometrySeedFootLength>0. || m_options.geometrySeedCollarLength>0.)
             fit=GeometrySeedGradientFit(state.flow,seedGeometry);
         state.flow=RemapVelocity(state.flow,seedGeometry);
         state=DirichletState(state,0.);
+        if (observe) observe("essential_and_dependent_lifts",state);
         m_initialContinuityBefore=ContinuityNorm(state.flow);
         const int nv=2*m_flow.VelocitySize();
         const double gradientBefore=fit ? fit->Error(state.flow.head(nv)) : 0.;
         state.flow=ProjectContinuity(state.flow,fit ? &*fit : nullptr);
+        if (observe) observe("constrained_continuity_projection",state);
         if (fit)
         {
             m_initialGradientFit=std::array<double,2>{gradientBefore,fit->Error(state.flow.head(nv))};
@@ -1430,9 +1433,10 @@ Vec Coupling::RemainderLoad(const Data&d)const
     return load;
 }
 
-Vec Coupling::MomentumAdvection(const CoupledState&s)const
+Vec Coupling::MomentumAdvection(const CoupledState&s,Vec *sampledAction)const
 {
     const int n=m_flow.VelocitySize();Vec load=Vec::Zero(2*n+m_flow.PressureSize());
+    if(sampledAction)*sampledAction=Vec::Zero(load.size());
     for(const auto&rp:m_rules.Static()){
         const auto&r=*rp;Vec u=Local(s.flow,r.u),v=Local(s.flow,r.u,n),up=r.B*u,vp=r.B*v;
         std::array<Vec,2> a{up.cwiseProduct(r.Dx*u)+vp.cwiseProduct(r.Dz*u),
@@ -1440,6 +1444,8 @@ Vec Coupling::MomentumAdvection(const CoupledState&s)const
         const auto &cell=Owner(r.geometry);
         if(cell.rl<m_geometry.h)
         {
+            std::array<Vec,2> sampled;
+            if(sampledAction)for(auto &v:sampled)v=Vec::Zero(r.w.size());
             for(int q=0;q<r.w.size();++q) if(r.z[q]-m_geometry.d0<m_geometry.h)
             {
                 const auto h=InterfaceVelocity(cell,r.x[q],s);
@@ -1447,7 +1453,14 @@ Vec Coupling::MomentumAdvection(const CoupledState&s)const
                 const double amplitude=2*h[0]*h[1];
                 a[0][q]-=normal[2]*amplitude;
                 a[1][q]+=normal[0]*amplitude;
+                if(sampledAction){
+                    sampled[0][q]=-normal[2]*amplitude;
+                    sampled[1][q]=normal[0]*amplitude;
+                }
             }
+            if(sampledAction)
+                for(int i=0;i<2;++i)
+                    Add(*sampledAction,r.u,r.B.transpose()*r.w.asDiagonal()*sampled[i],i*n);
         }
         for(int i=0;i<2;++i)
             Add(load,r.u,r.B.transpose()*r.w.asDiagonal()*a[i],i*n);
@@ -1455,10 +1468,10 @@ Vec Coupling::MomentumAdvection(const CoupledState&s)const
     return load;
 }
 CoupledState Coupling::Advection(const CoupledState &state, const Rules &kRules,
-                                CoupledStepTimingDetail *timing) const
+                                CoupledStepTimingDetail *timing,Vec *sampledMomentum) const
 {
     const double began = Clock();
-    Vec momentum = MomentumAdvection(state);
+    Vec momentum = MomentumAdvection(state,sampledMomentum);
     const double scalarBegan = Clock();
     Vec k = m_k.Advection(kRules, state.flow, state.k);
     Vec epsilon = m_e.Advection(m_rules.Static(), state.flow, state.epsilon);
@@ -1826,6 +1839,199 @@ CoupledResidual Coupling::SteadyResidual(const CoupledState&s,double time)
 {
     return AuditSteadyState(s,time).residual;
 }
+
+Vec Coupling::SteadyRows(const Loads &action,const CoupledState &state,double gaugeMultiplier)const
+{
+    const int nf=m_flow.Size(),nk=m_k.FreeSize(),ne=m_e.FreeSize();
+    Vec raw(nf+nk+ne);
+    raw.head(nf)=m_flow.Restrict(action.flow);
+    if(m_flow.Gauge())
+    {
+        raw.segment(m_flow.PressureOffset(),m_flow.PressureSize())+=m_flow.PressureMean()*gaugeMultiplier;
+        raw[nf-1]=m_flow.PressureMean().dot(state.flow.tail(m_flow.PressureSize()));
+    }
+    raw.segment(nf,nk)=m_k.Restrict(action.k);
+    raw.tail(ne)=m_e.Restrict(action.epsilon);
+    return raw;
+}
+
+CoupledResidual Coupling::SteadyRowNorms(const Vec &raw)const
+{
+    const int nf=m_flow.Size(),nk=m_k.FreeSize(),ne=m_e.FreeSize();
+    Require(raw.size()==nf+nk+ne&&raw.allFinite(),"invalid native steady residual inventory");
+    const auto flow=m_flow.RawResidualNorm(raw.head(nf));
+    return {flow.momentum,flow.continuity,flow.gauge,m_k.FreeResidualNorm(raw.segment(nf,nk)),
+            m_e.FreeResidualNorm(raw.tail(ne)),0.};
+}
+
+void Coupling::WriteOriginalTransferAudit(const std::filesystem::path &path,
+    const CoupledState &root,const std::string &rootPacketSha,
+    const std::string &parent,const std::string &parentPacketSha,
+    const SteadyKrylovOptions &options)
+{
+    Require(m_geometry.normalMap&&!m_mms&&!m_flow.Gauge()&&options.evaluateInitialOnly&&
+            rootPacketSha.size()==64&&parentPacketSha.size()==64,
+            "original transfer audit requires two bound steady fields on a physical traction-outlet chart");
+    Require(!std::filesystem::exists(path),"original transfer audit is immutable");
+    const InitialFields parentField(parent,true,true,false);
+    Require(parentField.Metadata().originalDiagnosticSteady&&
+            parentField.Metadata().packetSha256==parentPacketSha,
+            "transfer audit requires a bound original steady parent");
+    const double began=Clock();
+    std::vector<std::pair<std::string,CoupledState>> stages;
+    auto observe=[&](const char *name,const CoupledState &state){stages.emplace_back(name,state);};
+    const auto transferred=LiftInitialState(ImportInitialState(parent,true,
+        m_geometry.normalMap->amplitude,&parentPacketSha,false,observe));
+    Require(m_geometrySeedRefined,"transfer audit requires a strict nested child");
+    observe("prepared",transferred);
+    observe("solved",root);
+    const Vec x=PackFree(root),p=PackFree(transferred),delta=x-p;
+    Require(StateHash(FromFree(x,0.))==StateHash(root)&&StateHash(FromFree(p,0.))==StateHash(transferred),
+            "transfer audit changed essential or dependent lift coefficients");
+    const int nf=m_flow.Size(),nk=m_k.FreeSize(),ne=m_e.FreeSize(),nv=2*m_flow.VelocitySize();
+    Vec rowScale(nf+nk+ne);
+    rowScale.head(nf)=m_flow.ResidualRowScale();
+    rowScale.segment(nf,nk)=m_k.ResidualRowScale();
+    rowScale.tail(ne)=m_e.ResidualRowScale();
+    CoupledTiming timing;
+    const auto forcing=Forcing(0.,timing,true);
+    using TermRows=std::map<std::string,Vec>;
+    auto evaluate=[&](const Vec &unknown,TermRows *terms=nullptr)->Vec {
+        Require(Clock()-began<options.maximumSeconds,"original transfer audit exceeded its wall budget");
+        try
+        {
+            const auto s=FromFree(unknown,0.);
+            const auto data=Evaluate(s,0.,PrincipalPolicy::Skip,timing);
+            const auto current=CurrentActions(s,data);
+            Vec sampledConvection;
+            const auto adv=Advection(s,data.kRules,nullptr,terms?&sampledConvection:nullptr);
+            const Loads total{current.flow+adv.flow-forcing.flow,
+                current.k+adv.k-forcing.k,current.epsilon+adv.epsilon-forcing.epsilon};
+            const Vec rows=SteadyRows(total,s,0.);
+            if(!terms)return rows;
+
+            auto flow=[&](const char *name,const Vec &v,int offset=0) {
+                Vec local=Vec::Zero(current.flow.size()),raw=Vec::Zero(rows.size());
+                local.segment(offset,v.size())=v;
+                raw.head(nf)=m_flow.Restrict(local);
+                terms->emplace(name,std::move(raw));
+            };
+            const auto pressure=s.flow.tail(m_flow.PressureSize());
+            const Vec ordinary=m_flow.Core().Gradient()*pressure;
+            const Vec sampledPressure=-m_flow.Core().AWF()*pressure;
+            const Vec sampledK=-m_flow.KnownScalarKLoad(s.k);
+            flow("ordinary_pressure",ordinary);
+            flow("sampled_pressure",sampledPressure);
+            flow("sampled_k",sampledK);
+            flow("sampled_convection",sampledConvection);
+            flow("constitutive_momentum",current.flow.head(nv)-ordinary-sampledPressure-sampledK);
+            flow("local_momentum_advection",adv.flow-sampledConvection);
+            flow("continuity",current.flow.tail(m_flow.PressureSize()),nv);
+            flow("exterior_traction",-forcing.flow);
+            Vec scalar=Vec::Zero(rows.size());
+            scalar.segment(nf,nk)=rows.segment(nf,nk);
+            terms->emplace("k_equation",scalar);
+            scalar.segment(nf,nk).setZero();
+            scalar.tail(ne)=rows.tail(ne);
+            terms->emplace("epsilon_equation",std::move(scalar));
+            return rows;
+        }
+        catch(const NativeInadmissibleState &error){throw SteadyInadmissibleTrial(error.what());}
+    };
+    auto feasible=[&](const Vec &unknown){
+        try
+        {
+            const auto s=FromFree(unknown,0.);
+            if(m_k.PolynomialBounds(s.k)[0]<=0.||m_e.PolynomialBounds(s.epsilon)[0]<=0.)
+                return SteadyTrialValidity{false,"transported scalar polynomial is not strictly positive"};
+            return SteadyTrialValidity{};
+        }
+        catch(const NativeInadmissibleState &error){return SteadyTrialValidity{false,error.what()};}
+    };
+    TermRows preparedTerms,rootTerms;
+    const Vec fp=evaluate(p,&preparedTerms),fx=evaluate(x,&rootTerms);
+    Require(SteadyRowNorms(fx).Maximum()<=options.acceptanceNorm,
+            "transfer audit root does not satisfy the current original equations");
+    SteadyKrylovCallbacks callbacks;
+    callbacks.ValidTrial=feasible;
+    callbacks.Residual=[&](const Vec &v){return evaluate(v);};
+    callbacks.TrueNorm=[&](const Vec &v){return SteadyRowNorms(v).Maximum();};
+    callbacks.Precondition=[](const Vec &v){return v;}; // A directional probe never applies an inverse.
+    const Vec scales=UnknownScales();
+    const SteadyKrylov probe(std::move(callbacks),scales,rowScale,options);
+    const auto derivative=probe.ProbeDirection(x,delta,{2.,1.,.5,.25});
+    Require(derivative.completed&&derivative.actions.size()==4&&
+            derivative.finiteDifferences.back().method=="central",
+            "cannot resolve current transfer direction: "+derivative.reason);
+    const auto &j=derivative.actions.back();
+    const double h=derivative.finiteDifferences.back().parameterStep;
+    TermRows plus,minus;
+    (void)evaluate(x+h*delta,&plus);
+    (void)evaluate(x-h*delta,&minus);
+    const Vec remainder=fp-fx+j;
+    const Vec spacingChange=j-derivative.actions[derivative.actions.size()-2];
+
+    std::ofstream out(path);
+    namespace J=RANSWallSolveJson;
+    auto writeNorms=[&](const Vec &raw){
+        const auto n=SteadyRowNorms(raw);
+        out<<'['<<n.momentum<<','<<n.continuity<<','<<n.k<<','<<n.epsilon<<']';
+    };
+    out<<std::setprecision(17)<<"{\"schema\":\"WJH27NativeOriginalTransferAuditV1\",\"physical_history\":false"
+       <<",\"source_identity\":"<<J::Quote(m_options.sourceIdentity)<<",\"signature\":"<<J::Quote(m_signature)
+       <<",\"reference_identity\":"<<J::Quote(m_reference->Identity())<<",\"eta\":0"
+       <<",\"root_packet_sha256\":"<<J::Quote(rootPacketSha)
+       <<",\"parent_packet_sha256\":"<<J::Quote(parentPacketSha)
+       <<",\"parent_coefficient_sha256\":"<<J::Quote(parentField.Metadata().stateSha256)
+       <<",\"row_order\":[\"momentum\",\"continuity\",\"k\",\"epsilon\"]"
+       <<",\"free_rows\":["<<m_flow.PressureOffset()<<','<<m_flow.PressureSize()<<','<<nk<<','<<ne<<']'
+       <<",\"scaled_delta_infinity\":"<<delta.cwiseQuotient(scales).lpNorm<Eigen::Infinity>()
+       <<",\"F_prepared\":";writeNorms(fp);
+    out<<",\"F_root\":";writeNorms(fx);
+    out<<",\"J_root_delta\":";writeNorms(j);
+    out<<",\"remainder\":";writeNorms(remainder);
+    out<<",\"halving_change\":";writeNorms(spacingChange);
+    out<<",\"spacing_records\":[";
+    bool comma=false;
+    for(const auto &record:derivative.finiteDifferences)
+    {
+        if(comma)out<<',';
+        comma=true;
+        out<<"{\"method\":"<<J::Quote(record.method)
+           <<",\"parameter_step\":"<<record.parameterStep<<",\"relative_step\":"<<record.relativeStep<<'}';
+    }
+    out<<"],\"successive_scaled_relative_change\":"<<J::Numbers(derivative.successiveRelativeScaledChanges)
+       <<",\"terms\":{";
+    comma=false;
+    Vec fpSum=Vec::Zero(x.size()),fxSum=fpSum,jSum=fpSum;
+    for(const auto &[name,term]:preparedTerms)
+    {
+        const Vec &other=rootTerms.at(name);
+        const Vec action=(plus.at(name)-minus.at(name))/(2.*h);
+        fpSum+=term;fxSum+=other;jSum+=action;
+        if(comma)out<<',';
+        comma=true;
+        out<<J::Quote(name)<<":{\"prepared_minus_root\":";writeNorms(term-other);
+        out<<",\"action\":";writeNorms(action);
+        out<<",\"remainder\":";writeNorms(term-other+action);out<<'}';
+    }
+    out<<"},\"partition_closure\":{\"F_prepared\":";writeNorms(fpSum-fp);
+    out<<",\"F_root\":";writeNorms(fxSum-fx);
+    out<<",\"J_root_delta\":";writeNorms(jSum-j);
+    out<<"},\"stages\":{";
+    comma=false;
+    for(const auto &[name,state]:stages)
+    {
+        if(comma)out<<',';
+        comma=true;
+        out<<J::Quote(name)<<":{\"state_sha256\":"<<J::Quote(StateHash(state))
+           <<",\"weak_continuity\":"<<ContinuityNorm(state.flow)<<",\"coefficients\":{\"flow\":";
+        VectorJSON(out,state.flow);out<<",\"k\":";VectorJSON(out,state.k);
+        out<<",\"epsilon\":";VectorJSON(out,state.epsilon);out<<"}}";
+    }
+    out<<"},\"audit_seconds\":"<<Clock()-began<<"}\n"<<std::flush;
+    Require(bool(out),"original transfer audit write failed");
+}
 CoupledStepInfo Coupling::AuditSteadyState(const CoupledState&s,double time)
 {
     const double began=Clock();CoupledStepInfo info;auto d=Evaluate(s,time,true,info.timing);auto load=Forcing(time,info.timing,true);auto adv=Advection(s,d.kRules);
@@ -1911,9 +2117,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
     }
     auto pack=[&](const CoupledState&s){return PackFree(s);};
     auto unpack=[&](const Vec&x){return FromFree(x,0);};
-    auto norms=[&](const Vec&raw){Require(raw.size()==size&&raw.allFinite(),"invalid native steady residual inventory");
-        auto f=m_flow.RawResidualNorm(raw.head(nf));return CoupledResidual{f.momentum,f.continuity,f.gauge,
-            m_k.FreeResidualNorm(raw.segment(nf,nk)),m_e.FreeResidualNorm(raw.tail(ne)),0};};
+    auto norms=[&](const Vec&raw){return SteadyRowNorms(raw);};
     Vec validatedUnknowns;std::shared_ptr<const Data>validatedData;
     auto currentData=[&](const Vec&x,const CoupledState&s){
         if(validatedData&&x.size()==validatedUnknowns.size()&&(x.array()==validatedUnknowns.array()).all())return validatedData;
@@ -1924,12 +2128,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
         auto s=unpack(x);auto owned=currentData(x,s);const auto&d=*owned;const double start=Clock();auto adv=Advection(s,d.kRules);auto action=CurrentActions(s,d);
         action.flow+=adv.flow-forcing.flow;action.k+=adv.k-forcing.k;action.epsilon+=adv.epsilon-forcing.epsilon;
         if(modified)action.flow.head(nv).noalias()+=regularization*s.flow.head(nv);
-        Vec raw(size);raw.head(nf)=m_flow.Restrict(action.flow);
-        if(m_flow.Gauge()){
-            raw.segment(m_flow.PressureOffset(),m_flow.PressureSize())+=m_flow.PressureMean()*x[nf-1];
-            raw[nf-1]=m_flow.PressureMean().dot(s.flow.tail(m_flow.PressureSize()));
-        }
-        raw.segment(nf,nk)=m_k.Restrict(action.k);raw.tail(ne)=m_e.Restrict(action.epsilon);
+        const Vec raw=SteadyRows(action,s,m_flow.Gauge()?x[nf-1]:0.);
         if(m_options.checkCurrentActions){
             Sparse K=Strain(d);
             if(modified)K+=regularization;

@@ -18,7 +18,8 @@ def prepare(args):
     for item in list(info):
         if item.get("PROPERTY") in {
             "WJInitialFields", "WJInitialSourceIdentity", "WJRestart", "WJGeometrySeedPacketSHA256",
-            "WJDiagnosticSeedSHA256", "WJDiagnosticCandidateOutput", "WJTerminalOutput"
+            "WJDiagnosticSeedSHA256", "WJDiagnosticCandidateOutput", "WJTerminalOutput",
+            "WJDiagnosticTransferParent", "WJDiagnosticTransferParentSHA256"
         }:
             info.remove(item)
     for item in list(parameters):
@@ -84,6 +85,12 @@ def prepare(args):
                             WJGeometrySeedTaper=args.remap_taper)
     elif args.remap:
         raise ValueError("geometry remap requires a seed packet")
+    if args.transfer_audit_parent:
+        if not (args.seed and args.evaluate_only and args.check_actions) or (
+                args.remap or args.uncommitted_guess or args.eta or args.beta or args.pseudo_time):
+            raise ValueError("transfer audit requires a bound unshifted evaluate-only root with action checks")
+        fields.update(WJDiagnosticTransferParent=args.transfer_audit_parent.resolve(),
+                      WJDiagnosticTransferParentSHA256=identity(args.transfer_audit_parent)["sha256"])
     output.mkdir(parents=True)
     target = output/"run.xml"
     session.write(target, encoding="unicode")
@@ -91,6 +98,8 @@ def prepare(args):
     files = [args.template, target, table]
     if args.seed:
         files.append(args.seed)
+    if args.transfer_audit_parent:
+        files.append(args.transfer_audit_parent)
     (output/"inputs.json").write_text(json.dumps([identity(p) for p in files], indent=2)+"\n")
 
 
@@ -130,6 +139,8 @@ def main():
     parser.add_argument("--globalization", choices=("HalvingV1", "ModelBacktrackV1"),
                         default="HalvingV1")
     parser.add_argument("--uncommitted-guess", action="store_true")
+    parser.add_argument("--transfer-audit-parent", type=Path,
+                        help="same-height original steady parent for a nested-transfer residual/Jv audit")
     prepare(parser.parse_args())
 
 

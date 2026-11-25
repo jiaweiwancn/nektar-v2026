@@ -235,6 +235,8 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadParameter("WJDiagnosticScalarSubdivisionDepth",
                              m_diagnosticSteadyOptions.scalarSubdivisionDepth,0);
     m_session->LoadSolverInfo("WJDiagnosticSeedSHA256",m_diagnosticSteadyOptions.seedSha256,"");
+    m_session->LoadSolverInfo("WJDiagnosticTransferParent",m_transferAuditParent,"");
+    m_session->LoadSolverInfo("WJDiagnosticTransferParentSHA256",m_transferAuditParentSha,"");
     std::string inverse,audit,evaluateOnly,direction,globalization,uncommitted;
     m_session->LoadSolverInfo("WJDiagnosticSteadyInverse",inverse,"BlockV1");
     m_session->LoadSolverInfo("WJDiagnosticCorrectionAudit",audit,"False");
@@ -316,6 +318,13 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
               !m_session->DefinesParameter("WJGeometrySeedCollarReach") &&
               options.geometrySeedPacketSha256.empty(),
               "geometry seed controls require a geometry-continuation seed");
+    Check(m_transferAuditParent.empty()==m_transferAuditParentSha.empty()&&
+          (m_transferAuditParent.empty()||
+           (m_diagnosticSteady&&m_steadyOptions.evaluateInitialOnly&&options.checkCurrentActions&&
+            !m_geometrySeedHeight.has_value()&&!m_diagnosticSteadyOptions.seedSha256.empty()&&
+            !m_diagnosticSteadyOptions.allowUncommittedGuess&&m_diagnosticSteadyOptions.eta==0.&&
+            m_diagnosticSteadyOptions.pseudoTime==0.&&m_diagnosticSteadyOptions.correctionDiffusion==0.)),
+          "transfer audit requires an original-equation digest-bound evaluate-only replay with action checks");
     m_session->LoadSolverInfo("WJPerturbationCertificate",m_perturbationCertificate,"");
     m_session->LoadSolverInfo("WJPerturbationCertificateSHA256",m_perturbationSha256,"");
     Check(m_perturbationCertificate.empty()==m_perturbationSha256.empty()&&
@@ -453,6 +462,10 @@ void WJNativeCoupled::v_DoSolve()
         Check(bool(out),"cannot write diagnostic steady ledger");
         m_coupling->WriteSteadyDiagnostic(m_prefix+".diagnostic-steady.json",
                                           m_prefix+".diagnostic-uncommitted.json");
+        if(!m_transferAuditParent.empty())
+            m_coupling->WriteOriginalTransferAudit(m_prefix+".transfer-audit.json",*m_diagnosticSeed,
+                m_diagnosticSteadyOptions.seedSha256,m_transferAuditParent,m_transferAuditParentSha,
+                m_steadyOptions);
         std::cout<<"WJ-H27 diagnostic steady: "<<m_steadyResult.reason<<", residual="
                  <<m_steadyResult.trueNorm<<std::endl;
         Check(m_steadyResult.converged||(m_steadyOptions.evaluateInitialOnly&&m_steadyResult.hasEvaluatedState),
