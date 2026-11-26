@@ -121,6 +121,7 @@ void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mas
                <<",\"verified_step\":"<<(d.step>0.?J::Number(d.step):"null")
                <<",\"predicted_norm\":"<<(d.step>0.?J::Number(d.predictedNorm):"null")
                <<",\"predicted_blocks\":"<<(d.step>0.?J::Numbers(d.predictedBlocks):"null")
+               <<",\"mass_move\":"<<J::Quote(d.massMove)
                <<",\"decision\":"<<J::Quote(d.decision)<<'}';
         }
     }

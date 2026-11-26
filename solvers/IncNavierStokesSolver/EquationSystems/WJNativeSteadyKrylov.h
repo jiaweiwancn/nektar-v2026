@@ -195,7 +195,7 @@ struct SteadyMeritRecord
     std::array<double,6> baseBlocks{}, shiftedErrorBlocks{}, correctionBlocks{},
         fullPredictedBlocks{}, predictedBlocks{};
     std::vector<int> activeBlocks;
-    std::string decision;
+    std::string decision,massMove;
     bool modelEvaluated=false, linearPassed=false;
 };
 

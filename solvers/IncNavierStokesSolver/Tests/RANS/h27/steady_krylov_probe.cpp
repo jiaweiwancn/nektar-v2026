@@ -179,7 +179,7 @@ std::vector<std::string> OriginalMeritControls()
     };
     auto o=Options();
     o.maximumNewtonIterations=1;
-    o.forcingInitial=.5;
+    o.forcingInitial=o.forcingMaximum=.5;
     o.merit.emplace();
     o.merit->maximumWork=1;
     o.merit->initialMass=3.;

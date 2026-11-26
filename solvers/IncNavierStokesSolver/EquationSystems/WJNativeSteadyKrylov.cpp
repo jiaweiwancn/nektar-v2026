@@ -370,6 +370,7 @@ private:
         auto remaining=[&] {return o.merit->maximumWork-int(out.statistics.linearIterations-initialWork);};
         std::string reason="no direction was evaluated";
         std::vector<double> triedMasses;
+        std::string massMove="accepted controller proposal";
         for(int proposal=0;proposal<3&&remaining()>0;++proposal)
         {
             triedMasses.push_back(currentMass);
@@ -399,6 +400,7 @@ private:
                     factorBase<0?"merit cold entry":"merit age cap",reuse,
                     std::min(remaining(),o.reuseLinearIterations),warm);
                 assessment=MeasureMerit(x,f,norm,result,target,proposal,int(out.statistics.linearIterations-before),original);
+                assessment.massMove=massMove;
                 out.meritDirections.push_back(assessment);
                 if(cb.ObserveMeritDirection)cb.ObserveMeritDirection(assessment);
                 if(!result.converged&&priorForcing==1.&&reuse&&!refreshed&&remaining()>0&&
@@ -410,6 +412,7 @@ private:
                         std::min(remaining(),o.reuseLinearIterations),&result.correction);
                     assessment=MeasureMerit(x,f,norm,result,target,proposal,
                         int(out.statistics.linearIterations-workBefore),original);
+                    assessment.massMove=massMove;
                     out.meritDirections.push_back(assessment);
                     if(cb.ObserveMeritDirection)cb.ObserveMeritDirection(assessment);
                 }
@@ -421,8 +424,9 @@ private:
             auto untried=[&](double mass) {
                 return std::find(triedMasses.begin(),triedMasses.end(),mass)==triedMasses.end();
             };
-            double alternative=anchor>currentMass&&untried(anchor)?anchor:StrongerMass(currentMass);
-            if(!untried(alternative))alternative=.5*initialMass;
+            const bool declaredAnchor=anchor>currentMass&&untried(anchor);
+            double alternative=declaredAnchor?anchor:StrongerMass(currentMass);
+            if(!untried(alternative))alternative=.5*currentMass;
             const bool canChange=proposal<2&&remaining()>0&&untried(alternative);
             RecordLinear(result,priorForcing);
             if(reason=="USEFUL_DESCENT"||(reason=="WEAK_VERIFIED_DESCENT"&&!canChange))
@@ -436,6 +440,8 @@ private:
                 reason=evaluated?"FEASIBLE_ORIGINAL_LINE_SEARCH_EXHAUSTED":"NONLINEAR_DOMAIN_RESTRICTION";
             }
             if(!canChange)break;
+            massMove=declaredAnchor?"declared re-anchor":
+                alternative>currentMass?"bounded strengthening":"bounded weakening";
             currentMass=alternative;
         }
         throw Stop("ORIGINAL_MERIT_DIRECTION_STOP: "+reason);
