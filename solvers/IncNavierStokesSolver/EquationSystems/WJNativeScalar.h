@@ -78,6 +78,10 @@ public:
     Vec FixedRuleDiffusionDifferenceCorrection(
         const Rules &rightRules,const std::vector<Vec> &rightD,const Vec &right,
         const Rules &leftRules,const std::vector<Vec> &leftD,const Vec &left) const;
+    /** Derivative on a prescribed fixed subset, with signed coefficient
+     * derivatives and the original signed FE scatter. */
+    Vec FixedRuleDiffusionTangent(const Rules &rules,const std::vector<Vec> &diffusion,
+        const std::vector<Vec> &diffusionDirection,const Vec &state,const Vec &direction) const;
     Vec Source(const Rules &rules, const std::vector<Vec> &source) const;
     /** Full-row conservative LHS load: -int grad(phi).U q + int_boundary phi Un q.
      * Velocity uses canonical [u,v] coefficients (an optional p tail is ignored).

@@ -2450,6 +2450,71 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
                 audit.arrays.emplace_back("raw_stable_fixed_k_taylor_1",raw("raw_difference_1")-half*stableFine);
                 const auto base=unpack(x);
                 const auto d=currentData(x,base);
+                Require(std::string(m_reference->TransportName())=="ScalarCdV2",
+                        "fixed-rule scalar tangent audit uses the ScalarCdV2 law");
+                const Vec dk=m_k.Expand(direction.segment(nf,nk),Vec::Zero(m_k.Size()));
+                const Vec de=m_e.Expand(direction.tail(ne),DependentTraceDirection(base,dk));
+                Rules fixed;
+                std::vector<Vec> tangentD;
+                std::array<std::vector<Vec>,5> diffusion;
+                for(std::size_t i=0;i<m_rules.Static().size();++i)
+                {
+                    const auto &rule=m_rules.Static()[i];
+                    if(d->kRules[i]!=rule||plus.rules[i]!=rule||minus.rules[i]!=rule||
+                       finePlus.rules[i]!=rule||fineMinus.rules[i]!=rule)continue;
+                    fixed.push_back(rule);
+                    diffusion[0].push_back(d->Dk[i]);diffusion[1].push_back(plus.diffusion[i]);
+                    diffusion[2].push_back(minus.diffusion[i]);diffusion[3].push_back(finePlus.diffusion[i]);
+                    diffusion[4].push_back(fineMinus.diffusion[i]);
+                    const auto &q=*rule;
+                    const Vec k=m_k.Evaluate(q,base.k),deltaK=m_k.Evaluate(q,dk);
+                    Vec epsilon,deltaEpsilon;
+                    if(m_e.Owns(q.geometry))
+                    {
+                        epsilon=m_e.Evaluate(q,base.epsilon);
+                        deltaEpsilon=m_e.Evaluate(q,de);
+                    }
+                    else
+                    {
+                        const auto &owner=HOwner(Owner(q.geometry));
+                        const auto &trace=m_hKTrace.at(owner.geometry);
+                        std::array<double,4> coeff{};
+                        for(int j=0;j<4;++j)coeff[j]=trace.signs[j]*dk[trace.ids[j]];
+                        const double width=owner.xr-owner.xl;
+                        epsilon.resize(q.w.size());deltaEpsilon.resize(q.w.size());
+                        for(int j=0;j<q.w.size();++j)
+                        {
+                            const double K=InterfaceK(owner,q.x[j],base);
+                            const auto e=m_reference->DependentEpsilon(K,q.z[j]-m_geometry.d0);
+                            epsilon[j]=e.value;
+                            deltaEpsilon[j]=e.dK*CubicTrace(coeff,(q.x[j]-owner.xl)/width,width)[0];
+                        }
+                    }
+                    const auto &p=m_reference->Parameters();
+                    tangentD.emplace_back(p.Cd/p.sigmaK*(2.*k.array()*deltaK.array()/epsilon.array()-
+                        k.array().square()*deltaEpsilon.array()/epsilon.array().square()));
+                }
+                const Vec tangent=m_k.Restrict(m_k.FixedRuleDiffusionTangent(fixed,diffusion[0],tangentD,base.k,dk));
+                const auto fixedAction=[&](const Vec &k,std::size_t i) {
+                    return m_k.Restrict(m_k.DiffusionAction(fixed,diffusion[i],k));
+                };
+                const Vec fixedBase=fixedAction(base.k,0),fixedPlus=fixedAction(plus.k,1),
+                    fixedMinus=fixedAction(minus.k,2),fixedFinePlus=fixedAction(finePlus.k,3),
+                    fixedFineMinus=fixedAction(fineMinus.k,4);
+                Vec tangentCoarse=raw("raw_action_0"),tangentFine=raw("raw_action_1"),tangentRows=Vec::Zero(size);
+                tangentCoarse.segment(nf,nk)+=tangent-(fixedPlus-fixedMinus)/(2.*h);
+                tangentFine.segment(nf,nk)+=tangent-(fixedFinePlus-fixedFineMinus)/(2.*half);
+                tangentRows.segment(nf,nk)=tangent;
+                audit.arrays.emplace_back("raw_exact_fixed_k_tangent",tangentRows);
+                audit.arrays.emplace_back("raw_tangent_replaced_spacing_change",tangentFine-tangentCoarse);
+                audit.arrays.emplace_back("raw_tangent_replaced_action_0",tangentCoarse);
+                audit.arrays.emplace_back("raw_tangent_replaced_model_0",raw("raw_base_residual")+tangentCoarse);
+                tangentRows.segment(nf,nk)=fixedPlus-fixedBase-h*tangent;
+                audit.arrays.emplace_back("raw_exact_fixed_k_taylor_0",tangentRows);
+                tangentRows.segment(nf,nk)=fixedFinePlus-fixedBase-half*tangent;
+                audit.arrays.emplace_back("raw_exact_fixed_k_taylor_1",tangentRows);
+                audit.measurements.emplace_back("tangent_fixed_rules",fixed.size());
+                audit.measurements.emplace_back("unchanged_moving_rules",m_rules.Static().size()-fixed.size());
                 for(bool k:{true,false})
                 {
                     const int offset=k?nf:nf+nk,count=k?nk:ne;

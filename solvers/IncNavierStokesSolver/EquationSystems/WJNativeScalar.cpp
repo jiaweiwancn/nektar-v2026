@@ -688,6 +688,30 @@ Vec Scalar::FixedRuleDiffusionDifferenceCorrection(
     return correction;
 }
 
+Vec Scalar::FixedRuleDiffusionTangent(const Rules &rules,const std::vector<Vec> &diffusion,
+    const std::vector<Vec> &diffusionDirection,const Vec &state,const Vec &direction) const
+{
+    Check(rules.size()==diffusion.size()&&rules.size()==diffusionDirection.size()&&
+          state.size()==Size()&&direction.size()==Size(),"fixed diffusion tangent inventory differs");
+    Vec result=Vec::Zero(Size());
+    for(std::size_t e=0;e<rules.size();++e)
+    {
+        const auto &rule=*rules[e];
+        const Cell *cell=Find(rule);
+        if(!cell)continue;
+        const Vec local=Local(state,cell->ids),delta=Local(direction,cell->ids);
+        const Vec weighted=rule.w.cwiseProduct(diffusion[e]);
+        const Vec weightedDirection=rule.w.cwiseProduct(diffusionDirection[e]);
+        const auto component=[&](int axis)->Vec {
+            const Mat grad=Basis(rule,*cell,axis);
+            return grad.transpose()*(weighted.cwiseProduct(grad*delta)+
+                                     weightedDirection.cwiseProduct(grad*local));
+        };
+        Add(result,component(0)+component(2),*cell);
+    }
+    return result;
+}
+
 Vec Scalar::Source(const Rules &rules, const std::vector<Vec> &source) const
 {
     Check(source.size() == rules.size(), "scalar source rule count differs");
