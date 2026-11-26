@@ -323,6 +323,8 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     auto &diagnostic=m_diagnosticSteadyOptions;
     m_session->LoadSolverInfo("WJDiagnosticActionProbe",diagnostic.actionProbePath,"");
     m_session->LoadSolverInfo("WJDiagnosticActionProbeSHA256",diagnostic.actionProbeSha,"");
+    m_session->LoadParameter("WJDiagnosticActionProbeCount",diagnostic.actionProbeCount,1);
+    m_session->LoadParameter("WJDiagnosticFrozenSizeColumns",m_steadyOptions.frozenSizeColumns,0);
     m_session->LoadParameter("WJDiagnosticFactorFDStep",diagnostic.factorFDStep,0.);
     std::string actionGap,colorAudit,scalarAudit,momentumAudit,fixedKTangent;
     m_session->LoadSolverInfo("WJDiagnosticActionGapAudit",actionGap,"False");
@@ -441,7 +443,12 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
               !m_session->DefinesParameter("WJDiagnosticScalarSubdivisionDepth"),
               "diagnostic correction or momentum regularization requires DiagnosticSteady");
     }
-    Check((actionGap=="False"||actionGap=="True")&&
+    Check(m_steadyOptions.frozenSizeColumns>=0&&m_steadyOptions.frozenSizeColumns<=24&&
+          (!m_steadyOptions.frozenSizeColumns||(actionGap=="True"&&fixedKTangent=="True"&&checkpoint=="False"))&&
+          diagnostic.actionProbeCount>=1&&diagnostic.actionProbeCount<=32&&
+          (diagnostic.actionProbeCount==1||(!diagnostic.actionProbePath.empty()&&colorAudit=="False"&&
+             scalarAudit=="False"&&momentumAudit=="False"))&&
+          (actionGap=="False"||actionGap=="True")&&
           (colorAudit=="False"||(colorAudit=="True"&&!diagnostic.actionProbePath.empty()&&geometry.normalMap))&&
           (scalarAudit=="False"||(scalarAudit=="True"&&!diagnostic.actionProbePath.empty()))&&
           (momentumAudit=="False"||(momentumAudit=="True"&&!diagnostic.actionProbePath.empty()&&scalarAudit=="False"))&&
@@ -672,7 +679,8 @@ void WJNativeCoupled::v_DoSolve()
                 m_steadyOptions);
         std::cout<<"WJ-H27 diagnostic steady: "<<m_steadyResult.reason<<", residual="
                  <<m_steadyResult.trueNorm<<std::endl;
-        Check(m_steadyResult.converged||(m_steadyOptions.evaluateInitialOnly&&m_steadyResult.hasEvaluatedState),
+        Check(m_steadyResult.converged||(m_steadyOptions.evaluateInitialOnly&&m_steadyResult.hasEvaluatedState)||
+              (m_steadyOptions.frozenSizeColumns&&m_steadyResult.status=="FROZEN_SIZE_BASIS"),
               "bounded diagnostic steady search did not converge");
         m_solveCompleted=true;
         return;

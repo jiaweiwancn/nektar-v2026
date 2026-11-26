@@ -782,6 +782,46 @@ int main(int argc,char**argv)
             solves.push_back(J::Object({{"name",J::Quote("reuse_forced_cold_refresh")},
                 {"refreshes",J::Number(refreshes)},{"result",Result(result)}}));
         }
+        {
+            SteadyKrylovCallbacks cb;
+            Eigen::Matrix2d a;
+            a << 2., 1., .5, 3.;
+            const Vec base=Vector({.1,-.3}),sx=Vector({1.,2.}),sr=Vector({2.,.5});
+            cb.Residual=[&](const Vec &x)->Vec {return a*x+Vector({1.,2.});};
+            cb.ValidTrial=[](const Vec &){return SteadyTrialValidity{};};
+            cb.Precondition=[](const Vec &r){return r;};
+            cb.TrueNorm=[](const Vec &r){return r.cwiseAbs().maxCoeff();};
+            cb.ResidualBlocks=[](const Vec &r){return std::array<double,6>{std::abs(r[0]),0.,0.,std::abs(r[1]),0.,0.};};
+            std::vector<SteadyKrylovActionAudit> receipts;
+            cb.ObserveActionAudit=[&](const auto &r){receipts.push_back(r);};
+            auto options=Options();options.frozenSizeColumns=2;
+            const SteadyKrylov solver(cb,sx,sr,options);
+            const auto result=solver.Solve(base);
+            Check(result.status=="FROZEN_SIZE_BASIS"&&result.statistics.acceptedNewtonSteps==0&&
+                  (result.lastAcceptedX.array()==base.array()).all()&&receipts.size()==1,"frozen basis advanced the checkpoint");
+            auto array=[&](std::size_t i,const std::string &name)->Eigen::MatrixXd
+            {
+                for(const auto &[label,value]:receipts.at(i).arrays)
+                    if(label==name)return value;
+                throw std::runtime_error("missing frozen-size control array "+name);
+            };
+            const Eigen::MatrixXd q=array(0,"scaled_correction_basis");
+            const auto response=array(0,"raw_residual_and_actions");
+            Check(q.cols()==2&&(q.transpose()*q-Eigen::Matrix2d::Identity()).norm()<1e-12&&
+                  (response.rightCols(2)-a*sx.asDiagonal()*q).norm()<1e-9,
+                  "frozen basis/response assembly differs from the known scaled action");
+            const Vec normalization=array(0,"response_column_normalization");
+            const auto normalized=response*normalization.cwiseInverse().asDiagonal();
+            Check((array(0,"normalized_physical_gram_3")-
+                   normalized.row(1).transpose()*normalized.row(1)).norm()<1e-11,
+                   "frozen block Gram differs from the known block norm");
+            Eigen::Matrix2d directions;directions << .02, -.03, .1, .04;
+            solver.AuditDirections(base,directions);
+            Check(receipts.size()==3&&receipts[1].proposal==0&&receipts[2].proposal==1&&
+                  (array(2,"raw_model_residual_0").col(0)-cb.Residual(base)-a*directions.col(1)).norm()<1e-10,
+                  "batch verification changed the direction, base or order");
+            solves.push_back(J::Object({{"name",J::Quote("frozen_size_basis_and_batch")},{"result",Result(result)}}));
+        }
         const auto result=J::Object({{"schema",J::Quote("WJH27SteadyKrylovProbeV1")},{"status",J::Quote("RECORDED")},
             {"solver_identity",J::Quote(SteadyKrylov::Identity)},{"unknown_scale",V(problem.sx)},
             {"physical_residual_scale",V(problem.b)},{"residual_row_scale",V(problem.RowScale())},
