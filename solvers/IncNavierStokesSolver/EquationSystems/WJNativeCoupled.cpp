@@ -475,8 +475,16 @@ void WJNativeCoupled::v_DoSolve()
     const double solveStart=Clock();
     if(m_diagnosticSteady)
     {
-        m_steadyResult=m_coupling->SolveDiagnosticSteady(*m_diagnosticSeed,m_steadyOptions,m_last,
-            m_steadyPreconditionerMass,m_diagnosticSteadyOptions);
+        try
+        {
+            m_steadyResult=m_coupling->SolveDiagnosticSteady(*m_diagnosticSeed,m_steadyOptions,m_last,
+                m_steadyPreconditionerMass,m_diagnosticSteadyOptions);
+        }
+        catch(const std::exception &error)
+        {
+            std::cerr<<"WJ-H27 diagnostic steady failure: "<<error.what()<<std::endl;
+            throw;
+        }
         const std::string path=m_prefix+".steady.json";
         Check(!std::filesystem::exists(path),"diagnostic steady ledger is immutable");
         std::ofstream out(path);
