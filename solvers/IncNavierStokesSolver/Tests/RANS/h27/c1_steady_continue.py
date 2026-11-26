@@ -66,6 +66,8 @@ def termination(code, ledger, candidate):
 def original_admission(candidate, table, receipts):
     """Apply the original scientific gates to individually digest-bound evidence."""
     state = read(candidate)
+    if "accepted_checkpoint" in state:
+        return "DIAGNOSTIC_CHECKPOINT_REQUIRES_FINAL_REPLAY"
     equations, margins, points = (read(receipts[name])
                                   for name in ("equations", "margins", "points"))
     expected_packet = identity(candidate)["sha256"]

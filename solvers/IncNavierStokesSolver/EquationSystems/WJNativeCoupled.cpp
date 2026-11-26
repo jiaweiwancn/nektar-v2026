@@ -237,13 +237,37 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadSolverInfo("WJDiagnosticSeedSHA256",m_diagnosticSteadyOptions.seedSha256,"");
     m_session->LoadSolverInfo("WJDiagnosticTransferParent",m_transferAuditParent,"");
     m_session->LoadSolverInfo("WJDiagnosticTransferParentSHA256",m_transferAuditParentSha,"");
-    std::string inverse,audit,evaluateOnly,direction,globalization,uncommitted;
+    std::string inverse,audit,evaluateOnly,direction,globalization,uncommitted,checkpoint;
     m_session->LoadSolverInfo("WJDiagnosticSteadyInverse",inverse,"BlockV1");
     m_session->LoadSolverInfo("WJDiagnosticCorrectionAudit",audit,"False");
     m_session->LoadSolverInfo("WJDiagnosticEvaluateOnly",evaluateOnly,"False");
     m_session->LoadSolverInfo("WJDiagnosticDirectionModel",direction,"False");
     m_session->LoadSolverInfo("WJDiagnosticGlobalization",globalization,"HalvingV1");
     m_session->LoadSolverInfo("WJDiagnosticUncommittedGuess",uncommitted,"False");
+    m_session->LoadSolverInfo("WJDiagnosticAcceptedCheckpoint",checkpoint,"False");
+    double checkpointProcessSeconds;
+    auto &diagnostic=m_diagnosticSteadyOptions;
+    m_session->LoadParameter("WJDiagnosticCheckpointProcessSeconds",checkpointProcessSeconds,0.);
+    m_session->LoadParameter("WJDiagnosticCheckpointReserveSeconds",diagnostic.checkpointReserveSeconds,0.);
+    m_session->LoadParameter("WJDiagnosticCheckpointInverseSeconds",diagnostic.checkpointInverseSeconds,0.);
+    Check(checkpoint=="True"||checkpoint=="False","invalid accepted checkpoint switch");
+    if(checkpoint=="True")
+    {
+        Check(m_diagnosticSteady&&evaluateOnly=="False"&&diagnostic.eta==0.&&
+              std::isfinite(checkpointProcessSeconds)&&std::isfinite(diagnostic.checkpointReserveSeconds)&&
+              std::isfinite(diagnostic.checkpointInverseSeconds)&&diagnostic.checkpointReserveSeconds>0.&&
+              diagnostic.checkpointInverseSeconds>=0.&&
+              checkpointProcessSeconds>diagnostic.checkpointReserveSeconds+diagnostic.checkpointInverseSeconds,
+              "accepted checkpoint requires original diagnostic correction and valid process, reserve and inverse budgets");
+        diagnostic.acceptedCheckpointPrefix=m_prefix+".accepted-";
+        diagnostic.checkpointProcessDeadline=start+checkpointProcessSeconds;
+        for(const auto &filename:m_session->GetFilenames())
+            diagnostic.checkpointSessionDigests.push_back(RANSWallR3::HashFile(filename));
+        Check(!diagnostic.checkpointSessionDigests.empty(),"accepted checkpoint must bind session bytes");
+    }
+    else
+        Check(checkpointProcessSeconds==0.&&diagnostic.checkpointReserveSeconds==0.&&diagnostic.checkpointInverseSeconds==0.,
+              "checkpoint budgets require accepted checkpoints");
     m_session->LoadParameter("WJDiagnosticInverseMaximumAge",m_steadyOptions.maximumInverseAge,0);
     m_session->LoadParameter("WJDiagnosticReuseLinearIterations",m_steadyOptions.reuseLinearIterations,12);
     Check((inverse=="BlockV1"||inverse=="ColoredSparseV1")&&

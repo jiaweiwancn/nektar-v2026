@@ -2251,6 +2251,28 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
     if(shifted)callbacks.CorrectionAction=[&](const Vec&,const Vec&dx) {
         return applyShift(dx,correctionMass,correctionDiffusion);
     };
+    auto refreshState=[&](CoupledState state,const Data &d,const std::string &reason,int iteration,bool accepted) {
+        auto load=forcing;
+        auto adv=Advection(state,d.kRules);
+        load.flow-=adv.flow;load.k-=adv.k;load.epsilon-=adv.epsilon;
+        SteadyPacket packet;
+        auto &original=packet.original;
+        original.residual=Residual(state,d,load,0,0,timing);
+        original.minimumK=d.minK;original.minimumEpsilon=d.minE;
+        original.minimumCovarianceOverK=d.minCovariance;original.minimumPrincipalOverMu=d.minPrincipal;
+        packet.modifiedMargin=d.minModifiedPrincipal;
+        packet.wholeCellLower={m_k.PolynomialBounds(state.k)[0],m_e.PolynomialBounds(state.epsilon)[0]};
+        auto solved=original.residual;
+        if(modified)
+        {
+            const Vec extra=regularization*state.flow.head(nv);
+            packet.extraWork=state.flow.head(nv).dot(extra);
+            load.flow.head(nv)-=extra;
+            solved=Residual(state,d,load,0,0,timing);
+        }
+        packet.candidate={DiagnosticRole::SteadySearch,std::move(state),0,0.,reason,solved,iteration,accepted};
+        return std::make_pair(std::move(packet),std::move(adv));
+    };
     Vec lastObserved;
     if(diagnostic)
     {
@@ -2258,7 +2280,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
         if(!options.evaluateInitialOnly)callbacks.ObserveAccepted=[&](const Vec &x,double norm) {
             if(x.size()==lastObserved.size()&&(x.array()==lastObserved.array()).all())return;
             const double start=Clock();
-            const auto s=unpack(x);
+            auto s=unpack(x);
             const auto observed=Evaluate(s,0,PrincipalPolicy::Observe,timing,diagnostic);
             const auto k=InterfaceBounds(s);
             const auto kin=m_reference->Parameters().KIn;
@@ -2268,6 +2290,24 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
             std::cout<<std::setprecision(12)<<"WJ-H27 steady base "<<m_steadyBaseObservations.size()-1
                      <<" residual "<<norm<<" original principal "<<observed.minPrincipal
                      <<" K/Kin ["<<k[0]/kin<<','<<k[1]/kin<<']'<<std::endl;
+            const auto sequence=m_steadyBaseObservations.size()-1;
+            if(sequence && !diagnostic->acceptedCheckpointPrefix.empty())
+            {
+                const double refreshStart=Clock();
+                auto packet=refreshState(std::move(s),observed,"accepted correction during diagnostic solve",
+                                         static_cast<int>(sequence)-1,true).first;
+                packet.checkpointSequence=sequence;
+                packet.checkpointRefreshSeconds=Clock()-refreshStart;
+                std::ostringstream path;
+                path<<diagnostic->acceptedCheckpointPrefix<<std::setfill('0')<<std::setw(6)<<sequence<<".json";
+                const double writeStart=Clock();
+                WriteDiagnostic(path.str(),packet.candidate,&packet);
+                const double writeSeconds=Clock()-writeStart;
+                timing.io+=writeSeconds;
+                std::cout<<"WJ-H27 accepted checkpoint "<<sequence<<" "<<StateHash(packet.candidate.state)
+                         <<" refresh "<<packet.checkpointRefreshSeconds<<" s, publication "<<writeSeconds<<" s"
+                         <<std::endl;
+            }
         };
     }
     // Analyze a bounded sample of the actual line-search trials. The fifth
@@ -2427,7 +2467,24 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
         }
         m_steadyAuditSeconds+=Clock()-start;
     };
+    double observedPreparationSeconds=0.;
     callbacks.PreparePreconditioner=[&](const Vec&x,const Vec&raw){
+        const double preparationStart=Clock();
+        if(diagnostic&&!diagnostic->acceptedCheckpointPrefix.empty())
+        {
+            const double remaining=std::min(began+options.maximumSeconds,
+                diagnostic->checkpointProcessDeadline)-preparationStart;
+            const double estimate=std::max(diagnostic->checkpointInverseSeconds,observedPreparationSeconds);
+            if(remaining<=estimate+diagnostic->checkpointReserveSeconds)
+            {
+                std::ostringstream why;
+                why<<"DEADLINE: remaining "<<remaining<<" s before inverse; estimated "
+                   <<estimate<<" s plus "<<diagnostic->checkpointReserveSeconds<<" s for output";
+                throw SteadyCorrectionFailure(why.str());
+            }
+            std::cout<<"WJ-H27 inverse preparation start; estimated "<<estimate
+                     <<" s, remaining "<<remaining<<" s"<<std::endl;
+        }
         const double inverseMass=preconditionerMass+correctionMass;
         if(sparse)
         {
@@ -2444,6 +2501,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
                      <<" entries, assembly "<<work.assemblySeconds<<" s, factor "
                      <<work.factorSeconds<<" s"<<std::endl;
             if(diagnostic->auditCorrection&&m_sparseSteadyWork.size()==1)auditInverse(x,raw);
+            observedPreparationSeconds=std::max(observedPreparationSeconds,Clock()-preparationStart);
             return;
         }
         auto owned=currentData(x,pcState);
@@ -2458,6 +2516,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
         m_flow.PrepareLinearPreconditioner(m_flow.System(inverseMass,flowPC,1));
         m_k.PrepareLinearPreconditioner(m_k.System(inverseMass,kPC));
         m_e.PrepareLinearPreconditioner(m_e.System(inverseMass,ePC));
+        observedPreparationSeconds=std::max(observedPreparationSeconds,Clock()-preparationStart);
     };
     callbacks.Precondition=[&](const Vec&rhs){
         if(sparse)return coupledInverse->Solve(rhs);
@@ -2479,26 +2538,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
     auto refresh=[&](const Vec &x,int iteration,bool accepted) {
         auto state=unpack(x);
         const auto d=Evaluate(state,0,diagnostic?PrincipalPolicy::Observe:PrincipalPolicy::Enforce,timing,diagnostic);
-        auto load=forcing;
-        auto adv=Advection(state,d.kRules);
-        load.flow-=adv.flow;load.k-=adv.k;load.epsilon-=adv.epsilon;
-        SteadyPacket packet;
-        auto &original=packet.original;
-        original.residual=Residual(state,d,load,0,0,timing);
-        original.minimumK=d.minK;original.minimumEpsilon=d.minE;
-        original.minimumCovarianceOverK=d.minCovariance;original.minimumPrincipalOverMu=d.minPrincipal;
-        packet.modifiedMargin=d.minModifiedPrincipal;
-        packet.wholeCellLower={m_k.PolynomialBounds(state.k)[0],m_e.PolynomialBounds(state.epsilon)[0]};
-        auto solved=original.residual;
-        if(modified)
-        {
-            const Vec extra=regularization*state.flow.head(nv);
-            packet.extraWork=state.flow.head(nv).dot(extra);
-            load.flow.head(nv)-=extra;
-            solved=Residual(state,d,load,0,0,timing);
-        }
-        packet.candidate={DiagnosticRole::SteadySearch,std::move(state),0,0.,result.reason,solved,iteration,accepted};
-        return std::make_pair(std::move(packet),std::move(adv));
+        return refreshState(std::move(state),d,result.reason,iteration,accepted);
     };
     if(result.converged||(diagnostic&&result.hasEvaluatedState)){
         auto [packet,adv]=refresh(result.lastAcceptedX,result.lastAcceptedNewtonIteration,true);
@@ -2845,6 +2885,17 @@ void Coupling::WriteDiagnostic(const std::filesystem::path&path,const Diagnostic
     {
         const auto *original=&steady->original;
         out<<",\"iterate_custody\":"<<J::Quote(candidate.acceptedSteady?"LAST_ACCEPTED":"UNCOMMITTED_TRIAL");
+        if(steady->checkpointSequence)
+        {
+            out<<",\"accepted_checkpoint\":{\"sequence\":"<<steady->checkpointSequence
+               <<",\"refresh_seconds\":"<<steady->checkpointRefreshSeconds<<",\"session_sha256\":[";
+            for(std::size_t i=0;i<options->checkpointSessionDigests.size();++i)
+            {
+                if(i)out<<',';
+                out<<J::Quote(options->checkpointSessionDigests[i]);
+            }
+            out<<"]}";
+        }
         std::ostringstream identity;
         identity<<std::setprecision(17)<<m_signature<<"|steady";
         if(options->eta>0.)

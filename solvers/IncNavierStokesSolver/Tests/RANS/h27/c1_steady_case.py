@@ -38,12 +38,14 @@ def prepare(args):
         fields["WJDiagnosticCandidateOutput"] = "True"
     # Clear inherited numerical controls when reproducing the rebuild route.
     for name in ("WJDiagnosticDirectionModel", "WJDiagnosticGlobalization",
-                 "WJDiagnosticUncommittedGuess"):
+                 "WJDiagnosticUncommittedGuess", "WJDiagnosticAcceptedCheckpoint"):
         for item in info.findall(f"I[@PROPERTY='{name}']"):
             info.remove(item)
     for item in list(parameters):
         if item.text.split("=", 1)[0].strip() in (
-                "WJDiagnosticInverseMaximumAge", "WJDiagnosticReuseLinearIterations"):
+                "WJDiagnosticInverseMaximumAge", "WJDiagnosticReuseLinearIterations",
+                "WJDiagnosticCheckpointProcessSeconds", "WJDiagnosticCheckpointReserveSeconds",
+                "WJDiagnosticCheckpointInverseSeconds"):
             parameters.remove(item)
     controls = dict(NumSteps=0, WJSteadySeconds=args.seconds,
                     WJSteadyFDStep=args.fd, WJSteadyNewtonIterations=args.newton,
@@ -57,6 +59,13 @@ def prepare(args):
     if args.maximum_inverse_age:
         controls.update(WJDiagnosticInverseMaximumAge=args.maximum_inverse_age,
                         WJDiagnosticReuseLinearIterations=args.reuse_linear_iterations)
+    if args.accepted_checkpoint:
+        outer, reserve, estimate = args.accepted_checkpoint
+        if args.evaluate_only or args.eta != 0 or not outer > reserve + estimate or reserve <= 0 or estimate < 0:
+            raise ValueError("accepted checkpoints need original correction and positive process and output budgets")
+        fields["WJDiagnosticAcceptedCheckpoint"] = "True"
+        controls.update(WJDiagnosticCheckpointProcessSeconds=outer, WJDiagnosticCheckpointReserveSeconds=reserve,
+                        WJDiagnosticCheckpointInverseSeconds=estimate)
     if args.direction_model:
         fields["WJDiagnosticDirectionModel"] = "True"
     if args.globalization != "HalvingV1":
@@ -139,6 +148,9 @@ def main():
     parser.add_argument("--globalization", choices=("HalvingV1", "ModelBacktrackV1"),
                         default="HalvingV1")
     parser.add_argument("--uncommitted-guess", action="store_true")
+    parser.add_argument("--accepted-checkpoint", type=float, nargs=3,
+                        metavar=("OUTER_SECONDS", "OUTPUT_RESERVE", "INVERSE_ESTIMATE"),
+                        help="publish accepted corrections before later factor preparations")
     parser.add_argument("--transfer-audit-parent", type=Path,
                         help="same-height original steady parent for a nested-transfer residual/Jv audit")
     prepare(parser.parse_args())

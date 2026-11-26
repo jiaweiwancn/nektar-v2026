@@ -111,7 +111,15 @@ InitialFields::InitialFields(const std::string &path, bool allowAcceptedTimeStat
         Require(custody.empty()||custody=="LAST_ACCEPTED"||
                 (custody=="UNCOMMITTED_TRIAL"&&allowUncommittedGuess&&!allowAcceptedTimeState),
                 "uncommitted steady trial requires an explicit fixed-height diagnostic guess");
-        m.originalDiagnosticSteady=role=="STEADY_SEARCH"&&custody!="UNCOMMITTED_TRIAL"&&
+        const auto checkpoint=root.get_child_optional("accepted_checkpoint");
+        if(checkpoint)
+        {
+            const auto digests=Array<std::string>(*checkpoint,"session_sha256");
+            Require(role=="STEADY_SEARCH"&&custody=="LAST_ACCEPTED"&&
+                    checkpoint->get<std::size_t>("sequence")>0&&!digests.empty()&&
+                    std::all_of(digests.begin(),digests.end(),SHA),"invalid accepted diagnostic checkpoint");
+        }
+        m.originalDiagnosticSteady=!checkpoint&&role=="STEADY_SEARCH"&&custody!="UNCOMMITTED_TRIAL"&&
             root.get<std::string>("residual_kind","")=="refreshed original steady"&&
             root.get<double>("regularization.eta",-1.)==0.;
         m.equationIdentity=root.get<std::string>("equation_identity","");

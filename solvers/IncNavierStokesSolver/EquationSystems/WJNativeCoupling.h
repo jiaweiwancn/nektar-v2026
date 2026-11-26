@@ -84,6 +84,9 @@ struct DiagnosticSteadyOptions
     double eta=0., regularizationViscosity=0.;
     double regularizationStart=0., regularizationFull=0.;
     std::string seedSha256;
+    std::string acceptedCheckpointPrefix;
+    std::vector<std::string> checkpointSessionDigests;
+    double checkpointProcessDeadline=0., checkpointReserveSeconds=0., checkpointInverseSeconds=0.;
     int scalarSubdivisionDepth=0;
     bool sparseInverse=false, auditCorrection=false, allowUncommittedGuess=false;
 };
@@ -293,6 +296,8 @@ private:
         CoupledStepInfo original;
         std::array<double,2> wholeCellLower{};
         double extraWork=0.,modifiedMargin=0.;
+        std::size_t checkpointSequence=0;
+        double checkpointRefreshSeconds=0.;
     };
     void WriteDiagnostic(const std::filesystem::path&path,const DiagnosticCandidate&candidate,
                          const SteadyPacket *steady=nullptr)const;
