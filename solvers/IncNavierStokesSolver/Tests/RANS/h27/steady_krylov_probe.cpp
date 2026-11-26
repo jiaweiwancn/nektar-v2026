@@ -288,8 +288,8 @@ std::string ActionGapControls()
     cb.TrueNorm=[](const Vec &v){return v.lpNorm<Eigen::Infinity>();};
     cb.ColoredAction=linear;
     cb.TraceDirection=[](const Vec &v){return Vector({0.,v[1]});};
-    std::vector<SteadyActionAudit> observed;
-    cb.ObserveActionAudit=[&](const SteadyActionAudit &a){observed.push_back(a);};
+    std::vector<SteadyKrylovActionAudit> observed;
+    cb.ObserveActionAudit=[&](const SteadyKrylovActionAudit &a){observed.push_back(a);};
     auto options=Options();
     options.fdRelativeStep=.1;
     options.maximumNewtonIterations=1;
@@ -298,7 +298,7 @@ std::string ActionGapControls()
     options.forcingInitial=.1;
     options.forcingMaximum=.2;
     const auto result=SteadyKrylov(cb,one,one,options).Solve(base);
-    auto payload=[](const SteadyActionAudit &a,const std::string &name)->Vec {
+    auto payload=[](const SteadyKrylovActionAudit &a,const std::string &name)->Vec {
         for(const auto &[key,value]:a.arrays)
             if(key==name)return value.col(0);
         throw std::runtime_error("missing action audit array "+name);

@@ -2359,7 +2359,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
         for(const auto *ids:{&m_flow.FreeVelocityIds()[0],&m_flow.FreeVelocityIds()[1],&m_k.FreeIds(),&m_e.FreeIds()})
             ordering.Update(ids->data(),ids->size()*sizeof(int));
         const auto orderingSha=ordering.Finish();
-        callbacks.ObserveActionAudit=[&,orderingSha](const SteadyActionAudit &audit) {
+        callbacks.ObserveActionAudit=[&,orderingSha](const SteadyKrylovActionAudit &audit) {
             const double start=Clock();
             Require(correctionMass==0.&&correctionDiffusion==0.,"action audit requires an unshifted current correction");
             namespace J=RANSWallSolveJson;

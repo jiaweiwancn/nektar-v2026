@@ -58,7 +58,7 @@ struct SteadyTrialValidity
 };
 
 struct SteadyMeritRecord;
-struct SteadyActionAudit;
+struct SteadyKrylovActionAudit;
 
 struct SteadyKrylovCallbacks
 {
@@ -90,7 +90,7 @@ struct SteadyKrylovCallbacks
     std::function<void(const SteadyMeritState &)> ObserveMeritState;
     std::function<void(const SteadyMeritRecord &)> ObserveMeritDirection;
     // Opt-in only. The fixed unshifted colored action is a diagnostic control.
-    std::function<void(const SteadyActionAudit&)> ObserveActionAudit;
+    std::function<void(const SteadyKrylovActionAudit&)> ObserveActionAudit;
     std::function<SteadyVector(const SteadyVector&)> ColoredAction, FactoredAction, TraceDirection;
     // For the merit policy TrueNorm is the maximum of these fixed quadratic
     // seminorms (including absolute value and identically zero blocks).
@@ -161,7 +161,7 @@ struct SteadyFDRecord
 
 // Diagnostic payloads are separate from states and are never accepted iterates.
 // Matrices use Eigen column-major order. The publisher binds the free ordering.
-struct SteadyActionAudit
+struct SteadyKrylovActionAudit
 {
     std::string stage;
     int newton=-1, cycle=-1, iteration=-1;

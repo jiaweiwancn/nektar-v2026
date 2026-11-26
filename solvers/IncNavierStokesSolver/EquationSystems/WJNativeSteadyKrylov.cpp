@@ -196,10 +196,10 @@ public:
 
 private:
 
-    SteadyActionAudit AuditData(const char *stage,const Vec &x,const Vec &f,
+    SteadyKrylovActionAudit AuditData(const char *stage,const Vec &x,const Vec &f,
                                 const Vec &direction,int cycle,int iteration) const
     {
-        SteadyActionAudit data;
+        SteadyKrylovActionAudit data;
         data.stage=stage;data.newton=newton;data.cycle=cycle;data.iteration=iteration;
         data.factorSerial=factorSerial;
         data.arrays={{"base",x},{"raw_base_residual",f},{"unknown_scale",sx},
@@ -215,7 +215,7 @@ private:
         const auto first=out.finiteDifferences.size();
         const auto began=Clock::now();
         std::vector<std::pair<double,Vec>> samples;
-        Vec reference, middle;
+        Vec reference, middle, previous;
         for(double spacing:{4e-6,2e-6,1e-6,5e-7,2e-6})
         {
             const std::string label=std::to_string(samples.size());
@@ -223,6 +223,12 @@ private:
             Vec action=Jacobian(x,f,direction,spacing/o.fdRelativeStep,"spacing_"+label,cycle,iteration,&sample);
             if(samples.size()==3)reference=action;
             if(samples.size()==1)middle=action;
+            if(samples.size()==4)
+                data.arrays.emplace_back("raw_repeated_action_difference",action-middle);
+            else if(!samples.empty())
+                data.arrays.emplace_back("raw_spacing_change_"+label,action-previous);
+            previous=action;
+            data.arrays.emplace_back("raw_model_residual_"+label,f+action);
             data.arrays.emplace_back("raw_action_"+label,std::move(action));
             data.arrays.emplace_back("raw_difference_"+label,sample.second);
             data.measurements.emplace_back("signed_parameter_"+label,sample.first);
@@ -232,7 +238,11 @@ private:
             data.arrays.emplace_back("raw_taylor_"+std::to_string(i),
                                      samples[i].second-samples[i].first*reference);
         if(cb.ColoredAction&&factorSerial)
-            data.arrays.emplace_back("raw_colored_action",cb.ColoredAction(sx.cwiseProduct(direction)));
+        {
+            const Vec colored=cb.ColoredAction(sx.cwiseProduct(direction));
+            data.arrays.emplace_back("raw_colored_action",colored);
+            data.arrays.emplace_back("raw_colored_minus_middle",colored-middle);
+        }
         if(cb.TraceDirection)
         {
             const Vec trace=cb.TraceDirection(sx.cwiseProduct(direction)).cwiseQuotient(sx);
