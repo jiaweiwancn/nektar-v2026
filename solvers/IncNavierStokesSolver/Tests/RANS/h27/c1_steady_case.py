@@ -76,7 +76,7 @@ def prepare(args):
             "WJDiagnosticSeedSHA256", "WJDiagnosticCandidateOutput", "WJTerminalOutput",
             "WJDiagnosticTransferParent", "WJDiagnosticTransferParentSHA256",
             "WJDiagnosticActionProbe", "WJDiagnosticActionProbeSHA256", "WJDiagnosticActionGapAudit",
-            "WJDiagnosticActionColorAudit"
+            "WJDiagnosticActionColorAudit", "WJDiagnosticActionScalarAudit"
         }:
             info.remove(item)
     for item in list(parameters):
@@ -225,6 +225,10 @@ def prepare(args):
         if not args.action_probe_capture:
             raise ValueError("selected color comparisons require a bound captured direction")
         fields["WJDiagnosticActionColorAudit"] = "True"
+    if args.action_scalar_audit:
+        if not args.action_probe_capture:
+            raise ValueError("scalar term attribution requires a bound captured direction")
+        fields["WJDiagnosticActionScalarAudit"] = "True"
     output.mkdir(parents=True)
     if direction is not None:
         (output/"action-probe.bin").write_bytes(direction)
@@ -262,6 +266,8 @@ def main():
                         help="replay a saved nonaccepted direction on its exact base")
     parser.add_argument("--action-color-audit", action="store_true",
                         help="also compare selected full-row singleton and complete-color actions")
+    parser.add_argument("--action-scalar-audit", action="store_true",
+                        help="attribute a captured action's spacing difference to scalar terms and owners")
     parser.add_argument("--newton", type=int, default=48)
     parser.add_argument("--krylov", type=int, default=40)
     parser.add_argument("--cycles", type=int, default=4)

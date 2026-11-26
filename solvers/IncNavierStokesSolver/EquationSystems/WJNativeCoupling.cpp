@@ -2372,10 +2372,90 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
         for(const auto *ids:{&m_flow.FreeVelocityIds()[0],&m_flow.FreeVelocityIds()[1],&m_k.FreeIds(),&m_e.FreeIds()})
             ordering.Update(ids->data(),ids->size()*sizeof(int));
         const auto orderingSha=ordering.Finish();
-        callbacks.ObserveActionAudit=[&,orderingSha,sequence=std::size_t{0}](const SteadyKrylovActionAudit &audit) mutable {
+        callbacks.ObserveActionAudit=[&,orderingSha,sequence=std::size_t{0}](const SteadyKrylovActionAudit &observed) mutable {
             const double start=Clock();
             Require(correctionMass==0.&&correctionDiffusion==0.,"action audit requires an unshifted current correction");
             namespace J=RANSWallSolveJson;
+            std::optional<SteadyKrylovActionAudit> localized;
+            if(diagnostic->auditScalarAction&&observed.stage=="seed-direction")
+            {
+                localized=observed;
+                auto &audit=*localized;
+                auto raw=[&](const char *name)->Vec {
+                    for(const auto &[key,array]:observed.arrays)
+                        if(key==name)return array.col(0);
+                    throw std::runtime_error(std::string("missing scalar action audit array ")+name);
+                };
+                auto spacing=[&](const char *purpose) {
+                    for(const auto &s:observed.stencils)
+                        if(s.purpose==purpose&&s.method=="central")return s.parameterStep;
+                    throw std::runtime_error(std::string("scalar term audit requires central stencil ")+purpose);
+                };
+                const Vec x=raw("base"),direction=raw("direction");
+                const auto terms=[&](const Vec &at) {
+                    const auto s=unpack(at);
+                    const auto d=currentData(at,s); // Rebuild trace and moving rules on every side.
+                    const auto &fixed=m_rules.Static();
+                    const Vec ed=m_e.DiffusionAction(fixed,d->De,s.epsilon);
+                    return std::array<Vec,7>{
+                        m_k.Restrict(m_k.DiffusionAction(d->kRules,d->Dk,s.k)),
+                        m_k.Restrict(-KVolumeLoad(s,*d)),
+                        m_k.Restrict(m_k.Advection(d->kRules,s.flow,s.k)),
+                        m_e.Restrict(ed),
+                        m_e.Restrict(m_e.DiffusionAction(fixed,d->De,s.epsilon,d->reactionE)-ed),
+                        m_e.Restrict(-EVolumeLoad(s,*d)),
+                        m_e.Restrict(m_e.Advection(fixed,s.flow,s.epsilon))};
+                };
+                const double h=spacing("spacing_0"),half=spacing("spacing_1");
+                const auto plus=terms(x+h*direction),minus=terms(x-h*direction);
+                const auto finePlus=terms(x+half*direction),fineMinus=terms(x-half*direction);
+                const std::array<const char *,7> labels{"k_diffusion","k_source","k_advection",
+                    "epsilon_diffusion","epsilon_destruction","epsilon_source","epsilon_advection"};
+                Vec difference=Vec::Zero(size);
+                for(std::size_t i=0;i<labels.size();++i)
+                {
+                    const bool k=i<3;
+                    Vec term=Vec::Zero(size);
+                    term.segment(k?nf:nf+nk,k?nk:ne)=(finePlus[i]-fineMinus[i])/(2.*half)-
+                                                   (plus[i]-minus[i])/(2.*h);
+                    difference+=term;
+                    audit.arrays.emplace_back(std::string("raw_spacing_term_")+labels[i],std::move(term));
+                }
+                const Vec measured=raw("raw_spacing_change_1");
+                Vec closure=Vec::Zero(size);
+                closure.tail(nk+ne)=(difference-measured).tail(nk+ne);
+                audit.arrays.emplace_back("raw_scalar_term_closure",std::move(closure));
+                const auto base=unpack(x);
+                const auto d=currentData(x,base);
+                for(bool k:{true,false})
+                {
+                    const int offset=k?nf:nf+nk,count=k?nk:ne;
+                    Eigen::Index row;
+                    measured.segment(offset,count).cwiseProduct(sr.segment(offset,count)).
+                        cwiseAbs().maxCoeff(&row);
+                    const auto &scalar=k?m_k:m_e;
+                    const int id=scalar.FreeIds()[row];
+                    const auto label=k?"k":"epsilon";
+                    audit.measurements.emplace_back(std::string("peak_")+label+"_free_row",offset+row);
+                    audit.measurements.emplace_back(std::string("peak_")+label+"_scalar_id",id);
+                    std::ostringstream owners;
+                    owners<<std::setprecision(17);
+                    const auto &elements=m_flow.Elements();
+                    for(std::size_t i=0;i<elements.size();++i)
+                    {
+                        const auto &cell=elements[i];
+                        if(!scalar.Owns(cell.geometry))continue;
+                        const auto &ids=scalar.CellIds(cell.geometry);
+                        if(std::find(ids.begin(),ids.end(),id)!=ids.end())
+                            owners<<cell.geometry<<" ["<<cell.xl<<','<<cell.xr<<','<<cell.rl<<','<<cell.rr
+                                  <<"] moving rule "<<(d->kRules[i]!=m_rules.Static()[i])<<' ';
+                    }
+                    audit.notes.emplace_back(std::string("peak_")+label+"_owners",owners.str());
+                }
+                audit.measurements.emplace_back("scalar_attribution_seconds",Clock()-start);
+            }
+            const auto &audit=localized?*localized:observed;
+            const double writing=Clock();
             const std::uint16_t endian=1;
             Require(sizeof(double)==8&&std::numeric_limits<double>::is_iec559&&
                     *reinterpret_cast<const unsigned char*>(&endian)==1,"action audit requires little-endian binary64");
@@ -2462,7 +2542,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
             out<<"]}\n";
             const auto contents=out.str();
             PublishDiagnostic(prefix+".json",[&](int fd){D::WriteAll(fd,contents.data(),contents.size());});
-            timing.io+=Clock()-start;
+            timing.io+=Clock()-writing;
             std::cout<<"WJ-H27 action audit "<<audit.stage<<" published in "<<Clock()-start<<" s"<<std::endl;
         };
         if(sparse)
