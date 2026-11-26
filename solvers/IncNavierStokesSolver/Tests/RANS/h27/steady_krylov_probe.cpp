@@ -2,6 +2,7 @@
 #include <IncNavierStokesSolver/EquationSystems/WJNativeSteadyKrylov.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <Eigen/Core>
+#include <Eigen/LU>
 #include <algorithm>
 #include <chrono>
 #include <cmath>
@@ -138,6 +139,117 @@ SteadyKrylovOptions Options()
     o.trueLinearCheckInterval=1;o.forcingInitial=o.forcingMinimum=o.forcingMaximum=.001;
     o.fdRelativeStep=1e-5;return o;
 }
+
+std::vector<std::string> OriginalMeritControls()
+{
+    std::vector<std::string> receipts;
+    auto solve=[](const Eigen::Matrix2d &a,const Vec &rhs,const Vec &x,
+                  SteadyKrylovOptions o,bool approximate,int &observed) {
+        double mass=0.;
+        Eigen::Matrix2d inverse=Eigen::Matrix2d::Identity();
+        SteadyKrylovCallbacks cb;
+        cb.Residual=[&](const Vec &v)->Vec{return rhs+a*v;};
+        cb.ValidTrial=[](const Vec&){return SteadyTrialValidity{};};
+        cb.TrueNorm=[](const Vec &v){return v.lpNorm<Eigen::Infinity>();};
+        cb.ResidualBlocks=[](const Vec &v){
+            return std::array<double,6>{std::abs(v[0]),std::abs(v[1]),0.,0.,0.,0.};
+        };
+        cb.SetCorrectionMass=[&](double value){mass=value;};
+        cb.CorrectionAction=[&](const Vec&,const Vec &d)->Vec{return mass*d;};
+        cb.PreparePreconditioner=[&](const Vec&,const Vec&) {
+            if(approximate)inverse<<2.,0.,-.4,1.;
+            else inverse=(a+mass*Eigen::Matrix2d::Identity()).inverse();
+        };
+        cb.Precondition=[&](const Vec &v)->Vec{return inverse*v;};
+        cb.ObserveAccepted=[&](const Vec&,double){++observed;};
+        return SteadyKrylov(cb,Vec::Ones(2),Vec::Ones(2),o).Solve(x);
+    };
+    auto record=[&](const char *name,const SteadyKrylovResult &r) {
+        std::vector<std::string> directions;
+        for(const auto &d:r.meritDirections)
+            directions.push_back(J::Object({
+                {"mass",J::Number(d.mass)},{"forcing",J::Number(d.forcing)},
+                {"error",J::Number(d.linearNorm)},{"scaled_error",J::Number(d.scaledError)},
+                {"spacing_uncertainty",J::Number(d.actionUncertainty)},
+                {"slope",J::Number(d.activeSlope)},{"step",J::Number(d.step)},
+                {"blocks",J::Numbers(d.activeBlocks)},{"decision",J::Quote(d.decision)}}));
+        receipts.push_back(J::Object({{"name",J::Quote(name)},{"result",Result(r)},
+            {"directions",J::List(directions)},{"controller_start",r.meritStart->ToJson()},
+            {"controller_end",r.meritEnd->ToJson()}}));
+    };
+    auto o=Options();
+    o.maximumNewtonIterations=1;
+    o.forcingInitial=.5;
+    o.merit.emplace();
+    o.merit->maximumWork=1;
+    o.merit->initialMass=3.;
+    const Vec zero=Vec::Zero(2);
+    Eigen::Matrix2d a;
+    a<<-2.,0.,0.,1.;
+    int seen=0;
+    const auto ascent=solve(a,Vector({1,0}),zero,o,false,seen);
+    Check(ascent.meritDirections.size()==1&&ascent.meritDirections[0].decision=="RESOLVED_ASCENT"&&
+          ascent.meritDirections[0].linearNorm<1e-8&&ascent.lineSearch.empty()&&seen==1&&
+          ascent.lastAcceptedX==zero,"exact shifted ascent reached an actual trial");
+    record("exact_shifted_ascent",ascent);
+
+    o.merit->initialMass=1.;
+    a<<-2.,0.,0.,-.5;
+    seen=0;
+    const auto tie=solve(a,Vector({1,1}),zero,o,false,seen);
+    Check(tie.meritDirections[0].decision=="RESOLVED_ASCENT"&&
+          tie.meritDirections[0].activeBlocks.size()==2&&tie.lineSearch.empty()&&seen==1,
+          "tied original merit used a favorable block");
+    record("active_block_tie",tie);
+
+    a<<0.,.005,1.,-1.;
+    seen=0;
+    const auto small=solve(a,Vector({1,0}),zero,o,false,seen);
+    Check(small.meritDirections[0].decision=="WEAK_VERIFIED_DESCENT"&&
+          small.meritDirections[0].step<1./64.&&small.newton[0].accepted&&
+          small.lastAcceptedNorm<1.&&seen==2,"small verified descent was lost across active-block change");
+    record("finite_secant_caveat",small);
+
+    o.merit->maximumWork=12;
+    a<<.1,3.,0.,.2;
+    seen=0;
+    const auto tighter=solve(a,Vector({1,0}),zero,o,true,seen);
+    Check(tighter.meritDirections.size()>=2&&tighter.meritDirections[0].decision=="RESOLVED_ASCENT"&&
+          tighter.meritDirections[0].forcing==.5&&tighter.meritDirections[1].forcing==.1&&
+          tighter.meritDirections[0].mass==tighter.meritDirections[1].mass&&
+          tighter.inverses[0].serial==tighter.inverses[1].serial&&
+          tighter.meritDirections[1].linearNorm<tighter.meritDirections[0].linearNorm&&
+          tighter.newton[0].accepted&&seen==2,"same-base same-inverse tightening control failed");
+    record("same_base_tighter",tighter);
+
+    a<<-2.,0.,0.,1.;
+    o.merit->initialMass=3.;
+    seen=0;
+    const auto changed=solve(a,Vector({1,0}),zero,o,false,seen);
+    Check(changed.meritDirections.size()>1&&changed.meritDirections[0].decision=="RESOLVED_ASCENT"&&
+          changed.meritDirections.back().mass!=3.&&changed.newton[0].accepted&&seen==2&&
+          changed.lastAcceptedNorm<1e-8,"changed mass did not check a fresh direction at the same base");
+    record("changed_mass",changed);
+
+    a<<4.,0.,0.,1.;
+    o.merit->initialMass=1.;
+    seen=0;
+    const auto interrupted=solve(a,Vector({1,0}),zero,o,false,seen);
+    const auto saved=interrupted.meritEnd;
+    Check(saved->goodSteps==1&&saved->nextMass==1.,"controller did not preserve first useful mass");
+    auto continuous=o;
+    continuous.maximumNewtonIterations=2;
+    const auto uninterrupted=solve(a,Vector({1,0}),zero,continuous,false,seen);
+    o.merit->restored=saved;
+    const auto resumed=solve(a,Vector({1,0}),interrupted.lastAcceptedX,o,false,seen);
+    Check(resumed.meritStart->ToJson()==saved->ToJson()&&
+          resumed.meritEnd->ToJson()==uninterrupted.meritEnd->ToJson()&&
+          resumed.meritEnd->nextMass==.5&&resumed.lastAcceptedX==uninterrupted.lastAcceptedX,
+          "controller resume changed effective mass or next decision for identical action");
+    record("controller_resume",resumed);
+    return receipts;
+}
+
 std::string Probe(const std::string&name,const SteadyDerivativeProbe&p,const Vec&base,const Vec&direction,const Vec&exact)
 {
     std::vector<std::string>actions;for(const auto&v:p.actions)actions.push_back(V(v));
@@ -448,6 +560,7 @@ int main(int argc,char**argv)
             {"scope",J::Quote("Standalone generic solver verification; no native coupled/PDE convergence or cost qualification")},
             {"solves",J::List(solves)},{"derivative_probes",J::List(probes)},{"fatal_exceptions",J::List(exceptions)},
             {"nonlinear_validation_controls",J::List(validationControls)},
+            {"original_merit_controls",J::List(OriginalMeritControls())},
             {"full_initial_guard_residual_calls",J::Number(initialGuardResiduals)},
             {"revalidated_full_base_calls",J::Number(fullBaseCalls)}});
         std::ofstream output(argv[1]);output<<result<<'\n';Check(output.good(),"probe output write failed");

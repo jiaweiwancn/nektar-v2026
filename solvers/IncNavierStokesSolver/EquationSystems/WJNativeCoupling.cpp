@@ -1135,6 +1135,15 @@ CoupledState Coupling::ImportInitialState(const std::string &path,bool allowCand
                  <<", mapped flux roundtrip "<<m_initialFluxRoundtripError<<std::endl;
     }
     m_initialPacketSha=initial.Metadata().packetSha256;m_initialSourceStateSha=initial.Metadata().stateSha256;
+    if(diagnosticSeedSha256)
+    {
+        const auto &metadata=initial.Metadata();
+        m_importedMerit=metadata.meritController;
+        m_importedMeritPolicy=metadata.meritPolicy;
+        m_importedMeritCompatible=same&&!geometrySeedHeight&&!allowUncommittedGuess&&
+            metadata.sourceIdentity==m_options.sourceIdentity&&metadata.signature==m_signature&&
+            metadata.equationIdentity==RANSWallR3::Hash(m_signature+"|steady");
+    }
     m_initialProjected=!same||geometrySeedHeight.has_value();
     m_initialCandidate=initial.Metadata().role==InitialFieldRole::Candidate || diagnosticSeed;
     return state;
@@ -2096,7 +2105,35 @@ SteadyKrylovResult Coupling::SolveDiagnosticSteady(const CoupledState &seed,
     m_steadyAuditResiduals=0;
     m_steadyDiagnosticCandidate.reset();
     m_steadyUncommitted.reset();
-    return SearchSteady(seed,options,final,preconditionerMass,nullptr,&diagnostic);
+    auto controlled=options;
+    Require(options.merit||options.evaluateInitialOnly||!m_importedMerit,
+            "an original-merit checkpoint needs explicit continuation or re-anchoring");
+    m_currentMerit.reset();
+    m_meritPolicy.clear();
+    if(controlled.merit)
+    {
+        Require(!options.evaluateInitialOnly&&diagnostic.eta==0.&&diagnostic.correctionDiffusion==0.&&
+                diagnostic.pseudoTime==0.,"original-merit policy requires an original correction and explicit mass");
+        auto &policy=*controlled.merit;
+        std::ostringstream binding;
+        binding<<std::setprecision(17)<<SteadyMeritState::Identity;
+        for(double value:{policy.initialMass,policy.reanchorMass,options.forcingInitial,options.forcingMinimum,
+                          options.forcingMaximum,options.forcingGamma,options.forcingExponent,
+                          options.fdRelativeStep,options.fdMinimumRelativeStep,options.armijo})
+            binding<<'|'<<value;
+        m_meritPolicy=RANSWallR3::Hash(binding.str());
+        if(diagnostic.meritEntry=="Resume")
+        {
+            Require(m_importedMerit&&m_importedMeritCompatible&&m_importedMeritPolicy==m_meritPolicy&&
+                    StateHash(FromFree(PackFree(seed),0.))==m_initialSourceStateSha,
+                    "original-merit resume requires the exact accepted coefficients, policy and equation/source bindings");
+            policy.restored=m_importedMerit;
+        }
+        else
+            Require(diagnostic.meritEntry=="Reanchor"||!m_importedMerit,
+                    "original-merit restart requires explicit Resume or Reanchor");
+    }
+    return SearchSteady(seed,controlled,final,preconditionerMass,nullptr,&diagnostic);
 }
 
 SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyKrylovOptions &options,
@@ -2113,7 +2150,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
     const int nv=2*m_flow.VelocitySize();
     const auto forcing=Forcing(0,timing,true);
     Sparse positiveDiffusion,regularization;
-    const bool shifted=diagnostic&&(diagnostic->pseudoTime>0.||diagnostic->correctionDiffusion>0.);
+    const bool shifted=diagnostic&&(options.merit||diagnostic->pseudoTime>0.||diagnostic->correctionDiffusion>0.);
     const bool modified=diagnostic&&diagnostic->eta>0.;
     if(shifted||modified)
     {
@@ -2211,9 +2248,11 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
     };
     callbacks.Residual=[&](const Vec&x)->Vec{try{return equations(x);}catch(const NativeInadmissibleState&error){throw SteadyInadmissibleTrial(error.what());}};
     callbacks.TrueNorm=[&](const Vec&raw){return norms(raw).Maximum();};
+    double meritBaseNorm=0.;
     callbacks.PrepareCorrection=[&](const Vec&x,const Vec&raw){
         pcState=unpack(x);
-        if(shifted)
+        if(options.merit)meritBaseNorm=norms(raw).Maximum();
+        else if(shifted)
         {
             const double norm=norms(raw).Maximum();
             if(initialBaseNorm==0.)initialBaseNorm=norm;
@@ -2225,6 +2264,22 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
             m_diagnosticCorrections.push_back({norm,correctionMass,correctionDiffusion});
         }
     };
+    if(options.merit)
+    {
+        callbacks.SetCorrectionMass=[&](double mass) {
+            correctionMass=mass;
+            m_diagnosticCorrections.push_back({meritBaseNorm,mass,0.});
+        };
+        callbacks.ObserveMeritState=[&](const SteadyMeritState &state) {
+            m_currentMerit=state;
+        };
+        callbacks.ObserveMeritDirection=[](const SteadyMeritRecord &r) {
+            std::cout<<std::setprecision(12)<<"WJ-H27 original merit base "<<r.base
+                     <<" proposal "<<r.proposal<<" mass "<<r.mass<<" forcing "<<r.forcing
+                     <<" shifted error "<<r.linearNorm<<" action spacing uncertainty "<<r.actionUncertainty
+                     <<" verified fraction "<<r.step<<" "<<r.decision<<std::endl;
+        };
+    }
     auto differentialShift=[&](const CoupledState&delta,double mass,double diffusion) {
         Vec action=Vec::Zero(size);
         Vec momentum=mass*m_flow.Core().MassAction(delta.flow);
@@ -2256,6 +2311,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
         auto adv=Advection(state,d.kRules);
         load.flow-=adv.flow;load.k-=adv.k;load.epsilon-=adv.epsilon;
         SteadyPacket packet;
+        if(accepted)packet.meritController=m_currentMerit;
         auto &original=packet.original;
         original.residual=Residual(state,d,load,0,0,timing);
         original.minimumK=d.minK;original.minimumEpsilon=d.minE;
@@ -2901,7 +2957,14 @@ void Coupling::WriteDiagnostic(const std::filesystem::path&path,const Diagnostic
         if(options->eta>0.)
             identity<<"|CartesianBoundaryPolynomialV1|"<<options->eta<<'|'<<options->regularizationViscosity
                     <<'|'<<options->regularizationStart<<'|'<<options->regularizationFull;
-        out<<",\"equation_identity\":"<<J::Quote(D::Hash(identity.str()))
+        const std::string equationIdentity=D::Hash(identity.str());
+        if(steady->meritController)
+            out<<",\"merit_controller\":{\"policy_sha256\":"<<J::Quote(m_meritPolicy)
+               <<",\"coefficient_sha256\":"<<J::Quote(StateHash(candidate.state))
+               <<",\"equation_identity\":"<<J::Quote(equationIdentity)
+               <<",\"entry\":"<<J::Quote(options->meritEntry)
+               <<",\"state\":"<<steady->meritController->ToJson()<<'}';
+        out<<",\"equation_identity\":"<<J::Quote(equationIdentity)
            <<",\"regularization\":{\"eta\":"<<options->eta
            <<",\"viscosity\":"<<options->regularizationViscosity
            <<",\"shape\":\"CartesianBoundaryPolynomialV1\",\"radius_ramp\":["

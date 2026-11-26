@@ -4,6 +4,7 @@
 
 import argparse
 import json
+import math
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
@@ -38,14 +39,18 @@ def prepare(args):
         fields["WJDiagnosticCandidateOutput"] = "True"
     # Clear inherited numerical controls when reproducing the rebuild route.
     for name in ("WJDiagnosticDirectionModel", "WJDiagnosticGlobalization",
-                 "WJDiagnosticUncommittedGuess", "WJDiagnosticAcceptedCheckpoint"):
+                 "WJDiagnosticUncommittedGuess", "WJDiagnosticAcceptedCheckpoint",
+                 "WJDiagnosticMeritPolicy", "WJDiagnosticMeritEntry"):
         for item in info.findall(f"I[@PROPERTY='{name}']"):
             info.remove(item)
     for item in list(parameters):
         if item.text.split("=", 1)[0].strip() in (
                 "WJDiagnosticInverseMaximumAge", "WJDiagnosticReuseLinearIterations",
                 "WJDiagnosticCheckpointProcessSeconds", "WJDiagnosticCheckpointReserveSeconds",
-                "WJDiagnosticCheckpointInverseSeconds"):
+                "WJDiagnosticCheckpointInverseSeconds", "WJDiagnosticMeritInitialMass",
+                "WJDiagnosticMeritReanchorMass", "WJDiagnosticMeritWork",
+                "WJSteadyForcingInitial", "WJSteadyForcingMinimum", "WJSteadyForcingMaximum",
+                "WJSteadyForcingGamma", "WJSteadyForcingExponent"):
             parameters.remove(item)
     controls = dict(NumSteps=0, WJSteadySeconds=args.seconds,
                     WJSteadyFDStep=args.fd, WJSteadyNewtonIterations=args.newton,
@@ -66,6 +71,26 @@ def prepare(args):
         fields["WJDiagnosticAcceptedCheckpoint"] = "True"
         controls.update(WJDiagnosticCheckpointProcessSeconds=outer, WJDiagnosticCheckpointReserveSeconds=reserve,
                         WJDiagnosticCheckpointInverseSeconds=estimate)
+    if args.steady_forcing:
+        initial, low, high = args.steady_forcing
+        if not 0 < low <= initial <= high < 1:
+            raise ValueError("steady forcing requires 0 < minimum <= initial <= maximum < 1")
+        controls.update(WJSteadyForcingInitial=initial, WJSteadyForcingMinimum=low,
+                        WJSteadyForcingMaximum=high)
+    if args.merit_mass is not None:
+        if (not all(math.isfinite(x) and x >= 0 for x in (args.merit_mass, args.merit_reanchor))
+                or args.merit_work <= 0 or args.eta or args.beta or args.pseudo_time
+                or args.evaluate_only or args.incomplete_linear or args.remap or args.uncommitted_guess):
+            raise ValueError("original merit requires a fixed-height original diagnostic correction")
+        if args.merit_entry != "Fresh" and not args.seed:
+            raise ValueError("merit resume or re-anchor requires a pinned seed")
+        fields.update(WJDiagnosticMeritPolicy="WJH27OriginalMeritV1",
+                      WJDiagnosticMeritEntry=args.merit_entry)
+        controls.update(WJDiagnosticMeritInitialMass=args.merit_mass,
+                        WJDiagnosticMeritReanchorMass=args.merit_reanchor,
+                        WJDiagnosticMeritWork=args.merit_work)
+    elif args.merit_entry != "Fresh" or args.merit_reanchor or args.merit_work != 96:
+        raise ValueError("merit settings require --merit-mass")
     if args.direction_model:
         fields["WJDiagnosticDirectionModel"] = "True"
     if args.globalization != "HalvingV1":
@@ -84,6 +109,10 @@ def prepare(args):
         bound = json.loads(args.seed.read_text())
         if bound.get("iterate_custody") == "UNCOMMITTED_TRIAL" and not args.uncommitted_guess:
             raise ValueError("uncommitted diagnostic seed requires --uncommitted-guess")
+        if args.merit_mass is not None:
+            controller = bound.get("merit_controller")
+            if (controller and args.merit_entry=="Fresh") or (not controller and args.merit_entry=="Resume"):
+                raise ValueError("merit continuation requires a saved controller and explicit Resume, or deliberate Reanchor")
         packet = bound["state"]
         sha = identity(args.seed)["sha256"]
         fields.update(WJInitialFields=args.seed.resolve(),
@@ -145,6 +174,15 @@ def main():
     parser.add_argument("--maximum-inverse-age", type=int, default=0)
     parser.add_argument("--reuse-linear-iterations", type=int, default=12)
     parser.add_argument("--direction-model", action="store_true")
+    parser.add_argument("--steady-forcing", type=float, nargs=3,
+                        metavar=("INITIAL", "MINIMUM", "MAXIMUM"))
+    parser.add_argument("--merit-mass", type=float,
+                        help="enable original-merit recovery with this first correction mass")
+    parser.add_argument("--merit-reanchor", type=float, default=0.,
+                        help="explicit stronger same-base candidate before bounded changes")
+    parser.add_argument("--merit-work", type=int, default=96,
+                        help="maximum current Krylov iterations per nonlinear base")
+    parser.add_argument("--merit-entry", choices=("Fresh", "Resume", "Reanchor"), default="Fresh")
     parser.add_argument("--globalization", choices=("HalvingV1", "ModelBacktrackV1"),
                         default="HalvingV1")
     parser.add_argument("--uncommitted-guess", action="store_true")

@@ -168,6 +168,35 @@ InitialFields::InitialFields(const std::string &path, bool allowAcceptedTimeStat
     m.signature=state.get<std::string>("signature","");
     Require(!m.model.empty()&&!m.mmsVariant.empty()&&SHA(m.sourceIdentity)&&SHA(m.referenceIdentity)&&SHA(m.stateSha256),
             "missing/invalid scientific metadata or identities");
+    if(const auto controller=root.get_child_optional("merit_controller"))
+    {
+        auto &c=*controller;
+        Require(diagnostic&&root.get<std::string>("role")=="STEADY_SEARCH"&&
+                root.get<std::string>("iterate_custody","")=="LAST_ACCEPTED"&&
+                root.get<std::string>("residual_kind","")=="refreshed original steady"&&
+                root.get<double>("regularization.eta",-1.)==0.&&m.step==0&&m.time==0.&&
+                c.get<std::string>("coefficient_sha256")==m.stateSha256&&
+                c.get<std::string>("equation_identity")==m.equationIdentity,
+                "invalid original-merit checkpoint coefficients or equation binding");
+        m.meritPolicy=c.get<std::string>("policy_sha256");
+        Require(SHA(m.meritPolicy)&&c.get<std::string>("state.schema")==SteadyMeritState::Identity,
+                "invalid original-merit policy binding or schema");
+        SteadyMeritState r;
+        r.usedMass=Number(c,"state.used_mass");
+        r.nextMass=Number(c,"state.next_mass");
+        r.referenceNorm=Number(c,"state.reference_norm");
+        r.previousNorm=Number(c,"state.previous_norm");
+        r.acceptedNorm=Number(c,"state.accepted_norm");
+        r.usedForcing=Number(c,"state.used_forcing");
+        r.nextForcing=Number(c,"state.next_forcing");
+        r.step=Number(c,"state.step");
+        if(c.get<std::string>("state.actual_to_predicted_decrease")!="null")
+            r.ratio=Number(c,"state.actual_to_predicted_decrease");
+        r.accepted=c.get<int>("state.accepted");
+        r.goodSteps=c.get<int>("state.good_steps");
+        r.decision=c.get<std::string>("state.decision");
+        m.meritController=r;
+    }
     m_geometry=Geometry(state.get_child("geometry"));
     const auto sizes=Array<int>(state,"sizes");Require(sizes.size()==4&&std::all_of(sizes.begin(),sizes.end(),[](int n){return n>0;}),"invalid coefficient sizes");
     std::copy(sizes.begin(),sizes.end(),m_sizes.begin());

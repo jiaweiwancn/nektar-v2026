@@ -84,6 +84,7 @@ struct DiagnosticSteadyOptions
     double eta=0., regularizationViscosity=0.;
     double regularizationStart=0., regularizationFull=0.;
     std::string seedSha256;
+    std::string meritEntry="Fresh";
     std::string acceptedCheckpointPrefix;
     std::vector<std::string> checkpointSessionDigests;
     double checkpointProcessDeadline=0., checkpointReserveSeconds=0., checkpointInverseSeconds=0.;
@@ -297,6 +298,7 @@ private:
         std::array<double,2> wholeCellLower{};
         double extraWork=0.,modifiedMargin=0.;
         std::size_t checkpointSequence=0;
+        std::optional<SteadyMeritState> meritController;
         double checkpointRefreshSeconds=0.;
     };
     void WriteDiagnostic(const std::filesystem::path&path,const DiagnosticCandidate&candidate,
@@ -336,6 +338,9 @@ private:
     bool m_exportRejections=false;
     mutable std::optional<DiagnosticCandidate> m_rejectedCandidate;
     std::optional<SteadyPacket> m_steadyDiagnosticCandidate,m_steadyUncommitted;
+    std::optional<SteadyMeritState> m_importedMerit,m_currentMerit;
+    bool m_importedMeritCompatible=false;
+    std::string m_importedMeritPolicy,m_meritPolicy;
     DiagnosticSteadyOptions m_diagnosticOptions;
     std::vector<std::array<double,3>> m_diagnosticCorrections;
     std::vector<SteadySparseWork> m_sparseSteadyWork;

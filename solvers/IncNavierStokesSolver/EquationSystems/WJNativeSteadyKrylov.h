@@ -14,6 +14,24 @@ namespace Nektar::WJNative
 {
 using SteadyVector=Eigen::VectorXd;
 
+struct SteadyMeritState
+{
+    static constexpr const char *Identity="WJH27OriginalMeritV1";
+    double usedMass=0., nextMass=0., referenceNorm=0., previousNorm=0., acceptedNorm=0.;
+    double usedForcing=0., nextForcing=0., step=0.;
+    std::optional<double> ratio;
+    int accepted=0, goodSteps=0;
+    std::string decision;
+    std::string ToJson()const;
+};
+
+struct SteadyMeritOptions
+{
+    double initialMass=0., reanchorMass=0.;
+    int maximumWork=96;
+    std::optional<SteadyMeritState> restored;
+};
+
 /** The only residual/feasibility exception interpreted as a rejected trial.
  * At the initial/base state this is fatal. Other callback exceptions always
  * propagate: scientific/input/programming failures are not line-search events.
@@ -39,6 +57,8 @@ struct SteadyTrialValidity
     std::string reason;
 };
 
+struct SteadyMeritRecord;
+
 struct SteadyKrylovCallbacks
 {
     // All callbacks use PHYSICAL coordinates/residuals/corrections. Residual
@@ -63,6 +83,13 @@ struct SteadyKrylovCallbacks
     // Raw additive correction action in physical unknowns at the frozen
     // nonlinear base. It is used in every linear product and check, never F.
     std::function<SteadyVector(const SteadyVector &,const SteadyVector &)> CorrectionAction;
+    // Used only by the opt-in merit policy. Set the mass at an already frozen
+    // base before any linear product or inverse preparation.
+    std::function<void(double)> SetCorrectionMass;
+    std::function<void(const SteadyMeritState &)> ObserveMeritState;
+    std::function<void(const SteadyMeritRecord &)> ObserveMeritDirection;
+    // For the merit policy TrueNorm is the maximum of these fixed quadratic
+    // seminorms (including absolute value and identically zero blocks).
     std::function<std::array<double,6>(const SteadyVector &)> ResidualBlocks;
     // Diagnostic-only observations of the unshifted local model.
     std::function<void(int,const SteadyVector &,const SteadyVector &)> InspectDirection;
@@ -99,6 +126,7 @@ struct SteadyKrylovOptions
     int maximumInverseAge=0, reuseLinearIterations=12;
     bool measureDirection=false;
     bool adaptiveTrialStep=false;
+    std::optional<SteadyMeritOptions> merit;
 };
 
 struct SteadyKrylovStatistics
@@ -137,7 +165,7 @@ struct SteadyLinearRecord
 
 struct SteadyLineSearchRecord
 {
-    int newton=0, trial=0;
+    int newton=0, trial=0, proposal=-1;
     double step=0, trueNorm=0;
     bool admissible=false, evaluated=false, sufficientDecrease=false, accepted=false;
     bool nonlinearValidationAttempted=false, nonlinearValidated=false;
@@ -152,7 +180,23 @@ struct SteadyInverseUse
     bool rebuild=false,prepared=false;
     std::optional<bool> converged;
     std::optional<double> trueNorm;
+    long long serial=0;
+    std::optional<double> mass;
     std::string reason;
+};
+
+struct SteadyMeritRecord
+{
+    int base=0, proposal=0, inverse=-1, work=0;
+    double mass=0., forcing=0., baseNorm=0.;
+    double linearNorm=0., scaledError=0., scaledBaseNorm=0.;
+    double actionUncertainty=0., scaledUncertainty=0.;
+    double step=0., predictedNorm=0., activeSlope=0., slopeUncertainty=0.;
+    std::array<double,6> baseBlocks{}, shiftedErrorBlocks{}, correctionBlocks{},
+        fullPredictedBlocks{}, predictedBlocks{};
+    std::vector<int> activeBlocks;
+    std::string decision;
+    bool modelEvaluated=false, linearPassed=false;
 };
 
 struct SteadyNewtonRecord
@@ -183,6 +227,9 @@ struct SteadyKrylovResult
     std::vector<SteadyLineSearchRecord> lineSearch;
     std::vector<SteadyNewtonRecord> newton;
     std::vector<SteadyInverseUse> inverses;
+    std::vector<SteadyMeritRecord> meritDirections;
+    std::vector<SteadyMeritState> meritAcceptances;
+    std::optional<SteadyMeritState> meritStart, meritEnd;
 };
 
 struct SteadyDerivativeProbe

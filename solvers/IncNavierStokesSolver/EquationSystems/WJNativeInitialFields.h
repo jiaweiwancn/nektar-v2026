@@ -2,6 +2,7 @@
 #ifndef NEKTAR_WJ_NATIVE_INITIAL_FIELDS_H
 #define NEKTAR_WJ_NATIVE_INITIAL_FIELDS_H
 
+#include <IncNavierStokesSolver/EquationSystems/WJNativeSteadyKrylov.h>
 #include <Eigen/Core>
 #include <array>
 #include <cstdint>
@@ -23,7 +24,8 @@ struct InitialFieldMetadata
 {
     std::string schema,stateSchema,model,sourceIdentity,referenceIdentity;
     std::string basis,mmsVariant,packetSha256,stateSha256,outletPolicy;
-    std::string signature,equationIdentity;
+    std::string signature,equationIdentity,meritPolicy;
+    std::optional<SteadyMeritState> meritController;
     bool manufactured=false,gauge=false,qualifiedReference=false;
     bool originalDiagnosticSteady=false;
     std::uint64_t step=0;

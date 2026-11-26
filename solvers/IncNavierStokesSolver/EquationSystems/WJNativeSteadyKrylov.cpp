@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 #include <IncNavierStokesSolver/EquationSystems/WJNativeSteadyKrylov.h>
+#include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <Eigen/QR>
 #include <algorithm>
 #include <chrono>
@@ -73,6 +74,7 @@ public:
         {
             Vec x=initial,f=Base(x);
             double norm=Norm(f),previousBase=norm;
+            if(o.merit)StartMerit(norm);
             Observe(x,f,norm,true);Deadline();
             if(norm<=o.acceptanceNorm){Converged();return Finish();}
             if(o.evaluateInitialOnly)
@@ -97,115 +99,42 @@ public:
                 if(iteration>0)
                     forcing=std::clamp(o.forcingGamma*std::pow(norm/previousBase,o.forcingExponent),
                                        o.forcingMinimum,o.forcingMaximum);
+                if(o.merit)forcing=out.meritEnd->nextForcing;
                 previousBase=norm;
                 SteadyNewtonRecord record;
                 record.iteration=iteration;record.baseNorm=norm;record.forcing=forcing;
                 record.missingLinearReason="correction base preparation";
                 out.newton.push_back(record);
                 if(cb.PrepareCorrection)cb.PrepareCorrection(x,f);
-                const bool reuse=factorBase>=0&&iteration-factorBase<=o.maximumInverseAge;
-                auto linear=Correct(x,f,norm,forcing,factorBase,
-                    reuse?"reuse":factorBase<0?"cold entry":"age cap",reuse);
-                if(reuse&&!linear.converged)
-                    linear=Correct(x,f,norm,forcing,factorBase,"current linear check or work cap",false);
-                out.newton.back().linearEvaluated=true;
-                out.newton.back().missingLinearReason.clear();
-                out.newton.back().linearTrueNorm=linear.trueNorm;
-                out.newton.back().linearConverged=linear.converged;
-                if(!linear.converged&&
-                   (!o.allowIncompleteLinearStep||linear.trueNorm>=norm))
-                    throw Stop("LINEAR_NOT_CONVERGED: declared Krylov cycles did not meet both current residual tests");
-                const Vec correction=(sx.array()*linear.correction.array()).matrix();
-                if(!correction.allFinite()||correction.cwiseAbs().maxCoeff()==0)
-                    throw Stop("NEWTON_DIRECTION_UNUSABLE: zero or nonfinite correction");
-                Vec originalAction;
-                double modelSlope=0.;
-                if(o.measureDirection)
+                if(o.merit)
+                    RecoverDirection(x,f,norm,factorBase);
+                else
                 {
-                    originalAction=std::move(linear.action);
-                    if(cb.CorrectionAction)originalAction-=cb.CorrectionAction(x,correction);
-                    if(o.adaptiveTrialStep)
+                    const bool reuse=factorBase>=0&&iteration-factorBase<=o.maximumInverseAge;
+                    auto linear=Correct(x,f,norm,forcing,factorBase,
+                        reuse?"reuse":factorBase<0?"cold entry":"age cap",reuse);
+                    if(reuse&&!linear.converged)
+                        linear=Correct(x,f,norm,forcing,factorBase,"current linear check or work cap",false);
+                    RecordLinear(linear,forcing);
+                    if(!linear.converged&&
+                       (!o.allowIncompleteLinearStep||linear.trueNorm>=norm))
+                        throw Stop("LINEAR_NOT_CONVERGED: declared Krylov cycles did not meet both current residual tests");
+                    const Vec correction=PhysicalCorrection(linear);
+                    Vec originalAction;
+                    double modelSlope=0.;
+                    if(o.measureDirection)
                     {
-                        constexpr double localFraction=.015625;
-                        modelSlope=(Norm(f+localFraction*originalAction)-norm)/localFraction;
+                        originalAction=std::move(linear.action);
+                        if(cb.CorrectionAction)originalAction-=cb.CorrectionAction(x,correction);
+                        if(o.adaptiveTrialStep)
+                        {
+                            constexpr double localFraction=.015625;
+                            modelSlope=(Norm(f+localFraction*originalAction)-norm)/localFraction;
+                        }
                     }
-                    if(cb.InspectDirection)cb.InspectDirection(iteration,x,correction);
+                    if(!Backtrack(x,f,norm,correction,originalAction,1.,modelSlope,o.maximumLineSearchTrials))
+                        throw Stop("LINE_SEARCH_NOT_CONVERGED: declared feasible Armijo trials exhausted");
                 }
-                bool accepted=false;
-                {
-                    Timer timer(out.statistics.lineSearchSeconds);
-                    double step=1;
-                    for(int trial=0;trial<o.maximumLineSearchTrials;++trial)
-                    {
-                        Deadline();
-                        SteadyLineSearchRecord ls;
-                        ls.newton=iteration;ls.trial=trial;ls.step=step;
-                        const Vec candidate=x+step*correction;
-                        if(!candidate.allFinite())
-                            throw Stop("NONFINITE_NEWTON_TRIAL: solver arithmetic failed; no clipping or hidden retry");
-                        if((candidate.array()==x.array()).all())
-                            throw Stop("NEWTON_ROUNDOFF: line-search correction no longer changes the state");
-                        auto evaluation=Trial(candidate,false);
-                        ls.admissible=evaluation.admissible;ls.reason=evaluation.reason;
-                        ls.nonlinearValidationAttempted=evaluation.nonlinearValidationAttempted;
-                        ls.nonlinearValidated=evaluation.nonlinearValidated;
-                        if(evaluation.admissible)
-                        {
-                            ls.trueNorm=Norm(evaluation.residual);ls.evaluated=true;
-                            Observe(candidate,evaluation.residual,ls.trueNorm,false);
-                            if(o.measureDirection)
-                            {
-                                const Vec predicted=f+step*originalAction;
-                                const Vec remainder=evaluation.residual-predicted;
-                                ls.predictedNorm=Norm(predicted);
-                                const double decrease=norm-*ls.predictedNorm;
-                                if(decrease>0.)
-                                {
-                                    const double ratio=(norm-ls.trueNorm)/decrease;
-                                    if(std::isfinite(ratio))ls.decreaseRatio=ratio;
-                                }
-                                if(cb.ResidualBlocks)
-                                {
-                                    ls.predictedBlocks=cb.ResidualBlocks(predicted);
-                                    ls.actualBlocks=cb.ResidualBlocks(evaluation.residual);
-                                    ls.remainderBlocks=cb.ResidualBlocks(remainder);
-                                }
-                                if(cb.InspectTrial)cb.InspectTrial(iteration,trial,step,candidate,remainder);
-                            }
-                            // Norm-Armijo uses the caller's fixed physical norm.
-                            ls.sufficientDecrease=ls.trueNorm<=o.acceptanceNorm||
-                                ls.trueNorm<=(1-o.armijo*step)*norm;
-                            if(!ls.sufficientDecrease)
-                            {
-                                ++out.statistics.lineSearchRejectedTrials;
-                                ls.reason="current true norm fails sufficient decrease";
-                            }
-                        }
-                        out.lineSearch.push_back(ls);Deadline();
-                        if(ls.sufficientDecrease)
-                        {
-                            out.lineSearch.back().accepted=true;
-                            x=candidate;f=std::move(evaluation.residual);norm=ls.trueNorm;
-                            Observe(x,f,norm,true);accepted=true;
-                            ++out.statistics.acceptedNewtonSteps;
-                            auto &nr=out.newton.back();nr.accepted=true;
-                            nr.acceptedNorm=norm;nr.acceptedStep=step;
-                            nr.acceptedSeconds=Seconds(start);
-                            break;
-                        }
-                        double reduction=o.lineSearchReduction;
-                        if(o.adaptiveTrialStep&&ls.evaluated&&modelSlope<0.)
-                        {
-                            // Safeguarded minimizer of the quadratic through the
-                            // measured trial with the current model slope at zero.
-                            const double curvature=ls.trueNorm-norm-step*modelSlope;
-                            if(curvature>0.)
-                                reduction=std::clamp(-step*modelSlope/(2.*curvature),.1,.75);
-                        }
-                        step*=reduction;
-                    }
-                }
-                if(!accepted)throw Stop("LINE_SEARCH_NOT_CONVERGED: declared feasible Armijo trials exhausted");
                 if(norm<=o.acceptanceNorm){Converged();return Finish();}
             }
             throw Stop("NEWTON_NOT_CONVERGED: declared Newton iteration bound exhausted");
@@ -256,6 +185,343 @@ public:
     }
 
 private:
+
+    void StartMerit(double norm)
+    {
+        SteadyMeritState state;
+        if(o.merit->restored)
+        {
+            state=*o.merit->restored;
+            if(std::abs(state.acceptedNorm-norm)>2e-12*std::max(norm,state.acceptedNorm)+1e-15)
+                throw std::invalid_argument("restored original merit differs from the accepted packet");
+        }
+        else
+        {
+            state.usedMass=state.nextMass=o.merit->initialMass;
+            state.referenceNorm=state.previousNorm=state.acceptedNorm=norm;
+            state.usedForcing=state.nextForcing=o.forcingInitial;
+            state.decision="initial";
+        }
+        out.meritStart=out.meritEnd=state;
+        if(cb.ObserveMeritState)cb.ObserveMeritState(state);
+    }
+
+    double StrongerMass(double mass)const
+    {
+        const double cap=std::max({1.,o.merit->initialMass,o.merit->reanchorMass});
+        return mass>cap/2.?cap:2.*mass;
+    }
+
+    void AdvanceMerit(double baseNorm,const SteadyLineSearchRecord &trial)
+    {
+        auto state=*out.meritEnd;
+        state.goodSteps=state.usedMass==currentMass?state.goodSteps:0;
+        state.usedMass=state.nextMass=currentMass;
+        state.usedForcing=out.newton.back().forcing;
+        state.previousNorm=baseNorm;
+        state.acceptedNorm=trial.trueNorm;
+        state.step=trial.step;
+        state.ratio=trial.decreaseRatio;
+        ++state.accepted;
+        const double relativeDecrease=(baseNorm-trial.trueNorm)/baseNorm;
+        const bool reliable=trial.step>=.75&&trial.decreaseRatio&&
+                            *trial.decreaseRatio>=.7&&*trial.decreaseRatio<=1.5&&relativeDecrease>=.2;
+        state.goodSteps=reliable?state.goodSteps+1:0;
+        state.decision="hold";
+        if(state.goodSteps==2&&currentMass>0.)
+        {
+            state.nextMass=.5*currentMass;
+            state.goodSteps=0;
+            state.decision="weaken after two well-predicted large reductions";
+        }
+        else if(trial.step<.25&&relativeDecrease<.03&&StrongerMass(currentMass)>currentMass)
+        {
+            state.nextMass=StrongerMass(currentMass);
+            state.decision="strengthen after limited actual progress";
+        }
+        state.nextForcing=std::clamp(o.forcingGamma*std::pow(trial.trueNorm/baseNorm,o.forcingExponent),
+                                     o.forcingMinimum,o.forcingMaximum);
+        out.meritEnd=state;
+        out.meritAcceptances.push_back(state);
+        if(cb.ObserveMeritState)cb.ObserveMeritState(state);
+    }
+
+    void RecordLinear(const LinearResult &linear,double forcing)
+    {
+        auto &entry=out.newton.back();
+        entry.forcing=forcing;
+        entry.linearEvaluated=true;
+        entry.missingLinearReason.clear();
+        entry.linearTrueNorm=linear.trueNorm;
+        entry.linearConverged=linear.converged;
+    }
+
+    Vec PhysicalCorrection(const LinearResult &linear)const
+    {
+        Vec dx=sx.cwiseProduct(linear.correction);
+        if(!dx.allFinite()||dx.cwiseAbs().maxCoeff()==0.)
+            throw Stop("NEWTON_DIRECTION_UNUSABLE: zero or nonfinite correction");
+        return dx;
+    }
+
+    // Evaluate the original model using the current checked linear action.
+    // A second, predetermined spacing supplies a sensitivity allowance.
+    // Reuse the primary action for the decision regardless of the second sign.
+    SteadyMeritRecord MeasureMerit(const Vec &x,const Vec &f,double norm,
+                                  const LinearResult &linear,double forcing,
+                                  int proposal,int usedWork,Vec &original)
+    {
+        SteadyMeritRecord rec;
+        rec.base=newton;
+        rec.proposal=proposal;
+        rec.inverse=int(out.inverses.size())-1;
+        rec.work=usedWork;
+        rec.mass=currentMass;
+        rec.forcing=forcing;
+        rec.baseNorm=norm;
+        rec.baseBlocks=cb.ResidualBlocks(f);
+        const bool nonzero=linear.correction.cwiseAbs().maxCoeff()!=0.;
+        const Vec primary=nonzero?Jacobian(x,f,linear.correction,1.,"original-merit-primary",-1,proposal):
+                                  linear.action;
+        const double primarySpacing=nonzero?out.finiteDifferences.back().parameterStep:0.;
+        const Vec error=f+primary;
+        rec.linearNorm=Norm(error);
+        rec.scaledError=sr.cwiseProduct(error).stableNorm();
+        rec.scaledBaseNorm=sr.cwiseProduct(f).stableNorm();
+        rec.shiftedErrorBlocks=cb.ResidualBlocks(error);
+        rec.linearPassed=linear.converged&&rec.linearNorm<=forcing*norm&&
+                         rec.scaledError<=forcing*rec.scaledBaseNorm;
+        if(!nonzero)
+        {
+            rec.decision="LINEAR_UNRESOLVED";
+            return rec;
+        }
+        const Vec shift=cb.CorrectionAction(x,PhysicalCorrection(linear));
+        original=primary-shift;
+        rec.correctionBlocks=cb.ResidualBlocks(shift);
+        rec.fullPredictedBlocks=cb.ResidualBlocks(error-shift);
+        const double multiplier=std::max(.5,o.fdMinimumRelativeStep/o.fdRelativeStep);
+        rec.decision="ACTION_UNRESOLVED";
+        if(multiplier>=1.)return rec;
+        const Vec finer=Jacobian(x,f,linear.correction,multiplier,"original-merit-spacing",-1,proposal);
+        if(out.finiteDifferences.back().parameterStep>=.8*primarySpacing)return rec;
+        const Vec change=finer-primary;
+        rec.actionUncertainty=2.*Norm(change);
+        rec.scaledUncertainty=2.*sr.cwiseProduct(change).stableNorm();
+        rec.modelEvaluated=true;
+        const double actionNorm=Norm(original);
+        const double roundoff=64.*std::numeric_limits<double>::epsilon()*std::max(norm,actionNorm);
+        rec.slopeUncertainty=rec.actionUncertainty+roundoff;
+        if(std::abs(*std::max_element(rec.baseBlocks.begin(),rec.baseBlocks.end())-norm)>roundoff)
+            throw std::invalid_argument("original merit is not the maximum of its declared blocks");
+        // Polarization gives each active Hilbert-seminorm slope without relying
+        // on a finite one-sided secant across a change in the active block.
+        rec.activeSlope=-std::numeric_limits<double>::infinity();
+        const double t=actionNorm>norm?norm/actionNorm:1.;
+        const auto plus=cb.ResidualBlocks(f+t*original);
+        const auto minus=cb.ResidualBlocks(f-t*original);
+        for(std::size_t i=0;i<rec.baseBlocks.size();++i)
+            if(rec.baseBlocks[i]>=norm-64.*std::numeric_limits<double>::epsilon()*norm)
+            {
+                rec.activeBlocks.push_back(int(i));
+                if(rec.baseBlocks[i]==norm)
+                {
+                    const double slope=(plus[i]-minus[i])/(4.*t)*
+                        ((plus[i]+minus[i])/rec.baseBlocks[i]);
+                    rec.activeSlope=std::max(rec.activeSlope,slope);
+                }
+            }
+        if(!std::isfinite(rec.activeSlope))
+            throw std::invalid_argument("original merit has no evaluable active block slope");
+
+        const double gamma=std::max(.01,2.*o.armijo);
+        for(double step=1.;step>=1./4096.;step*=.5)
+        {
+            const Vec prediction=f+step*original;
+            const double value=Norm(prediction);
+            if(value+step*rec.actionUncertainty+roundoff<=(1.-gamma*step)*norm)
+            {
+                rec.step=step;
+                rec.predictedNorm=value;
+                rec.predictedBlocks=cb.ResidualBlocks(prediction);
+                break;
+            }
+        }
+        if(!rec.linearPassed)
+            rec.decision="LINEAR_UNRESOLVED";
+        else if(rec.actionUncertainty>=.5*forcing*norm||
+                rec.scaledUncertainty>=.5*forcing*rec.scaledBaseNorm)
+            rec.decision="ACTION_UNRESOLVED";
+        else if(rec.step>0.)
+            rec.decision=(norm-rec.predictedNorm)>=.01*norm?"USEFUL_DESCENT":"WEAK_VERIFIED_DESCENT";
+        else if(rec.activeSlope>rec.slopeUncertainty)
+            rec.decision="RESOLVED_ASCENT";
+        else if(rec.activeSlope<-rec.slopeUncertainty)
+            rec.decision="INSUFFICIENT_MODEL_DECREASE";
+        return rec;
+    }
+
+    void RecoverDirection(Vec &x,Vec &f,double &norm,int &factorBase)
+    {
+        const double initialMass=out.meritEnd->nextMass;
+        currentMass=initialMass;
+        bool refreshed=false;
+        const auto initialWork=out.statistics.linearIterations;
+        auto remaining=[&] {return o.merit->maximumWork-int(out.statistics.linearIterations-initialWork);};
+        std::string reason="no direction was evaluated";
+        std::vector<double> triedMasses;
+        for(int proposal=0;proposal<3&&remaining()>0;++proposal)
+        {
+            triedMasses.push_back(currentMass);
+            cb.SetCorrectionMass(currentMass);
+            const bool cold=factorBase<0||newton-factorBase>o.maximumInverseAge;
+            LinearResult result;
+            Vec original;
+            SteadyMeritRecord assessment;
+            double priorForcing=1.;
+            const std::array<double,4> forcingLevels={out.meritEnd->nextForcing,.1,.03,.01};
+            for(double target:forcingLevels)
+            {
+                target=std::clamp(target,o.forcingMinimum,o.forcingMaximum);
+                if(target>=priorForcing||remaining()<=0)continue;
+                if(priorForcing<1.)
+                {
+                    if(std::max(assessment.linearNorm/norm,
+                                assessment.scaledError/assessment.scaledBaseNorm)<=target)continue;
+                    if((assessment.decision=="ACTION_UNRESOLVED"&&!assessment.modelEvaluated)||
+                       assessment.actionUncertainty>=.5*target*norm||
+                       assessment.scaledUncertainty>=.5*target*assessment.scaledBaseNorm)break;
+                }
+                const bool reuse=priorForcing<1.||!cold;
+                const auto before=out.statistics.linearIterations;
+                const Vec *warm=result.correction.size()?&result.correction:nullptr;
+                result=Correct(x,f,norm,target,factorBase,reuse?"merit current inverse":
+                    factorBase<0?"merit cold entry":"merit age cap",reuse,
+                    std::min(remaining(),o.reuseLinearIterations),warm);
+                assessment=MeasureMerit(x,f,norm,result,target,proposal,int(out.statistics.linearIterations-before),original);
+                out.meritDirections.push_back(assessment);
+                if(cb.ObserveMeritDirection)cb.ObserveMeritDirection(assessment);
+                if(!result.converged&&priorForcing==1.&&reuse&&!refreshed&&remaining()>0&&
+                   (factorBase!=newton||factorMass!=currentMass))
+                {
+                    refreshed=true;
+                    const auto workBefore=out.statistics.linearIterations;
+                    result=Correct(x,f,norm,target,factorBase,"bounded merit linear refresh",false,
+                        std::min(remaining(),o.reuseLinearIterations),&result.correction);
+                    assessment=MeasureMerit(x,f,norm,result,target,proposal,
+                        int(out.statistics.linearIterations-workBefore),original);
+                    out.meritDirections.push_back(assessment);
+                    if(cb.ObserveMeritDirection)cb.ObserveMeritDirection(assessment);
+                }
+                priorForcing=target;
+                if(assessment.decision=="USEFUL_DESCENT")break;
+            }
+            reason=assessment.decision.empty()?"declared current linear work exhausted":assessment.decision;
+            const double anchor=o.merit->reanchorMass;
+            auto untried=[&](double mass) {
+                return std::find(triedMasses.begin(),triedMasses.end(),mass)==triedMasses.end();
+            };
+            double alternative=anchor>currentMass&&untried(anchor)?anchor:StrongerMass(currentMass);
+            if(!untried(alternative))alternative=.5*initialMass;
+            const bool canChange=proposal<2&&remaining()>0&&untried(alternative);
+            RecordLinear(result,priorForcing);
+            if(reason=="USEFUL_DESCENT"||(reason=="WEAK_VERIFIED_DESCENT"&&!canChange))
+            {
+                const auto before=out.lineSearch.size();
+                if(Backtrack(x,f,norm,PhysicalCorrection(result),original,assessment.step,
+                             assessment.activeSlope,std::min(8,o.maximumLineSearchTrials),proposal))
+                    return;
+                const bool evaluated=std::any_of(out.lineSearch.begin()+before,out.lineSearch.end(),
+                    [](const auto &trial){return trial.evaluated;});
+                reason=evaluated?"FEASIBLE_ORIGINAL_LINE_SEARCH_EXHAUSTED":"NONLINEAR_DOMAIN_RESTRICTION";
+            }
+            if(!canChange)break;
+            currentMass=alternative;
+        }
+        throw Stop("ORIGINAL_MERIT_DIRECTION_STOP: "+reason);
+    }
+
+    bool Backtrack(Vec &x,Vec &f,double &norm,const Vec &correction,const Vec &originalAction,
+                   double step,double modelSlope,int trialLimit,int proposal=-1)
+    {
+        if((o.measureDirection||o.merit)&&cb.InspectDirection)cb.InspectDirection(newton,x,correction);
+        bool accepted=false;
+        {
+            Timer timer(out.statistics.lineSearchSeconds);
+            for(int trial=0;trial<trialLimit;++trial)
+            {
+                Deadline();
+                SteadyLineSearchRecord ls;
+                ls.newton=newton;ls.trial=trial;ls.step=step;ls.proposal=proposal;
+                const Vec candidate=x+step*correction;
+                if(!candidate.allFinite())
+                    throw Stop("NONFINITE_NEWTON_TRIAL: solver arithmetic failed; no clipping or hidden retry");
+                if((candidate.array()==x.array()).all())
+                    throw Stop("NEWTON_ROUNDOFF: line-search correction no longer changes the state");
+                auto evaluation=Trial(candidate,false);
+                ls.admissible=evaluation.admissible;ls.reason=evaluation.reason;
+                ls.nonlinearValidationAttempted=evaluation.nonlinearValidationAttempted;
+                ls.nonlinearValidated=evaluation.nonlinearValidated;
+                if(evaluation.admissible)
+                {
+                    ls.trueNorm=Norm(evaluation.residual);ls.evaluated=true;
+                    Observe(candidate,evaluation.residual,ls.trueNorm,false);
+                    if(o.measureDirection||o.merit)
+                    {
+                        const Vec predicted=f+step*originalAction;
+                        const Vec remainder=evaluation.residual-predicted;
+                        ls.predictedNorm=Norm(predicted);
+                        const double decrease=norm-*ls.predictedNorm;
+                        if(decrease>0.)
+                        {
+                            const double ratio=(norm-ls.trueNorm)/decrease;
+                            if(std::isfinite(ratio))ls.decreaseRatio=ratio;
+                        }
+                        if(cb.ResidualBlocks)
+                        {
+                            ls.predictedBlocks=cb.ResidualBlocks(predicted);
+                            ls.actualBlocks=cb.ResidualBlocks(evaluation.residual);
+                            ls.remainderBlocks=cb.ResidualBlocks(remainder);
+                        }
+                        if(cb.InspectTrial)cb.InspectTrial(newton,trial,step,candidate,remainder);
+                    }
+                    // Norm-Armijo uses the caller's fixed physical norm.
+                    ls.sufficientDecrease=ls.trueNorm<=o.acceptanceNorm||
+                        ls.trueNorm<=(1-o.armijo*step)*norm;
+                    if(!ls.sufficientDecrease)
+                    {
+                        ++out.statistics.lineSearchRejectedTrials;
+                        ls.reason="current true norm fails sufficient decrease";
+                    }
+                }
+                out.lineSearch.push_back(ls);Deadline();
+                if(ls.sufficientDecrease)
+                {
+                    out.lineSearch.back().accepted=true;
+                    if(o.merit)AdvanceMerit(norm,ls);
+                    x=candidate;f=std::move(evaluation.residual);norm=ls.trueNorm;
+                    Observe(x,f,norm,true);accepted=true;
+                    ++out.statistics.acceptedNewtonSteps;
+                    auto &nr=out.newton.back();nr.accepted=true;
+                    nr.acceptedNorm=norm;nr.acceptedStep=step;
+                    nr.acceptedSeconds=Seconds(start);
+                    break;
+                }
+                double reduction=o.lineSearchReduction;
+                if(o.adaptiveTrialStep&&ls.evaluated&&modelSlope<0.)
+                {
+                    // Safeguarded minimizer of the quadratic through the
+                    // measured trial with the current model slope at zero.
+                    const double curvature=ls.trueNorm-norm-step*modelSlope;
+                    if(curvature>0.)
+                        reduction=std::clamp(-step*modelSlope/(2.*curvature),.1,.75);
+                }
+                step*=reduction;
+            }
+        }
+        return accepted;
+    }
+
     void Deadline()const
     {if(Seconds(start)>=o.maximumSeconds)throw Stop("DEADLINE: finite steady-solve wall budget exhausted");}
 
@@ -370,7 +636,7 @@ private:
     }
 
     LinearResult Correct(const Vec &x,const Vec &f,double norm,double forcing,
-                         int &factorBase,const char *reason,bool reuse)
+                         int &factorBase,const char *reason,bool reuse,int workLimit=-1,const Vec *guess=nullptr)
     {
         auto &record=out.inverses.emplace_back();
         record.base=newton;record.factorBase=reuse?factorBase:newton;
@@ -387,9 +653,13 @@ private:
                 cb.PreparePreconditioner(x,f);
                 factorBase=newton;
                 record.prepared=true;
+                factorSerial=out.statistics.preconditionerPreparations;
+                factorMass=currentMass;
             }
             out.newton.back().missingLinearReason="current linear solve";
-            auto result=Linear(x,f,norm,forcing,reuse?o.reuseLinearIterations:0);
+            record.serial=factorSerial;
+            if(o.merit)record.mass=factorMass;
+            auto result=Linear(x,f,norm,forcing,workLimit>=0?workLimit:(reuse?o.reuseLinearIterations:0),guess);
             record.iterations=int(out.statistics.linearIterations-before);
             record.converged=result.converged;
             record.trueNorm=result.trueNorm;
@@ -493,7 +763,7 @@ private:
         throw Stop("FD_INFEASIBLE: derivative construction exhausted");
     }
 
-    LinearResult Linear(const Vec &x,const Vec &f,double baseNorm,double forcing,int workLimit)
+    LinearResult Linear(const Vec &x,const Vec &f,double baseNorm,double forcing,int workLimit,const Vec *guess)
     {
         Timer timer(out.statistics.linearSeconds);
         const Vec b=-(sr.array()*f.array()).matrix();
@@ -501,7 +771,7 @@ private:
         const double bNorm=b.stableNorm();
         if(!Positive(bNorm))throw Stop("LINEAR_SCALING: nonzero true residual has zero/nonfinite scaled norm");
         const int n=static_cast<int>(sx.size()),m=std::min(n,o.restartDimension);
-        Vec best=Vec::Zero(n),bestAction=Vec::Zero(n);
+        Vec best=guess?*guess:Vec::Zero(n).eval(),bestAction=Vec::Zero(n);
         double bestNorm=baseNorm,bestScaled=bNorm;
         int work=0;
         for(int cycle=0;cycle<o.maximumLinearCycles;++cycle)
@@ -519,6 +789,12 @@ private:
             const double beta=r.stableNorm();
             const Vec raw=(r.array()/sr.array()).matrix();
             const double initialTrue=Norm(raw);
+            if(cycle==0&&guess)
+            {
+                bestNorm=initialTrue;
+                bestScaled=beta;
+                bestAction=baseAction;
+            }
             SteadyLinearRecord restart;restart.newton=newton;restart.cycle=cycle;
             restart.iteration=-1;restart.trueChecked=true;restart.projectedNorm=beta;
             restart.trueScaledNorm=beta;restart.trueNorm=initialTrue;
@@ -599,8 +875,22 @@ private:
     const SteadyKrylovOptions &o;
     Clock::time_point start;
     int newton=-1;
+    long long factorSerial=0;
+    double currentMass=0.,factorMass=0.;
     SteadyKrylovResult out;
 };
+}
+
+std::string SteadyMeritState::ToJson()const
+{
+    namespace J=RANSWallSolveJson;
+    return J::Object({{"schema",J::Quote(Identity)},{"used_mass",J::Number(usedMass)},
+        {"next_mass",J::Number(nextMass)},{"reference_norm",J::Number(referenceNorm)},
+        {"previous_norm",J::Number(previousNorm)},{"accepted_norm",J::Number(acceptedNorm)},
+        {"used_forcing",J::Number(usedForcing)},{"next_forcing",J::Number(nextForcing)},
+        {"step",J::Number(step)},{"actual_to_predicted_decrease",ratio?J::Number(*ratio):"null"},
+        {"accepted",J::Number(accepted)},{"good_steps",J::Number(goodSteps)},
+        {"decision",J::Quote(decision)}});
 }
 
 SteadyKrylov::SteadyKrylov(SteadyKrylovCallbacks callbacks,SteadyVector unknownScale,
@@ -632,6 +922,25 @@ SteadyKrylov::SteadyKrylov(SteadyKrylovCallbacks callbacks,SteadyVector unknownS
             o.forcingMinimum<=o.forcingInitial&&o.forcingInitial<=o.forcingMaximum&&
             Positive(o.forcingGamma)&&Positive(o.forcingExponent)&&Fraction(o.arnoldiBreakdownRelative),
             "invalid declared inexact-Newton forcing or Arnoldi policy");
+    if(o.merit)
+    {
+        const auto &m=*o.merit;
+        Require(bool(m_callbacks.CorrectionAction)&&bool(m_callbacks.SetCorrectionMass)&&
+                bool(m_callbacks.ResidualBlocks)&&!o.allowIncompleteLinearStep&&
+                std::isfinite(m.initialMass)&&m.initialMass>=0.&&std::isfinite(m.reanchorMass)&&m.reanchorMass>=0.&&
+                m.maximumWork>0,"invalid original-merit correction policy");
+        if(m.restored)
+        {
+            const auto &r=*m.restored;
+            Require(std::isfinite(r.usedMass)&&r.usedMass>=0.&&std::isfinite(r.nextMass)&&r.nextMass>=0.&&
+                    Positive(r.referenceNorm)&&Positive(r.previousNorm)&&Positive(r.acceptedNorm)&&
+                    r.usedForcing>=o.forcingMinimum&&r.usedForcing<=o.forcingMaximum&&
+                    r.nextForcing>=o.forcingMinimum&&r.nextForcing<=o.forcingMaximum&&
+                    r.accepted>=0&&r.goodSteps>=0&&r.goodSteps<2&&std::isfinite(r.step)&&r.step>=0.&&r.step<=1.&&
+                    (!r.ratio||std::isfinite(*r.ratio))&&!r.decision.empty(),"invalid restored original-merit state");
+        }
+    }
+
 }
 
 SteadyKrylovResult SteadyKrylov::Solve(const SteadyVector &initial)const

@@ -67,6 +67,7 @@ void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mas
         <<",\"accepted\":"<<(n.accepted?"true":"false")<<",\"accepted_norm\":"<<n.acceptedNorm<<",\"accepted_step\":"<<n.acceptedStep
         <<",\"accepted_seconds\":"<<(n.accepted?J::Number(n.acceptedSeconds):"null")<<'}';}
     out<<"],\"line_search\":[";for(int i=0;i<int(r.lineSearch.size());++i){const auto&l=r.lineSearch[i];if(i)out<<',';out<<"{\"newton\":"<<l.newton<<",\"trial\":"<<l.trial<<",\"step\":"<<l.step
+        <<",\"merit_proposal\":"<<(l.proposal<0?"null":J::Number(l.proposal))
         <<",\"nonlinear_validation_attempted\":"<<(l.nonlinearValidationAttempted?"true":"false")<<",\"nonlinear_validated\":"<<(l.nonlinearValidated?"true":"false")
         <<",\"admissible\":"<<(l.admissible?"true":"false")<<",\"evaluated\":"<<(l.evaluated?"true":"false")
         <<",\"true_norm\":"<<(l.evaluated?J::Number(l.trueNorm):"null")
@@ -80,10 +81,48 @@ void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mas
         const auto &use=r.inverses[i];
         if(i)out<<',';
         out<<"{\"base\":"<<use.base<<",\"factor_base\":"<<use.factorBase<<",\"age\":"<<use.age
+           <<",\"factor_serial\":"<<use.serial<<",\"factor_correction_mass\":"<<number(use.mass)
            <<",\"rebuild\":"<<J::Boolean(use.rebuild)<<",\"preparation_completed\":"<<J::Boolean(use.prepared)
            <<",\"reason\":"<<J::Quote(use.reason)<<",\"krylov_iterations\":"<<use.iterations
            <<",\"linear_converged\":"<<(use.converged?J::Boolean(*use.converged):"null")
            <<",\"linear_true_norm\":"<<number(use.trueNorm)<<'}';
+    }
+    if(r.meritStart)
+    {
+        out<<"],\"original_merit_policy\":"<<J::Quote(WJNative::SteadyMeritState::Identity)
+           <<",\"merit_start\":"<<r.meritStart->ToJson()<<",\"merit_end\":"<<r.meritEnd->ToJson()
+           <<",\"merit_acceptances\":[";
+        for(std::size_t i=0;i<r.meritAcceptances.size();++i)
+        {
+            if(i)out<<',';
+            out<<r.meritAcceptances[i].ToJson();
+        }
+        out<<"],\"merit_directions\":[";
+        for(std::size_t i=0;i<r.meritDirections.size();++i)
+        {
+            const auto &d=r.meritDirections[i];
+            if(i)out<<',';
+            out<<"{\"base\":"<<d.base<<",\"proposal\":"<<d.proposal
+               <<",\"inverse_use\":"<<d.inverse<<",\"krylov_iterations\":"<<d.work
+               <<",\"mass\":"<<d.mass<<",\"forcing\":"<<d.forcing
+               <<",\"base_norm\":"<<d.baseNorm<<",\"active_blocks\":"<<J::Numbers(d.activeBlocks)
+               <<",\"base_blocks\":"<<J::Numbers(d.baseBlocks)
+               <<",\"linear_true_norm\":"<<d.linearNorm<<",\"linear_scaled_error\":"<<d.scaledError
+               <<",\"linear_scaled_rhs_norm\":"<<d.scaledBaseNorm
+               <<",\"linear_passed\":"<<J::Boolean(d.linearPassed)
+               <<",\"model_evaluated\":"<<J::Boolean(d.modelEvaluated)
+               <<",\"shifted_error_blocks\":"<<J::Numbers(d.shiftedErrorBlocks)
+               <<",\"correction_action_blocks\":"<<J::Numbers(d.correctionBlocks)
+               <<",\"full_original_model_blocks\":"<<J::Numbers(d.fullPredictedBlocks)
+               <<",\"action_spacing_uncertainty\":"<<(d.modelEvaluated?J::Number(d.actionUncertainty):"null")
+               <<",\"scaled_spacing_uncertainty\":"<<(d.modelEvaluated?J::Number(d.scaledUncertainty):"null")
+               <<",\"active_slope\":"<<(d.modelEvaluated?J::Number(d.activeSlope):"null")
+               <<",\"slope_uncertainty\":"<<(d.modelEvaluated?J::Number(d.slopeUncertainty):"null")
+               <<",\"verified_step\":"<<(d.step>0.?J::Number(d.step):"null")
+               <<",\"predicted_norm\":"<<(d.step>0.?J::Number(d.predictedNorm):"null")
+               <<",\"predicted_blocks\":"<<(d.step>0.?J::Numbers(d.predictedBlocks):"null")
+               <<",\"decision\":"<<J::Quote(d.decision)<<'}';
+        }
     }
     out<<"],\"best_from_accepted_iterate\":"<<(r.bestFromAcceptedIterate?"true":"false")<<",\"best_unknowns\":";VecJSON(out,r.x);out<<",\"best_raw_residual\":";VecJSON(out,r.residual);
     out<<",\"finite_differences\":[";for(int i=0;i<int(r.finiteDifferences.size());++i){const auto&f=r.finiteDifferences[i];if(i)out<<',';
@@ -200,6 +239,11 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
         m_session->LoadParameter("WJSteadyKrylovDimension",m_steadyOptions.restartDimension,40);
         m_session->LoadParameter("WJSteadyLinearCycles",m_steadyOptions.maximumLinearCycles,8);
         m_session->LoadParameter("WJSteadyFDStep",m_steadyOptions.fdRelativeStep,1e-6);
+        m_session->LoadParameter("WJSteadyForcingInitial",m_steadyOptions.forcingInitial,.3);
+        m_session->LoadParameter("WJSteadyForcingMinimum",m_steadyOptions.forcingMinimum,1e-3);
+        m_session->LoadParameter("WJSteadyForcingMaximum",m_steadyOptions.forcingMaximum,.5);
+        m_session->LoadParameter("WJSteadyForcingGamma",m_steadyOptions.forcingGamma,.9);
+        m_session->LoadParameter("WJSteadyForcingExponent",m_steadyOptions.forcingExponent,1.5);
         m_session->LoadParameter("WJSteadyPreconditionerMass",m_steadyPreconditionerMass,0.);
         m_session->LoadParameter("WJSteadySeed",m_steadySeed,0.);Check(m_steadySeed>=0&&m_steadySeed<=.02,"invalid verification-only steady seed");Check(options.manufactured||m_steadySeed==0,"steady seed perturbation is verification-only");
     }
@@ -245,6 +289,29 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadSolverInfo("WJDiagnosticGlobalization",globalization,"HalvingV1");
     m_session->LoadSolverInfo("WJDiagnosticUncommittedGuess",uncommitted,"False");
     m_session->LoadSolverInfo("WJDiagnosticAcceptedCheckpoint",checkpoint,"False");
+    std::string merit;
+    m_session->LoadSolverInfo("WJDiagnosticMeritPolicy",merit,"Disabled");
+    m_session->LoadSolverInfo("WJDiagnosticMeritEntry",m_diagnosticSteadyOptions.meritEntry,"Fresh");
+    const auto &entry=m_diagnosticSteadyOptions.meritEntry;
+    if(merit==WJNative::SteadyMeritState::Identity)
+    {
+        Check(m_diagnosticSteady&&evaluateOnly=="False"&&allowIncomplete=="False"&&
+              m_diagnosticSteadyOptions.eta==0.&&m_diagnosticSteadyOptions.pseudoTime==0.&&
+              m_diagnosticSteadyOptions.correctionDiffusion==0.&&uncommitted=="False"&&
+              (entry=="Fresh"||entry=="Resume"||entry=="Reanchor")&&
+              m_session->DefinesParameter("WJDiagnosticMeritInitialMass"),
+              "original-merit policy requires an original diagnostic correction and explicit numerical mass");
+        auto &m=m_steadyOptions.merit.emplace();
+        m_session->LoadParameter("WJDiagnosticMeritInitialMass",m.initialMass,0.);
+        m_session->LoadParameter("WJDiagnosticMeritReanchorMass",m.reanchorMass,0.);
+        m_session->LoadParameter("WJDiagnosticMeritWork",m.maximumWork,96);
+    }
+    else
+        Check(merit=="Disabled"&&entry=="Fresh"&&
+              !m_session->DefinesParameter("WJDiagnosticMeritInitialMass")&&
+              !m_session->DefinesParameter("WJDiagnosticMeritReanchorMass")&&
+              !m_session->DefinesParameter("WJDiagnosticMeritWork"),
+              "original-merit options require the declared original-merit policy");
     double checkpointProcessSeconds;
     auto &diagnostic=m_diagnosticSteadyOptions;
     m_session->LoadParameter("WJDiagnosticCheckpointProcessSeconds",checkpointProcessSeconds,0.);
@@ -287,7 +354,7 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
         m_diagnosticSteadyOptions.sparseInverse=inverse=="ColoredSparseV1";
         m_diagnosticSteadyOptions.auditCorrection=audit=="True";
         m_diagnosticSteadyOptions.allowUncommittedGuess=uncommitted=="True";
-        m_steadyOptions.measureDirection=direction=="True";
+        m_steadyOptions.measureDirection=direction=="True"||m_steadyOptions.merit.has_value();
         m_steadyOptions.adaptiveTrialStep=globalization=="ModelBacktrackV1";
         Check(m_steadyOptions.maximumInverseAge==0||m_diagnosticSteadyOptions.sparseInverse,
               "inverse reuse requires ColoredSparseV1");
