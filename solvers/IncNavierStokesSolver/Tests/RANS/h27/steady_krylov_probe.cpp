@@ -265,10 +265,14 @@ int main(int argc,char**argv)
             cb.TrueNorm=[](const Vec&f){return std::abs(f[0]);};
             cb.Precondition=[](const Vec&rhs){return Vec(-rhs);};cb.ValidTrial=[](const Vec&){return SteadyTrialValidity{};};
             auto options=Options();options.armijo=.4;options.maximumLineSearchTrials=1;
+            std::vector<double> observed;
+            cb.ObserveAccepted=[&](const Vec &x,double){observed.push_back(x[0]);};
             SteadyKrylov solver(cb,Vector({1.}),Vector({2.}),options);const Vec initial=Vector({0.});
             const auto result=solver.Solve(initial);
             Check(!result.converged&&result.hasEvaluatedState&&!result.bestFromAcceptedIterate&&result.trueNorm<result.lastAcceptedNorm,
                 "best unaccepted admissible state semantics were not exercised");
+            Check(observed==std::vector<double>{initial[0]},
+                  "the uncommitted trial was published to the accepted observer");
             solves.push_back(J::Object({{"name",J::Quote("best_unaccepted_state")},{"system",J::Quote("no_real_root")},
                 {"initial",V(initial)},{"maximum_seconds",J::Number(options.maximumSeconds)},{"result",Result(result)}}));
         }
