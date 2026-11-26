@@ -90,6 +90,7 @@ struct DiagnosticSteadyOptions
     double checkpointProcessDeadline=0., checkpointReserveSeconds=0., checkpointInverseSeconds=0.;
     std::string actionAuditPrefix, actionProbePath, actionProbeSha;
     double factorFDStep=0.;
+    bool auditColorColumns=false;
     int scalarSubdivisionDepth=0;
     bool sparseInverse=false, auditCorrection=false, allowUncommittedGuess=false;
 };

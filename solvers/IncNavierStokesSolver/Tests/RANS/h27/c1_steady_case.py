@@ -49,6 +49,23 @@ def action_probe_difference(base, peer):
     return struct.pack(f"<{len(direction)}d", *direction)
 
 
+def action_probe_capture(bound, receipt, quadrature):
+    from c1_action_gap import read_audit
+
+    metadata, arrays = read_audit(receipt)
+    state = bound["state"]
+    ids = [i for indices in [*state["free_velocity_ids"], state["k_free_ids"], state["epsilon_free_ids"]]
+           for i in indices]
+    binding = hashlib.sha256(struct.pack(f"<{len(ids)}i", *ids)).hexdigest()
+    rule = [state["quadratureX"], state["quadratureR"]]
+    if (metadata["base_coefficient_sha256"] != state["state_sha256"]
+            or metadata["reference_identity"] != state["reference_identity"]
+            or metadata["quadrature"] != rule or (quadrature and quadrature != rule)
+            or metadata["free_id_sha256"] != binding):
+        raise ValueError("captured direction does not bind the original base, free ordering and quadrature")
+    return arrays["direction"].astype("<f8", copy=False).tobytes(order="F")
+
+
 def prepare(args):
     session = ET.parse(args.template)
     info = session.find("CONDITIONS/SOLVERINFO")
@@ -58,7 +75,8 @@ def prepare(args):
             "WJInitialFields", "WJInitialSourceIdentity", "WJRestart", "WJGeometrySeedPacketSHA256",
             "WJDiagnosticSeedSHA256", "WJDiagnosticCandidateOutput", "WJTerminalOutput",
             "WJDiagnosticTransferParent", "WJDiagnosticTransferParentSHA256",
-            "WJDiagnosticActionProbe", "WJDiagnosticActionProbeSHA256", "WJDiagnosticActionGapAudit"
+            "WJDiagnosticActionProbe", "WJDiagnosticActionProbeSHA256", "WJDiagnosticActionGapAudit",
+            "WJDiagnosticActionColorAudit"
         }:
             info.remove(item)
     for item in list(parameters):
@@ -167,7 +185,7 @@ def prepare(args):
             raise ValueError("transfer audit requires a bound unshifted evaluate-only root with action checks")
         fields.update(WJDiagnosticTransferParent=args.transfer_audit_parent.resolve(),
                       WJDiagnosticTransferParentSHA256=identity(args.transfer_audit_parent)["sha256"])
-    if args.action_gap_audit or args.action_probe_peer or args.factor_fd:
+    if args.action_gap_audit or args.action_probe_peer or args.action_probe_capture or args.factor_fd:
         if not args.seed or args.eta or args.beta or args.pseudo_time or args.remap or args.uncommitted_guess:
             raise ValueError("action audit settings require an exact original diagnostic base")
     if args.action_gap_audit:
@@ -179,12 +197,19 @@ def prepare(args):
             raise ValueError("factor FD requires a finite positive step and a colored solve")
         controls["WJDiagnosticFactorFDStep"] = args.factor_fd
     direction = None
-    if args.action_probe_peer:
+    if args.action_probe_peer or args.action_probe_capture:
         if not args.evaluate_only or args.action_gap_audit:
-            raise ValueError("the action peer requires a separate evaluate-only probe")
-        direction = action_probe_difference(args.seed, args.action_probe_peer)
+            raise ValueError("a frozen direction needs a separate evaluate-only probe")
+        if args.action_probe_peer:
+            direction = action_probe_difference(args.seed, args.action_probe_peer)
+        else:
+            direction = action_probe_capture(bound, args.action_probe_capture, args.quadrature)
         fields.update(WJDiagnosticActionProbe=output/"action-probe.bin",
                       WJDiagnosticActionProbeSHA256=hashlib.sha256(direction).hexdigest())
+    if args.action_color_audit:
+        if not args.action_probe_capture:
+            raise ValueError("selected color comparisons require a bound captured direction")
+        fields["WJDiagnosticActionColorAudit"] = "True"
     output.mkdir(parents=True)
     if direction is not None:
         (output/"action-probe.bin").write_bytes(direction)
@@ -196,8 +221,8 @@ def prepare(args):
         files.append(args.seed)
     if args.transfer_audit_parent:
         files.append(args.transfer_audit_parent)
-    if args.action_probe_peer:
-        files.extend((args.action_probe_peer, output/"action-probe.bin"))
+    if direction is not None:
+        files.extend((args.action_probe_peer or args.action_probe_capture, output/"action-probe.bin"))
     (output/"inputs.json").write_text(json.dumps([identity(p) for p in files], indent=2)+"\n")
 
 
@@ -215,8 +240,13 @@ def main():
     parser.add_argument("--factor-fd", type=float, help="independent assembly spacing for the colored factor")
     parser.add_argument("--action-gap-audit", action="store_true",
                         help="capture one material failed Krylov check and audit the retained factor")
-    parser.add_argument("--action-probe-peer", type=Path,
+    frozen = parser.add_mutually_exclusive_group()
+    frozen.add_argument("--action-probe-peer", type=Path,
                         help="audit base minus peer in the identical free coordinates without correction")
+    frozen.add_argument("--action-probe-capture", type=Path,
+                        help="replay a saved nonaccepted direction on its exact base")
+    parser.add_argument("--action-color-audit", action="store_true",
+                        help="also compare selected full-row singleton and complete-color actions")
     parser.add_argument("--newton", type=int, default=48)
     parser.add_argument("--krylov", type=int, default=40)
     parser.add_argument("--cycles", type=int, default=4)

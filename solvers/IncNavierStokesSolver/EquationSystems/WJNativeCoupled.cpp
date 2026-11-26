@@ -286,8 +286,9 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadSolverInfo("WJDiagnosticActionProbe",diagnostic.actionProbePath,"");
     m_session->LoadSolverInfo("WJDiagnosticActionProbeSHA256",diagnostic.actionProbeSha,"");
     m_session->LoadParameter("WJDiagnosticFactorFDStep",diagnostic.factorFDStep,0.);
-    std::string actionGap;
+    std::string actionGap,colorAudit;
     m_session->LoadSolverInfo("WJDiagnosticActionGapAudit",actionGap,"False");
+    m_session->LoadSolverInfo("WJDiagnosticActionColorAudit",colorAudit,"False");
     std::string inverse,audit,evaluateOnly,direction,globalization,uncommitted,checkpoint;
     m_session->LoadSolverInfo("WJDiagnosticSteadyInverse",inverse,"BlockV1");
     m_session->LoadSolverInfo("WJDiagnosticCorrectionAudit",audit,"False");
@@ -386,6 +387,7 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
               "diagnostic correction or momentum regularization requires DiagnosticSteady");
     }
     Check((actionGap=="False"||actionGap=="True")&&
+          (colorAudit=="False"||(colorAudit=="True"&&!diagnostic.actionProbePath.empty()&&geometry.normalMap))&&
           (diagnostic.actionProbePath.empty()==diagnostic.actionProbeSha.empty())&&
           std::isfinite(diagnostic.factorFDStep)&&diagnostic.factorFDStep>=0.,
           "invalid diagnostic action audit options");
@@ -402,6 +404,7 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
         if(!diagnostic.actionProbePath.empty())
             Check(m_steadyOptions.evaluateInitialOnly&&diagnostic.actionProbeSha.size()==64,
                   "a frozen direction requires a pinned evaluate-only probe");
+        diagnostic.auditColorColumns=colorAudit=="True";
         if(diagnostic.factorFDStep>0.)
             Check(diagnostic.sparseInverse&&!m_steadyOptions.evaluateInitialOnly&&
                   diagnostic.factorFDStep>=m_steadyOptions.fdMinimumRelativeStep,

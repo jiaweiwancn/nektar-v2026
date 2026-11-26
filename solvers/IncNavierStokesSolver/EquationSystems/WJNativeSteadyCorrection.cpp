@@ -171,6 +171,27 @@ Vec SteadySparseInverse::OriginalAction(const Vec &direction)const
     return (m_original*direction.cwiseQuotient(m_unknownScale)).cwiseQuotient(m_rowScale);
 }
 
+SteadyColoredColumnProbe SteadySparseInverse::ColumnProbe(int column)const
+{
+    if(column<0||column>=m_exact.cols()||m_support[column].empty())
+        throw std::invalid_argument("column probe needs a declared nonlinear support");
+    const auto color=std::find_if(m_colors.begin(),m_colors.end(),[column](const auto &columns) {
+        return std::find(columns.begin(),columns.end(),column)!=columns.end();
+    });
+    if(color==m_colors.end())throw std::logic_error("probe column is uncolored");
+    SteadyColoredColumnProbe result;
+    result.column=column;
+    result.colorColumns=int(color->size());
+    result.support=m_support[column];
+    result.colorDirection=Vec::Zero(m_exact.cols());
+    for(int col:*color)result.colorDirection[col]=m_unknownScale[col];
+    result.exactColorAction=m_exact*result.colorDirection;
+    Vec single=Vec::Zero(m_exact.cols());
+    single[column]=m_unknownScale[column];
+    result.exactSingleAction=m_exact*single;
+    return result;
+}
+
 Vec SteadySparseInverse::Solve(const Vec &rhs)const
 {
     Vec correction=m_factor.solve(rhs.cwiseProduct(m_rowScale));

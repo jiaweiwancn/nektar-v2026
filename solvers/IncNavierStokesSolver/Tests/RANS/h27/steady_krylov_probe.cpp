@@ -324,12 +324,24 @@ std::string ActionGapControls()
     Check((plain.OriginalAction(rhs)-shifted.OriginalAction(rhs)).norm()==0.&&
           (before-after).norm()>.1&&backsolve<1e-12,
           "inverse-only addition changed original action or failed to change the solve");
+    const SteadySparseInverse::SparseMatrix zero(2,2);
+    const SteadySparseInverse incomplete({{0},{1}},zero,one,one);
+    cb.Residual=[](const Vec &x){return Vector({1.+2.*x[0]+.3*x[1],4.*x[1]});};
+    const SteadyKrylov columnSolver(cb,one,one,options);
+    columnSolver.AuditColumn(base,one,incomplete.ColumnProbe(0),"owned-row-alias");
+    columnSolver.AuditColumn(base,one,incomplete.ColumnProbe(1),"missed-row");
+    const double aliased=payload(observed[4],"raw_owned_color_delta").norm();
+    const double missing=payload(observed[5],"raw_outside_support").norm();
+    Check(std::abs(aliased-.3)<1e-12&&std::abs(missing-.3)<1e-12,
+          "singleton control missed a coupling hidden by another column's owned row");
     return J::Object({{"projected_scaled",J::Number(result.linear.back().projectedNorm)},
         {"recomputed_scaled",J::Number(payload(observed[0],"raw_fresh_residual").norm())},
         {"fixed_matrix_residual",J::Number(payload(observed[2],"raw_colored_residual").norm())},
         {"accepted_updates",J::Number(result.statistics.acceptedNewtonSteps)},
         {"captured_nonzero_direction",V(payload(observed[0],"direction"))},
         {"inverse_only_backsolve_residual",J::Number(backsolve)},
+        {"constructed_owned_row_alias",J::Number(aliased)},
+        {"constructed_missing_support",J::Number(missing)},
         {"inverse_solution_change",J::Number((before-after).norm())}});
 }
 }

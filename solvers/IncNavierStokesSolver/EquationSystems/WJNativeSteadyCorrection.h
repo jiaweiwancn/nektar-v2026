@@ -33,6 +33,7 @@ public:
     void Prepare(const SteadyVector &base,const Action &residual,const Action &correction,
         const SteadyKrylovOptions &options,const std::function<void()> &deadline,SteadySparseWork &work);
     SteadyVector OriginalAction(const SteadyVector &direction)const;
+    SteadyColoredColumnProbe ColumnProbe(int column)const;
     SteadyVector Solve(const SteadyVector &rhs)const;
 
 private:

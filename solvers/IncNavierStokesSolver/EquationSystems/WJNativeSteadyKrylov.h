@@ -171,6 +171,13 @@ struct SteadyKrylovActionAudit
     std::vector<SteadyFDRecord> stencils;
 };
 
+struct SteadyColoredColumnProbe
+{
+    int column=0, colorColumns=0;
+    SteadyVector colorDirection, exactColorAction, exactSingleAction;
+    std::vector<int> support;
+};
+
 struct SteadyLinearRecord
 {
     int newton=0, cycle=0, iteration=0, leastSquaresRank=0;
@@ -299,6 +306,8 @@ public:
         const SteadyVector &physicalDirection,
         const std::vector<double> &stepMultipliers={1.,.5,.25})const;
     void AuditDirection(const SteadyVector &base,const SteadyVector &physicalDirection)const;
+    void AuditColumn(const SteadyVector &base,const SteadyVector &physicalDirection,
+                     const SteadyColoredColumnProbe &column,const std::string &label)const;
 private:
     SteadyKrylovCallbacks m_callbacks;
     SteadyVector m_unknownScale,m_residualRowScale;

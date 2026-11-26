@@ -194,6 +194,44 @@ public:
         AuditSpacings("seed-direction",x,f,direction.cwiseQuotient(sx),-1,-1,0);
     }
 
+    void AuditColumn(const Vec &x,const Vec &direction,const SteadyColoredColumnProbe &column,
+                     const std::string &label)
+    {
+        const Vec f=Base(x);
+        if(cb.PrepareCorrection)cb.PrepareCorrection(x,f);
+        const auto started=Clock::now();
+        const auto displacement=column.colorDirection.cwiseQuotient(sx).eval();
+        Vec unit=Vec::Zero(sx.size());
+        unit[column.column]=1.;
+        const Vec single=Jacobian(x,f,unit,1.,"singleton",-1,-1);
+        const Vec colored=Jacobian(x,f,displacement,1.,"complete-color",-1,-1);
+        Require(out.finiteDifferences.size()==2&&
+                out.finiteDifferences[0].method=="central"&&out.finiteDifferences[1].method=="central",
+                "selected color comparison requires two central stencils at the same prescribed spacing");
+        Vec outside=single-column.exactSingleAction, owned=Vec::Zero(sx.size());
+        for(int row:column.support)
+        {
+            owned[row]=colored[row]-column.exactColorAction[row]-outside[row];
+            outside[row]=0.;
+        }
+        auto data=AuditData(label.c_str(),x,f,unit,-1,-1);
+        const double weight=direction[column.column]/sx[column.column];
+        data.measurements={{"column",double(column.column)},{"color_columns",double(column.colorColumns)},
+                           {"owned_rows",double(column.support.size())},{"coefficient_weight",weight},
+                           {"current_fd",o.fdRelativeStep},{"audit_seconds",Seconds(started)}};
+        data.arrays.emplace_back("raw_full_row_singleton",single);
+        data.arrays.emplace_back("raw_full_row_color",colored);
+        data.arrays.emplace_back("color_direction",column.colorDirection);
+        data.arrays.emplace_back("raw_exact_singleton",column.exactSingleAction);
+        data.arrays.emplace_back("raw_exact_color",column.exactColorAction);
+        data.arrays.emplace_back("raw_outside_support",outside);
+        data.arrays.emplace_back("raw_owned_color_delta",owned);
+        data.arrays.emplace_back("raw_weighted_outside_support",weight*outside);
+        data.arrays.emplace_back("raw_weighted_owned_color_delta",weight*owned);
+        data.stencils=out.finiteDifferences;
+        cb.ObserveActionAudit(data);
+    }
+
 private:
 
     SteadyKrylovActionAudit AuditData(const char *stage,const Vec &x,const Vec &f,
@@ -216,11 +254,11 @@ private:
         const auto began=Clock::now();
         std::vector<std::pair<double,Vec>> samples;
         Vec reference, middle, previous;
-        for(double spacing:{4e-6,2e-6,1e-6,5e-7,2e-6})
+        for(double multiplier:{1.,.5,.25,.125,.5})
         {
             const std::string label=std::to_string(samples.size());
             std::pair<double,Vec> sample;
-            Vec action=Jacobian(x,f,direction,spacing/o.fdRelativeStep,"spacing_"+label,cycle,iteration,&sample);
+            Vec action=Jacobian(x,f,direction,multiplier,"spacing_"+label,cycle,iteration,&sample);
             if(samples.size()==3)reference=action;
             if(samples.size()==1)middle=action;
             if(samples.size()==4)
@@ -249,8 +287,8 @@ private:
             const Vec complement=direction-trace;
             if(trace.cwiseAbs().maxCoeff()>0.&&complement.cwiseAbs().maxCoeff()>0.)
             {
-                const Vec a=Jacobian(x,f,trace,2e-6/o.fdRelativeStep,"matching-k",cycle,iteration);
-                const Vec b=Jacobian(x,f,complement,2e-6/o.fdRelativeStep,"remaining-free",cycle,iteration);
+                const Vec a=Jacobian(x,f,trace,.5,"matching-k",cycle,iteration);
+                const Vec b=Jacobian(x,f,complement,.5,"remaining-free",cycle,iteration);
                 data.arrays.emplace_back("matching_k_direction",sx.cwiseProduct(trace));
                 data.arrays.emplace_back("raw_matching_k_action",a);
                 data.arrays.emplace_back("raw_complement_action",b);
@@ -1133,5 +1171,12 @@ void SteadyKrylov::AuditDirection(const SteadyVector &base,const SteadyVector &p
 {
     Require(bool(m_callbacks.ObserveActionAudit),"fixed-direction audit requires a publisher");
     Runner(m_callbacks,m_unknownScale,m_residualRowScale,m_options).Audit(base,physicalDirection);
+}
+
+void SteadyKrylov::AuditColumn(const SteadyVector &base,const SteadyVector &physicalDirection,
+                              const SteadyColoredColumnProbe &column,const std::string &label)const
+{
+    Require(bool(m_callbacks.ObserveActionAudit),"column audit requires a publisher");
+    Runner(m_callbacks,m_unknownScale,m_residualRowScale,m_options).AuditColumn(base,physicalDirection,column,label);
 }
 }

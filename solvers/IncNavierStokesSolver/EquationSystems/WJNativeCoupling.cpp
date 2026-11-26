@@ -2703,7 +2703,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
             auto factorOptions=options;
             if(diagnostic->factorFDStep>0.)factorOptions.fdRelativeStep=diagnostic->factorFDStep;
             coupledInverse->Prepare(x,checkedResidual,addShift,factorOptions,deadline,work);
-            if(callbacks.FactoredAction)
+            if(!diagnostic->actionAuditPrefix.empty())
             {
                 auditedFactorState=pcState;
                 auditedFactorMass=inverseMass;
@@ -2760,6 +2760,41 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
         Require(file.gcount()==static_cast<std::streamsize>(bytes)&&file.peek()==std::char_traits<char>::eof()&&
                 D::Hash(direction.data(),bytes)==diagnostic->actionProbeSha,"fixed direction size or digest differs");
         solver.AuditDirection(initial,direction);
+        if(diagnostic->auditColorColumns)
+        {
+            auto pattern=MakeSteadySparseInverse(sx,sr);
+            const double foot=m_geometry.normalMap->lengthX;
+            std::array<std::set<int>,3> selected;
+            auto addFree=[](std::set<int> &out,const auto &ids,const std::vector<int> &free,int offset) {
+                for(int id:ids)
+                {
+                    const auto pos=std::lower_bound(free.begin(),free.end(),id);
+                    if(pos!=free.end()&&*pos==id)out.insert(offset+int(pos-free.begin()));
+                }
+            };
+            for(const auto &cell:m_flow.Elements())
+                if(cell.xl<foot+.05&&cell.xr>foot-.05&&cell.rl<m_geometry.H+.04)
+                {
+                    addFree(selected[0],m_hKTrace.at(HOwner(cell).geometry).ids,m_k.FreeIds(),nf);
+                    if(m_e.Owns(cell.geometry))
+                        addFree(selected[1],m_e.CellIds(cell.geometry),m_e.FreeIds(),nf+nk);
+                    if(cell.rl<m_geometry.H&&cell.rr>m_geometry.h)
+                    {
+                        const auto &free=m_flow.FreeVelocityIds();
+                        addFree(selected[2],cell.u,free[0],0);
+                        addFree(selected[2],cell.u,free[1],int(free[0].size()));
+                    }
+                }
+            const std::array<std::string,3> labels{"color-matching-k","color-outer-epsilon","color-foot-velocity"};
+            for(std::size_t i=0;i<selected.size();++i)
+            {
+                Require(!selected[i].empty(),"selected foot column inventory is empty");
+                const int col=*std::max_element(selected[i].begin(),selected[i].end(),[&](int a,int b) {
+                    return std::abs(direction[a]/sx[a])<std::abs(direction[b]/sx[b]);
+                });
+                solver.AuditColumn(initial,direction,pattern->ColumnProbe(col),labels[i]);
+            }
+        }
     }
     auto result=solver.Solve(initial);
     auto refresh=[&](const Vec &x,int iteration,bool accepted) {
