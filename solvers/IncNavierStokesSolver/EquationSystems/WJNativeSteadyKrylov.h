@@ -96,6 +96,8 @@ struct SteadyKrylovCallbacks
     // For the merit policy TrueNorm is the maximum of these fixed quadratic
     // seminorms (including absolute value and identically zero blocks).
     std::function<std::array<double,6>(const SteadyVector &)> ResidualBlocks;
+    // Optional infinity norms by free-variable block in scaled coordinates.
+    std::function<std::array<double,6>(const SteadyVector &)> ScaledUnknownBlocks;
     // Diagnostic-only observations of the unshifted local model.
     std::function<void(int,const SteadyVector &,const SteadyVector &)> InspectDirection;
     std::function<void(int,int,double,const SteadyVector &,const SteadyVector &)> InspectTrial;
@@ -154,6 +156,7 @@ struct SteadyFDRecord
     int newton=-1, cycle=-1, iteration=-1, reduction=0;
     std::string purpose, method, plusReason, minusReason, halfReason;
     double relativeStep=0, parameterStep=0, scaledCoordinateStep=0;
+    double plusDisplacement=0, minusDisplacement=0, halfDisplacement=0;
     double scaledDirectionInfinityNorm=0, seconds=0;
     // Admissible means ValidTrial + Residual domain checks only. These flags
     // do not certify optional full nonlinear-state/principal validation.
@@ -165,11 +168,13 @@ struct SteadyFDRecord
 struct SteadyKrylovActionAudit
 {
     std::string stage;
-    int newton=-1, cycle=-1, iteration=-1;
+    int newton=-1, cycle=-1, iteration=-1, proposal=-1;
     long long factorSerial=0;
     std::vector<std::pair<std::string,double>> measurements;
+    std::vector<std::pair<std::string,std::string>> notes;
     std::vector<std::pair<std::string,Eigen::MatrixXd>> arrays;
     std::vector<SteadyFDRecord> stencils;
+    std::string FileSuffix(std::size_t sequence) const;
 };
 
 struct SteadyColoredColumnProbe
@@ -195,6 +200,8 @@ struct SteadyLineSearchRecord
     bool nonlinearValidationAttempted=false, nonlinearValidated=false;
     std::optional<double> predictedNorm,decreaseRatio;
     std::optional<std::array<double,6>> predictedBlocks,actualBlocks,remainderBlocks;
+    double scaledDisplacement=0.;
+    std::optional<std::array<double,6>> displacementBlocks;
     std::string reason;
 };
 
@@ -204,6 +211,7 @@ struct SteadyInverseUse
     bool rebuild=false,prepared=false;
     std::optional<bool> converged;
     std::optional<double> trueNorm;
+    double preparationSeconds=0., linearSeconds=0.;
     long long serial=0;
     std::optional<double> mass;
     std::string reason;
@@ -215,6 +223,8 @@ struct SteadyMeritRecord
     double mass=0., forcing=0., baseNorm=0.;
     double linearNorm=0., scaledError=0., scaledBaseNorm=0.;
     double actionUncertainty=0., scaledUncertainty=0.;
+    double scaledDirectionNorm=0., primaryParameter=0., halfParameter=0.;
+    std::optional<std::array<double,6>> directionBlocks;
     double step=0., predictedNorm=0., activeSlope=0., slopeUncertainty=0.;
     std::array<double,6> baseBlocks{}, shiftedErrorBlocks{}, correctionBlocks{},
         fullPredictedBlocks{}, predictedBlocks{};

@@ -74,6 +74,8 @@ void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mas
         <<",\"predicted_norm\":"<<number(l.predictedNorm)<<",\"actual_to_predicted_decrease\":"<<number(l.decreaseRatio)
         <<",\"predicted_blocks\":"<<blocks(l.predictedBlocks)<<",\"actual_blocks\":"<<blocks(l.actualBlocks)
         <<",\"nonlinear_remainder_blocks\":"<<blocks(l.remainderBlocks)
+        <<",\"scaled_displacement\":"<<l.scaledDisplacement
+        <<",\"scaled_displacement_blocks\":"<<blocks(l.displacementBlocks)
         <<",\"accepted\":"<<(l.accepted?"true":"false")<<",\"sufficient_decrease\":"<<(l.sufficientDecrease?"true":"false")<<",\"reason\":"<<J::Quote(l.reason)<<'}';}
     out<<"],\"inverse_uses\":[";
     for(std::size_t i=0;i<r.inverses.size();++i)
@@ -83,6 +85,7 @@ void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mas
         out<<"{\"base\":"<<use.base<<",\"factor_base\":"<<use.factorBase<<",\"age\":"<<use.age
            <<",\"factor_serial\":"<<use.serial<<",\"factor_correction_mass\":"<<number(use.mass)
            <<",\"rebuild\":"<<J::Boolean(use.rebuild)<<",\"preparation_completed\":"<<J::Boolean(use.prepared)
+           <<",\"preparation_seconds\":"<<use.preparationSeconds<<",\"linear_seconds\":"<<use.linearSeconds
            <<",\"reason\":"<<J::Quote(use.reason)<<",\"krylov_iterations\":"<<use.iterations
            <<",\"linear_converged\":"<<(use.converged?J::Boolean(*use.converged):"null")
            <<",\"linear_true_norm\":"<<number(use.trueNorm)<<'}';
@@ -114,6 +117,10 @@ void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mas
                <<",\"shifted_error_blocks\":"<<J::Numbers(d.shiftedErrorBlocks)
                <<",\"correction_action_blocks\":"<<J::Numbers(d.correctionBlocks)
                <<",\"full_original_model_blocks\":"<<J::Numbers(d.fullPredictedBlocks)
+               <<",\"scaled_direction_norm\":"<<d.scaledDirectionNorm
+               <<",\"scaled_direction_blocks\":"<<blocks(d.directionBlocks)
+               <<",\"primary_parameter\":"<<(d.primaryParameter>0.?J::Number(d.primaryParameter):"null")
+               <<",\"half_parameter\":"<<(d.halfParameter>0.?J::Number(d.halfParameter):"null")
                <<",\"action_spacing_uncertainty\":"<<(d.modelEvaluated?J::Number(d.actionUncertainty):"null")
                <<",\"scaled_spacing_uncertainty\":"<<(d.modelEvaluated?J::Number(d.scaledUncertainty):"null")
                <<",\"active_slope\":"<<(d.modelEvaluated?J::Number(d.activeSlope):"null")
@@ -129,6 +136,8 @@ void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mas
     out<<",\"finite_differences\":[";for(int i=0;i<int(r.finiteDifferences.size());++i){const auto&f=r.finiteDifferences[i];if(i)out<<',';
         out<<"{\"newton\":"<<f.newton<<",\"cycle\":"<<f.cycle<<",\"iteration\":"<<f.iteration<<",\"reduction\":"<<f.reduction<<",\"purpose\":"<<J::Quote(f.purpose)<<",\"method\":"<<J::Quote(f.method)
            <<",\"relative_step\":"<<f.relativeStep<<",\"parameter_step\":"<<f.parameterStep<<",\"scaled_coordinate_step\":"<<f.scaledCoordinateStep<<",\"scaled_direction_infinity_norm\":"<<f.scaledDirectionInfinityNorm
+           <<",\"plus_displacement\":"<<f.plusDisplacement<<",\"minus_displacement\":"<<f.minusDisplacement
+           <<",\"half_displacement\":"<<(f.halfDisplacement>0.?J::Number(f.halfDisplacement):"null")
            <<",\"nonlinear_validation_enabled\":"<<(r.nonlinearValidationEnabled?"true":"false")<<",\"admissibility_scope\":\"domain/root/covariance; uncommitted derivative probes\""
            <<",\"plus_admissible\":"<<(f.plusAdmissible?"true":"false")<<",\"minus_admissible\":"<<(f.minusAdmissible?"true":"false")<<",\"half_admissible\":"<<(f.halfAdmissible?"true":"false")
            <<",\"plus_reason\":"<<J::Quote(f.plusReason)<<",\"minus_reason\":"<<J::Quote(f.minusReason)<<",\"half_reason\":"<<J::Quote(f.halfReason)<<",\"seconds\":"<<f.seconds<<'}';}

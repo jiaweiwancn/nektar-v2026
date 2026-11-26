@@ -82,12 +82,20 @@ def summarize(receipt, prospective_forcing):
             direction_reconstruction=norm(reconstructed-vector("direction")),
             scaled_direction_amplification=meta["measurements"]["scaled_direction_sum"]/norm(reconstructed/x_scale),
         )
-    if "raw_action_0" in arrays:
+    if any(f"raw_action_{i}" in arrays for i in range(5)):
+        def adjacent_change(i):
+            if f"raw_action_{i}" not in arrays or f"raw_action_{i-1}" not in arrays:
+                return None
+            return norm(row_scale*(vector(f"raw_action_{i}")-vector(f"raw_action_{i-1}")))
+
+        def repeats(label):
+            return (np.array_equal(vector(f"{label}_4"), vector(f"{label}_1"))
+                    if f"{label}_4" in arrays and f"{label}_1" in arrays else None)
+
         output["fixed_direction"] = dict(
-            scaled_change=[norm(row_scale*(vector(f"raw_action_{j}")-vector(f"raw_action_{j-1}")))
-                           for j in (1, 2, 3)],
-            repeat_action_equal=np.array_equal(vector("raw_action_4"), vector("raw_action_1")),
-            repeat_residual_difference_equal=np.array_equal(vector("raw_difference_4"), vector("raw_difference_1")),
+            scaled_change=[adjacent_change(i) for i in (1, 2, 3)],
+            repeat_action_equal=repeats("raw_action"),
+            repeat_residual_difference_equal=repeats("raw_difference"),
         )
     return output
 

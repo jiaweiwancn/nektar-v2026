@@ -2300,6 +2300,15 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
     };
     if(options.merit)
     {
+        const std::array<int,7> freeOffsets{0,int(m_flow.FreeVelocityIds()[0].size()),npOffset,
+            nf-(m_flow.Gauge()?1:0),nf,nf+nk,size};
+        callbacks.ScaledUnknownBlocks=[freeOffsets](const Vec &x) {
+            std::array<double,6> result{};
+            for(int i=0;i<6;++i)
+                if(const int count=freeOffsets[i+1]-freeOffsets[i];count>0)
+                    result[i]=x.segment(freeOffsets[i],count).cwiseAbs().maxCoeff();
+            return result;
+        };
         callbacks.SetCorrectionMass=[&](double mass) {
             correctionMass=mass;
             m_diagnosticCorrections.push_back({meritBaseNorm,mass,0.});
@@ -2360,14 +2369,14 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
         for(const auto *ids:{&m_flow.FreeVelocityIds()[0],&m_flow.FreeVelocityIds()[1],&m_k.FreeIds(),&m_e.FreeIds()})
             ordering.Update(ids->data(),ids->size()*sizeof(int));
         const auto orderingSha=ordering.Finish();
-        callbacks.ObserveActionAudit=[&,orderingSha](const SteadyKrylovActionAudit &audit) {
+        callbacks.ObserveActionAudit=[&,orderingSha,sequence=std::size_t{0}](const SteadyKrylovActionAudit &audit) mutable {
             const double start=Clock();
             Require(correctionMass==0.&&correctionDiffusion==0.,"action audit requires an unshifted current correction");
             namespace J=RANSWallSolveJson;
             const std::uint16_t endian=1;
             Require(sizeof(double)==8&&std::numeric_limits<double>::is_iec559&&
                     *reinterpret_cast<const unsigned char*>(&endian)==1,"action audit requires little-endian binary64");
-            const auto prefix=diagnostic->actionAuditPrefix+audit.stage;
+            const auto prefix=diagnostic->actionAuditPrefix+audit.FileSuffix(++sequence);
             const auto binary=prefix+".bin";
             PublishDiagnostic(binary,[&](int fd) {
                 for(const auto &[name,values]:audit.arrays)
@@ -2397,6 +2406,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
                 <<",\"current_fd\":"<<options.fdRelativeStep<<",\"correction_mass\":"<<correctionMass
                 <<",\"inverse_only_mass\":"<<preconditionerMass
                 <<",\"newton\":"<<audit.newton<<",\"cycle\":"<<audit.cycle<<",\"iteration\":"<<audit.iteration
+                <<",\"proposal\":"<<audit.proposal<<",\"capture_sequence\":"<<sequence
                 <<",\"factor_serial\":"<<audit.factorSerial<<",\"factor\":";
             if(audit.factorSerial)
             {
@@ -2409,7 +2419,10 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
             else out<<"null";
             std::vector<std::pair<std::string,std::string>> measures;
             for(const auto &[name,value]:audit.measurements)measures.emplace_back(name,J::Number(value));
-            out<<",\"measurements\":"<<J::Object(measures)<<",\"raw_payload\":"<<D::Pin(binary)
+            std::vector<std::pair<std::string,std::string>> notes;
+            for(const auto &[name,value]:audit.notes)notes.emplace_back(name,J::Quote(value));
+            out<<",\"measurements\":"<<J::Object(measures)<<",\"notes\":"<<J::Object(notes)
+               <<",\"raw_payload\":"<<D::Pin(binary)
                <<",\"encoding\":\"little-endian binary64, column major\",\"arrays\":[";
             std::size_t offset=0;
             for(const auto &[name,values]:audit.arrays)
@@ -2436,6 +2449,8 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
                 out<<"{\"purpose\":"<<J::Quote(fd.purpose)<<",\"method\":"<<J::Quote(fd.method)
                    <<",\"reduction\":"<<fd.reduction<<",\"relative\":"<<fd.relativeStep
                    <<",\"parameter\":"<<fd.parameterStep<<",\"coordinate\":"<<fd.scaledCoordinateStep
+                   <<",\"plus_displacement\":"<<fd.plusDisplacement<<",\"minus_displacement\":"<<fd.minusDisplacement
+                   <<",\"half_displacement\":"<<(fd.halfDisplacement>0.?J::Number(fd.halfDisplacement):"null")
                    <<",\"scaled_direction_infinity\":"<<fd.scaledDirectionInfinityNorm
                    <<",\"plus\":"<<J::Boolean(fd.plusAdmissible)<<",\"minus\":"<<J::Boolean(fd.minusAdmissible)
                    <<",\"half\":"<<J::Boolean(fd.halfAdmissible)<<",\"plus_reason\":"<<J::Quote(fd.plusReason)

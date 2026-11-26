@@ -58,6 +58,11 @@ struct LinearResult
     Vec action;
 };
 
+using FDSample=std::pair<double,Vec>;
+
+bool FDStop(const Stop &error)
+{return std::string(error.what()).rfind("FD_",0)==0;}
+
 class Runner
 {
 public:
@@ -452,6 +457,89 @@ private:
         return dx;
     }
 
+    void CaptureMerit(const Vec &x,const Vec &f,const Vec &direction,
+                      const Vec &primary,const Vec &finer,const Vec &original,
+                      const FDSample &primarySample,const FDSample &halfSample,
+                      std::size_t firstStencil,const SteadyMeritRecord &rec)
+    {
+        if(!cb.ObserveActionAudit||!rec.linearPassed)return;
+        const bool unresolved=rec.decision=="ACTION_UNRESOLVED";
+        // A prospective first usable direction and up to two failures per solve.
+        if(unresolved?meritFailureCaptures>=2:meritPanelCaptured)return;
+        if(unresolved)++meritFailureCaptures;
+        else meritPanelCaptured=true;
+        auto data=AuditData(unresolved?"merit-unresolved":"merit-current-panel",x,f,direction,-1,-1);
+        data.proposal=rec.proposal;
+        data.notes={{"decision",rec.decision}};
+        data.measurements={{"forcing",rec.forcing},{"physical_target",rec.forcing*rec.baseNorm},
+            {"scaled_target",rec.forcing*rec.scaledBaseNorm},{"current_fd",o.fdRelativeStep},
+            {"primary_parameter",rec.primaryParameter},{"half_parameter",rec.halfParameter}};
+        if(rec.modelEvaluated)
+        {
+            data.measurements.emplace_back("physical_spacing_allowance",rec.actionUncertainty);
+            data.measurements.emplace_back("scaled_spacing_allowance",rec.scaledUncertainty);
+            data.measurements.emplace_back("active_slope",rec.activeSlope);
+        }
+        data.arrays.emplace_back("scaled_direction",direction);
+        data.arrays.emplace_back("raw_primary_action",primary);
+        data.arrays.emplace_back("raw_original_prediction",f+original);
+        if(finer.size())data.arrays.emplace_back("raw_half_action",finer);
+
+        // Same direction, factor and scales. Retain the actual production and
+        // half-spacing samples, and repeat the production action independently.
+        struct PanelSample { Vec action; FDSample sample; };
+        std::array<PanelSample,5> panel;
+        panel[1]={primary,primarySample};
+        panel[2]={finer,halfSample};
+        const std::array<double,5> multipliers{2.,1.,.5,.25,1.};
+        for(int i:{0,3,4})
+        {
+            try
+            {
+                panel[i].action=Jacobian(x,f,direction,multipliers[i],
+                    "merit-panel-"+std::to_string(i),-1,rec.proposal,&panel[i].sample);
+            }
+            catch(const Stop &error)
+            {
+                if(!FDStop(error))throw;
+                data.notes.emplace_back("unavailable_sample_"+std::to_string(i),error.what());
+            }
+        }
+        const Vec &reference=panel[3].action.size()?panel[3].action:primary;
+        for(std::size_t i=0;i<panel.size();++i)
+        {
+            if(!panel[i].action.size())continue;
+            const auto label=std::to_string(i);
+            const auto &[h,difference]=panel[i].sample;
+            data.measurements.emplace_back("signed_parameter_"+label,h);
+            data.arrays.emplace_back("raw_action_"+label,panel[i].action);
+            data.arrays.emplace_back("raw_difference_"+label,difference);
+            data.arrays.emplace_back("raw_taylor_"+label,difference-h*reference);
+        }
+        data.stencils.assign(out.finiteDifferences.begin()+firstStencil,out.finiteDifferences.end());
+        cb.ObserveActionAudit(data);
+    }
+
+    void CaptureRejectedTrial(const Vec &x,const Vec &f,const Vec &d,const Vec &action,
+                              const Vec &candidate,const Evaluation &evaluation,
+                              const SteadyLineSearchRecord &trial)
+    {
+        if(!cb.ObserveActionAudit||rejectedTrialCaptured)return;
+        rejectedTrialCaptured=true;
+        const Vec prediction=f+trial.step*action;
+        auto data=AuditData("merit-armijo-rejected",x,f,d.cwiseQuotient(sx),-1,trial.trial);
+        data.proposal=trial.proposal;
+        data.notes={{"decision","FEASIBLE_ARMIJO_REJECTED"}};
+        data.measurements={{"fraction",trial.step},{"actual_norm",trial.trueNorm},
+            {"predicted_norm",*trial.predictedNorm},{"scaled_displacement",trial.scaledDisplacement}};
+        data.arrays.emplace_back("trial_free",candidate);
+        data.arrays.emplace_back("raw_original_action",action);
+        data.arrays.emplace_back("raw_plain_residual",evaluation.residual);
+        data.arrays.emplace_back("raw_original_prediction",prediction);
+        data.arrays.emplace_back("raw_coupled_remainder",evaluation.residual-prediction);
+        cb.ObserveActionAudit(data);
+    }
+
     // Evaluate the original model using the current checked linear action.
     // A second, predetermined spacing supplies a sensitivity allowance.
     // Reuse the primary action for the decision regardless of the second sign.
@@ -468,10 +556,15 @@ private:
         rec.forcing=forcing;
         rec.baseNorm=norm;
         rec.baseBlocks=cb.ResidualBlocks(f);
-        const bool nonzero=linear.correction.cwiseAbs().maxCoeff()!=0.;
-        const Vec primary=nonzero?Jacobian(x,f,linear.correction,1.,"original-merit-primary",-1,proposal):
+        rec.scaledDirectionNorm=linear.correction.cwiseAbs().maxCoeff();
+        if(cb.ScaledUnknownBlocks)rec.directionBlocks=cb.ScaledUnknownBlocks(linear.correction);
+        const bool nonzero=rec.scaledDirectionNorm!=0.;
+        const auto firstStencil=out.finiteDifferences.size();
+        FDSample primarySample,halfSample;
+        const Vec primary=nonzero?Jacobian(x,f,linear.correction,1.,"original-merit-primary",-1,proposal,
+                                           cb.ObserveActionAudit?&primarySample:nullptr):
                                   linear.action;
-        const double primarySpacing=nonzero?out.finiteDifferences.back().parameterStep:0.;
+        rec.primaryParameter=nonzero?out.finiteDifferences.back().parameterStep:0.;
         const Vec error=f+primary;
         rec.linearNorm=Norm(error);
         rec.scaledError=sr.cwiseProduct(error).stableNorm();
@@ -490,9 +583,28 @@ private:
         rec.fullPredictedBlocks=cb.ResidualBlocks(error-shift);
         const double multiplier=std::max(.5,o.fdMinimumRelativeStep/o.fdRelativeStep);
         rec.decision="ACTION_UNRESOLVED";
-        if(multiplier>=1.)return rec;
-        const Vec finer=Jacobian(x,f,linear.correction,multiplier,"original-merit-spacing",-1,proposal);
-        if(out.finiteDifferences.back().parameterStep>=.8*primarySpacing)return rec;
+        Vec finer;
+        if(multiplier<1.)
+        {
+            try
+            {
+                finer=Jacobian(x,f,linear.correction,multiplier,"original-merit-spacing",-1,proposal,
+                               cb.ObserveActionAudit?&halfSample:nullptr);
+                rec.halfParameter=out.finiteDifferences.back().parameterStep;
+            }
+            catch(const Stop &error)
+            {
+                if(!FDStop(error)||!cb.ObserveActionAudit)throw;
+            }
+        }
+        auto publish=[&] {
+            CaptureMerit(x,f,linear.correction,primary,finer,original,
+                         primarySample,halfSample,firstStencil,rec);
+        };
+        if(!finer.size()||rec.halfParameter>=.8*rec.primaryParameter)
+        {
+            publish();return rec;
+        }
         const Vec change=finer-primary;
         rec.actionUncertainty=2.*Norm(change);
         rec.scaledUncertainty=2.*sr.cwiseProduct(change).stableNorm();
@@ -546,6 +658,7 @@ private:
             rec.decision="RESOLVED_ASCENT";
         else if(rec.activeSlope<-rec.slopeUncertainty)
             rec.decision="INSUFFICIENT_MODEL_DECREASE";
+        publish();
         return rec;
     }
 
@@ -664,6 +777,9 @@ private:
                     throw Stop("NONFINITE_NEWTON_TRIAL: solver arithmetic failed; no clipping or hidden retry");
                 if((candidate.array()==x.array()).all())
                     throw Stop("NEWTON_ROUNDOFF: line-search correction no longer changes the state");
+                const Vec displacement=(candidate-x).cwiseQuotient(sx);
+                ls.scaledDisplacement=displacement.cwiseAbs().maxCoeff();
+                if(cb.ScaledUnknownBlocks)ls.displacementBlocks=cb.ScaledUnknownBlocks(displacement);
                 auto evaluation=Trial(candidate,false);
                 ls.admissible=evaluation.admissible;ls.reason=evaluation.reason;
                 ls.nonlinearValidationAttempted=evaluation.nonlinearValidationAttempted;
@@ -698,6 +814,7 @@ private:
                     {
                         ++out.statistics.lineSearchRejectedTrials;
                         ls.reason="current true norm fails sufficient decrease";
+                        if(o.merit)CaptureRejectedTrial(x,f,correction,originalAction,candidate,evaluation,ls);
                     }
                 }
                 out.lineSearch.push_back(ls);Deadline();
@@ -855,8 +972,10 @@ private:
             {
                 out.newton.back().missingLinearReason="inverse preparation";
                 ++out.statistics.preconditionerPreparations;
+                const auto began=Clock::now();
                 Timer timer(out.statistics.preparationSeconds);
                 cb.PreparePreconditioner(x,f);
+                record.preparationSeconds=Seconds(began);
                 factorBase=newton;
                 record.prepared=true;
                 factorSerial=out.statistics.preconditionerPreparations;
@@ -865,7 +984,9 @@ private:
             out.newton.back().missingLinearReason="current linear solve";
             record.serial=factorSerial;
             if(o.merit)record.mass=factorMass;
+            const auto began=Clock::now();
             auto result=Linear(x,f,norm,forcing,workLimit>=0?workLimit:(reuse?o.reuseLinearIterations:0),guess);
+            record.linearSeconds=Seconds(began);
             record.iterations=int(out.statistics.linearIterations-before);
             record.converged=result.converged;
             record.trueNorm=result.trueNorm;
@@ -922,6 +1043,8 @@ private:
             record.reduction=reduction;record.purpose=purpose;record.relativeStep=relative;
             record.parameterStep=h;record.scaledCoordinateStep=displacement;
             record.scaledDirectionInfinityNorm=directionNorm;
+            record.plusDisplacement=(plus-x).cwiseQuotient(sx).cwiseAbs().maxCoeff();
+            record.minusDisplacement=(minus-x).cwiseQuotient(sx).cwiseAbs().maxCoeff();
             out.finiteDifferences.push_back(record);
             auto &audit=out.finiteDifferences.back();
             auto positive=Trial(plus,true);
@@ -939,6 +1062,7 @@ private:
                 const Vec half=x+(forward?.5:-.5)*h*direction;
                 if((half.array()==x.array()).all())
                     throw Stop("FD_ROUNDOFF: feasible one-sided half step is not representable");
+                audit.halfDisplacement=(half-x).cwiseQuotient(sx).cwiseAbs().maxCoeff();
                 auto middle=Trial(half,true);
                 audit.halfAdmissible=middle.admissible;audit.halfReason=middle.reason;
                 if(middle.admissible)
@@ -1104,10 +1228,19 @@ private:
     Clock::time_point start;
     int newton=-1;
     bool actionAuditCaptured=false;
+    bool meritPanelCaptured=false,rejectedTrialCaptured=false;
+    int meritFailureCaptures=0;
     long long factorSerial=0;
     double currentMass=0.,factorMass=0.;
     SteadyKrylovResult out;
 };
+}
+
+std::string SteadyKrylovActionAudit::FileSuffix(std::size_t sequence) const
+{
+    if(newton<0)return stage; // Standalone probes retain their one-shot names.
+    return stage+"-base-"+std::to_string(newton)+"-proposal-"+std::to_string(proposal)+
+           "-sequence-"+std::to_string(sequence);
 }
 
 std::string SteadyMeritState::ToJson()const

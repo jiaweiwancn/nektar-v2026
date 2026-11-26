@@ -353,6 +353,37 @@ std::string ActionGapControls()
           continued.meritEnd->ToJson()==continuous.meritEnd->ToJson()&&
           std::abs(continued.lastAcceptedX[0]-.52)<1e-8,
           "initial trial fraction or restored progress did not preserve actual Armijo acceptance");
+
+    std::vector<SteadyKrylovActionAudit> meritCaptures;
+    int acceptedObservations=0;
+    trial.ObserveActionAudit=[&](const auto &a){meritCaptures.push_back(a);};
+    trial.ObserveAccepted=[&](const Vec &,double){++acceptedObservations;};
+    trial.Residual=[](const Vec &x){return Vector({1.+x[0]+25.*x[0]*x[0]*x[0]});};
+    seeded.maximumNewtonIterations=1;
+    seeded.fdRelativeStep=.1;
+    const auto unresolved=SteadyKrylov(trial,scalar,scalar,seeded).Solve(Vec::Zero(1));
+    Check(unresolved.meritDirections.at(0).linearPassed&&unresolved.lineSearch.empty()&&
+          unresolved.lastAcceptedX.isZero()&&acceptedObservations==1&&meritCaptures.size()==1&&
+          meritCaptures.front().stage=="merit-unresolved"&&
+          std::abs(payload(meritCaptures.front(),"direction")[0]+.8)<1e-12&&
+          (payload(meritCaptures.front(),"raw_primary_action")-
+           payload(meritCaptures.front(),"raw_half_action")).norm()>.14,
+          "a converged linear direction rejected by action sensitivity was lost or committed");
+    auto later=meritCaptures.front();
+    ++later.newton;
+    Check(later.FileSuffix(1)!=meritCaptures.front().FileSuffix(1)&&
+          later.FileSuffix(1)!=later.FileSuffix(2),"nonaccepted capture filenames can collide across bases or attempts");
+
+    trial.Residual=[](const Vec &x){return Vector({1.+x[0]+20.*x[0]*x[0]});};
+    seeded.merit->initialTrialFraction=.5;
+    acceptedObservations=0;
+    const auto plain=SteadyKrylov(trial,scalar,scalar,seeded).Solve(Vec::Zero(1));
+    const auto &rejection=meritCaptures.back();
+    Check(meritCaptures.size()==3&&rejection.stage=="merit-armijo-rejected"&&
+          std::abs(payload(rejection,"raw_coupled_remainder")[0]-5.)<1e-12&&
+          plain.newton.front().accepted&&acceptedObservations==2&&
+          plain.lastAcceptedX!=payload(rejection,"trial_free"),
+          "representative feasible rejection did not retain the original remainder or preserve custody");
     return J::Object({{"projected_scaled",J::Number(result.linear.back().projectedNorm)},
         {"recomputed_scaled",J::Number(payload(observed[0],"raw_fresh_residual").norm())},
         {"fixed_matrix_residual",J::Number(payload(observed[2],"raw_colored_residual").norm())},
@@ -363,6 +394,10 @@ std::string ActionGapControls()
         {"constructed_missing_support",J::Number(missing)},
         {"seeded_trial_fractions",J::Numbers(std::array<double,2>{.2,.4})},
         {"seeded_trial_endpoint",J::Number(continued.lastAcceptedX[0])},
+        {"converged_linear_unresolved_direction",V(payload(meritCaptures.front(),"direction"))},
+        {"distinct_capture_names",J::List({J::Quote(meritCaptures.front().FileSuffix(1)),
+                                            J::Quote(later.FileSuffix(1)),J::Quote(later.FileSuffix(2))})},
+        {"rejected_plain_remainder",V(payload(rejection,"raw_coupled_remainder"))},
         {"inverse_solution_change",J::Number((before-after).norm())}});
 }
 }
