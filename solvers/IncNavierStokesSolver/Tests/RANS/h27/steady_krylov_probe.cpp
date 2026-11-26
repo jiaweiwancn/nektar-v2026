@@ -377,12 +377,12 @@ std::string ActionGapControls()
     trial.Residual=[](const Vec &x){return Vector({1.+x[0]+20.*x[0]*x[0]});};
     seeded.merit->initialTrialFraction=.5;
     acceptedObservations=0;
-    const auto plain=SteadyKrylov(trial,scalar,scalar,seeded).Solve(Vec::Zero(1));
+    const auto plainSolve=SteadyKrylov(trial,scalar,scalar,seeded).Solve(Vec::Zero(1));
     const auto &rejection=meritCaptures.back();
     Check(meritCaptures.size()==3&&rejection.stage=="merit-armijo-rejected"&&
           std::abs(payload(rejection,"raw_coupled_remainder")[0]-5.)<1e-12&&
-          plain.newton.front().accepted&&acceptedObservations==2&&
-          plain.lastAcceptedX!=payload(rejection,"trial_free"),
+          plainSolve.newton.front().accepted&&acceptedObservations==2&&
+          plainSolve.lastAcceptedX!=payload(rejection,"trial_free"),
           "representative feasible rejection did not retain the original remainder or preserve custody");
     return J::Object({{"projected_scaled",J::Number(result.linear.back().projectedNorm)},
         {"recomputed_scaled",J::Number(payload(observed[0],"raw_fresh_residual").norm())},

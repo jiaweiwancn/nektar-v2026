@@ -515,7 +515,11 @@ private:
             data.arrays.emplace_back("raw_action_"+label,panel[i].action);
             data.arrays.emplace_back("raw_difference_"+label,difference);
             data.arrays.emplace_back("raw_taylor_"+label,difference-h*reference);
+            if(i>0&&i<4&&panel[i-1].action.size())
+                data.arrays.emplace_back("raw_spacing_change_"+label,panel[i].action-panel[i-1].action);
         }
+        if(panel[4].action.size())
+            data.arrays.emplace_back("raw_repeated_action_difference",panel[4].action-primary);
         data.stencils.assign(out.finiteDifferences.begin()+firstStencil,out.finiteDifferences.end());
         cb.ObserveActionAudit(data);
     }
