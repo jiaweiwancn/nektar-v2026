@@ -187,7 +187,7 @@ The authoritative Linux campaign used 10,250 elapsed seconds of the 10,800-secon
 | `C1_CLOSED` | OPEN | Original spatial and full physical evidence required. |
 | `C2_READY` | OPEN | Requires C1 closure. |
 | `LONG_FLAT_PRODUCTION_COST_CLOSED` | OPEN | Separate long-flat and 1.25 times total cost <=86400 s per qualified production trajectory. |
-| `REMOTE_PUSH_VERIFIED` | OPEN | Commit publication verification pending. |
+| `REMOTE_PUSH_VERIFIED` | PASS | GitHub returned b4b9c8b1c2503b1af7d36f7759e2cf70b3624a64, equal to local HEAD for the scientific evidence commit. |
 
 Resume B3 before selecting another spatial solve. One bounded control is to re-anchor the correction mass at \(\Delta\tau=7.936156875971839\), the setting that accepted the second full step, from the exact final accepted field. Measure current linear error and the unshifted merit slope on that same base. Compare with the observed weak-mass direction before choosing a further taper. One new factor has measured cost of about 1,200 s. Allow roughly 2,080 s for this control and reserve independent qualification separately. This campaign ends with a 6.70e-6 maximum and 24 feasible failed trials at the weaker setting, and the remaining 550 seconds could not cover a fresh factor. The qualification gate stayed too far away to justify the optional extension.
 
