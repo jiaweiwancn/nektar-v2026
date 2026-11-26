@@ -95,6 +95,20 @@ public:
             double norm=Norm(f),previousBase=norm;
             if(o.merit)StartMerit(norm);
             Observe(x,f,norm,true);Deadline();
+            if(o.frozenSizeColumns)
+            {
+                newton=0;
+                SteadyNewtonRecord record;
+                record.baseNorm=norm;
+                record.forcing=o.forcingInitial;
+                out.newton.push_back(record);
+                if(cb.PrepareCorrection)cb.PrepareCorrection(x,f);
+                int factorBase=-1;
+                Correct(x,f,norm,o.forcingInitial,factorBase,"frozen size basis",false,o.frozenSizeColumns);
+                out.status="FROZEN_SIZE_BASIS";
+                out.reason="one frozen correction basis collected";
+                return Finish();
+            }
             if(norm<=o.acceptanceNorm){Converged();return Finish();}
             if(o.evaluateInitialOnly)
             {
@@ -213,6 +227,47 @@ public:
         AuditSpacings("seed-direction",x,f,direction.cwiseQuotient(sx),-1,-1,0);
     }
 
+    void AuditDirections(const Vec &x,const Mat &directions)
+    {
+        CheckVector(x,sx.size(),"frozen candidate base");
+        const Vec f=Base(x);
+        if(cb.PrepareCorrection)cb.PrepareCorrection(x,f);
+        newton=0;
+        const double physicalTarget=o.forcingInitial*Norm(f);
+        const double scaledTarget=o.forcingInitial*sr.cwiseProduct(f).stableNorm();
+        for(int index=0;index<directions.cols();++index)
+        {
+            const Vec v=directions.col(index).cwiseQuotient(sx);
+            auto audit=AuditData("frozen-size-candidate",x,f,v,-1,index);
+            audit.proposal=index;
+            audit.measurements={{"physical_target",physicalTarget},{"scaled_target",scaledTarget},
+                {"scaled_size",v.cwiseAbs().maxCoeff()},{"forcing",o.forcingInitial}};
+            const auto first=out.finiteDifferences.size();
+            Vec previous;
+            const std::array<double,3> multipliers{1.,.5,2.};
+            for(int sample=0;sample<3;++sample)
+            {
+                const auto label=std::to_string(sample);
+                try
+                {
+                    const Vec action=Jacobian(x,f,v,multipliers[sample],"candidate-"+label,-1,index);
+                    audit.arrays.emplace_back("raw_action_"+label,action);
+                    audit.arrays.emplace_back("raw_model_residual_"+label,f+action);
+                    if(previous.size())
+                        audit.arrays.emplace_back("raw_spacing_change_"+label,action-previous);
+                    previous=action;
+                }
+                catch(const Stop &error)
+                {
+                    if(!FDStop(error))throw;
+                    audit.notes.emplace_back("unavailable_sample_"+label,error.what());
+                }
+            }
+            audit.stencils.assign(out.finiteDifferences.begin()+first,out.finiteDifferences.end());
+            cb.ObserveActionAudit(audit);
+        }
+    }
+
     void AuditColumn(const Vec &x,const Vec &direction,const SteadyColoredColumnProbe &column,
                      const std::string &label)
     {
@@ -262,6 +317,58 @@ private:
         data.arrays={{"base",x},{"raw_base_residual",f},{"unknown_scale",sx},
                      {"row_scale",sr},{"direction",sx.cwiseProduct(direction)}};
         return data;
+    }
+
+    void ExportFrozenBasis(const Vec &x,const Vec &f,const Mat &z)
+    {
+        Eigen::ColPivHouseholderQR<Mat> qr(z);
+        qr.setThreshold(1e-11);
+        const int n=static_cast<int>(z.rows()),m=static_cast<int>(qr.rank());
+        Require(m>0,"frozen correction subspace is empty");
+        const Mat q=qr.householderQ()*Mat::Identity(n,m);
+        Mat response(n,m+1);
+        response.col(0)=f;
+        for(int j=0;j<m;++j)
+            response.col(j+1)=Jacobian(x,f,q.col(j),1.,"orthonormal-basis",-1,j);
+        auto data=AuditData("frozen-size-basis",x,f,Vec::Zero(n),0,m);
+        const double target=o.forcingInitial*Norm(f);
+        data.measurements={{"physical_target",target},{"scaled_target",o.forcingInitial*sr.cwiseProduct(f).stableNorm()},
+            {"forcing",o.forcingInitial},{"basis_rank",double(m)},{"krylov_columns",double(z.cols())},
+            {"scaled_basis_orthogonality",(q.transpose()*q-Mat::Identity(m,m)).norm()}};
+        data.arrays.emplace_back("scaled_correction_basis",q);
+        data.arrays.emplace_back("raw_residual_and_actions",response);
+        // Normalize each column before polarization. The multiplier is
+        // recorded separately so it cannot change either forcing target.
+        Vec normalization(m+1);
+        Mat normalized(n,m+1);
+        std::vector<std::array<double,6>> diagonals;
+        for(int j=0;j<=m;++j)
+        {
+            normalization[j]=sr.cwiseProduct(response.col(j)).stableNorm();
+            if(normalization[j]==0.)normalization[j]=1.;
+            normalized.col(j)=response.col(j)/normalization[j];
+            diagonals.push_back(cb.ResidualBlocks(normalized.col(j)));
+        }
+        std::array<Mat,6> grams;
+        for(auto &gram:grams)gram=Mat::Zero(m+1,m+1);
+        for(int i=0;i<=m;++i)
+        {
+            for(std::size_t k=0;k<grams.size();++k)
+                grams[k](i,i)=diagonals[i][k]*diagonals[i][k];
+            for(int j=0;j<i;++j)
+            {
+                Deadline();
+                const auto plus=cb.ResidualBlocks(normalized.col(i)+normalized.col(j));
+                const auto minus=cb.ResidualBlocks(normalized.col(i)-normalized.col(j));
+                for(std::size_t k=0;k<grams.size();++k)
+                    grams[k](i,j)=grams[k](j,i)=(plus[k]-minus[k])*(plus[k]+minus[k])/4.;
+            }
+        }
+        data.arrays.emplace_back("response_column_normalization",normalization);
+        for(std::size_t k=0;k<grams.size();++k)
+            data.arrays.emplace_back("normalized_physical_gram_"+std::to_string(k),std::move(grams[k]));
+        data.stencils=out.finiteDifferences;
+        cb.ObserveActionAudit(data);
     }
 
     void AuditSpacings(const char *stage,const Vec &x,const Vec &f,const Vec &direction,
@@ -1330,7 +1437,7 @@ private:
         Vec best=guess?*guess:Vec::Zero(n).eval(),bestAction=Vec::Zero(n);
         double bestNorm=baseNorm,bestScaled=bNorm;
         int work=0;
-        const bool audit=!fixed&&!auxiliary&&bool(cb.ObserveActionAudit)&&!actionAuditCaptured;
+        const bool audit=!fixed&&!auxiliary&&!o.frozenSizeColumns&&bool(cb.ObserveActionAudit)&&!actionAuditCaptured;
         const double scaledTarget=auxiliary?auxiliary->scaledBudget:forcing*bNorm;
         const auto initialProducts=out.statistics.jacobianActions;
         auto canSpend=[&](int needed) {
@@ -1414,6 +1521,15 @@ private:
                 const bool breakdown=after<=o.arnoldiBreakdownRelative*before;
                 if(!breakdown)v.col(j+1)=w/after;
                 const int k=j+1;
+                if(o.frozenSizeColumns)
+                {
+                    if(k==available||breakdown)
+                    {
+                        ExportFrozenBasis(x,f,z.leftCols(k));
+                        return {best,false,bestNorm,std::move(bestAction)};
+                    }
+                    continue;
+                }
                 const Mat small=h.topLeftCorner(k+1,k);
                 Vec target=Vec::Zero(k+1);target[0]=beta;
                 // Rank-revealing small dense QR also handles happy/singular
@@ -1503,6 +1619,9 @@ SteadyKrylov::SteadyKrylov(SteadyKrylovCallbacks callbacks,SteadyVector unknownS
             "steady solver requires residual, fixed true norm, physical preconditioner and feasibility callbacks");
     Require(bool(m_callbacks.ExactPartAction)==bool(m_callbacks.ExactPartResidual),
             "exact partial differentiation needs matched value and tangent callbacks");
+    Require(o.frozenSizeColumns>=0&&o.frozenSizeColumns<=o.restartDimension&&
+            (!o.frozenSizeColumns||(bool(m_callbacks.ObserveActionAudit)&&bool(m_callbacks.ResidualBlocks))),
+            "frozen size bound requires a scoped audit observer and block norms");
     Require(m_unknownScale.size()>0&&m_unknownScale.size()<std::numeric_limits<int>::max()&&
             m_unknownScale.size()==m_residualRowScale.size()&&m_unknownScale.allFinite()&&
             m_residualRowScale.allFinite()&&(m_unknownScale.array()>0).all()&&
@@ -1562,6 +1681,13 @@ void SteadyKrylov::AuditDirection(const SteadyVector &base,const SteadyVector &p
 {
     Require(bool(m_callbacks.ObserveActionAudit),"fixed-direction audit requires a publisher");
     Runner(m_callbacks,m_unknownScale,m_residualRowScale,m_options).Audit(base,physicalDirection);
+}
+
+void SteadyKrylov::AuditDirections(const SteadyVector &base,const Eigen::MatrixXd &physicalDirections)const
+{
+    Require(bool(m_callbacks.ObserveActionAudit)&&physicalDirections.rows()==base.size()&&
+            physicalDirections.cols()>1&&physicalDirections.allFinite(),"invalid frozen candidate batch");
+    Runner(m_callbacks,m_unknownScale,m_residualRowScale,m_options).AuditDirections(base,physicalDirections);
 }
 
 void SteadyKrylov::AuditColumn(const SteadyVector &base,const SteadyVector &physicalDirection,

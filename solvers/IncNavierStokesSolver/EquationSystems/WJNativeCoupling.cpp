@@ -3053,17 +3053,22 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
     }
     SteadyKrylov solver(std::move(callbacks),sx,sr,options);
     const Vec initial=pack(seed);
+    if(options.frozenSizeColumns)
+        Require(diagnostic&&StateHash(unpack(initial))==m_initialSourceStateSha,
+                "frozen correction basis requires an exact signed base without projection");
     if(diagnostic&&!diagnostic->actionProbePath.empty())
     {
         Require(StateHash(unpack(initial))==m_initialSourceStateSha,
                 "fixed direction requires an exact signed base without projection");
         std::ifstream file(diagnostic->actionProbePath,std::ios::binary);
-        Vec direction(size);
-        const auto bytes=size*sizeof(double);
-        file.read(reinterpret_cast<char*>(direction.data()),bytes);
+        Mat directions(size,diagnostic->actionProbeCount);
+        const auto bytes=directions.size()*sizeof(double);
+        file.read(reinterpret_cast<char*>(directions.data()),bytes);
         Require(file.gcount()==static_cast<std::streamsize>(bytes)&&file.peek()==std::char_traits<char>::eof()&&
-                D::Hash(direction.data(),bytes)==diagnostic->actionProbeSha,"fixed direction size or digest differs");
-        solver.AuditDirection(initial,direction);
+                D::Hash(directions.data(),bytes)==diagnostic->actionProbeSha,"fixed direction size or digest differs");
+        const Vec direction=directions.col(0);
+        if(diagnostic->actionProbeCount==1)solver.AuditDirection(initial,direction);
+        else solver.AuditDirections(initial,directions);
         if(diagnostic->auditColorColumns)
         {
             auto pattern=MakeSteadySparseInverse(sx,sr);

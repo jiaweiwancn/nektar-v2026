@@ -145,6 +145,7 @@ struct SteadyKrylovOptions
     int maximumInverseAge=0, reuseLinearIterations=12;
     bool measureDirection=false;
     bool adaptiveTrialStep=false;
+    int frozenSizeColumns=0;
     std::optional<SteadyMeritOptions> merit;
 };
 
@@ -346,6 +347,7 @@ public:
         const SteadyVector &physicalDirection,
         const std::vector<double> &stepMultipliers={1.,.5,.25})const;
     void AuditDirection(const SteadyVector &base,const SteadyVector &physicalDirection)const;
+    void AuditDirections(const SteadyVector &base,const Eigen::MatrixXd &physicalDirections)const;
     void AuditColumn(const SteadyVector &base,const SteadyVector &physicalDirection,
                      const SteadyColoredColumnProbe &column,const std::string &label)const;
 private:
