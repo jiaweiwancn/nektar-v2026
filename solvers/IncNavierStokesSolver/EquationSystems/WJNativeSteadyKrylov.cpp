@@ -58,6 +58,20 @@ struct LinearResult
     Vec action;
 };
 
+struct AuxiliaryRhs
+{
+    const Vec &defect;
+    const std::array<double,6> &blockBudgets;
+    double scaledBudget;
+    int maximumProducts;
+};
+
+struct CurvedCandidate
+{
+    Vec x;
+    Evaluation evaluation;
+};
+
 using FDSample=std::pair<double,Vec>;
 
 bool FDStop(const Stop &error)
@@ -612,6 +626,7 @@ private:
         const Vec change=finer-primary;
         rec.actionUncertainty=2.*Norm(change);
         rec.scaledUncertainty=2.*sr.cwiseProduct(change).stableNorm();
+        rec.uncertaintyBlocks=cb.ResidualBlocks(2.*change);
         rec.modelEvaluated=true;
         const double actionNorm=Norm(original);
         const double roundoff=64.*std::numeric_limits<double>::epsilon()*std::max(norm,actionNorm);
@@ -750,7 +765,8 @@ private:
                     step=std::min(step,start);
                 }
                 if(Backtrack(x,f,norm,PhysicalCorrection(result),original,step,
-                             assessment.activeSlope,std::min(8,o.maximumLineSearchTrials),proposal))
+                             assessment.activeSlope,std::min(8,o.maximumLineSearchTrials),proposal,
+                             &assessment,remaining()))
                     return;
                 const bool evaluated=std::any_of(out.lineSearch.begin()+before,out.lineSearch.end(),
                     [](const auto &trial){return trial.evaluated;});
@@ -764,11 +780,167 @@ private:
         throw Stop("ORIGINAL_MERIT_DIRECTION_STOP: "+reason);
     }
 
+    std::optional<CurvedCandidate> CorrectTrial(
+        const Vec &x,const Vec &f,double norm,const Vec &d,const Vec &action,
+        const Vec &plainX,const Evaluation &plain,const SteadyLineSearchRecord &trial,
+        const SteadyMeritRecord &primary,int &availableProducts)
+    {
+        const auto &policy=*o.merit->curvature;
+        auto &rec=out.curvatureTrials.emplace_back();
+        Timer timer(rec.seconds);
+        rec.base=newton;rec.proposal=trial.proposal;rec.trial=trial.trial;rec.step=trial.step;
+        rec.factorSerial=factorSerial;
+        rec.plainNorm=trial.trueNorm;rec.primaryPrediction=*trial.predictedNorm;
+        rec.armijoLimit=(1.-o.armijo*trial.step)*norm;
+        const Vec predicted=f+trial.step*action;
+        const Vec defect=plain.residual-predicted;
+        rec.defectBlocks=*trial.remainderBlocks;
+        const auto &primaryError=*primary.uncertaintyBlocks;
+        const double roundoff=64.*std::numeric_limits<double>::epsilon()*norm;
+        bool resolved=true;
+        for(std::size_t i=0;i<rec.defectBlocks.size();++i)
+        {
+            rec.primaryUncertainty[i]=trial.step*primaryError[i];
+            rec.blockBudgets[i]=policy.budgetFraction*
+                (rec.armijoLimit-(*trial.predictedBlocks)[i]-rec.primaryUncertainty[i]-roundoff);
+            if((*trial.actualBlocks)[i]>rec.armijoLimit&&
+               rec.defectBlocks[i]<=2.*rec.primaryUncertainty[i]+roundoff)
+                resolved=false;
+        }
+        const double scaledDefect=sr.cwiseProduct(defect).stableNorm();
+        resolved=resolved&&scaledDefect>2.*trial.step*primary.scaledUncertainty;
+        const double scaledSlack=trial.step*(primary.scaledBaseNorm-primary.scaledError-primary.scaledUncertainty);
+        rec.scaledBudget=std::min(.25*scaledDefect,policy.budgetFraction*scaledSlack);
+        rec.scaledSizeLimit=policy.maximumScaledSize*trial.scaledDisplacement;
+        if(!resolved)
+        {
+            rec.decision="DEFECT_BELOW_PRIMARY_ACTION_RESOLUTION";
+            return std::nullopt;
+        }
+        if(rec.scaledBudget<=0.||*std::min_element(rec.blockBudgets.begin(),rec.blockBudgets.end())<=0.)
+        {
+            rec.decision="NO_VERIFIED_MODEL_MARGIN";
+            return std::nullopt;
+        }
+        const int cap=std::min(availableProducts,policy.maximumProducts);
+        if(cap<4)
+        {
+            rec.decision="SHARED_WORK_CAP";
+            return std::nullopt;
+        }
+
+        std::optional<SteadyKrylovActionAudit> receipt;
+        const auto firstStencil=out.finiteDifferences.size();
+        if(cb.ObserveActionAudit&&curvatureCaptures<2)
+        {
+            ++curvatureCaptures;
+            receipt=AuditData("merit-curvature-trial",x,f,d.cwiseQuotient(sx),-1,trial.trial);
+            receipt->proposal=trial.proposal;
+            receipt->arrays.emplace_back("trial_free",plainX);
+            receipt->arrays.emplace_back("raw_original_prediction",predicted);
+            receipt->arrays.emplace_back("raw_plain_residual",plain.residual);
+            receipt->arrays.emplace_back("raw_coupled_remainder",defect);
+        }
+        const auto productsBefore=out.statistics.jacobianActions;
+        auto finish=[&](const char *decision,std::optional<CurvedCandidate> candidate=std::nullopt) {
+            rec.decision=decision;
+            rec.products=int(out.statistics.jacobianActions-productsBefore);
+            availableProducts-=rec.products;
+            if(receipt)
+            {
+                receipt->notes={{"decision",rec.decision},{"reason",rec.reason}};
+                receipt->measurements={{"fraction",trial.step},{"plain_norm",rec.plainNorm},
+                    {"armijo_limit",rec.armijoLimit},{"physical_target",*std::min_element(
+                        rec.blockBudgets.begin(),rec.blockBudgets.end())},
+                    {"scaled_target",rec.scaledBudget},{"products",double(rec.products)},
+                    {"scaled_size_limit",rec.scaledSizeLimit}};
+                receipt->stencils.assign(out.finiteDifferences.begin()+firstStencil,out.finiteDifferences.end());
+                cb.ObserveActionAudit(*receipt);
+            }
+            return candidate;
+        };
+        // The RHS defect and F0(x) are distinct. In a one-sided stencil the
+        // action still subtracts F0(x), never this auxiliary load.
+        const AuxiliaryRhs rhs{defect,rec.blockBudgets,rec.scaledBudget,cap-2};
+        LinearResult auxiliary;
+        try
+        {
+            auxiliary=Linear(x,f,Norm(defect),.25,cap-2,nullptr,false,&rhs);
+        }
+        catch(const Stop &error)
+        {
+            if(!FDStop(error))throw;
+            rec.reason=error.what();
+            return finish("AUXILIARY_ACTION_UNAVAILABLE");
+        }
+        rec.scaledCorrection=auxiliary.correction.cwiseAbs().maxCoeff();
+        if(*rec.scaledCorrection==0.)
+            return finish("AUXILIARY_LINEAR_TARGET_NOT_MET");
+        Vec auxiliaryAction,halfAction;
+        const double multiplier=std::max(.5,o.fdMinimumRelativeStep/o.fdRelativeStep);
+        if(multiplier>=1.)return finish("AUXILIARY_ACTION_UNRESOLVED");
+        try
+        {
+            auxiliaryAction=Jacobian(x,f,auxiliary.correction,1.,"curvature-primary",-1,trial.trial);
+            const double parameter=out.finiteDifferences.back().parameterStep;
+            halfAction=Jacobian(x,f,auxiliary.correction,multiplier,"curvature-half",-1,trial.trial);
+            if(out.finiteDifferences.back().parameterStep>=.8*parameter)
+                return finish("AUXILIARY_ACTION_UNRESOLVED");
+        }
+        catch(const Stop &error)
+        {
+            if(!FDStop(error))throw;
+            rec.reason=error.what();
+            return finish("AUXILIARY_ACTION_UNAVAILABLE");
+        }
+        const Vec error=defect+auxiliaryAction, uncertainty=2.*(auxiliaryAction-halfAction);
+        rec.errorBlocks=cb.ResidualBlocks(error);
+        rec.uncertaintyBlocks=cb.ResidualBlocks(uncertainty);
+        rec.scaledError=sr.cwiseProduct(error).stableNorm();
+        rec.scaledUncertainty=sr.cwiseProduct(uncertainty).stableNorm();
+        bool resolvedAuxiliary=*rec.scaledError+*rec.scaledUncertainty<=rec.scaledBudget;
+        for(std::size_t i=0;i<rec.defectBlocks.size();++i)
+            resolvedAuxiliary=resolvedAuxiliary&&
+                (*rec.errorBlocks)[i]+(*rec.uncertaintyBlocks)[i]<=rec.blockBudgets[i];
+        if(receipt)
+        {
+            receipt->arrays.emplace_back("auxiliary_scaled_correction",auxiliary.correction);
+            receipt->arrays.emplace_back("raw_auxiliary_action",auxiliaryAction);
+            receipt->arrays.emplace_back("raw_auxiliary_half_action",halfAction);
+            receipt->arrays.emplace_back("raw_auxiliary_residual",error);
+        }
+        if(!auxiliary.converged)return finish("AUXILIARY_LINEAR_TARGET_NOT_MET");
+        if(!resolvedAuxiliary)return finish("AUXILIARY_ACTION_AND_ERROR_OVER_BUDGET");
+        if(*rec.scaledCorrection>rec.scaledSizeLimit)return finish("AUXILIARY_SIZE_LIMIT");
+        Vec corrected=plainX+sx.cwiseProduct(auxiliary.correction);
+        const Vec displacement=(corrected-x).cwiseQuotient(sx);
+        rec.correctedDisplacement=displacement.cwiseAbs().maxCoeff();
+        auto evaluation=Trial(corrected,false);
+        rec.reason=evaluation.reason;
+        if(!evaluation.admissible)return finish("CORRECTED_TRIAL_INADMISSIBLE");
+        rec.correctedNorm=Norm(evaluation.residual);
+        rec.correctedBlocks=cb.ResidualBlocks(evaluation.residual);
+        rec.correctedPrediction=Norm(plain.residual+auxiliaryAction);
+        const Vec remaining=evaluation.residual-predicted;
+        rec.remainingDefectBlocks=cb.ResidualBlocks(remaining);
+        if(receipt)
+        {
+            receipt->arrays.emplace_back("corrected_free",corrected);
+            receipt->arrays.emplace_back("raw_corrected_residual",evaluation.residual);
+            receipt->arrays.emplace_back("raw_remaining_defect",remaining);
+        }
+        if(*rec.correctedNorm>std::max(rec.armijoLimit,o.acceptanceNorm))
+            return finish("CORRECTED_TRIAL_ARMIJO_REJECTED");
+        return finish("CORRECTED_TRIAL_PASSED",CurvedCandidate{std::move(corrected),std::move(evaluation)});
+    }
+
     bool Backtrack(Vec &x,Vec &f,double &norm,const Vec &correction,const Vec &originalAction,
-                   double step,double modelSlope,int trialLimit,int proposal=-1)
+                   double step,double modelSlope,int trialLimit,int proposal=-1,
+                   const SteadyMeritRecord *assessment=nullptr,int availableProducts=0)
     {
         if((o.measureDirection||o.merit)&&cb.InspectDirection)cb.InspectDirection(newton,x,correction);
         bool accepted=false;
+        int curvatureTrials=0;
         {
             Timer timer(out.statistics.lineSearchSeconds);
             for(int trial=0;trial<trialLimit;++trial)
@@ -776,7 +948,7 @@ private:
                 Deadline();
                 SteadyLineSearchRecord ls;
                 ls.newton=newton;ls.trial=trial;ls.step=step;ls.proposal=proposal;
-                const Vec candidate=x+step*correction;
+                Vec candidate=x+step*correction;
                 if(!candidate.allFinite())
                     throw Stop("NONFINITE_NEWTON_TRIAL: solver arithmetic failed; no clipping or hidden retry");
                 if((candidate.array()==x.array()).all())
@@ -819,6 +991,29 @@ private:
                         ++out.statistics.lineSearchRejectedTrials;
                         ls.reason="current true norm fails sufficient decrease";
                         if(o.merit)CaptureRejectedTrial(x,f,correction,originalAction,candidate,evaluation,ls);
+                        if(assessment&&o.merit->curvature&&curvatureTrials<2&&availableProducts>=4)
+                        {
+                            ++curvatureTrials;
+                            auto curved=CorrectTrial(x,f,norm,correction,originalAction,candidate,
+                                evaluation,ls,*assessment,availableProducts);
+                            if(curved)
+                            {
+                                candidate=std::move(curved->x);evaluation=std::move(curved->evaluation);
+                                const auto &record=out.curvatureTrials.back();
+                                ls.trueNorm=*record.correctedNorm;
+                                ls.actualBlocks=record.correctedBlocks;
+                                ls.remainderBlocks=record.remainingDefectBlocks;
+                                ls.scaledDisplacement=*record.correctedDisplacement;
+                                if(cb.ScaledUnknownBlocks)
+                                    ls.displacementBlocks=cb.ScaledUnknownBlocks((candidate-x).cwiseQuotient(sx));
+                                ls.sufficientDecrease=true;ls.curvatureCorrected=true;
+                                ls.reason="coupled trial passed original norm-Armijo";
+                                const double decrease=norm-*ls.predictedNorm;
+                                ls.decreaseRatio.reset();
+                                const double ratio=decrease>0.?(norm-ls.trueNorm)/decrease:0.;
+                                if(decrease>0.&&std::isfinite(ratio))ls.decreaseRatio=ratio;
+                            }
+                        }
                     }
                 }
                 out.lineSearch.push_back(ls);Deadline();
@@ -1104,10 +1299,10 @@ private:
     }
 
     LinearResult Linear(const Vec &x,const Vec &f,double baseNorm,double forcing,int workLimit,
-                        const Vec *guess,bool fixed=false)
+                        const Vec *guess,bool fixed=false,const AuxiliaryRhs *auxiliary=nullptr)
     {
         Timer timer(out.statistics.linearSeconds);
-        const Vec b=-(sr.array()*f.array()).matrix();
+        const Vec b=-sr.cwiseProduct(auxiliary?auxiliary->defect:f);
         CheckVector(b,sx.size(),"scaled Newton RHS");
         const double bNorm=b.stableNorm();
         if(!Positive(bNorm))throw Stop("LINEAR_SCALING: nonzero true residual has zero/nonfinite scaled norm");
@@ -1115,7 +1310,19 @@ private:
         Vec best=guess?*guess:Vec::Zero(n).eval(),bestAction=Vec::Zero(n);
         double bestNorm=baseNorm,bestScaled=bNorm;
         int work=0;
-        const bool audit=!fixed&&bool(cb.ObserveActionAudit)&&!actionAuditCaptured;
+        const bool audit=!fixed&&!auxiliary&&bool(cb.ObserveActionAudit)&&!actionAuditCaptured;
+        const double scaledTarget=auxiliary?auxiliary->scaledBudget:forcing*bNorm;
+        const auto initialProducts=out.statistics.jacobianActions;
+        auto canSpend=[&](int needed) {
+            return !auxiliary||out.statistics.jacobianActions-initialProducts+needed<=auxiliary->maximumProducts;
+        };
+        auto passes=[&](const SteadyLinearRecord &check) {
+            if(!(check.trueScaledNorm<=scaledTarget))return false;
+            if(!auxiliary)return check.trueNorm<=forcing*baseNorm;
+            for(std::size_t i=0;i<auxiliary->blockBudgets.size();++i)
+                if(!((*check.trueBlocks)[i]<=auxiliary->blockBudgets[i]))return false;
+            return true;
+        };
         auto product=[&](const Vec &direction,const char *purpose,int cycle,int iteration)->Vec {
             if(!fixed)return Jacobian(x,f,direction,1.,purpose,cycle,iteration);
             const Vec action=cb.ColoredAction(sx.cwiseProduct(direction));
@@ -1130,6 +1337,7 @@ private:
             Vec r=b;
             if(baseCorrection.cwiseAbs().maxCoeff()!=0)
             {
+                if(!canSpend(1))break;
                 baseAction=product(baseCorrection,"restart-residual",cycle,-1);
                 r-=baseAction.cwiseProduct(sr);
             }
@@ -1145,9 +1353,10 @@ private:
             }
             SteadyLinearRecord restart;restart.newton=newton;restart.cycle=cycle;
             restart.iteration=-1;restart.trueChecked=true;restart.projectedNorm=beta;
+            restart.auxiliary=bool(auxiliary);
             restart.trueScaledNorm=beta;restart.trueNorm=initialTrue;
             if(cb.ResidualBlocks)restart.trueBlocks=cb.ResidualBlocks(raw);
-            restart.converged=beta<=forcing*bNorm&&initialTrue<=forcing*baseNorm;
+            restart.converged=passes(restart);
             out.linear.push_back(restart);
             if(restart.converged)
                 return {baseCorrection,true,initialTrue,std::move(baseAction)};
@@ -1159,6 +1368,7 @@ private:
             const int available=workLimit?std::min(m,workLimit-work):m;
             for(int j=0;j<available;++j)
             {
+                if(!canSpend(2))return {best,false,bestNorm,std::move(bestAction)};
                 Deadline();++out.statistics.linearIterations;++work;
                 z.col(j)=Precondition(v.col(j));
                 Vec w=sr.cwiseProduct(product(z.col(j),"arnoldi",cycle,j));
@@ -1192,9 +1402,11 @@ private:
                 const Vec coefficients=qr.solve(target);
                 CheckVector(coefficients,k,"small Krylov least-squares solution");
                 SteadyLinearRecord record;record.newton=newton;record.cycle=cycle;
+                record.auxiliary=bool(auxiliary);
                 record.iteration=j;record.leastSquaresRank=static_cast<int>(qr.rank());
                 record.projectedNorm=(target-small*coefficients).stableNorm();record.breakdown=breakdown;
-                if(breakdown||k==available||k%o.trueLinearCheckInterval==0||record.projectedNorm<=forcing*bNorm)
+                if(breakdown||k==available||k%o.trueLinearCheckInterval==0||
+                   record.projectedNorm<=scaledTarget||!canSpend(3))
                 {
                     const Vec candidate=baseCorrection+z.leftCols(k)*coefficients;
                     // This is a new nonlinear-residual FD evaluation in the
@@ -1206,7 +1418,7 @@ private:
                     const Vec rawCheck=(check.array()/sr.array()).matrix();
                     record.trueNorm=Norm(rawCheck);
                     if(cb.ResidualBlocks)record.trueBlocks=cb.ResidualBlocks(rawCheck);
-                    record.converged=record.trueScaledNorm<=forcing*bNorm&&record.trueNorm<=forcing*baseNorm;
+                    record.converged=passes(record);
                     if(record.trueNorm<bestNorm||
                        (record.trueNorm==bestNorm&&record.trueScaledNorm<bestScaled))
                     {best=candidate;bestAction=action;bestNorm=record.trueNorm;bestScaled=record.trueScaledNorm;}
@@ -1234,6 +1446,7 @@ private:
     bool actionAuditCaptured=false;
     bool meritPanelCaptured=false,rejectedTrialCaptured=false;
     int meritFailureCaptures=0;
+    int curvatureCaptures=0;
     long long factorSerial=0;
     double currentMass=0.,factorMass=0.;
     SteadyKrylovResult out;
@@ -1296,6 +1509,12 @@ SteadyKrylov::SteadyKrylov(SteadyKrylovCallbacks callbacks,SteadyVector unknownS
                 std::isfinite(m.initialMass)&&m.initialMass>=0.&&std::isfinite(m.reanchorMass)&&m.reanchorMass>=0.&&
                 m.maximumWork>0&&std::isfinite(m.initialTrialFraction)&&
                 m.initialTrialFraction>=0.&&m.initialTrialFraction<=1.,"invalid original-merit correction policy");
+        if(m.curvature)
+            Require(m.initialMass==0.&&m.reanchorMass==0.&&m.curvature->maximumProducts>=4&&
+                    m.curvature->maximumProducts<=m.maximumWork&&
+                    Fraction(m.curvature->maximumScaledSize)&&Fraction(m.curvature->budgetFraction)&&
+                    (!m.restored||(m.restored->usedMass==0.&&m.restored->nextMass==0.)),
+                    "coupled trial curvature correction requires an unshifted policy and strict bounded work");
         if(m.restored)
         {
             const auto &r=*m.restored;

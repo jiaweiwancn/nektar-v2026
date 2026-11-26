@@ -105,6 +105,8 @@ def prepare(args):
                 "WJDiagnosticCheckpointProcessSeconds", "WJDiagnosticCheckpointReserveSeconds",
                 "WJDiagnosticCheckpointInverseSeconds", "WJDiagnosticMeritInitialMass",
                 "WJDiagnosticMeritReanchorMass", "WJDiagnosticMeritWork", "WJDiagnosticMeritTrialFraction",
+                "WJDiagnosticCurvatureProducts", "WJDiagnosticCurvatureSizeFraction",
+                "WJDiagnosticCurvatureBudgetFraction",
                 "WJSteadyForcingInitial", "WJSteadyForcingMinimum", "WJSteadyForcingMaximum",
                 "WJSteadyForcingGamma", "WJSteadyForcingExponent", "WJDiagnosticFactorFDStep"):
             parameters.remove(item)
@@ -149,8 +151,17 @@ def prepare(args):
             if not 0. < args.merit_trial_fraction <= 1.:
                 raise ValueError("initial merit trial fraction must lie in (0,1]")
             controls["WJDiagnosticMeritTrialFraction"] = args.merit_trial_fraction
-    elif args.merit_entry != "Fresh" or args.merit_reanchor or args.merit_work != 96 or args.merit_trial_fraction:
+    elif (args.merit_entry != "Fresh" or args.merit_reanchor or args.merit_work != 96
+          or args.merit_trial_fraction or args.coupled_curvature):
         raise ValueError("merit settings require --merit-mass")
+    if args.coupled_curvature:
+        products, size, budget = args.coupled_curvature
+        if (args.merit_mass != 0 or args.merit_reanchor or not products.is_integer()
+                or not 4 <= products <= args.merit_work or not 0 < size < 1 or not 0 < budget < 1):
+            raise ValueError("coupled trial correction requires zero mass and bounded products, size and budget")
+        controls.update(WJDiagnosticCurvatureProducts=int(products),
+                        WJDiagnosticCurvatureSizeFraction=size,
+                        WJDiagnosticCurvatureBudgetFraction=budget)
     if args.direction_model:
         fields["WJDiagnosticDirectionModel"] = "True"
     if args.globalization != "HalvingV1":
@@ -283,6 +294,9 @@ def main():
                         help="maximum current Krylov iterations per nonlinear base")
     parser.add_argument("--merit-trial-fraction", type=float, default=0.,
                         help="start with this fraction and carry the last verified Armijo fraction")
+    parser.add_argument("--coupled-curvature", type=float, nargs=3,
+                        metavar=("AUX_PRODUCTS", "SCALED_SIZE_FRACTION", "MARGIN_FRACTION"),
+                        help="try a bounded original-equation correction to a feasible rejected trial")
     parser.add_argument("--merit-entry", choices=("Fresh", "Resume", "Reanchor"), default="Fresh")
     parser.add_argument("--globalization", choices=("HalvingV1", "ModelBacktrackV1"),
                         default="HalvingV1")

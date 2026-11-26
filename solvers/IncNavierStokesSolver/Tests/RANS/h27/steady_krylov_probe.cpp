@@ -400,6 +400,91 @@ std::string ActionGapControls()
         {"rejected_plain_remainder",V(payload(rejection,"raw_coupled_remainder"))},
         {"inverse_solution_change",J::Number((before-after).norm())}});
 }
+
+std::string CurvatureControls()
+{
+    const Vec initial=Vec::Zero(2),scale=Vec::Ones(2);
+    SteadyKrylovCallbacks cb;
+    cb.Residual=[](const Vec &x) {
+        return Vector({1.+x[0]+.008*x[1]*x[1],.5+.01*x[1]+.0001*x[1]*x[1]});
+    };
+    cb.ValidTrial=[](const Vec &x) {
+        return x[0]<=0.?SteadyTrialValidity{}:SteadyTrialValidity{false,"right side outside domain"};
+    };
+    cb.Precondition=[](const Vec &rhs){return Vector({rhs[0],100.*rhs[1]});};
+    cb.TrueNorm=[](const Vec &value){return value.lpNorm<Eigen::Infinity>();};
+    cb.ResidualBlocks=[](const Vec &value) {
+        return std::array<double,6>{0,0,0,std::abs(value[0]),std::abs(value[1]),0};
+    };
+    cb.CorrectionAction=[](const Vec &,const Vec &d)->Vec{return Vec::Zero(d.size());};
+    cb.SetCorrectionMass=[](double mass){Check(mass==0.,"changed the original test action");};
+    SteadyMeritState controller, checkpoint;
+    Vec published;
+    int observations=0;
+    cb.ObserveMeritState=[&](const auto &state){controller=state;};
+    cb.ObserveAccepted=[&](const Vec &x,double norm) {
+        Check(controller.acceptedNorm==norm,"checkpoint controller does not bind the accepted coefficients");
+        checkpoint=controller;
+        published=x;
+        ++observations;
+    };
+    auto options=Options();
+    options.maximumNewtonIterations=1;
+    options.maximumLineSearchTrials=1;
+    auto &merit=options.merit.emplace();
+    merit.initialTrialFraction=.1;
+    merit.curvature=SteadyCurvatureOptions{12,.5,.5};
+    const auto solve=[&](const Vec &x){return SteadyKrylov(cb,scale,scale,options).Solve(x);};
+    const auto first=solve(initial);
+    const auto &paired=first.curvatureTrials.at(0);
+    const Vec expected=Vector({-.3,-5.25});
+    Check(observations==2&&published==first.lastAcceptedX&&
+          (published-expected).norm()<2e-8&&checkpoint.step==.1&&
+          first.lineSearch.at(0).curvatureCorrected&&*checkpoint.ratio>.79&&*checkpoint.ratio<.8&&
+          paired.plainNorm>1.09&&*paired.correctedNorm<.93&&paired.products<=12,
+          "coupled trial did not publish its corrected coefficients and primary reduction ratio");
+    const bool oneSided=std::any_of(first.finiteDifferences.begin(),first.finiteDifferences.end(),
+        [](const auto &s){return s.purpose=="curvature-primary"&&s.method=="forward-second-order";});
+    Check(oneSided&&std::abs(paired.defectBlocks[3]-.2)<1e-9&&
+          std::abs(paired.defectBlocks[4]-.0025)<1e-9&&*paired.scaledError<1e-9&&
+          *paired.scaledUncertainty<1e-8,
+          "one-sided auxiliary action subtracted the linear RHS in place of the true base residual");
+
+    merit.restored=checkpoint;
+    const Vec restored=published;
+    const auto resumed=solve(restored);
+    merit.restored.reset();
+    options.maximumNewtonIterations=2;
+    const auto continuous=solve(initial);
+    Check(resumed.meritStart->ToJson()==first.meritEnd->ToJson()&&
+          resumed.meritEnd->ToJson()==continuous.meritEnd->ToJson()&&
+          resumed.lastAcceptedX==continuous.lastAcceptedX,
+          "resumed coupled trial did not preserve the corrected state and primary controller");
+
+    options.maximumNewtonIterations=1;
+    merit.initialTrialFraction=.15;
+    const auto larger=solve(initial);
+    const auto &second=larger.curvatureTrials.at(0);
+    const double ratio=second.defectBlocks[3]/paired.defectBlocks[3];
+    Check(larger.lineSearch.at(0).curvatureCorrected&&std::abs(ratio-2.25)<2e-8&&
+          *second.scaledCorrection>*paired.scaledCorrection&&
+          *second.scaledCorrection<second.scaledSizeLimit,
+          "paired coupled trial fractions do not resolve the expected quadratic defect");
+
+    merit.initialTrialFraction=.1;
+    merit.curvature->maximumScaledSize=.01;
+    observations=0;
+    const auto rejected=solve(initial);
+    Check(rejected.curvatureTrials.at(0).decision=="AUXILIARY_SIZE_LIMIT"&&observations==1&&
+          rejected.lastAcceptedX.isZero()&&rejected.meritEnd->accepted==0,
+          "a rejected curvature correction changed accepted custody");
+    return J::Object({{"one_sided",J::Boolean(oneSided)},{"plain_norm",J::Number(paired.plainNorm)},
+        {"corrected_norm",J::Number(*paired.correctedNorm)},{"actual_to_primary_ratio",J::Number(*first.meritEnd->ratio)},
+        {"accepted_free",V(first.lastAcceptedX)},{"restored_free",V(restored)},{"restart_equal","true"},
+        {"auxiliary_products",J::Number(paired.products)},{"auxiliary_error",J::Number(*paired.scaledError)},
+        {"fraction_defect_ratio",J::Number(ratio)},{"second_corrected_norm",J::Number(*second.correctedNorm)},
+        {"cap_rejection",J::Quote(rejected.curvatureTrials.at(0).decision)}});
+}
 }
 int main(int argc,char**argv)
 {
@@ -693,6 +778,7 @@ int main(int argc,char**argv)
             {"nonlinear_validation_controls",J::List(validationControls)},
             {"original_merit_controls",J::List(OriginalMeritControls())},
             {"action_gap_controls",ActionGapControls()},
+            {"coupled_curvature_controls",CurvatureControls()},
             {"full_initial_guard_residual_calls",J::Number(initialGuardResiduals)},
             {"revalidated_full_base_calls",J::Number(fullBaseCalls)}});
         std::ofstream output(argv[1]);output<<result<<'\n';Check(output.good(),"probe output write failed");

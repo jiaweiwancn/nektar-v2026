@@ -76,6 +76,7 @@ void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mas
         <<",\"nonlinear_remainder_blocks\":"<<blocks(l.remainderBlocks)
         <<",\"scaled_displacement\":"<<l.scaledDisplacement
         <<",\"scaled_displacement_blocks\":"<<blocks(l.displacementBlocks)
+        <<",\"curvature_corrected\":"<<J::Boolean(l.curvatureCorrected)
         <<",\"accepted\":"<<(l.accepted?"true":"false")<<",\"sufficient_decrease\":"<<(l.sufficientDecrease?"true":"false")<<",\"reason\":"<<J::Quote(l.reason)<<'}';}
     out<<"],\"inverse_uses\":[";
     for(std::size_t i=0;i<r.inverses.size();++i)
@@ -123,6 +124,7 @@ void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mas
                <<",\"half_parameter\":"<<(d.halfParameter>0.?J::Number(d.halfParameter):"null")
                <<",\"action_spacing_uncertainty\":"<<(d.modelEvaluated?J::Number(d.actionUncertainty):"null")
                <<",\"scaled_spacing_uncertainty\":"<<(d.modelEvaluated?J::Number(d.scaledUncertainty):"null")
+               <<",\"action_uncertainty_blocks\":"<<blocks(d.uncertaintyBlocks)
                <<",\"active_slope\":"<<(d.modelEvaluated?J::Number(d.activeSlope):"null")
                <<",\"slope_uncertainty\":"<<(d.modelEvaluated?J::Number(d.slopeUncertainty):"null")
                <<",\"verified_step\":"<<(d.step>0.?J::Number(d.step):"null")
@@ -130,6 +132,32 @@ void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mas
                <<",\"predicted_blocks\":"<<(d.step>0.?J::Numbers(d.predictedBlocks):"null")
                <<",\"mass_move\":"<<J::Quote(d.massMove)
                <<",\"decision\":"<<J::Quote(d.decision)<<'}';
+        }
+        out<<"],\"curvature_trials\":[";
+        for(std::size_t i=0;i<r.curvatureTrials.size();++i)
+        {
+            const auto &c=r.curvatureTrials[i];
+            if(i)out<<',';
+            out<<"{\"base\":"<<c.base<<",\"proposal\":"<<c.proposal<<",\"trial\":"<<c.trial
+               <<",\"factor_serial\":"<<c.factorSerial<<",\"fraction\":"<<c.step
+               <<",\"plain_norm\":"<<c.plainNorm<<",\"primary_prediction\":"<<c.primaryPrediction
+               <<",\"armijo_limit\":"<<c.armijoLimit<<",\"q_blocks\":"<<J::Numbers(c.defectBlocks)
+               <<",\"primary_action_allowance_blocks_at_trial\":"<<J::Numbers(c.primaryUncertainty)
+               <<",\"auxiliary_budget_blocks\":"<<J::Numbers(c.blockBudgets)
+               <<",\"auxiliary_scaled_budget\":"<<c.scaledBudget
+               <<",\"auxiliary_scaled_size_limit\":"<<c.scaledSizeLimit
+               <<",\"auxiliary_scaled_size\":"<<number(c.scaledCorrection)
+               <<",\"auxiliary_error_blocks\":"<<blocks(c.errorBlocks)
+               <<",\"auxiliary_uncertainty_blocks\":"<<blocks(c.uncertaintyBlocks)
+               <<",\"auxiliary_scaled_error\":"<<number(c.scaledError)
+               <<",\"auxiliary_scaled_uncertainty\":"<<number(c.scaledUncertainty)
+               <<",\"corrected_norm\":"<<number(c.correctedNorm)
+               <<",\"corrected_prediction\":"<<number(c.correctedPrediction)
+               <<",\"corrected_blocks\":"<<blocks(c.correctedBlocks)
+               <<",\"corrected_scaled_displacement\":"<<number(c.correctedDisplacement)
+               <<",\"remaining_defect_blocks\":"<<blocks(c.remainingDefectBlocks)
+               <<",\"products\":"<<c.products<<",\"seconds\":"<<c.seconds
+               <<",\"decision\":"<<J::Quote(c.decision)<<",\"reason\":"<<J::Quote(c.reason)<<'}';
         }
     }
     out<<"],\"best_from_accepted_iterate\":"<<(r.bestFromAcceptedIterate?"true":"false")<<",\"best_unknowns\":";VecJSON(out,r.x);out<<",\"best_raw_residual\":";VecJSON(out,r.residual);
@@ -146,7 +174,8 @@ void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mas
            <<",\"projected_norm\":"<<l.projectedNorm<<",\"true_scaled_norm\":"<<(l.trueChecked?J::Number(l.trueScaledNorm):"null")
            <<",\"true_norm\":"<<(l.trueChecked?J::Number(l.trueNorm):"null")
            <<",\"true_blocks\":"<<(l.trueBlocks?J::Numbers(*l.trueBlocks):"null")
-           <<",\"true_checked\":"<<(l.trueChecked?"true":"false")<<",\"breakdown\":"<<(l.breakdown?"true":"false")<<",\"converged\":"<<(l.converged?"true":"false")<<'}';}out<<"]}";
+           <<",\"true_checked\":"<<(l.trueChecked?"true":"false")<<",\"breakdown\":"<<(l.breakdown?"true":"false")
+           <<",\"auxiliary\":"<<J::Boolean(l.auxiliary)<<",\"converged\":"<<(l.converged?"true":"false")<<'}';}out<<"]}";
 }
 }
 std::string WJNativeCoupled::className=SolverUtils::GetEquationSystemFactory().RegisterCreatorFunction("WJNativeCoupledV2",WJNativeCoupled::create);
@@ -310,6 +339,11 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadSolverInfo("WJDiagnosticMeritPolicy",merit,"Disabled");
     m_session->LoadSolverInfo("WJDiagnosticMeritEntry",m_diagnosticSteadyOptions.meritEntry,"Fresh");
     const auto &entry=m_diagnosticSteadyOptions.meritEntry;
+    const bool curvatureProducts=m_session->DefinesParameter("WJDiagnosticCurvatureProducts");
+    const bool curvatureSize=m_session->DefinesParameter("WJDiagnosticCurvatureSizeFraction");
+    const bool curvatureBudget=m_session->DefinesParameter("WJDiagnosticCurvatureBudgetFraction");
+    Check(curvatureProducts==curvatureSize&&curvatureSize==curvatureBudget,
+          "coupled trial correction requires all three declared controls");
     if(merit==WJNative::SteadyMeritState::Identity)
     {
         Check(m_diagnosticSteady&&evaluateOnly=="False"&&allowIncomplete=="False"&&
@@ -323,9 +357,16 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
         m_session->LoadParameter("WJDiagnosticMeritReanchorMass",m.reanchorMass,0.);
         m_session->LoadParameter("WJDiagnosticMeritWork",m.maximumWork,96);
         m_session->LoadParameter("WJDiagnosticMeritTrialFraction",m.initialTrialFraction,0.);
+        if(curvatureProducts)
+        {
+            auto &c=m.curvature.emplace();
+            m_session->LoadParameter("WJDiagnosticCurvatureProducts",c.maximumProducts,0);
+            m_session->LoadParameter("WJDiagnosticCurvatureSizeFraction",c.maximumScaledSize,0.);
+            m_session->LoadParameter("WJDiagnosticCurvatureBudgetFraction",c.budgetFraction,0.);
+        }
     }
     else
-        Check(merit=="Disabled"&&entry=="Fresh"&&
+        Check(merit=="Disabled"&&entry=="Fresh"&&!curvatureProducts&&
               !m_session->DefinesParameter("WJDiagnosticMeritInitialMass")&&
               !m_session->DefinesParameter("WJDiagnosticMeritReanchorMass")&&
               !m_session->DefinesParameter("WJDiagnosticMeritWork")&&

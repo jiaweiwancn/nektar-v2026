@@ -25,12 +25,19 @@ struct SteadyMeritState
     std::string ToJson()const;
 };
 
+struct SteadyCurvatureOptions
+{
+    int maximumProducts=0;
+    double maximumScaledSize=0., budgetFraction=0.;
+};
+
 struct SteadyMeritOptions
 {
     double initialMass=0., reanchorMass=0.;
     int maximumWork=96;
     std::optional<SteadyMeritState> restored;
     double initialTrialFraction=0.;
+    std::optional<SteadyCurvatureOptions> curvature;
 };
 
 /** The only residual/feasibility exception interpreted as a rejected trial.
@@ -189,7 +196,7 @@ struct SteadyLinearRecord
     int newton=0, cycle=0, iteration=0, leastSquaresRank=0;
     double projectedNorm=0, trueScaledNorm=0, trueNorm=0;
     std::optional<std::array<double,6>> trueBlocks;
-    bool trueChecked=false, breakdown=false, converged=false;
+    bool trueChecked=false, breakdown=false, converged=false, auxiliary=false;
 };
 
 struct SteadyLineSearchRecord
@@ -198,6 +205,7 @@ struct SteadyLineSearchRecord
     double step=0, trueNorm=0;
     bool admissible=false, evaluated=false, sufficientDecrease=false, accepted=false;
     bool nonlinearValidationAttempted=false, nonlinearValidated=false;
+    bool curvatureCorrected=false;
     std::optional<double> predictedNorm,decreaseRatio;
     std::optional<std::array<double,6>> predictedBlocks,actualBlocks,remainderBlocks;
     double scaledDisplacement=0.;
@@ -225,12 +233,27 @@ struct SteadyMeritRecord
     double actionUncertainty=0., scaledUncertainty=0.;
     double scaledDirectionNorm=0., primaryParameter=0., halfParameter=0.;
     std::optional<std::array<double,6>> directionBlocks;
+    std::optional<std::array<double,6>> uncertaintyBlocks;
     double step=0., predictedNorm=0., activeSlope=0., slopeUncertainty=0.;
     std::array<double,6> baseBlocks{}, shiftedErrorBlocks{}, correctionBlocks{},
         fullPredictedBlocks{}, predictedBlocks{};
     std::vector<int> activeBlocks;
     std::string decision,massMove;
     bool modelEvaluated=false, linearPassed=false;
+};
+
+struct SteadyCurvatureRecord
+{
+    int base=0, proposal=0, trial=0, products=0;
+    long long factorSerial=0;
+    double step=0., plainNorm=0., armijoLimit=0., primaryPrediction=0., seconds=0.;
+    double scaledSizeLimit=0., scaledBudget=0.;
+    std::array<double,6> defectBlocks{}, primaryUncertainty{}, blockBudgets{};
+    std::optional<double> scaledCorrection, scaledError, scaledUncertainty,
+        correctedNorm, correctedPrediction, correctedDisplacement;
+    std::optional<std::array<double,6>> errorBlocks, uncertaintyBlocks, correctedBlocks,
+        remainingDefectBlocks;
+    std::string decision, reason;
 };
 
 struct SteadyNewtonRecord
@@ -262,6 +285,7 @@ struct SteadyKrylovResult
     std::vector<SteadyNewtonRecord> newton;
     std::vector<SteadyInverseUse> inverses;
     std::vector<SteadyMeritRecord> meritDirections;
+    std::vector<SteadyCurvatureRecord> curvatureTrials;
     std::vector<SteadyMeritState> meritAcceptances;
     std::optional<SteadyMeritState> meritStart, meritEnd;
 };

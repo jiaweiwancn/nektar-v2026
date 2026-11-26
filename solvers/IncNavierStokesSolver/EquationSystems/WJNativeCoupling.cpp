@@ -2152,6 +2152,9 @@ SteadyKrylovResult Coupling::SolveDiagnosticSteady(const CoupledState &seed,
                           options.fdRelativeStep,options.fdMinimumRelativeStep,options.armijo})
             binding<<'|'<<value;
         if(policy.initialTrialFraction>0.)binding<<"|trial-fraction:"<<policy.initialTrialFraction;
+        if(policy.curvature)
+            binding<<"|coupled-trial-v1:"<<policy.curvature->maximumProducts
+                   <<'|'<<policy.curvature->maximumScaledSize<<'|'<<policy.curvature->budgetFraction;
         m_meritPolicy=RANSWallR3::Hash(binding.str());
         if(diagnostic.meritEntry=="Resume")
         {
