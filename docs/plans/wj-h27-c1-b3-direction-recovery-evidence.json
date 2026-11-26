@@ -4051,8 +4051,8 @@
       "status": "OPEN"
     },
     "REMOTE_PUSH_VERIFIED": {
-      "evidence": "Publication check pending.",
-      "status": "OPEN"
+      "evidence": "git rev-parse HEAD and git ls-remote origin returned f61a2a13ceab3cccd48250dbac68a4965990d5b5 for the source and numerical evidence commit.",
+      "status": "PASS"
     },
     "SAME_BASE_LINEAR_ACCURACY_CONTROL_COMPLETE": {
       "evidence": "At fixed B3 coefficients, mass and inverse, forcing .5 to .01 reduced shifted error 29.5×. The measured active slope remained positive.",
@@ -6679,8 +6679,13 @@
   },
   "publication": {
     "branch": "refs/heads/codex/wj-earsm-awf",
+    "command": "git ls-remote origin refs/heads/codex/wj-earsm-awf",
     "initial_remote_expectation": "44060fba84c65bb12ef839be2fe1cf9f796a1dc8",
-    "status": "pending"
+    "observed_at": "2026-11-26T15:50:17+08:00",
+    "scope": "The verified evidence commit contains the tested numerical source as an ancestor. This later receipt changes only documentation and machine-readable evidence.",
+    "status": "verified",
+    "verified_local_sha": "f61a2a13ceab3cccd48250dbac68a4965990d5b5",
+    "verified_remote_sha": "f61a2a13ceab3cccd48250dbac68a4965990d5b5"
   },
   "qualified_a3": {
     "audits": {

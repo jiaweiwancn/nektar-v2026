@@ -126,7 +126,7 @@ The qualification entry point is `bash qualify.sh qualify <case> B3-rich 1350`. 
 | `C1_CLOSED` | OPEN | Full-height qualification and physical pilot pending. |
 | `C2_READY` | OPEN | C1 pending. |
 | `LONG_FLAT_PRODUCTION_COST_CLOSED` | OPEN | Separate production-cost study pending. |
-| `REMOTE_PUSH_VERIFIED` | OPEN | Publication check pending. |
+| `REMOTE_PUSH_VERIFIED` | PASS | Local HEAD and the GitHub ref both returned `f61a2a13ceab3cccd48250dbac68a4965990d5b5` for the source and numerical evidence. |
 
 The next discriminating solve keeps the correction operator \(J_0\) unshifted and uses the measured small positive mass only in the inverse. The .009539982703780335 cold factor met the true shifted target at the same field. Its shifted correction had an ascending original slope. The proposed test separates the effect of this factor on the current unshifted Krylov error from the mass in the correction. Compare recurrence and recomputed residuals at the original 4e−6 spacing and retain the prospective half-spacing check. A passing direction must still reduce actual \(F_0\). Budget approximately 2,100 s for this first native test, plus qualification time if convergence permits. It needs a new allocation with that reserve.
 
