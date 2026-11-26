@@ -324,10 +324,11 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadSolverInfo("WJDiagnosticActionProbe",diagnostic.actionProbePath,"");
     m_session->LoadSolverInfo("WJDiagnosticActionProbeSHA256",diagnostic.actionProbeSha,"");
     m_session->LoadParameter("WJDiagnosticFactorFDStep",diagnostic.factorFDStep,0.);
-    std::string actionGap,colorAudit,scalarAudit;
+    std::string actionGap,colorAudit,scalarAudit,fixedKTangent;
     m_session->LoadSolverInfo("WJDiagnosticActionGapAudit",actionGap,"False");
     m_session->LoadSolverInfo("WJDiagnosticActionColorAudit",colorAudit,"False");
     m_session->LoadSolverInfo("WJDiagnosticActionScalarAudit",scalarAudit,"False");
+    m_session->LoadSolverInfo("WJDiagnosticFixedKTangent",fixedKTangent,"False");
     std::string inverse,audit,evaluateOnly,direction,globalization,uncommitted,checkpoint;
     m_session->LoadSolverInfo("WJDiagnosticSteadyInverse",inverse,"BlockV1");
     m_session->LoadSolverInfo("WJDiagnosticCorrectionAudit",audit,"False");
@@ -442,10 +443,12 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     Check((actionGap=="False"||actionGap=="True")&&
           (colorAudit=="False"||(colorAudit=="True"&&!diagnostic.actionProbePath.empty()&&geometry.normalMap))&&
           (scalarAudit=="False"||(scalarAudit=="True"&&!diagnostic.actionProbePath.empty()))&&
+          (fixedKTangent=="False"||fixedKTangent=="True")&&
           (diagnostic.actionProbePath.empty()==diagnostic.actionProbeSha.empty())&&
           std::isfinite(diagnostic.factorFDStep)&&diagnostic.factorFDStep>=0.,
           "invalid diagnostic action audit options");
-    if(actionGap=="True"||!diagnostic.actionProbePath.empty()||diagnostic.factorFDStep>0.)
+    if(actionGap=="True"||!diagnostic.actionProbePath.empty()||diagnostic.factorFDStep>0.||
+       fixedKTangent=="True")
     {
         Check(m_diagnosticSteady&&diagnostic.eta==0.&&diagnostic.pseudoTime==0.&&
               diagnostic.correctionDiffusion==0.&&uncommitted=="False"&&
@@ -460,6 +463,11 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
                   "a frozen direction requires a pinned evaluate-only probe");
         diagnostic.auditColorColumns=colorAudit=="True";
         diagnostic.auditScalarAction=scalarAudit=="True";
+        diagnostic.fixedKTangent=fixedKTangent=="True";
+        if(diagnostic.fixedKTangent)
+            Check(!diagnostic.auditScalarAction&&!diagnostic.auditColorColumns&&
+                  (actionGap=="True"||!diagnostic.actionProbePath.empty()),
+                  "fixed-rule k tangent requires an unshifted audited solve or frozen-direction probe");
         if(diagnostic.factorFDStep>0.)
             Check(diagnostic.sparseInverse&&!m_steadyOptions.evaluateInitialOnly&&
                   diagnostic.factorFDStep>=m_steadyOptions.fdMinimumRelativeStep,

@@ -478,10 +478,23 @@ std::string CurvatureControls()
     Check(rejected.curvatureTrials.at(0).decision=="AUXILIARY_SIZE_LIMIT"&&observations==1&&
           rejected.lastAcceptedX.isZero()&&rejected.meritEnd->accepted==0,
           "a rejected curvature correction changed accepted custody");
+    cb.ExactPartResidual=[](const Vec &x) {
+        return Vector({.008*x[1]*x[1],.0001*x[1]*x[1]});
+    };
+    cb.ExactPartAction=[](const Vec &x,const Vec &d) {
+        return Vector({.016*x[1]*d[1],.0002*x[1]*d[1]});
+    };
+    const Vec probeBase=Vector({0.,-.4}),probeDirection=Vector({-.2,1.});
+    const auto split=SteadyKrylov(cb,scale,scale,options).ProbeDirection(probeBase,probeDirection);
+    const Vec exact=Vector({-.2+.016*probeBase[1],.01+.0002*probeBase[1]});
+    Check(split.completed&&split.finiteDifferences.front().method=="forward-second-order"&&
+          (split.actions.front()-exact).norm()<1e-9,
+          "exact partial derivative did not preserve the rest of the one-sided action");
     return J::Object({{"one_sided",J::Boolean(oneSided)},{"plain_norm",J::Number(paired.plainNorm)},
         {"corrected_norm",J::Number(*paired.correctedNorm)},{"actual_to_primary_ratio",J::Number(*first.meritEnd->ratio)},
         {"accepted_free",V(first.lastAcceptedX)},{"restored_free",V(restored)},{"restart_equal","true"},
         {"auxiliary_products",J::Number(paired.products)},{"auxiliary_error",J::Number(*paired.scaledError)},
+        {"exact_partial_one_sided_error",J::Number((split.actions.front()-exact).norm())},
         {"fraction_defect_ratio",J::Number(ratio)},{"second_corrected_norm",J::Number(*second.correctedNorm)},
         {"cap_rejection",J::Quote(rejected.curvatureTrials.at(0).decision)}});
 }

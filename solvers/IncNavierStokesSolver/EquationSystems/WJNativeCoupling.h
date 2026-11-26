@@ -89,7 +89,7 @@ struct DiagnosticSteadyOptions
     std::vector<std::string> checkpointSessionDigests;
     double checkpointProcessDeadline=0., checkpointReserveSeconds=0., checkpointInverseSeconds=0.;
     std::string actionAuditPrefix, actionProbePath, actionProbeSha;
-    bool auditScalarAction=false;
+    bool auditScalarAction=false, fixedKTangent=false;
     double factorFDStep=0.;
     bool auditColorColumns=false;
     int scalarSubdivisionDepth=0;
@@ -260,6 +260,7 @@ private:
     Vec TimePreconditionerData(const Data&data)const;
     Vec RemainderLoad(const Data&data)const;
     Loads CurrentActions(const CoupledState&state,const Data&data)const;
+    Vec FixedKDiffusionPart(const Rules &rules,const CoupledState &state,const Vec *direction=nullptr)const;
     Vec MomentumAdvection(const CoupledState&state,Vec *sampledAction=nullptr)const;
     Vec SteadyRows(const Loads &action,const CoupledState &state,double gaugeMultiplier)const;
     CoupledResidual SteadyRowNorms(const Vec &raw)const;

@@ -1655,6 +1655,62 @@ Coupling::Loads Coupling::CurrentActions(const CoupledState&s,const Data&d)const
     return action;
 }
 
+Vec Coupling::FixedKDiffusionPart(const Rules &rules,const CoupledState &state,const Vec *direction)const
+{
+    Require(std::string(m_reference->TransportName())=="ScalarCdV2",
+            "fixed k diffusion tangent uses the ScalarCdV2 law");
+    const auto &p=m_reference->Parameters();
+    Vec dk,de;
+    if(direction)
+    {
+        dk=m_k.Expand(direction->segment(m_flow.Size(),m_k.FreeSize()),Vec::Zero(m_k.Size()));
+        de=m_e.Expand(direction->tail(m_e.FreeSize()),DependentTraceDirection(state,dk));
+    }
+    std::vector<Vec> diffusion,tangentD;
+    for(const auto &entry:rules)
+    {
+        const auto &q=*entry;
+        const Vec k=m_k.Evaluate(q,state.k);
+        const bool outer=m_e.Owns(q.geometry);
+        Vec epsilon,deltaEpsilon;
+        if(outer)
+        {
+            epsilon=m_e.Evaluate(q,state.epsilon);
+            if(direction)deltaEpsilon=m_e.Evaluate(q,de);
+        }
+        else
+        {
+            const auto &owner=HOwner(Owner(q.geometry));
+            const auto &trace=m_hKTrace.at(owner.geometry);
+            std::array<double,4> dkTrace{};
+            if(direction)
+                for(int i=0;i<4;++i)dkTrace[i]=trace.signs[i]*dk[trace.ids[i]];
+            const double width=owner.xr-owner.xl;
+            epsilon.resize(q.w.size());
+            if(direction)deltaEpsilon.resize(q.w.size());
+            for(int i=0;i<q.w.size();++i)
+            {
+                const double K=InterfaceK(owner,q.x[i],state);
+                const auto e=m_reference->DependentEpsilon(K,q.z[i]-m_geometry.d0);
+                epsilon[i]=e.value;
+                if(direction)
+                    deltaEpsilon[i]=e.dK*CubicTrace(dkTrace,(q.x[i]-owner.xl)/width,width)[0];
+            }
+        }
+        auto &D=diffusion.emplace_back(k.size());
+        for(int i=0;i<k.size();++i)D[i]=m_reference->KDiffusivity(k[i],epsilon[i],0.,outer);
+        if(direction)
+        {
+            const Vec deltaK=m_k.Evaluate(q,dk);
+            tangentD.emplace_back(p.Cd/p.sigmaK*(2.*k.array()*deltaK.array()/epsilon.array()-
+                k.array().square()*deltaEpsilon.array()/epsilon.array().square()));
+        }
+    }
+    if(direction)
+        return m_k.Restrict(m_k.FixedRuleDiffusionTangent(rules,diffusion,tangentD,state.k,dk));
+    return m_k.Restrict(m_k.DiffusionAction(rules,diffusion,state.k));
+}
+
 CoupledResidual Coupling::Residual(const CoupledState&s,const Data&d,const Loads&external,double alpha,double time,CoupledTiming&timing,const CoupledHistory*history)const
 {
     const double start=Clock();(void)time;auto action=CurrentActions(s,d);
@@ -2155,6 +2211,7 @@ SteadyKrylovResult Coupling::SolveDiagnosticSteady(const CoupledState &seed,
         if(policy.curvature)
             binding<<"|coupled-trial-v1:"<<policy.curvature->maximumProducts
                    <<'|'<<policy.curvature->maximumScaledSize<<'|'<<policy.curvature->budgetFraction;
+        if(diagnostic.fixedKTangent)binding<<"|fixed-rule-k-tangent-v1";
         m_meritPolicy=RANSWallR3::Hash(binding.str());
         if(diagnostic.meritEntry=="Resume")
         {
@@ -2286,6 +2343,31 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
     callbacks.Residual=[&](const Vec&x)->Vec{try{return equations(x);}catch(const NativeInadmissibleState&error){throw SteadyInadmissibleTrial(error.what());}};
     callbacks.TrueNorm=[&](const Vec&raw){return norms(raw).Maximum();};
     double meritBaseNorm=0.;
+    Rules fixedKRules;
+    if(diagnostic&&diagnostic->fixedKTangent)
+    {
+        // The original cutoff factory marks every cell intersecting the
+        // certified range as moving, for any admissible current trace.
+        for(const auto &rule:m_rules.Static())
+        {
+            const auto &cell=Owner(rule->geometry);
+            if(cell.rl>=.4*m_geometry.H||cell.rr<=0.||
+               cell.rr<m_cutoffRange[0]||cell.rl>m_cutoffRange[1])
+                fixedKRules.push_back(rule);
+        }
+        std::cout<<"WJ-H27 exact fixed-rule k diffusion tangent "<<fixedKRules.size()
+                 <<" cells, "<<m_rules.Static().size()-fixedKRules.size()<<" moving cells kept in FD"<<std::endl;
+        callbacks.ExactPartResidual=[&](const Vec &x) {
+            Vec raw=Vec::Zero(size);
+            raw.segment(nf,nk)=FixedKDiffusionPart(fixedKRules,unpack(x));
+            return raw;
+        };
+        callbacks.ExactPartAction=[&](const Vec &x,const Vec &direction) {
+            Vec raw=Vec::Zero(size);
+            raw.segment(nf,nk)=FixedKDiffusionPart(fixedKRules,unpack(x),&direction);
+            return raw;
+        };
+    }
     callbacks.PrepareCorrection=[&](const Vec&x,const Vec&raw){
         pcState=unpack(x);
         if(options.merit)meritBaseNorm=norms(raw).Maximum();
@@ -2450,12 +2532,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
                 audit.arrays.emplace_back("raw_stable_fixed_k_taylor_1",raw("raw_difference_1")-half*stableFine);
                 const auto base=unpack(x);
                 const auto d=currentData(x,base);
-                Require(std::string(m_reference->TransportName())=="ScalarCdV2",
-                        "fixed-rule scalar tangent audit uses the ScalarCdV2 law");
-                const Vec dk=m_k.Expand(direction.segment(nf,nk),Vec::Zero(m_k.Size()));
-                const Vec de=m_e.Expand(direction.tail(ne),DependentTraceDirection(base,dk));
                 Rules fixed;
-                std::vector<Vec> tangentD;
                 std::array<std::vector<Vec>,5> diffusion;
                 for(std::size_t i=0;i<m_rules.Static().size();++i)
                 {
@@ -2466,35 +2543,8 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
                     diffusion[0].push_back(d->Dk[i]);diffusion[1].push_back(plus.diffusion[i]);
                     diffusion[2].push_back(minus.diffusion[i]);diffusion[3].push_back(finePlus.diffusion[i]);
                     diffusion[4].push_back(fineMinus.diffusion[i]);
-                    const auto &q=*rule;
-                    const Vec k=m_k.Evaluate(q,base.k),deltaK=m_k.Evaluate(q,dk);
-                    Vec epsilon,deltaEpsilon;
-                    if(m_e.Owns(q.geometry))
-                    {
-                        epsilon=m_e.Evaluate(q,base.epsilon);
-                        deltaEpsilon=m_e.Evaluate(q,de);
-                    }
-                    else
-                    {
-                        const auto &owner=HOwner(Owner(q.geometry));
-                        const auto &trace=m_hKTrace.at(owner.geometry);
-                        std::array<double,4> coeff{};
-                        for(int j=0;j<4;++j)coeff[j]=trace.signs[j]*dk[trace.ids[j]];
-                        const double width=owner.xr-owner.xl;
-                        epsilon.resize(q.w.size());deltaEpsilon.resize(q.w.size());
-                        for(int j=0;j<q.w.size();++j)
-                        {
-                            const double K=InterfaceK(owner,q.x[j],base);
-                            const auto e=m_reference->DependentEpsilon(K,q.z[j]-m_geometry.d0);
-                            epsilon[j]=e.value;
-                            deltaEpsilon[j]=e.dK*CubicTrace(coeff,(q.x[j]-owner.xl)/width,width)[0];
-                        }
-                    }
-                    const auto &p=m_reference->Parameters();
-                    tangentD.emplace_back(p.Cd/p.sigmaK*(2.*k.array()*deltaK.array()/epsilon.array()-
-                        k.array().square()*deltaEpsilon.array()/epsilon.array().square()));
                 }
-                const Vec tangent=m_k.Restrict(m_k.FixedRuleDiffusionTangent(fixed,diffusion[0],tangentD,base.k,dk));
+                const Vec tangent=FixedKDiffusionPart(fixed,base,&direction);
                 const auto fixedAction=[&](const Vec &k,std::size_t i) {
                     return m_k.Restrict(m_k.DiffusionAction(fixed,diffusion[i],k));
                 };
@@ -2575,6 +2625,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
                 <<','<<m_flow.PressureSize()<<','<<(m_flow.Gauge()?1:0)<<','<<nk<<','<<ne<<']'
                 <<",\"quadrature\":["<<m_options.quadratureX<<','<<m_options.quadratureR<<']'
                 <<",\"current_fd\":"<<options.fdRelativeStep<<",\"correction_mass\":"<<correctionMass
+                <<",\"fixed_k_tangent\":"<<J::Boolean(diagnostic->fixedKTangent)
                 <<",\"inverse_only_mass\":"<<preconditionerMass
                 <<",\"newton\":"<<audit.newton<<",\"cycle\":"<<audit.cycle<<",\"iteration\":"<<audit.iteration
                 <<",\"proposal\":"<<audit.proposal<<",\"capture_sequence\":"<<sequence

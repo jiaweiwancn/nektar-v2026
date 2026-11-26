@@ -75,6 +75,11 @@ struct SteadyKrylovCallbacks
     // eliminated. Steady preparation uses alpha=0; an implicit physical step
     // supplies its exact BDF mass/history. This engine adds no mass or time.
     std::function<SteadyVector(const SteadyVector &)> Residual;
+    // Optional exact differentiation of a part of Residual. Remove its
+    // current values from the same FD stencil, then add its base tangent.
+    // The nonlinear residual, auxiliary loads and inverse remain separate.
+    std::function<SteadyVector(const SteadyVector &)> ExactPartResidual;
+    std::function<SteadyVector(const SteadyVector &,const SteadyVector &)> ExactPartAction;
     // A fixed norm of raw residuals, including all required blocks. The caller
     // owns its physical thresholds; return a norm ratio if acceptanceNorm=1.
     // This must be a norm (including sign symmetry and homogeneity), not a

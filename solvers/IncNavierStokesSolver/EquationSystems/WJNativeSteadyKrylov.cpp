@@ -1225,6 +1225,17 @@ private:
         CheckVector(y,sx.size(),"scaled steady base");
         CheckVector(direction,sx.size(),"physical Jacobian direction");
         const double coordinateNorm=std::max(1.,y.cwiseAbs().maxCoeff());
+        auto difference=[&](const Vec &high,const Vec &low,const Vec &fh,const Vec &fl)->Vec {
+            Vec value=fh-fl;
+            if(cb.ExactPartResidual)
+            {
+                const Vec splitHigh=cb.ExactPartResidual(high),splitLow=cb.ExactPartResidual(low);
+                CheckVector(splitHigh,sx.size(),"exact partial residual");
+                CheckVector(splitLow,sx.size(),"exact partial residual");
+                value-=splitHigh-splitLow;
+            }
+            return value;
+        };
         double relative=o.fdRelativeStep*multiplier;
         for(int reduction=0;reduction<=o.maximumFDReductions;++reduction)
         {
@@ -1253,7 +1264,8 @@ private:
             Vec action;
             if(positive.admissible&&negative.admissible)
             {
-                action=(positive.residual-negative.residual)/(2*h);audit.method="central";
+                action=difference(plus,minus,positive.residual,negative.residual)/(2*h);
+                audit.method="central";
             }
             else if(positive.admissible||negative.admissible)
             {
@@ -1267,8 +1279,10 @@ private:
                 if(middle.admissible)
                 {
                     // Difference from base first to avoid a large -3*f term.
-                    if(forward)action=(4*(middle.residual-f)-(positive.residual-f))/h;
-                    else action=(4*(f-middle.residual)-(f-negative.residual))/h;
+                    if(forward)action=(4*difference(half,x,middle.residual,f)-
+                                        difference(plus,x,positive.residual,f))/h;
+                    else action=(4*difference(x,half,f,middle.residual)-
+                                 difference(x,minus,f,negative.residual))/h;
                     audit.method=forward?"forward-second-order":"backward-second-order";
                 }
             }
@@ -1279,6 +1293,12 @@ private:
                 {
                     sample->first=positive.admissible?h:-h;
                     sample->second=(positive.admissible?positive.residual:negative.residual)-f;
+                }
+                if(cb.ExactPartAction)
+                {
+                    const Vec tangent=cb.ExactPartAction(x,direction);
+                    CheckVector(tangent,sx.size(),"exact partial derivative");
+                    action+=tangent;
                 }
                 if(cb.CorrectionAction)
                 {
@@ -1481,6 +1501,8 @@ SteadyKrylov::SteadyKrylov(SteadyKrylovCallbacks callbacks,SteadyVector unknownS
     Require(bool(m_callbacks.Residual)&&bool(m_callbacks.TrueNorm)&&
             bool(m_callbacks.Precondition)&&bool(m_callbacks.ValidTrial),
             "steady solver requires residual, fixed true norm, physical preconditioner and feasibility callbacks");
+    Require(bool(m_callbacks.ExactPartAction)==bool(m_callbacks.ExactPartResidual),
+            "exact partial differentiation needs matched value and tangent callbacks");
     Require(m_unknownScale.size()>0&&m_unknownScale.size()<std::numeric_limits<int>::max()&&
             m_unknownScale.size()==m_residualRowScale.size()&&m_unknownScale.allFinite()&&
             m_residualRowScale.allFinite()&&(m_unknownScale.array()>0).all()&&

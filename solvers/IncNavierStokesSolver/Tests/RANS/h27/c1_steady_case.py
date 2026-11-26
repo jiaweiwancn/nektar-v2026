@@ -76,7 +76,7 @@ def prepare(args):
             "WJDiagnosticSeedSHA256", "WJDiagnosticCandidateOutput", "WJTerminalOutput",
             "WJDiagnosticTransferParent", "WJDiagnosticTransferParentSHA256",
             "WJDiagnosticActionProbe", "WJDiagnosticActionProbeSHA256", "WJDiagnosticActionGapAudit",
-            "WJDiagnosticActionColorAudit", "WJDiagnosticActionScalarAudit"
+            "WJDiagnosticActionColorAudit", "WJDiagnosticActionScalarAudit", "WJDiagnosticFixedKTangent"
         }:
             info.remove(item)
     for item in list(parameters):
@@ -229,6 +229,11 @@ def prepare(args):
         if not args.action_probe_capture:
             raise ValueError("scalar term attribution requires a bound captured direction")
         fields["WJDiagnosticActionScalarAudit"] = "True"
+    if args.fixed_k_tangent:
+        if (not (args.action_gap_audit or args.action_probe_capture)
+                or args.action_scalar_audit or args.action_color_audit):
+            raise ValueError("fixed-rule k tangent requires an audited solve or a standalone captured direction")
+        fields["WJDiagnosticFixedKTangent"] = "True"
     output.mkdir(parents=True)
     if direction is not None:
         (output/"action-probe.bin").write_bytes(direction)
@@ -268,6 +273,8 @@ def main():
                         help="also compare selected full-row singleton and complete-color actions")
     parser.add_argument("--action-scalar-audit", action="store_true",
                         help="attribute a captured action's spacing difference to scalar terms and owners")
+    parser.add_argument("--fixed-k-tangent", action="store_true",
+                        help="differentiate fixed-rule k diffusion exactly while retaining original residuals")
     parser.add_argument("--newton", type=int, default=48)
     parser.add_argument("--krylov", type=int, default=40)
     parser.add_argument("--cycles", type=int, default=4)
