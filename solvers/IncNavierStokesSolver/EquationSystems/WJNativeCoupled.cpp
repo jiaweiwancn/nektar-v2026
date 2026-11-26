@@ -324,10 +324,11 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadSolverInfo("WJDiagnosticActionProbe",diagnostic.actionProbePath,"");
     m_session->LoadSolverInfo("WJDiagnosticActionProbeSHA256",diagnostic.actionProbeSha,"");
     m_session->LoadParameter("WJDiagnosticFactorFDStep",diagnostic.factorFDStep,0.);
-    std::string actionGap,colorAudit,scalarAudit,fixedKTangent;
+    std::string actionGap,colorAudit,scalarAudit,momentumAudit,fixedKTangent;
     m_session->LoadSolverInfo("WJDiagnosticActionGapAudit",actionGap,"False");
     m_session->LoadSolverInfo("WJDiagnosticActionColorAudit",colorAudit,"False");
     m_session->LoadSolverInfo("WJDiagnosticActionScalarAudit",scalarAudit,"False");
+    m_session->LoadSolverInfo("WJDiagnosticActionMomentumAudit",momentumAudit,"False");
     m_session->LoadSolverInfo("WJDiagnosticFixedKTangent",fixedKTangent,"False");
     std::string inverse,audit,evaluateOnly,direction,globalization,uncommitted,checkpoint;
     m_session->LoadSolverInfo("WJDiagnosticSteadyInverse",inverse,"BlockV1");
@@ -443,6 +444,7 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     Check((actionGap=="False"||actionGap=="True")&&
           (colorAudit=="False"||(colorAudit=="True"&&!diagnostic.actionProbePath.empty()&&geometry.normalMap))&&
           (scalarAudit=="False"||(scalarAudit=="True"&&!diagnostic.actionProbePath.empty()))&&
+          (momentumAudit=="False"||(momentumAudit=="True"&&!diagnostic.actionProbePath.empty()&&scalarAudit=="False"))&&
           (fixedKTangent=="False"||fixedKTangent=="True")&&
           (diagnostic.actionProbePath.empty()==diagnostic.actionProbeSha.empty())&&
           std::isfinite(diagnostic.factorFDStep)&&diagnostic.factorFDStep>=0.,
@@ -463,6 +465,7 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
                   "a frozen direction requires a pinned evaluate-only probe");
         diagnostic.auditColorColumns=colorAudit=="True";
         diagnostic.auditScalarAction=scalarAudit=="True";
+        diagnostic.auditMomentumAction=momentumAudit=="True";
         diagnostic.fixedKTangent=fixedKTangent=="True";
         if(diagnostic.fixedKTangent)
             Check(!diagnostic.auditScalarAction&&!diagnostic.auditColorColumns&&

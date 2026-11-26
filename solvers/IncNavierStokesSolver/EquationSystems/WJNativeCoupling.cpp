@@ -2459,20 +2459,20 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
             Require(correctionMass==0.&&correctionDiffusion==0.,"action audit requires an unshifted current correction");
             namespace J=RANSWallSolveJson;
             std::optional<SteadyKrylovActionAudit> localized;
+            auto raw=[&](const char *name)->Vec {
+                for(const auto &[key,array]:observed.arrays)
+                    if(key==name)return array.col(0);
+                throw std::runtime_error(std::string("missing action audit array ")+name);
+            };
+            auto spacing=[&](const char *purpose) {
+                for(const auto &s:observed.stencils)
+                    if(s.purpose==purpose&&s.method=="central")return s.parameterStep;
+                throw std::runtime_error(std::string("term audit requires central stencil ")+purpose);
+            };
             if(diagnostic->auditScalarAction&&observed.stage=="seed-direction")
             {
                 localized=observed;
                 auto &audit=*localized;
-                auto raw=[&](const char *name)->Vec {
-                    for(const auto &[key,array]:observed.arrays)
-                        if(key==name)return array.col(0);
-                    throw std::runtime_error(std::string("missing scalar action audit array ")+name);
-                };
-                auto spacing=[&](const char *purpose) {
-                    for(const auto &s:observed.stencils)
-                        if(s.purpose==purpose&&s.method=="central")return s.parameterStep;
-                    throw std::runtime_error(std::string("scalar term audit requires central stencil ")+purpose);
-                };
                 const Vec x=raw("base"),direction=raw("direction");
                 struct ScalarActionSample
                 {
@@ -2591,6 +2591,62 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
                     audit.notes.emplace_back(std::string("peak_")+label+"_owners",owners.str());
                 }
                 audit.measurements.emplace_back("scalar_attribution_seconds",Clock()-start);
+            }
+            if(diagnostic->auditMomentumAction&&observed.stage=="seed-direction")
+            {
+                localized=observed;
+                auto &audit=*localized;
+                const Vec x=raw("base"),direction=raw("direction");
+                const auto terms=[&](const Vec &at) {
+                    const auto s=unpack(at);
+                    const auto d=currentData(at,s);
+                    const Vec pressure=s.flow.tail(m_flow.PressureSize());
+                    const Vec gradient=m_flow.Core().Gradient()*pressure;
+                    const Vec sampledPressure=-m_flow.Core().AWF()*pressure;
+                    const Vec sampledK=-m_flow.KnownScalarKLoad(s.k);
+                    const auto current=CurrentActions(s,*d);
+                    Vec sampledConvection;
+                    const Vec transport=MomentumAdvection(s,&sampledConvection);
+                    return std::array<Vec,6>{gradient,sampledPressure,sampledK,
+                        current.flow.head(nv)-gradient-sampledPressure-sampledK,
+                        transport.head(nv)-sampledConvection.head(nv),sampledConvection.head(nv)};
+                };
+                const double h=spacing("spacing_0"),half=spacing("spacing_1");
+                const auto plus=terms(x+h*direction),minus=terms(x-h*direction),
+                    finePlus=terms(x+half*direction),fineMinus=terms(x-half*direction);
+                const std::array<const char *,6> labels{"pressure","sampled_pressure","sampled_k",
+                    "constitutive","local_advection","sampled_advection"};
+                Vec total=Vec::Zero(size),linear=Vec::Zero(size);
+                for(std::size_t i=0;i<labels.size();++i)
+                {
+                    Vec rows=Vec::Zero(nv+m_flow.PressureSize());
+                    rows.head(nv)=(finePlus[i]-fineMinus[i])/(2.*half)-(plus[i]-minus[i])/(2.*h);
+                    Vec term=Vec::Zero(size);
+                    term.head(nf)=m_flow.Restrict(rows);
+                    total+=term;
+                    if(i<3)linear+=term;
+                    audit.arrays.emplace_back(std::string("raw_spacing_momentum_")+labels[i],std::move(term));
+                }
+                const Vec measured=raw("raw_spacing_change_1");
+                Vec closure=Vec::Zero(size),remain=Vec::Zero(size);
+                closure.head(npOffset)=(total-measured).head(npOffset);
+                remain.head(npOffset)=(measured-linear).head(npOffset);
+                audit.arrays.emplace_back("raw_momentum_term_closure",std::move(closure));
+                audit.arrays.emplace_back("raw_momentum_spacing_without_linear_terms",std::move(remain));
+                Eigen::Index row;
+                measured.head(npOffset).cwiseProduct(sr.head(npOffset)).cwiseAbs().maxCoeff(&row);
+                const auto &free=m_flow.FreeVelocityIds();
+                const int component=row<static_cast<Eigen::Index>(free[0].size())?0:1;
+                const int id=free[component][row-(component?free[0].size():0)];
+                std::ostringstream owners;
+                owners<<std::setprecision(17);
+                for(const auto &cell:m_flow.Elements())
+                    if(std::find(cell.u.begin(),cell.u.end(),id)!=cell.u.end())
+                        owners<<cell.geometry<<" ["<<cell.xl<<','<<cell.xr<<','<<cell.rl<<','<<cell.rr<<"] ";
+                audit.measurements.emplace_back("peak_momentum_free_row",row);
+                audit.measurements.emplace_back("peak_momentum_component",component);
+                audit.notes.emplace_back("peak_momentum_owners",owners.str());
+                audit.measurements.emplace_back("momentum_attribution_seconds",Clock()-start);
             }
             const auto &audit=localized?*localized:observed;
             const double writing=Clock();
