@@ -138,7 +138,7 @@ Use `c1_action_gap.py` from the tested follow-up source to recheck the SHA-bound
 | `C1_CLOSED` | OPEN | Original full-height qualification and physical pilot pending. |
 | `C2_READY` | OPEN | C1 pending. |
 | `LONG_FLAT_PRODUCTION_COST_CLOSED` | OPEN | Separate long-flat and production studies pending. |
-| `REMOTE_PUSH_VERIFIED` | OPEN | Publication check pending. |
+| `REMOTE_PUSH_VERIFIED` | PASS | `git ls-remote origin refs/heads/codex/wj-earsm-awf` returned the published evidence commit `d295d5a1e08e8acabc73114b698b580775338d1f`, equal to the local HEAD at 2026-11-26T19:01:53+08:00. |
 
 The next bounded solve should test 512e−6 current FD on the newest accepted coefficients while retaining 4e−6 factor assembly and correction mass zero. The final accepted-direction probe and the earlier frozen brackets give a quantified sensitivity trend. The previously unresolved direction still needs the two fresh checks. Preserve the effective next forcing .3 and seed the next trial from twice the last accepted fraction, 1.4500886948443608e−4. The changed FD fingerprint requires an explicit re-anchor. This comparison needs a fresh factor allocation plus the qualification reserve.
 
