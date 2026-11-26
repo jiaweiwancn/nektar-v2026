@@ -195,6 +195,10 @@ def main():
     p.add_argument("--out",type=Path,required=True)
     p.add_argument("--seconds",type=float,default=550.)
     p.add_argument("--coverage",action="store_true")
+    p.add_argument("--retained-patches",type=Path,action="append",default=[],
+                   help="preserve the exact off-core coordinates from an earlier paired receipt")
+    p.add_argument("--patch",type=float,nargs=4,action="append",default=[],
+                   metavar=("A","R","HALF_A","HALF_R"))
     p.add_argument("--sampled-action",action="store_true")
     p.add_argument("--archived-noise",type=Path)
     p.add_argument("--noise-receipt",type=Path)
@@ -243,7 +247,28 @@ def main():
             raise ValueError("independent margins refer to different coefficients")
         reports[label]=report
         report_ids[label]=identity(path)
-    study_patches=patches(reports,ref.H,core["critical_interval"],ref.h,core["radial_absolute_offset"],domain)
+    retained,retained_ids=[],[]
+    frozen_identity=identity(args.frozen)
+    for path in args.retained_patches:
+        earlier=json.loads(path.read_text())
+        if earlier["frozen"]["sha256"]!=frozen_identity["sha256"]:
+            raise ValueError("retained patches must share the frozen chart and approaches")
+        retained.extend(earlier["patches"])
+        retained_ids.append(identity(path))
+    for a,r,da,dr in args.patch:
+        if not (domain[0]<=a<=domain[1] and 0.<=r<=domain[2] and da>0. and dr>0.):
+            raise ValueError("explicit patch lies outside the chart or has invalid widths")
+        coords=np.column_stack([v.ravel() for v in np.meshgrid(
+            np.clip(np.linspace(a-da,a+da,9),*domain[:2]),np.clip(np.linspace(r-dr,r+dr,9),0.,domain[2]))])
+        retained.append(dict(centre=[a,r],half_a=da,half_r=dr,witnesses=[],
+                             coords=sorted(set(map(tuple,coords)))))
+    study_patches=[]
+    known=set()
+    for patch in retained+patches(reports,ref.H,core["critical_interval"],ref.h,core["radial_absolute_offset"],domain):
+        key=tuple(map(tuple,patch["coords"]))
+        if key not in known:
+            known.add(key)
+            study_patches.append(patch)
     datasets=[("core",np.array(core["chart_coordinates"]),{})]
     datasets.extend((f"limiting-patch-{i+1}",np.array(q["coords"]),{}) for i,q in enumerate(study_patches))
     if args.coverage:
@@ -280,11 +305,12 @@ def main():
                             extents=extents,comparisons={
             f"{a}/{b}":compare(views[a],views[b],core["scales"],noise) for a,b in args.compare})
     save(args.out/"paired-comparison.json",dict(
-        schema="WJH27PairedAxialComparisonV1",frozen=identity(args.frozen),table=identity(args.table),
+        schema="WJH27PairedAxialComparisonV1",frozen=frozen_identity,table=identity(args.table),
         analysis=identity(__file__),inputs=states,scales=core["scales"],noise=noise,margin_reports=report_ids,
         reported_margin_witnesses={name:{k:{n:v[n] for n in ("principal_over_mu","max_directional_difference","witness","samples")}
              for k,v in report["regions"].items()} for name,report in reports.items()},
         patches=study_patches,
+        retained_patch_receipts=retained_ids,
         sampled_action_orders={k:sampled_action_order(a) for k,a in audits.items()} if args.sampled_action else {},
         transfer_root_signed_sampled_action=sampled_action_order(audits["solved"],native_sampled)
             if native_sampled is not None else None,

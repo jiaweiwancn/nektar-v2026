@@ -50,6 +50,8 @@ def prepare(args):
     boundary = args.out / "boundary-template.xml"
     table = Path(required["WJReferenceTable"])
     splits, mesh_axis, radius_axis = dict(), None, None
+    if args.bisect_radial_at is not None and (args.streamwise or args.radial or args.axial_envelope):
+        raise ValueError("one witnessed radial bisection cannot be combined with other subdivisions")
     if args.axial_envelope:
         if args.streamwise or args.radial:
             raise ValueError("a frozen axial envelope already defines all subdivisions")
@@ -62,25 +64,43 @@ def prepare(args):
     else:
         mesh_axis = insert(xs, args.streamwise)
         radius_axis = insert(zs, [r+d0 for r in args.radial])
+    if args.bisect_radial_at is not None:
+        z = d0 + args.bisect_radial_at
+        owners = [(lo,hi) for lo,hi in zip(zs,zs[1:]) if lo+1e-12 < z < hi-1e-12]
+        if len(owners) != 1:
+            raise ValueError("the radial witness must identify one original interval interior")
+        (lo,hi), = owners
+        middle = lo + (hi-lo)/2
+        radius_axis = insert(zs,[middle])
+        splits = dict(radial_witness=args.bisect_radial_at,parent_vertex_z_bounds=[lo,hi],
+                      parent_radial_bounds=[lo-d0,hi-d0],inserted_vertex_z=middle,
+                      inserted_radial_midpoint=middle-d0,
+                      parent_axial=xs,child_axial=mesh_axis,
+                      cells=(len(mesh_axis)-1)*(len(radius_axis)-1))
     mesh(geometry, mesh_axis, radius_axis, quadrature=12)
-    if args.axial_envelope:
-        # Preserve the parent's vertex text on existing coordinates and the
-        # original radial token at every new axial coordinate.
+    if args.axial_envelope or args.bisect_radial_at is not None:
+        # Preserve original tokens on both axes, including at a new cut.
         vertices = {}
-        radial = {}
+        axial, radial = {}, {}
         for v in parent_geometry.findall("VERTEX/V"):
             a,z,w = v.text.split()
             if float(w)!=0.:
                 raise ValueError("expected a planar chart vertex")
             vertices[float(a),float(z)] = v.text
-            if radial.setdefault(float(z),z)!=z:
-                raise ValueError("radial coordinate uses multiple original tokens")
+            if axial.setdefault(float(a),a)!=a or radial.setdefault(float(z),z)!=z:
+                raise ValueError("chart coordinate uses multiple original tokens")
         gen = ET.parse(geometry)
         for v in gen.findall("GEOMETRY/VERTEX/V"):
             a,z,w = v.text.split()
-            v.text = vertices.get((float(a),float(z)),f"{a} {radial[float(z)]} {w}")
+            x, height = float(a),float(z)
+            v.text = vertices.get((x,height),f"{axial.get(x,a)} {radial.get(height,z)} {w}")
         gen.write(geometry,encoding="unicode")
         splits["radial_xml_tokens"] = [radial[z] for z in zs]
+        recorded_x,recorded_z,recorded = mesh_axes(geometry)
+        if recorded_x!=mesh_axis or recorded_z!=radius_axis or any(
+                v.text!=vertices[key] for v in recorded.findall("VERTEX/V")
+                if (key:=tuple(map(float,v.text.split()[:2]))) in vertices):
+            raise ValueError("mesh output does not preserve the parent's chart bytes and intended cuts")
     generate(boundary, table, args.out / "unused", template=geometry,
              mode="Physical", outlet_policy=required["WJOutletPolicy"])
     rebuilt = ET.parse(boundary)
@@ -181,6 +201,8 @@ def main():
     nested.add_argument("out", type=Path)
     nested.add_argument("--streamwise", nargs="+", type=float, default=[])
     nested.add_argument("--radial", nargs="+", type=float, default=[])
+    nested.add_argument("--bisect-radial-at", type=float,
+                        help="bisect the parent radial interval containing this chart radius")
     nested.add_argument("--axial-envelope",nargs=2,type=float,
                         help="bisect each interval in this fixed envelope, preserving radial XML coordinates")
     nested.set_defaults(run=prepare)

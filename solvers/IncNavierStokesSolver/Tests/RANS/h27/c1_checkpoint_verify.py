@@ -94,7 +94,8 @@ def main():
     assert packet(accepted[-1])["state"]["state_sha256"] == protected["state"]["state_sha256"]
 
     stopped = output/"interrupted"
-    prepare(args.hill, stopped, "--inverse", "ColoredSparseV1", "--accepted-checkpoint", 155, 8, 0)
+    prepare(args.hill, stopped, "--seconds", 220, "--inverse", "ColoredSparseV1",
+            "--accepted-checkpoint", 245, 8, 0)
     saved, stopped_seconds = interrupt_later_preparation(args.exe, stopped)
     replay = output/"interrupted-replay"
     prepare(stopped/"run.xml", replay, "--seed", saved, "--evaluate-only", "--check-actions")
