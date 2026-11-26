@@ -334,6 +334,25 @@ std::string ActionGapControls()
     const double missing=payload(observed[5],"raw_outside_support").norm();
     Check(std::abs(aliased-.3)<1e-12&&std::abs(missing-.3)<1e-12,
           "singleton control missed a coupling hidden by another column's owned row");
+    auto trial=ScalarCallbacks();
+    trial.CorrectionAction=[](const Vec &,const Vec &d)->Vec{return Vec::Zero(d.size());};
+    trial.SetCorrectionMass=[](double){};
+    trial.ResidualBlocks=[](const Vec &r){return std::array<double,6>{std::abs(r[0]),0,0,0,0,0};};
+    auto seeded=Options();
+    seeded.maximumNewtonIterations=1;
+    seeded.merit.emplace().initialTrialFraction=.2;
+    const Vec scalar=Vec::Ones(1);
+    const auto first=SteadyKrylov(trial,scalar,scalar,seeded).Solve(Vec::Zero(1));
+    seeded.merit->restored=first.meritEnd;
+    const auto continued=SteadyKrylov(trial,scalar,scalar,seeded).Solve(first.lastAcceptedX);
+    seeded.merit->restored.reset();
+    seeded.maximumNewtonIterations=2;
+    const auto continuous=SteadyKrylov(trial,scalar,scalar,seeded).Solve(Vec::Zero(1));
+    Check(first.lineSearch.at(0).step==.2&&continued.lineSearch.at(0).step==.4&&
+          continued.lastAcceptedX==continuous.lastAcceptedX&&
+          continued.meritEnd->ToJson()==continuous.meritEnd->ToJson()&&
+          std::abs(continued.lastAcceptedX[0]-.52)<1e-8,
+          "initial trial fraction or restored progress did not preserve actual Armijo acceptance");
     return J::Object({{"projected_scaled",J::Number(result.linear.back().projectedNorm)},
         {"recomputed_scaled",J::Number(payload(observed[0],"raw_fresh_residual").norm())},
         {"fixed_matrix_residual",J::Number(payload(observed[2],"raw_colored_residual").norm())},
@@ -342,6 +361,8 @@ std::string ActionGapControls()
         {"inverse_only_backsolve_residual",J::Number(backsolve)},
         {"constructed_owned_row_alias",J::Number(aliased)},
         {"constructed_missing_support",J::Number(missing)},
+        {"seeded_trial_fractions",J::Numbers(std::array<double,2>{.2,.4})},
+        {"seeded_trial_endpoint",J::Number(continued.lastAcceptedX[0])},
         {"inverse_solution_change",J::Number((before-after).norm())}});
 }
 }

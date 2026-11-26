@@ -104,7 +104,7 @@ def prepare(args):
                 "WJDiagnosticInverseMaximumAge", "WJDiagnosticReuseLinearIterations",
                 "WJDiagnosticCheckpointProcessSeconds", "WJDiagnosticCheckpointReserveSeconds",
                 "WJDiagnosticCheckpointInverseSeconds", "WJDiagnosticMeritInitialMass",
-                "WJDiagnosticMeritReanchorMass", "WJDiagnosticMeritWork",
+                "WJDiagnosticMeritReanchorMass", "WJDiagnosticMeritWork", "WJDiagnosticMeritTrialFraction",
                 "WJSteadyForcingInitial", "WJSteadyForcingMinimum", "WJSteadyForcingMaximum",
                 "WJSteadyForcingGamma", "WJSteadyForcingExponent", "WJDiagnosticFactorFDStep"):
             parameters.remove(item)
@@ -145,7 +145,11 @@ def prepare(args):
         controls.update(WJDiagnosticMeritInitialMass=args.merit_mass,
                         WJDiagnosticMeritReanchorMass=args.merit_reanchor,
                         WJDiagnosticMeritWork=args.merit_work)
-    elif args.merit_entry != "Fresh" or args.merit_reanchor or args.merit_work != 96:
+        if args.merit_trial_fraction:
+            if not 0. < args.merit_trial_fraction <= 1.:
+                raise ValueError("initial merit trial fraction must lie in (0,1]")
+            controls["WJDiagnosticMeritTrialFraction"] = args.merit_trial_fraction
+    elif args.merit_entry != "Fresh" or args.merit_reanchor or args.merit_work != 96 or args.merit_trial_fraction:
         raise ValueError("merit settings require --merit-mass")
     if args.direction_model:
         fields["WJDiagnosticDirectionModel"] = "True"
@@ -277,6 +281,8 @@ def main():
                         help="explicit stronger same-base candidate before bounded changes")
     parser.add_argument("--merit-work", type=int, default=96,
                         help="maximum current Krylov iterations per nonlinear base")
+    parser.add_argument("--merit-trial-fraction", type=float, default=0.,
+                        help="start with this fraction and carry the last verified Armijo fraction")
     parser.add_argument("--merit-entry", choices=("Fresh", "Resume", "Reanchor"), default="Fresh")
     parser.add_argument("--globalization", choices=("HalvingV1", "ModelBacktrackV1"),
                         default="HalvingV1")

@@ -620,7 +620,19 @@ private:
             if(reason=="USEFUL_DESCENT"||(reason=="WEAK_VERIFIED_DESCENT"&&!canChange))
             {
                 const auto before=out.lineSearch.size();
-                if(Backtrack(x,f,norm,PhysicalCorrection(result),original,assessment.step,
+                double step=assessment.step;
+                if(o.merit->initialTrialFraction>0.)
+                {
+                    const auto &previous=*out.meritEnd;
+                    double start=o.merit->initialTrialFraction;
+                    if(previous.step>0.)
+                    {
+                        const bool reliable=previous.ratio&&*previous.ratio>=.5&&*previous.ratio<=1.5;
+                        start=(reliable?2.:1.)*previous.step;
+                    }
+                    step=std::min(step,start);
+                }
+                if(Backtrack(x,f,norm,PhysicalCorrection(result),original,step,
                              assessment.activeSlope,std::min(8,o.maximumLineSearchTrials),proposal))
                     return;
                 const bool evaluated=std::any_of(out.lineSearch.begin()+before,out.lineSearch.end(),
@@ -1145,7 +1157,8 @@ SteadyKrylov::SteadyKrylov(SteadyKrylovCallbacks callbacks,SteadyVector unknownS
         Require(bool(m_callbacks.CorrectionAction)&&bool(m_callbacks.SetCorrectionMass)&&
                 bool(m_callbacks.ResidualBlocks)&&!o.allowIncompleteLinearStep&&
                 std::isfinite(m.initialMass)&&m.initialMass>=0.&&std::isfinite(m.reanchorMass)&&m.reanchorMass>=0.&&
-                m.maximumWork>0,"invalid original-merit correction policy");
+                m.maximumWork>0&&std::isfinite(m.initialTrialFraction)&&
+                m.initialTrialFraction>=0.&&m.initialTrialFraction<=1.,"invalid original-merit correction policy");
         if(m.restored)
         {
             const auto &r=*m.restored;

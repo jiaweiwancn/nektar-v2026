@@ -2151,6 +2151,7 @@ SteadyKrylovResult Coupling::SolveDiagnosticSteady(const CoupledState &seed,
                           options.forcingMaximum,options.forcingGamma,options.forcingExponent,
                           options.fdRelativeStep,options.fdMinimumRelativeStep,options.armijo})
             binding<<'|'<<value;
+        if(policy.initialTrialFraction>0.)binding<<"|trial-fraction:"<<policy.initialTrialFraction;
         m_meritPolicy=RANSWallR3::Hash(binding.str());
         if(diagnostic.meritEntry=="Resume")
         {
@@ -2707,6 +2708,16 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
             {
                 auditedFactorState=pcState;
                 auditedFactorMass=inverseMass;
+                const double auditStart=Clock();
+                const Vec rhs=raw/raw.cwiseProduct(sr).stableNorm();
+                const Vec solved=coupledInverse->Solve(rhs);
+                const Vec unshifted=coupledInverse->OriginalAction(solved)-rhs;
+                const Vec shiftedError=unshifted+applyShift(solved,inverseMass,correctionDiffusion);
+                work.backsolveAudit=std::array<double,2>{sr.cwiseProduct(shiftedError).stableNorm(),
+                                                       sr.cwiseProduct(unshifted).stableNorm()};
+                work.backsolveAuditSeconds=Clock()-auditStart;
+                std::cout<<"WJ-H27 factor backsolve scaled check shifted "<<(*work.backsolveAudit)[0]
+                         <<", unshifted "<<(*work.backsolveAudit)[1]<<std::endl;
             }
             std::cout<<"WJ-H27 coupled inverse "<<work.colors<<" colors, "<<work.nonzeros
                      <<" entries, assembly "<<work.assemblySeconds<<" s, factor "
@@ -3208,6 +3219,9 @@ void Coupling::WriteDiagnostic(const std::filesystem::path&path,const Diagnostic
             out<<"{\"base_norm\":"<<work.baseNorm<<",\"base_coefficient_sha256\":"<<J::Quote(work.baseSha256)
                <<",\"inverse_mass\":"<<work.inverseMass<<",\"stiffness\":"<<work.stiffness<<",\"colors\":"<<work.colors
                <<",\"factor_fd_relative_step\":"<<work.fdRelativeStep
+               <<",\"backsolve_audit_seconds\":"<<work.backsolveAuditSeconds
+               <<",\"backsolve_scaled_shifted_then_unshifted\":"
+               <<(work.backsolveAudit?J::Numbers(*work.backsolveAudit):"null")
                <<",\"nonzeros\":"<<work.nonzeros<<",\"factor_nonzeros\":"<<work.factorNonzeros
                <<",\"residual_evaluations\":"<<work.residualEvaluations
                <<",\"rejected_samples\":"<<work.rejectedSamples

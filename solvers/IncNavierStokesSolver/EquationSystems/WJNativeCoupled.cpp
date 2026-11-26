@@ -313,12 +313,14 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
         m_session->LoadParameter("WJDiagnosticMeritInitialMass",m.initialMass,0.);
         m_session->LoadParameter("WJDiagnosticMeritReanchorMass",m.reanchorMass,0.);
         m_session->LoadParameter("WJDiagnosticMeritWork",m.maximumWork,96);
+        m_session->LoadParameter("WJDiagnosticMeritTrialFraction",m.initialTrialFraction,0.);
     }
     else
         Check(merit=="Disabled"&&entry=="Fresh"&&
               !m_session->DefinesParameter("WJDiagnosticMeritInitialMass")&&
               !m_session->DefinesParameter("WJDiagnosticMeritReanchorMass")&&
-              !m_session->DefinesParameter("WJDiagnosticMeritWork"),
+              !m_session->DefinesParameter("WJDiagnosticMeritWork")&&
+              !m_session->DefinesParameter("WJDiagnosticMeritTrialFraction"),
               "original-merit options require the declared original-merit policy");
     double checkpointProcessSeconds;
     m_session->LoadParameter("WJDiagnosticCheckpointProcessSeconds",checkpointProcessSeconds,0.);

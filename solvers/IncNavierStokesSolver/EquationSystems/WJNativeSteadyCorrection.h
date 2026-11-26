@@ -13,6 +13,8 @@ struct SteadySparseWork
     double baseNorm=0., assemblySeconds=0., factorSeconds=0., maximumUnassignedAction=0.;
     double inverseMass=0.,stiffness=0.;
     double fdRelativeStep=0.;
+    double backsolveAuditSeconds=0.;
+    std::optional<std::array<double,2>> backsolveAudit;
     std::string lastRejection,baseSha256;
 };
 

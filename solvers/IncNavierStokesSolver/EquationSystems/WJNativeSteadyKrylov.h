@@ -30,6 +30,7 @@ struct SteadyMeritOptions
     double initialMass=0., reanchorMass=0.;
     int maximumWork=96;
     std::optional<SteadyMeritState> restored;
+    double initialTrialFraction=0.;
 };
 
 /** The only residual/feasibility exception interpreted as a rejected trial.
