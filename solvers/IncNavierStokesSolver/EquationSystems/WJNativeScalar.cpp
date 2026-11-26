@@ -656,6 +656,38 @@ Vec Scalar::DiffusionAction(const Rules &rules,
     return result;
 }
 
+Vec Scalar::FixedRuleDiffusionDifferenceCorrection(
+    const Rules &rightRules,const std::vector<Vec> &rightD,const Vec &right,
+    const Rules &leftRules,const std::vector<Vec> &leftD,const Vec &left) const
+{
+    Check(rightRules.size()==leftRules.size()&&rightD.size()==rightRules.size()&&
+          leftD.size()==leftRules.size()&&right.size()==Size()&&left.size()==Size(),
+          "fixed-rule diffusion difference inventory differs");
+    Vec correction=Vec::Zero(Size());
+    for(std::size_t e=0;e<rightRules.size();++e)
+    {
+        if(rightRules[e]!=leftRules[e])continue;
+        const auto &rule=*rightRules[e];
+        const Cell *cell=Find(rule);
+        if(!cell)continue;
+        const Vec a=Local(right,cell->ids),b=Local(left,cell->ids);
+        const Vec difference=a-b,average=.5*(a+b);
+        const Vec wa=rule.w.cwiseProduct(rightD[e]),wb=rule.w.cwiseProduct(leftD[e]);
+        const Vec weightDifference=wa-wb,weightAverage=.5*(wa+wb);
+        const Mat dx=Basis(rule,*cell,0),dz=Basis(rule,*cell,2);
+        const Vec actionA=dx.transpose()*wa.cwiseProduct(dx*a)+dz.transpose()*wa.cwiseProduct(dz*a);
+        const Vec actionB=dx.transpose()*wb.cwiseProduct(dx*b)+dz.transpose()*wb.cwiseProduct(dz*b);
+        // Apply the FE gradient to the coefficient difference before
+        // subtracting large nearly equal physical diffusion actions.
+        const auto weakDifference=[&](const Mat &gradient)->Vec {
+            return gradient.transpose()*(weightAverage.cwiseProduct(gradient*difference)+
+                                         weightDifference.cwiseProduct(gradient*average));
+        };
+        Add(correction,weakDifference(dx)+weakDifference(dz)-(actionA-actionB),*cell);
+    }
+    return correction;
+}
+
 Vec Scalar::Source(const Rules &rules, const std::vector<Vec> &source) const
 {
     Check(source.size() == rules.size(), "scalar source rule count differs");

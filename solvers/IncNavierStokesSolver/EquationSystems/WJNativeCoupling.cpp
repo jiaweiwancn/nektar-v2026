@@ -2392,19 +2392,26 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
                     throw std::runtime_error(std::string("scalar term audit requires central stencil ")+purpose);
                 };
                 const Vec x=raw("base"),direction=raw("direction");
+                struct ScalarActionSample
+                {
+                    Vec k;
+                    Rules rules;
+                    std::vector<Vec> diffusion;
+                    std::array<Vec,7> residual;
+                };
                 const auto terms=[&](const Vec &at) {
                     const auto s=unpack(at);
                     const auto d=currentData(at,s); // Rebuild trace and moving rules on every side.
                     const auto &fixed=m_rules.Static();
                     const Vec ed=m_e.DiffusionAction(fixed,d->De,s.epsilon);
-                    return std::array<Vec,7>{
+                    return ScalarActionSample{s.k,d->kRules,d->Dk,{
                         m_k.Restrict(m_k.DiffusionAction(d->kRules,d->Dk,s.k)),
                         m_k.Restrict(-KVolumeLoad(s,*d)),
                         m_k.Restrict(m_k.Advection(d->kRules,s.flow,s.k)),
                         m_e.Restrict(ed),
                         m_e.Restrict(m_e.DiffusionAction(fixed,d->De,s.epsilon,d->reactionE)-ed),
                         m_e.Restrict(-EVolumeLoad(s,*d)),
-                        m_e.Restrict(m_e.Advection(fixed,s.flow,s.epsilon))};
+                        m_e.Restrict(m_e.Advection(fixed,s.flow,s.epsilon))}};
                 };
                 const double h=spacing("spacing_0"),half=spacing("spacing_1");
                 const auto plus=terms(x+h*direction),minus=terms(x-h*direction);
@@ -2416,8 +2423,9 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
                 {
                     const bool k=i<3;
                     Vec term=Vec::Zero(size);
-                    term.segment(k?nf:nf+nk,k?nk:ne)=(finePlus[i]-fineMinus[i])/(2.*half)-
-                                                   (plus[i]-minus[i])/(2.*h);
+                    term.segment(k?nf:nf+nk,k?nk:ne)=
+                        (finePlus.residual[i]-fineMinus.residual[i])/(2.*half)-
+                        (plus.residual[i]-minus.residual[i])/(2.*h);
                     difference+=term;
                     audit.arrays.emplace_back(std::string("raw_spacing_term_")+labels[i],std::move(term));
                 }
@@ -2425,6 +2433,21 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
                 Vec closure=Vec::Zero(size);
                 closure.tail(nk+ne)=(difference-measured).tail(nk+ne);
                 audit.arrays.emplace_back("raw_scalar_term_closure",std::move(closure));
+                auto stableDifference=[&](const ScalarActionSample &a,const ScalarActionSample &b,double step)->Vec {
+                    return m_k.Restrict(m_k.FixedRuleDiffusionDifferenceCorrection(
+                        a.rules,a.diffusion,a.k,b.rules,b.diffusion,b.k))/(2.*step);
+                };
+                const Vec coarseCorrection=stableDifference(plus,minus,h);
+                const Vec fineCorrection=stableDifference(finePlus,fineMinus,half);
+                Vec stableCoarse=raw("raw_action_0"),stableFine=raw("raw_action_1");
+                stableCoarse.segment(nf,nk)+=coarseCorrection;
+                stableFine.segment(nf,nk)+=fineCorrection;
+                audit.arrays.emplace_back("raw_stable_fixed_k_spacing_change",stableFine-stableCoarse);
+                audit.arrays.emplace_back("raw_stable_fixed_k_action_0",stableCoarse);
+                audit.arrays.emplace_back("raw_stable_fixed_k_action_1",stableFine);
+                audit.arrays.emplace_back("raw_stable_fixed_k_model_0",raw("raw_base_residual")+stableCoarse);
+                audit.arrays.emplace_back("raw_stable_fixed_k_taylor_0",raw("raw_difference_0")-h*stableFine);
+                audit.arrays.emplace_back("raw_stable_fixed_k_taylor_1",raw("raw_difference_1")-half*stableFine);
                 const auto base=unpack(x);
                 const auto d=currentData(x,base);
                 for(bool k:{true,false})
