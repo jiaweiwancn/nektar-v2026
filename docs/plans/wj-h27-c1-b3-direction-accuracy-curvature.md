@@ -67,7 +67,7 @@ The 16×24 replay retained the exact coefficients and passed the direct/assemble
 
 The retained 2,175-location, four-approach core has SHA-256 `73c264cf3d237311049fec71f07c32fa44a5b38c2cd2cd308c85103c9f62ab98`. The existing A2/A3 difference is .02551944209, about 33.6 times the .0007594305446050912 ceiling. The 5,292-cell mesh remains an unsolved generator control. This diagnostic work leaves the full-height physical and `1.25*C_total <= 86400` second production qualification open.
 
-The numerical campaign began at 20:08:28 Asia/Shanghai on 2026-11-26. Linux evidence collection reached 22:16:20 after 7,672 elapsed seconds of the 10,800-second allocation. The 3,128-second balance included the 1,800-second qualification reserve. The 1,250-second estimate for another cold factor plus output reserve would have used almost all of the nonreserved balance. The observed direction sizes and contraction provided no basis for repeating that allocation. The extension remained unused.
+The numerical campaign began at 20:08:28 Asia/Shanghai on 2026-11-26. Linux evidence collection reached 22:16:20 after 7,672 elapsed seconds of the 10,800-second allocation. The 3,128-second balance included the 1,800-second qualification reserve. The 1,250-second estimate for another cold factor plus output reserve would have used almost all of the nonreserved balance. The observed direction sizes and contraction provided no basis for repeating that allocation. The extension remained unused. The first verified publication was 8,095 seconds after the campaign start.
 
 The largest observed aggregate at launch was 66 counted workers, including other jobs. The 47-rank external job showed one compute thread per rank. Its blocked MPI service threads were recorded separately. Builds used eight workers and numerical-library threading was one. The native solve lane was serial. Independent audits and diagnostics overlapped within the allocation.
 
@@ -107,7 +107,7 @@ The remaining diagnostic builds and source fingerprints are pinned in the manife
 | `C1_CLOSED` | OPEN | Full-height independent qualification and pilot pending. |
 | `C2_READY` | OPEN | C1 closure pending. |
 | `LONG_FLAT_PRODUCTION_COST_CLOSED` | OPEN | Separate production criterion remains unqualified. |
-| `REMOTE_PUSH_VERIFIED` | OPEN | Publication check pending. |
+| `REMOTE_PUSH_VERIFIED` | PASS | `git ls-remote origin refs/heads/codex/wj-earsm-awf` returned `96e0d957dce814a4ca2d4e79d8fe5f6f81b1ca71`, equal to local HEAD at 2026-11-26T22:23:23+08:00. |
 
 ## Reproduction and continuation
 

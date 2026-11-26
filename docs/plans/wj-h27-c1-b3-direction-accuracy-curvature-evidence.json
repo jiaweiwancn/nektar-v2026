@@ -18672,7 +18672,8 @@
     "worker_scope": "Shared ranks and potential numerical-library workers. MPI progress threads blocked in poll or epoll were recorded separately.",
     "compiler_workers": 8,
     "numerical_library_threads": 1,
-    "allocation_limit_note": "The remaining nonreserved time was close to one cold factor cost. Measured direction amplification and contraction did not support repeating the solve."
+    "allocation_limit_note": "The remaining nonreserved time was close to one cold factor cost. Measured direction amplification and contraction did not support repeating the solve.",
+    "elapsed_through_first_verified_publication_seconds": 8095
   },
   "outcome": {
     "decision": "D_SPATIAL_ADMISSIBILITY_UNRESOLVED",
@@ -18850,12 +18851,17 @@
       "evidence": "Separate production criterion remains unqualified."
     },
     "REMOTE_PUSH_VERIFIED": {
-      "status": "OPEN",
-      "evidence": "Publication check pending."
+      "status": "PASS",
+      "evidence": "Observed remote and local source/evidence SHAs were identical. See publication."
     }
   },
   "publication": {
-    "status": "pending",
-    "branch": "refs/heads/codex/wj-earsm-awf"
+    "status": "verified",
+    "branch": "refs/heads/codex/wj-earsm-awf",
+    "local_head": "96e0d957dce814a4ca2d4e79d8fe5f6f81b1ca71",
+    "remote_ref_sha": "96e0d957dce814a4ca2d4e79d8fe5f6f81b1ca71",
+    "verified_at_Asia_Shanghai": "2026-11-26T22:23:23+08:00",
+    "command": "git ls-remote origin refs/heads/codex/wj-earsm-awf",
+    "scope": "Published numerical source and evidence preceding this verification receipt."
   }
 }
