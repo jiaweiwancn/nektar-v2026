@@ -3,13 +3,50 @@
 """Pin an immutable original-residual or diffusion-homotopy steady case."""
 
 import argparse
+import hashlib
 import json
 import math
 from pathlib import Path
+import struct
 import xml.etree.ElementTree as ET
 
 from resources import identity
 from task2r_verify import edit
+
+
+def action_probe_difference(base, peer):
+    """Map a signed, same-mesh packet difference to independent coefficients."""
+    def load(path):
+        packet = json.loads(path.read_text(), parse_int=lambda text: -0. if text == "-0" else int(text))
+        state = packet["state"]
+        if (packet.get("role") != "STEADY_SEARCH" or packet.get("iterate_custody") != "LAST_ACCEPTED"
+                or packet.get("physical_history") or packet["regularization"]["eta"] != 0
+                or packet["equation_identity"] != hashlib.sha256((state["signature"]+"|steady").encode()).hexdigest()):
+            raise ValueError("direction peer requires bound accepted original diagnostic coefficients")
+        coeff = state["coefficients"]
+        raw = (v for block in ("flow", "k", "epsilon") for v in coeff[block])
+        digest = hashlib.sha256(b"".join(struct.pack("<d", v) for v in raw)).hexdigest()
+        if digest != state["state_sha256"]:
+            raise ValueError("action probe coefficient digest differs")
+        return state
+
+    current, previous = load(base), load(peer)
+    bindings = ("geometry", "elements", "sizes", "free_velocity_ids", "k_free_ids", "epsilon_free_ids",
+                "gauge", "reference_identity", "outlet_identity", "quadratureX", "quadratureR")
+    if any(current[key] != previous[key] for key in bindings):
+        raise ValueError("action probe packets must use the identical signed free inventory and rule")
+    nu, np, _, _ = current["sizes"]
+    flow_ids = [c*nu+i for c, ids in enumerate(current["free_velocity_ids"]) for i in ids]
+    flow_ids.extend(range(2*nu, 2*nu+np))
+    direction = []
+    for block, ids in (("flow", flow_ids), ("k", current["k_free_ids"]), ("epsilon", current["epsilon_free_ids"])):
+        a, b = current["coefficients"][block], previous["coefficients"][block]
+        direction.extend(a[i]-b[i] for i in ids)
+        if block == "flow" and current["gauge"]:
+            direction.append(0.)
+    if not all(math.isfinite(value) for value in direction) or not any(direction):
+        raise ValueError("action probe requires a finite nonzero difference")
+    return struct.pack(f"<{len(direction)}d", *direction)
 
 
 def prepare(args):
@@ -20,7 +57,8 @@ def prepare(args):
         if item.get("PROPERTY") in {
             "WJInitialFields", "WJInitialSourceIdentity", "WJRestart", "WJGeometrySeedPacketSHA256",
             "WJDiagnosticSeedSHA256", "WJDiagnosticCandidateOutput", "WJTerminalOutput",
-            "WJDiagnosticTransferParent", "WJDiagnosticTransferParentSHA256"
+            "WJDiagnosticTransferParent", "WJDiagnosticTransferParentSHA256",
+            "WJDiagnosticActionProbe", "WJDiagnosticActionProbeSHA256", "WJDiagnosticActionGapAudit"
         }:
             info.remove(item)
     for item in list(parameters):
@@ -50,7 +88,7 @@ def prepare(args):
                 "WJDiagnosticCheckpointInverseSeconds", "WJDiagnosticMeritInitialMass",
                 "WJDiagnosticMeritReanchorMass", "WJDiagnosticMeritWork",
                 "WJSteadyForcingInitial", "WJSteadyForcingMinimum", "WJSteadyForcingMaximum",
-                "WJSteadyForcingGamma", "WJSteadyForcingExponent"):
+                "WJSteadyForcingGamma", "WJSteadyForcingExponent", "WJDiagnosticFactorFDStep"):
             parameters.remove(item)
     controls = dict(NumSteps=0, WJSteadySeconds=args.seconds,
                     WJSteadyFDStep=args.fd, WJSteadyNewtonIterations=args.newton,
@@ -129,7 +167,27 @@ def prepare(args):
             raise ValueError("transfer audit requires a bound unshifted evaluate-only root with action checks")
         fields.update(WJDiagnosticTransferParent=args.transfer_audit_parent.resolve(),
                       WJDiagnosticTransferParentSHA256=identity(args.transfer_audit_parent)["sha256"])
+    if args.action_gap_audit or args.action_probe_peer or args.factor_fd:
+        if not args.seed or args.eta or args.beta or args.pseudo_time or args.remap or args.uncommitted_guess:
+            raise ValueError("action audit settings require an exact original diagnostic base")
+    if args.action_gap_audit:
+        if args.evaluate_only or args.inverse != "ColoredSparseV1" or args.merit_mass != 0 or args.merit_reanchor:
+            raise ValueError("action gap audit requires unshifted merit policy and ColoredSparseV1")
+        fields["WJDiagnosticActionGapAudit"] = "True"
+    if args.factor_fd is not None:
+        if not math.isfinite(args.factor_fd) or args.factor_fd <= 0 or args.inverse != "ColoredSparseV1" or args.evaluate_only:
+            raise ValueError("factor FD requires a finite positive step and a colored solve")
+        controls["WJDiagnosticFactorFDStep"] = args.factor_fd
+    direction = None
+    if args.action_probe_peer:
+        if not args.evaluate_only or args.action_gap_audit:
+            raise ValueError("the action peer requires a separate evaluate-only probe")
+        direction = action_probe_difference(args.seed, args.action_probe_peer)
+        fields.update(WJDiagnosticActionProbe=output/"action-probe.bin",
+                      WJDiagnosticActionProbeSHA256=hashlib.sha256(direction).hexdigest())
     output.mkdir(parents=True)
+    if direction is not None:
+        (output/"action-probe.bin").write_bytes(direction)
     target = output/"run.xml"
     session.write(target, encoding="unicode")
     edit(target, fields, controls)
@@ -138,6 +196,8 @@ def prepare(args):
         files.append(args.seed)
     if args.transfer_audit_parent:
         files.append(args.transfer_audit_parent)
+    if args.action_probe_peer:
+        files.extend((args.action_probe_peer, output/"action-probe.bin"))
     (output/"inputs.json").write_text(json.dumps([identity(p) for p in files], indent=2)+"\n")
 
 
@@ -152,6 +212,11 @@ def main():
     parser.add_argument("--quadrature", type=int, nargs=2)
     parser.add_argument("--seconds", type=float, required=True)
     parser.add_argument("--fd", type=float, default=4e-6)
+    parser.add_argument("--factor-fd", type=float, help="independent assembly spacing for the colored factor")
+    parser.add_argument("--action-gap-audit", action="store_true",
+                        help="capture one material failed Krylov check and audit the retained factor")
+    parser.add_argument("--action-probe-peer", type=Path,
+                        help="audit base minus peer in the identical free coordinates without correction")
     parser.add_argument("--newton", type=int, default=48)
     parser.add_argument("--krylov", type=int, default=40)
     parser.add_argument("--cycles", type=int, default=4)

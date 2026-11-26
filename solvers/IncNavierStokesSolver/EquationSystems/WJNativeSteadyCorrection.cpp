@@ -63,6 +63,7 @@ void SteadySparseInverse::Prepare(const Vec &base,const Action &residual,const A
 {
     const int n=base.size();
     work.colors=m_colors.size();
+    work.fdRelativeStep=options.fdRelativeStep;
     std::vector<Triplet> values,shiftValues;
     {
         Timer timer(work.assemblySeconds);

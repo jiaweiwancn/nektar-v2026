@@ -55,6 +55,36 @@ void VectorJSON(std::ostream&out,const Vec&v)
 {out<<'[';for(int i=0;i<v.size();++i){if(i)out<<',';out<<v[i];}out<<']';}
 std::string StateHash(const CoupledState&s)
 {D::Sha256 hash;for(const auto*v:{&s.flow,&s.k,&s.epsilon})hash.Update(v->data(),v->size()*sizeof(double));return hash.Finish();}
+template<class Write> void PublishDiagnostic(const std::filesystem::path &path,Write write)
+{
+    const auto temporary=path.string()+".tmp."+std::to_string(::getpid());
+    const int fd=::open(temporary.c_str(),O_WRONLY|O_CREAT|O_EXCL,0600);
+    D::Check(fd>=0,"cannot reserve diagnostic packet");
+    try
+    {
+        write(fd);
+        D::Check(::fsync(fd)==0,"cannot sync diagnostic packet");
+    }
+    catch(...)
+    {
+        ::close(fd);
+        ::unlink(temporary.c_str());
+        throw;
+    }
+    const int closed=::close(fd);
+    try
+    {
+        D::Check(closed==0,"cannot close diagnostic packet");
+        std::filesystem::create_hard_link(temporary,path);
+    }
+    catch(...)
+    {
+        ::unlink(temporary.c_str());
+        throw;
+    }
+    D::Check(::unlink(temporary.c_str())==0,"cannot unlink diagnostic temporary");
+    D::SyncDirectory(std::filesystem::absolute(path));
+}
 CoupledState Combination(const CoupledState&a,double wa,const CoupledState&b,double wb)
 {return {wa*a.flow+wb*b.flow,wa*a.k+wb*b.k,wa*a.epsilon+wb*b.epsilon};}
 std::array<double,2> HillWindow(double a,double left,double right,double band)
@@ -2128,6 +2158,9 @@ SteadyKrylovResult Coupling::SolveDiagnosticSteady(const CoupledState &seed,
                     StateHash(FromFree(PackFree(seed),0.))==m_initialSourceStateSha,
                     "original-merit resume requires the exact accepted coefficients, policy and equation/source bindings");
             policy.restored=m_importedMerit;
+            Require(diagnostic.actionAuditPrefix.empty()||
+                    (policy.restored->usedMass==0.&&policy.restored->nextMass==0.),
+                    "unshifted action audit cannot restore a shifted controller");
         }
         else
             Require(diagnostic.meritEntry=="Reanchor"||!m_importedMerit,
@@ -2219,8 +2252,8 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
         m_steadyPatternSeconds=sparse?Clock()-patternStart:0.;
         m_steadyBaseSha256=StateHash(unpack(pack(seed)));
     }
-    CoupledState pcState;Sparse epsilonPCFull;
-    double initialBaseNorm=0.,correctionMass=0.,correctionDiffusion=0.;
+    CoupledState pcState, auditedFactorState;Sparse epsilonPCFull;
+    double initialBaseNorm=0.,correctionMass=0.,correctionDiffusion=0.,auditedFactorMass=0.;
     auto blockNorms=[&](const Vec &raw) {
         const auto r=norms(raw);
         return std::array<double,6>{r.momentum,r.continuity,r.gauge,r.k,r.epsilon,r.trace};
@@ -2293,19 +2326,134 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
         }
         return action;
     };
-    auto applyShift=[&](const Vec&dx,double mass,double diffusion) {
+    auto shiftAt=[&](const CoupledState &base,const Vec&dx,double mass,double diffusion) {
         CoupledState delta;
         delta.flow=m_flow.Expand(dx.head(nf),Vec::Zero(nv+m_flow.PressureSize()));
         if(mass>0.)
         {
             delta.k=m_k.Expand(dx.segment(nf,nk),Vec::Zero(m_k.Size()));
-            delta.epsilon=m_e.Expand(dx.tail(ne),DependentTraceDirection(pcState,delta.k));
+            delta.epsilon=m_e.Expand(dx.tail(ne),DependentTraceDirection(base,delta.k));
         }
         return differentialShift(delta,mass,diffusion);
+    };
+    auto applyShift=[&](const Vec&dx,double mass,double diffusion) {
+        return shiftAt(pcState,dx,mass,diffusion);
     };
     if(shifted)callbacks.CorrectionAction=[&](const Vec&,const Vec&dx) {
         return applyShift(dx,correctionMass,correctionDiffusion);
     };
+    if(diagnostic&&!diagnostic->actionAuditPrefix.empty())
+    {
+        std::set<int> matching;
+        for(const auto &[id,trace]:m_hKTrace)
+            matching.insert(trace.ids.begin(),trace.ids.end());
+        std::vector<int> traceRows;
+        for(int i=0;i<nk;++i)
+            if(matching.count(m_k.FreeIds()[i]))traceRows.push_back(nf+i);
+        callbacks.TraceDirection=[traceRows](const Vec &d) {
+            Vec trace=Vec::Zero(d.size());
+            for(int row:traceRows)trace[row]=d[row];
+            return trace;
+        };
+        D::Sha256 ordering;
+        for(const auto *ids:{&m_flow.FreeVelocityIds()[0],&m_flow.FreeVelocityIds()[1],&m_k.FreeIds(),&m_e.FreeIds()})
+            ordering.Update(ids->data(),ids->size()*sizeof(int));
+        const auto orderingSha=ordering.Finish();
+        callbacks.ObserveActionAudit=[&,orderingSha](const SteadyActionAudit &audit) {
+            const double start=Clock();
+            Require(correctionMass==0.&&correctionDiffusion==0.,"action audit requires an unshifted current correction");
+            namespace J=RANSWallSolveJson;
+            const std::uint16_t endian=1;
+            Require(sizeof(double)==8&&std::numeric_limits<double>::is_iec559&&
+                    *reinterpret_cast<const unsigned char*>(&endian)==1,"action audit requires little-endian binary64");
+            const auto prefix=diagnostic->actionAuditPrefix+audit.stage;
+            const auto binary=prefix+".bin";
+            PublishDiagnostic(binary,[&](int fd) {
+                for(const auto &[name,values]:audit.arrays)
+                    D::WriteAll(fd,values.data(),values.size()*sizeof(double));
+            });
+            std::ostringstream out;
+            out<<std::setprecision(17)<<"{\"schema\":\"WJH27SteadyActionAuditV1\",\"role\":\"NONACCEPTED_ACTION_VECTOR\""
+                <<",\"physical_history\":false,\"stage\":"<<J::Quote(audit.stage)
+                <<",\"source_identity\":"<<J::Quote(m_options.sourceIdentity)
+                <<",\"reference_identity\":"<<J::Quote(m_reference->Identity())
+                <<",\"signature\":"<<J::Quote(m_signature)
+                <<",\"equation_identity\":"<<J::Quote(D::Hash(m_signature+"|steady"))
+                <<",\"initial_packet_sha256\":"<<J::Quote(m_initialPacketSha)
+                <<",\"base_coefficient_sha256\":"<<J::Quote(StateHash(unpack(audit.arrays.front().second.col(0))))
+                <<",\"session_sha256\":[";
+            for(std::size_t i=0;i<diagnostic->checkpointSessionDigests.size();++i)
+            {
+                if(i)out<<',';
+                out<<J::Quote(diagnostic->checkpointSessionDigests[i]);
+            }
+            out<<"],\"probe_input_sha256\":"<<J::Quote(diagnostic->actionProbeSha)
+                <<",\"free_order\":\"free u, free v, all Pi, optional gauge, free k, free outer epsilon\""
+                <<",\"free_id_sha256\":"<<J::Quote(orderingSha)
+                <<",\"free_counts\":["<<m_flow.FreeVelocityIds()[0].size()<<','<<m_flow.FreeVelocityIds()[1].size()
+                <<','<<m_flow.PressureSize()<<','<<(m_flow.Gauge()?1:0)<<','<<nk<<','<<ne<<']'
+                <<",\"quadrature\":["<<m_options.quadratureX<<','<<m_options.quadratureR<<']'
+                <<",\"current_fd\":"<<options.fdRelativeStep<<",\"correction_mass\":"<<correctionMass
+                <<",\"inverse_only_mass\":"<<preconditionerMass
+                <<",\"newton\":"<<audit.newton<<",\"cycle\":"<<audit.cycle<<",\"iteration\":"<<audit.iteration
+                <<",\"factor_serial\":"<<audit.factorSerial<<",\"factor\":";
+            if(audit.factorSerial)
+            {
+                const auto &work=m_sparseSteadyWork.at(audit.factorSerial-1);
+                out<<"{\"assembly_base_sha256\":"<<J::Quote(work.baseSha256)
+                   <<",\"total_mass\":"<<work.inverseMass<<",\"fd_relative_step\":"<<work.fdRelativeStep
+                   <<",\"colors\":"<<work.colors<<",\"matrix_nonzeros\":"<<work.nonzeros
+                   <<",\"factor_nonzeros\":"<<work.factorNonzeros<<'}';
+            }
+            else out<<"null";
+            std::vector<std::pair<std::string,std::string>> measures;
+            for(const auto &[name,value]:audit.measurements)measures.emplace_back(name,J::Number(value));
+            out<<",\"measurements\":"<<J::Object(measures)<<",\"raw_payload\":"<<D::Pin(binary)
+               <<",\"encoding\":\"little-endian binary64, column major\",\"arrays\":[";
+            std::size_t offset=0;
+            for(const auto &[name,values]:audit.arrays)
+            {
+                if(offset)out<<',';
+                const auto bytes=values.size()*sizeof(double);
+                out<<"{\"name\":"<<J::Quote(name)<<",\"offset_bytes\":"<<offset
+                   <<",\"rows\":"<<values.rows()<<",\"columns\":"<<values.cols()
+                   <<",\"sha256\":"<<J::Quote(D::Hash(values.data(),bytes));
+                if(name.rfind("raw_",0)==0&&values.cols()==1)
+                {
+                    const Vec raw=values.col(0);
+                    out<<",\"scaled_l2\":"<<sr.cwiseProduct(raw).stableNorm()
+                       <<",\"physical_blocks\":"<<J::Numbers(blockNorms(raw));
+                }
+                out<<'}';
+                offset+=bytes;
+            }
+            out<<"],\"stencils\":[";
+            for(std::size_t i=0;i<audit.stencils.size();++i)
+            {
+                const auto &fd=audit.stencils[i];
+                if(i)out<<',';
+                out<<"{\"purpose\":"<<J::Quote(fd.purpose)<<",\"method\":"<<J::Quote(fd.method)
+                   <<",\"reduction\":"<<fd.reduction<<",\"relative\":"<<fd.relativeStep
+                   <<",\"parameter\":"<<fd.parameterStep<<",\"coordinate\":"<<fd.scaledCoordinateStep
+                   <<",\"scaled_direction_infinity\":"<<fd.scaledDirectionInfinityNorm
+                   <<",\"plus\":"<<J::Boolean(fd.plusAdmissible)<<",\"minus\":"<<J::Boolean(fd.minusAdmissible)
+                   <<",\"half\":"<<J::Boolean(fd.halfAdmissible)<<",\"plus_reason\":"<<J::Quote(fd.plusReason)
+                   <<",\"minus_reason\":"<<J::Quote(fd.minusReason)<<",\"half_reason\":"<<J::Quote(fd.halfReason)<<'}';
+            }
+            out<<"]}\n";
+            const auto contents=out.str();
+            PublishDiagnostic(prefix+".json",[&](int fd){D::WriteAll(fd,contents.data(),contents.size());});
+            timing.io+=Clock()-start;
+            std::cout<<"WJ-H27 action audit "<<audit.stage<<" published in "<<Clock()-start<<" s"<<std::endl;
+        };
+        if(sparse)
+        {
+            callbacks.ColoredAction=[&](const Vec &d){return coupledInverse->OriginalAction(d);};
+            callbacks.FactoredAction=[&](const Vec &d)->Vec {
+                return coupledInverse->OriginalAction(d)+shiftAt(auditedFactorState,d,auditedFactorMass,0.);
+            };
+        }
+    }
     auto refreshState=[&](CoupledState state,const Data &d,const std::string &reason,int iteration,bool accepted) {
         auto load=forcing;
         auto adv=Advection(state,d.kRules);
@@ -2552,10 +2700,19 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
             work.baseSha256=StateHash(pcState);
             work.inverseMass=inverseMass;
             work.stiffness=correctionDiffusion;
-            coupledInverse->Prepare(x,checkedResidual,addShift,options,deadline,work);
+            auto factorOptions=options;
+            if(diagnostic->factorFDStep>0.)factorOptions.fdRelativeStep=diagnostic->factorFDStep;
+            coupledInverse->Prepare(x,checkedResidual,addShift,factorOptions,deadline,work);
+            if(callbacks.FactoredAction)
+            {
+                auditedFactorState=pcState;
+                auditedFactorMass=inverseMass;
+            }
             std::cout<<"WJ-H27 coupled inverse "<<work.colors<<" colors, "<<work.nonzeros
                      <<" entries, assembly "<<work.assemblySeconds<<" s, factor "
-                     <<work.factorSeconds<<" s"<<std::endl;
+                     <<work.factorSeconds<<" s, correction mass "<<correctionMass
+                     <<", inverse-only mass "<<preconditionerMass<<", total "<<inverseMass
+                     <<", factor FD "<<work.fdRelativeStep<<", current FD "<<options.fdRelativeStep<<std::endl;
             if(diagnostic->auditCorrection&&m_sparseSteadyWork.size()==1)auditInverse(x,raw);
             observedPreparationSeconds=std::max(observedPreparationSeconds,Clock()-preparationStart);
             return;
@@ -2590,7 +2747,21 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
         if(m_flow.Gauge())probe[nf-1]=.003;
         (void)equations(probe);
     }
-    SteadyKrylov solver(std::move(callbacks),sx,sr,options);auto result=solver.Solve(pack(seed));
+    SteadyKrylov solver(std::move(callbacks),sx,sr,options);
+    const Vec initial=pack(seed);
+    if(diagnostic&&!diagnostic->actionProbePath.empty())
+    {
+        Require(StateHash(unpack(initial))==m_initialSourceStateSha,
+                "fixed direction requires an exact signed base without projection");
+        std::ifstream file(diagnostic->actionProbePath,std::ios::binary);
+        Vec direction(size);
+        const auto bytes=size*sizeof(double);
+        file.read(reinterpret_cast<char*>(direction.data()),bytes);
+        Require(file.gcount()==static_cast<std::streamsize>(bytes)&&file.peek()==std::char_traits<char>::eof()&&
+                D::Hash(direction.data(),bytes)==diagnostic->actionProbeSha,"fixed direction size or digest differs");
+        solver.AuditDirection(initial,direction);
+    }
+    auto result=solver.Solve(initial);
     auto refresh=[&](const Vec &x,int iteration,bool accepted) {
         auto state=unpack(x);
         const auto d=Evaluate(state,0,diagnostic?PrincipalPolicy::Observe:PrincipalPolicy::Enforce,timing,diagnostic);
@@ -3001,6 +3172,7 @@ void Coupling::WriteDiagnostic(const std::filesystem::path&path,const Diagnostic
             if(i)out<<',';
             out<<"{\"base_norm\":"<<work.baseNorm<<",\"base_coefficient_sha256\":"<<J::Quote(work.baseSha256)
                <<",\"inverse_mass\":"<<work.inverseMass<<",\"stiffness\":"<<work.stiffness<<",\"colors\":"<<work.colors
+               <<",\"factor_fd_relative_step\":"<<work.fdRelativeStep
                <<",\"nonzeros\":"<<work.nonzeros<<",\"factor_nonzeros\":"<<work.factorNonzeros
                <<",\"residual_evaluations\":"<<work.residualEvaluations
                <<",\"rejected_samples\":"<<work.rejectedSamples
@@ -3090,34 +3262,8 @@ void Coupling::WriteDiagnostic(const std::filesystem::path&path,const Diagnostic
     if(timeStep)WriteInputHistory(out);
     out<<"}}\n";
 
-    const auto bytes=out.str(),temporary=path.string()+".tmp."+std::to_string(::getpid());
-    const int fd=::open(temporary.c_str(),O_WRONLY|O_CREAT|O_EXCL,0600);
-    D::Check(fd>=0,"cannot reserve diagnostic packet");
-    try
-    {
-        D::WriteAll(fd,bytes.data(),bytes.size());
-        D::Check(::fsync(fd)==0,"cannot sync diagnostic packet");
-    }
-    catch(...)
-    {
-        ::close(fd);
-        ::unlink(temporary.c_str());
-        throw;
-    }
-    const int closed=::close(fd);
-    try
-    {
-        D::Check(closed==0,"cannot close diagnostic packet");
-        // Link publishes atomically and refuses an existing destination.
-        std::filesystem::create_hard_link(temporary,path);
-    }
-    catch(...)
-    {
-        ::unlink(temporary.c_str());
-        throw;
-    }
-    D::Check(::unlink(temporary.c_str())==0,"cannot unlink diagnostic temporary");
-    D::SyncDirectory(std::filesystem::absolute(path));
+    const auto bytes=out.str();
+    PublishDiagnostic(path,[&](int fd){D::WriteAll(fd,bytes.data(),bytes.size());});
 }
 
 }

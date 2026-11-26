@@ -282,6 +282,12 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     m_session->LoadSolverInfo("WJDiagnosticSeedSHA256",m_diagnosticSteadyOptions.seedSha256,"");
     m_session->LoadSolverInfo("WJDiagnosticTransferParent",m_transferAuditParent,"");
     m_session->LoadSolverInfo("WJDiagnosticTransferParentSHA256",m_transferAuditParentSha,"");
+    auto &diagnostic=m_diagnosticSteadyOptions;
+    m_session->LoadSolverInfo("WJDiagnosticActionProbe",diagnostic.actionProbePath,"");
+    m_session->LoadSolverInfo("WJDiagnosticActionProbeSHA256",diagnostic.actionProbeSha,"");
+    m_session->LoadParameter("WJDiagnosticFactorFDStep",diagnostic.factorFDStep,0.);
+    std::string actionGap;
+    m_session->LoadSolverInfo("WJDiagnosticActionGapAudit",actionGap,"False");
     std::string inverse,audit,evaluateOnly,direction,globalization,uncommitted,checkpoint;
     m_session->LoadSolverInfo("WJDiagnosticSteadyInverse",inverse,"BlockV1");
     m_session->LoadSolverInfo("WJDiagnosticCorrectionAudit",audit,"False");
@@ -314,7 +320,6 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
               !m_session->DefinesParameter("WJDiagnosticMeritWork"),
               "original-merit options require the declared original-merit policy");
     double checkpointProcessSeconds;
-    auto &diagnostic=m_diagnosticSteadyOptions;
     m_session->LoadParameter("WJDiagnosticCheckpointProcessSeconds",checkpointProcessSeconds,0.);
     m_session->LoadParameter("WJDiagnosticCheckpointReserveSeconds",diagnostic.checkpointReserveSeconds,0.);
     m_session->LoadParameter("WJDiagnosticCheckpointInverseSeconds",diagnostic.checkpointInverseSeconds,0.);
@@ -379,6 +384,36 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
               !m_session->DefinesParameter("WJDiagnosticRegularizationFullRadius")&&
               !m_session->DefinesParameter("WJDiagnosticScalarSubdivisionDepth"),
               "diagnostic correction or momentum regularization requires DiagnosticSteady");
+    }
+    Check((actionGap=="False"||actionGap=="True")&&
+          (diagnostic.actionProbePath.empty()==diagnostic.actionProbeSha.empty())&&
+          std::isfinite(diagnostic.factorFDStep)&&diagnostic.factorFDStep>=0.,
+          "invalid diagnostic action audit options");
+    if(actionGap=="True"||!diagnostic.actionProbePath.empty()||diagnostic.factorFDStep>0.)
+    {
+        Check(m_diagnosticSteady&&diagnostic.eta==0.&&diagnostic.pseudoTime==0.&&
+              diagnostic.correctionDiffusion==0.&&uncommitted=="False"&&
+              !diagnostic.seedSha256.empty(),"action audit requires pinned original diagnostic state");
+        if(actionGap=="True")
+            Check(diagnostic.sparseInverse&&!m_steadyOptions.evaluateInitialOnly&&
+                  m_steadyOptions.merit&&m_steadyOptions.merit->initialMass==0.&&
+                  m_steadyOptions.merit->reanchorMass==0.&&
+                  diagnostic.actionProbePath.empty(),"action gap audit requires an unshifted colored solve");
+        if(!diagnostic.actionProbePath.empty())
+            Check(m_steadyOptions.evaluateInitialOnly&&diagnostic.actionProbeSha.size()==64,
+                  "a frozen direction requires a pinned evaluate-only probe");
+        if(diagnostic.factorFDStep>0.)
+            Check(diagnostic.sparseInverse&&!m_steadyOptions.evaluateInitialOnly&&
+                  diagnostic.factorFDStep>=m_steadyOptions.fdMinimumRelativeStep,
+                  "factor FD spacing requires a colored factor and representable step");
+        if(actionGap=="True"||!diagnostic.actionProbePath.empty())
+        {
+            diagnostic.actionAuditPrefix=m_prefix+".action-";
+            if(diagnostic.checkpointSessionDigests.empty())
+                for(const auto &filename:m_session->GetFilenames())
+                    diagnostic.checkpointSessionDigests.push_back(RANSWallR3::HashFile(filename));
+            Check(!diagnostic.checkpointSessionDigests.empty(),"action audit must bind session bytes");
+        }
     }
     double geometrySeedHeight=-1.;
     m_session->LoadParameter("WJGeometrySeedFromHeight",geometrySeedHeight,-1.);

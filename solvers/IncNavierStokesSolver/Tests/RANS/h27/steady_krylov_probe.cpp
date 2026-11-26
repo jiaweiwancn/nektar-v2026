@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 #include <IncNavierStokesSolver/EquationSystems/WJNativeSteadyKrylov.h>
+#include <IncNavierStokesSolver/EquationSystems/WJNativeSteadyCorrection.h>
 #include <IncNavierStokesSolver/EquationSystems/RANSWallSolveDiagnostics.h>
 #include <Eigen/Core>
 #include <Eigen/LU>
@@ -268,6 +269,68 @@ SteadyKrylovCallbacks ScalarCallbacks()
     cb.Precondition=[](const Vec&rhs){return Vec(rhs);};
     cb.ValidTrial=[](const Vec&x){return SteadyTrialValidity{std::abs(x[0])<=2,"scalar constitutive domain"};};
     return cb;
+}
+
+std::string ActionGapControls()
+{
+    Eigen::Matrix2d matrix;
+    matrix<<0.,1.,1.,1.;
+    const Vec one=Vec::Ones(2), base=Vec::Zero(2), rhs=Vector({1.,0.});
+    const auto linear=[&](const Vec &d)->Vec {return matrix*d;};
+    SteadyKrylovCallbacks cb;
+    cb.Residual=[&](const Vec &x)->Vec {
+        Vec f=rhs+linear(x);
+        f[0]+=200.*x[0]*x[0]*x[1];
+        return f;
+    };
+    cb.Precondition=[](const Vec &v){return v;};
+    cb.ValidTrial=[](const Vec &){return SteadyTrialValidity{};};
+    cb.TrueNorm=[](const Vec &v){return v.lpNorm<Eigen::Infinity>();};
+    cb.ColoredAction=linear;
+    cb.TraceDirection=[](const Vec &v){return Vector({0.,v[1]});};
+    std::vector<SteadyActionAudit> observed;
+    cb.ObserveActionAudit=[&](const SteadyActionAudit &a){observed.push_back(a);};
+    auto options=Options();
+    options.fdRelativeStep=.1;
+    options.maximumNewtonIterations=1;
+    options.maximumLinearCycles=1;
+    options.restartDimension=2;
+    options.forcingInitial=.1;
+    options.forcingMaximum=.2;
+    const auto result=SteadyKrylov(cb,one,one,options).Solve(base);
+    auto payload=[](const SteadyActionAudit &a,const std::string &name)->Vec {
+        for(const auto &[key,value]:a.arrays)
+            if(key==name)return value.col(0);
+        throw std::runtime_error("missing action audit array "+name);
+    };
+    Check(observed.size()==4&&observed[0].stage=="failed-krylov"&&
+          payload(observed[0],"direction").norm()>1.&&
+          payload(observed[0],"raw_stored_residual").norm()<1e-12&&
+          payload(observed[0],"raw_fresh_residual").norm()>1.9&&
+          payload(observed[2],"raw_colored_residual").norm()<1e-12,
+          "failed nonzero direction or fixed matrix discriminator lost");
+    Check(!result.converged&&result.lastAcceptedX.isZero()&&result.lineSearch.empty(),
+          "a misleading projected residual changed the selected or accepted state");
+    Check((payload(observed[1],"raw_action_1").array()==payload(observed[1],"raw_action_4").array()).all(),
+          "repeat of the fixed-direction action changed");
+
+    const SteadySparseInverse::SparseMatrix exact=matrix.sparseView();
+    SteadySparseInverse plain({{0,1},{0,1}},exact,one,one), shifted({{0,1},{0,1}},exact,one,one);
+    SteadySparseWork originalWork,shiftWork;
+    plain.Prepare(base,cb.Residual,{},options,[]{},originalWork);
+    shifted.Prepare(base,cb.Residual,[](const Vec &v)->Vec{return .5*v;},options,[]{},shiftWork);
+    const Vec before=plain.Solve(rhs), after=shifted.Solve(rhs);
+    const double backsolve=(shifted.OriginalAction(after)+.5*after-rhs).norm();
+    Check((plain.OriginalAction(rhs)-shifted.OriginalAction(rhs)).norm()==0.&&
+          (before-after).norm()>.1&&backsolve<1e-12,
+          "inverse-only addition changed original action or failed to change the solve");
+    return J::Object({{"projected_scaled",J::Number(result.linear.back().projectedNorm)},
+        {"recomputed_scaled",J::Number(payload(observed[0],"raw_fresh_residual").norm())},
+        {"fixed_matrix_residual",J::Number(payload(observed[2],"raw_colored_residual").norm())},
+        {"accepted_updates",J::Number(result.statistics.acceptedNewtonSteps)},
+        {"captured_nonzero_direction",V(payload(observed[0],"direction"))},
+        {"inverse_only_backsolve_residual",J::Number(backsolve)},
+        {"inverse_solution_change",J::Number((before-after).norm())}});
 }
 }
 int main(int argc,char**argv)
@@ -561,6 +624,7 @@ int main(int argc,char**argv)
             {"solves",J::List(solves)},{"derivative_probes",J::List(probes)},{"fatal_exceptions",J::List(exceptions)},
             {"nonlinear_validation_controls",J::List(validationControls)},
             {"original_merit_controls",J::List(OriginalMeritControls())},
+            {"action_gap_controls",ActionGapControls()},
             {"full_initial_guard_residual_calls",J::Number(initialGuardResiduals)},
             {"revalidated_full_base_calls",J::Number(fullBaseCalls)}});
         std::ofstream output(argv[1]);output<<result<<'\n';Check(output.good(),"probe output write failed");

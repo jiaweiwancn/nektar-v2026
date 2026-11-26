@@ -184,7 +184,147 @@ public:
         return result;
     }
 
+    void Audit(const Vec &x,const Vec &direction)
+    {
+        CheckVector(x,sx.size(),"audit base");
+        CheckVector(direction,sx.size(),"physical audit direction");
+        Require(direction.cwiseAbs().maxCoeff()>0.,"audit requires a nonzero direction");
+        const Vec f=Base(x);
+        if(cb.PrepareCorrection)cb.PrepareCorrection(x,f);
+        AuditSpacings("seed-direction",x,f,direction.cwiseQuotient(sx),-1,-1,0);
+    }
+
 private:
+
+    SteadyActionAudit AuditData(const char *stage,const Vec &x,const Vec &f,
+                                const Vec &direction,int cycle,int iteration) const
+    {
+        SteadyActionAudit data;
+        data.stage=stage;data.newton=newton;data.cycle=cycle;data.iteration=iteration;
+        data.factorSerial=factorSerial;
+        data.arrays={{"base",x},{"raw_base_residual",f},{"unknown_scale",sx},
+                     {"row_scale",sr},{"direction",sx.cwiseProduct(direction)}};
+        return data;
+    }
+
+    void AuditSpacings(const char *stage,const Vec &x,const Vec &f,const Vec &direction,
+                       int cycle,int iteration,double forcing)
+    {
+        auto data=AuditData(stage,x,f,direction,cycle,iteration);
+        data.measurements={{"forcing",forcing},{"current_fd",o.fdRelativeStep}};
+        const auto first=out.finiteDifferences.size();
+        const auto began=Clock::now();
+        std::vector<std::pair<double,Vec>> samples;
+        Vec reference, middle;
+        for(double spacing:{4e-6,2e-6,1e-6,5e-7,2e-6})
+        {
+            const std::string label=std::to_string(samples.size());
+            std::pair<double,Vec> sample;
+            Vec action=Jacobian(x,f,direction,spacing/o.fdRelativeStep,"spacing_"+label,cycle,iteration,&sample);
+            if(samples.size()==3)reference=action;
+            if(samples.size()==1)middle=action;
+            data.arrays.emplace_back("raw_action_"+label,std::move(action));
+            data.arrays.emplace_back("raw_difference_"+label,sample.second);
+            data.measurements.emplace_back("signed_parameter_"+label,sample.first);
+            samples.push_back(std::move(sample));
+        }
+        for(std::size_t i=0;i<samples.size();++i)
+            data.arrays.emplace_back("raw_taylor_"+std::to_string(i),
+                                     samples[i].second-samples[i].first*reference);
+        if(cb.ColoredAction&&factorSerial)
+            data.arrays.emplace_back("raw_colored_action",cb.ColoredAction(sx.cwiseProduct(direction)));
+        if(cb.TraceDirection)
+        {
+            const Vec trace=cb.TraceDirection(sx.cwiseProduct(direction)).cwiseQuotient(sx);
+            const Vec complement=direction-trace;
+            if(trace.cwiseAbs().maxCoeff()>0.&&complement.cwiseAbs().maxCoeff()>0.)
+            {
+                const Vec a=Jacobian(x,f,trace,2e-6/o.fdRelativeStep,"matching-k",cycle,iteration);
+                const Vec b=Jacobian(x,f,complement,2e-6/o.fdRelativeStep,"remaining-free",cycle,iteration);
+                data.arrays.emplace_back("matching_k_direction",sx.cwiseProduct(trace));
+                data.arrays.emplace_back("raw_matching_k_action",a);
+                data.arrays.emplace_back("raw_complement_action",b);
+                data.arrays.emplace_back("raw_additivity_gap",middle-a-b);
+                if(cb.ColoredAction&&factorSerial)
+                    data.arrays.emplace_back("raw_colored_matching_k",cb.ColoredAction(sx.cwiseProduct(trace)));
+            }
+        }
+        data.stencils.assign(out.finiteDifferences.begin()+first,out.finiteDifferences.end());
+        data.measurements.emplace_back("audit_seconds",Seconds(began));
+        cb.ObserveActionAudit(data);
+    }
+
+    void AuditGap(const Vec &x,const Vec &f,const Vec &candidate,const Vec &freshAction,
+                  const Vec &d0,const Vec &action0,const Vec &r0,const Mat &v,const Mat &z,
+                  const Mat &w,const Mat &h,const Vec &y,const SteadyLinearRecord &check,double forcing)
+    {
+        actionAuditCaptured=true;
+        const int k=int(y.size()),basis=k+(check.breakdown?0:1);
+        const auto started=Clock::now();
+        auto data=AuditData("failed-krylov",x,f,candidate,check.cycle,check.iteration);
+        const Vec stored=r0-w.leftCols(k)*y, arnoldi=r0-v.leftCols(k+1)*(h*y);
+        const Vec fresh=-sr.cwiseProduct(f+freshAction);
+        const Mat orthogonality=v.leftCols(basis).transpose()*v.leftCols(basis)-Mat::Identity(basis,basis);
+        double directionSum=d0.stableNorm(),actionSum=sr.cwiseProduct(action0).stableNorm();
+        Vec replay=sx.cwiseProduct(d0);
+        for(int j=0;j<k;++j)
+        {
+            directionSum+=std::abs(y[j])*z.col(j).stableNorm();
+            actionSum+=std::abs(y[j])*w.col(j).stableNorm();
+            replay+=y[j]*sx.cwiseProduct(z.col(j));
+        }
+        data.measurements={{"forcing",forcing},{"projected_scaled",check.projectedNorm},
+            {"rank",double(check.leastSquaresRank)},{"basis_columns",double(basis)},
+            {"physical_target",forcing*Norm(f)},{"scaled_target",forcing*sr.cwiseProduct(f).stableNorm()},
+            {"arnoldi_relation_frobenius",(w.leftCols(k)-v.leftCols(k+1)*h).norm()},
+            {"orthogonality_frobenius",orthogonality.norm()},
+            {"least_squares_reconstruction",std::abs(arnoldi.stableNorm()-check.projectedNorm)},
+            {"physical_direction_reconstruction",(replay-sx.cwiseProduct(candidate)).stableNorm()},
+            {"scaled_direction_sum",directionSum},{"scaled_direction_norm",candidate.stableNorm()},
+            {"scaled_action_sum",actionSum},{"scaled_summed_action_norm",(r0-stored+sr.cwiseProduct(action0)).stableNorm()}};
+        data.arrays.emplace_back("scaled_seed_direction",d0);
+        data.arrays.emplace_back("raw_seed_action",action0);
+        data.arrays.emplace_back("scaled_arnoldi_basis",v.leftCols(k+1));
+        data.arrays.emplace_back("scaled_preconditioned_directions",z.leftCols(k));
+        data.arrays.emplace_back("scaled_stored_actions",w.leftCols(k));
+        data.arrays.emplace_back("hessenberg",h);
+        data.arrays.emplace_back("least_squares_coefficients",y);
+        data.arrays.emplace_back("scaled_restart_rhs",r0);
+        data.arrays.emplace_back("raw_fresh_action",freshAction);
+        data.arrays.emplace_back("raw_stored_residual",stored.cwiseQuotient(sr));
+        data.arrays.emplace_back("raw_arnoldi_residual",arnoldi.cwiseQuotient(sr));
+        data.arrays.emplace_back("raw_fresh_residual",fresh.cwiseQuotient(sr));
+        data.arrays.emplace_back("raw_additivity_gap",(stored-fresh).cwiseQuotient(sr));
+        if(cb.FactoredAction)
+        {
+            const Vec z0=sx.cwiseProduct(z.col(0)),rhs=v.col(0).cwiseQuotient(sr);
+            data.arrays.emplace_back("raw_first_backsolve_residual",cb.FactoredAction(z0)-rhs);
+            data.arrays.emplace_back("raw_first_unshifted_factor_residual",cb.ColoredAction(z0)-rhs);
+        }
+        data.measurements.emplace_back("audit_seconds",Seconds(started));
+        cb.ObserveActionAudit(data);
+        AuditSpacings("failed-direction",x,f,candidate,check.cycle,check.iteration,forcing);
+        if(cb.ColoredAction)
+        {
+            // Preserve the owner's current Krylov work and forcing ledger.
+            // The control uses the same assembled factor and original matrix.
+            Runner control(cb,sx,sr,o);
+            control.start=start;control.newton=newton;
+            const auto fixedStart=Clock::now();
+            const auto fixed=control.Linear(x,f,Norm(f),forcing,30,nullptr,true);
+            auto fixedData=AuditData("fixed-colored-control",x,f,fixed.correction,check.cycle,check.iteration);
+            fixedData.measurements={{"forcing",forcing},{"matrix_passed",fixed.converged?1.:0.},
+                {"products",double(control.out.statistics.linearIterations)},{"seconds",Seconds(fixedStart)}};
+            const auto last=std::find_if(control.out.linear.rbegin(),control.out.linear.rend(),
+                                         [](const auto &line){return line.trueChecked;});
+            if(last!=control.out.linear.rend())
+                fixedData.measurements.emplace_back("projected_scaled_at_last_check",last->projectedNorm);
+            fixedData.arrays.emplace_back("raw_colored_residual",f+fixed.action);
+            cb.ObserveActionAudit(fixedData);
+            if(fixed.correction.cwiseAbs().maxCoeff()>0.)
+                AuditSpacings("fixed-colored-direction",x,f,fixed.correction,check.cycle,check.iteration,forcing);
+        }
+    }
 
     void StartMerit(double norm)
     {
@@ -693,7 +833,8 @@ private:
     // Returns raw physical J(x)*diag(sx)*scaledDirection. Both sides must be
     // explicitly tested before choosing a central or feasible one-sided rule.
     Vec Jacobian(const Vec &x,const Vec &f,const Vec &scaledDirection,
-                 double multiplier,const std::string &purpose,int cycle,int iteration)
+                 double multiplier,const std::string &purpose,int cycle,int iteration,
+                 std::pair<double,Vec> *sample=nullptr)
     {
         Deadline();++out.statistics.jacobianActions;
         CheckVector(scaledDirection,sx.size(),"scaled Jacobian direction");
@@ -751,6 +892,11 @@ private:
             audit.seconds=Seconds(attemptStart);
             if(action.size()!=0)
             {
+                if(sample)
+                {
+                    sample->first=positive.admissible?h:-h;
+                    sample->second=(positive.admissible?positive.residual:negative.residual)-f;
+                }
                 if(cb.CorrectionAction)
                 {
                     const Vec correction=cb.CorrectionAction(x,direction);
@@ -769,7 +915,8 @@ private:
         throw Stop("FD_INFEASIBLE: derivative construction exhausted");
     }
 
-    LinearResult Linear(const Vec &x,const Vec &f,double baseNorm,double forcing,int workLimit,const Vec *guess)
+    LinearResult Linear(const Vec &x,const Vec &f,double baseNorm,double forcing,int workLimit,
+                        const Vec *guess,bool fixed=false)
     {
         Timer timer(out.statistics.linearSeconds);
         const Vec b=-(sr.array()*f.array()).matrix();
@@ -780,6 +927,13 @@ private:
         Vec best=guess?*guess:Vec::Zero(n).eval(),bestAction=Vec::Zero(n);
         double bestNorm=baseNorm,bestScaled=bNorm;
         int work=0;
+        const bool audit=!fixed&&bool(cb.ObserveActionAudit)&&!actionAuditCaptured;
+        auto product=[&](const Vec &direction,const char *purpose,int cycle,int iteration)->Vec {
+            if(!fixed)return Jacobian(x,f,direction,1.,purpose,cycle,iteration);
+            const Vec action=cb.ColoredAction(sx.cwiseProduct(direction));
+            CheckVector(action,n,"retained unshifted colored action");
+            return action;
+        };
         for(int cycle=0;cycle<o.maximumLinearCycles;++cycle)
         {
             Deadline();++out.statistics.linearCycles;
@@ -788,7 +942,7 @@ private:
             Vec r=b;
             if(baseCorrection.cwiseAbs().maxCoeff()!=0)
             {
-                baseAction=Jacobian(x,f,baseCorrection,1.,"restart-residual",cycle,-1);
+                baseAction=product(baseCorrection,"restart-residual",cycle,-1);
                 r-=baseAction.cwiseProduct(sr);
             }
             CheckVector(r,n,"current scaled linear residual");
@@ -811,14 +965,17 @@ private:
                 return {baseCorrection,true,initialTrue,std::move(baseAction)};
             if(!Positive(beta))throw Stop("LINEAR_SCALING: inconsistent zero/nonfinite Krylov residual");
             Mat v=Mat::Zero(n,m+1),z=Mat::Zero(n,m),h=Mat::Zero(m+1,m);
+            Mat stored;
+            if(audit&&!actionAuditCaptured)stored.resize(n,m);
             v.col(0)=r/beta;
             const int available=workLimit?std::min(m,workLimit-work):m;
             for(int j=0;j<available;++j)
             {
                 Deadline();++out.statistics.linearIterations;++work;
                 z.col(j)=Precondition(v.col(j));
-                Vec w=(sr.array()*Jacobian(x,f,z.col(j),1.,"arnoldi",cycle,j).array()).matrix();
+                Vec w=sr.cwiseProduct(product(z.col(j),"arnoldi",cycle,j));
                 CheckVector(w,n,"scaled Arnoldi action");
+                if(stored.size())stored.col(j)=w;
                 const double before=w.stableNorm();
                 if(!std::isfinite(before))throw Stop("ARNOLDI_ARITHMETIC: nonfinite action norm");
                 double after=0;
@@ -854,7 +1011,7 @@ private:
                     const Vec candidate=baseCorrection+z.leftCols(k)*coefficients;
                     // This is a new nonlinear-residual FD evaluation in the
                     // accumulated direction, not the Arnoldi recurrence norm.
-                    Vec action=Jacobian(x,f,candidate,1.,"true-linear-residual",cycle,j);
+                    Vec action=product(candidate,"true-linear-residual",cycle,j);
                     const Vec check=b-action.cwiseProduct(sr);
                     CheckVector(check,n,"recomputed linear residual");
                     record.trueChecked=true;record.trueScaledNorm=check.stableNorm();
@@ -866,6 +1023,11 @@ private:
                        (record.trueNorm==bestNorm&&record.trueScaledNorm<bestScaled))
                     {best=candidate;bestAction=action;bestNorm=record.trueNorm;bestScaled=record.trueScaledNorm;}
                     out.linear.push_back(record);Deadline();
+                    if(audit&&!actionAuditCaptured&&!record.converged&&
+                       candidate.cwiseAbs().maxCoeff()>0.&&
+                       (record.projectedNorm<=forcing*bNorm||k==available||breakdown))
+                        AuditGap(x,f,candidate,action,baseCorrection,baseAction,r,v,z,stored,small,
+                                 coefficients,record,forcing);
                     if(record.converged)return {candidate,true,record.trueNorm,std::move(action)};
                 }
                 else out.linear.push_back(record);
@@ -881,6 +1043,7 @@ private:
     const SteadyKrylovOptions &o;
     Clock::time_point start;
     int newton=-1;
+    bool actionAuditCaptured=false;
     long long factorSerial=0;
     double currentMass=0.,factorMass=0.;
     SteadyKrylovResult out;
@@ -955,4 +1118,10 @@ SteadyKrylovResult SteadyKrylov::Solve(const SteadyVector &initial)const
 SteadyDerivativeProbe SteadyKrylov::ProbeDirection(const SteadyVector &base,
     const SteadyVector &direction,const std::vector<double> &multipliers)const
 {return Runner(m_callbacks,m_unknownScale,m_residualRowScale,m_options).Probe(base,direction,multipliers);}
+
+void SteadyKrylov::AuditDirection(const SteadyVector &base,const SteadyVector &physicalDirection)const
+{
+    Require(bool(m_callbacks.ObserveActionAudit),"fixed-direction audit requires a publisher");
+    Runner(m_callbacks,m_unknownScale,m_residualRowScale,m_options).Audit(base,physicalDirection);
+}
 }
