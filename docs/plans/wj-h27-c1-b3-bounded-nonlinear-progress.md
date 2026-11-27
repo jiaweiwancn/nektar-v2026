@@ -245,7 +245,7 @@ The later full-cost production criterion remains
 | `C1_CLOSED` | OPEN | Original admissible full-height pilot and its controls required |
 | `C2_READY` | OPEN | Depends on C1 |
 | `LONG_FLAT_PRODUCTION_COST_CLOSED` | OPEN | Separate long-flat tests and production cost measurements required |
-| `REMOTE_PUSH_VERIFIED` | OPEN | Pending remote ref check |
+| `REMOTE_PUSH_VERIFIED` | PASS | Remote ref matched evidence commit `9d5f1c56bd62666e299d2639b5aa12e2c43156bf` |
 
 ## Reproduction
 
