@@ -93,7 +93,8 @@ void SteadyJSON(std::ostream&out,const WJNative::SteadyKrylovResult&r,double mas
     }
     if(r.meritStart)
     {
-        out<<"],\"original_merit_policy\":"<<J::Quote(WJNative::SteadyMeritState::Identity)
+        out<<"],\"original_merit_policy\":"<<J::Quote(r.meritStart->radius?
+                WJNative::SteadyBoundedOptions::Identity:WJNative::SteadyMeritState::Identity)
            <<",\"merit_start\":"<<r.meritStart->ToJson()<<",\"merit_end\":"<<r.meritEnd->ToJson()
            <<",\"merit_acceptances\":[";
         for(std::size_t i=0;i<r.meritAcceptances.size();++i)
@@ -351,7 +352,8 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     const bool curvatureBudget=m_session->DefinesParameter("WJDiagnosticCurvatureBudgetFraction");
     Check(curvatureProducts==curvatureSize&&curvatureSize==curvatureBudget,
           "coupled trial correction requires all three declared controls");
-    if(merit==WJNative::SteadyMeritState::Identity)
+    const bool bounded=merit==WJNative::SteadyBoundedOptions::Identity;
+    if(merit==WJNative::SteadyMeritState::Identity||bounded)
     {
         Check(m_diagnosticSteady&&evaluateOnly=="False"&&allowIncomplete=="False"&&
               m_diagnosticSteadyOptions.eta==0.&&m_diagnosticSteadyOptions.pseudoTime==0.&&
@@ -364,6 +366,21 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
         m_session->LoadParameter("WJDiagnosticMeritReanchorMass",m.reanchorMass,0.);
         m_session->LoadParameter("WJDiagnosticMeritWork",m.maximumWork,96);
         m_session->LoadParameter("WJDiagnosticMeritTrialFraction",m.initialTrialFraction,0.);
+        if(bounded)
+        {
+            Check(actionGap=="True"&&fixedKTangent=="True"&&checkpoint=="True"&&!curvatureProducts,
+                  "bounded directions require original hybrid action auditing and accepted checkpoints");
+            auto &b=m.bounded.emplace();
+            m_session->LoadParameter("WJDiagnosticBoundedInitialRadius",b.initialRadius,.025);
+            m_session->LoadParameter("WJDiagnosticBoundedMinimumRadius",b.minimumRadius,1e-7);
+            m_session->LoadParameter("WJDiagnosticBoundedMaximumRadius",b.maximumRadius,.1);
+            m_session->LoadParameter("WJDiagnosticBoundedColumns",b.columns,16);
+            m_session->LoadParameter("WJDiagnosticBoundedProposals",b.maximumProposals,4);
+            m_session->LoadSolverInfo("WJDiagnosticBoundedOptimizer",diagnostic.boundedOptimizer,"");
+            m_session->LoadSolverInfo("WJDiagnosticBoundedOptimizerSHA256",diagnostic.boundedOptimizerSha,"");
+            Check(!diagnostic.boundedOptimizer.empty()&&diagnostic.boundedOptimizerSha.size()==64&&
+                  (entry=="Resume"||entry=="Reanchor"),"bounded directions require a pinned optimizer and explicit entry");
+        }
         if(curvatureProducts)
         {
             auto &c=m.curvature.emplace();

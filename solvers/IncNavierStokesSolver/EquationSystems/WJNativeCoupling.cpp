@@ -11,6 +11,7 @@
 #include <Eigen/Eigenvalues>
 #include <Eigen/QR>
 #include <algorithm>
+#include <cerrno>
 #include <chrono>
 #include <cmath>
 #include <fstream>
@@ -19,7 +20,11 @@
 #include <limits>
 #include <set>
 #include <sstream>
+#include <spawn.h>
 #include <stdexcept>
+#include <sys/wait.h>
+
+extern char **environ;
 
 namespace Nektar::WJNative
 {
@@ -53,6 +58,51 @@ std::array<double,2>CubicTrace(const std::array<double,4>&c,double t,double widt
 }
 void VectorJSON(std::ostream&out,const Vec&v)
 {out<<'[';for(int i=0;i<v.size();++i){if(i)out<<',';out<<v[i];}out<<']';}
+
+SteadyBoundedProposal OptimizeRadius(const DiagnosticSteadyOptions &diagnostic,
+    const std::filesystem::path &basis,double radius,int proposal,double remaining)
+{
+    if(remaining<=3.)throw SteadyCorrectionFailure("BOUNDED_OPTIMIZER_DEADLINE: preserve output time");
+    const auto output=basis.string()+".proposal-"+std::to_string(proposal);
+    Require(!std::filesystem::exists(output),"bounded proposal output is immutable");
+    Require(D::HashFile(diagnostic.boundedOptimizer)==diagnostic.boundedOptimizerSha,
+            "bounded optimizer bytes changed after policy setup");
+    std::ostringstream radiusArg;
+    radiusArg<<std::setprecision(17)<<radius;
+    // Start just the small pinned optimizer with literal arguments. The
+    // controlled timeout applies to this child, not to the native process.
+    std::vector<std::string> arguments{"timeout","--kill-after=1s",std::to_string(std::min(120.,remaining-2.)),
+        "python3",diagnostic.boundedOptimizer,basis.string(),radiusArg.str(),output};
+    std::vector<char*> argv;
+    for(auto &argument:arguments)argv.push_back(argument.data());
+    argv.push_back(nullptr);
+    pid_t child;
+    const int spawned=posix_spawnp(&child,argv[0],nullptr,nullptr,argv.data(),environ);
+    if(spawned)throw SteadyCorrectionFailure("BOUNDED_OPTIMIZER_START: "+std::to_string(spawned));
+    int status=0;
+    pid_t waited;
+    do { waited=waitpid(child,&status,0); } while(waited<0&&errno==EINTR);
+    if(waited!=child||!WIFEXITED(status)||WEXITSTATUS(status)!=0)
+        throw SteadyCorrectionFailure("BOUNDED_OPTIMIZER_EXIT: "+std::to_string(status));
+    std::ifstream in(output);
+    SteadyBoundedProposal result;
+    std::string schema,basisSha;
+    double actualRadius=0.,lower=0.;
+    int count=0,hasLower=0;
+    in>>schema>>basisSha>>actualRadius>>count>>result.score>>hasLower>>lower>>result.iterations>>result.status;
+    if(!in||schema!="WJH27BoundedProposalV1"||basisSha!=D::HashFile(basis.string())||actualRadius!=radius||
+       count<1||count>24||!std::isfinite(result.score)||result.score<0.||
+       (hasLower!=0&&hasLower!=1)||!std::isfinite(lower)||result.iterations<1||result.iterations>100)
+        throw SteadyCorrectionFailure("BOUNDED_OPTIMIZER_OUTPUT: invalid signed proposal header");
+    if(hasLower)result.lower=lower;
+    result.coordinates.resize(count);
+    for(int i=0;i<count;++i)in>>result.coordinates[i];
+    std::string extra;
+    if(!in||!result.coordinates.allFinite()||(in>>extra))
+        throw SteadyCorrectionFailure("BOUNDED_OPTIMIZER_OUTPUT: invalid proposal coordinates");
+    return result;
+}
+
 std::string StateHash(const CoupledState&s)
 {D::Sha256 hash;for(const auto*v:{&s.flow,&s.k,&s.epsilon})hash.Update(v->data(),v->size()*sizeof(double));return hash.Finish();}
 template<class Write> void PublishDiagnostic(const std::filesystem::path &path,Write write)
@@ -2212,6 +2262,18 @@ SteadyKrylovResult Coupling::SolveDiagnosticSteady(const CoupledState &seed,
             binding<<"|coupled-trial-v1:"<<policy.curvature->maximumProducts
                    <<'|'<<policy.curvature->maximumScaledSize<<'|'<<policy.curvature->budgetFraction;
         if(diagnostic.fixedKTangent)binding<<"|fixed-rule-k-tangent-v1";
+        if(policy.bounded)
+        {
+            const auto &b=*policy.bounded;
+            Require(std::filesystem::path(diagnostic.boundedOptimizer).is_absolute()&&
+                    D::HashFile(diagnostic.boundedOptimizer)==diagnostic.boundedOptimizerSha,
+                    "bounded direction optimizer path or identity differs");
+            binding<<'|'<<SteadyBoundedOptions::Identity<<'|'<<diagnostic.boundedOptimizerSha
+                   <<'|'<<b.initialRadius<<'|'<<b.minimumRadius<<'|'<<b.maximumRadius
+                   <<'|'<<b.columns<<'|'<<b.maximumProposals<<'|'<<policy.maximumWork
+                   <<'|'<<preconditionerMass<<'|'<<diagnostic.factorFDStep
+                   <<'|'<<options.maximumInverseAge<<'|'<<options.reuseLinearIterations;
+        }
         m_meritPolicy=RANSWallR3::Hash(binding.str());
         if(diagnostic.meritEntry=="Resume")
         {
@@ -2437,6 +2499,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
     if(shifted)callbacks.CorrectionAction=[&](const Vec&,const Vec&dx) {
         return applyShift(dx,correctionMass,correctionDiffusion);
     };
+    std::filesystem::path boundedBasisPath;
     if(diagnostic&&!diagnostic->actionAuditPrefix.empty())
     {
         std::set<int> matching;
@@ -2703,7 +2766,10 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
                 if(i)out<<',';
                 out<<J::Quote(diagnostic->checkpointSessionDigests[i]);
             }
-            out<<"],\"probe_input_sha256\":"<<J::Quote(diagnostic->actionProbeSha)
+            out<<']';
+            if(options.merit&&options.merit->bounded)
+                out<<",\"bounded_policy_sha256\":"<<J::Quote(m_meritPolicy);
+            out<<",\"probe_input_sha256\":"<<J::Quote(diagnostic->actionProbeSha)
                 <<",\"free_order\":\"free u, free v, all Pi, optional gauge, free k, free outer epsilon\""
                 <<",\"free_id_sha256\":"<<J::Quote(orderingSha)
                 <<",\"free_counts\":["<<m_flow.FreeVelocityIds()[0].size()<<','<<m_flow.FreeVelocityIds()[1].size()
@@ -2767,8 +2833,14 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
             const auto contents=out.str();
             PublishDiagnostic(prefix+".json",[&](int fd){D::WriteAll(fd,contents.data(),contents.size());});
             timing.io+=Clock()-writing;
+            if(audit.stage=="bounded-current-basis")boundedBasisPath=prefix+".json";
             std::cout<<"WJ-H27 action audit "<<audit.stage<<" published in "<<Clock()-start<<" s"<<std::endl;
         };
+        if(options.merit&&options.merit->bounded)
+            callbacks.OptimizeBounded=[&](double radius,int proposal,double remaining) {
+                Require(!boundedBasisPath.empty(),"bounded optimizer has no current published basis");
+                return OptimizeRadius(*diagnostic,boundedBasisPath,radius,proposal,remaining);
+            };
         if(sparse)
         {
             callbacks.ColoredAction=[&](const Vec &d){return coupledInverse->OriginalAction(d);};
@@ -3513,11 +3585,22 @@ void Coupling::WriteDiagnostic(const std::filesystem::path&path,const Diagnostic
                     <<'|'<<options->regularizationStart<<'|'<<options->regularizationFull;
         const std::string equationIdentity=D::Hash(identity.str());
         if(steady->meritController)
+        {
+            const auto &controller=*steady->meritController;
             out<<",\"merit_controller\":{\"policy_sha256\":"<<J::Quote(m_meritPolicy)
                <<",\"coefficient_sha256\":"<<J::Quote(StateHash(candidate.state))
                <<",\"equation_identity\":"<<J::Quote(equationIdentity)
                <<",\"entry\":"<<J::Quote(options->meritEntry)
-               <<",\"state\":"<<steady->meritController->ToJson()<<'}';
+               <<",\"state\":"<<controller.ToJson();
+            if(controller.radius&&controller.radius->acceptedDisplacement.size())
+            {
+                const auto &delta=controller.radius->acceptedDisplacement;
+                out<<",\"accepted_displacement_sha256\":"<<J::Quote(D::Hash(delta.data(),delta.size()*sizeof(double)))
+                   <<",\"accepted_displacement\":";
+                VectorJSON(out,delta);
+            }
+            out<<'}';
+        }
         out<<",\"equation_identity\":"<<J::Quote(equationIdentity)
            <<",\"regularization\":{\"eta\":"<<options->eta
            <<",\"viscosity\":"<<options->regularizationViscosity

@@ -14,12 +14,21 @@ namespace Nektar::WJNative
 {
 using SteadyVector=Eigen::VectorXd;
 
+struct SteadyRadiusState
+{
+    double used=0., next=0., displacement=0., windowBase=0., firstRate=0., lastRate=0.;
+    int windowUpdates=0;
+    bool stagnated=false;
+    SteadyVector acceptedDisplacement;
+};
+
 struct SteadyMeritState
 {
     static constexpr const char *Identity="WJH27OriginalMeritV1";
     double usedMass=0., nextMass=0., referenceNorm=0., previousNorm=0., acceptedNorm=0.;
     double usedForcing=0., nextForcing=0., step=0.;
     std::optional<double> ratio;
+    std::optional<SteadyRadiusState> radius;
     int accepted=0, goodSteps=0;
     std::string decision;
     std::string ToJson()const;
@@ -31,6 +40,22 @@ struct SteadyCurvatureOptions
     double maximumScaledSize=0., budgetFraction=0.;
 };
 
+struct SteadyBoundedOptions
+{
+    static constexpr const char *Identity="WJH27BoundedDirectionV1";
+    double initialRadius=.025, minimumRadius=1e-7, maximumRadius=.1;
+    int columns=16, maximumProposals=4;
+};
+
+struct SteadyBoundedProposal
+{
+    SteadyVector coordinates;
+    double score=0.;
+    std::optional<double> lower;
+    int iterations=0;
+    std::string status;
+};
+
 struct SteadyMeritOptions
 {
     double initialMass=0., reanchorMass=0.;
@@ -38,6 +63,7 @@ struct SteadyMeritOptions
     std::optional<SteadyMeritState> restored;
     double initialTrialFraction=0.;
     std::optional<SteadyCurvatureOptions> curvature;
+    std::optional<SteadyBoundedOptions> bounded;
 };
 
 /** The only residual/feasibility exception interpreted as a rejected trial.
@@ -104,6 +130,9 @@ struct SteadyKrylovCallbacks
     std::function<void(const SteadyMeritRecord &)> ObserveMeritDirection;
     // Opt-in only. The fixed unshifted colored action is a diagnostic control.
     std::function<void(const SteadyKrylovActionAudit&)> ObserveActionAudit;
+    // The bounded optimizer works on the most recently published current
+    // basis. It returns its small coordinates, never an accepted field.
+    std::function<SteadyBoundedProposal(double,int,double)> OptimizeBounded;
     std::function<SteadyVector(const SteadyVector&)> ColoredAction, FactoredAction, TraceDirection;
     // For the merit policy TrueNorm is the maximum of these fixed quadratic
     // seminorms (including absolute value and identically zero blocks).

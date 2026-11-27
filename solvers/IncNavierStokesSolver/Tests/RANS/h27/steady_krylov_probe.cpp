@@ -13,6 +13,7 @@
 #include <limits>
 #include <memory>
 #include <thread>
+#include <tuple>
 
 using namespace Nektar::WJNative;
 namespace J=Nektar::RANSWallSolveJson;
@@ -859,6 +860,78 @@ int main(int argc,char**argv)
                   (result.lastAcceptedX.array()==base.array()).all(),"frozen finite trials advanced the seed");
             solves.push_back(J::Object({{"name",J::Quote("frozen_finite_trial_custody")},
                 {"result",Result(result)},{"finite_trials",J::Number(trials.size())}}));
+        }
+        {
+            const Vec zero=Vec::Zero(2),one=Vec::Ones(2);
+            auto solve=[&](const Vec &seed,double curvature,bool badFinite,double radius,
+                           const std::optional<SteadyMeritState> &resume) {
+                auto options=Options();
+                options.forcingInitial=options.forcingMaximum=.3;
+                options.maximumNewtonIterations=1;
+                options.merit.emplace();
+                options.merit->restored=resume;
+                auto &b=options.merit->bounded.emplace();
+                b.initialRadius=radius;b.columns=2;b.maximumProposals=1;
+                SteadyKrylovCallbacks cb;
+                cb.Residual=[&](const Vec &v)->Vec {
+                    return Vector({1.+v[0]+curvature*v[0]*v[0]+.2*v[1],.2+v[1]+.2*v[0]});
+                };
+                cb.TrueNorm=[](const Vec &f){return f.cwiseAbs().maxCoeff();};
+                cb.ResidualBlocks=[](const Vec &f){return std::array<double,6>{std::abs(f[0]),0.,0.,std::abs(f[1]),0.,0.};};
+                cb.ValidTrial=[](const Vec &){return SteadyTrialValidity{};};
+                cb.Precondition=[](const Vec &f){return f;};
+                cb.CorrectionAction=[](const Vec &f,const Vec &){return Vec::Zero(f.size());};
+                cb.SetCorrectionMass=[](double mass){Check(mass==0.,"bounded controller shifted the action");};
+                cb.ValidateNonlinearState=[=](const Vec &v){
+                    if(badFinite&&v[0]<-.025)throw SteadyInadmissibleTrial("finite-only bound");
+                };
+                Eigen::MatrixXd q;
+                std::optional<SteadyKrylovActionAudit> finalTrial;
+                int observations=0;
+                cb.ObserveAccepted=[&](const Vec &,double){++observations;};
+                cb.ObserveActionAudit=[&](const auto &r) {
+                    if(r.stage=="bounded-current-basis")
+                        for(const auto &[name,values]:r.arrays)
+                            if(name=="scaled_correction_basis")q=values;
+                    if(r.stage=="bounded-direction")finalTrial=r;
+                };
+                cb.OptimizeBounded=[&](double trust,int,double) {
+                    return SteadyBoundedProposal{q.transpose()*Vector({-trust,0.}),1.-trust,{},1,"CONTROL"};
+                };
+                auto result=SteadyKrylov(cb,one,one,options).Solve(seed);
+                Check(finalTrial.has_value(),"bounded control has no current direction");
+                const auto &m=finalTrial->measurements;
+                auto measured=[&](const char *key) {
+                    const auto i=std::find_if(m.begin(),m.end(),[&](const auto &v){return v.first==key;});
+                    return i==m.end()?-1.:i->second;
+                };
+                Check(observations==1+result.statistics.acceptedNewtonSteps&&
+                      measured("old_newton_model_pass")==0.&&!result.newton.at(0).linearConverged,
+                      "bounded control misrepresented Newton forcing or changed custody");
+                return std::make_tuple(std::move(result),measured("armijo_passed"),
+                                       measured("ratio_passed"),measured("nonlinear_validated"));
+            };
+            auto [good,armijo,rho,valid]=solve(zero,0.,false,.05,{});
+            Check(good.statistics.acceptedNewtonSteps==1&&armijo==1.&&rho==1.&&valid==1.&&
+                  good.meritEnd->radius->next==.1&&
+                  (good.meritEnd->radius->acceptedDisplacement-good.lastAcceptedX).norm()<1e-15,
+                  "bounded partial correction failed original acceptance or exact displacement");
+            auto [cold,coldArmijo,coldRatio,coldValid]=solve(good.lastAcceptedX,0.,false,.05,good.meritEnd);
+            Check(cold.statistics.acceptedNewtonSteps==1&&cold.meritStart->radius->next==.1&&
+                  (cold.meritStart->radius->acceptedDisplacement-good.lastAcceptedX).norm()<1e-15,
+                  "cold bounded resume lost the actual displacement or controller radius");
+            auto [bad,badArmijo,badRatio,badValid]=solve(zero,1024.,false,.05,{});
+            auto [weak,weakArmijo,weakRatio,weakValid]=solve(zero,19.6,false,.05,{});
+            auto [invalid,invalidArmijo,invalidRatio,invalidValid]=solve(zero,0.,true,.05,{});
+            Check(badArmijo==0.&&weakArmijo==1.&&weakRatio==0.&&invalidValid==0.&&
+                  bad.statistics.acceptedNewtonSteps==0&&weak.statistics.acceptedNewtonSteps==0&&
+                  invalid.statistics.acceptedNewtonSteps==0,"bounded rejected control changed the accepted seed");
+            auto [low,lowArmijo,lowRatio,lowValid]=solve(zero,0.,false,.001,{});
+            Check(low.statistics.acceptedNewtonSteps==1,"one percent became a hard direction threshold");
+            solves.push_back(J::Object({{"name",J::Quote("bounded_partial_direction_and_resume")},
+                {"result",Result(good)},{"resumed",Result(cold)},{"weak_direction",Result(low)},
+                {"curved_rejected",Result(bad)},{"ratio_rejected",Result(weak)},
+                {"invalid_rejected",Result(invalid)}}));
         }
         const auto result=J::Object({{"schema",J::Quote("WJH27SteadyKrylovProbeV1")},{"status",J::Quote("RECORDED")},
             {"solver_identity",J::Quote(SteadyKrylov::Identity)},{"unknown_scale",V(problem.sx)},

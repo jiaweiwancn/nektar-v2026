@@ -195,6 +195,28 @@ InitialFields::InitialFields(const std::string &path, bool allowAcceptedTimeStat
         r.accepted=c.get<int>("state.accepted");
         r.goodSteps=c.get<int>("state.good_steps");
         r.decision=c.get<std::string>("state.decision");
+        if(c.get_child_optional("state.radius"))
+        {
+            Require(c.get<std::string>("state.radius.schema")==SteadyBoundedOptions::Identity,
+                    "invalid bounded-direction checkpoint schema");
+            auto &a=r.radius.emplace();
+            a.used=Number(c,"state.radius.used");
+            a.next=Number(c,"state.radius.next");
+            a.displacement=Number(c,"state.radius.scaled_displacement");
+            a.windowBase=Number(c,"state.radius.window_base");
+            a.windowUpdates=c.get<int>("state.radius.window_updates");
+            a.firstRate=Number(c,"state.radius.first_rate");
+            a.lastRate=Number(c,"state.radius.last_rate");
+            a.stagnated=c.get<bool>("state.radius.stagnated");
+            if(r.accepted>0)
+            {
+                const auto delta=Array<double>(c,"accepted_displacement");
+                Require(!delta.empty()&&RANSWallR3::Hash(delta.data(),delta.size()*sizeof(double))==
+                        c.get<std::string>("accepted_displacement_sha256"),"bounded accepted displacement identity differs");
+                a.acceptedDisplacement=Eigen::Map<const Eigen::VectorXd>(delta.data(),delta.size());
+                Require(a.acceptedDisplacement.allFinite(),"nonfinite bounded accepted displacement");
+            }
+        }
         m.meritController=r;
     }
     m_geometry=Geometry(state.get_child("geometry"));
