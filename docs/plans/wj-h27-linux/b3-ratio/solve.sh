@@ -32,9 +32,12 @@ while ! bash capacity.sh "$name-workers.ps" 2; do
     sleep 15
 done
 if test "$mode" != retained; then
-    available=$((10800-$(date +%s)+$(cat start.epoch)-2190))
+    reserve=2190
+    minimum=2300
+    if test "$mode" = momentum; then reserve=1850; minimum=1820; fi
+    available=$((10800-$(date +%s)+$(cat start.epoch)-reserve))
     if test "$cooperative" -gt "$available"; then cooperative=$available; fi
-    test "$cooperative" -gt 2300
+    test "$cooperative" -gt "$minimum"
 fi
 outer=$((cooperative+180))
 python3 "$suite/c1_steady_case.py" "$old/bounded-active/run.xml" "$case_dir" \
