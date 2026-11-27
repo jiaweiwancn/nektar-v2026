@@ -45,6 +45,7 @@ struct SteadyBoundedOptions
     static constexpr const char *Identity="WJH27BoundedDirectionV1";
     double initialRadius=.025, minimumRadius=1e-7, maximumRadius=.1;
     int columns=16, maximumProposals=4;
+    Eigen::MatrixXd recycledBasis;
 };
 
 struct SteadyBoundedProposal

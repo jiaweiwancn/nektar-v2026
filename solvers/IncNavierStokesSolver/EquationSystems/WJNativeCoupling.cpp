@@ -2273,6 +2273,8 @@ SteadyKrylovResult Coupling::SolveDiagnosticSteady(const CoupledState &seed,
                    <<'|'<<b.columns<<'|'<<b.maximumProposals<<'|'<<policy.maximumWork
                    <<'|'<<preconditionerMass<<'|'<<diagnostic.factorFDStep
                    <<'|'<<options.maximumInverseAge<<'|'<<options.reuseLinearIterations;
+            if(!diagnostic.boundedBasisPath.empty())
+                binding<<"|recycled-scaled-basis-v1|"<<diagnostic.boundedBasisSha<<'|'<<diagnostic.boundedBasisBinding;
         }
         m_meritPolicy=RANSWallR3::Hash(binding.str());
         if(diagnostic.meritEntry=="Resume")
@@ -2367,7 +2369,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
             const auto x=sx.segment(offset,n),r=sr.segment(offset,n);
             m_steadyScaleExtrema[block]={x.minCoeff(),x.maxCoeff(),r.minCoeff(),r.maxCoeff()};
         }
-    const bool sparse=diagnostic&&diagnostic->sparseInverse;
+    const bool sparse=diagnostic&&diagnostic->sparseInverse&&diagnostic->boundedBasisPath.empty();
     const double patternStart=Clock();
     auto coupledInverse=sparse?MakeSteadySparseInverse(sx,sr):nullptr;
     if(diagnostic)
@@ -3152,7 +3154,31 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
         if(m_flow.Gauge())probe[nf-1]=.003;
         (void)equations(probe);
     }
-    SteadyKrylov solver(std::move(callbacks),sx,sr,options);
+    auto selectedOptions=options;
+    if(diagnostic&&!diagnostic->boundedBasisPath.empty())
+    {
+        Require(options.merit&&options.merit->bounded&&
+                StateHash(unpack(pack(seed)))==m_initialSourceStateSha,
+                "recycled basis requires an exact signed original seed");
+        auto &b=*selectedOptions.merit->bounded;
+        Require(b.columns>0&&b.columns<=24,"invalid recycled basis column count");
+        D::Sha256 ordering;
+        for(const auto *ids:{&m_flow.FreeVelocityIds()[0],&m_flow.FreeVelocityIds()[1],&m_k.FreeIds(),&m_e.FreeIds()})
+            ordering.Update(ids->data(),ids->size()*sizeof(int));
+        const auto binding=D::Hash("WJH27RecycledBasisV1|"+m_reference->Identity()+"|"+
+            ordering.Finish()+"|"+D::Hash(sx.data(),sx.size()*sizeof(double))+"|"+
+            D::Hash(sr.data(),sr.size()*sizeof(double))+"|"+std::to_string(m_options.quadratureX)+"|"+
+            std::to_string(m_options.quadratureR)+"|"+(m_geometry.normalMap?m_geometry.normalMap->Signature():"flat")+
+            "|"+m_outletIdentity+"|"+diagnostic->boundedBasisSha);
+        Require(binding==diagnostic->boundedBasisBinding,"recycled basis reference, signed ordering or scales differ");
+        b.recycledBasis.resize(size,b.columns);
+        const auto bytes=b.recycledBasis.size()*sizeof(double);
+        std::ifstream file(diagnostic->boundedBasisPath,std::ios::binary);
+        file.read(reinterpret_cast<char*>(b.recycledBasis.data()),bytes);
+        Require(file.gcount()==static_cast<std::streamsize>(bytes)&&file.peek()==std::char_traits<char>::eof()&&
+                D::Hash(b.recycledBasis.data(),bytes)==diagnostic->boundedBasisSha,"recycled basis bytes differ");
+    }
+    SteadyKrylov solver(std::move(callbacks),sx,sr,std::move(selectedOptions));
     const Vec initial=pack(seed);
     if(options.frozenSizeColumns)
         Require(diagnostic&&StateHash(unpack(initial))==m_initialSourceStateSha,
@@ -3618,7 +3644,8 @@ void Coupling::WriteDiagnostic(const std::filesystem::path&path,const Diagnostic
         out<<"]},\"original_residuals\":";
         norms(out,original->residual);
         out<<",\"base_coefficient_sha256\":"<<J::Quote(m_steadyBaseSha256)
-           <<",\"steady_inverse\":"<<J::Quote(options->sparseInverse?"ColoredSparseV1":"BlockV1")
+           <<",\"steady_inverse\":"<<J::Quote(!options->boundedBasisPath.empty()?"RecycledBasisV1":
+               options->sparseInverse?"ColoredSparseV1":"BlockV1")
            <<",\"scale_extrema\":[";
         for(std::size_t i=0;i<m_steadyScaleExtrema.size();++i)
         {

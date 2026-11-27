@@ -91,6 +91,7 @@ struct DiagnosticSteadyOptions
     std::string actionAuditPrefix, actionProbePath, actionProbeSha, actionProbeBinding;
     int actionProbeCount=1;
     std::string boundedOptimizer, boundedOptimizerSha;
+    std::string boundedBasisPath, boundedBasisSha, boundedBasisBinding;
     bool auditScalarAction=false, auditMomentumAction=false, fixedKTangent=false;
     double factorFDStep=0.;
     bool auditColorColumns=false;

@@ -380,6 +380,13 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
             m_session->LoadSolverInfo("WJDiagnosticBoundedOptimizerSHA256",diagnostic.boundedOptimizerSha,"");
             Check(!diagnostic.boundedOptimizer.empty()&&diagnostic.boundedOptimizerSha.size()==64&&
                   (entry=="Resume"||entry=="Reanchor"),"bounded directions require a pinned optimizer and explicit entry");
+            m_session->LoadSolverInfo("WJDiagnosticBoundedBasis",diagnostic.boundedBasisPath,"");
+            m_session->LoadSolverInfo("WJDiagnosticBoundedBasisSHA256",diagnostic.boundedBasisSha,"");
+            m_session->LoadSolverInfo("WJDiagnosticBoundedBasisBinding",diagnostic.boundedBasisBinding,"");
+            Check(diagnostic.boundedBasisPath.empty()?
+                  diagnostic.boundedBasisSha.empty()&&diagnostic.boundedBasisBinding.empty():
+                  diagnostic.boundedBasisSha.size()==64&&diagnostic.boundedBasisBinding.size()==64,
+                  "recycled bounded basis requires byte and coordinate identities");
         }
         if(curvatureProducts)
         {

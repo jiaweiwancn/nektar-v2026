@@ -634,8 +634,14 @@ private:
         if(factorBase>=0&&newton-factorBase>o.maximumInverseAge)
             throw Stop("BOUNDED_INVERSE_AGE: measured run ended at its declared inverse age");
         if(cb.SetCorrectionMass)cb.SetCorrectionMass(0.);
-        Correct(x,f,norm,o.forcingInitial,factorBase,factorBase<0?"bounded cold basis":"bounded current basis",
-                factorBase>=0,policy.columns);
+        if(policy.recycledBasis.size())
+        {
+            boundedBasis=CorrectionBasis(x,f,policy.recycledBasis,true);
+            cb.ObserveActionAudit(*boundedBasis);
+        }
+        else
+            Correct(x,f,norm,o.forcingInitial,factorBase,factorBase<0?"bounded cold basis":"bounded current basis",
+                    factorBase>=0,policy.columns);
         if(!boundedBasis)throw Stop("BOUNDED_BASIS: no current correction subspace");
         const auto q=std::find_if(boundedBasis->arrays.begin(),boundedBasis->arrays.end(),
                                   [](const auto &a){return a.first=="scaled_correction_basis";});
@@ -1982,6 +1988,11 @@ SteadyKrylov::SteadyKrylov(SteadyKrylovCallbacks callbacks,SteadyVector unknownS
                     b.maximumProposals>0&&b.maximumProposals<=8&&
                     2*b.columns+3*b.maximumProposals<=m.maximumWork,
                     "invalid original radius-bounded direction policy");
+            if(b.recycledBasis.size())
+                Require(b.recycledBasis.rows()==m_unknownScale.size()&&b.recycledBasis.cols()==b.columns&&
+                        b.recycledBasis.allFinite()&&
+                        (b.recycledBasis.transpose()*b.recycledBasis-Mat::Identity(b.columns,b.columns)).norm()<1e-10,
+                        "recycled directions must form the signed orthonormal scaled basis");
         }
         if(m.curvature)
             Require(m.initialMass==0.&&m.reanchorMass==0.&&m.curvature->maximumProducts>=4&&

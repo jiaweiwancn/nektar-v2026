@@ -864,7 +864,7 @@ int main(int argc,char**argv)
         {
             const Vec zero=Vec::Zero(2),one=Vec::Ones(2);
             auto solve=[&](const Vec &seed,double curvature,bool badFinite,double radius,
-                           const std::optional<SteadyMeritState> &resume) {
+                           const std::optional<SteadyMeritState> &resume,bool recycled=false) {
                 auto options=Options();
                 options.forcingInitial=options.forcingMaximum=.3;
                 options.maximumNewtonIterations=1;
@@ -872,7 +872,11 @@ int main(int argc,char**argv)
                 options.merit->restored=resume;
                 auto &b=options.merit->bounded.emplace();
                 b.initialRadius=radius;b.columns=2;b.maximumProposals=1;
+                if(recycled)b.recycledBasis=Eigen::Matrix2d::Identity();
                 SteadyKrylovCallbacks cb;
+                if(recycled)cb.PreparePreconditioner=[](const Vec &,const Vec &) {
+                    throw std::runtime_error("recycled basis unexpectedly prepared an inverse");
+                };
                 cb.Residual=[&](const Vec &v)->Vec {
                     return Vector({1.+v[0]+curvature*v[0]*v[0]+.2*v[1],.2+v[1]+.2*v[0]});
                 };
@@ -928,8 +932,13 @@ int main(int argc,char**argv)
                   invalid.statistics.acceptedNewtonSteps==0,"bounded rejected control changed the accepted seed");
             auto [low,lowArmijo,lowRatio,lowValid]=solve(zero,0.,false,.001,{});
             Check(low.statistics.acceptedNewtonSteps==1,"one percent became a hard direction threshold");
+            auto [recycled,recycledArmijo,recycledRatio,recycledValid]=solve(zero,0.,false,.05,{},true);
+            Check(recycled.statistics.acceptedNewtonSteps==1&&recycled.statistics.preconditionerPreparations==0&&
+                  (recycled.lastAcceptedX-good.lastAcceptedX).norm()<1e-15,
+                  "current recycled basis did not give the same bounded linear control");
             solves.push_back(J::Object({{"name",J::Quote("bounded_partial_direction_and_resume")},
                 {"result",Result(good)},{"resumed",Result(cold)},{"weak_direction",Result(low)},
+                {"recycled",Result(recycled)},
                 {"curved_rejected",Result(bad)},{"ratio_rejected",Result(weak)},
                 {"invalid_rejected",Result(invalid)}}));
         }
