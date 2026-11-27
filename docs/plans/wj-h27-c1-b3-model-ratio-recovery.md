@@ -374,7 +374,7 @@ $1.25 C_{\rm total}\le86400$ seconds per qualified trajectory.
 | `C1_CLOSED` | OPEN | Qualified signed branches and the original physical pilot required |
 | `C2_READY` | OPEN | Depends on C1 |
 | `LONG_FLAT_PRODUCTION_COST_CLOSED` | OPEN | Separate qualified trajectory measurements required |
-| `REMOTE_PUSH_VERIFIED` | OPEN | Pending remote ref check |
+| `REMOTE_PUSH_VERIFIED` | PASS | Remote ref matched evidence commit `04a0820a301da8645e79b0ed4e646147e229db3a` |
 
 ## Reproduction
 
