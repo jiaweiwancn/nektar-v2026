@@ -1013,7 +1013,9 @@ int main(int argc,char**argv)
                 dx[0]+=2.*rhs[2];dx[1]-=3.*rhs[3];
                 return dx;
             };
-            cb.ObserveAccepted=[&](const Vec &x,double){accepted.push_back(x);};
+            cb.ObserveAccepted=[&](const Vec &x,double) {
+                if(accepted.empty()||!(accepted.back().array()==x.array()).all())accepted.push_back(x);
+            };
             cb.ObserveActionAudit=[&](const SteadyKrylovActionAudit &receipt) {
                 Check(receipt.factorSerial==1,"coupled residual direction did not bind the prepared inverse");
                 if(receipt.stage=="bounded-current-basis")
