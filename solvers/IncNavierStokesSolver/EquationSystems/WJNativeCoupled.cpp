@@ -352,7 +352,8 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     const bool curvatureBudget=m_session->DefinesParameter("WJDiagnosticCurvatureBudgetFraction");
     Check(curvatureProducts==curvatureSize&&curvatureSize==curvatureBudget,
           "coupled trial correction requires all three declared controls");
-    const bool bounded=merit==WJNative::SteadyBoundedOptions::Identity;
+    const bool modelRatio=merit==WJNative::SteadyBoundedOptions::RatioIdentity;
+    const bool bounded=merit==WJNative::SteadyBoundedOptions::Identity||modelRatio;
     if(merit==WJNative::SteadyMeritState::Identity||bounded)
     {
         Check(m_diagnosticSteady&&evaluateOnly=="False"&&allowIncomplete=="False"&&
@@ -371,6 +372,13 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
             Check(actionGap=="True"&&fixedKTangent=="True"&&checkpoint=="True"&&!curvatureProducts,
                   "bounded directions require original hybrid action auditing and accepted checkpoints");
             auto &b=m.bounded.emplace();
+            b.modelRatio=modelRatio;
+            if(modelRatio)
+            {
+                m_session->LoadParameter("WJDiagnosticBoundedOptimizerIterations",b.optimizerIterations,1000);
+                m_session->LoadParameter("WJDiagnosticBoundedOptimizerSeconds",b.optimizerSeconds,12.);
+                m_session->LoadParameter("WJDiagnosticBoundedOptimizerRelativeGap",b.optimizerRelativeGap,.1);
+            }
             m_session->LoadParameter("WJDiagnosticBoundedInitialRadius",b.initialRadius,.025);
             m_session->LoadParameter("WJDiagnosticBoundedMinimumRadius",b.minimumRadius,1e-7);
             m_session->LoadParameter("WJDiagnosticBoundedMaximumRadius",b.maximumRadius,.1);

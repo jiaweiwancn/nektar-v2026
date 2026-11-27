@@ -19,6 +19,7 @@ struct SteadyRadiusState
     double used=0., next=0., displacement=0., windowBase=0., firstRate=0., lastRate=0.;
     int windowUpdates=0;
     bool stagnated=false;
+    bool modelRatio=false;
     SteadyVector acceptedDisplacement;
 };
 
@@ -43,6 +44,14 @@ struct SteadyCurvatureOptions
 struct SteadyBoundedOptions
 {
     static constexpr const char *Identity="WJH27BoundedDirectionV1";
+    static constexpr const char *RatioIdentity="WJH27BoundedDirectionV2";
+    static constexpr double MinimumRatio=.1, ActionTargetFraction=.5, AllowanceMultiplier=4.;
+    static constexpr double RoundoffMultiplier=64., GrowthRatio=.75, GrowthUse=.8, RadiusGrowth=2.;
+    static constexpr double RadiusContraction=.5, StagnationDecrease=.01;
+    static constexpr int StagnationWindow=6;
+    bool modelRatio=false;
+    int optimizerIterations=100;
+    double optimizerSeconds=120., optimizerRelativeGap=.1;
     double initialRadius=.025, minimumRadius=1e-7, maximumRadius=.1;
     int columns=16, maximumProposals=4;
     Eigen::MatrixXd recycledBasis;

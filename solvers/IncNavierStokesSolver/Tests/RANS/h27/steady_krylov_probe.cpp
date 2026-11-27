@@ -843,8 +843,8 @@ int main(int argc,char**argv)
                 if(r.stage=="frozen-size-finite-trial")trials.push_back(r);
             };
             const SteadyKrylov solver(cb,scale,scale,options);
-            Eigen::MatrixXd directions(2,3);
-            directions<<-.0125,-.1,.0,-.005,-.05,.2;
+            Eigen::MatrixXd directions(2,5);
+            directions<<-.0125,-.1,.0,-.00002,-.00004,-.005,-.05,.2,0.,0.;
             solver.AuditDirections(base,directions);
             auto observed=[&](int proposal,int trial,const std::string &decision) {
                 return std::any_of(trials.begin(),trials.end(),[&](const auto &r) {
@@ -855,6 +855,17 @@ int main(int argc,char**argv)
             Check(observed(0,0,"DECREASE_OBSERVED")&&observed(1,0,"ARMIJO_FAILED")&&
                   observed(1,2,"DECREASE_OBSERVED")&&observed(2,0,"FINITE_STATE_REJECTED"),
                   "frozen finite trials missed a curvature rejection, halved recovery or full validation");
+            auto metric=[&](int proposal,int level,const std::string &name) {
+                for(const auto &row:trials)
+                    if(row.proposal==proposal&&row.iteration==level)
+                        for(const auto &[key,value]:row.measurements)
+                            if(key==name)return value;
+                throw std::runtime_error("missing model-ratio control measurement "+name);
+            };
+            Check(metric(3,0,"model_ratio_accepted")==1.&&metric(4,1,"model_ratio_accepted")==1.&&
+                  metric(3,0,"physical_actual")==metric(4,1,"physical_actual")&&
+                  metric(3,0,"physical_decrease_ratio")==metric(4,1,"physical_decrease_ratio"),
+                  "model-ratio decisions depend on equivalent direction/fraction parameterizations");
             const auto result=solver.Solve(base);
             Check(result.status=="EVALUATED"&&result.statistics.acceptedNewtonSteps==0&&
                   (result.lastAcceptedX.array()==base.array()).all(),"frozen finite trials advanced the seed");
@@ -864,7 +875,8 @@ int main(int argc,char**argv)
         {
             const Vec zero=Vec::Zero(2),one=Vec::Ones(2);
             auto solve=[&](const Vec &seed,double curvature,bool badFinite,double radius,
-                           const std::optional<SteadyMeritState> &resume,bool recycled=false) {
+                           const std::optional<SteadyMeritState> &resume,bool recycled=false,
+                           bool modelRatio=false,double cubic=0.) {
                 auto options=Options();
                 options.forcingInitial=options.forcingMaximum=.3;
                 options.maximumNewtonIterations=1;
@@ -872,13 +884,15 @@ int main(int argc,char**argv)
                 options.merit->restored=resume;
                 auto &b=options.merit->bounded.emplace();
                 b.initialRadius=radius;b.columns=2;b.maximumProposals=1;
+                b.modelRatio=modelRatio;
                 if(recycled)b.recycledBasis=Eigen::Matrix2d::Identity();
                 SteadyKrylovCallbacks cb;
                 if(recycled)cb.PreparePreconditioner=[](const Vec &,const Vec &) {
                     throw std::runtime_error("recycled basis unexpectedly prepared an inverse");
                 };
                 cb.Residual=[&](const Vec &v)->Vec {
-                    return Vector({1.+v[0]+curvature*v[0]*v[0]+.2*v[1],.2+v[1]+.2*v[0]});
+                    return Vector({1.+v[0]+curvature*v[0]*v[0]+cubic*v[0]*v[0]*v[0]+.2*v[1],
+                                   .2+v[1]+.2*v[0]});
                 };
                 cb.TrueNorm=[](const Vec &f){return f.cwiseAbs().maxCoeff();};
                 cb.ResidualBlocks=[](const Vec &f){return std::array<double,6>{std::abs(f[0]),0.,0.,std::abs(f[1]),0.,0.};};
@@ -910,9 +924,10 @@ int main(int argc,char**argv)
                     return i==m.end()?-1.:i->second;
                 };
                 Check(observations==1+result.statistics.acceptedNewtonSteps&&
-                      measured("old_newton_model_pass")==0.&&!result.newton.at(0).linearConverged,
+                      (cubic!=0.||measured("old_newton_model_pass")==0.)&&!result.newton.at(0).linearConverged,
                       "bounded control misrepresented Newton forcing or changed custody");
-                return std::make_tuple(std::move(result),measured("armijo_passed"),
+                return std::make_tuple(std::move(result),
+                                       measured(modelRatio?"legacy_full_fraction_armijo_passed":"armijo_passed"),
                                        measured("ratio_passed"),measured("nonlinear_validated"));
             };
             auto [good,armijo,rho,valid]=solve(zero,0.,false,.05,{});
@@ -941,6 +956,27 @@ int main(int argc,char**argv)
                 {"recycled",Result(recycled)},
                 {"curved_rejected",Result(bad)},{"ratio_rejected",Result(weak)},
                 {"invalid_rejected",Result(invalid)}}));
+            auto [v1,v1Floor,v1Rho,v1Valid]=solve(zero,0.,false,.00005,{},true);
+            auto [v2,v2Floor,v2Rho,v2Valid]=solve(zero,0.,false,.00005,{},true,true);
+            auto [restarted,restartFloor,restartRho,restartValid]=
+                solve(v2.lastAcceptedX,0.,false,.00005,v2.meritEnd,true,true);
+            auto [ratioRejected,ratioFloor,ratioTest,ratioValid]=solve(zero,19.6,false,.05,{},true,true);
+            auto [infeasible,infeasibleFloor,infeasibleRatio,infeasibleValid]=solve(zero,0.,true,.05,{},true,true);
+            auto [unresolved,unresolvedFloor,unresolvedRatio,unresolvedValid]=
+                solve(zero,0.,false,.05,{},true,true,2.e12);
+            Check(v1Floor==0.&&v1.statistics.acceptedNewtonSteps==0&&v2Floor==0.&&v2Rho==1.&&v2Valid==1.&&
+                  v2.statistics.acceptedNewtonSteps==1&&std::abs(*v2.meritEnd->ratio-1.)<1e-6&&
+                  restarted.meritStart->radius->modelRatio&&
+                  restarted.meritStart->radius->next==v2.meritEnd->radius->next&&
+                  (restarted.meritStart->radius->acceptedDisplacement-v2.lastAcceptedX).norm()<1e-15&&
+                  ratioTest==0.&&ratioValid==1.&&infeasibleValid==0.&&unresolvedValid<0.&&
+                  ratioRejected.statistics.acceptedNewtonSteps==0&&infeasible.statistics.acceptedNewtonSteps==0&&
+                  unresolved.statistics.acceptedNewtonSteps==0,
+                  "versioned model-ratio trial resolution, rejection custody or cold radius restart differs");
+            solves.push_back(J::Object({{"name",J::Quote("bounded_model_ratio_trial_and_resume")},
+                {"legacy_weak_rejected",Result(v1)},{"ratio_weak_accepted",Result(v2)},
+                {"cold_resume",Result(restarted)},{"ratio_rejected",Result(ratioRejected)},
+                {"infeasible",Result(infeasible)},{"unresolved",Result(unresolved)}}));
         }
         const auto result=J::Object({{"schema",J::Quote("WJH27SteadyKrylovProbeV1")},{"status",J::Quote("RECORDED")},
             {"solver_identity",J::Quote(SteadyKrylov::Identity)},{"unknown_scale",V(problem.sx)},

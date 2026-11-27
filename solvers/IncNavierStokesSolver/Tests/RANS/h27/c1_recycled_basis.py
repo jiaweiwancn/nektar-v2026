@@ -17,7 +17,7 @@ def digest(data):
     return hashlib.sha256(data).hexdigest()
 
 
-def prepare(checkpoint, receipt, directory):
+def prepare(checkpoint, receipt, directory, retained_only=False):
     packet = load(checkpoint)
     state = packet["state"]
     _, ordering = packed(packet, state["state_sha256"])
@@ -42,7 +42,8 @@ def prepare(checkpoint, receipt, directory):
     offsets = np.r_[0, np.cumsum(metadata["free_counts"])]
     enriched = q.copy()
     additions = []
-    for block, name in ((4, "k"), (5, "outer_epsilon")):
+    blocks = () if retained_only else ((4, "k"), (5, "outer_epsilon"))
+    for block, name in blocks:
         axis = np.zeros_like(v)
         axis[offsets[block]:offsets[block+1]] = v[offsets[block]:offsets[block+1]]
         size = np.linalg.norm(axis)
@@ -54,10 +55,13 @@ def prepare(checkpoint, receipt, directory):
             enriched = np.column_stack((enriched,axis/outside))
         additions.append({"block":name, "uncorrected_norm":float(size),
                           "outside_span_norm":float(outside), "kept":kept})
-    if not (base_dim < enriched.shape[1] <= 24):
+    if not retained_only and not (base_dim < enriched.shape[1] <= 24):
         raise ValueError("block split supplied no bounded new direction")
     directory.mkdir()
-    for name, matrix, components in (("recycled",q,[]),("enriched",enriched,additions)):
+    frames = [("recycled",q,[])]
+    if not retained_only:
+        frames.append(("enriched",enriched,additions))
+    for name, matrix, components in frames:
         out = directory/(name+".bin")
         with out.open("xb") as stream:
             stream.write(matrix.astype("<f8",copy=False).tobytes(order="F"))
@@ -79,5 +83,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     for param in ("checkpoint", "basis", "directory"):
         parser.add_argument(param, type=Path)
+    parser.add_argument("--retained-only",action="store_true")
     args = parser.parse_args()
-    prepare(args.checkpoint.resolve(),args.basis.resolve(),args.directory.resolve())
+    prepare(args.checkpoint.resolve(),args.basis.resolve(),args.directory.resolve(),args.retained_only)

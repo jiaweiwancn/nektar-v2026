@@ -71,7 +71,7 @@ def prepare(args):
     info = session.find("CONDITIONS/SOLVERINFO")
     parameters = session.find("CONDITIONS/PARAMETERS")
     for item in list(info):
-        if item.get("PROPERTY") in {
+        if item.get("PROPERTY","").startswith("WJDiagnosticBounded") or item.get("PROPERTY") in {
             "WJInitialFields", "WJInitialSourceIdentity", "WJRestart", "WJGeometrySeedPacketSHA256",
             "WJDiagnosticSeedSHA256", "WJDiagnosticCandidateOutput", "WJTerminalOutput",
             "WJDiagnosticTransferParent", "WJDiagnosticTransferParentSHA256",
@@ -81,7 +81,7 @@ def prepare(args):
         }:
             info.remove(item)
     for item in list(parameters):
-        if item.text.split("=", 1)[0].strip().startswith("WJGeometrySeed"):
+        if item.text.split("=", 1)[0].strip().startswith(("WJGeometrySeed","WJDiagnosticBounded")):
             parameters.remove(item)
     table = Path(info.find("I[@PROPERTY='WJReferenceTable']").get("VALUE"))
     output = args.out.resolve()

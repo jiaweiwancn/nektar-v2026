@@ -60,19 +60,29 @@ void VectorJSON(std::ostream&out,const Vec&v)
 {out<<'[';for(int i=0;i<v.size();++i){if(i)out<<',';out<<v[i];}out<<']';}
 
 SteadyBoundedProposal OptimizeRadius(const DiagnosticSteadyOptions &diagnostic,
-    const std::filesystem::path &basis,double radius,int proposal,double remaining)
+    const SteadyBoundedOptions &policy,const std::filesystem::path &basis,double radius,int proposal,double remaining)
 {
     if(remaining<=3.)throw SteadyCorrectionFailure("BOUNDED_OPTIMIZER_DEADLINE: preserve output time");
     const auto output=basis.string()+".proposal-"+std::to_string(proposal);
-    Require(!std::filesystem::exists(output),"bounded proposal output is immutable");
+    Require(!std::filesystem::exists(output)&&!std::filesystem::exists(output+".json"),
+            "bounded proposal output is immutable");
     Require(D::HashFile(diagnostic.boundedOptimizer)==diagnostic.boundedOptimizerSha,
             "bounded optimizer bytes changed after policy setup");
     std::ostringstream radiusArg;
     radiusArg<<std::setprecision(17)<<radius;
     // Start just the small pinned optimizer with literal arguments. The
     // controlled timeout applies to this child, not to the native process.
-    std::vector<std::string> arguments{"timeout","--kill-after=1s",std::to_string(std::min(120.,remaining-2.)),
+    const double optimizerTime=std::min(policy.optimizerSeconds,remaining-2.);
+    std::vector<std::string> arguments{"timeout","--kill-after=1s",
+        std::to_string(policy.modelRatio?std::min(optimizerTime+2.,remaining-1.):optimizerTime),
         "python3",diagnostic.boundedOptimizer,basis.string(),radiusArg.str(),output};
+    if(policy.modelRatio)
+    {
+        std::ostringstream gap;
+        gap<<std::setprecision(17)<<policy.optimizerRelativeGap;
+        arguments.insert(arguments.end(),{"--iterations",std::to_string(policy.optimizerIterations),
+            "--seconds",std::to_string(optimizerTime),"--relative-gap",gap.str()});
+    }
     std::vector<char*> argv;
     for(auto &argument:arguments)argv.push_back(argument.data());
     argv.push_back(nullptr);
@@ -90,9 +100,14 @@ SteadyBoundedProposal OptimizeRadius(const DiagnosticSteadyOptions &diagnostic,
     double actualRadius=0.,lower=0.;
     int count=0,hasLower=0;
     in>>schema>>basisSha>>actualRadius>>count>>result.score>>hasLower>>lower>>result.iterations>>result.status;
-    if(!in||schema!="WJH27BoundedProposalV1"||basisSha!=D::HashFile(basis.string())||actualRadius!=radius||
+    const char *expected=policy.modelRatio?"WJH27BoundedProposalV2":"WJH27BoundedProposalV1";
+    if(!in||schema!=expected||basisSha!=D::HashFile(basis.string())||actualRadius!=radius||
        count<1||count>24||!std::isfinite(result.score)||result.score<0.||
-       (hasLower!=0&&hasLower!=1)||!std::isfinite(lower)||result.iterations<1||result.iterations>100)
+       (hasLower!=0&&hasLower!=1)||!std::isfinite(lower)||result.iterations<1||
+       result.iterations>policy.optimizerIterations||
+       (policy.modelRatio&&((hasLower&&(lower<0.||lower>result.score+1.e-8))||
+         (result.status!="GAP_TARGET"&&result.status!="ITERATION_CAP"&&
+          result.status!="TIME_CAP"&&result.status!="LP_LIMIT"))))
         throw SteadyCorrectionFailure("BOUNDED_OPTIMIZER_OUTPUT: invalid signed proposal header");
     if(hasLower)result.lower=lower;
     result.coordinates.resize(count);
@@ -2268,11 +2283,20 @@ SteadyKrylovResult Coupling::SolveDiagnosticSteady(const CoupledState &seed,
             Require(std::filesystem::path(diagnostic.boundedOptimizer).is_absolute()&&
                     D::HashFile(diagnostic.boundedOptimizer)==diagnostic.boundedOptimizerSha,
                     "bounded direction optimizer path or identity differs");
-            binding<<'|'<<SteadyBoundedOptions::Identity<<'|'<<diagnostic.boundedOptimizerSha
+            using Bounded=SteadyBoundedOptions;
+            binding<<'|'<<(b.modelRatio?Bounded::RatioIdentity:Bounded::Identity)<<'|'<<diagnostic.boundedOptimizerSha
                    <<'|'<<b.initialRadius<<'|'<<b.minimumRadius<<'|'<<b.maximumRadius
                    <<'|'<<b.columns<<'|'<<b.maximumProposals<<'|'<<policy.maximumWork
                    <<'|'<<preconditionerMass<<'|'<<diagnostic.factorFDStep
                    <<'|'<<options.maximumInverseAge<<'|'<<options.reuseLinearIterations;
+            if(b.modelRatio)
+            {
+                binding<<"|finite-repeat-both-v1|"<<b.optimizerIterations<<'|'<<b.optimizerSeconds
+                       <<'|'<<b.optimizerRelativeGap<<'|'<<Bounded::MinimumRatio<<'|'<<Bounded::ActionTargetFraction
+                       <<'|'<<Bounded::AllowanceMultiplier<<'|'<<Bounded::RoundoffMultiplier
+                       <<'|'<<Bounded::GrowthRatio<<'|'<<Bounded::GrowthUse<<'|'<<Bounded::RadiusGrowth
+                       <<'|'<<Bounded::RadiusContraction<<'|'<<Bounded::StagnationDecrease<<'|'<<Bounded::StagnationWindow;
+            }
             if(!diagnostic.boundedBasisPath.empty())
                 binding<<"|recycled-scaled-basis-v1|"<<diagnostic.boundedBasisSha<<'|'<<diagnostic.boundedBasisBinding;
         }
@@ -2288,8 +2312,22 @@ SteadyKrylovResult Coupling::SolveDiagnosticSteady(const CoupledState &seed,
                     "unshifted action audit cannot restore a shifted controller");
         }
         else
+        {
             Require(diagnostic.meritEntry=="Reanchor"||!m_importedMerit,
                     "original-merit restart requires explicit Resume or Reanchor");
+            if(policy.bounded&&policy.bounded->modelRatio&&m_importedMerit&&m_importedMerit->radius)
+            {
+                Require(!diagnostic.allowUncommittedGuess&&!m_initialProjected&&
+                        StateHash(FromFree(PackFree(seed),0.))==m_initialSourceStateSha,
+                        "bounded model-ratio reanchor requires the exact accepted base for its history");
+                policy.restored=m_importedMerit;
+                auto &state=*policy.restored;
+                state.radius->modelRatio=true;
+                state.radius->next=policy.bounded->initialRadius;
+                state.usedForcing=state.nextForcing=options.forcingInitial;
+                state.decision="explicit radius reanchor with imported progress";
+            }
+        }
     }
     return SearchSteady(seed,controlled,final,preconditionerMass,nullptr,&diagnostic);
 }
@@ -2841,7 +2879,7 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
         if(options.merit&&options.merit->bounded)
             callbacks.OptimizeBounded=[&](double radius,int proposal,double remaining) {
                 Require(!boundedBasisPath.empty(),"bounded optimizer has no current published basis");
-                return OptimizeRadius(*diagnostic,boundedBasisPath,radius,proposal,remaining);
+                return OptimizeRadius(*diagnostic,*options.merit->bounded,boundedBasisPath,radius,proposal,remaining);
             };
         if(sparse)
         {

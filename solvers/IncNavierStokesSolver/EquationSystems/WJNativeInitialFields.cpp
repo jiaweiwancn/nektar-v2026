@@ -197,9 +197,11 @@ InitialFields::InitialFields(const std::string &path, bool allowAcceptedTimeStat
         r.decision=c.get<std::string>("state.decision");
         if(c.get_child_optional("state.radius"))
         {
-            Require(c.get<std::string>("state.radius.schema")==SteadyBoundedOptions::Identity,
+            const auto schema=c.get<std::string>("state.radius.schema");
+            Require(schema==SteadyBoundedOptions::Identity||schema==SteadyBoundedOptions::RatioIdentity,
                     "invalid bounded-direction checkpoint schema");
             auto &a=r.radius.emplace();
+            a.modelRatio=schema==SteadyBoundedOptions::RatioIdentity;
             a.used=Number(c,"state.radius.used");
             a.next=Number(c,"state.radius.next");
             a.displacement=Number(c,"state.radius.scaled_displacement");

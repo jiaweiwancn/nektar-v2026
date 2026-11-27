@@ -237,6 +237,7 @@ public:
         newton=0;
         const double physicalTarget=o.forcingInitial*Norm(f);
         const double scaledTarget=o.forcingInitial*sr.cwiseProduct(f).stableNorm();
+        const double baseRepeat=o.frozenFiniteTrialLimit?RepeatBase(x,f):0.;
         for(int index=0;index<directions.cols();++index)
         {
             const Vec v=directions.col(index).cwiseQuotient(sx);
@@ -274,7 +275,7 @@ public:
             audit.stencils.assign(out.finiteDifferences.begin()+first,out.finiteDifferences.end());
             cb.ObserveActionAudit(audit);
             if(o.frozenFiniteTrialLimit)
-                AuditFiniteTrials(x,f,directions.col(index),primary,half,primaryStep,halfStep,index);
+                AuditFiniteTrials(x,f,directions.col(index),primary,half,primaryStep,halfStep,index,baseRepeat);
         }
     }
 
@@ -329,8 +330,54 @@ private:
         return data;
     }
 
+    double RepeatBase(const Vec &x,const Vec &f)
+    {
+        const auto repeated=Trial(x,false);
+        Require(repeated.admissible,"accepted base failed a repeated evaluation");
+        return Norm(repeated.residual-f);
+    }
+
+    bool ModelRatio(const Vec &x,Evaluation &first,double base,double predicted,
+                    double baseRepeat,bool eligible,SteadyKrylovActionAudit &audit)
+    {
+        using Policy=SteadyBoundedOptions;
+        const double p=base-predicted, original=Norm(first.residual);
+        double actual=original, repeat=0.;
+        const bool repeated=eligible&&(actual<=o.acceptanceNorm||
+                              (p>0.&&base-actual>=Policy::MinimumRatio*p));
+        if(repeated)
+        {
+            auto confirmation=Trial(x,false);
+            if(!confirmation.admissible)
+            {
+                audit.notes.emplace_back("model_ratio_decision","REPEAT_INFEASIBLE");
+                audit.notes.emplace_back("model_ratio_repeat_failure",confirmation.reason);
+                return false;
+            }
+            repeat=Norm(confirmation.residual-first.residual);
+            actual=std::max(original,Norm(confirmation.residual));
+            if(actual>original)first=std::move(confirmation);
+            audit.measurements.emplace_back("trial_repeatability",repeat);
+        }
+        const double floor=baseRepeat+repeat+Policy::RoundoffMultiplier*
+                           std::numeric_limits<double>::epsilon()*std::max(base,actual);
+        const double a=base-actual,ratio=p>0.?a/p:0.;
+        const bool accurate=a>floor;
+        const bool adequate=std::isfinite(ratio)&&ratio>=Policy::MinimumRatio;
+        const bool root=actual<=o.acceptanceNorm;
+        const bool accepted=eligible&&repeated&&(root||(accurate&&adequate));
+        audit.measurements.insert(audit.measurements.end(),{
+            {"predicted_physical_decrease",p},{"actual_physical_decrease",a},
+            {"base_repeatability",baseRepeat},{"actual_decrease_floor",floor},
+            {"model_decrease_resolved",eligible?1.:0.},{"actual_decrease_resolved",accurate?1.:0.},
+            {"model_ratio_repeat_evaluated",repeated?1.:0.},{"model_ratio_accepted",accepted?1.:0.}});
+        audit.notes.emplace_back("model_ratio_decision",accepted?"ACCEPTABLE":
+            !eligible?"MODEL_UNRESOLVED":!adequate?"RATIO_INSUFFICIENT":"ACTUAL_DECREASE_UNRESOLVED");
+        return accepted;
+    }
+
     void AuditFiniteTrials(const Vec &x,const Vec &f,const Vec &direction,const Vec &primary,
-                           const Vec &half,double primaryStep,double halfStep,int proposal)
+                           const Vec &half,double primaryStep,double halfStep,int proposal,double baseRepeat)
     {
         const double base=Norm(f), scaledBase=sr.cwiseProduct(f).stableNorm();
         const double physicalTarget=o.forcingInitial*base,scaledTarget=o.forcingInitial*scaledBase;
@@ -387,9 +434,17 @@ private:
             bool useful=false;
             if(evaluation.admissible)
             {
+                using Policy=SteadyBoundedOptions;
+                const double roundoff=Policy::RoundoffMultiplier*std::numeric_limits<double>::epsilon();
+                const bool eligible=prediction.size()&&resolved&&
+                    base-predicted>Policy::AllowanceMultiplier*fraction*physicalAllowance+roundoff*base&&
+                    scaledBase-scaledPredicted>Policy::AllowanceMultiplier*fraction*scaledAllowance+roundoff*scaledBase;
+                ModelRatio(candidate,evaluation,base,predicted,baseRepeat,eligible,audit);
                 const double actual=Norm(evaluation.residual),scaledActual=sr.cwiseProduct(evaluation.residual).stableNorm();
                 const bool armijo=actual<=(1.-o.armijo*fraction)*base;
                 const bool root=actual<=o.acceptanceNorm;
+                audit.measurements.emplace_back("legacy_full_fraction_armijo_limit",(1.-o.armijo)*base);
+                audit.measurements.emplace_back("legacy_full_fraction_armijo_passed",actual<=(1.-o.armijo)*base?1.:0.);
                 audit.arrays.emplace_back("raw_actual_residual",evaluation.residual);
                 audit.measurements.emplace_back("physical_actual",actual);
                 audit.measurements.emplace_back("scaled_actual",scaledActual);
@@ -436,6 +491,9 @@ private:
             {"scaled_basis_orthogonality",(q.transpose()*q-Mat::Identity(m,m)).norm()}};
         data.arrays.emplace_back("scaled_correction_basis",q);
         data.arrays.emplace_back("raw_residual_and_actions",response);
+        if(bounded&&o.merit->bounded->modelRatio&&out.meritEnd->radius->acceptedDisplacement.size())
+            data.arrays.emplace_back("scaled_previous_displacement",
+                out.meritEnd->radius->acceptedDisplacement.cwiseQuotient(sx));
         // Normalize each column before polarization. The multiplier is
         // recorded separately so it cannot change either forcing target.
         Vec normalization(m+1);
@@ -619,6 +677,7 @@ private:
             {
                 state.radius.emplace();
                 state.radius->next=o.merit->bounded->initialRadius;
+                state.radius->modelRatio=o.merit->bounded->modelRatio;
             }
         }
         out.meritStart=out.meritEnd=state;
@@ -647,7 +706,9 @@ private:
                                   [](const auto &a){return a.first=="scaled_correction_basis";});
         const double scaledBase=sr.cwiseProduct(f).stableNorm();
         const double physicalTarget=o.forcingInitial*norm,scaledTarget=o.forcingInitial*scaledBase;
-        const double roundoff=64.*std::numeric_limits<double>::epsilon();
+        using Policy=SteadyBoundedOptions;
+        const double roundoff=Policy::RoundoffMultiplier*std::numeric_limits<double>::epsilon();
+        const double baseRepeat=policy.modelRatio?RepeatBase(x,f):0.;
         double radius=out.meritEnd->radius->next;
         if(q==boundedBasis->arrays.end())throw std::logic_error("bounded basis has no scaled coordinates");
 
@@ -724,9 +785,10 @@ private:
                     audit.arrays.emplace_back("raw_action_allowance",allowance);
                     audit.measurements.emplace_back("physical_action_allowance",physicalAllowance);
                     audit.measurements.emplace_back("scaled_action_allowance",scaledAllowance);
-                    const bool resolved=physicalAllowance<.5*physicalTarget&&scaledAllowance<.5*scaledTarget;
-                    const bool eligible=resolved&&decrease>4.*physicalAllowance+roundoff*norm&&
-                        scaledDecrease>4.*scaledAllowance+roundoff*scaledBase;
+                    const bool resolved=physicalAllowance<Policy::ActionTargetFraction*physicalTarget&&
+                        scaledAllowance<Policy::ActionTargetFraction*scaledTarget;
+                    const bool eligible=resolved&&decrease>Policy::AllowanceMultiplier*physicalAllowance+roundoff*norm&&
+                        scaledDecrease>Policy::AllowanceMultiplier*scaledAllowance+roundoff*scaledBase;
                     decision=resolved?"INSUFFICIENT_RESOLVED_MODEL_DESCENT":decision;
                     if(eligible)
                     {
@@ -751,19 +813,24 @@ private:
                         if(!evaluation.admissible)audit.notes.emplace_back("failure",evaluation.reason);
                         if(evaluation.admissible)
                         {
+                            const bool ratioAccepted=policy.modelRatio&&
+                                ModelRatio(candidate,evaluation,norm,model,baseRepeat,true,audit);
                             trialNorm=Norm(evaluation.residual);
                             const bool armijo=trialNorm<=(1.-o.armijo)*norm;
                             const bool root=trialNorm<=o.acceptanceNorm;
                             ratio=(norm-trialNorm)/decrease;
-                            const bool agreement=std::isfinite(ratio)&&ratio>=.1;
-                            accepted=root||(armijo&&agreement);
-                            decision=accepted?"BOUNDED_ACCEPTED":(armijo?"INSUFFICIENT_ACTUAL_AGREEMENT":"ARMIJO_FAILED");
+                            const bool agreement=std::isfinite(ratio)&&ratio>=Policy::MinimumRatio;
+                            accepted=policy.modelRatio?ratioAccepted:root||(armijo&&agreement);
+                            decision=accepted?"BOUNDED_ACCEPTED":policy.modelRatio?
+                                "MODEL_RATIO_REJECTED":armijo?"INSUFFICIENT_ACTUAL_AGREEMENT":"ARMIJO_FAILED";
                             audit.arrays.emplace_back("raw_actual_residual",evaluation.residual);
                             audit.arrays.emplace_back("raw_remainder",evaluation.residual-predicted);
                             audit.measurements.emplace_back("physical_actual",trialNorm);
                             audit.measurements.emplace_back("scaled_actual",sr.cwiseProduct(evaluation.residual).stableNorm());
-                            audit.measurements.emplace_back("armijo_limit",(1.-o.armijo)*norm);
-                            audit.measurements.emplace_back("armijo_passed",armijo?1.:0.);
+                            audit.measurements.emplace_back(policy.modelRatio?"legacy_full_fraction_armijo_limit":"armijo_limit",
+                                                            (1.-o.armijo)*norm);
+                            audit.measurements.emplace_back(policy.modelRatio?"legacy_full_fraction_armijo_passed":"armijo_passed",
+                                                            armijo?1.:0.);
                             audit.measurements.emplace_back("ratio_passed",agreement?1.:0.);
                             audit.measurements.emplace_back("root_tolerance_passed",root?1.:0.);
                             if(std::isfinite(ratio))audit.measurements.emplace_back("physical_decrease_ratio",ratio);
@@ -791,7 +858,7 @@ private:
                     throw Stop("BOUNDED_STAGNATION: six updates below one percent with no improving action rate");
                 return;
             }
-            radius*=.5;
+            radius*=Policy::RadiusContraction;
         }
         throw Stop("BOUNDED_SEARCH_EXHAUSTED: no eligible actual original decrease in the radius budget");
     }
@@ -807,17 +874,19 @@ private:
         radius.used=used;radius.displacement=displacement;radius.acceptedDisplacement=delta;
         radius.next=used;
         state.decision="hold radius";
-        if(ratio>.75&&displacement>=.8*used)
+        using Policy=SteadyBoundedOptions;
+        if(ratio>Policy::GrowthRatio&&displacement>=Policy::GrowthUse*used)
         {
-            radius.next=std::min(2.*used,o.merit->bounded->maximumRadius);
+            radius.next=std::min(Policy::RadiusGrowth*used,o.merit->bounded->maximumRadius);
             if(radius.next>used)state.decision="grow radius";
         }
         const double rate=(base-actual)/base/std::max(1LL,work);
         if(!radius.windowUpdates){radius.windowBase=base;radius.firstRate=rate;}
         radius.lastRate=rate;
-        if(++radius.windowUpdates==6)
+        if(++radius.windowUpdates==Policy::StagnationWindow)
         {
-            radius.stagnated=(radius.windowBase-actual)/radius.windowBase<.01&&radius.lastRate<=radius.firstRate;
+            radius.stagnated=(radius.windowBase-actual)/radius.windowBase<Policy::StagnationDecrease&&
+                radius.lastRate<=radius.firstRate;
             if(!radius.stagnated)radius.windowUpdates=0;
         }
         out.meritEnd=state;
@@ -1920,7 +1989,7 @@ std::string SteadyMeritState::ToJson()const
     {
         const auto &r=*radius;
         fields.emplace_back("radius",J::Object({
-            {"schema",J::Quote(SteadyBoundedOptions::Identity)},
+            {"schema",J::Quote(r.modelRatio?SteadyBoundedOptions::RatioIdentity:SteadyBoundedOptions::Identity)},
             {"used",J::Number(r.used)},{"next",J::Number(r.next)},
             {"scaled_displacement",J::Number(r.displacement)},{"window_base",J::Number(r.windowBase)},
             {"window_updates",J::Number(r.windowUpdates)},{"first_rate",J::Number(r.firstRate)},
@@ -1993,6 +2062,9 @@ SteadyKrylov::SteadyKrylov(SteadyKrylovCallbacks callbacks,SteadyVector unknownS
                         b.recycledBasis.allFinite()&&
                         (b.recycledBasis.transpose()*b.recycledBasis-Mat::Identity(b.columns,b.columns)).norm()<1e-10,
                         "recycled directions must form the signed orthonormal scaled basis");
+            Require(!b.modelRatio||(b.optimizerIterations>=1&&b.optimizerIterations<=1000&&
+                        Positive(b.optimizerSeconds)&&b.optimizerSeconds<=120.&&Fraction(b.optimizerRelativeGap)),
+                    "invalid bounded optimizer budget");
         }
         if(m.curvature)
             Require(m.initialMass==0.&&m.reanchorMass==0.&&m.curvature->maximumProducts>=4&&
@@ -2014,7 +2086,8 @@ SteadyKrylov::SteadyKrylov(SteadyKrylovCallbacks callbacks,SteadyVector unknownS
             {
                 const auto &b=*m.bounded;
                 const auto &a=*r.radius;
-                Require(r.usedMass==0.&&r.nextMass==0.&&a.next>=b.minimumRadius&&a.next<=b.maximumRadius&&
+                Require(a.modelRatio==b.modelRatio&&r.usedMass==0.&&r.nextMass==0.&&
+                        a.next>=b.minimumRadius&&a.next<=b.maximumRadius&&
                         a.windowUpdates>=0&&a.windowUpdates<=6&&std::isfinite(a.windowBase)&&
                         std::isfinite(a.firstRate)&&std::isfinite(a.lastRate)&&
                         (r.accepted>0?(a.used>=b.minimumRadius&&a.used<=b.maximumRadius&&Positive(a.displacement)&&

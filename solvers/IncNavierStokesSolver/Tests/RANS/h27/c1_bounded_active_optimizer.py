@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 """Seed the signed current model with descent from its active block gradients."""
-import argparse
 import hashlib
 from pathlib import Path
 
@@ -10,7 +9,7 @@ from scipy.optimize import minimize, minimize_scalar
 
 import c1_bounded_optimizer as bounded
 
-MODEL_SHA256 = "d6ed3495eec4109d9ddbeace67125646e8aa3e79dc954a719197397d7cd0c811"
+MODEL_SHA256 = "eebd6ed781cb96179f826be49bf5a3e520f7c8a804582cd126f398e02d446176"
 
 
 def active_seed(model, radius):
@@ -44,11 +43,9 @@ def active_seed(model, radius):
 
 
 if __name__=="__main__":
-    p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument("basis",type=Path)
-    p.add_argument("radius",type=float)
-    p.add_argument("output",type=Path)
-    args=p.parse_args()
+    args=bounded.parse(__doc__)
     if hashlib.sha256(Path(bounded.__file__).read_bytes()).hexdigest()!=MODEL_SHA256:
         raise ValueError("pinned bounded model implementation differs")
-    bounded.choose(args.basis,args.radius,args.output,seed_model=active_seed)
+    bounded.choose(args.basis,args.radius,args.output,seed_model=active_seed,
+                   iterations=args.iterations,seconds=args.seconds,relative_gap=args.relative_gap,
+                   archived=args.incumbent)

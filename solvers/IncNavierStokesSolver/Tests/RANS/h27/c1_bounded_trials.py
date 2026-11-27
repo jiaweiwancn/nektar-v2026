@@ -169,12 +169,12 @@ def prepare(args):
                                           "table":inputs[2], "archive_signature":packet["equation_identity"]})
 
 
-def summarize(case):
+def summarize(case, seed_key="hybrid-fine/state.accepted-000001.json", expected_sha=BASE):
     case = case.resolve()
     manifest = load(case/"frozen-trial-inputs.json")
-    previous = load(Path(manifest["archive"]["hybrid-fine/state.accepted-000001.json"]["path"]))
+    previous = load(Path(manifest["archive"][seed_key]["path"]))
     final = load(case/"state.diagnostic-steady.json")
-    packed(final)
+    packed(final,expected_sha)
     require(all(previous["state"][k] == final["state"][k] for k in SETTINGS) and
             final["original_residuals"] == previous["original_residuals"] and
             all(final[k] == previous[k] for k in ("minimum_covariance_over_k", "original_principal_over_mu",
@@ -192,7 +192,7 @@ def summarize(case):
         metadata, arrays = read_audit(receipt)
         proposal = metadata["proposal"]
         digests = {s["name"]:s["sha256"] for s in metadata["arrays"]}
-        require(metadata["base_coefficient_sha256"] == BASE and
+        require(metadata["base_coefficient_sha256"] == expected_sha and
                 metadata["probe_input_sha256"] == manifest["input"]["sha256"] and
                 metadata["free_id_sha256"] == base["ordering"] and
                 all(digests[k] == base[k] for k in ("unknown_scale", "row_scale", "raw_base_residual")) and

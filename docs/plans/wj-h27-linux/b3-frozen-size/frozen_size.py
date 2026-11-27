@@ -6,6 +6,7 @@ import hashlib
 import json
 import math
 from pathlib import Path
+import time
 import warnings
 
 import numpy as np
@@ -65,7 +66,8 @@ class JointModel:
                 normal = r/norm
                 self.norm_cuts.append((normal @ a, -float(normal @ b)))
 
-    def solve(self, radius, previous=None, max_iterations=100):
+    def solve(self, radius, previous=None, max_iterations=100, *, gap_tolerance=2.e-4,
+              relative_gap=None, seconds=None, incumbents=()):
         n = self.q.shape[1]
         tcap = self.c0
         zero = np.zeros(n)
@@ -73,8 +75,15 @@ class JointModel:
         best = tcap
         best_size = 0.
         lower = None
+        best_origin = "zero"
         active = self.initial_rows.copy()
         radius_margin = max(1.e-12*radius, 1.e-14)
+        started = time.monotonic()
+        model_floor = 8.e-9
+        target = gap_tolerance
+        stop = "ITERATION_CAP"
+        lp_status = None
+        stages = []
 
         def consider(proposal):
             v = np.asarray(proposal)
@@ -88,11 +97,15 @@ class JointModel:
                 return v.copy(), quality, size
             return None
 
-        if previous is not None:
-            feasible = consider(previous)
+        candidates = ([("previous", previous)] if previous is not None else []) + list(incumbents)
+        for name, vector in candidates:
+            feasible = consider(vector)
             if feasible:
                 best_v, best, best_size = feasible
+                best_origin = name
                 self.add_norm_cuts(best_v)
+        incumbent_score = best
+        incumbent_origin = best_origin
 
         # Both bounds follow from orthonormal Q and ||A y|| <= ||c||+sqrt(7)*tcap.
         by_radius = math.sqrt(self.q.shape[0])*radius*self.scale
@@ -100,7 +113,16 @@ class JointModel:
                              self.ranks, out=np.full(n, np.inf), where=self.ranks > 0)
         caps = np.minimum(by_radius, by_merit)*(1.+1.e-12)
         bounds = [(-b, b) for b in caps]+[(0., tcap*(1.+1.e-12))]
+        iterations = 0
         for iteration in range(1, max_iterations+1):
+            limits = {"primal_feasibility_tolerance":1.e-9,
+                      "dual_feasibility_tolerance":1.e-9, "threads":1}
+            if seconds is not None:
+                remaining = seconds-(time.monotonic()-started)
+                if remaining <= 0.:
+                    stop = "TIME_CAP"
+                    break
+                limits["time_limit"] = remaining
             indices = list(sorted(active))
             rows = self.rows[indices]
             norm = np.maximum(radius, np.max(np.abs(rows), axis=1))
@@ -112,18 +134,29 @@ class JointModel:
             with warnings.catch_warnings():
                 warnings.filterwarnings("ignore", category=OptimizeWarning, message="(Unrecognized options detected|Unknown solver options)")
                 result = linprog(np.r_[zero, 1.], A_ub=Aub, b_ub=bub, bounds=bounds,
-                                 method="highs-ds", options={"primal_feasibility_tolerance":1.e-9,
-                                     "dual_feasibility_tolerance":1.e-9, "threads":1})
+                                 method="highs-ds", options=limits)
+            iterations = iteration
+            lp_status = int(result.status)
             if not result.success:
+                if result.status == 1 and seconds is not None:
+                    stop = "TIME_CAP"
+                    break
                 if result.status != 4:
                     raise ValueError(f"radius {radius:g}: {result.message}")
+                stop = "LP_LIMIT"
                 break
             v = result.x[:-1]
             lower = max(0. if lower is None else lower, float(result.x[-1]))
             feasible = consider(v)
             if feasible:
                 best_v, best, best_size = feasible
-            if best-lower <= 2.e-4:
+                best_origin = f"LP iteration {iteration}"
+            if relative_gap is not None:
+                target = min(gap_tolerance, relative_gap*max(tcap-best, model_floor))
+            if iteration in (100, 300, max_iterations):
+                stages.append({"iteration":iteration, "upper":float(best), "lower":lower, "target":target})
+            if best-lower <= target:
+                stop = "GAP_TARGET"
                 break
             scores = np.abs(self.rows @ v)
             violating = np.flatnonzero(scores > radius+radius_margin)
@@ -134,10 +167,14 @@ class JointModel:
         y = self.transform @ best_v
         scores = vector_norms(self.raw_parts, np.r_[1., y])
         error = max(scores)
-        return best_v, y, {"radius": radius, "size": best_size, "model_score": float(error),
-                             "model_lower": lower, "model_gap": None if lower is None else float(error-lower),
-                             "model_iterations": iteration, "model_size_rows": len(active),
-                             "model_ratios": scores.tolist()}
+        return best_v, y, {"radius":radius, "size":best_size, "model_score":float(error),
+                           "model_lower":lower, "model_gap":None if lower is None else float(error-lower),
+                           "model_iterations":iterations, "model_size_rows":len(active),
+                           "model_ratios":scores.tolist(), "model_gap_target":target,
+                           "model_floor":model_floor, "model_stages":stages, "status":stop,
+                           "model_lp_status":lp_status, "model_seconds":time.monotonic()-started,
+                           "initial_incumbent":incumbent_origin, "initial_incumbent_score":float(incumbent_score),
+                           "selected_incumbent":best_origin}
 
 
 def load_model(path):
