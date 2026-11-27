@@ -1029,8 +1029,7 @@ int main(int argc,char**argv)
                 }
             };
             cb.OptimizeBounded=[&](double radius,int,double) {
-                const Eigen::MatrixXd action=sx.asDiagonal()*q;
-                Vec y=action.colPivHouseholderQr().solve(-currentResidual);
+                Vec y=-q.transpose()*currentResidual.cwiseQuotient(sx);
                 const double size=(q*y).cwiseAbs().maxCoeff();
                 if(size>radius)y*=radius/size;
                 return SteadyBoundedProposal{y,1.,{},1,"CONTROL"};
