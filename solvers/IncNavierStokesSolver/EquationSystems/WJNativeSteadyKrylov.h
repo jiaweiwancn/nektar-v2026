@@ -20,6 +20,7 @@ struct SteadyRadiusState
     int windowUpdates=0;
     bool stagnated=false;
     bool modelRatio=false;
+    bool momentumDirection=false;
     int residualSpan=-1;
     SteadyVector acceptedDisplacement;
 };
@@ -52,6 +53,7 @@ struct SteadyBoundedOptions
     static constexpr int StagnationWindow=6;
     bool modelRatio=false;
     bool residualBlocks=false;
+    bool momentumDirection=false;
     int optimizerIterations=100;
     double optimizerSeconds=120., optimizerRelativeGap=.1;
     double initialRadius=.025, minimumRadius=1e-7, maximumRadius=.1;
@@ -152,6 +154,7 @@ struct SteadyKrylovCallbacks
     std::function<std::array<double,6>(const SteadyVector &)> ResidualBlocks;
     // Keep only one raw scalar equation block while leaving free-row layout intact.
     std::function<SteadyVector(const SteadyVector &,bool outerEpsilon)> ScalarResidual;
+    std::function<SteadyVector(const SteadyVector &)> MomentumResidual;
     // Optional infinity norms by free-variable block in scaled coordinates.
     std::function<std::array<double,6>(const SteadyVector &)> ScaledUnknownBlocks;
     // Diagnostic-only observations of the unshifted local model.

@@ -980,7 +980,7 @@ int main(int argc,char**argv)
         }
         {
             const Vec base=Vec::Zero(4),sx=Vector({2.,3.,5.,7.}),sr=Vector({11.,13.,17.,19.});
-            const Vec offset=Vector({.05,.02,1.,.99});
+            Vec offset=Vector({.05,.02,1.,.99});
             auto options=Options();
             options.forcingInitial=options.forcingMaximum=.3;
             options.maximumNewtonIterations=2;options.maximumInverseAge=4;options.reuseLinearIterations=4;
@@ -1045,8 +1045,24 @@ int main(int argc,char**argv)
                   (rightHandSides[2]-Vector({0.,0.,-offset[2]-accepted[1][2],0.})).norm()<1.e-14&&
                   (rightHandSides[3]-Vector({0.,0.,0.,-offset[3]-accepted[1][3]})).norm()<1.e-14,
                   "matched residual spans lost coupling, raw RHS scaling, accepted selection or inverse reuse");
+
+            rightHandSides.clear();accepted.clear();ranks.clear();factors=0;
+            offset=Vector({.98,1.,.05,.04});
+            policy.columns=1;policy.recycledBasis=Eigen::MatrixXd::Identity(4,1);
+            policy.momentumDirection=true;
+            options.maximumNewtonIterations=1;
+            cb.MomentumResidual=[](const Vec &f)->Vec {
+                Vec block=Vec::Zero(f.size());
+                block.head(2)=f.head(2);
+                return block;
+            };
+            const auto momentum=SteadyKrylov(cb,sx,sr,options).Solve(base);
+            Check(factors==1&&rightHandSides.size()==3&&ranks==std::vector<int>{3,4}&&
+                  (rightHandSides[2]-Vector({-.98,-1.,0.,0.})).norm()<1.e-14&&
+                  momentum.statistics.acceptedNewtonSteps==1&&momentum.meritEnd->radius->residualSpan==7,
+                  "momentum comparison did not add the correctly scaled independent direction");
             solves.push_back(J::Object({{"name",J::Quote("bounded_current_coupled_residual_spans")},
-                {"result",Result(result)},{"inverse_preparations",J::Number(factors)},{"block_rhs",J::Number(rightHandSides.size())}}));
+                {"result",Result(result)},{"momentum",Result(momentum)}}));
         }
         const auto result=J::Object({{"schema",J::Quote("WJH27SteadyKrylovProbeV1")},{"status",J::Quote("RECORDED")},
             {"solver_identity",J::Quote(SteadyKrylov::Identity)},{"unknown_scale",V(problem.sx)},

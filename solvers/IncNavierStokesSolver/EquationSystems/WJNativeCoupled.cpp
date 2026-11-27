@@ -382,6 +382,11 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
                 m_session->LoadSolverInfo("WJDiagnosticBoundedResidualBlocks",blocks,"False");
                 Check(blocks=="True"||blocks=="False","invalid scalar residual-span preparation switch");
                 b.residualBlocks=diagnostic.boundedResidualBlocks=blocks=="True";
+                std::string momentum;
+                m_session->LoadSolverInfo("WJDiagnosticBoundedMomentumDirection",momentum,"False");
+                Check((momentum=="True"&&b.residualBlocks)||momentum=="False",
+                      "the matched momentum direction requires the coupled residual-span policy");
+                b.momentumDirection=momentum=="True";
                 if(b.residualBlocks)
                     m_session->LoadParameter("WJDiagnosticBoundedComparisonRadius",b.comparisonRadius,.025);
             }

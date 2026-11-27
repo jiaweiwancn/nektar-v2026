@@ -2297,6 +2297,7 @@ SteadyKrylovResult Coupling::SolveDiagnosticSteady(const CoupledState &seed,
                        <<'|'<<Bounded::GrowthRatio<<'|'<<Bounded::GrowthUse<<'|'<<Bounded::RadiusGrowth
                        <<'|'<<Bounded::RadiusContraction<<'|'<<Bounded::StagnationDecrease<<'|'<<Bounded::StagnationWindow;
                 if(b.residualBlocks)binding<<"|coupled-scalar-residual-spans-v1|"<<b.comparisonRadius;
+                if(b.momentumDirection)binding<<"|coupled-momentum-residual-axis-v1";
             }
             if(!diagnostic.boundedBasisPath.empty())
                 binding<<"|recycled-scaled-basis-v1|"<<diagnostic.boundedBasisSha<<'|'<<diagnostic.boundedBasisBinding;
@@ -2323,16 +2324,20 @@ SteadyKrylovResult Coupling::SolveDiagnosticSteady(const CoupledState &seed,
                         "bounded model-ratio reanchor requires the exact accepted base for its history");
                 policy.restored=m_importedMerit;
                 auto &state=*policy.restored;
+                const bool newMomentum=policy.bounded->momentumDirection&&!state.radius->momentumDirection;
+                state.radius->momentumDirection=policy.bounded->momentumDirection;
                 state.radius->modelRatio=true;
                 state.radius->next=policy.bounded->initialRadius;
                 state.usedForcing=state.nextForcing=options.forcingInitial;
                 state.decision="explicit radius reanchor with imported progress";
+                if(newMomentum)state.radius->residualSpan=-1;
                 if(policy.bounded->residualBlocks&&state.radius->residualSpan<0&&state.radius->stagnated)
                 {
                     state.radius->windowUpdates=0;
                     state.radius->windowBase=state.radius->firstRate=state.radius->lastRate=0.;
                     state.radius->stagnated=false;
-                    state.decision="new coupled residual directions after measured retained-span stagnation";
+                    state.decision=newMomentum?"momentum-residual direction after measured scalar-span stagnation":
+                        "new coupled residual directions after measured retained-span stagnation";
                 }
             }
         }
@@ -2444,6 +2449,15 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
             block.segment(offset,count)=f.segment(offset,count);
             return block;
         };
+        if(options.merit->bounded->momentumDirection)
+        {
+            callbacks.MomentumResidual=[npOffset,size](const Vec &f)
+            {
+                Vec block=Vec::Zero(size);
+                block.head(npOffset)=f.head(npOffset);
+                return block;
+            };
+        }
     }
     callbacks.ValidTrial=[&](const Vec&x){
         try{auto s=unpack(x);

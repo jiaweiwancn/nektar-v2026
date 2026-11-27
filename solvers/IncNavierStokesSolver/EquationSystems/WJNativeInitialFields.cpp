@@ -202,8 +202,10 @@ InitialFields::InitialFields(const std::string &path, bool allowAcceptedTimeStat
                     "invalid bounded-direction checkpoint schema");
             auto &a=r.radius.emplace();
             a.modelRatio=schema==SteadyBoundedOptions::RatioIdentity;
+            a.momentumDirection=c.get<bool>("state.radius.momentum_direction",false);
             a.residualSpan=c.get<int>("state.radius.residual_span",-1);
-            Require(a.residualSpan>=-1&&a.residualSpan<=3&&(a.modelRatio||a.residualSpan<0),
+            Require(a.residualSpan>=-1&&a.residualSpan<=(a.momentumDirection?7:3)&&
+                    (a.modelRatio||(!a.momentumDirection&&a.residualSpan<0)),
                     "invalid bounded residual-span checkpoint selection");
             a.used=Number(c,"state.radius.used");
             a.next=Number(c,"state.radius.next");

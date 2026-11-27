@@ -15,10 +15,10 @@ radius=$8
 frame="$(realpath "$9")"
 shift 9
 optimizer_seconds=$1
-outer=$((cooperative+180))
 case "$mode" in
     retained) inverse_estimate=0 ;;
     scalar-blocks) inverse_estimate=1750 ;;
+    momentum) inverse_estimate=1350 ;;
     *) exit 2 ;;
 esac
 suite="$r/source/solvers/IncNavierStokesSolver/Tests/RANS/h27"
@@ -27,7 +27,16 @@ old="$(dirname "$r")/wj-c1-b3-bounded.xjpRylk7"
 wrapper="$(dirname "$r")/wj-c1-steady-recovery.LOp8mfob/run-capped.sh"
 case_dir="$r/$name"
 test -s "$r/bin/$stage/finish.epoch"
-bash capacity.sh "$name-workers.ps" 2
+while ! bash capacity.sh "$name-workers.ps" 2; do
+    test "$(($(date +%s)-$(cat start.epoch)))" -lt 7300
+    sleep 15
+done
+if test "$mode" != retained; then
+    available=$((10800-$(date +%s)+$(cat start.epoch)-2190))
+    if test "$cooperative" -gt "$available"; then cooperative=$available; fi
+    test "$cooperative" -gt 2300
+fi
+outer=$((cooperative+180))
 python3 "$suite/c1_steady_case.py" "$old/bounded-active/run.xml" "$case_dir" \
     --seed "$seed" --eta 0 --quadrature 10 16 --fd .000512 --factor-fd 4e-6 \
     --seconds "$cooperative" --newton "$iterations" --krylov 24 --cycles 1 \
@@ -55,7 +64,8 @@ edit(session,{"WJDiagnosticMeritPolicy":"WJH27BoundedDirectionV2",
               "WJDiagnosticBoundedOptimizer":operator,"WJDiagnosticBoundedOptimizerSHA256":script["sha256"],
               "WJDiagnosticBoundedBasis":frame["input"]["path"],"WJDiagnosticBoundedBasisSHA256":frame["input"]["sha256"],
               "WJDiagnosticBoundedBasisBinding":frame["binding"],
-              "WJDiagnosticBoundedResidualBlocks":"True" if mode=="scalar-blocks" else "False"},
+              "WJDiagnosticBoundedResidualBlocks":"False" if mode=="retained" else "True",
+              "WJDiagnosticBoundedMomentumDirection":"True" if mode=="momentum" else "False"},
              {"WJDiagnosticBoundedInitialRadius":radius,"WJDiagnosticBoundedComparisonRadius":.025,
               "WJDiagnosticBoundedMinimumRadius":1e-7,"WJDiagnosticBoundedMaximumRadius":.1,
               "WJDiagnosticBoundedColumns":frame["columns"],"WJDiagnosticBoundedProposals":4,

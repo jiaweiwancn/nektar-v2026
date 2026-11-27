@@ -690,6 +690,7 @@ private:
                 state.radius.emplace();
                 state.radius->next=o.merit->bounded->initialRadius;
                 state.radius->modelRatio=o.merit->bounded->modelRatio;
+                state.radius->momentumDirection=o.merit->bounded->momentumDirection;
             }
         }
         out.meritStart=out.meritEnd=state;
@@ -868,17 +869,21 @@ private:
             throw Stop("BOUNDED_STAGNATION: six updates below one percent with no improving action rate");
     }
 
-    std::array<Vec,2> ResidualAxes(const Vec &x,const Vec &f,const Mat &q)
+    static constexpr std::array<const char *,3> ResidualAxisNames{"k","outer_epsilon","momentum"};
+
+    std::vector<Vec> ResidualAxes(const Vec &x,const Vec &f,const Mat &q)
     {
         const auto started=Clock::now();
         auto receipt=AuditData("bounded-residual-axes",x,f,Vec::Zero(x.size()),-1,0);
-        std::array<Vec,2> axes;
-        for(int i=0;i<2;++i)
+        const int count=o.merit->bounded->momentumDirection?3:2;
+        std::vector<Vec> axes;
+        axes.reserve(count);
+        for(int i=0;i<count;++i)
         {
-            const std::string name=i?"outer_epsilon":"k";
-            const Vec rhs=-cb.ScalarResidual(f,i==1);
+            const std::string name=ResidualAxisNames[i];
+            const Vec rhs=i==2?-cb.MomentumResidual(f):-cb.ScalarResidual(f,i==1);
             const Vec scaledRhs=sr.cwiseProduct(rhs);
-            axes[i]=Precondition(scaledRhs);
+            axes.push_back(Precondition(scaledRhs));
             const Vec physical=sx.cwiseProduct(axes[i]);
             const Vec projected=(axes[i]-q*(q.transpose()*axes[i])).eval();
             const double size=axes[i].stableNorm();
@@ -913,8 +918,8 @@ private:
         const auto publish=[&](int mask,const char *span)
         {
             Mat q=retained,actions=retainedActions;
-            std::array<double,2> outside{};
-            for(int i=0;i<2;++i)
+            std::vector<double> outside(axes.size(),0.);
+            for(std::size_t i=0;i<axes.size();++i)
             {
                 if(!(mask&(1<<i)))continue;
                 Vec axis=axes[i];
@@ -931,17 +936,20 @@ private:
                 actions.col(actions.cols()-1)=Jacobian(x,f,axis,1.,"current-residual-basis",-1,i);
             }
             boundedBasis=ModelBasis(x,f,q,actions,true,q.cols());
-            boundedBasis->measurements.emplace_back("k_fraction_outside_preceding_span",outside[0]);
-            boundedBasis->measurements.emplace_back("outer_epsilon_fraction_outside_preceding_span",outside[1]);
+            for(std::size_t i=0;i<outside.size();++i)
+                boundedBasis->measurements.emplace_back(std::string(ResidualAxisNames[i])+
+                    "_fraction_outside_preceding_span",outside[i]);
             if(span)boundedBasis->notes.emplace_back("matched_residual_span",span);
             cb.ObserveActionAudit(*boundedBasis);
         };
         if(radiusState.residualSpan<0)
         {
-            constexpr std::array<const char *,4> labels{"retained","k","outer_epsilon","joint"};
+            constexpr std::array<const char *,8> labels{
+                "retained","k","outer_epsilon","joint","","","","joint_momentum"};
+            const std::vector<int> masks=policy.momentumDirection?std::vector<int>{3,7}:std::vector<int>{0,1,2,3};
             std::optional<BoundedTrial> best;
             int selected=-1;
-            for(int mask=0;mask<4;++mask)
+            for(int mask:masks)
             {
                 publish(mask,labels[mask]);
                 for(int index=0;index<2;++index)
@@ -961,15 +969,15 @@ private:
                 AcceptBounded(x,f,norm,std::move(*best),starts);
                 return;
             }
-            // The last published span is joint. Contract from the smaller
+            // The last published span contains all declared blocks. Contract from the smaller
             // matched radius after both original comparison sizes failed.
             double radius=std::min(policy.initialRadius,policy.comparisonRadius)*
                 SteadyBoundedOptions::RadiusContraction;
             for(int proposal=2;proposal<policy.maximumProposals&&radius>=policy.minimumRadius;++proposal)
             {
-                if(auto trial=TryBounded(x,f,norm,baseRepeat,radius,proposal,starts,"joint"))
+                if(auto trial=TryBounded(x,f,norm,baseRepeat,radius,proposal,starts,labels[masks.back()]))
                 {
-                    radiusState.residualSpan=3;
+                    radiusState.residualSpan=masks.back();
                     AcceptBounded(x,f,norm,std::move(*trial),starts);
                     return;
                 }
@@ -2173,7 +2181,8 @@ std::string SteadyMeritState::ToJson()const
             {"scaled_displacement",J::Number(r.displacement)},{"window_base",J::Number(r.windowBase)},
             {"window_updates",J::Number(r.windowUpdates)},{"first_rate",J::Number(r.firstRate)},
             {"last_rate",J::Number(r.lastRate)},{"stagnated",J::Boolean(r.stagnated)},
-            {"residual_span",J::Number(r.residualSpan)}}));
+            {"residual_span",J::Number(r.residualSpan)},
+            {"momentum_direction",J::Boolean(r.momentumDirection)}}));
     }
     return J::Object(fields);
 }
@@ -2245,9 +2254,12 @@ SteadyKrylov::SteadyKrylov(SteadyKrylovCallbacks callbacks,SteadyVector unknownS
             Require(!b.modelRatio||(b.optimizerIterations>=1&&b.optimizerIterations<=1000&&
                         Positive(b.optimizerSeconds)&&b.optimizerSeconds<=120.&&Fraction(b.optimizerRelativeGap)),
                     "invalid bounded optimizer budget");
-            Require(!b.residualBlocks||(b.modelRatio&&b.recycledBasis.size()&&b.columns+2<=24&&
-                        b.columns+2<=o.restartDimension&&b.maximumProposals>=2&&
-                        o.maximumInverseAge>0&&o.reuseLinearIterations>=b.columns+2&&
+            const int extra=b.momentumDirection?3:2;
+            Require(!b.momentumDirection||(b.residualBlocks&&bool(m_callbacks.MomentumResidual)),
+                    "momentum enrichment requires its raw residual callback");
+            Require(!b.residualBlocks||(b.modelRatio&&b.recycledBasis.size()&&b.columns+extra<=24&&
+                        b.columns+extra<=o.restartDimension&&b.maximumProposals>=2&&
+                        o.maximumInverseAge>0&&o.reuseLinearIterations>=b.columns+extra&&
                         bool(m_callbacks.PreparePreconditioner)&&bool(m_callbacks.ScalarResidual)&&
                         b.comparisonRadius>=b.minimumRadius&&b.comparisonRadius<=b.maximumRadius&&
                         b.comparisonRadius!=b.initialRadius&&b.columns+4+3*(6+b.maximumProposals)<=m.maximumWork),
@@ -2273,8 +2285,9 @@ SteadyKrylov::SteadyKrylov(SteadyKrylovCallbacks callbacks,SteadyVector unknownS
             {
                 const auto &b=*m.bounded;
                 const auto &a=*r.radius;
-                Require(a.modelRatio==b.modelRatio&&r.usedMass==0.&&r.nextMass==0.&&
-                        a.residualSpan>=-1&&a.residualSpan<=3&&(a.residualSpan<0||b.residualBlocks)&&
+                Require(a.modelRatio==b.modelRatio&&a.momentumDirection==b.momentumDirection&&
+                        r.usedMass==0.&&r.nextMass==0.&&a.residualSpan>=-1&&
+                        a.residualSpan<=(b.momentumDirection?7:3)&&(a.residualSpan<0||b.residualBlocks)&&
                         a.next>=b.minimumRadius&&a.next<=b.maximumRadius&&
                         a.windowUpdates>=0&&a.windowUpdates<=6&&std::isfinite(a.windowBase)&&
                         std::isfinite(a.firstRate)&&std::isfinite(a.lastRate)&&

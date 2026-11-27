@@ -9,8 +9,10 @@ parallel=$2
 [[ "$parallel" =~ ^([1-9]|1[0-6])$ ]]
 target="$r/bin/$stage"
 mkdir -p "$target"
+latest=4300
+if test "$stage" = momentum; then latest=7050; fi
 while ! bash capacity.sh "$target/workers.ps" "$((parallel+2))"; do
-    test "$(($(date +%s)-$(cat start.epoch)))" -lt 4300
+    test "$(($(date +%s)-$(cat start.epoch)))" -lt "$latest"
     sleep 20
 done
 date +%s > "$target/start.epoch"
