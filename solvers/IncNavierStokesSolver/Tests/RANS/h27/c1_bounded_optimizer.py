@@ -19,7 +19,7 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def choose(receipt, radius, output):
+def choose(receipt, radius, output, seed_model=None):
     if sha(HELPERS/"frozen_size.py") != HELPER_SHA:
         raise ValueError("pinned joint-model solver differs")
     sys.path.insert(0, str(HELPERS))
@@ -51,7 +51,12 @@ def choose(receipt, radius, output):
         parts.append(((np.sqrt(np.maximum(values, 0.))[:,None]*vectors.T)*normalization[None,:])/physical)
     parts.append(np.linalg.qr(sr[:,None]*response/scaled, mode="r"))
     model = JointModel(q, parts)
-    _, y, info = model.solve(radius, max_iterations=100)
+    previous = seed_model(model, radius) if seed_model is not None else None
+    _, y, info = model.solve(radius, previous=previous, max_iterations=100)
+    if seed_model is not None:
+        info["incumbent_method"] = "current active gradients"
+        info["seed_model_score"] = None if previous is None else float(
+            max(np.linalg.norm(b + a @ previous) for b, a in model.parts))
     observed = float(np.max(np.abs(q @ y)))
     if not np.isfinite(y).all() or observed > radius*(1.+1.e-10):
         raise ValueError("nonfinite or infeasible radius proposal")
