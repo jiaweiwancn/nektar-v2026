@@ -7,8 +7,13 @@ status=0
 awk -v extra="$requested" '
 $3 !~ /^[ITZ]/ && $4 ~ /^(cc1plus|simpleFoam|mpirun|mpiexec|ninja|cmake|python|WJ|IncNavier|orted|f951|gcc|g\+\+|time)/ {
     if ($3 ~ /^S/ && $4 ~ /^(time|timer|timeout)$/) { wrappers++; next }
-    if ($1 != $2 && $4 ~ /^(simpleFoam|mpirun|mpiexec|IncNavier|orted)/ &&
-        $5 ~ /^(ep_poll|do_poll|do_select)(\.|$)/) { mpi_io++; next }
+    # Count rank leaders, even when they wait. A launcher or daemon stopped
+    # in MPI progress I/O is a service, as are the corresponding rank threads.
+    if ($3 ~ /^S/ && $5 ~ /^(ep_poll|do_poll|do_select)(\.|$)/ &&
+        ($4 ~ /^(mpirun|mpiexec|orted)$/ || ($1 != $2 && $4 ~ /^(simpleFoam|IncNavier)/))) {
+        mpi_io++
+        next
+    }
     by_command[$4]++
     workers++
 }

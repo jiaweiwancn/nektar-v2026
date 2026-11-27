@@ -20,6 +20,7 @@ struct SteadyRadiusState
     int windowUpdates=0;
     bool stagnated=false;
     bool modelRatio=false;
+    int residualSpan=-1;
     SteadyVector acceptedDisplacement;
 };
 
@@ -50,9 +51,11 @@ struct SteadyBoundedOptions
     static constexpr double RadiusContraction=.5, StagnationDecrease=.01;
     static constexpr int StagnationWindow=6;
     bool modelRatio=false;
+    bool residualBlocks=false;
     int optimizerIterations=100;
     double optimizerSeconds=120., optimizerRelativeGap=.1;
     double initialRadius=.025, minimumRadius=1e-7, maximumRadius=.1;
+    double comparisonRadius=.025;
     int columns=16, maximumProposals=4;
     Eigen::MatrixXd recycledBasis;
 };
@@ -147,6 +150,8 @@ struct SteadyKrylovCallbacks
     // For the merit policy TrueNorm is the maximum of these fixed quadratic
     // seminorms (including absolute value and identically zero blocks).
     std::function<std::array<double,6>(const SteadyVector &)> ResidualBlocks;
+    // Keep only one raw scalar equation block while leaving free-row layout intact.
+    std::function<SteadyVector(const SteadyVector &,bool outerEpsilon)> ScalarResidual;
     // Optional infinity norms by free-variable block in scaled coordinates.
     std::function<std::array<double,6>(const SteadyVector &)> ScaledUnknownBlocks;
     // Diagnostic-only observations of the unshifted local model.

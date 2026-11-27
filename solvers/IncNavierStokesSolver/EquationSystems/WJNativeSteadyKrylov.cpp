@@ -480,14 +480,26 @@ private:
         const int n=static_cast<int>(z.rows()),m=static_cast<int>(qr.rank());
         Require(m>0,"frozen correction subspace is empty");
         const Mat q=qr.householderQ()*Mat::Identity(n,m);
-        Mat response(n,m+1);
+        return ModelBasis(x,f,q,Responses(x,f,q),bounded,z.cols());
+    }
+
+    Mat Responses(const Vec &x,const Vec &f,const Mat &q)
+    {
+        Mat response(q.rows(),q.cols()+1);
         response.col(0)=f;
-        for(int j=0;j<m;++j)
+        for(int j=0;j<q.cols();++j)
             response.col(j+1)=Jacobian(x,f,q.col(j),1.,"orthonormal-basis",-1,j);
+        return response;
+    }
+
+    SteadyKrylovActionAudit ModelBasis(const Vec &x,const Vec &f,const Mat &q,const Mat &response,
+                                      bool bounded,int columns)
+    {
+        const int n=q.rows(),m=q.cols();
         auto data=AuditData(bounded?"bounded-current-basis":"frozen-size-basis",x,f,Vec::Zero(n),0,m);
         const double target=o.forcingInitial*Norm(f);
         data.measurements={{"physical_target",target},{"scaled_target",o.forcingInitial*sr.cwiseProduct(f).stableNorm()},
-            {"forcing",o.forcingInitial},{"basis_rank",double(m)},{"krylov_columns",double(z.cols())},
+            {"forcing",o.forcingInitial},{"basis_rank",double(m)},{"krylov_columns",double(columns)},
             {"scaled_basis_orthogonality",(q.transpose()*q-Mat::Identity(m,m)).norm()}};
         data.arrays.emplace_back("scaled_correction_basis",q);
         data.arrays.emplace_back("raw_residual_and_actions",response);
@@ -684,6 +696,303 @@ private:
         if(cb.ObserveMeritState)cb.ObserveMeritState(state);
     }
 
+    struct BoundedTrial
+    {
+        Vec candidate;
+        Evaluation evaluation;
+        double norm, radius, displacement, ratio;
+    };
+
+    std::optional<BoundedTrial> TryBounded(const Vec &x,const Vec &f,double norm,double baseRepeat,
+                                          double radius,int proposal,long long starts,const char *span=nullptr)
+    {
+        const auto &policy=*o.merit->bounded;
+        if(!boundedBasis)throw Stop("BOUNDED_BASIS: no current correction subspace");
+        const auto q=std::find_if(boundedBasis->arrays.begin(),boundedBasis->arrays.end(),
+                                  [](const auto &a){return a.first=="scaled_correction_basis";});
+        const double scaledBase=sr.cwiseProduct(f).stableNorm();
+        const double physicalTarget=o.forcingInitial*norm,scaledTarget=o.forcingInitial*scaledBase;
+        using Policy=SteadyBoundedOptions;
+        const double roundoff=Policy::RoundoffMultiplier*std::numeric_limits<double>::epsilon();
+        if(q==boundedBasis->arrays.end())throw std::logic_error("bounded basis has no scaled coordinates");
+
+        if(out.statistics.jacobianActions-starts+3>o.merit->maximumWork)
+            throw Stop("BOUNDED_PRODUCT_LIMIT: current action work limit reached");
+        const auto began=Clock::now();
+        const auto proposalData=cb.OptimizeBounded(radius,proposal,o.maximumSeconds-Seconds(start));
+        const double optimizerSeconds=Seconds(began);
+        CheckVector(proposalData.coordinates,q->second.cols(),"bounded optimizer coordinates");
+        const Vec direction=q->second*proposalData.coordinates;
+        const double size=direction.cwiseAbs().maxCoeff();
+        if(!(size<=radius*(1.+1e-10)))
+            throw Stop("BOUNDED_RADIUS: optimizer result exceeds its declared radius");
+        auto audit=AuditData("bounded-direction",x,f,direction,-1,0);
+        audit.proposal=proposal;
+        audit.notes.emplace_back("optimizer_status",proposalData.status);
+        if(span) audit.notes.emplace_back("matched_residual_span",span);
+        audit.arrays.emplace_back("optimizer_coordinates",proposalData.coordinates);
+        audit.measurements={{"radius",radius},{"scaled_size",size},{"physical_base",norm},
+            {"scaled_base",scaledBase},{"physical_target",physicalTarget},{"scaled_target",scaledTarget},
+            {"optimizer_score",proposalData.score},{"optimizer_iterations",double(proposalData.iterations)},
+            {"optimizer_seconds",optimizerSeconds}};
+        if(proposalData.lower)
+        {
+            audit.measurements.emplace_back("optimizer_lower_bound",*proposalData.lower);
+            audit.measurements.emplace_back("optimizer_gap",proposalData.score-*proposalData.lower);
+        }
+        const auto first=out.finiteDifferences.size();
+        Vec primary,half,wide;
+        double parameter=0.,halfParameter=0.;
+        auto action=[&](double multiplier,const char *label,Vec &result,double *step=nullptr) {
+            try
+            {
+                result=Jacobian(x,f,direction,multiplier,label,-1,proposal);
+                if(step)*step=out.finiteDifferences.back().parameterStep;
+            }
+            catch(const Stop &error)
+            {
+                if(!FDStop(error))throw;
+                audit.notes.emplace_back(label,error.what());
+            }
+        };
+        std::string decision="NO_NONZERO_BOUNDED_PROPOSAL";
+        if(size>0.)
+        {
+            action(1.,"bounded-primary",primary,&parameter);
+            action(.5,"bounded-half",half,&halfParameter);
+            action(2.,"bounded-wide",wide);
+            decision="UNRESOLVED_CURRENT_ACTION";
+        }
+        Evaluation evaluation;
+        Vec candidate;
+        double trialNorm=0.,displacement=0.,ratio=0.;
+        bool accepted=false;
+        if(primary.size())
+        {
+            const Vec predicted=f+primary;
+            const double model=Norm(predicted),scaledModel=sr.cwiseProduct(predicted).stableNorm();
+            const double decrease=norm-model,scaledDecrease=scaledBase-scaledModel;
+            audit.arrays.emplace_back("raw_action_primary",primary);
+            audit.arrays.emplace_back("raw_model_residual",predicted);
+            audit.measurements.emplace_back("physical_model",model);
+            audit.measurements.emplace_back("scaled_model",scaledModel);
+            audit.measurements.emplace_back("effective_physical_error_ratio",model/norm);
+            audit.measurements.emplace_back("effective_scaled_error_ratio",scaledModel/scaledBase);
+            audit.measurements.emplace_back("old_newton_model_pass",model<=physicalTarget&&scaledModel<=scaledTarget?1.:0.);
+            if(wide.size())audit.arrays.emplace_back("raw_action_wide",wide);
+            if(half.size()&&halfParameter<.8*parameter)
+            {
+                const Vec allowance=2.*(half-primary);
+                const double physicalAllowance=Norm(allowance),scaledAllowance=sr.cwiseProduct(allowance).stableNorm();
+                audit.arrays.emplace_back("raw_action_half",half);
+                audit.arrays.emplace_back("raw_action_allowance",allowance);
+                audit.measurements.emplace_back("physical_action_allowance",physicalAllowance);
+                audit.measurements.emplace_back("scaled_action_allowance",scaledAllowance);
+                const bool resolved=physicalAllowance<Policy::ActionTargetFraction*physicalTarget&&
+                    scaledAllowance<Policy::ActionTargetFraction*scaledTarget;
+                audit.measurements.emplace_back("current_action_resolved",resolved?1.:0.);
+                const bool eligible=resolved&&decrease>Policy::AllowanceMultiplier*physicalAllowance+roundoff*norm&&
+                    scaledDecrease>Policy::AllowanceMultiplier*scaledAllowance+roundoff*scaledBase;
+                decision=resolved?"INSUFFICIENT_RESOLVED_MODEL_DESCENT":decision;
+                if(eligible)
+                {
+                    audit.notes.emplace_back("model_status",decrease>=.01*norm?"USEFUL_MODEL_DESCENT":"WEAK_MODEL_DESCENT");
+                    candidate=x+sx.cwiseProduct(direction);
+                    const Vec delta=(candidate-x).cwiseQuotient(sx);
+                    displacement=delta.cwiseAbs().maxCoeff();
+                    const double coordinateNorm=std::max(1.,x.cwiseQuotient(sx).cwiseAbs().maxCoeff());
+                    if(displacement>radius*(1.+1e-10)+roundoff*coordinateNorm)
+                        throw Stop("BOUNDED_RADIUS: represented trial exceeds its declared radius");
+                    audit.arrays.emplace_back("trial_free",candidate);
+                    audit.measurements.emplace_back("fraction",1.);
+                    audit.measurements.emplace_back("scaled_displacement",displacement);
+                    if(cb.ScaledUnknownBlocks)
+                    {
+                        const auto blocks=cb.ScaledUnknownBlocks(delta);
+                        audit.arrays.emplace_back("scaled_displacement_blocks",Eigen::Map<const Vec>(blocks.data(),blocks.size()));
+                    }
+                    evaluation=Trial(candidate,false);
+                    audit.measurements.emplace_back("nonlinear_validated",evaluation.nonlinearValidated?1.:0.);
+                    decision="FINITE_STATE_REJECTED";
+                    if(!evaluation.admissible)audit.notes.emplace_back("failure",evaluation.reason);
+                    if(evaluation.admissible)
+                    {
+                        const bool ratioAccepted=policy.modelRatio&&
+                            ModelRatio(candidate,evaluation,norm,model,baseRepeat,true,audit);
+                        trialNorm=Norm(evaluation.residual);
+                        const bool armijo=trialNorm<=(1.-o.armijo)*norm;
+                        const bool root=trialNorm<=o.acceptanceNorm;
+                        ratio=(norm-trialNorm)/decrease;
+                        const bool agreement=std::isfinite(ratio)&&ratio>=Policy::MinimumRatio;
+                        accepted=policy.modelRatio?ratioAccepted:root||(armijo&&agreement);
+                        decision=accepted?(span?"MATCHED_ELIGIBLE":"BOUNDED_ACCEPTED"):policy.modelRatio?
+                            "MODEL_RATIO_REJECTED":armijo?"INSUFFICIENT_ACTUAL_AGREEMENT":"ARMIJO_FAILED";
+                        audit.arrays.emplace_back("raw_actual_residual",evaluation.residual);
+                        audit.arrays.emplace_back("raw_remainder",evaluation.residual-predicted);
+                        audit.measurements.emplace_back("physical_actual",trialNorm);
+                        audit.measurements.emplace_back("scaled_actual",sr.cwiseProduct(evaluation.residual).stableNorm());
+                        audit.measurements.emplace_back(policy.modelRatio?"legacy_full_fraction_armijo_limit":"armijo_limit",
+                                                        (1.-o.armijo)*norm);
+                        audit.measurements.emplace_back(policy.modelRatio?"legacy_full_fraction_armijo_passed":"armijo_passed",
+                                                        armijo?1.:0.);
+                        audit.measurements.emplace_back("ratio_passed",agreement?1.:0.);
+                        audit.measurements.emplace_back("root_tolerance_passed",root?1.:0.);
+                        if(std::isfinite(ratio))audit.measurements.emplace_back("physical_decrease_ratio",ratio);
+                        Observe(candidate,evaluation.residual,trialNorm,false);
+                    }
+                }
+            }
+        }
+        audit.stencils.assign(out.finiteDifferences.begin()+first,out.finiteDifferences.end());
+        const auto work=out.statistics.jacobianActions-starts;
+        audit.measurements.emplace_back("current_products_at_base",double(work));
+        audit.notes.emplace_back("decision",decision);
+        cb.ObserveActionAudit(audit);
+        Deadline();
+        if(accepted)
+            return BoundedTrial{std::move(candidate),std::move(evaluation),trialNorm,radius,displacement,ratio};
+        return std::nullopt;
+    }
+
+    void AcceptBounded(Vec &x,Vec &f,double &norm,BoundedTrial trial,long long starts)
+    {
+        AdvanceRadius(norm,trial.norm,trial.radius,trial.displacement,trial.ratio,
+                      out.statistics.jacobianActions-starts,trial.candidate-x);
+        x=std::move(trial.candidate);f=std::move(trial.evaluation.residual);norm=trial.norm;
+        Observe(x,f,norm,true);
+        ++out.statistics.acceptedNewtonSteps;
+        auto &record=out.newton.back();
+        record.accepted=true;record.acceptedNorm=norm;record.acceptedStep=1.;
+        boundedBasis.reset();
+        if(out.meritEnd->radius->stagnated&&norm>o.acceptanceNorm)
+            throw Stop("BOUNDED_STAGNATION: six updates below one percent with no improving action rate");
+    }
+
+    std::array<Vec,2> ResidualAxes(const Vec &x,const Vec &f,const Mat &q)
+    {
+        const auto started=Clock::now();
+        auto receipt=AuditData("bounded-residual-axes",x,f,Vec::Zero(x.size()),-1,0);
+        std::array<Vec,2> axes;
+        for(int i=0;i<2;++i)
+        {
+            const std::string name=i?"outer_epsilon":"k";
+            const Vec rhs=-cb.ScalarResidual(f,i==1);
+            const Vec scaledRhs=sr.cwiseProduct(rhs);
+            axes[i]=Precondition(scaledRhs);
+            const Vec physical=sx.cwiseProduct(axes[i]);
+            const Vec projected=(axes[i]-q*(q.transpose()*axes[i])).eval();
+            const double size=axes[i].stableNorm();
+            receipt.measurements.emplace_back(name+"_scaled_coupled_norm",size);
+            receipt.measurements.emplace_back(name+"_outside_retained_norm",projected.stableNorm());
+            receipt.measurements.emplace_back(name+"_outside_retained_fraction",
+                                              size>0.?projected.stableNorm()/size:0.);
+            receipt.arrays.emplace_back("raw_negative_"+name+"_residual",rhs);
+            receipt.arrays.emplace_back("scaled_"+name+"_rhs",scaledRhs);
+            receipt.arrays.emplace_back("scaled_"+name+"_coupled_correction",axes[i]);
+            if(cb.FactoredAction)
+                receipt.arrays.emplace_back("raw_"+name+"_factor_backsolve_error",
+                                             cb.FactoredAction(physical)-rhs);
+        }
+        receipt.measurements.emplace_back("block_solve_seconds",Seconds(started));
+        cb.ObserveActionAudit(receipt);
+        return axes;
+    }
+
+    void SearchResidualSpans(Vec &x,Vec &f,double &norm,int &factorBase,long long starts)
+    {
+        const auto &policy=*o.merit->bounded;
+        auto &record=BeginInverse(factorBase,"current scalar block right-hand sides",factorBase>=0);
+        PrepareInverse(x,f,factorBase,record);
+        auto &radiusState=*out.meritEnd->radius;
+        const double baseRepeat=RepeatBase(x,f);
+        const Mat &retained=policy.recycledBasis;
+        const auto backsolveStart=Clock::now();
+        const auto axes=ResidualAxes(x,f,retained);
+        record.linearSeconds=Seconds(backsolveStart);
+        const Mat retainedActions=Responses(x,f,retained);
+        const auto publish=[&](int mask,const char *span)
+        {
+            Mat q=retained,actions=retainedActions;
+            std::array<double,2> outside{};
+            for(int i=0;i<2;++i)
+            {
+                if(!(mask&(1<<i)))continue;
+                Vec axis=axes[i];
+                const double initial=axis.stableNorm();
+                for(int pass=0;pass<2;++pass)
+                    axis-=(q*(q.transpose()*axis)).eval();
+                const double independent=axis.stableNorm();
+                outside[i]=initial>0.?independent/initial:0.;
+                if(independent<=1.e-10*std::max(1.e-30,initial))continue;
+                axis/=independent;
+                q.conservativeResize(Eigen::NoChange,q.cols()+1);
+                q.col(q.cols()-1)=axis;
+                actions.conservativeResize(Eigen::NoChange,actions.cols()+1);
+                actions.col(actions.cols()-1)=Jacobian(x,f,axis,1.,"current-residual-basis",-1,i);
+            }
+            boundedBasis=ModelBasis(x,f,q,actions,true,q.cols());
+            boundedBasis->measurements.emplace_back("k_fraction_outside_preceding_span",outside[0]);
+            boundedBasis->measurements.emplace_back("outer_epsilon_fraction_outside_preceding_span",outside[1]);
+            if(span)boundedBasis->notes.emplace_back("matched_residual_span",span);
+            cb.ObserveActionAudit(*boundedBasis);
+        };
+        if(radiusState.residualSpan<0)
+        {
+            constexpr std::array<const char *,4> labels{"retained","k","outer_epsilon","joint"};
+            std::optional<BoundedTrial> best;
+            int selected=-1;
+            for(int mask=0;mask<4;++mask)
+            {
+                publish(mask,labels[mask]);
+                for(int index=0;index<2;++index)
+                {
+                    const double radius=index==0?policy.initialRadius:policy.comparisonRadius;
+                    auto trial=TryBounded(x,f,norm,baseRepeat,radius,index,starts,labels[mask]);
+                    if(trial&&(!best||trial->norm<best->norm))
+                    {
+                        best=std::move(trial);
+                        selected=mask;
+                    }
+                }
+            }
+            if(best)
+            {
+                radiusState.residualSpan=selected;
+                AcceptBounded(x,f,norm,std::move(*best),starts);
+                return;
+            }
+            // The last published span is joint. Contract from the smaller
+            // matched radius after both original comparison sizes failed.
+            double radius=std::min(policy.initialRadius,policy.comparisonRadius)*
+                SteadyBoundedOptions::RadiusContraction;
+            for(int proposal=2;proposal<policy.maximumProposals&&radius>=policy.minimumRadius;++proposal)
+            {
+                if(auto trial=TryBounded(x,f,norm,baseRepeat,radius,proposal,starts,"joint"))
+                {
+                    radiusState.residualSpan=3;
+                    AcceptBounded(x,f,norm,std::move(*trial),starts);
+                    return;
+                }
+                radius*=SteadyBoundedOptions::RadiusContraction;
+            }
+        }
+        else
+        {
+            publish(radiusState.residualSpan,nullptr);
+            double radius=radiusState.next;
+            for(int proposal=0;proposal<policy.maximumProposals&&radius>=policy.minimumRadius;++proposal)
+            {
+                if(auto trial=TryBounded(x,f,norm,baseRepeat,radius,proposal,starts))
+                {
+                    AcceptBounded(x,f,norm,std::move(*trial),starts);
+                    return;
+                }
+                radius*=SteadyBoundedOptions::RadiusContraction;
+            }
+        }
+        throw Stop("BOUNDED_RESIDUAL_SPAN_EXHAUSTED: no eligible original decrease in the declared spans");
+    }
+
     void BoundedDirections(Vec &x,Vec &f,double &norm,int &factorBase)
     {
         const auto &policy=*o.merit->bounded;
@@ -693,6 +1002,11 @@ private:
         if(factorBase>=0&&newton-factorBase>o.maximumInverseAge)
             throw Stop("BOUNDED_INVERSE_AGE: measured run ended at its declared inverse age");
         if(cb.SetCorrectionMass)cb.SetCorrectionMass(0.);
+        if(policy.residualBlocks)
+        {
+            SearchResidualSpans(x,f,norm,factorBase,starts);
+            return;
+        }
         if(policy.recycledBasis.size())
         {
             boundedBasis=CorrectionBasis(x,f,policy.recycledBasis,true);
@@ -701,164 +1015,18 @@ private:
         else
             Correct(x,f,norm,o.forcingInitial,factorBase,factorBase<0?"bounded cold basis":"bounded current basis",
                     factorBase>=0,policy.columns);
-        if(!boundedBasis)throw Stop("BOUNDED_BASIS: no current correction subspace");
-        const auto q=std::find_if(boundedBasis->arrays.begin(),boundedBasis->arrays.end(),
-                                  [](const auto &a){return a.first=="scaled_correction_basis";});
-        const double scaledBase=sr.cwiseProduct(f).stableNorm();
-        const double physicalTarget=o.forcingInitial*norm,scaledTarget=o.forcingInitial*scaledBase;
-        using Policy=SteadyBoundedOptions;
-        const double roundoff=Policy::RoundoffMultiplier*std::numeric_limits<double>::epsilon();
         const double baseRepeat=policy.modelRatio?RepeatBase(x,f):0.;
         double radius=out.meritEnd->radius->next;
-        if(q==boundedBasis->arrays.end())throw std::logic_error("bounded basis has no scaled coordinates");
-
         for(int proposal=0;proposal<policy.maximumProposals;++proposal)
         {
             Deadline();
             if(radius<policy.minimumRadius)break;
-            const auto began=Clock::now();
-            const auto proposalData=cb.OptimizeBounded(radius,proposal,o.maximumSeconds-Seconds(start));
-            const double optimizerSeconds=Seconds(began);
-            CheckVector(proposalData.coordinates,q->second.cols(),"bounded optimizer coordinates");
-            const Vec direction=q->second*proposalData.coordinates;
-            const double size=direction.cwiseAbs().maxCoeff();
-            if(!(size<=radius*(1.+1e-10)))
-                throw Stop("BOUNDED_RADIUS: optimizer result exceeds its declared radius");
-            auto audit=AuditData("bounded-direction",x,f,direction,-1,0);
-            audit.proposal=proposal;
-            audit.notes.emplace_back("optimizer_status",proposalData.status);
-            audit.arrays.emplace_back("optimizer_coordinates",proposalData.coordinates);
-            audit.measurements={{"radius",radius},{"scaled_size",size},{"physical_base",norm},
-                {"scaled_base",scaledBase},{"physical_target",physicalTarget},{"scaled_target",scaledTarget},
-                {"optimizer_score",proposalData.score},{"optimizer_iterations",double(proposalData.iterations)},
-                {"optimizer_seconds",optimizerSeconds}};
-            if(proposalData.lower)
+            if(auto candidate=TryBounded(x,f,norm,baseRepeat,radius,proposal,starts))
             {
-                audit.measurements.emplace_back("optimizer_lower_bound",*proposalData.lower);
-                audit.measurements.emplace_back("optimizer_gap",proposalData.score-*proposalData.lower);
-            }
-            const auto first=out.finiteDifferences.size();
-            Vec primary,half,wide;
-            double parameter=0.,halfParameter=0.;
-            auto action=[&](double multiplier,const char *label,Vec &result,double *step=nullptr) {
-                try
-                {
-                    result=Jacobian(x,f,direction,multiplier,label,-1,proposal);
-                    if(step)*step=out.finiteDifferences.back().parameterStep;
-                }
-                catch(const Stop &error)
-                {
-                    if(!FDStop(error))throw;
-                    audit.notes.emplace_back(label,error.what());
-                }
-            };
-            std::string decision="NO_NONZERO_BOUNDED_PROPOSAL";
-            if(size>0.)
-            {
-                action(1.,"bounded-primary",primary,&parameter);
-                action(.5,"bounded-half",half,&halfParameter);
-                action(2.,"bounded-wide",wide);
-                decision="UNRESOLVED_CURRENT_ACTION";
-            }
-            Evaluation evaluation;
-            Vec candidate;
-            double trialNorm=0.,displacement=0.,ratio=0.;
-            bool accepted=false;
-            if(primary.size())
-            {
-                const Vec predicted=f+primary;
-                const double model=Norm(predicted),scaledModel=sr.cwiseProduct(predicted).stableNorm();
-                const double decrease=norm-model,scaledDecrease=scaledBase-scaledModel;
-                audit.arrays.emplace_back("raw_action_primary",primary);
-                audit.arrays.emplace_back("raw_model_residual",predicted);
-                audit.measurements.emplace_back("physical_model",model);
-                audit.measurements.emplace_back("scaled_model",scaledModel);
-                audit.measurements.emplace_back("effective_physical_error_ratio",model/norm);
-                audit.measurements.emplace_back("effective_scaled_error_ratio",scaledModel/scaledBase);
-                audit.measurements.emplace_back("old_newton_model_pass",model<=physicalTarget&&scaledModel<=scaledTarget?1.:0.);
-                if(wide.size())audit.arrays.emplace_back("raw_action_wide",wide);
-                if(half.size()&&halfParameter<.8*parameter)
-                {
-                    const Vec allowance=2.*(half-primary);
-                    const double physicalAllowance=Norm(allowance),scaledAllowance=sr.cwiseProduct(allowance).stableNorm();
-                    audit.arrays.emplace_back("raw_action_half",half);
-                    audit.arrays.emplace_back("raw_action_allowance",allowance);
-                    audit.measurements.emplace_back("physical_action_allowance",physicalAllowance);
-                    audit.measurements.emplace_back("scaled_action_allowance",scaledAllowance);
-                    const bool resolved=physicalAllowance<Policy::ActionTargetFraction*physicalTarget&&
-                        scaledAllowance<Policy::ActionTargetFraction*scaledTarget;
-                    const bool eligible=resolved&&decrease>Policy::AllowanceMultiplier*physicalAllowance+roundoff*norm&&
-                        scaledDecrease>Policy::AllowanceMultiplier*scaledAllowance+roundoff*scaledBase;
-                    decision=resolved?"INSUFFICIENT_RESOLVED_MODEL_DESCENT":decision;
-                    if(eligible)
-                    {
-                        audit.notes.emplace_back("model_status",decrease>=.01*norm?"USEFUL_MODEL_DESCENT":"WEAK_MODEL_DESCENT");
-                        candidate=x+sx.cwiseProduct(direction);
-                        const Vec delta=(candidate-x).cwiseQuotient(sx);
-                        displacement=delta.cwiseAbs().maxCoeff();
-                        const double coordinateNorm=std::max(1.,x.cwiseQuotient(sx).cwiseAbs().maxCoeff());
-                        if(displacement>radius*(1.+1e-10)+roundoff*coordinateNorm)
-                            throw Stop("BOUNDED_RADIUS: represented trial exceeds its declared radius");
-                        audit.arrays.emplace_back("trial_free",candidate);
-                        audit.measurements.emplace_back("fraction",1.);
-                        audit.measurements.emplace_back("scaled_displacement",displacement);
-                        if(cb.ScaledUnknownBlocks)
-                        {
-                            const auto blocks=cb.ScaledUnknownBlocks(delta);
-                            audit.arrays.emplace_back("scaled_displacement_blocks",Eigen::Map<const Vec>(blocks.data(),blocks.size()));
-                        }
-                        evaluation=Trial(candidate,false);
-                        audit.measurements.emplace_back("nonlinear_validated",evaluation.nonlinearValidated?1.:0.);
-                        decision="FINITE_STATE_REJECTED";
-                        if(!evaluation.admissible)audit.notes.emplace_back("failure",evaluation.reason);
-                        if(evaluation.admissible)
-                        {
-                            const bool ratioAccepted=policy.modelRatio&&
-                                ModelRatio(candidate,evaluation,norm,model,baseRepeat,true,audit);
-                            trialNorm=Norm(evaluation.residual);
-                            const bool armijo=trialNorm<=(1.-o.armijo)*norm;
-                            const bool root=trialNorm<=o.acceptanceNorm;
-                            ratio=(norm-trialNorm)/decrease;
-                            const bool agreement=std::isfinite(ratio)&&ratio>=Policy::MinimumRatio;
-                            accepted=policy.modelRatio?ratioAccepted:root||(armijo&&agreement);
-                            decision=accepted?"BOUNDED_ACCEPTED":policy.modelRatio?
-                                "MODEL_RATIO_REJECTED":armijo?"INSUFFICIENT_ACTUAL_AGREEMENT":"ARMIJO_FAILED";
-                            audit.arrays.emplace_back("raw_actual_residual",evaluation.residual);
-                            audit.arrays.emplace_back("raw_remainder",evaluation.residual-predicted);
-                            audit.measurements.emplace_back("physical_actual",trialNorm);
-                            audit.measurements.emplace_back("scaled_actual",sr.cwiseProduct(evaluation.residual).stableNorm());
-                            audit.measurements.emplace_back(policy.modelRatio?"legacy_full_fraction_armijo_limit":"armijo_limit",
-                                                            (1.-o.armijo)*norm);
-                            audit.measurements.emplace_back(policy.modelRatio?"legacy_full_fraction_armijo_passed":"armijo_passed",
-                                                            armijo?1.:0.);
-                            audit.measurements.emplace_back("ratio_passed",agreement?1.:0.);
-                            audit.measurements.emplace_back("root_tolerance_passed",root?1.:0.);
-                            if(std::isfinite(ratio))audit.measurements.emplace_back("physical_decrease_ratio",ratio);
-                            Observe(candidate,evaluation.residual,trialNorm,false);
-                        }
-                    }
-                }
-            }
-            audit.stencils.assign(out.finiteDifferences.begin()+first,out.finiteDifferences.end());
-            const auto work=out.statistics.jacobianActions-starts;
-            audit.measurements.emplace_back("current_products_at_base",double(work));
-            audit.notes.emplace_back("decision",decision);
-            cb.ObserveActionAudit(audit);
-            Deadline();
-            if(accepted)
-            {
-                AdvanceRadius(norm,trialNorm,radius,displacement,ratio,work,candidate-x);
-                x=std::move(candidate);f=std::move(evaluation.residual);norm=trialNorm;
-                Observe(x,f,norm,true);
-                ++out.statistics.acceptedNewtonSteps;
-                auto &record=out.newton.back();
-                record.accepted=true;record.acceptedNorm=norm;record.acceptedStep=1.;
-                boundedBasis.reset();
-                if(out.meritEnd->radius->stagnated&&norm>o.acceptanceNorm)
-                    throw Stop("BOUNDED_STAGNATION: six updates below one percent with no improving action rate");
+                AcceptBounded(x,f,norm,std::move(*candidate),starts);
                 return;
             }
-            radius*=Policy::RadiusContraction;
+            radius*=SteadyBoundedOptions::RadiusContraction;
         }
         throw Stop("BOUNDED_SEARCH_EXHAUSTED: no eligible actual original decrease in the radius budget");
     }
@@ -1638,32 +1806,43 @@ private:
         out.statistics.totalSeconds=Seconds(start);return std::move(out);
     }
 
-    LinearResult Correct(const Vec &x,const Vec &f,double norm,double forcing,
-                         int &factorBase,const char *reason,bool reuse,int workLimit=-1,const Vec *guess=nullptr)
+    SteadyInverseUse &BeginInverse(int factorBase,const char *reason,bool reuse)
     {
         auto &record=out.inverses.emplace_back();
         record.base=newton;record.factorBase=reuse?factorBase:newton;
         record.age=newton-record.factorBase;record.reason=reason;
         record.rebuild=!reuse&&bool(cb.PreparePreconditioner);
+        return record;
+    }
+
+    void PrepareInverse(const Vec &x,const Vec &f,int &factorBase,SteadyInverseUse &record)
+    {
+        if(record.rebuild)
+        {
+            out.newton.back().missingLinearReason="inverse preparation";
+            ++out.statistics.preconditionerPreparations;
+            const auto began=Clock::now();
+            Timer timer(out.statistics.preparationSeconds);
+            cb.PreparePreconditioner(x,f);
+            record.preparationSeconds=Seconds(began);
+            factorBase=newton;
+            record.prepared=true;
+            factorSerial=out.statistics.preconditionerPreparations;
+            factorMass=currentMass;
+        }
+        record.serial=factorSerial;
+        if(o.merit)record.mass=factorMass;
+    }
+
+    LinearResult Correct(const Vec &x,const Vec &f,double norm,double forcing,
+                         int &factorBase,const char *reason,bool reuse,int workLimit=-1,const Vec *guess=nullptr)
+    {
+        auto &record=BeginInverse(factorBase,reason,reuse);
         const auto before=out.statistics.linearIterations;
         try
         {
-            if(record.rebuild)
-            {
-                out.newton.back().missingLinearReason="inverse preparation";
-                ++out.statistics.preconditionerPreparations;
-                const auto began=Clock::now();
-                Timer timer(out.statistics.preparationSeconds);
-                cb.PreparePreconditioner(x,f);
-                record.preparationSeconds=Seconds(began);
-                factorBase=newton;
-                record.prepared=true;
-                factorSerial=out.statistics.preconditionerPreparations;
-                factorMass=currentMass;
-            }
+            PrepareInverse(x,f,factorBase,record);
             out.newton.back().missingLinearReason="current linear solve";
-            record.serial=factorSerial;
-            if(o.merit)record.mass=factorMass;
             const auto began=Clock::now();
             auto result=Linear(x,f,norm,forcing,workLimit>=0?workLimit:(reuse?o.reuseLinearIterations:0),guess);
             record.linearSeconds=Seconds(began);
@@ -1993,7 +2172,8 @@ std::string SteadyMeritState::ToJson()const
             {"used",J::Number(r.used)},{"next",J::Number(r.next)},
             {"scaled_displacement",J::Number(r.displacement)},{"window_base",J::Number(r.windowBase)},
             {"window_updates",J::Number(r.windowUpdates)},{"first_rate",J::Number(r.firstRate)},
-            {"last_rate",J::Number(r.lastRate)},{"stagnated",J::Boolean(r.stagnated)}}));
+            {"last_rate",J::Number(r.lastRate)},{"stagnated",J::Boolean(r.stagnated)},
+            {"residual_span",J::Number(r.residualSpan)}}));
     }
     return J::Object(fields);
 }
@@ -2065,6 +2245,13 @@ SteadyKrylov::SteadyKrylov(SteadyKrylovCallbacks callbacks,SteadyVector unknownS
             Require(!b.modelRatio||(b.optimizerIterations>=1&&b.optimizerIterations<=1000&&
                         Positive(b.optimizerSeconds)&&b.optimizerSeconds<=120.&&Fraction(b.optimizerRelativeGap)),
                     "invalid bounded optimizer budget");
+            Require(!b.residualBlocks||(b.modelRatio&&b.recycledBasis.size()&&b.columns+2<=24&&
+                        b.columns+2<=o.restartDimension&&b.maximumProposals>=2&&
+                        o.maximumInverseAge>0&&o.reuseLinearIterations>=b.columns+2&&
+                        bool(m_callbacks.PreparePreconditioner)&&bool(m_callbacks.ScalarResidual)&&
+                        b.comparisonRadius>=b.minimumRadius&&b.comparisonRadius<=b.maximumRadius&&
+                        b.comparisonRadius!=b.initialRadius&&b.columns+4+3*(6+b.maximumProposals)<=m.maximumWork),
+                    "invalid coupled residual-span policy or work allocation");
         }
         if(m.curvature)
             Require(m.initialMass==0.&&m.reanchorMass==0.&&m.curvature->maximumProducts>=4&&
@@ -2087,6 +2274,7 @@ SteadyKrylov::SteadyKrylov(SteadyKrylovCallbacks callbacks,SteadyVector unknownS
                 const auto &b=*m.bounded;
                 const auto &a=*r.radius;
                 Require(a.modelRatio==b.modelRatio&&r.usedMass==0.&&r.nextMass==0.&&
+                        a.residualSpan>=-1&&a.residualSpan<=3&&(a.residualSpan<0||b.residualBlocks)&&
                         a.next>=b.minimumRadius&&a.next<=b.maximumRadius&&
                         a.windowUpdates>=0&&a.windowUpdates<=6&&std::isfinite(a.windowBase)&&
                         std::isfinite(a.firstRate)&&std::isfinite(a.lastRate)&&

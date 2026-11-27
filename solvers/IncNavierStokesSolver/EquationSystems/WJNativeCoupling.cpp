@@ -2296,6 +2296,7 @@ SteadyKrylovResult Coupling::SolveDiagnosticSteady(const CoupledState &seed,
                        <<'|'<<Bounded::AllowanceMultiplier<<'|'<<Bounded::RoundoffMultiplier
                        <<'|'<<Bounded::GrowthRatio<<'|'<<Bounded::GrowthUse<<'|'<<Bounded::RadiusGrowth
                        <<'|'<<Bounded::RadiusContraction<<'|'<<Bounded::StagnationDecrease<<'|'<<Bounded::StagnationWindow;
+                if(b.residualBlocks)binding<<"|coupled-scalar-residual-spans-v1|"<<b.comparisonRadius;
             }
             if(!diagnostic.boundedBasisPath.empty())
                 binding<<"|recycled-scaled-basis-v1|"<<diagnostic.boundedBasisSha<<'|'<<diagnostic.boundedBasisBinding;
@@ -2326,6 +2327,13 @@ SteadyKrylovResult Coupling::SolveDiagnosticSteady(const CoupledState &seed,
                 state.radius->next=policy.bounded->initialRadius;
                 state.usedForcing=state.nextForcing=options.forcingInitial;
                 state.decision="explicit radius reanchor with imported progress";
+                if(policy.bounded->residualBlocks&&state.radius->residualSpan<0&&state.radius->stagnated)
+                {
+                    state.radius->windowUpdates=0;
+                    state.radius->windowBase=state.radius->firstRate=state.radius->lastRate=0.;
+                    state.radius->stagnated=false;
+                    state.decision="new coupled residual directions after measured retained-span stagnation";
+                }
             }
         }
     }
@@ -2407,7 +2415,8 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
             const auto x=sx.segment(offset,n),r=sr.segment(offset,n);
             m_steadyScaleExtrema[block]={x.minCoeff(),x.maxCoeff(),r.minCoeff(),r.maxCoeff()};
         }
-    const bool sparse=diagnostic&&diagnostic->sparseInverse&&diagnostic->boundedBasisPath.empty();
+    const bool sparse=diagnostic&&diagnostic->sparseInverse&&
+        (diagnostic->boundedBasisPath.empty()||diagnostic->boundedResidualBlocks);
     const double patternStart=Clock();
     auto coupledInverse=sparse?MakeSteadySparseInverse(sx,sr):nullptr;
     if(diagnostic)
@@ -2426,6 +2435,16 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
             throw SteadyCorrectionFailure("DEADLINE: bounded coupled inverse preparation exhausted");
     };
     SteadyKrylovCallbacks callbacks;
+    if(diagnostic&&diagnostic->boundedResidualBlocks)
+    {
+        callbacks.ScalarResidual=[nf,nk,ne,size](const Vec &f,bool outerEpsilon)
+        {
+            Vec block=Vec::Zero(size);
+            const int offset=outerEpsilon?nf+nk:nf, count=outerEpsilon?ne:nk;
+            block.segment(offset,count)=f.segment(offset,count);
+            return block;
+        };
+    }
     callbacks.ValidTrial=[&](const Vec&x){
         try{auto s=unpack(x);
             const int depth=diagnostic?diagnostic->scalarSubdivisionDepth:0;
@@ -2751,7 +2770,11 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
                 audit.notes.emplace_back("peak_momentum_owners",owners.str());
                 audit.measurements.emplace_back("momentum_attribution_seconds",Clock()-start);
             }
-            if(observed.stage=="frozen-size-finite-trial"&&
+            const bool matchedTrial=observed.stage=="bounded-direction"&&
+                std::any_of(observed.notes.begin(),observed.notes.end(),[](const auto &entry) {
+                    return entry.first=="matched_residual_span";
+                });
+            if((observed.stage=="frozen-size-finite-trial"||matchedTrial)&&
                 std::any_of(observed.arrays.begin(),observed.arrays.end(),[](const auto &entry) {
                     return entry.first=="raw_actual_residual";
                 }))
@@ -2808,7 +2831,11 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
             }
             out<<']';
             if(options.merit&&options.merit->bounded)
-                out<<",\"bounded_policy_sha256\":"<<J::Quote(m_meritPolicy);
+            {
+                out<<",\"bounded_policy_sha256\":"<<J::Quote(m_meritPolicy)
+                   <<",\"bounded_acceptance\":"<<J::Quote(options.merit->bounded->modelRatio?
+                       SteadyBoundedOptions::RatioIdentity:SteadyBoundedOptions::Identity);
+            }
             out<<",\"probe_input_sha256\":"<<J::Quote(diagnostic->actionProbeSha)
                 <<",\"free_order\":\"free u, free v, all Pi, optional gauge, free k, free outer epsilon\""
                 <<",\"free_id_sha256\":"<<J::Quote(orderingSha)
@@ -3682,8 +3709,8 @@ void Coupling::WriteDiagnostic(const std::filesystem::path&path,const Diagnostic
         out<<"]},\"original_residuals\":";
         norms(out,original->residual);
         out<<",\"base_coefficient_sha256\":"<<J::Quote(m_steadyBaseSha256)
-           <<",\"steady_inverse\":"<<J::Quote(!options->boundedBasisPath.empty()?"RecycledBasisV1":
-               options->sparseInverse?"ColoredSparseV1":"BlockV1")
+           <<",\"steady_inverse\":"<<J::Quote(options->boundedResidualBlocks?"ColoredSparseResidualSpansV1":
+               !options->boundedBasisPath.empty()?"RecycledBasisV1":options->sparseInverse?"ColoredSparseV1":"BlockV1")
            <<",\"scale_extrema\":[";
         for(std::size_t i=0;i<m_steadyScaleExtrema.size();++i)
         {

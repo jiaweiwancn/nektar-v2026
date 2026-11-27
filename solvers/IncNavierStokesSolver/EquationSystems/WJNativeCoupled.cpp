@@ -378,6 +378,12 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
                 m_session->LoadParameter("WJDiagnosticBoundedOptimizerIterations",b.optimizerIterations,1000);
                 m_session->LoadParameter("WJDiagnosticBoundedOptimizerSeconds",b.optimizerSeconds,12.);
                 m_session->LoadParameter("WJDiagnosticBoundedOptimizerRelativeGap",b.optimizerRelativeGap,.1);
+                std::string blocks;
+                m_session->LoadSolverInfo("WJDiagnosticBoundedResidualBlocks",blocks,"False");
+                Check(blocks=="True"||blocks=="False","invalid scalar residual-span preparation switch");
+                b.residualBlocks=diagnostic.boundedResidualBlocks=blocks=="True";
+                if(b.residualBlocks)
+                    m_session->LoadParameter("WJDiagnosticBoundedComparisonRadius",b.comparisonRadius,.025);
             }
             m_session->LoadParameter("WJDiagnosticBoundedInitialRadius",b.initialRadius,.025);
             m_session->LoadParameter("WJDiagnosticBoundedMinimumRadius",b.minimumRadius,1e-7);
@@ -395,6 +401,8 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
                   diagnostic.boundedBasisSha.empty()&&diagnostic.boundedBasisBinding.empty():
                   diagnostic.boundedBasisSha.size()==64&&diagnostic.boundedBasisBinding.size()==64,
                   "recycled bounded basis requires byte and coordinate identities");
+            Check(!b.residualBlocks||(inverse=="ColoredSparseV1"&&!diagnostic.boundedBasisPath.empty()),
+                  "coupled scalar-residual spans require one prepared colored inverse and a signed retained frame");
         }
         if(curvatureProducts)
         {

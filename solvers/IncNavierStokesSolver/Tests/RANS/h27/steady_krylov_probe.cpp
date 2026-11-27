@@ -978,6 +978,73 @@ int main(int argc,char**argv)
                 {"cold_resume",Result(restarted)},{"ratio_rejected",Result(ratioRejected)},
                 {"infeasible",Result(infeasible)},{"unresolved",Result(unresolved)}}));
         }
+        {
+            const Vec base=Vec::Zero(4),sx=Vector({2.,3.,5.,7.}),sr=Vector({11.,13.,17.,19.});
+            const Vec offset=Vector({.05,.02,1.,.99});
+            auto options=Options();
+            options.forcingInitial=options.forcingMaximum=.3;
+            options.maximumNewtonIterations=2;options.maximumInverseAge=4;options.reuseLinearIterations=4;
+            auto &policy=options.merit.emplace().bounded.emplace();
+            policy.modelRatio=true;policy.residualBlocks=true;
+            policy.columns=2;policy.initialRadius=.00625;policy.recycledBasis=Eigen::MatrixXd::Identity(4,2);
+            SteadyKrylovCallbacks cb;
+            cb.Residual=[&](const Vec &x)->Vec{return offset+x;};
+            cb.TrueNorm=[](const Vec &f){return f.cwiseAbs().maxCoeff();};
+            cb.ResidualBlocks=[](const Vec &f) {
+                return std::array<double,6>{std::abs(f[0]),std::abs(f[1]),0.,std::abs(f[2]),std::abs(f[3]),0.};
+            };
+            cb.ScalarResidual=[](const Vec &f,bool outer)->Vec {
+                const int row=outer?3:2;
+                Vec rhs=Vec::Zero(f.size());
+                rhs[row]=f[row];
+                return rhs;
+            };
+            cb.ValidTrial=[](const Vec &){return SteadyTrialValidity{};};
+            cb.ValidateNonlinearState=[](const Vec &){};
+            Eigen::MatrixXd q;
+            Vec currentResidual;
+            std::vector<Vec> rightHandSides, accepted;
+            std::vector<int> ranks;
+            int factors=0;
+            cb.PreparePreconditioner=[&](const Vec &,const Vec &){++factors;};
+            cb.Precondition=[&](const Vec &rhs)->Vec {
+                rightHandSides.push_back(rhs);
+                Vec dx=rhs;
+                dx[0]+=2.*rhs[2];dx[1]-=3.*rhs[3];
+                return dx;
+            };
+            cb.ObserveAccepted=[&](const Vec &x,double){accepted.push_back(x);};
+            cb.ObserveActionAudit=[&](const SteadyKrylovActionAudit &receipt) {
+                Check(receipt.factorSerial==1,"coupled residual direction did not bind the prepared inverse");
+                if(receipt.stage=="bounded-current-basis")
+                {
+                    for(const auto &[name,values]:receipt.arrays)
+                    {
+                        if(name=="scaled_correction_basis")q=values;
+                        if(name=="raw_base_residual")currentResidual=values;
+                    }
+                    ranks.push_back(q.cols());
+                }
+            };
+            cb.OptimizeBounded=[&](double radius,int,double) {
+                const Eigen::MatrixXd action=sx.asDiagonal()*q;
+                Vec y=action.colPivHouseholderQr().solve(-currentResidual);
+                const double size=(q*y).cwiseAbs().maxCoeff();
+                if(size>radius)y*=radius/size;
+                return SteadyBoundedProposal{y,1.,{},1,"CONTROL"};
+            };
+            const auto result=SteadyKrylov(cb,sx,sr,options).Solve(base);
+            Check(factors==1&&result.statistics.preconditionerPreparations==1&&rightHandSides.size()==4&&
+                  accepted.size()==3&&result.statistics.acceptedNewtonSteps==2&&
+                  ranks==std::vector<int>{2,3,3,4,4}&&result.meritEnd->radius->residualSpan==3&&
+                  (rightHandSides[0]-Vector({0.,0.,-offset[2],0.})).norm()<1.e-14&&
+                  (rightHandSides[1]-Vector({0.,0.,0.,-offset[3]})).norm()<1.e-14&&
+                  (rightHandSides[2]-Vector({0.,0.,-offset[2]-accepted[1][2],0.})).norm()<1.e-14&&
+                  (rightHandSides[3]-Vector({0.,0.,0.,-offset[3]-accepted[1][3]})).norm()<1.e-14,
+                  "matched residual spans lost coupling, raw RHS scaling, accepted selection or inverse reuse");
+            solves.push_back(J::Object({{"name",J::Quote("bounded_current_coupled_residual_spans")},
+                {"result",Result(result)},{"inverse_preparations",J::Number(factors)},{"block_rhs",J::Number(rightHandSides.size())}}));
+        }
         const auto result=J::Object({{"schema",J::Quote("WJH27SteadyKrylovProbeV1")},{"status",J::Quote("RECORDED")},
             {"solver_identity",J::Quote(SteadyKrylov::Identity)},{"unknown_scale",V(problem.sx)},
             {"physical_residual_scale",V(problem.b)},{"residual_row_scale",V(problem.RowScale())},
