@@ -1001,6 +1001,8 @@ int main(int argc,char**argv)
             };
             cb.ValidTrial=[](const Vec &){return SteadyTrialValidity{};};
             cb.ValidateNonlinearState=[](const Vec &){};
+            cb.CorrectionAction=[](const Vec &x,const Vec &)->Vec {return Vec::Zero(x.size());};
+            cb.SetCorrectionMass=[](double mass){Check(mass==0.,"coupled residual-span control changed the action");};
             Eigen::MatrixXd q;
             Vec currentResidual;
             std::vector<Vec> rightHandSides, accepted;
