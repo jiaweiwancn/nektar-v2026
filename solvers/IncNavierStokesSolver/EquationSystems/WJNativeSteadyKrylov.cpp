@@ -243,7 +243,8 @@ public:
             audit.measurements={{"physical_target",physicalTarget},{"scaled_target",scaledTarget},
                 {"scaled_size",v.cwiseAbs().maxCoeff()},{"forcing",o.forcingInitial}};
             const auto first=out.finiteDifferences.size();
-            Vec previous;
+            Vec previous, primary, half;
+            double primaryStep=0.,halfStep=0.;
             const std::array<double,3> multipliers{1.,.5,2.};
             for(int sample=0;sample<3;++sample)
             {
@@ -251,6 +252,11 @@ public:
                 try
                 {
                     const Vec action=Jacobian(x,f,v,multipliers[sample],"candidate-"+label,-1,index);
+                    if(o.frozenFiniteTrialLimit&&action.size()&&out.finiteDifferences.size()>first)
+                    {
+                        if(sample==0){primary=action;primaryStep=out.finiteDifferences.back().parameterStep;}
+                        if(sample==1){half=action;halfStep=out.finiteDifferences.back().parameterStep;}
+                    }
                     audit.arrays.emplace_back("raw_action_"+label,action);
                     audit.arrays.emplace_back("raw_model_residual_"+label,f+action);
                     if(previous.size())
@@ -265,6 +271,8 @@ public:
             }
             audit.stencils.assign(out.finiteDifferences.begin()+first,out.finiteDifferences.end());
             cb.ObserveActionAudit(audit);
+            if(o.frozenFiniteTrialLimit)
+                AuditFiniteTrials(x,f,directions.col(index),primary,half,primaryStep,halfStep,index);
         }
     }
 
@@ -317,6 +325,95 @@ private:
         data.arrays={{"base",x},{"raw_base_residual",f},{"unknown_scale",sx},
                      {"row_scale",sr},{"direction",sx.cwiseProduct(direction)}};
         return data;
+    }
+
+    void AuditFiniteTrials(const Vec &x,const Vec &f,const Vec &direction,const Vec &primary,
+                           const Vec &half,double primaryStep,double halfStep,int proposal)
+    {
+        const double base=Norm(f), scaledBase=sr.cwiseProduct(f).stableNorm();
+        const double physicalTarget=o.forcingInitial*base,scaledTarget=o.forcingInitial*scaledBase;
+        const bool haveAllowance=primaryStep>0.&&halfStep>0.&&halfStep<.8*primaryStep;
+        Vec allowance;
+        double physicalAllowance=0.,scaledAllowance=0.;
+        if(haveAllowance)
+        {
+            allowance=2.*(half-primary);
+            physicalAllowance=Norm(allowance);
+            scaledAllowance=sr.cwiseProduct(allowance).stableNorm();
+        }
+        const bool resolved=haveAllowance&&physicalAllowance<.5*physicalTarget&&scaledAllowance<.5*scaledTarget;
+        for(int i=0;i<o.frozenFiniteTrialLimit;++i)
+        {
+            Deadline();
+            const double fraction=std::ldexp(1.,-i);
+            const Vec candidate=x+fraction*direction;
+            const Vec displacement=(candidate-x).cwiseQuotient(sx);
+            auto audit=AuditData("frozen-size-finite-trial",x,f,direction.cwiseQuotient(sx),-1,i);
+            audit.proposal=proposal;
+            audit.measurements={{"fraction",fraction},{"scaled_size",displacement.cwiseAbs().maxCoeff()},
+                {"physical_target",physicalTarget},{"scaled_target",scaledTarget},{"armijo_limit",(1.-o.armijo*fraction)*base},
+                {"physical_base",base},{"scaled_base",scaledBase},{"action_resolved",resolved?1.:0.}};
+            audit.arrays.emplace_back("trial_free",candidate);
+            audit.arrays.emplace_back("canonical_input_direction",direction);
+            if(cb.ScaledUnknownBlocks)
+            {
+                const auto blocks=cb.ScaledUnknownBlocks(displacement);
+                audit.arrays.emplace_back("scaled_displacement_blocks",Eigen::Map<const Vec>(blocks.data(),blocks.size()));
+            }
+            Vec prediction;
+            double predicted=0.,scaledPredicted=0.;
+            if(primary.size())
+            {
+                prediction=f+fraction*primary;
+                predicted=Norm(prediction);
+                scaledPredicted=sr.cwiseProduct(prediction).stableNorm();
+                audit.arrays.emplace_back("raw_model_residual",prediction);
+                audit.measurements.emplace_back("physical_model",predicted);
+                audit.measurements.emplace_back("scaled_model",scaledPredicted);
+            }
+            if(haveAllowance)
+            {
+                audit.arrays.emplace_back("raw_action_allowance",fraction*allowance);
+                audit.measurements.emplace_back("physical_action_allowance",fraction*physicalAllowance);
+                audit.measurements.emplace_back("scaled_action_allowance",fraction*scaledAllowance);
+            }
+            auto evaluation=Trial(candidate,false);
+            audit.measurements.emplace_back("nonlinear_validated",evaluation.nonlinearValidated?1.:0.);
+            std::string status="FINITE_STATE_REJECTED";
+            if(!evaluation.admissible)
+                audit.notes.emplace_back("failure",evaluation.reason);
+            bool useful=false;
+            if(evaluation.admissible)
+            {
+                const double actual=Norm(evaluation.residual),scaledActual=sr.cwiseProduct(evaluation.residual).stableNorm();
+                const bool armijo=actual<=(1.-o.armijo*fraction)*base;
+                const bool root=actual<=o.acceptanceNorm;
+                audit.arrays.emplace_back("raw_actual_residual",evaluation.residual);
+                audit.measurements.emplace_back("physical_actual",actual);
+                audit.measurements.emplace_back("scaled_actual",scaledActual);
+                audit.measurements.emplace_back("armijo_passed",armijo?1.:0.);
+                audit.measurements.emplace_back("root_tolerance_passed",root?1.:0.);
+                status=armijo?"MODEL_AGREEMENT_UNRESOLVED":"ARMIJO_FAILED";
+                if(prediction.size())
+                {
+                    audit.arrays.emplace_back("raw_remainder",evaluation.residual-prediction);
+                    const double decrease=base-predicted,scaledDecrease=scaledBase-scaledPredicted;
+                    if(decrease>0.)
+                    {
+                        const double ratio=(base-actual)/decrease;
+                        if(std::isfinite(ratio))audit.measurements.emplace_back("physical_decrease_ratio",ratio);
+                        useful=resolved&&armijo&&std::isfinite(ratio)&&ratio>=.1&&
+                            decrease>4.*fraction*physicalAllowance+64.*std::numeric_limits<double>::epsilon()*base&&
+                            scaledDecrease>4.*fraction*scaledAllowance+64.*std::numeric_limits<double>::epsilon()*scaledBase;
+                    }
+                    if(useful||root)status="DECREASE_OBSERVED";
+                }
+                useful=useful||root;
+            }
+            audit.notes.emplace_back("decision",status);
+            cb.ObserveActionAudit(audit);
+            if(useful)break;
+        }
     }
 
     void ExportFrozenBasis(const Vec &x,const Vec &f,const Mat &z)
@@ -1622,6 +1719,10 @@ SteadyKrylov::SteadyKrylov(SteadyKrylovCallbacks callbacks,SteadyVector unknownS
     Require(o.frozenSizeColumns>=0&&o.frozenSizeColumns<=o.restartDimension&&
             (!o.frozenSizeColumns||(bool(m_callbacks.ObserveActionAudit)&&bool(m_callbacks.ResidualBlocks))),
             "frozen size bound requires a scoped audit observer and block norms");
+    Require(o.frozenFiniteTrialLimit>=0&&o.frozenFiniteTrialLimit<=4&&
+            (!o.frozenFiniteTrialLimit||(o.evaluateInitialOnly&&bool(m_callbacks.ValidateNonlinearState)&&
+              bool(m_callbacks.ObserveActionAudit)&&!m_callbacks.ObserveAccepted)),
+            "frozen finite trials require evaluate-only validation and nonaccepted audit custody");
     Require(m_unknownScale.size()>0&&m_unknownScale.size()<std::numeric_limits<int>::max()&&
             m_unknownScale.size()==m_residualRowScale.size()&&m_unknownScale.allFinite()&&
             m_residualRowScale.allFinite()&&(m_unknownScale.array()>0).all()&&

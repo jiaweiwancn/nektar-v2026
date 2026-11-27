@@ -88,7 +88,7 @@ struct DiagnosticSteadyOptions
     std::string acceptedCheckpointPrefix;
     std::vector<std::string> checkpointSessionDigests;
     double checkpointProcessDeadline=0., checkpointReserveSeconds=0., checkpointInverseSeconds=0.;
-    std::string actionAuditPrefix, actionProbePath, actionProbeSha;
+    std::string actionAuditPrefix, actionProbePath, actionProbeSha, actionProbeBinding;
     int actionProbeCount=1;
     bool auditScalarAction=false, auditMomentumAction=false, fixedKTangent=false;
     double factorFDStep=0.;

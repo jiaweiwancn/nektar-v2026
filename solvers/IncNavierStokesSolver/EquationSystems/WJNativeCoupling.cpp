@@ -2648,6 +2648,35 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
                 audit.notes.emplace_back("peak_momentum_owners",owners.str());
                 audit.measurements.emplace_back("momentum_attribution_seconds",Clock()-start);
             }
+            if(observed.stage=="frozen-size-finite-trial"&&
+                std::any_of(observed.arrays.begin(),observed.arrays.end(),[](const auto &entry) {
+                    return entry.first=="raw_actual_residual";
+                }))
+            {
+                localized=observed;
+                const auto field=unpack(raw("trial_free"));
+                const auto k=InterfaceBounds(field);
+                const double kin=m_reference->Parameters().KIn;
+                const int depth=diagnostic->scalarSubdivisionDepth;
+                localized->notes.emplace_back("observed_trial_coefficient_sha256",StateHash(field));
+                localized->measurements.emplace_back("whole_k_lower",m_k.PolynomialBounds(field.k,depth)[0]);
+                localized->measurements.emplace_back("whole_epsilon_lower",m_e.PolynomialBounds(field.epsilon,depth)[0]);
+                localized->measurements.emplace_back("whole_K_over_Kin_lower",k[0]/kin);
+                localized->measurements.emplace_back("whole_K_over_Kin_upper",k[1]/kin);
+                try
+                {
+                    const auto scientific=Evaluate(field,0,PrincipalPolicy::Observe,timing,diagnostic);
+                    localized->measurements.emplace_back("sampled_principal_over_mu",scientific.minPrincipal);
+                    localized->measurements.emplace_back("sampled_covariance_over_k",scientific.minCovariance);
+                    localized->measurements.emplace_back("projected_trace_error",scientific.traceError);
+                    localized->notes.emplace_back("principal_observation","OBSERVED");
+                }
+                catch(const NativeInadmissibleState &error)
+                {
+                    localized->notes.emplace_back("principal_observation","UNRESOLVED");
+                    localized->notes.emplace_back("principal_observation_reason",error.what());
+                }
+            }
             const auto &audit=localized?*localized:observed;
             const double writing=Clock();
             const std::uint16_t endian=1;
@@ -3066,8 +3095,18 @@ SteadyKrylovResult Coupling::SearchSteady(const CoupledState &seed,const SteadyK
         file.read(reinterpret_cast<char*>(directions.data()),bytes);
         Require(file.gcount()==static_cast<std::streamsize>(bytes)&&file.peek()==std::char_traits<char>::eof()&&
                 D::Hash(directions.data(),bytes)==diagnostic->actionProbeSha,"fixed direction size or digest differs");
+        if(options.frozenFiniteTrialLimit)
+        {
+            D::Sha256 ordering;
+            for(const auto *ids:{&m_flow.FreeVelocityIds()[0],&m_flow.FreeVelocityIds()[1],&m_k.FreeIds(),&m_e.FreeIds()})
+                ordering.Update(ids->data(),ids->size()*sizeof(int));
+            const auto binding=D::Hash("WJH27FrozenFiniteBindingV1|"+m_initialSourceStateSha+"|"+
+                ordering.Finish()+"|"+D::Hash(sx.data(),sx.size()*sizeof(double))+"|"+
+                D::Hash(sr.data(),sr.size()*sizeof(double))+"|"+diagnostic->actionProbeSha);
+            Require(binding==diagnostic->actionProbeBinding,"finite-trial input base, free ordering or scales differ");
+        }
         const Vec direction=directions.col(0);
-        if(diagnostic->actionProbeCount==1)solver.AuditDirection(initial,direction);
+        if(diagnostic->actionProbeCount==1&&!options.frozenFiniteTrialLimit)solver.AuditDirection(initial,direction);
         else solver.AuditDirections(initial,directions);
         if(diagnostic->auditColorColumns)
         {

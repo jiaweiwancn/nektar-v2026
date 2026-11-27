@@ -323,6 +323,8 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     auto &diagnostic=m_diagnosticSteadyOptions;
     m_session->LoadSolverInfo("WJDiagnosticActionProbe",diagnostic.actionProbePath,"");
     m_session->LoadSolverInfo("WJDiagnosticActionProbeSHA256",diagnostic.actionProbeSha,"");
+    m_session->LoadSolverInfo("WJDiagnosticActionProbeBinding",diagnostic.actionProbeBinding,"");
+    m_session->LoadParameter("WJDiagnosticFrozenFiniteTrials",m_steadyOptions.frozenFiniteTrialLimit,0);
     m_session->LoadParameter("WJDiagnosticActionProbeCount",diagnostic.actionProbeCount,1);
     m_session->LoadParameter("WJDiagnosticFrozenSizeColumns",m_steadyOptions.frozenSizeColumns,0);
     m_session->LoadParameter("WJDiagnosticFactorFDStep",diagnostic.factorFDStep,0.);
@@ -445,6 +447,11 @@ void WJNativeCoupled::v_InitObject(bool declareFields)
     }
     Check(m_steadyOptions.frozenSizeColumns>=0&&m_steadyOptions.frozenSizeColumns<=24&&
           (!m_steadyOptions.frozenSizeColumns||(actionGap=="True"&&fixedKTangent=="True"&&checkpoint=="False"))&&
+          (m_steadyOptions.frozenFiniteTrialLimit!=0)==!diagnostic.actionProbeBinding.empty()&&
+          (!m_steadyOptions.frozenFiniteTrialLimit||(m_diagnosticSteady&&!diagnostic.sparseInverse&&
+              evaluateOnly=="True"&&!diagnostic.actionProbePath.empty()&&fixedKTangent=="True"&&
+              colorAudit=="False"&&scalarAudit=="False"&&momentumAudit=="False"&&
+              diagnostic.actionProbeBinding.size()==64))&&
           diagnostic.actionProbeCount>=1&&diagnostic.actionProbeCount<=32&&
           (diagnostic.actionProbeCount==1||(!diagnostic.actionProbePath.empty()&&colorAudit=="False"&&
              scalarAudit=="False"&&momentumAudit=="False"))&&

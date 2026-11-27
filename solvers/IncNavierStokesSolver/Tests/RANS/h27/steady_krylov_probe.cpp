@@ -822,6 +822,44 @@ int main(int argc,char**argv)
                   "batch verification changed the direction, base or order");
             solves.push_back(J::Object({{"name",J::Quote("frozen_size_basis_and_batch")},{"result",Result(result)}}));
         }
+        {
+            const Vec base=Vec::Zero(2),scale=Vec::Ones(2);
+            auto options=Options();
+            options.evaluateInitialOnly=true;
+            options.frozenFiniteTrialLimit=4;
+            SteadyKrylovCallbacks cb;
+            cb.Residual=[](const Vec &v)->Vec {
+                return Vector({1.+v[0]+32.*v[0]*v[0]+.2*v[1],.2+v[1]+.2*v[0]});
+            };
+            cb.TrueNorm=[](const Vec &f){return f.cwiseAbs().maxCoeff();};
+            cb.ValidTrial=[](const Vec &){return SteadyTrialValidity{};};
+            cb.Precondition=[](const Vec &f){return f;};
+            cb.ValidateNonlinearState=[](const Vec &v) {
+                if(v[1]>.15)throw SteadyInadmissibleTrial("finite-state control");
+            };
+            std::vector<SteadyKrylovActionAudit> trials;
+            cb.ObserveActionAudit=[&](const auto &r) {
+                if(r.stage=="frozen-size-finite-trial")trials.push_back(r);
+            };
+            const SteadyKrylov solver(cb,scale,scale,options);
+            Eigen::MatrixXd directions(2,3);
+            directions<<-.0125,-.1,.0,-.005,-.05,.2;
+            solver.AuditDirections(base,directions);
+            auto observed=[&](int proposal,int trial,const std::string &decision) {
+                return std::any_of(trials.begin(),trials.end(),[&](const auto &r) {
+                    return r.proposal==proposal&&r.iteration==trial&&
+                        std::find(r.notes.begin(),r.notes.end(),std::make_pair(std::string("decision"),decision))!=r.notes.end();
+                });
+            };
+            Check(observed(0,0,"DECREASE_OBSERVED")&&observed(1,0,"ARMIJO_FAILED")&&
+                  observed(1,2,"DECREASE_OBSERVED")&&observed(2,0,"FINITE_STATE_REJECTED"),
+                  "frozen finite trials missed a curvature rejection, halved recovery or full validation");
+            const auto result=solver.Solve(base);
+            Check(result.status=="EVALUATED"&&result.statistics.acceptedNewtonSteps==0&&
+                  (result.lastAcceptedX.array()==base.array()).all(),"frozen finite trials advanced the seed");
+            solves.push_back(J::Object({{"name",J::Quote("frozen_finite_trial_custody")},
+                {"result",Result(result)},{"finite_trials",J::Number(trials.size())}}));
+        }
         const auto result=J::Object({{"schema",J::Quote("WJH27SteadyKrylovProbeV1")},{"status",J::Quote("RECORDED")},
             {"solver_identity",J::Quote(SteadyKrylov::Identity)},{"unknown_scale",V(problem.sx)},
             {"physical_residual_scale",V(problem.b)},{"residual_row_scale",V(problem.RowScale())},

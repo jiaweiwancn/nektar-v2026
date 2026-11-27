@@ -145,7 +145,7 @@ struct SteadyKrylovOptions
     int maximumInverseAge=0, reuseLinearIterations=12;
     bool measureDirection=false;
     bool adaptiveTrialStep=false;
-    int frozenSizeColumns=0;
+    int frozenSizeColumns=0, frozenFiniteTrialLimit=0;
     std::optional<SteadyMeritOptions> merit;
 };
 
